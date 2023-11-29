@@ -1,0 +1,12 @@
+{
+  "/v1": {
+    "target": "http://213.35.109.168:5300/",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/fxsp": {
+    "target": "http://213.35.109.168:5300/",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

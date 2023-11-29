@@ -1,0 +1,59 @@
+<div class="register-form-wrap">
+  <h3 class="title">registered</h3>
+  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please enter the email address!">
+        <nz-input-group [nzSize]="'large'">
+          <input type="text" nz-input formControlName="name" placeholder="email" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please enter the password!">
+        <nz-input-group [nzSize]="'large'">
+          <input type="password" nz-input formControlName="password" placeholder="At least six password, are case sensitive" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please make sure the password!">
+        <nz-input-group [nzSize]="'large'">
+          <input type="text" nz-input formControlName="name" placeholder="Confirm password" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please enter the phone number!">
+        <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate" [nzSize]="'large'">
+          <input type="text" nz-input formControlName="name" placeholder="Mobile phone no." />
+        </nz-input-group>
+      </nz-form-control>
+
+      <ng-template #addOnBeforeTemplate>
+        <nz-select [ngModel]="'86'" [ngModelOptions]="{ standalone: true }">
+          <nz-option nzLabel="+86" nzValue="86"></nz-option>
+          <nz-option nzLabel="+87" nzValue="87"></nz-option>
+        </nz-select>
+      </ng-template>
+    </nz-form-item>
+
+    <nz-form-item nz-row nzJustify="space-between">
+      <nz-form-control class="flex-1" style="max-width: 65%" nz-col [nzXs]="15" [nzSm]="16" nzErrorTip="Please enter the verification code!">
+        <nz-input-group [nzSize]="'large'">
+          <input type="password" nz-input formControlName="password" placeholder="Verification code" />
+        </nz-input-group>
+      </nz-form-control>
+      <button class="p-0" nz-button nz-col [nzXs]="7" [nzSm]="7" [nzSize]="'large'" nzType="default">Get verification code</button>
+    </nz-form-item>
+
+    <div nz-row class="login-form-margin" nzAlign="middle" nzJustify="space-between">
+      <div nz-col [nzSpan]="12">
+        <button nz-button nzSize="large" class="login-form-button login-form-margin" [nzType]="'primary'">Note book</button>
+      </div>
+      <div class="text-right" nz-col [nzSpan]="9">
+        <a class="password-login" routerLink="/login/login-form">Use the existing account login</a>
+      </div>
+    </div>
+  </form>
+</div>

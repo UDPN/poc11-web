@@ -1,0 +1,97 @@
+<div>
+  <form nz-form nzLayout="vertical" class="m-t-30">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>Transaction No.</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="" name="transactionNo" [(ngModel)]="searchParam.transactionNo" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>BN ID</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="" name="fromBnId" [(ngModel)]="searchParam.fromBnId" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24" class="m-b-8 p-0">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"></nz-form-label>
+          <nz-form-control>
+            <div nz-col [nzSpan]="24" class="text-right">
+              <button nz-button [nzType]="'primary'" class="m-r-15" (click)="getDataList(this.tableQueryParams)">
+                Query
+              </button>
+              <ng-container *appAuth="'R0302002001'">
+                <button nz-button class="m-r-15" [nzType]="'primary'" (click)="getExport()">
+                  Export
+                </button>
+              </ng-container>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
+    [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+  <ng-template #fromTpl let-fromAccount="fromAccount" let-fromBankId="fromBankId" let-fromBankName="fromBankName">
+    <span [title]="fromAccount">{{ fromAccount }}</span>
+    <br>
+    <span [title]="fromBankId + '-' + fromBankName">{{ fromBankId + '-' + fromBankName }}</span>
+  </ng-template>
+  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
+    let-formPlatform="formPlatform" let-toCurrency="toCurrency" let-toPlatform="toPlatform">
+    <span
+      [title]="(fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount  + ' ' + toCurrency + '-' + toPlatform)">{{
+      (fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform )
+      }}</span>
+  </ng-template>
+  <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency"
+    let-formPlatform="formPlatform">
+    <span [title]="commissionFee + ' ' +  formCurrency + '-' + formPlatform">{{ commissionFee + ' ' +
+      formCurrency + '-' + formPlatform }}</span>
+  </ng-template>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Export" (nzOnCancel)="cancelExport()" [nzClosable]="false">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item *ngFor="let control of listOfControl; index as i">
+        <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">
+          Please enter the email address for receiving records:
+        </nz-form-label>
+        <nz-form-control [nzErrorTip]="emailError" nzSpan="24">
+          <div nz-row class="flex">
+            <div nz-col nzSpan="20">
+              <input class="passenger-input" nz-input [attr.id]="control.id"
+                [formControlName]="control.controlInstance" />
+            </div>
+            <div nz-col nzSpan="4" nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
+              (click)="removeField(control, $event)" *ngIf="i !== 0">
+            </div>
+            <ng-template #emailError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please enter the email</ng-container>
+              <ng-container *ngIf="control.hasError('regular')">Email format error</ng-container>
+            </ng-template>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nzSpan="24">
+        <nz-form-control>
+          <button nz-button nzType="dashed" class="add-button" (click)="addField($event)">
+            <span nz-icon nzType="plus"></span>
+            Add email
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelExport()">Cancel</button>
+    <button nz-button nzType="primary" (click)="onExport()" [nzLoading]="isLoading"
+      [disabled]="!this.validateForm.valid">Confirm</button>
+  </div>
+</nz-modal>

@@ -1,0 +1,38 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-10-23 11:03:54
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2023-10-30 21:05:22
+ * @Description: 
+-->
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-profile/foreign-exchange-apply'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card [nzTitle]="'Basic Information'" [nzBordered]="true" class="m-b-10">
+    <nz-descriptions [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="SP Name">{{
+        info.spName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Country of Region">{{
+        info.country
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">{{
+        info.introduction
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{
+        info.description
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="BN ID">{{
+        info.bnCode
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Wallet Address(Besu)">{{
+        info.spBesuWalletAddress
+        }}</nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+  <!-- <app-currency-capital [currencyCapitalData]="settlementList" /> -->
+  <app-currency-capital-fix />
+</div>

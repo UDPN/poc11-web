@@ -1,0 +1,29 @@
+<div class="u-modal">
+    <h4 nz-typography class="m-b-10">VN Node Information</h4>
+    <nz-table #rowSelectionTable nzShowPagination nzShowSizeChanger [nzData]="listOfData" [nzLoading]="loading">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Node Name</th>
+                <th>Access Address</th>
+                <th>Brief Information</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data">
+                <td [nzChecked]="setOfCheckedId.has(data['id'])"
+                    (nzCheckedChange)="onItemChecked(data['id'], $event)">
+                </td>
+                <td>{{ data['vnNodeName'] }}</td>
+                <td>{{ data['accessAddress'] }}</td>
+                <td>{{ data['vnInformation'] }}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="btn-modal">
+        <nz-space [nzSize]="'large'">
+        <button *nzSpaceItem nz-button nzType="default" (click)="destroyModal()">Cancel</button>
+        <button *nzSpaceItem nz-button nzType="primary" [disabled]="isChecked === false" (click)="onSubmit()" [nzLoading]="btLoading">Confirm</button>
+        </nz-space>
+    </div>
+</div>

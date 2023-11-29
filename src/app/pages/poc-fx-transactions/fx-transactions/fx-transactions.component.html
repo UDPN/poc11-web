@@ -1,0 +1,80 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Transaction No.</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="transactionNo" [(ngModel)]="searchParam.transactionNo" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Transaction Hash</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="transactionHash" [(ngModel)]="searchParam.transactionHash" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Transaction Currency</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="" name="currency" [(ngModel)]="searchParam.currency">
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option *ngFor="let item of currencyList" [nzValue]="item.key"
+                  [nzLabel]="item.sourceCurrency + '-' + item.sourcePlatform + '->' + item.targetCurrency + '-' + item.targetPlatform">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Date</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker style="width: 100%" name="creation" [(ngModel)]="searchParam.creation"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="16" [nzXl]="16" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24"
+          class="m-b-8 text-right p-0">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button nz-button [nzType]="'primary'" (click)="getDataList(this.tableQueryParams)">
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()">Reset</a>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <nz-card>
+    <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+    <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
+      let-formPlatform="formPlatform" let-toCurrency="toCurrency" let-toPlatform="toPlatform">
+      <span
+        [title]="(fromAmount + ' ' +  formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform)">{{
+        (fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform)
+         }}</span>
+    </ng-template>
+    <ng-template #operationTpl let-transactionNo="transactionNo">
+      <ng-container *appAuth="'R0301'">
+        <span class="operate-text" routerLink="/poc/poc-fx-transactions/fx-transactions/info"
+          [queryParams]="{transactionNo}">
+          Detail
+        </span>
+      </ng-container>
+    </ng-template>
+  </nz-card>
+</div>

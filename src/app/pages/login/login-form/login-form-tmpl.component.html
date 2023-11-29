@@ -1,0 +1,133 @@
+<!-- <div class="login-form-wrap">
+  <ng-container>
+    <nz-alert
+      nzType="error"
+      nzMessage=""
+      [nzDescription]="descriptionTemplate"
+      class="m-b-10 m-t-10"
+    ></nz-alert>
+    <ng-template #descriptionTemplate>
+      <h5 nz-typography class="sp-12">
+        The wallets, tokens, and network provided for use in the sandbox are for
+        demo purposes only. Users should not add production/real wallet data.
+        Use of the sandbox is at the user’s own risk.
+      </h5>
+    </ng-template>
+  </ng-container>
+
+  <form
+    nz-form
+    [formGroup]="validateForm"
+    class="login-form"
+    (ngSubmit)="submitForm()"
+  >
+    <nz-tabset [nzAnimated]="false">
+      <nz-tab nzTitle="">
+        <div class="m-b-20">BN Name: {{ instance }}</div>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="userNameError">
+            <nz-input-group [nzSize]="'large'" nzPrefixIcon="user">
+              <input
+                [placeholder]="'User name'"
+                type="text"
+                nz-input
+                minlength="2"
+                maxlength="20"
+                formControlName="clientName"
+              />
+            </nz-input-group>
+            <ng-template #userNameError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your User name</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="passwordError">
+            <nz-input-group [nzSize]="'large'" nzPrefixIcon="lock">
+              <input
+                autocomplete="on"
+                [placeholder]="'Password'"
+                type="password"
+                nz-input
+                formControlName="pwd"
+              />
+            </nz-input-group>
+            <ng-template #passwordError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Password</ng-container
+              >
+              <ng-container *ngIf="control.hasError('regular')">
+                The password is a combination of 8-20 digits of numbers and
+                letters with at least one uppercase letter
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="">
+            <label nz-checkbox formControlName="isAgree">
+              <span> I have read and understand the following statement: </span>
+            </label>
+          </nz-form-control>
+        </nz-form-item> -->
+
+        <!-- <nz-form-item nz-row nzJustify="space-between">
+          <nz-form-control class="flex-1" style="max-width: 65%" nz-col [nzXs]="15" [nzSm]="16" nzErrorTip="please enter verification code!">
+            <nz-input-group [nzSize]="'large'" nzPrefixIcon="gif">
+              <input type="text" nz-input formControlName="code" placeholder="code" />
+            </nz-input-group>
+          </nz-form-control>
+          <button class="p-0" nz-button nz-col [nzXs]="7" [nzSm]="7" [nzSize]="'large'" nzType="default"
+            type="button" (click)="onRefresh()"><img class="img-size" [src]="srcUrl" alt=""></button>
+        </nz-form-item> -->
+        <!-- </nz-tab> -->
+
+        <!-- <nz-tab nzTitle="Phone" [nzDisabled]="true">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please type user name!">
+            <nz-input-group [nzSize]="'large'" nzPrefixIcon="mobile">
+              <input autocomplete="on" type="text" nz-input formControlName="clientName" placeholder="phone" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row nzJustify="space-between">
+          <nz-form-control class="flex-1" style="max-width: 65%" nz-col [nzXs]="15" [nzSm]="16" nzErrorTip="Please enter the verification code!">
+            <nz-input-group [nzSize]="'large'" nzPrefixIcon="mail">
+              <input type="password" nz-input formControlName="pwd" placeholder="password" />
+            </nz-input-group>
+          </nz-form-control>
+          <button class="p-0" nz-button nz-col [nzXs]="7" [nzSm]="7" [nzSize]="'large'" nzType="default">Get verification code</button>
+        </nz-form-item> -->
+      <!-- </nz-tab>
+    </nz-tabset> -->
+    <!-- <div nz-row class="login-form-margin">
+      <div nz-col [nzSpan]="12">
+        <label nz-checkbox formControlName="remember">
+          <span>Auto Login</span>
+        </label>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <a class="login-form-forgot">Forget The Password</a>
+      </div>
+    </div> -->
+    <!-- <button
+      nz-button
+      nzSize="large"
+      class="login-form-button login-form-margin"
+      [nzType]="'primary'"
+    >
+      {{ this.hasUser === true ? 'LOGIN' : 'Create Account' }}
+    </button>
+    <div class="other-way"> -->
+      <!-- <div class="other-login">
+        <span>Other ways to login</span>
+        <i nz-icon nzType="alipay-circle" nzTheme="fill"></i>
+        <i nz-icon nzType="taobao-circle" nzTheme="fill"></i>
+        <i nz-icon nzType="weibo-circle" nzTheme="fill"></i>
+      </div> -->
+      <!-- <a routerLink="/login/register-form">Registered User</a> -->
+    <!-- </div>
+  </form>
+</div> -->

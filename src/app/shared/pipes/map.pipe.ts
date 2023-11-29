@@ -1,0 +1,189 @@
+import { DatePipe } from '@angular/common';
+import { Pipe, PipeTransform } from '@angular/core';
+import { timestampToMonth, timestampToTime } from '@app/utils/tools';
+
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
+
+export const enum DateFormat {
+  Date = 'yyyy-MM-dd',
+  DateHour = 'yyyy-MM-dd HH',
+  DateTime = 'yyyy-MM-dd HH:mm'
+}
+
+export const enum MapKeyType {
+  String,
+  Number,
+  Boolean
+}
+
+export const MapSet = {
+  contractStatus: {
+    0: 'To be submitted',
+    1: 'Voting',
+    5: 'Approved',
+    10: 'Declined',
+    15: 'Compilation error'
+  },
+  resultStatus: {
+    10: 'Deployment successful'
+  },
+  sex: {
+    0: 'female',
+    1: 'male'
+  },
+  available: {
+    true: 'enable',
+    false: 'disable'
+  },
+  isOrNot: {
+    true: 'yes',
+    false: 'no'
+  },
+  visible: {
+    true: 'open',
+    false: 'hide'
+  },
+  transactionType: {
+    1: 'Contract Deployment',
+    2: 'Contract Call'
+  },
+  transactionResult: {
+    1: 'Pending',
+    5: 'Success',
+    10: 'Fail'
+  },
+  accessStatus: {
+    0: 'Enabled',
+    1: 'Disabled',
+    2: 'Expired'
+  },
+  receiptStatus: {
+    0: 'Failed',
+    1: 'Successful'
+  },
+  version: {
+    1: 'enterprise',
+    0: 'standard'
+  },
+  accessibleType: {
+    1: 'Myself',
+    2: 'From BN',
+    3: 'Public',
+    4: 'Official'
+  },
+  lockable: {
+    1: 'Disable',
+    2: 'Enable'
+  },
+  foreignStatus: {
+    0: 'Pending',
+    1: 'Approved',
+    2: 'Rejected',
+    3: 'Repealed'
+  },
+  approvalResult: {
+    0: '--',
+    1: 'Agree',
+    2: 'Reject'
+  },
+  chargingModel: {
+    1: 'Proportional Charges',
+    2: 'Fixed Charges'
+  },
+  transactionsStatus: {
+    1: 'Success',
+    2: 'Failure'
+  },
+  foreignStatusPool: {
+    0: 'Pending',
+    5: 'Approved',
+    10: 'Rejected'
+  },
+  exchangeBusinessType: {
+    0: 'Activate',
+    1: 'Reduce'
+  }
+};
+
+export interface MapItem {
+  label: string;
+  value: NzSafeAny;
+}
+
+@Pipe({
+  name: 'map'
+})
+export class MapPipe implements PipeTransform {
+  private datePipe: DatePipe = new DatePipe('en-US');
+  private mapObj = MapSet;
+
+  static transformMapToArray(
+    data: NzSafeAny,
+    mapKeyType: MapKeyType = MapKeyType.Number
+  ): MapItem[] {
+    return Object.keys(data || {}).map((key) => {
+      let value: NzSafeAny;
+      switch (mapKeyType) {
+        case MapKeyType.Number:
+          value = Number(key);
+          break;
+        case MapKeyType.Boolean:
+          value = key === 'true';
+          break;
+        case MapKeyType.String:
+        default:
+          value = key;
+          break;
+      }
+      return { value, label: data[key] };
+    });
+  }
+
+  transform(value: NzSafeAny, arg?: NzSafeAny): NzSafeAny {
+    if (arg === undefined) {
+      return value;
+    }
+    if (arg === 'nullValue') {
+      if (!value) {
+        return (value = '--');
+      } else {
+        return value;
+      }
+    }
+    if (arg === 'null') {
+      if (value?.indexOf(undefined) !== -1 || value.indexOf('null') !== -1) {
+        return (value = '--');
+      } else {
+        return value;
+      }
+    }
+    if (arg === 'timeStamp') {
+      if (!value) {
+        return (value = '--');
+      } else {
+        return timestampToTime(value);
+      }
+    }
+    if (arg === 'monthStamp') {
+      if (!value) {
+        return (value = '--');
+      } else {
+        return timestampToMonth(value);
+      }
+    }
+    let type: string = arg;
+    let param = '';
+
+    if (arg.indexOf(':') !== -1) {
+      type = arg.substring(0, arg.indexOf(':'));
+      param = arg.substring(arg.indexOf(':') + 1, arg.length);
+    }
+    switch (type) {
+      case 'date':
+        return this.datePipe.transform(value, param);
+      default:
+        // @ts-ignore
+        return this.mapObj[type] ? this.mapObj[type][value] : '';
+    }
+  }
+}

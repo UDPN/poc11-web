@@ -1,0 +1,15 @@
+<form nz-form [formGroup]="addEditForm">
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="roleName">Role Name</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="Role Name">
+      <input nz-input formControlName="roleName" name="roleName" placeholder="Role Name" id="roleName" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="roleDesc">description</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <input nz-input formControlName="roleDesc" name="roleDesc" placeholder="description" id="roleDesc" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,0 +1,328 @@
+@import (multiple) '../../../node_modules/ng-zorro-antd/src/style/themes/variable.less';
+@import './base';
+
+@layout-header-background: @component-background;
+@menu-dark-bg: #3c5686;
+@layout-sider-background: @menu-dark-bg;
+@primary-color: #3c5686;
+@primary-color-hover: #60769e;
+
+.operate-text {
+  color: @primary-color;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+.ant-menu-vertical .ant-menu-item,
+.ant-menu-vertical-left .ant-menu-item,
+.ant-menu-vertical-right .ant-menu-item,
+.ant-menu-inline .ant-menu-item,
+.ant-menu-vertical .ant-menu-submenu-title,
+.ant-menu-vertical-left .ant-menu-submenu-title,
+.ant-menu-vertical-right .ant-menu-submenu-title,
+.ant-menu-inline .ant-menu-submenu-title {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  height: 47px !important;
+}
+
+.ant-menu-item {
+  margin-bottom: 0px !important;
+}
+
+.ant-menu-vertical .ant-menu-item::after,
+.ant-menu-vertical-left .ant-menu-item::after,
+.ant-menu-vertical-right .ant-menu-item::after,
+.ant-menu-inline .ant-menu-item::after {
+  border-right: 0px !important;
+}
+
+.ant-menu-item,
+.ant-menu-submenu-title {
+  span {
+    font-weight: 500 !important;
+  }
+}
+
+.ant-menu-submenu-open {
+  a>span {
+    font-weight: 400 !important;
+  }
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: @primary-color;
+}
+
+.ant-menu-item-selected a,
+.ant-menu-item-selected a:hover {
+  color: white !important;
+}
+
+.ant-tabs-tab:hover {
+  color: @primary-color;
+}
+
+.ctx-desc {
+  color: @primary-color;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.ctxs-desc {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.onboarding-card {
+  .ant-card-head {
+    background-color: @primary-color;
+    color: #fff;
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+  }
+
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+}
+
+.ant-form-item-label>label::after {
+  content: none;
+}
+
+.ant-form-item-label>label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+  font-weight: 800;
+}
+
+.ant-form-item-label>label {
+  font-weight: 700;
+  color: #7d8592;
+  margin-right: 8px;
+}
+
+.bn-onboarding {
+  .ant-form-item-control-input-content {
+    text-align: end;
+  }
+
+  .anticon-info-circle {
+    color: @primary-color;
+  }
+}
+
+.operate-text-disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.onboarding {
+  .ant-tooltip-inner {
+    color: @primary-color;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+    border-radius: 15px;
+    padding: 1rem 3rem;
+    width: 385px;
+    height: 194px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.n-modal {
+
+  .ant-modal-content,
+  .ant-modal-header {
+    border-radius: 25px;
+  }
+
+  .ant-modal-header {
+    border-bottom: none;
+    padding: 40px 60px;
+
+    .ant-modal-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+  }
+
+  .ant-modal-footer {
+    border-top: none;
+  }
+}
+
+.custom-select {
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    height: 48px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #d8e0f0;
+    box-shadow: 0px 1px 2px rgba(184, 200, 224, 0.222055);
+  }
+
+  .ant-select-selection-item {
+    line-height: 46px !important;
+    text-align: left;
+  }
+}
+
+.ant-table-thead {
+  .ant-table-cell {
+    background-color: #f7f9fe;
+  }
+}
+
+.ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input) .ant-select-selector {
+  border-color: #d8e0f0 !important;
+}
+
+.onboarding {
+  .ant-btn {
+    border-radius: 14px !important;
+
+    line-height: 0px;
+  }
+}
+
+.ant-alert {
+  border-radius: 24px;
+}
+
+.alertsp {
+  .ant-alert {
+    border-radius: 0px !important;
+  }
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: @primary-color;
+}
+
+.ant-menu-item-selected a,
+.ant-menu-item-selected a:hover {
+  color: white !important;
+}
+
+.ant-tabs-tab:hover {
+  color: @primary-color;
+}
+
+.ctx-desc {
+  color: @primary-color;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: #3C4658 !important;
+}
+
+.ant-menu-dark .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: #a59999 !important;
+  color: #3c5686 !important
+}
+
+.cust-page-header {
+  .ant-page-header-heading {
+    display: none;
+  }
+}
+
+.ant-list-item {
+  padding: 6px 0 !important;
+}
+
+.ant-modal-confirm .ant-modal-body {
+  padding: 56px 32px 24px !important;
+}
+
+.site-page-header {
+  width: 100%;
+  position: fixed !important;
+  top: 64px !important;
+  z-index: 999 !important;
+  border-bottom: 1px solid #f0f0f0;
+  padding-top: 16px !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
+}
+
+.access-title {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 25px !important;
+  margin: 21px 0 16px 0 !important;
+}
+
+.ant-descriptions-bordered .ant-descriptions-item-label {
+  width: 15% !important;
+}
+
+.ant-descriptions-bordered .ant-descriptions-item-content {
+  width: 35% !important;
+}
+
+.card-descriptions {
+  .ant-descriptions-item-container .ant-descriptions-item-label {
+    width: 15% !important;
+    color: #91929E !important;
+    font-weight: 600 !important;
+  }
+
+  .ant-descriptions-item-container .ant-descriptions-item-content {
+    width: 35% !important;
+    font-weight: 600 !important;
+  }
+}
+
+.ngx-charts .grid-panel.odd rect {
+  fill: #FFF !important;
+}
+
+.card {
+  .ant-descriptions-item-label {
+    color: #91929E !important;
+    margin-top: 20px !important;
+  }
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.card-tpl {
+  .ant-card-bordered {
+    border: none !important;
+  }
+}
+
+table tr th.ant-table-selection-column,
+table tr td.ant-table-selection-column {
+  text-align: left !important;
+}
+
+.ant-menu-item-group-title {
+  color: #3c5686;
+  font-weight: 500;
+}

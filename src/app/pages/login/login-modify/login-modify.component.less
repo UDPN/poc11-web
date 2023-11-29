@@ -1,0 +1,86 @@
+.container {
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin-left: -48%;
+    background-image: url('../../../../assets/imgs/login1/login-bg-logo.svg');
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    content: '';
+  }
+
+  &.is-night:before {
+    background-image: url('../../../../assets/imgs/login1/login1-bg-dark.svg');
+  }
+
+  &.over-modal:before {
+    background-image: none;
+  }
+
+  .logo {
+    top: 40px;
+    height: 80px;
+
+    img {
+      width: 48px;
+    }
+
+    span {
+      font-size: 70px;
+      font-weight: 600;
+      color: #ffff;
+      font-style: italic;
+      font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      a {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .desc {
+    margin-top: 55px;
+    font-weight: 500;
+    color: white;
+    font-size: 32px;
+    span{
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+
+  .sub-desc {
+    position: absolute;
+    height: 166px;
+    top: calc(50% - 166px/2 - 223px);
+    color: #ffff;
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+  }
+}
+
+.over-modal {
+  background: #293146 !important;
+}
+
+:host ::ng-deep .ant-card.over-modal,
+.ant-card.is-night {
+  background: #293146 !important;
+}
+
+:host ::ng-deep .container.is-night {
+  background: #293146 !important;
+}
+
+:host ::ng-deep .ant-switch {
+  background: black !important;
+}
+
+img {
+  width: 14px;
+}

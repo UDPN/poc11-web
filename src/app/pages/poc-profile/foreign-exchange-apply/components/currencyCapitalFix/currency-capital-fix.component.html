@@ -1,0 +1,143 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-10-27 14:54:28
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2023-10-30 17:59:42
+ * @Description: 
+-->
+<div>
+    <!-- <form nz-form [formGroup]="validateForm">
+        <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'Settlement Information'" class="m-b-10">
+
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+                <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+                    <div nz-row nzJustify="space-between" nzGutter="8"
+                        *ngFor="let item of outCapitalPool$ | async; index as i">
+                        <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                            <nz-form-item>
+                                <nz-form-label nzSpan="24" *ngIf="i === 0">Currency
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <div nz-row>
+                                        <div nz-col nzSpan="16">
+                                            <input nz-input disabled
+                                                [value]="item['capitalPoolCurrency']+'-'+item['capitalPoolPlatform']" />
+                                        </div>
+
+                                    </div>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                            <nz-form-item>
+                                <nz-form-label nzSpan="24" *ngIf="i === 0">Capital Pool Address
+                                </nz-form-label>
+                                <nz-form-control>
+                                    <div nz-row>
+                                        <div nz-col nzSpan="16">
+                                            <input nz-input disabled [value]="item.capitalPoolAddress"
+                                                [title]="item.capitalPoolAddress" />
+                                        </div>
+                                        <ng-container *ngIf="(typeStats$|async) === 0">
+                                            <div nz-col nzSpan="4" *ngIf="i + 1 === (outCapitalPool$ | async)?.length">
+                                                <ng-container *ngIf="!(zeroShowStatus$|async)"> <button nz-button
+                                                        (click)="showAdd()" nzType="text"
+                                                        style="color: #3c5686; font-size: 16px;">
+                                                        {{'Show'}}
+                                                    </button>
+                                                </ng-container>
+                                                <ng-container *ngIf="(zeroShowStatus$|async)"> <button nz-button
+                                                        (click)="hideAdd()" nzType="text"
+                                                        style="color: #3c5686; font-size: 16px;">
+                                                        {{'Hide'}}
+                                                    </button>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="zeroShowStatus$|async">
+                        <div nz-row nzJustify="space-between" nzGutter="8"
+                            *ngFor="let control of listOfControl; index as i">
+                            <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Currency
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="currencyError">
+                                        <div nz-row>
+                                            <div nz-col nzSpan="16">
+                                                <nz-select [attr.id]="control.id" [formControlName]="control.crrency"
+                                                    (ngModelChange)="onChange(control, $event)"
+                                                    [nzDisabled]="validateForm.get(control.status)?.value">
+                                                    <nz-option *ngFor="let item of selectOptionPacths$ | async"
+                                                        [nzValue]="item" [nzLabel]="item"></nz-option>
+                                                </nz-select>
+                                            </div>
+                                        </div>
+                                        <ng-template #currencyError let-control>
+                                            <ng-container *ngIf="control.hasError('required')">Please select your
+                                                Currency</ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                                <nz-form-item>
+                                    <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Capital Pool Address
+                                    </nz-form-label>
+                                    <nz-form-control [nzErrorTip]="capitalPoolAddressError">
+                                        <div nz-row>
+                                            <div nz-col nzSpan="16">
+                                                <input nz-input [formControlName]="control.capitalPoolAddress" />
+                                            </div>
+                                            <ng-container *ngIf="i !== selectOptionPacthsLenght - 1">
+                                                <div nz-col nzSpan="4" (click)="addField($event)"
+                                                    *ngIf="i <= selectOptionPacthsLenght && i === listOfControl.length - 1">
+                                                    <button nz-button nzType="text"
+                                                        style="color: #3c5686; font-size: 16px;">
+                                                        <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
+                                                        Add
+                                                    </button>
+                                                </div>
+                                                <div nz-col nzSpan="4" class="m-l-2"
+                                                    *ngIf="i >0 && i === listOfControl.length - 1"
+                                                    (click)="removeField(control, $event)">
+                                                    <button nz-button nzType="text"
+                                                        style="color: #ff4d4f; font-size: 16px;">
+                                                        <i nz-icon nzType="minus-circle" nzTheme="fill"></i>
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container *ngIf="i === selectOptionPacthsLenght - 1">
+                                                <div nz-col nzSpan="4" class="m-l-2" *ngIf="i >0 "
+                                                    (click)="removeField(control, $event)">
+                                                    <button nz-button nzType="text"
+                                                        style="color: #ff4d4f; font-size: 16px;">
+                                                        <i nz-icon nzType="minus-circle" nzTheme="fill"></i>
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </ng-container>
+
+                                        </div>
+                                        <ng-template #capitalPoolAddressError let-control>
+                                            <ng-container *ngIf="control.hasError('required')">Please input your Capital
+                                                Pool
+                                                Address</ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                </div>
+            </div>
+        </nz-card>
+    </form> -->
+    <app-currency-foreign-fix [formData]="validateForm" (submit)="onSubmit()"></app-currency-foreign-fix>
+</div>

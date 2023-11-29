@@ -1,0 +1,120 @@
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-settlement/settlement'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="''" class="m-b-10">
+    <form nz-form [formGroup]="validateForm">
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">Settlement Model Name
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="settlementModelNameError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input nz-input formControlName="settlementModelName" maxlength="100" />
+              </div>
+            </div>
+            <ng-template #settlementModelNameError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please input your Settlement Model Name</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">Currency Pair
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="pairedExchangeRateError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-select formControlName="pairedExchangeRate" (ngModelChange)="onChangeRate($event)">
+                  <nz-option *ngFor="let item of pairedList" [nzValue]="item.key" [nzDisabled]="!tempStatus"
+                    [nzLabel]="item.sourceCurrency + '-' + item.sourcePlatform + '->' + item.targetCurrency + '-' + item.targetPlatform">
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
+            <ng-template #pairedExchangeRateError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please select your Currency Pair</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">Charging Model
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="chargingModelError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-select formControlName="chargingModel" (ngModelChange)="onChangeModel($event)">
+                  <nz-option *ngFor="let item of chargingModelList" [nzValue]="item.cseValue"
+                    [nzLabel]="item.cseDesc"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+            <ng-template #chargingModelError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please select your Charging Model</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">Commission
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="chargingModelError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-input-group [nzAddOnAfter]="this.commissionAfter">
+                  <input nz-input formControlName="commission" ngModelOptions="{ standalone: true }"
+                    id="inputCommission" />
+                </nz-input-group>
+              </div>
+            </div>
+            <ng-template #chargingModelError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please input your Commission</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10"
+        [ngStyle]="{'display': this.validateForm.get('chargingModel')?.value !== '1' ? 'none' : ''}">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">Max Commission
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="maxCommissionError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-input-group [nzAddOnAfter]="this.maxCommissionAfter">
+                  <input nz-input formControlName="maxCommission" id="inputMaxCommission"  maxlength="60"/>
+                </nz-input-group>
+              </div>
+            </div>
+            <ng-template #maxCommissionError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please input your Max Commission</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <div nz-row>
+            <div nz-col nzSpan="24" style="text-align: end">
+              <nz-space>
+                <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="default" (click)="onBack()">
+                  Back
+                </button>
+                <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
+                  [disabled]="!this.validateForm.valid" (click)="onSubmit()">
+                  {{ this.tempStatus === true ? 'Save' : 'Edit' }}
+                </button></nz-space>
+            </div>
+          </div>
+        </nz-form-item>
+      </div>
+    </form>
+  </nz-card>
+</div>

@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2022",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@app": ["src/app"],
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["src/assets/*"],
+      "@config/*": ["src/app/config/*"],
+      "@core/*": ["src/app/core/*"],
+      "@env/*": ["src/environments/*"],
+      "@services/*": ["src/app/core/services/http/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@store/*": ["src/app/core/services/store/*"],
+      "@utils/*": ["src/app/utils/*"],
+      "@widget/*": ["src/app/widget/*"]
+    },
+    "useDefineForClassFields": false,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
+    }
+  ],
+  "compileOnSave": false,
+  "exclude": ["node_modules", "tmp"],
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

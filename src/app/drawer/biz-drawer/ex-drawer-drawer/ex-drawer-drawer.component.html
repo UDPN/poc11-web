@@ -1,0 +1,9 @@
+<p>The value of bring it：{{ params.name }}</p>
+<form [formGroup]="validateForm">
+  <nz-form-item>
+    <nz-form-label nzRequired>Click ok after try the input values</nz-form-label>
+    <nz-form-control nzErrorTip="Required">
+      <input nz-input [placeholder]="'Input the content of the click ok, and returned to the outside'" formControlName="password" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

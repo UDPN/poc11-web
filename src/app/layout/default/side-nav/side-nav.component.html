@@ -1,0 +1,28 @@
+<div
+  class="left-nav-wrap"
+  [class.dark-scrollbar]="(themesOptions$ | async)!.theme === 'dark'"
+>
+  <div
+    class="sidebar-logo"
+    *ngIf="(themesOptions$ | async)!.hasNavHeadArea"
+    [class.p-l-8]="isCollapsed$ | async"
+  >
+    <a href="#" target="_blank">
+      <!-- <img src="assets/imgs/logo.svg" alt="logo" /> -->
+      <h1
+        class="animate-02"
+        [class.light]="
+          (themesOptions$ | async)!.theme === 'light' &&
+          (isNightTheme$ | async) === false
+        "
+      >
+        <div>
+          <span class="logo" [title]="'CBDC Settlement Platform System'"> CBDC Settlement Platform </span>
+        </div>
+      </h1>
+    </a>
+  </div>
+  <div class="nav-ul-wrap">
+    <app-nav-bar></app-nav-bar>
+  </div>
+</div>

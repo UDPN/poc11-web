@@ -1,0 +1,10 @@
+<div
+  class="top-nav"
+  [ngStyle]="{
+    'border-bottom': !(isOverMode$ | async)
+      ? '1px solid rgb(240, 240, 240)'
+      : ''
+  }"
+>
+  <ng-content> </ng-content>
+</div>

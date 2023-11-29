@@ -1,0 +1,71 @@
+<form nz-form [formGroup]="addEditForm">
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="sex">User Name</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <input nz-input formControlName="userName" id="userName" placeholder="sex" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="!isEdit">
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="roleId">password</nz-form-label>
+    <nz-form-control nzExtra="The initial password for creating a new user is: a123456" [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <input [type]="'password'" nz-input placeholder="password" formControlName="password" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="sex">sex</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <nz-radio-group formControlName="sex">
+        <label nz-radio [nzValue]="1">male</label>
+        <label nz-radio [nzValue]="0">female</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="available">status</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <nz-switch formControlName="available" nzCheckedChildren="enable" nzUnCheckedChildren="disable"></nz-switch>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="telephone">telephone</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <input nz-input formControlName="telephone" id="telephone" placeholder="telephone" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="mobile">phone</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <input nz-input formControlName="mobile" maxlength="11" id="mobile" placeholder="phone" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="email">email</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <input nz-input formControlName="email" id="email" placeholder="email" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="departmentId">department</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <nz-tree-select [nzNodes]="deptNodes" nzShowSearch [nzDropdownMatchSelectWidth]="true" nzPlaceHolder="Please select" formControlName="departmentId"></nz-tree-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired nzFor="roleId">role</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" [nzErrorTip]="combineTpl">
+      <nz-select nzMode="multiple" formControlName="roleId" nzPlaceHolder="role">
+        <nz-option *ngFor="let option of roleOptions" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<ng-template #combineTpl let-control>
+  <ng-container *ngIf="control.hasError('message')">{{ control.errors.message }}</ng-container>
+  <ng-container *ngIf="control.hasError('required')">required</ng-container>
+</ng-template>
