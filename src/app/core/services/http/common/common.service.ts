@@ -26,4 +26,15 @@ export class CommonService {
       params
     );
   }
+
+  public uploadImg(params: File): Observable<any> {
+    let file: File = params;
+    let formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post(`/v1/fxsp/sys/file/upload`, formData);
+  }
+
+  public downImg(params: { hash: string }): Observable<any> {
+    return this.http.post(`/v1/fxsp/sys/file/download`, params);
+  }
 }

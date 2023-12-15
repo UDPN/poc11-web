@@ -21,6 +21,7 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
+import * as echarts from 'echarts';
 
 @Component({
   selector: 'app-home',
@@ -62,6 +63,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   validateForm!: FormGroup;
   nzOption: any[] = [];
   value: string[] = [];
+
+  testSeries: any[] = [];
+
 
   // colorScheme: Color = {
   //   domain: ['#5AA454', '#E44D25', '#7aa3e5', '#a8385d', '#aae3f5'],
@@ -154,7 +158,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.isFirstLogin();
     this.initTable();
     this.initSelect();
-    this.fetchNumbers();
+    // this.fetchNumbers();
     this.validateForm = this.fb.group({
       pairedExchangeRate: [1]
     });
@@ -172,6 +176,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.getEcharts();
+    this.fetchNumbers();
     this.pageHeaderInfo = {
       title: ``,
       breadcrumb: ['Dashboard'],
@@ -285,7 +291,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
                   item.targetPlatform,
                 series: series
               });
-
               this.multi = multi;
               Object.assign(this, { multi });
             });
@@ -326,7 +331,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
               name: timestampToDate(item.transactionDate),
               series: series1
             });
-
+            this.testSeries = series1;
             this.multi1 = multi1;
             Object.assign(this, { multi1 });
           });
@@ -393,4 +398,132 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pageIndex: 1
     };
   }
+
+  getEcharts() {
+    var dom = document.getElementById('chart-container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+
+    var option;
+
+    let xAxisData: string[] = [];
+    let data1: number[] = [];
+    let data2: number[] = [];
+    let data3: number[] = [];
+    let data4: number[] = [];
+
+    for (let i = 0; i < 10; i++) {
+      xAxisData.push('Class' + i);
+      data1.push(+(Math.random() * 2).toFixed(2));
+      data2.push(+(Math.random() * 5).toFixed(2));
+      data3.push(+(Math.random() + 0.3).toFixed(2));
+      data4.push(+Math.random().toFixed(2));
+    }
+
+    var emphasisStyle = {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowColor: 'rgba(0,0,0,0.3)'
+      }
+    };
+    option = {
+      title: {
+        text: 'CBDC Movements In the Last 7 Days',
+        left: 'center',
+        bottom: '0'
+      },
+      color: ['#A8385D', '#7AA3E5', '#A280A8', '#AAE3F5', '#ADCDCF', '#A95963'],
+      legend: {
+        data: ['bar', 'bar2', 'bar3', 'bar4'],
+        right: '10%',
+      },
+      tooltip: {},
+      xAxis: {
+        data: xAxisData,
+        name: '',
+        axisLine: { onZero: false },
+        splitLine: { show: false },
+        splitArea: { show: false }
+      },
+      yAxis: {},
+      grid: {
+        bottom: 100
+      },
+      series: [
+        {
+          name: 'bar',
+          type: 'bar',
+          stack: 'one',
+          emphasis: emphasisStyle,
+          data: data1
+        },
+        {
+          name: 'bar2',
+          type: 'bar',
+          stack: 'one',
+          emphasis: emphasisStyle,
+          data: data2
+        },
+        {
+          name: 'bar3',
+          type: 'bar',
+          stack: 'two',
+          emphasis: emphasisStyle,
+          data: data3
+        },
+        {
+          name: 'bar4',
+          type: 'bar',
+          stack: 'two',
+          emphasis: emphasisStyle,
+          data: data4
+        }
+      ],
+    };
+
+
+    // myChart.on('brushSelected', function (params: any) {
+    //   var brushed = [];
+    //   var brushComponent = params.batch[0];
+
+    //   for (var sIdx = 0; sIdx < brushComponent.selected.length; sIdx++) {
+    //     var rawIndices = brushComponent.selected[sIdx].dataIndex;
+    //     brushed.push('[Series ' + sIdx + '] ' + rawIndices.join(', '));
+    //   }
+
+    //   myChart.setOption<echarts.EChartsOption>({
+    //     title: {
+    //       backgroundColor: '#333',
+    //       text: 'SELECTED DATA INDICES: \n' + brushed.join('\n'),
+    //       bottom: 0,
+    //       right: '10%',
+    //       width: 100,
+    //       textStyle: {
+    //         fontSize: 12,
+    //         color: '#fff'
+    //       }
+    //     }
+    //   });
+    // });
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+  }
+
+  panels = [
+    {
+      active: true,
+      // name: 'This is panel header 1',
+      disabled: false
+    },
+    {
+      active: false,
+      disabled: false,
+      // name: 'This is panel header 2'
+    },
+  ];
 }

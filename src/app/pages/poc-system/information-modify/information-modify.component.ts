@@ -26,6 +26,7 @@ import { DestroyService } from '@app/core/services/common/destory.service';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 
 interface SearchParam {
   nodeName: string;
@@ -46,6 +47,8 @@ interface SearchParam {
   styleUrls: ['./information-modify.component.less']
 })
 export class InformationModifyComponent implements OnInit, AfterViewInit {
+  @ViewChild('authorizedTpl', { static: true }) 
+  authorizedTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -64,6 +67,10 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
   onSubmitStatus: boolean = false;
   businessLicenseUrlOld!: string; 
   spCode: any = '';
+  tableConfig!: AntTableConfig;
+  capitalPoolList: NzSafeAny[] = [];
+  attachmentsList: any = [];
+  bankType: any = '';
   constructor(
     private fb: FormBuilder,
     private modalService: NzModalService,
@@ -93,7 +100,9 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.initTable();
     this.getInfo();
+    this.getCapital();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required, this.spNameValidator]],
       countryInfoId: ['AL', [Validators.required]],
@@ -107,6 +116,10 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       detailedAddress: [null, [Validators.required]],
       businessLicenseUrl: [null, [Validators.required]]
     });
+  }
+
+  changePageSize(e: number): void {
+    this.tableConfig.pageSize = e;
   }
 
   getInfo() {
@@ -162,6 +175,16 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
 
   onDownload() {
     location.href = '../../../../assets/walletAddress/udpn-besu-sdk-1.0.0.jar';
+  }
+
+  getCapital() {
+    this._informationService.getUpgrade().subscribe((res: any) => {
+      this.bankType = res.bankType;
+      this.capitalPoolList = res.capitalPoolList;
+      this.attachmentsList = res.fileList;
+      this.cdr.markForCheck();
+      return;
+    })
   }
 
   onSubmit() {
@@ -266,5 +289,82 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     const param = this.validateForm.getRawValue();
     this.windowSrc.setSessionStorage('sencStepData', JSON.stringify(param));
     this._location.back();
+  }
+
+  
+  private base64ToBlob(urlData: string, type: string) {
+    let arr = urlData.split(',');
+    let array = arr[0].match(/:(.*?);/);
+    let mime = (array && array.length > 1 ? array[1] : type) || type;
+    let bytes = window.atob(arr[1]);
+    let ab = new ArrayBuffer(bytes.length);
+    let ia = new Uint8Array(ab);
+    for (let i = 0; i < bytes.length; i++) {
+      ia[i] = bytes.charCodeAt(i);
+    }
+    return new Blob([ab], {
+      type: mime
+    });
+  }
+
+  private downloadFile(base64: any, fileName: string) {
+    const fileType = fileName.slice(fileName.lastIndexOf('.') + 1);
+    let typeHeader = 'data:application/' + fileType + ';base64,';
+    let converedBase64 = typeHeader + base64;
+    let blob = this.base64ToBlob(converedBase64, fileType);
+    this.downloadExportFile(blob, fileName);
+  }
+
+  private downloadExportFile(blob: any, fileName: string) {
+    let downloadElement = document.createElement('a');
+    let href = blob;
+    if (typeof blob == 'string') {
+      downloadElement.target = '_blank';
+    } else {
+      href = window.URL.createObjectURL(blob);
+    }
+    downloadElement.href = href;
+    downloadElement.download = fileName;
+    document.body.appendChild(downloadElement);
+    downloadElement.click();
+    document.body.removeChild(downloadElement);
+    if (typeof blob != 'string') {
+      window.URL.revokeObjectURL(href);
+    }
+  }
+
+  onLoad(fileCode: string, fileUrl: string) {
+    this._informationService
+      .downImg({ hash: fileCode })
+      .subscribe((res) => {
+        this.downloadFile(res, fileUrl);
+      });
+  }
+
+  private initTable(): void {
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'Currency',
+          field: 'capitalPoolCurrency',
+          width: 180
+        },
+        {
+          title: 'Account/Wallet (Capital Pool Address)',
+          field: 'capitalPoolAddress',
+          width: 300
+        },
+        {
+          title: 'Pre-authorized Debit',
+          tdTemplate: this.authorizedTpl,
+          width: 120
+        },
+      ],
+      total: 0,
+      showCheckbox: false,
+      loading: false,
+      pageSize: 10,
+      pageIndex: 1,
+    };
   }
 }

@@ -29,7 +29,8 @@ export interface AntTableConfig {
   xScroll?: number; 
   yScroll?: number; 
   virtualItemSize?: number; 
-  showCheckbox?: boolean; 
+  showCheckbox?: boolean;
+  isRadio?: boolean;
   pageIndex: number; 
   pageSize: number; 
   total: number; 

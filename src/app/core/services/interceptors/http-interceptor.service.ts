@@ -129,7 +129,7 @@ export class HttpInterceptorService implements HttpInterceptor {
           });
           return event;
         }
-        if (event.body.code !== 'FXSP_20420') {
+        if (event.body.code !== 'FXSP_ELEVEN_20420') {
           if (!this.firstCode) {
             this.modal.error({
               nzTitle: 'error',

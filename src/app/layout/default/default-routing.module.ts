@@ -71,6 +71,30 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-activate-settlement',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-activate-settlement/poc-activate-settlement.module').then(
+            (m) => m.PocActivateSettlementModule
+          )
+      },
+      {
+        path: 'poc-wallet',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-wallet/poc-wallet.module').then(
+            (m) => m.PocWalletModule
+          )
+      },
+      {
+        path: 'poc-remittance',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-remittance/poc-remittance.module').then(
+            (m) => m.PocRemittanceModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)

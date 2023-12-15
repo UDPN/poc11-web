@@ -24,6 +24,7 @@
                 <input
                   nz-input
                   formControlName="userName"
+                  [ngClass]="{'onboard-disabled': !tempStatus}"
                   [readonly]="!tempStatus"
                   maxlength="20"
                 />

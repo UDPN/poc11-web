@@ -1,10 +1,3 @@
-/*
- * @Author: zhangxuefeng
- * @Date: 2023-10-17 10:48:53
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-30 14:53:56
- * @Description:
- */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@app/shared/shared.module';

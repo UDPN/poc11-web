@@ -6,6 +6,7 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
@@ -45,6 +46,9 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   capitalTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('balanceTpl', { static: true })
   balanceTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('authorizedTpl', { static: true })
+  authorizedTpl!: TemplateRef<NzSafeAny>;
+
   searchParam: Partial<SearchParam> = {
     creation: [],
     status: ''
@@ -57,12 +61,17 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   };
   tabIndex: number = 0;
   capitalPoolTabs = ['Capital Pool Information', 'Application Information'];
+  isVisible: boolean = false;
+  isLoading: boolean = false;
+  editValidateForm!: FormGroup;
+  editInfo: any = {};
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
     private dataService: LoginService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder,
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -97,6 +106,10 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     } else {
       this.tabIndex = 0;
     }
+    this.editValidateForm = this.fb.group({
+      status: [true, [Validators.required]],
+      amount: ['', [Validators.required]],
+    });
   }
 
   ngAfterViewInit(): void {
@@ -147,6 +160,20 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getEdit(capitalPoolCurrency: string, capitalPoolPlatform: string, capitalPoolAddress: string) {
+    this.isVisible = true;
+    this.editInfo = {
+      capitalPool: capitalPoolCurrency + '-' + capitalPoolPlatform,
+      capitalPoolAddress
+    }
+  }
+
+  cancelEdit() {
+    this.isVisible = false;
+  }
+
+  edit() {}
+
   private initTable(): void {
     this.tableConfig = {
       headers: [
@@ -167,7 +194,6 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Balance',
-
           tdTemplate: this.balanceTpl,
           width: 200
         },
@@ -177,20 +203,19 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
           pipe: 'timeStamp',
           width: 180
         },
-        // {
-        //   title: 'Status',
-        //   field: 'status',
-        //   pipe: 'foreignStatusPool',
-        //   width: 180
-        // },
-        // {
-        //   title: 'Action',
-        //   tdTemplate: this.operationTpl,
-        //   fixed: true,
-        //   fixedDir: 'right',
-        //   showAction: false,
-        //   width: 180
-        // },
+        {
+          title: 'Pre-authorized Debit',
+          tdTemplate: this.authorizedTpl,
+          width: 180
+        },
+        {
+          title: 'Action',
+          tdTemplate: this.operationTpl,
+          fixed: true,
+          fixedDir: 'right',
+          showAction: false,
+          width: 180
+        }
       ],
       total: 0,
       showCheckbox: false,

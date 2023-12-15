@@ -14,7 +14,7 @@
           <div nz-row nzJustify="space-between" nzGutter="8">
             <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24">SP Name
+                <nz-form-label nzRequired nzSpan="24">Commercial Bank Name
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="enterpriseError">
                   <div nz-row [formGroup]="validateForm">
@@ -24,7 +24,7 @@
                   </div>
                   <ng-template #enterpriseError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your
-                      SP Name</ng-container>
+                      Commercial Bank Name</ng-container>
                     <ng-container *ngIf="control.hasError('regular')">Please enter 2~50
                       characters of numbers and letters. It cannot start with a
                       number.</ng-container>
@@ -34,8 +34,7 @@
             </div>
             <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24">Country of Region
-                </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24">Central Bank</nz-form-label>
                 <nz-form-control [nzErrorTip]="countryError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24" class="onboard-disabled">
@@ -44,7 +43,7 @@
                   </div>
                   <ng-template #countryError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please select your
-                      Country</ng-container>
+                      Central Bank</ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -242,12 +241,42 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+
+      <ng-container [ngStyle]="{'display' : bankType === 2 ? '' : 'none'}">
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
+            <div class="access-title">Capital Pool Information</div>
+          </div>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+            <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="tableConfig"
+              [tableData]="capitalPoolList"></app-ant-table>
+            <ng-template #authorizedTpl>
+              <span>{{ 'Yes' }}</span>
+            </ng-template>
+          </div>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
+            <div class="access-title">Attachments</div>
+          </div>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+            <label *ngFor="let item of attachmentsList">
+              <button nz-button nzType="primary" class="m-r-25" (click)="onLoad(item.fileCode, item.fileUrl)">{{
+                item.fileUrl }}</button>
+            </label>
+          </div>
+        </div>
+      </ng-container>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
           <div nz-row>
             <div nz-col nzSpan="24" style="text-align: end;">
               <nz-space>
-                <ng-container *appAuth="'R0601001'">
+                <ng-container *appAuth="'R030301'">
                   <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="onSubmitStatus"
                     (click)="onSubmit()">Submit</button>
                 </ng-container>

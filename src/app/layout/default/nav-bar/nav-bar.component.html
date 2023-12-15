@@ -172,14 +172,14 @@
                 (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
               " nz-submenu (nzOpenChange)="changeOpen(menu, menus)" [(nzOpen)]="menu.open" [nzTitle]="(isCollapsed$ | async) && !(isOverMode$ | async)
                 ? menu.groupCollapseName
-                : menu.groupName" [ngClass]="{ disabled: menu.disabled }">
+                : menu.groupName" [ngClass]="{ disabled: menu.disabled }" style="color: #3c5686;">
               <ul>
                 <ng-container *ngFor="
                     let menuSecond of menu.children;
                     trackByProperty: 'id'
                   ">
                   <!--Permission to 2-->
-                  <ng-container>
+                  <ng-container  *appAuth="menuSecond.code">
                     <li [nzPaddingLeft]="
                         (themesMode !== 'top' || isOverMode) && !isCollapsed
                           ? 32

@@ -73,13 +73,13 @@
     </ng-template>
     <ng-template #operationTpl let-formRateCurrency="formRateCurrency" let-formRatePlatform="formRatePlatform"
       let-toRateCurrency="toRateCurrency" let-toRatePlatform="toRatePlatform">
-      <ng-container *appAuth="'R0301002'">
+      <ng-container *appAuth="'R02040102'">
         <span class="operate-text" routerLink="/poc/poc-settlement/settlement/edit"
           [queryParams]="{formRateCurrency,formRatePlatform,toRateCurrency,toRatePlatform}">
           Edit
         </span>
       </ng-container>
-      <ng-container *appAuth="'R0301003'">
+      <ng-container *appAuth="'R02040103'">
         <span class="operate-text" routerLink="/poc/poc-settlement/settlement/info"
           [queryParams]="{formRateCurrency,formRatePlatform,toRateCurrency,toRatePlatform}">
           Detail
@@ -89,7 +89,7 @@
   </app-card-table-wrap>
 </div>
 <ng-template #tableBtns>
-  <button routerLink="/poc/poc-settlement/settlement/add" *appAuth="'R0301001'" nz-button nzType="primary"
+  <button routerLink="/poc/poc-settlement/settlement/add" *appAuth="'R02040101'" nz-button nzType="primary"
     class="m-r-8">
     <i nz-icon nzType="plus"></i>
     New

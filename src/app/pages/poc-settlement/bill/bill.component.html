@@ -90,12 +90,12 @@
         }}</span>
     </ng-template>
     <ng-template #operationTpl let-billNo="billNo">
-      <ng-container *appAuth="'R0302001'">
+      <ng-container *appAuth="'R02040201'">
         <span class="operate-text" (click)="onInvoice(billNo)">
           Invoice
         </span>
       </ng-container>
-      <ng-container *appAuth="'R0302002'">
+      <ng-container *appAuth="'R02040202'">
         <span class="operate-text" (click)="onDetail(billNo)">
           Detail
         </span>

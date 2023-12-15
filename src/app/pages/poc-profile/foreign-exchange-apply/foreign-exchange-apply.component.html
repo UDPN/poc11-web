@@ -85,7 +85,7 @@
       </span>
     </ng-template>
     <ng-template #operationTpl let-applicationNo="applicationNo">
-      <ng-container *appAuth="'R0202'">
+      <ng-container *appAuth="'R020302'">
         <span class="operate-text" routerLink="/poc/poc-profile/foreign-exchange-apply/info"
           [queryParams]="{applicationNo}">
           Detail
@@ -95,11 +95,11 @@
   </app-card-table-wrap>
   <div>
     <ng-template #createBtn>
-      <button routerLink="/poc/poc-profile/foreign-exchange-apply/add" *appAuth="'R0201'" nz-button nzType="primary"
+      <button routerLink="/poc/poc-profile/foreign-exchange-apply/add" *appAuth="'R020301'" nz-button nzType="primary"
         class="m-r-8">
         Activate Exchange Business
       </button>
-      <button routerLink="/poc/poc-profile/foreign-exchange-apply/reduce" *appAuth="'R0203'" nz-button nzType="primary"
+      <button routerLink="/poc/poc-profile/foreign-exchange-apply/reduce" *appAuth="'R020303'" nz-button nzType="primary"
         class="m-r-8">
         Reduce Exchange Business
       </button>

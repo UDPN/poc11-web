@@ -45,11 +45,10 @@ export class LoginInOutService {
       
       userInfo.authCode.push(ActionCode.TabsDetail);
       userInfo.authCode.push(ActionCode.SearchTableDetail);
-      
+
       userInfo.authCode.push('R0');
       
       this.userInfoService.setUserInfo(userInfo);
-      
 
       const helper = new JwtHelperService();
       const { resourceList } = helper.decodeToken(token)['user_name'];

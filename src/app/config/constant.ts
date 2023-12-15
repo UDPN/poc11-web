@@ -13,9 +13,13 @@ export const LockedKey = 'LockedKey';
 
 export const salt = 'EIpWsyfiy@R@X#qn17!StJNdZK1fFF8iV6ffN!goZkqt#JxO';
 
-export const aesKey = 'udpnpoc9aeskeymd';
+export const aesKey = 'udpnpoc11aeskeym';
 
-export const aesVi = 'udpnpoc9aesviics';
+export const aesVi = 'udpnpoc11aesvii6';
+
+// export const aesKey = 'udpnpoc9aeskeymd';
+
+// export const aesVi = 'udpnpoc9aesviics';
 
 export const loginTimeOutCode = 1012;
 

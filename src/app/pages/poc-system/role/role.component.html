@@ -35,24 +35,24 @@
     </ng-template>
     <ng-template #operationTpl let-lockable="lockable" let-superRole="superRole" let-roleCode="roleCode"
       let-roleName="roleName">
-      <ng-container *appAuth="'R0602002'">
+      <ng-container *appAuth="'R030202'">
         <span class="operate-text" *ngIf="superRole === 2" routerLink="/poc/poc-system/role/edit"
           [queryParams]="{roleCode}">
           Edit
         </span>
       </ng-container>
-      <ng-container *appAuth="lockable === 3 ? '' : (lockable === 2 ? 'R0602004' : 'R0602003')">
+      <ng-container *appAuth="lockable === 3 ? '' : (lockable === 2 ? 'R030204' : 'R030203')">
         <span class="operate-text" *ngIf="superRole === 2"
           (click)="onStatusUpdate(roleCode, lockable === 3 ? '' : (lockable === 1 ? 2 : 1), roleName)">
           {{ lockable === 3 ? '' : (lockable === 2 ? 'Disable' : 'Enable') }}
         </span>
       </ng-container>
-      <ng-container *appAuth="'R0602006'">
+      <ng-container *appAuth="'R030206'">
         <span class="operate-text" routerLink="/poc/poc-system/role/info" [queryParams]="{roleCode}">
           View
         </span>
       </ng-container>
-      <ng-container *appAuth="'R0602005'">
+      <ng-container *appAuth="'R030205'">
         <span class="operate-text" *ngIf="lockable === 1 && superRole === 2" (click)="onDelete(roleCode)">
           Delete
         </span>
@@ -61,7 +61,7 @@
   </app-card-table-wrap>
 </div>
 <ng-template #createBtn>
-  <button routerLink="/poc/poc-system/role/add" *appAuth="'R0602001'" nz-button nzType="primary" class="m-r-8">
+  <button routerLink="/poc/poc-system/role/add" *appAuth="'R030201'" nz-button nzType="primary" class="m-r-8">
     <i nz-icon nzType="plus"></i>
     Add
   </button>

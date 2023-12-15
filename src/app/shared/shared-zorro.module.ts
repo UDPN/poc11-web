@@ -51,6 +51,9 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzCommentModule } from 'ng-zorro-antd/comment';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+
 export const SHARED_ZORRO_MODULES = [
   NzTreeModule,
   NzTreeSelectModule,
@@ -104,5 +107,7 @@ export const SHARED_ZORRO_MODULES = [
   NzTypographyModule,
   NzModalModule,
   NzCollapseModule,
-  NzSkeletonModule
+  NzSkeletonModule,
+  NzCommentModule,
+  NzTimelineModule
 ];

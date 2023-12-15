@@ -1,0 +1,95 @@
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-wallet/cbdc-transaction'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <div nz-row class="m-t-10">
+    <div nz-col [nzXXl]="14" [nzXl]="14" [nzLg]="24" [nzMd]="14" [nzSm]="24" [nzXs]="24">
+      <nz-card nzTitle="" class="m-r-8 none-bottom">
+        <nz-card nzBordered="false" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+            [nzBordered]="false" class="card-descriptions">
+            <nz-descriptions-item nzTitle="Transfer"><span [ngStyle]="{color: 'red'}">{{ '-10,000.00 w-EUR'
+                }}</span></nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+
+        <!-- title: (Top-up: Top-up, Withdrawal: Withdrawal, Transfer & Exchange: + Receiving  - Payment) Information -->
+        <nz-card nzTitle="Top-up Information" nzBordered="false" class="m-t-25"
+          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+            <nz-descriptions-item nzTitle="Transaction No.">{{ 'F9160189-E5D5-4E64-1EEB-7DAAF4EF9999'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Creation Time">{{ 1654231412 | map:'timeStamp'
+              }}</nz-descriptions-item>
+          </nz-descriptions>
+          <nz-divider></nz-divider>
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+            <nz-descriptions-item nzTitle="From">
+              <ng-container>
+                {{'Standard Chartered Bank'}}
+                <br>
+                {{ '0x000000000000000000000000000000001111111'}}
+                <br>
+                {{'1,4026.63 w-USD'}}
+              </ng-container>
+              <ng-container>{{ '0x000000000000000000000000000000001111111'}}
+              </ng-container>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="To">
+              <ng-container>
+                {{'Standard Chartered Bank'}}
+                <br>
+                {{ '0x000000000000000000000000000000001111111'}}
+                <br>
+                {{'1,4026.63 w-USD'}}
+              </ng-container>
+              <ng-container>{{ '0x000000000000000000000000000000001111111'}}
+              </ng-container>
+            </nz-descriptions-item>
+          </nz-descriptions>
+          <nz-divider></nz-divider>
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+            <!-- Transfer: (+  Payment  - Remittance) Information -->
+            <nz-descriptions-item nzTitle="Payment Information">
+              {{ 'Enduser Information:'}}
+              <br>
+              {{'Commercial Bank of CNY'}}
+              <br>
+              {{'0x1230c9FCE1C71B6CCF18Cb89E4A9e03Ac51c456'}}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+        <!-- Transfer & Exchange -->
+        <nz-card nzTitle="FX Information" nzBordered="false" class="m-t-25"
+          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+            <nz-descriptions-item nzTitle="Settlement Bank">{{ 'Settlement Bank1'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ '1:0.91'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Commission">{{ '5 w-CNY'}}</nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+        <!-- Transfer & Exchange -->
+        <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25"
+          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+            <nz-descriptions-item nzTitle="Transcation Hash">{{ '--'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Transcation Time">{{ '--'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Status">{{ 'Pending Approval'}}</nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+
+      </nz-card>
+    </div>
+    <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="24" [nzMd]="10" [nzSm]="24" [nzXs]="24">
+      <nz-card nzTitle="" [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
+        <app-timeline />
+      </nz-card>
+    </div>
+  </div>
+</div>

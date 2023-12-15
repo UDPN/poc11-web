@@ -66,4 +66,9 @@ export class InformationService {
   public getWalletAddress(): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/sp/getWalletAddress`, {});
   }
+
+  public getUpgrade(): Observable<any> {
+    return this.http.post(`/v1/fxsp/sys/upgrade/detail`, {});
+  }
+  
 }
