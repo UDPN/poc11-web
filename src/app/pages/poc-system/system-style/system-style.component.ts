@@ -76,7 +76,7 @@ export class SystemStyleComponent implements OnInit {
   @ViewChild('numberTpl', { static: true })
   numberTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
-  hex: string = '#3c5686';
+  hex: string = '';
   _isNightTheme = false;
   _themesOptions: SettingInterface = {
     color: "#3c5686",
@@ -105,26 +105,12 @@ export class SystemStyleComponent implements OnInit {
     };
   }
   ngOnInit() {
-    console.log(this.hex);
+    const themeOptionsKey:any = this.windowServe.getStorage(ThemeOptionsKey);
+    this.hex = JSON.parse(themeOptionsKey).color;
     this.changeColor(this.hex);
   }
 
-  changePageSize(e: number): void {
-    this.tableConfig.pageSize = e;
-  }
-
-  // setThemeOptions(): void {
-  //   this.themesService.setThemesMode(this._themesOptions);
-  //   this.windowServe.setStorage(
-  //     ThemeOptionsKey,
-  //     JSON.stringify(this._themesOptions)
-  //   );
-  // }
-
   changeColor(color: string) {
-    console.log(this.hex);
-
-    // this.selOne(color as NormalModel, this.colors);
     this.nzConfigService.set('theme', {
       primaryColor: color
     });
@@ -133,61 +119,6 @@ export class SystemStyleComponent implements OnInit {
       ThemeOptionsKey,
       JSON.stringify(this._themesOptions)
     );
-    // this.setThemeOptions();
   }
 
-  // changeSpecialTheme(e: boolean, themeType: SpecialTheme): void {
-  //   const name = this.doc.getElementsByTagName('html');
-  //   const theme = fnFormatToHump(themeType);
-  //   if (e) {
-  //     this.rd2.addClass(name[0], themeType);
-  //   } else {
-  //     this.rd2.removeClass(name[0], themeType);
-  //   }
-  //   this._themesOptions[theme as SpecialThemeHump] = e;
-  //   this.setThemeOptions();
-  // }
-
-  // changePrimaryColor(color: Color): void {
-  //   this.selOne(color as NormalModel, this.colors);
-  //   this.nzConfigService.set('theme', {
-  //     primaryColor: color.color
-  //   });
-  //   this._themesOptions.color = color.color;
-  //   this.setThemeOptions();
-  // }
-
-
-  // selOne(item: NormalModel, itemArray: NormalModel[]): void {
-  //   itemArray.forEach((_item) => (_item.isChecked = false));
-  //   item.isChecked = true;
-  // }
-
-  // initThemeOption(): void {
-  //   this.isNightTheme$
-  //     .pipe(first())
-  //     .subscribe((res) => (this._isNightTheme = res));
-  //   this.themesOptions$.pipe(first()).subscribe((res) => {
-  //     this._themesOptions = res;
-  //   });
-
-  //   (['grey-theme', 'color-weak'] as SpecialTheme[]).forEach((item) => {
-  //     const specialTheme = fnFormatToHump(item);
-  //     this.changeSpecialTheme(
-  //       this._themesOptions[specialTheme as SpecialThemeHump],
-  //       item
-  //     );
-  //   });
-
-  //   this.modes.forEach((item) => {
-  //     item.isChecked = item.key === this._themesOptions.mode;
-  //   });
-  //   this.colors.forEach((item) => {
-  //     item.isChecked = item.color === this._themesOptions.color;
-  //   });
-  //   this.changePrimaryColor(this.colors.find((item) => item.isChecked)!);
-  //   this.themes.forEach((item) => {
-  //     item.isChecked = item.key === this._themesOptions.theme;
-  //   });
-  // }
 }

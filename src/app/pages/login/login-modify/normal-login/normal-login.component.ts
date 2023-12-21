@@ -15,6 +15,8 @@ import { Router } from '@angular/router';
 import { finalize, takeUntil } from 'rxjs/operators';
 
 import {
+  IsFirstLogin,
+  ThemeOptionsKey,
   TokenKey,
   TokenKeyDefault,
   TokenPre,
@@ -34,6 +36,24 @@ import { LoginInOutService } from '@app/core/services/common/login-in-out.servic
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { environment } from '@env/environment';
 import sign from 'jwt-encode';
+import { ThemeService } from '@app/core/services/store/common-store/theme.service';
+import { NzConfigService } from 'ng-zorro-antd/core/config';
+
+export interface SettingInterface {
+  theme: 'dark' | 'light';
+  color: string;
+  mode: 'side' | 'top' | 'mixi';
+  colorWeak: boolean;
+  greyTheme: boolean;
+  fixedHead: boolean;
+  splitNav: boolean;
+  fixedLeftNav: boolean;
+  fixedTab: boolean;
+  hasTopArea: boolean;
+  hasFooterArea: boolean;
+  hasNavArea: boolean;
+  hasNavHeadArea: boolean;
+}
 
 @Component({
   selector: 'app-normal-login',
@@ -53,6 +73,22 @@ export class NormalLoginComponent implements OnInit {
   hasUser!: boolean;
   version: any;
   isLoadingName: boolean = true;
+  isFirstLogin: any = '';
+  _themesOptions: SettingInterface = {
+    color: "#3c5686",
+    colorWeak: false,
+    fixedHead: true,
+    fixedLeftNav: true,
+    fixedTab: true,
+    greyTheme: false,
+    hasFooterArea: true,
+    hasNavArea: true,
+    hasNavHeadArea: true,
+    hasTopArea: true,
+    mode: "mixi",
+    splitNav: false,
+    theme: "dark"
+  };
   constructor(
     private destroy$: DestroyService,
     private userInfoService: UserInfoService,
@@ -65,7 +101,10 @@ export class NormalLoginComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private login1StoreService: Login1StoreService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private windowService: WindowService,
+    private themesService: ThemeService, 
+    private nzConfigService: NzConfigService,
   ) {}
 
   submitForm(): void {
@@ -105,6 +144,16 @@ export class NormalLoginComponent implements OnInit {
             .success('Login successfully!', { nzDuration: 1000 })
             .onClose!.subscribe(() => {
               this.router.navigateByUrl('/poc/poc-home/home');
+              // if (this.isFirstLogin === null) {
+              //   this.nzConfigService.set('theme', {
+              //     primaryColor: '#3c5686'
+              //   });
+              //   this._themesOptions.color = '#3c5686';
+              // }
+              // this.windowServe.setStorage(
+              //   ThemeOptionsKey,
+              //   JSON.stringify(this._themesOptions)
+              // );
             });
         });
       }
@@ -116,6 +165,21 @@ export class NormalLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isFirstLogin = this.windowService.getStorage(IsFirstLogin);
+    if (this.isFirstLogin === null) {
+      console.log(this.isFirstLogin);
+      
+      this.nzConfigService.set('theme', {
+        primaryColor: '#3c5686'
+      });
+      this._themesOptions.color = '#3c5686';
+      this.windowServe.setStorage(
+        ThemeOptionsKey,
+        JSON.stringify(this._themesOptions)
+      );
+    }
+
+ 
     this.onRefresh();
     this.login1StoreService
       .getIsLogin1OverModelStore()

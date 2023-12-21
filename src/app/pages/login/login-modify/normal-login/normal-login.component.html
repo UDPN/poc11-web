@@ -105,6 +105,7 @@
         nzSize="large"
         class="full-with m-t-15 btn"
         [nzType]="'primary'"
+        [ngClass]="{'ant-btn-primary': isFirstLogin !== null, 'btn-primary': isFirstLogin === null}"
       >
         LOGIN
       </button>
