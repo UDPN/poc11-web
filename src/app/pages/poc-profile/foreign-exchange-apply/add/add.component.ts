@@ -74,18 +74,25 @@ export class AddComponent implements OnInit {
         res.examineStatus === 1 ? true : false
       );
       // this._currencyStoreService.setTystatusStore(0);
-      if (res.examineStatus === 0) {
-        //edit
-        this.foreignExchangeApplyService
-          .getSpApprovedInfo()
-          .subscribe((resz) => {
-            this.info = resz
-            this.initSelectFirter(resz);
-            
-          });
-      } else {
-        this.initSelect();
-      }
+      // if (res.examineStatus === 0) {
+      //   //edit
+      //   this.foreignExchangeApplyService
+      //     .getSpApprovedInfo()
+      //     .subscribe((resz) => {
+      //       this.info = resz
+      //       this.initSelectFirter(resz);
+
+      //     });
+      // } else {
+      //   this.initSelect();
+      // }
+      this.foreignExchangeApplyService
+        .getSpApprovedInfo()
+        .subscribe((resz) => {
+          this.info = resz
+          this.initSelectFirter(resz);
+
+        });
     });
   }
   initSelectFirter(data: any) {

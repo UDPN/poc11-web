@@ -4,16 +4,24 @@
   <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
 </ng-template>
 <div class="normal-detail-table-wrap">
+  <nz-card [nzBordered]="true">
+    <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+      class="card-descriptions">
+      <nz-descriptions-item nzTitle="Cross-Border Remittance" [nzSpan]="3">{{
+        '11112w12sewd'
+        }}</nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
   <nz-card [nzBordered]="true" [nzTitle]="'Basic Information'" class="m-b-10">
     <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
       [nzBordered]="true">
       <nz-descriptions-item nzTitle="Transaction No." [nzSpan]="3">{{
         info.transactionNo
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">{{
+      <!-- <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">{{
         info.transactionHash
-        }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Transaction Currency" [nzSpan]="3">{{
+        }}</nz-descriptions-item> -->
+      <nz-descriptions-item nzTitle="Currency Pair" [nzSpan]="3">{{
         (info.formCurrency + '-' + info.formPlatform + '->' + info.toCurrency + '-' + info.toPlatform) | map:'null'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="From" [nzSpan]="3">
@@ -48,7 +56,8 @@
         info.chargingModel | map: 'chargingModel'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Commission" [nzSpan]="3">{{
-        (info.chargingModel === 1 ? info.ratioCommission + '%' : info.regularCommission + ' ' + info.formCurrency + '-' + info.formPlatform) | map:'null'
+        (info.chargingModel === 1 ? info.ratioCommission + '%' : info.regularCommission + ' ' + info.formCurrency + '-'
+        + info.formPlatform) | map:'null'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Max Commission (Per Transaction)" [nzSpan]="3" *ngIf="info.chargingModel === 1">{{
         (info.maxCommission + ' ' + info.formCurrency + '-' + info.formPlatform) | map:'null'

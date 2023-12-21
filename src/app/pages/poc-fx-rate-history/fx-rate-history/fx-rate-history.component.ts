@@ -191,7 +191,7 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
     this.tableConfig = {
       headers: [
         {
-          title: 'Transaction Currency',
+          title: 'Currency Pair',
           tdTemplate: this.currencyTpl,
           width: 200
         },

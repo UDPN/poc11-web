@@ -152,11 +152,11 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           field: 'transactionNo',
           width: 350
         },
-        {
-          title: 'Transaction Hash',
-          field: 'transactionHash',
-          width: 350
-        },
+        // {
+        //   title: 'Transaction Hash',
+        //   field: 'transactionHash',
+        //   width: 350
+        // },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,

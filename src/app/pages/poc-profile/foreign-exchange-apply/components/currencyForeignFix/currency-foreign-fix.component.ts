@@ -262,17 +262,19 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
       .getOutCapitalPoolStore()
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
-        let newArr: any[] = [];
-        res.forEach((item: any) => {
-          newArr.push(
-            item.capitalPoolCurrency + '-' + item.capitalPoolPlatform
-          );
-        });
-        let ssr = this.permutationAndCombination(newArr, 2);
-        this.allSsr = ssr;
-        this.setSelectOption();
-        this.existNewRatePair = newArr;
-        this.selectOption$.next(newArr);
+        if (res !== null) {
+          let newArr: any[] = [];
+          res.forEach((item: any) => {
+            newArr.push(
+              item.capitalPoolCurrency + '-' + item.capitalPoolPlatform
+            );
+          });
+          let ssr = this.permutationAndCombination(newArr, 2);
+          this.allSsr = ssr;
+          this.setSelectOption();
+          this.existNewRatePair = newArr;
+          this.selectOption$.next(newArr);
+        }
       });
 
     this._currencyStoreService
