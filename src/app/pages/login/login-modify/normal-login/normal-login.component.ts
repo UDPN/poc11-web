@@ -144,16 +144,6 @@ export class NormalLoginComponent implements OnInit {
             .success('Login successfully!', { nzDuration: 1000 })
             .onClose!.subscribe(() => {
               this.router.navigateByUrl('/poc/poc-home/home');
-              // if (this.isFirstLogin === null) {
-              //   this.nzConfigService.set('theme', {
-              //     primaryColor: '#3c5686'
-              //   });
-              //   this._themesOptions.color = '#3c5686';
-              // }
-              // this.windowServe.setStorage(
-              //   ThemeOptionsKey,
-              //   JSON.stringify(this._themesOptions)
-              // );
             });
         });
       }
@@ -167,8 +157,6 @@ export class NormalLoginComponent implements OnInit {
   ngOnInit(): void {
     this.isFirstLogin = this.windowService.getStorage(IsFirstLogin);
     if (this.isFirstLogin === null) {
-      console.log(this.isFirstLogin);
-      
       this.nzConfigService.set('theme', {
         primaryColor: '#3c5686'
       });
@@ -179,7 +167,6 @@ export class NormalLoginComponent implements OnInit {
       );
     }
 
- 
     this.onRefresh();
     this.login1StoreService
       .getIsLogin1OverModelStore()

@@ -19,6 +19,10 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 import { fadeRouteAnimation } from './animations/fade.animation';
 import { TranslateService } from '@ngx-translate/core';
+import { ThemeOptionsKey } from './config/constant';
+import { WindowService } from './core/services/common/window.service';
+import { ThemeService } from './core/services/store/common-store/theme.service';
+import { NzConfigService } from 'ng-zorro-antd/core/config';
 
 @Component({
   selector: 'app-root',
@@ -92,7 +96,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     private preloader: PreloaderService,
     private spinService: SpinService,
     public router: Router,
-    public translateService: TranslateService
+    public translateService: TranslateService,
+    private windowService: WindowService,
+    private themesService: ThemeService, 
+    private nzConfigService: NzConfigService,
   ) {
         this.initTranslate();
   }
@@ -118,6 +125,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    const themeOptionsKey:any = this.windowService.getStorage(ThemeOptionsKey);
+    this.nzConfigService.set('theme', {
+      primaryColor: JSON.parse(themeOptionsKey).color
+    });
     this.router.events
       .pipe(filter((event: NzSafeAny) => event instanceof NavigationEnd))
       .subscribe((event: NzSafeAny) => {
