@@ -17,6 +17,11 @@ const routes: Routes = [
     data: { preload: true },
     loadChildren: () => import('./information-modify/information-modify.module').then(m => m.InformationModifyModule)
   },
+  {
+    path: 'system-style',
+    data: { preload: true },
+    loadChildren: () => import('./system-style/system-style.module').then(m => m.SystemStyleModule)
+  },
 ];
 
 @NgModule({

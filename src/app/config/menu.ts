@@ -247,6 +247,16 @@ const menuNav: Menu[] = [
         code: 'R0303',
         path: '/poc/poc-system/information-modify'
       },
+      {
+        id: 4,
+        fatherId: 12,
+        menuName: 'System Color',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R0',
+        path: '/poc/poc-system/system-style'
+      },
     ]
   },
 ];

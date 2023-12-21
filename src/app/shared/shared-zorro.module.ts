@@ -53,6 +53,7 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';
 
 export const SHARED_ZORRO_MODULES = [
   NzTreeModule,
@@ -109,5 +110,6 @@ export const SHARED_ZORRO_MODULES = [
   NzCollapseModule,
   NzSkeletonModule,
   NzCommentModule,
-  NzTimelineModule
+  NzTimelineModule,
+  NzColorPickerModule
 ];

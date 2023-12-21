@@ -1,11 +1,20 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+  Renderer2
+} from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { IsNightKey, ThemeOptionsKey } from '@config/constant';
 import { ThemeSkinService } from '@core/services/common/theme-skin.service';
 import { WindowService } from '@core/services/common/window.service';
-import { SettingInterface, ThemeService } from '@store/common-store/theme.service';
+import {
+  SettingInterface,
+  ThemeService
+} from '@store/common-store/theme.service';
 import { fnFormatToHump } from '@utils/tools';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -107,7 +116,7 @@ export class SettingDrawerComponent implements OnInit {
     },
     {
       key: 'daybreak',
-      color: '#1890FF',
+      color: '#3c5686',
       title: 'Dawn blue (the default)',
       isChecked: false
     },
@@ -171,21 +180,21 @@ export class SettingDrawerComponent implements OnInit {
 
   changePrimaryColor(color: Color): void {
     this.selOne(color as NormalModel, this.colors);
-    this.nzConfigService.set('theme', { primaryColor: color.color });
+    this.nzConfigService.set('theme', {
+      primaryColor: color.color
+    });
     this._themesOptions.color = color.color;
     this.setThemeOptions();
   }
 
-  
   changeNightTheme(isNight: boolean): void {
     this.windowServe.setStorage(IsNightKey, `${isNight}`);
     this.themesService.setIsNightTheme(isNight);
     this.themeSkinService.toggleTheme().then();
   }
 
-  
   selOne(item: NormalModel, itemArray: NormalModel[]): void {
-    itemArray.forEach(_item => (_item.isChecked = false));
+    itemArray.forEach((_item) => (_item.isChecked = false));
     item.isChecked = true;
   }
 
@@ -196,22 +205,32 @@ export class SettingDrawerComponent implements OnInit {
     this.setThemeOptions();
   }
 
-  
   changeTheme(themeItem: Theme): void {
     this.selOne(themeItem, this.themes);
     this._themesOptions.theme = themeItem.key;
     this.setThemeOptions();
   }
 
-  
   setThemeOptions(): void {
     this.themesService.setThemesMode(this._themesOptions);
-    this.windowServe.setStorage(ThemeOptionsKey, JSON.stringify(this._themesOptions));
+    this.windowServe.setStorage(
+      ThemeOptionsKey,
+      JSON.stringify(this._themesOptions)
+    );
   }
 
-  
-  changeFixed(isFixed: boolean, type: 'splitNav' | 'fixedTab' | 'fixedLeftNav' | 'fixedHead' | 'hasTopArea' | 'hasFooterArea' | 'hasNavArea' | 'hasNavHeadArea'): void {
-    
+  changeFixed(
+    isFixed: boolean,
+    type:
+      | 'splitNav'
+      | 'fixedTab'
+      | 'fixedLeftNav'
+      | 'fixedHead'
+      | 'hasTopArea'
+      | 'hasFooterArea'
+      | 'hasNavArea'
+      | 'hasNavHeadArea'
+  ): void {
     if (type === 'fixedHead' && !isFixed) {
       this._themesOptions['fixedTab'] = false;
     }
@@ -219,7 +238,6 @@ export class SettingDrawerComponent implements OnInit {
     this.setThemeOptions();
   }
 
-  
   changeSpecialTheme(e: boolean, themeType: SpecialTheme): void {
     const name = this.doc.getElementsByTagName('html');
     const theme = fnFormatToHump(themeType);
@@ -233,25 +251,29 @@ export class SettingDrawerComponent implements OnInit {
   }
 
   initThemeOption(): void {
-    this.isNightTheme$.pipe(first()).subscribe(res => (this._isNightTheme = res));
-    this.themesOptions$.pipe(first()).subscribe(res => {
+    this.isNightTheme$
+      .pipe(first())
+      .subscribe((res) => (this._isNightTheme = res));
+    this.themesOptions$.pipe(first()).subscribe((res) => {
       this._themesOptions = res;
     });
 
-    
-    (['grey-theme', 'color-weak'] as SpecialTheme[]).forEach(item => {
+    (['grey-theme', 'color-weak'] as SpecialTheme[]).forEach((item) => {
       const specialTheme = fnFormatToHump(item);
-      this.changeSpecialTheme(this._themesOptions[specialTheme as SpecialThemeHump], item);
+      this.changeSpecialTheme(
+        this._themesOptions[specialTheme as SpecialThemeHump],
+        item
+      );
     });
 
-    this.modes.forEach(item => {
+    this.modes.forEach((item) => {
       item.isChecked = item.key === this._themesOptions.mode;
     });
-    this.colors.forEach(item => {
+    this.colors.forEach((item) => {
       item.isChecked = item.color === this._themesOptions.color;
     });
-    this.changePrimaryColor(this.colors.find(item => item.isChecked)!);
-    this.themes.forEach(item => {
+    this.changePrimaryColor(this.colors.find((item) => item.isChecked)!);
+    this.themes.forEach((item) => {
       item.isChecked = item.key === this._themesOptions.theme;
     });
   }

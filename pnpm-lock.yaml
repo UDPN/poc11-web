@@ -77,9 +77,12 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  ng-antd-color-picker:
+    specifier: ^1.1.0
+    version: 1.1.0(@angular/common@16.1.0)(@angular/core@16.1.0)(@ctrl/tinycolor@3.6.0)
   ng-zorro-antd:
-    specifier: ^16.1.0
-    version: 16.1.0(@angular/animations@16.1.0)(@angular/common@16.1.0)(@angular/core@16.1.0)(@angular/forms@16.1.0)(@angular/platform-browser@16.1.0)(@angular/router@16.1.0)(rxjs@7.8.1)
+    specifier: ^16.2.0
+    version: 16.2.2(@angular/animations@16.1.0)(@angular/common@16.1.0)(@angular/core@16.1.0)(@angular/forms@16.1.0)(@angular/platform-browser@16.1.0)(@angular/router@16.1.0)(rxjs@7.8.1)
   ngx-translate-multi-http-loader:
     specifier: ^16.0.1
     version: 16.0.1(@angular/common@16.1.0)(@angular/core@16.1.0)(@ngx-translate/core@15.0.0)(deepmerge-ts@5.1.0)(rxjs@7.8.1)
@@ -9201,8 +9204,21 @@ packages:
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  /ng-zorro-antd@16.1.0(@angular/animations@16.1.0)(@angular/common@16.1.0)(@angular/core@16.1.0)(@angular/forms@16.1.0)(@angular/platform-browser@16.1.0)(@angular/router@16.1.0)(rxjs@7.8.1):
-    resolution: {integrity: sha512-+KjXoA0+v/liTtVIHswmOAzB9UaGADrO1tL9AOZsTLq5sZM8+DmhtixGRoSMD8HkkhpMFhsgEIxoHlkxtn1SXg==}
+  /ng-antd-color-picker@1.1.0(@angular/common@16.1.0)(@angular/core@16.1.0)(@ctrl/tinycolor@3.6.0):
+    resolution: {integrity: sha512-B2v3gDMlC7tyoZ2qs0C1xorKTxxXga9iSznO/DFS64h+933uU79OIjJNJsACKZ2j5HVU5dzyx4WaDHY5MZ0TXQ==}
+    peerDependencies:
+      '@angular/common': ^17.0.0
+      '@angular/core': ^17.0.0
+      '@ctrl/tinycolor': ^3.6.0
+    dependencies:
+      '@angular/common': 16.1.0(@angular/core@16.1.0)(rxjs@7.8.1)
+      '@angular/core': 16.1.0(rxjs@7.8.1)(zone.js@0.13.0)
+      '@ctrl/tinycolor': 3.6.0
+      tslib: 2.6.1
+    dev: false
+
+  /ng-zorro-antd@16.2.2(@angular/animations@16.1.0)(@angular/common@16.1.0)(@angular/core@16.1.0)(@angular/forms@16.1.0)(@angular/platform-browser@16.1.0)(@angular/router@16.1.0)(rxjs@7.8.1):
+    resolution: {integrity: sha512-Y7ALO+iRjqBfVW9hqnlU4jJUovM5r6wNzXuwTxKIo/5c35/PJFwk++73iwhas6pCb3+kFucwL5XTUWUoLce3wQ==}
     peerDependencies:
       '@angular/animations': ^16.0.0
       '@angular/common': ^16.0.0

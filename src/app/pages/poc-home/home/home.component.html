@@ -12,7 +12,7 @@
   <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let currency of approveCurrency">
-        <nz-card class="card">
+        <nz-card class="card base-card">
           <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }"
             [nzColon]=" false">
             <nz-descriptions-item nzTitle="Currency"><span>{{ currency.capitalPoolCurrency + '-' +

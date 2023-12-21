@@ -46,8 +46,7 @@ export class InfoComponent implements OnInit {
     level,
     disabled: !!node.disabled
   });
-
-  treeControl = new FlatTreeControl<FlatNode>(
+  treeControl: any = new FlatTreeControl<FlatNode>(
     node => node.level,
     node => node.expandable
   );

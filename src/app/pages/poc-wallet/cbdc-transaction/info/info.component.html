@@ -9,7 +9,7 @@
       <nz-card nzTitle="" class="m-r-8 none-bottom">
         <nz-card nzBordered="false" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
           <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
-            [nzBordered]="false" class="card-descriptions">
+            [nzBordered]="false" class="card-descriptions-order">
             <nz-descriptions-item nzTitle="Transfer"><span [ngStyle]="{color: 'red'}">{{ '-10,000.00 w-EUR'
                 }}</span></nz-descriptions-item>
           </nz-descriptions>
@@ -18,14 +18,14 @@
         <!-- title: (Top-up: Top-up, Withdrawal: Withdrawal, Transfer & Exchange: + Receiving  - Payment) Information -->
         <nz-card nzTitle="Top-up Information" nzBordered="false" class="m-t-25"
           [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
-          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions-order">
             <nz-descriptions-item nzTitle="Transaction No.">{{ 'F9160189-E5D5-4E64-1EEB-7DAAF4EF9999'
               }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Creation Time">{{ 1654231412 | map:'timeStamp'
               }}</nz-descriptions-item>
           </nz-descriptions>
           <nz-divider></nz-divider>
-          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions-order">
             <nz-descriptions-item nzTitle="From">
               <ng-container>
                 {{'Standard Chartered Bank'}}
@@ -50,7 +50,7 @@
             </nz-descriptions-item>
           </nz-descriptions>
           <nz-divider></nz-divider>
-          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions-order">
             <!-- Transfer: (+  Payment  - Remittance) Information -->
             <nz-descriptions-item nzTitle="Payment Information">
               {{ 'Enduser Information:'}}
@@ -64,7 +64,7 @@
         <!-- Transfer & Exchange -->
         <nz-card nzTitle="FX Information" nzBordered="false" class="m-t-25"
           [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
-          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions-order">
             <nz-descriptions-item nzTitle="Settlement Bank">{{ 'Settlement Bank1'
               }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ '1:0.91'
@@ -75,7 +75,7 @@
         <!-- Transfer & Exchange -->
         <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25"
           [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
-          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false" class="card-descriptions-order">
             <nz-descriptions-item nzTitle="Transcation Hash">{{ '--'
               }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Transcation Time">{{ '--'

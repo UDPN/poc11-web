@@ -67,7 +67,7 @@ export class AddComponent implements OnInit {
   nestedNodeMap = new Map<TreeNode, FlatNode>();
   checklistSelection = new SelectionModel<FlatNode>(true);
 
-  treeControl = new FlatTreeControl<any>(
+  treeControl: any = new FlatTreeControl<any>(
     node => node.level,
     node => node.expandable,
   );
@@ -170,7 +170,7 @@ export class AddComponent implements OnInit {
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected =
       descendants.length > 0 &&
-      descendants.every(child => {
+      descendants.every((child: FlatNode) => {
         return this.checklistSelection.isSelected(child);
       });
     return descAllSelected;
@@ -178,7 +178,7 @@ export class AddComponent implements OnInit {
 
   descendantsPartiallySelected(node: FlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    const result = descendants.some(child => this.checklistSelection.isSelected(child));
+    const result = descendants.some((child: FlatNode) => this.checklistSelection.isSelected(child));
     return result && !this.descendantsAllSelected(node);
   }
 
@@ -194,7 +194,7 @@ export class AddComponent implements OnInit {
     this.checklistSelection.isSelected(node)
       ? this.checklistSelection.select(...descendants)
       : this.checklistSelection.deselect(...descendants);
-    descendants.forEach(child => this.checklistSelection.isSelected(child));
+    descendants.forEach((child: FlatNode) => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelection(node);
     this.checkAll();
 
@@ -212,7 +212,7 @@ export class AddComponent implements OnInit {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected =
-      descendants.length > 0 && descendants.every(child => this.checklistSelection.isSelected(child));
+      descendants.length > 0 && descendants.every((child: FlatNode) => this.checklistSelection.isSelected(child));
     if (nodeSelected && !descAllSelected) {
       this.checklistSelection.deselect(node);
     } else if (!nodeSelected && descAllSelected) {

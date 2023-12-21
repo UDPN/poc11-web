@@ -37,7 +37,7 @@ export class DeptTreeService {
   
   selectListSelection = new SelectionModel<FlatNode>(false);
 
-  treeControl = new FlatTreeControl<FlatNode>(
+  treeControl: any = new FlatTreeControl<FlatNode>(
     node => node.level,
     node => node.expandable
   );
@@ -72,7 +72,7 @@ export class DeptTreeService {
       pageSize: 0,
       pageNum: 0
     };
-    this.dataService.getDepts(params).subscribe(deptList => {
+    this.dataService.getDepts(params).subscribe((deptList: { list: any[]; }) => {
       this.TREE_DATA$.next(fnFlatDataHasParentToTree(deptList.list));
     });
   }
