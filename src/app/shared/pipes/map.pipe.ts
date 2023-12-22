@@ -102,7 +102,27 @@ export const MapSet = {
   exchangeBusinessType: {
     0: 'Activate',
     1: 'Reduce'
-  }
+  },
+  walletTransactionsStatus: {
+    1: 'Pending Approval',
+    2: 'Processing',
+    3: 'Success',
+    4: 'Failed',
+    5: 'Rejected'
+  },
+  walletTransactionsStatusColor: {
+    1: 'volcano',
+    2: 'purple',
+    3: 'cyan',
+    4: 'red',
+    5: 'red'
+  },
+  walletTransactionsType: {
+    1: 'Top-up',
+    2: 'Withdrawal',
+    3: 'Transfer',
+    4: 'Exchange'
+  },
 };
 
 export interface MapItem {

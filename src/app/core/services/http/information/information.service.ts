@@ -11,17 +11,17 @@ import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../base-http.service';
 
 export interface InformationData {
+  bankBic: string;
+  bnCode: string;
+  businessLicenseUrl: string;
+  contactName: string;
+  detailedAddress: string;
+  email: string;
+  fileName: string;
+  mobileNumber: string;
   spBriefIntroduction: string;
   spDescription: string;
-  bnCode: string;
-  contactName: string;
-  mobileNumber: string;
-  email: string;
-  detailedAddress: string;
-  businessLicenseUrl: string;
   spName: string;
-  countryInfoId: string;
-  spBesuWalletAddress: string;
 }
 export interface InformationEditData {
   spBriefIntroduction: string;
@@ -41,11 +41,11 @@ export class InformationService {
   constructor(public http: BaseHttpService, private https: HttpClient) {}
 
   public addForm(params: InformationData): Observable<any> {
-    return this.http.post(`/v1/fxsp/sys/sp/add`, params);
+    return this.http.post(`/v1/commercial/bank/add`, params);
   }
 
   public detail(): Observable<any> {
-    return this.http.post(`/v1/fxsp/sys/sp/detail`);
+    return this.http.post(`/v1/commercial/bank/detail`);
   }
 
   public editForm(params: InformationEditData): Observable<any> {
@@ -69,6 +69,10 @@ export class InformationService {
 
   public getUpgrade(): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/upgrade/detail`, {});
+  }
+
+  public getCentralBank(): Observable<any> {
+    return this.http.post(`/v1/commercial/bank/belongCentralBank`, {});
   }
   
 }

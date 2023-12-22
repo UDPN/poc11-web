@@ -8,6 +8,15 @@
 <div>
     <app-logo-title></app-logo-title>
     <div>
+        <ng-container>
+            <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1"
+                class="m-b-10 alertsp"></nz-alert>
+            <ng-template #descriptionTemplate1>
+                <h5 nz-typography>
+                    Commercial bank onboarding,please input the following information.
+                </h5>
+            </ng-template>
+        </ng-container>
         <div class="bn-onboarding">
             <form nz-form>
                 <div nz-row nzJustify="center" nzAlign="middle">
@@ -20,8 +29,7 @@
                         <div nz-row nzJustify="space-between" nzGutter="8">
                             <div nz-col nzSpan="12" class="enterpriseName">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired nzSpan="24">SP Name
-                                    </nz-form-label>
+                                    <nz-form-label nzRequired nzSpan="24">Commercial Bank Name</nz-form-label>
                                     <nz-form-control [nzErrorTip]="enterpriseError">
                                         <div nz-row [formGroup]="validateForm">
                                             <div nz-col nzSpan="24">
@@ -31,8 +39,7 @@
                                         </div>
                                         <ng-template #enterpriseError let-control>
                                             <ng-container *ngIf="control.hasError('required')">Please input your
-                                                SP
-                                                Name</ng-container>
+                                                Commercial Bank Name</ng-container>
                                             <ng-container *ngIf="control.hasError('regular')">Please enter 2~50
                                                 characters of numbers and letters. It cannot start with a
                                                 number.</ng-container>
@@ -40,30 +47,47 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="12" class="countryId">
+                            <div nz-col nzSpan="12">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired nzSpan="24">Country of Region
+                                    <nz-form-label nzRequired nzSpan="24">BIC
                                     </nz-form-label>
-                                    <nz-form-control [nzErrorTip]="countryError">
+                                    <nz-form-control [nzErrorTip]="bicError">
                                         <div nz-row [formGroup]="validateForm">
-                                            <div nz-col nzSpan="24" class="custom-select">
-                                                <nz-select formControlName="countryInfoId" class="onboard-select">
-                                                    <nz-option *ngFor="let item of countryListData"
-                                                        [nzValue]="item.countryInfoId"
-                                                        [nzLabel]="item.countryName"></nz-option>
-
-                                                </nz-select>
+                                            <div nz-col nzSpan="24">
+                                                <input nz-input formControlName="bankBic" class="onboard-input  "
+                                                    maxlength="50" />
                                             </div>
                                         </div>
-                                        <ng-template #countryError let-control>
-                                            <ng-container *ngIf="control.hasError('required')">Please select your
-                                                Country</ng-container>
+                                        <ng-template #bicError let-control>
+                                            <ng-container *ngIf="control.hasError('required')">Please input your
+                                                BIC</ng-container>
+                                            <ng-container *ngIf="control.hasError('regular')">Characters of 2 ~ 50
+                                                letters or numbers
+                                            </ng-container>
                                         </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+                        <nz-form-label nzRequired nzSpan="10">Central Bank
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="centralBankError">
+                            <div nz-row [formGroup]="validateForm">
+                                <div nz-col nzSpan="24">
+                                    <input nz-input formControlName="centralBankName"
+                                        class="onboard-input  onboard-disabled" readonly />
+                                </div>
+                            </div>
+                            <ng-template #centralBankError let-control>
+                                <ng-container *ngIf="control.hasError('required')">Please input your Central
+                                    Bank</ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
                 <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
                     <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
@@ -131,8 +155,8 @@
                         <nz-form-control [nzErrorTip]="nodeNameError">
                             <div nz-row [formGroup]="validateForm">
                                 <div nz-col nzSpan="24">
-                                    <input nz-input formControlName="spBesuWalletAddress" class="onboard-input onboard-disabled" readonly
-                                        maxlength="255" />
+                                    <input nz-input formControlName="spBesuWalletAddress"
+                                        class="onboard-input onboard-disabled" readonly maxlength="255" />
                                 </div>
                             </div>
                             <ng-template #nodeNameError let-control>

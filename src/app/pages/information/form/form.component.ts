@@ -66,9 +66,11 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getWalletAddress();
+    this.getCentralBank();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required, this.spNameValidator]],
-      countryInfoId: ['AL', [Validators.required]],
+      bankBic: [null, [Validators.required]],
+      centralBankName: [null, [Validators.required]],
       spBriefIntroduction: [null, [Validators.required]],
       spDescription: [null, [Validators.required]],
       bnCode: [null, [Validators.required]],
@@ -77,7 +79,8 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
       mobileNumber: [null, [Validators.required]],
       email: [null, [Validators.required, this.emailValidator]],
       detailedAddress: [null, [Validators.required]],
-      businessLicenseUrl: [null, [Validators.required]]
+      businessLicenseUrl: [null, [Validators.required]],
+      fileName: [null, [Validators.required]],
     });
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
@@ -101,6 +104,15 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     }
     return {};
   };
+
+  getCentralBank() {
+    this._informationService.getCentralBank().subscribe((res) => {
+      if (res) {
+        this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
+      }
+      this.cdr.markForCheck();
+    });
+  }
 
   getWalletAddress() {
     this._informationService.getWalletAddress().subscribe((res) => {
@@ -158,6 +170,7 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
         .get('businessLicense')
         ?.setValue(this.fileImgWord['name']);
       this.validateForm.get('businessLicenseUrl')?.setValue(this.fileImg);
+      this.validateForm.get('fileName')?.setValue(this.fileImgWord['name']);
     };
   }
 

@@ -95,6 +95,14 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-onboard',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-onboard/poc-onboard.module').then(
+            (m) => m.PocSpOnboardModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)

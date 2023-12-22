@@ -47,6 +47,8 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   transactionHashTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creationTime: [],
     status: '',
@@ -64,15 +66,55 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [
     {
-      transactionNo: 'F9160189-E5F9160189',
-      from: '0x000000000000',
-      to: '0x000000000000',
-      type: 'Top-up',
+      transactionNo: 'F9160189-E5D5-4E64-1EEB-7DAAF4EF9999',
+      from: '0x00000000000000',
+      to: '0x11c0E25E62C1dB',
+      type: 1,
       amount: '10000000',
       currency: 'w-CNY',
-      creationTime: 1654231412,
-      status: 'Pending Approval'
-    }
+      creationTime: 1702952079,
+      status: 1
+    },
+    {
+      transactionNo: 'F9160188-E5D5-4E64-1EEB-7DAAF4EF8888',
+      from: '0x33e0E25E62C1dBD32E505446062B26AECB00EU33',
+      to: '0x9110c9FCE1C71B6CCF18Cb89E4A9e03Ac51c7777',
+      type: 3,
+      amount: '1000000',
+      currency: 'w-EUR',
+      creationTime: 1702952079,
+      status: 2
+    },
+    {
+      transactionNo: 'F9160187-E5D5-4E64-1EEB-7DAAF4EF7777',
+      from: '0x11c0E25E62C1dBD32E505446062B26AECB00CN00',
+      to: '0x77f0c9FCE1C71B6CCF18Cb89E4A9e03Ac59e1234',
+      type: 3,
+      amount: '716500',
+      currency: 'w-CNY',
+      creationTime: 1702952079,
+      status: 2
+    },
+    {
+      transactionNo: 'F9160186-E5D5-4E64-1EEB-7DAAF4EF6666',
+      from: '0x11c0E25E62C1dBD32E505446062B26AECB00CN00',
+      to: '0x77f0c9FCE1C71B6CCF18Cb89E4A9e03Ac59e1234',
+      type: 4,
+      amount: '1000000',
+      currency: 'w-HKD',
+      creationTime: 1702952079,
+      status: 3
+    },
+    {
+      transactionNo: 'F9160187-E5D5-4E64-1EEB-7DAAF4EF7777',
+      from: '0x11c0E25E62C1dBD32E505446062B26AECB00CN00',
+      to: '0x77f0c9FCE1C71B6CCF18Cb89E4A9e03Ac59e1234',
+      type: 4,
+      amount: '911779',
+      currency: 'w-CNY',
+      creationTime: 1702952079,
+      status: 3
+    },
   ];
   typeList: any[] = [];
   currencyList: any[] = [];
@@ -175,6 +217,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         {
           title: 'Type',
           field: 'type',
+          pipe: 'walletTransactionsType',
           width: 100
         },
         {
@@ -195,7 +238,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Status',
-          field: 'status',
+          tdTemplate: this.statusTpl,
           width: 150
         },
         {

@@ -18,8 +18,9 @@ export class DetailComponent implements OnInit {
   detailData = {
     spCode: '',
     spName: '',
-    countryInfoId: '',
-    countryName: '',
+    bankBic: '',
+    centralBankName: '',
+    centralBankId: '',
     spBriefIntroduction: '',
     spDescription: '',
     spBesuWalletAddress: '',

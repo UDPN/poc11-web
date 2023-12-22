@@ -9,21 +9,21 @@
     <app-logo-title></app-logo-title>
     <div>
         <ng-container *ngIf="detailData['spStatus'] === 5">
-            <nz-alert nzShowIcon nzType="info" nzMessage="onboard a SP" [nzDescription]="descriptionTemplate1"
+            <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1"
                 class="m-b-10 alertsp"></nz-alert>
             <ng-template #descriptionTemplate1>
                 <h5 nz-typography>
-                    Your SP onboarding application is currently being for approval. We kindly ask for your patience
-                    while we process your application. Thank you..
+                    Commercial bank onboarding application is currently being for approval. We kindly ask for your
+                    patience while we process your application. Thank you.
                 </h5>
             </ng-template>
         </ng-container>
         <ng-container *ngIf="detailData['spStatus'] === 15">
-            <nz-alert nzShowIcon nzType="error" nzMessage="onboard a SP" [nzDescription]="descriptionTemplate1"
+            <nz-alert nzShowIcon nzType="error" nzMessage="" [nzDescription]="descriptionTemplate1"
                 class="m-b-10 alertsp" [nzAction]="actionTemplate"></nz-alert>
             <ng-template #descriptionTemplate1>
                 <h5 nz-typography>
-                    Unfortunately, the SP onboarding application did not pass the approval process.<br />
+                    Unfortunately, the Commercial bank onboarding application did not pass the approval process.<br />
                     Failure Reason:{{detailData.remark}}
                 </h5>
             </ng-template>
@@ -45,8 +45,7 @@
                         <div nz-row nzJustify="space-between" nzGutter="8">
                             <div nz-col nzSpan="12" class="enterpriseName">
                                 <nz-form-item>
-                                    <nz-form-label nzSpan="24">SP Name
-                                    </nz-form-label>
+                                    <nz-form-label nzSpan="24">Commercial Bank Name</nz-form-label>
                                     <nz-form-control>
                                         <div style="text-align: left;">
                                             {{detailData.spName}}
@@ -56,17 +55,26 @@
                             </div>
                             <div nz-col nzSpan="12" class="countryId">
                                 <nz-form-item>
-                                    <nz-form-label nzSpan="24">Country of Region
-                                    </nz-form-label>
+                                    <nz-form-label nzSpan="24">BIC</nz-form-label>
                                     <nz-form-control>
                                         <div style="text-align: left;">
-                                            {{detailData.countryName}}
+                                            {{detailData.bankBic}}
                                         </div>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+                        <nz-form-label nzSpan="10">Central Bank</nz-form-label>
+                        <nz-form-control>
+                            <div style="text-align: left;">
+                                {{detailData.centralBankName}}
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
                 <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
                     <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">

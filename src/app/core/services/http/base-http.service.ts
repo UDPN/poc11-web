@@ -114,10 +114,10 @@ export class BaseHttpService {
           return this.handleFilter(item, !!config.needSuccessInfo);
         }),
         map((item: any) => {
-          if (item.code !== '0') {
+          if (item.code !== '0' && item.code !== 0) {
             // throw new Error(item.message);
           } else {
-            if (this.url !== '/v1/fxsp/sys/sp/detail') {
+            if (this.url !== '/v1/commercial/bank/detail') {
               return item.data === null ? true : item.data;
             } else {
               return item.data;
@@ -128,8 +128,8 @@ export class BaseHttpService {
     };
   }
 
-  handleFilter<T>(item: ActionResult<T>, needSuccessInfo: boolean): boolean {
-    if (item.code !== '0') {
+  handleFilter<T>(item: any, needSuccessInfo: boolean): boolean {
+    if (item.code !== '0' && item.code !== 0) {
     } else if (needSuccessInfo) {
       this.message.success('Successful operation !');
     }

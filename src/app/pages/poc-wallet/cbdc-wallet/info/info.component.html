@@ -86,16 +86,16 @@
   </nz-card>
 </div>
 <ng-template #transactionNoTpl let-transactionNo="transactionNo">
-  <span [title]="transactionNo" nz-typography nzCopyable>{{ transactionNo.length > 12 ? transactionNo.slice(0,12) +
-    '...' : transactionNo }}</span>
+  <p [title]="transactionNo" nz-typography nzCopyable>{{ transactionNo.length > 12 ? transactionNo.slice(0,12) +
+    '...' : transactionNo }}</p>
 </ng-template>
 <ng-template #fromTpl let-from="from">
-  <span [title]="from" nz-typography nzCopyable>{{ from.length > 12 ? from.slice(0,12) + '...' : from }}</span>
+  <p [title]="from" nz-typography nzCopyable>{{ from.length > 12 ? from.slice(0,12) + '...' : from }}</p>
 </ng-template>
 <ng-template #toTpl let-to="to">
-  <span [title]="to" nz-typography nzCopyable>{{ to.length > 12 ? to.slice(0,12) + '...' : to }}</span>
+  <p [title]="to" nz-typography nzCopyable>{{ to.length > 12 ? to.slice(0,12) + '...' : to }}</p>
 </ng-template>
 <ng-template #transactionHashTpl let-transactionHash="transactionHash">
-  <span [title]="transactionHash" nz-typography nzCopyable>{{ transactionHash.length > 12 ? transactionHash.slice(0,12)
-    + '...' : transactionHash }}</span>
+  <p [title]="transactionHash" nz-typography nzCopyable>{{ transactionHash.length > 12 ? transactionHash.slice(0,12)
+    + '...' : transactionHash }}</p>
 </ng-template>

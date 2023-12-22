@@ -57,6 +57,7 @@ export class InfoComponent implements OnInit {
     }
   ];
   detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
+  infoType: any = '';
   constructor(
     public routeInfo: ActivatedRoute,
     private commonService: CommonService,
@@ -84,6 +85,9 @@ export class InfoComponent implements OnInit {
 
   ngOnInit() {
     this.initTable();
+    this.routeInfo.queryParams.subscribe(params => {
+      this.infoType = params['type'];
+    })
   }
 
   changePageSize(e: number): void {
