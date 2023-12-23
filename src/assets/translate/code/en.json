@@ -1,4 +1,5 @@
 {
+  "MSG_FXSP_ELEVEN_": "------ As a Service Provider ------",
   "MSG_FXSP_ELEVEN_20001": "businessApplicationCode id not null",
   "MSG_FXSP_ELEVEN_20002": "Blockchain call failed",
   "MSG_FXSP_ELEVEN_20003": "Fund pool containing opened business",
@@ -111,6 +112,46 @@
   
   "MSG_FXSP_ELEVEN_40100000": "Unauthorized access",
   "MSG_FXSP_ELEVEN_40100001": "The user has been disabled",
-  "MSG_FXSP_ELEVEN_40100002": "The user has been deleted"
+  "MSG_FXSP_ELEVEN_40100002": "The user has been deleted",
+
+
+
+  "MSG_00": "------ As a Commercial Bank ------",
+  "MSG_00_1000": "Creation method cannot be empty",
+  "MSG_00_1001": "Central bank cannot be empty",
+  "MSG_00_1002": "Business node cannot be empty",
+  "MSG_00_1003": "Two wallets have been created in this central bank and cannot be created anymore.",
+  "MSG_00_1004": "Central bank does not exist",
+  "MSG_00_1005": "Wallet creation failed",
+  "MSG_00_1006": "Failed to save chain account",
+  "MSG_00_1007": "Besu wallet address should start with '0x'",
+  "MSG_00_1008": "Besu wallet address should be 42 bits",
+  "MSG_00_1009": "Besu wallet address: a 40-digit hexadecimal string starting with '0x' (42 bytes totally), hexadecimal string can be all uppercase or all lowercase, or a mixed-case verifiable format with checksum",
+  "MSG_00_1010": "Besu Wallet address is invalid, regex validation pattern is:[0]{1}[x]{1}[A-Fa-f0-9]{40}",
+  "MSG_00_1011": "Wallet address cannot be empty",
+  "MSG_00_1012": "The wallet has already been created under this central bank",
+  "MSG_00_1013": "Submit central bank exception",
+  "MSG_00_1014": "Recharge amount cannot be empty",
+  "MSG_00_1015": "Password cannot be empty",
+  "MSG_00_1016": "Wallet account is unavailable",
+  "MSG_00_1017": "Top up save failed",
+  "MSG_00_1018": "Top up and withdrawal type not selected",
+
+  "MSG_02_1001": "bank name cannot be empty",
+  "MSG_02_1002": "bank bic cannot be empty",
+  "MSG_02_1003": "bank brief introduction cannot be empty",
+  "MSG_02_1004": "bank description cannot be empty",
+  "MSG_02_1005": "bank besu wallet address cannot be empty",
+  "MSG_02_1006": "bn code cannot be empty",
+  "MSG_02_1007": "contact name cannot be empty",
+  "MSG_02_1008": "mobile number cannot be empty",
+  "MSG_02_1009": "email cannot be empty",
+  "MSG_02_1010": "business license file name cannot be empty",
+  "MSG_02_1011": "detailed address cannot be empty",  
+  "MSG_02_1012": "business license file hash cannot be empty",
+  "MSG_02_1013": "bank code cannot be empty",  
+  "MSG_02_1014": "Already exist",
+  "MSG_02_1015": "Does not exist",
+  "MSG_02_1016": "The current state does not support editing"
 
 }

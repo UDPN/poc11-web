@@ -137,7 +137,7 @@ const fnEncrypts = function encrypt(word: NzSafeAny, keyStr: string, iv: any): s
   if (!word) {
     return '';
   }
-  const encrypted: any = CryptoJS.AES.encrypt(JSON.stringify(word),CryptoJS.enc.Utf8.parse(keyStr), {
+  const encrypted: any = CryptoJS.AES.encrypt(JSON.stringify(word), CryptoJS.enc.Utf8.parse(keyStr), {
     iv: CryptoJS.enc.Utf8.parse(iv),
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7,
@@ -346,6 +346,12 @@ const objPushKv = function objPushKv(t: any, k: string) {
   return arryNew;
 }
 
+const thousandthMark = function thousandthMark(x: any) {
+  // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  var parts = x.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
 
 export {
   fnFormatToHump,
@@ -374,5 +380,6 @@ export {
   timestampToTime,
   timestampToDate,
   timestampToMonth,
-  objPushKv
+  objPushKv,
+  thousandthMark
 };

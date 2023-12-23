@@ -9,21 +9,23 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  walletAddress: string;
-  centralBank: string;
+  chainAccountAddress: string;
+  centralBankId: string;
   region: string;
   currency: string;
-  creationTime: any;
-  status: string;
+  createTime: any;
+  state: string;
 }
 
 @Component({
@@ -38,8 +40,14 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   headerExtra!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('centralBankTpl', { static: true })
   centralBankTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletAddressTpl', { static: true })
+  walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('balanceTpl', { static: true })
+  balanceTpl!: TemplateRef<NzSafeAny>;
   isVisibleTopUp: boolean = false;
   isVisibleWithdraw: boolean = false;
   isVisibleEnterPassword: boolean = false;
@@ -48,8 +56,11 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   withdrawForm!: FormGroup;
   passwordForm!: FormGroup;
   searchParam: Partial<SearchParam> = {
-    creationTime: [],
-    status: ''
+    centralBankId: '',
+    currency: '',
+    region: '',
+    createTime: [],
+    state: '',
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -58,21 +69,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     filter: []
   };
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [
-    {
-      walletAddress: '0x1234567890',
-      centralBank: 'Central Bank of China',
-      region: 'China',
-      currency: 'w-EUR',
-      creationTime: '1654123212',
-      balance: '10000000',
-      status: 'Pending Approval',
-    }
-  ];
+  dataList: NzSafeAny[] = [];
   centralBankList: any[] = [];
-  regionList: any[] = [];
-  currencyList: any[] = [];
-  statusList: any[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -82,7 +80,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   };
   currency: any;
   constructor(
-    private pocCapitalPoolService: PocCapitalPoolService,
+    private cbdcWalletService: CbdcWalletService,
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
@@ -100,17 +98,24 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initTable();
+    this.getCentralBank();
     this.topUpForm = this.fb.group({
-      walletAddress: ['1111', [Validators.required]],
+      chainAccountAddress: ['1111', [Validators.required]],
       amount: ['', [Validators.required]],
     });
     this.withdrawForm = this.fb.group({
-      walletAddress: ['222', [Validators.required]],
+      chainAccountAddress: ['222', [Validators.required]],
       amount: ['', [Validators.required]],
     });
     this.passwordForm = this.fb.group({
       password: ['', [Validators.required]],
     });
+  }
+
+  getCentralBank() {
+    this.cbdcWalletService.getCentralBankQuery().subscribe((res) => {
+      this.centralBankList = res;
+    })
   }
 
   tableChangeDectction(): void {
@@ -125,8 +130,11 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
 
   resetForm(): void {
     this.searchParam = {};
-    this.searchParam.creationTime = '';
-    this.searchParam.status = '';
+    this.searchParam.centralBankId = '';
+    this.searchParam.currency = '';
+    this.searchParam.region = '';
+    this.searchParam.createTime = [];
+    this.searchParam.state = '';
     this.getDataList(this.tableQueryParams);
   }
 
@@ -137,29 +145,26 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.pocCapitalPoolService
-    //   .fetchList()
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _?.resultPageInfo?.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.cbdcWalletService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data?.rows;
+        this.tableConfig.total = _.data.page.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   getTopUp(currency: string) {
@@ -206,39 +211,41 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Wallet Address',
-          field: 'walletAddress',
+          tdTemplate: this.walletAddressTpl,
           width: 200
         },
         {
           title: 'Central Bank',
           thTemplate: this.centralBankTpl,
-          field: 'centralBank',
-          width: 200
+          field: 'centralBankName',
+          width: 260
         },
         {
           title: 'Region',
           field: 'region',
-          width: 300
+          pipe: 'region',
+          width: 150
         },
         {
           title: 'Currency',
           field: 'currency',
-          width: 200
+          width: 150
         },
         {
           title: 'Balance',
-          field: 'balance',
-          width: 180
+          tdTemplate: this.balanceTpl,
+          width: 150
         },
         {
           title: 'Creation Time',
-          field: 'creationTime',
+          field: 'createTime',
           pipe: 'timeStamp',
           width: 180
         },
         {
-          title: 'Status',
-          field: 'status',
+          title: 'state',
+          tdTemplate: this.statusTpl,
+          pipe: 'walletStatus',
           width: 180
         },
         {

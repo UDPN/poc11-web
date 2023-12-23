@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import { timestampToMonth, timestampToTime } from '@app/utils/tools';
+import { thousandthMark, timestampToMonth, timestampToTime } from '@app/utils/tools';
 
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
@@ -123,6 +123,26 @@ export const MapSet = {
     3: 'Transfer',
     4: 'Exchange'
   },
+  region: {
+    1: 'Domestic',
+    2: 'Foreign'
+  },
+  walletStatus: {
+    1: 'Pending Approval',
+    2: 'Rejected',
+    5: 'Active',
+    6: 'Failed',
+    7: 'Processing',
+    8: 'Inactive',
+  },
+  walletStatusColor: {
+    1: 'volcano',
+    2: 'red',
+    5: 'cyan',
+    6: 'red',
+    7: 'purple',
+    8: 'default',
+  },
 };
 
 export interface MapItem {
@@ -183,6 +203,9 @@ export class MapPipe implements PipeTransform {
       } else {
         return timestampToTime(value);
       }
+    }
+    if (arg === 'toThousandthMark') {
+      return thousandthMark(value);
     }
     if (arg === 'monthStamp') {
       if (!value) {
