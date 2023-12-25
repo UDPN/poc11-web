@@ -10,7 +10,7 @@
     "changeOrigin": true
   },
   "/v1": {
-    "target": "http://10.0.7.11:8006/",
+    "target": "http://10.0.7.107:8006/",
     "secure": false,
     "changeOrigin": true
   }

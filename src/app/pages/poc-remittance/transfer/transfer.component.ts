@@ -9,11 +9,11 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-
 
 @Component({
   selector: 'app-transfer',
@@ -50,14 +50,14 @@ export class TransferComponent implements OnInit, AfterViewInit {
       currencyPair: '1USD -> EUR',
       rate: '0.93',
       commission: '5 w-EUR',
-      amount: '9,305.00 w-EUR',
+      amount: '9,305.00 w-EUR'
     },
     {
       spName: 'Bank of Communications',
       currencyPair: '1USD -> EUR',
       rate: '0.92',
       commission: '6 w-EUR',
-      amount: '9,305.00 w-EUR',
+      amount: '9,305.00 w-EUR'
     }
   ];
   isVisible: boolean = false;
@@ -68,7 +68,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
-  ) { }
+    private transferService: TransferService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -80,6 +81,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.initData();
     this.validateForm = this.fb.group({
       beneficialBankName: [null, [Validators.required]],
       beneficialWalletAddress: [null, [Validators.required]],
@@ -87,13 +89,17 @@ export class TransferComponent implements OnInit, AfterViewInit {
       remitterWalletAddress: [null, [Validators.required]],
       availableBalance: [null, [Validators.required]],
       remitterBankName: [null, [Validators.required]],
-      remittanceInformation: [null, [Validators.required]],
-    })
+      remittanceInformation: [null, [Validators.required]]
+    });
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
-
+  initData() {
+    this.transferService.fetchBankList().subscribe((res: any) => {
+      console.log(res);
+    });
+  }
   onItemChecked(id: string, checked: boolean): void {
     this.updateCheckedSet(id, checked);
   }
@@ -123,7 +129,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSubmit() { 
+  onSubmit() {
     this.isVisible = true;
   }
 
