@@ -46,6 +46,7 @@ export class InformationService {
 
   public detail(): Observable<any> {
     return this.http.post(`/v1/commercial/bank/detail`);
+    // return this.http.post(`/v1/fxsp/sys/sp/detail`);
   }
 
   public editForm(params: InformationEditData): Observable<any> {

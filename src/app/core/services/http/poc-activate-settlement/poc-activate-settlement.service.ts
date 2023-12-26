@@ -23,4 +23,8 @@ export class PocActivateSettlementService {
   public getInfo(): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/upgrade/detail`, {});
   }
+
+  public getWalletAdress(param: {currency: any}): Observable<any> {
+    return this.http.post(`/v1/wallet/listByCurrency`, param);
+  }
 }

@@ -7,7 +7,7 @@ import {
   ChangeDetectorRef,
   HostListener
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocHomeService } from '@app/core/services/http/poc-home/poc-home.service';
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   gradient: boolean = true;
   showLegend: boolean = true;
   getScreenWidth: any;
-  validateForm!: FormGroup;
+  walletForm!: FormGroup;
   nzOption: any[] = [];
   value: string[] = [];
 
@@ -105,6 +105,61 @@ export class HomeComponent implements OnInit, AfterViewInit {
   nonactivatedRateCount: any = '';
   pendingRateCount: any = '';
   approveList: any = [];
+  validateForm!: FormGroup;
+  walletBalanceList: any = [
+    {
+      currency: 'w-THB',
+      walletList: [
+        {
+          walletAddress: '0x3234234234234234324',
+          amount: '40,000'
+        },
+        {
+          walletAddress: '0x3453453453463454353',
+          amount: '30,000'
+        },
+      ]
+    },
+    {
+      currency: 'w-EUR',
+      walletList: [
+        {
+          walletAddress: '0x3234234234234234321',
+          amount: '15,000'
+        },
+        {
+          walletAddress: '0x3453453453463454352',
+          amount: '23,000'
+        },
+      ]
+    },
+    {
+      currency: 'w-USD',
+      walletList: [
+        {
+          walletAddress: '0x3234234234234234332',
+          amount: '10,000'
+        },
+        {
+          walletAddress: '0x3453453453463454334',
+          amount: '50,000'
+        },
+      ]
+    },
+    {
+      currency: 'w-HKD',
+      walletList: [
+        {
+          walletAddress: '0x3234234234234234321',
+          amount: '40,000'
+        },
+        {
+          walletAddress: '0x3453453453463454352',
+          amount: '30,000'
+        },
+      ]
+    },
+  ]
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
@@ -121,7 +176,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-
+  walletAddress: any = '';
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
@@ -154,6 +209,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this._defaultStoreService.setShowChangePassWordStore(res.data.firstLogin);
     });
   }
+
+  chanWalletAddress(event: any) {
+    this.walletBalanceList.forEach((item: any) => {
+      console.log(item);
+      
+      item.walletList.forEach((wallet: any) => {
+        if (wallet.walletAddress === event) {
+          this.walletAddress = wallet.walletAddress;
+        }
+      });
+    });
+
+  }
+
   ngOnInit() {
     this.isFirstLogin();
     this.initTable();

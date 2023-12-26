@@ -27,7 +27,36 @@ export class InfoComponent implements OnInit {
     desc: '',
     footer: ''
   };
-  info: any = {};
+  info: any = {
+    amount: "10000000",
+    createTime: "1234567891",
+    creationTime: "",
+    currency: "w-THB",
+    reviewerRemarks: "",
+    reviewerTime: "",
+    reviewerUser: "",
+    status: 1,
+    transactionNo: "",
+    transferId: 0,
+    txHash: "",
+    txTime: "",
+    type: 1
+  };
+  // info: any = {
+  //   amount: "20000000",
+  //   createTime: "1234567891",
+  //   creationTime: "",
+  //   currency: "w-EUR",
+  //   reviewerRemarks: "",
+  //   reviewerTime: "",
+  //   reviewerUser: "",
+  //   status: 0,
+  //   transactionNo: "F9160189-E5D5-4E64-1EEB-7DAAF4EF9999",
+  //   transferId: 0,
+  //   txHash: "",
+  //   txTime: "",
+  //   type: 2
+  // };
   agreementUrl: any = '';
   recordTableConfig!: AntTableConfig;
   transactionTableConfig!: AntTableConfig;
