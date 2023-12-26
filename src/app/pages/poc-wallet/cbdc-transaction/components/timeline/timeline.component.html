@@ -1,0 +1,50 @@
+<div class="time-line">
+  <ng-container *ngIf="info.status === 1">
+    <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzDescription]="stepOneTpl"></nz-step>
+      <nz-step [nzTitle]="'Awaiting Approval'" [nzStatus]="'finish'" [nzDescription]="stepSecondTpl"></nz-step>
+      <nz-step nzTitle="Awaiting Submission" [nzStatus]="'error'" [nzDescription]="stepThirdTpl"></nz-step>
+    </nz-steps>
+    <ng-template #stepOneTpl>
+      <ul>
+        <li>{{ 'Transaction No.: ' + 'F9160184-E5D5-4E64-1EEB-7DAAF4EF4444' }}</li>
+        <li>{{ 'on ' + 'Nov 14, 2023, 10:14:45 UTC+08:00' + ' by banker1' }}</li>
+      </ul>
+    </ng-template>
+    <ng-template #stepSecondTpl>
+      <ul>
+        <li>{{'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is awaiting confirmation' }}</li>
+      </ul>
+    </ng-template>
+    <ng-template #stepThirdTpl>
+      <ul>
+        <li>{{ 'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is waiting to be executed on the chain'
+          }}</li>
+      </ul>
+    </ng-template>
+  </ng-container>
+  <ng-container *ngIf="info.status === 2">
+    <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzDescription]="stepOneTpl"></nz-step>
+      <nz-step [nzTitle]="'Awaiting Approval'" [nzStatus]="'finish'" [nzDescription]="stepSecondTpl"></nz-step>
+      <nz-step nzTitle="Awaiting Submission" [nzStatus]="'error'" [nzDescription]="stepThirdTpl"></nz-step>
+    </nz-steps>
+    <ng-template #stepOneTpl>
+      <ul>
+        <li>{{ 'Transaction No.: ' + 'F9160184-E5D5-4E64-1EEB-7DAAF4EF4444' }}</li>
+        <li>{{ 'on ' + 'Nov 14, 2023, 10:14:45 UTC+08:00' + ' by banker1' }}</li>
+      </ul>
+    </ng-template>
+    <ng-template #stepSecondTpl>
+      <ul>
+        <li>{{'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is awaiting confirmation' }}</li>
+      </ul>
+    </ng-template>
+    <ng-template #stepThirdTpl>
+      <ul>
+        <li>{{ 'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is waiting to be executed on the chain'
+          }}</li>
+      </ul>
+    </ng-template>
+  </ng-container>
+</div>

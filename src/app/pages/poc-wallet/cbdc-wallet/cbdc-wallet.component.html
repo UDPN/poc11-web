@@ -8,7 +8,7 @@
           <nz-form-item>
             <nz-form-label>Wallet Address</nz-form-label>
             <nz-form-control>
-              <input nz-input placeholder="" name="walletAddress" [(ngModel)]="searchParam.walletAddress" />
+              <input nz-input placeholder="" name="chainAccountAddress" [(ngModel)]="searchParam.chainAccountAddress" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -16,9 +16,10 @@
           <nz-form-item>
             <nz-form-label>Central Bank</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="centralBank" [(ngModel)]="searchParam.centralBank">
+              <nz-select nzPlaceHolder="" name="centralBankId" [(ngModel)]="searchParam.centralBankId">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of centralBankList" [nzValue]="" [nzLabel]="''">
+                <nz-option *ngFor="let item of centralBankList" [nzValue]="item.centralBankId"
+                  [nzLabel]="item.centralBankName">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -30,8 +31,8 @@
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="region" [(ngModel)]="searchParam.region">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of regionList" [nzValue]="" [nzLabel]="''">
-                </nz-option>
+                <nz-option [nzValue]="1" nzLabel="Domestic"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Foreign"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -42,7 +43,8 @@
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="currency" [(ngModel)]="searchParam.currency">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of currencyList" [nzValue]="" [nzLabel]="''">
+                <nz-option *ngFor="let item of centralBankList" [nzValue]="item.digitalSymbol"
+                  [nzLabel]="item.digitalSymbol">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -52,8 +54,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Creation Time</nz-form-label>
             <nz-form-control>
-              <nz-range-picker style="width: 100%" name="creationTime"
-                [(ngModel)]="searchParam.creationTime"></nz-range-picker>
+              <nz-range-picker style="width: 100%" name="createTime"
+                [(ngModel)]="searchParam.createTime"></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -61,10 +63,14 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Status</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="status" [(ngModel)]="searchParam.status">
+              <nz-select nzPlaceHolder="" name="state" [(ngModel)]="searchParam.state">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of statusList" [nzValue]="" [nzLabel]="''">
-                </nz-option>
+                <nz-option [nzValue]="1" nzLabel="Pending Approval"></nz-option>
+                <nz-option [nzValue]="7" nzLabel="Processing"></nz-option>
+                <nz-option [nzValue]="5" nzLabel="Active"></nz-option>
+                <nz-option [nzValue]="8" nzLabel="Inactive"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Rejected"></nz-option>
+                <nz-option [nzValue]="6" nzLabel="Failed"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -92,19 +98,33 @@
       {{ 'Central Bank' }} <i nz-tooltip nzTooltipTitle="Bank for wallet address" nzTooltipColor="#3C5686" nz-icon
         nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'"></i>
     </ng-template>
-    <ng-template #operationTpl let-currency="currency">
+    <ng-template #statusTpl let-state="state">
+      <nz-tag [nzColor]="state | map:'walletStatusColor'">{{ state | map:'walletStatus' }}</nz-tag>
+    </ng-template>
+    <ng-template #walletAddressTpl let-chainAccountAddress="chainAccountAddress">
+      <ng-container *ngIf="chainAccountAddress">
+        <p [title]="chainAccountAddress" nz-typography nzCopyable [nzCopyText]="chainAccountAddress">{{
+          chainAccountAddress.length > 12 ?
+          chainAccountAddress.slice(0,12) + '...' : chainAccountAddress }}</p>
+      </ng-container>
+      <ng-container *ngIf="!chainAccountAddress">
+        <span>{{ '--' }}</span>
+      </ng-container>
+    </ng-template>
+    <ng-template #operationTpl let-bankAccountId="bankAccountId" let-balance="balance" let-region="region"
+      let-chainAccountAddress="chainAccountAddress" let-state="state" let-currency="currency">
       <ng-container>
-        <span class="operate-text" (click)="getTopUp(currency)">
+        <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Top up
         </span>
       </ng-container>
       <ng-container>
-        <span class="operate-text" (click)="getWithdraw(currency)">
+        <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Withdraw
         </span>
       </ng-container>
       <ng-container>
-        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{}">
+        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{bankAccountId, currency, region}">
           Details
         </span>
       </ng-container>
@@ -127,7 +147,7 @@
               Wallet Address
             </nz-form-label>
             <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="18" class="m-b-20">
-              <input nz-input formControlName="walletAddress" readonly class="onboard-disabled" />
+              <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
               </ng-template>
@@ -139,7 +159,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18" class="m-b-20">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" />
+                <input nz-input formControlName="amount" type="number" [maxlength]="10" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
@@ -178,7 +198,7 @@
               Wallet Address
             </nz-form-label>
             <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="18" class="m-b-20">
-              <input nz-input formControlName="walletAddress" readonly class="onboard-disabled" />
+              <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
               </ng-template>
@@ -190,7 +210,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" />
+                <input nz-input formControlName="amount" type="number" [maxlength]="10" />
               </nz-input-group>
               <div>
                 Available Amount: 90,000.00 w-CNY
@@ -214,8 +234,8 @@
   </div>
 </nz-modal>
 
-<nz-modal [(nzVisible)]="isVisibleEnterPassword" nzTitle="Enter Login Password" (nzOnCancel)="cancelEnterPassword()" [nzClosable]="false"
-  [nzWidth]="700" nzCentered="true">
+<nz-modal [(nzVisible)]="isVisibleEnterPassword" nzTitle="Enter Login Password" (nzOnCancel)="cancelEnterPassword()"
+  [nzClosable]="false" [nzWidth]="700" nzCentered="true">
   <div *nzModalContent>
     <form nz-form [formGroup]="passwordForm">
       <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
@@ -225,7 +245,7 @@
               Password
             </nz-form-label>
             <nz-form-control [nzErrorTip]="passwordError" nzSpan="18">
-                <input nz-input formControlName="password" />
+              <input nz-input formControlName="password" />
               <ng-template #passwordError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Password</ng-container>
               </ng-template>
@@ -237,7 +257,7 @@
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="cancelEnterPassword()">Cancel</button>
-    <button nz-button nzType="primary" (click)="confirmEnterPassword()" [nzLoading]="isLoading"
+    <button nz-button nzType="primary" (click)="confirmEnterPassword()" [nzLoading]="isOkLoading"
       [disabled]="!this.passwordForm.valid">Confirm</button>
   </div>
 </nz-modal>

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import { timestampToMonth, timestampToTime } from '@app/utils/tools';
+import { thousandthMark, timestampToMonth, timestampToTime } from '@app/utils/tools';
 
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
@@ -105,23 +105,51 @@ export const MapSet = {
   },
   walletTransactionsStatus: {
     1: 'Pending Approval',
-    2: 'Processing',
-    3: 'Success',
-    4: 'Failed',
-    5: 'Rejected'
+    3: 'Processing',
+    5: 'Success',
+    6: 'Failed',
+    2: 'Rejected'
   },
   walletTransactionsStatusColor: {
     1: 'volcano',
-    2: 'purple',
-    3: 'cyan',
-    4: 'red',
-    5: 'red'
+    3: 'purple',
+    5: 'cyan',
+    6: 'red',
+    2: 'red'
   },
   walletTransactionsType: {
     1: 'Top-up',
-    2: 'Withdrawal',
-    3: 'Transfer',
-    4: 'Exchange'
+    2: 'Withdrawal'
+  },
+  region: {
+    1: 'Domestic',
+    2: 'Foreign'
+  },
+  walletStatus: {
+    1: 'Pending Approval',
+    2: 'Rejected',
+    5: 'Active',
+    6: 'Failed',
+    7: 'Processing',
+    8: 'Inactive',
+  },
+  walletStatusColor: {
+    1: 'volcano',
+    2: 'red',
+    5: 'cyan',
+    6: 'red',
+    7: 'purple',
+    8: 'default',
+  },
+  walletApprovalResult: {
+    1: '--',
+    2: 'Rejected',
+    3: 'Agree',
+    4: 'Agree',
+    5: 'Agree',
+    6: '--',
+    7: '--',
+    8: '--',
   },
 };
 
@@ -182,6 +210,13 @@ export class MapPipe implements PipeTransform {
         return (value = '--');
       } else {
         return timestampToTime(value);
+      }
+    }
+    if (arg === 'toThousandthMark') {
+      if (value === null || value === '' || value === undefined) {
+        return (value = '--');
+      } else {
+        return thousandthMark(value);
       }
     }
     if (arg === 'monthStamp') {

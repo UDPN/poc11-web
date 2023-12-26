@@ -9,6 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { CbdcTransactionService } from '@app/core/services/http/poc-wallet/cbdc-transaction/cbdc-transaction.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -23,7 +24,7 @@ interface SearchParam {
   to: string;
   type: string;
   currency: string;
-  creationTime: any;
+  createTime: any;
   status: string;
 }
 
@@ -49,11 +50,12 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   operationTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('amountTpl', { static: true })
+  amountTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
-    creationTime: [],
+    createTime: [],
     status: '',
-    type: '',
-    currency: ''
+    type: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -79,41 +81,11 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
       transactionNo: 'F9160188-E5D5-4E64-1EEB-7DAAF4EF8888',
       from: '0x33e0E25E62C1dBD32E505446062B26AECB00EU33',
       to: '0x9110c9FCE1C71B6CCF18Cb89E4A9e03Ac51c7777',
-      type: 3,
+      type: 2,
       amount: '1000000',
       currency: 'w-EUR',
       creationTime: 1702952079,
       status: 2
-    },
-    {
-      transactionNo: 'F9160187-E5D5-4E64-1EEB-7DAAF4EF7777',
-      from: '0x11c0E25E62C1dBD32E505446062B26AECB00CN00',
-      to: '0x77f0c9FCE1C71B6CCF18Cb89E4A9e03Ac59e1234',
-      type: 3,
-      amount: '716500',
-      currency: 'w-CNY',
-      creationTime: 1702952079,
-      status: 2
-    },
-    {
-      transactionNo: 'F9160186-E5D5-4E64-1EEB-7DAAF4EF6666',
-      from: '0x11c0E25E62C1dBD32E505446062B26AECB00CN00',
-      to: '0x77f0c9FCE1C71B6CCF18Cb89E4A9e03Ac59e1234',
-      type: 4,
-      amount: '1000000',
-      currency: 'w-HKD',
-      creationTime: 1702952079,
-      status: 3
-    },
-    {
-      transactionNo: 'F9160187-E5D5-4E64-1EEB-7DAAF4EF7777',
-      from: '0x11c0E25E62C1dBD32E505446062B26AECB00CN00',
-      to: '0x77f0c9FCE1C71B6CCF18Cb89E4A9e03Ac59e1234',
-      type: 4,
-      amount: '911779',
-      currency: 'w-CNY',
-      creationTime: 1702952079,
-      status: 3
     },
   ];
   typeList: any[] = [];
@@ -127,7 +99,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     footer: ''
   };
   constructor(
-    private pocCapitalPoolService: PocCapitalPoolService,
+    private cbdcTransactionService: CbdcTransactionService,
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
@@ -159,8 +131,9 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
 
   resetForm(): void {
     this.searchParam = {};
-    this.searchParam.creationTime = '';
+    this.searchParam.createTime = [];
     this.searchParam.status = '';
+    this.searchParam.type = '';
     this.getDataList(this.tableQueryParams);
   }
 
@@ -171,29 +144,26 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.pocCapitalPoolService
-    //   .fetchList()
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _?.resultPageInfo?.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.cbdcTransactionService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data?.rows;
+        this.tableConfig.total = _.data.page.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -222,7 +192,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Amount',
-          field: 'amount',
+          tdTemplate: this.amountTpl,
           width: 100
         },
         {

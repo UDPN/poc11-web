@@ -1,7 +1,32 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <nz-card nzTitle="As a Commercial Bank" class="m-b-10">
+  <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="6" *ngFor="let balance of walletBalanceList; index as i">
+        <nz-card class="card base-card">
+          <h3 nz-typography>{{ balance.currency }}</h3>
+          <div nz-row nzJustify="space-between" [nzGutter]="8">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-control class="m-t-30">
+                  <nz-select [(ngModel)]="balance[i]" (ngModelChange)="chanWalletAddress($event)">
+                    <nz-option *ngFor="let item of balance.walletList" [nzValue]="item.walletAddress"
+                      [nzLabel]="item.walletAddress">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+                <nz-form-control class="m-t-30">
+                  <h2 nz-typography style="text-align: center;">{{ '11111' }}</h2>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </nz-card>
+  <nz-card nzTitle="CBDC Movements In the Last 7 Days" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="24" nzOffset="2">
         <div id="chart-container" style="max-width:1200px;height:400px"></div>
@@ -346,7 +371,8 @@
         </div>
       </div>
     </nz-card>
-    <nz-card nzTitle="CBDC Wallet Details" class="m-t-10" [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }">
+    <nz-card nzTitle="CBDC Wallet Details" class="m-t-10"
+      [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }">
       <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
         [nzBordered]="true">
         <nz-descriptions-item nzTitle="Wallet Address" [nzSpan]="3">{{

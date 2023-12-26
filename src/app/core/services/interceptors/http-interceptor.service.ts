@@ -21,6 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { LoginInOutService } from '../common/login-in-out.service';
 import { environment } from '@env/environment';
+import { el } from 'date-fns/locale';
 
 interface CustomHttpConfig {
   headers?: HttpHeaders;
@@ -120,7 +121,17 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (filterCode.includes(event.body.code)) {
           return event;
         }
-        if (event.body.code === -1) {
+        if (
+          event.body.code === 1 &&
+          event.body.message.indexOf('MSG_') !== -1
+        ) {
+          this.modal.error({
+            nzTitle: 'error',
+            nzContent: this.translate.instant(`${event.body.message}`)
+          });
+          return event;
+        }
+        if (event.body.code === -1 || event.body.code === 1) {
           this.modal.error({
             nzTitle: 'Error',
             nzContent: 'System error, please try again later !'
@@ -146,10 +157,12 @@ export class HttpInterceptorService implements HttpInterceptor {
         }
         if (event.body.code !== 'FXSP_ELEVEN_20420') {
           if (!this.firstCode) {
-            this.modal.error({
-              nzTitle: 'error',
-              nzContent: this.translate.instant(`MSG_${event.body.code}`)
-            });
+            if (event.body.code !== 1) {
+              this.modal.error({
+                nzTitle: 'error',
+                nzContent: this.translate.instant(`MSG_${event.body.code}`)
+              });
+            }
           }
         } else {
           this.windowServe.clearStorage();
