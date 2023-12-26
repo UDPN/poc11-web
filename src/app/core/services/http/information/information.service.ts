@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-27 13:59:55
+ * @LastEditTime: 2023-12-25 13:20:00
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -45,8 +45,8 @@ export class InformationService {
   }
 
   public detail(): Observable<any> {
-    // return this.http.post(`/v1/commercial/bank/detail`);
-    return this.http.post(`/v1/fxsp/sys/sp/detail`);
+    return this.http.post(`/v1/commercial/bank/detail`);
+    // return this.http.post(`/v1/fxsp/sys/sp/detail`);
   }
 
   public editForm(params: InformationEditData): Observable<any> {
@@ -75,5 +75,4 @@ export class InformationService {
   public getCentralBank(): Observable<any> {
     return this.http.post(`/v1/commercial/bank/belongCentralBank`, {});
   }
-  
 }

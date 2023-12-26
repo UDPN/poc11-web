@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-25 11:25:05
+ * @LastEditTime: 2023-12-25 19:29:03
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -17,7 +17,10 @@ export class TransferService {
   constructor(public http: BaseHttpService, private https: HttpClient) {}
   // List of all wallets (aggregated)
   public fetchAllWalletList(): Observable<any> {
-    return this.http.post(`/v1/common/allWalletList`);
+    // return this.http.post(`/v1/common/allWalletList`);
+    return this.http.post(
+      `https://2f488421-27a1-4b4d-98d1-9f667c1d7020.mock.pstmn.io/v1/common/allWalletList`
+    );
   }
   // Query the list of central banks
   public fetchBankList(): Observable<any> {
@@ -28,7 +31,11 @@ export class TransferService {
   }
   // exchange rate information
   public exchange(params: { from: string; to: string }): Observable<any> {
-    return this.http.post(`/v1/common/fxRates`, params);
+    // return this.http.post(`/v1/common/fxRates`, params);
+    return this.http.post(
+      `https://d29e6f43-176f-486c-9330-e6bb3e4c0143.mock.pstmn.io/v1/common/fxRates`,
+      params
+    );
   }
   // National central bank information
   public nationalInformation(): Observable<any> {
@@ -37,5 +44,17 @@ export class TransferService {
   // List of national wallets
   public nationalWallets(): Observable<any> {
     return this.http.post(`/v1/common/nationalWalletList`);
+  }
+
+  // transfer
+  public transfer(params: {
+    beneficiaryBankId: number;
+    beneficiaryWalletAddress: string;
+    nterbankSettlementAmount: number;
+    remittanceInformation: string;
+    remitterWalletId: number;
+    rateId: string;
+  }): Observable<any> {
+    return this.http.post(`/v1/remittanceManagement/transfer`, params);
   }
 }
