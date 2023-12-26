@@ -9,11 +9,13 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { debounceTime, map } from 'rxjs';
 
 @Component({
   selector: 'app-transfer',
@@ -42,34 +44,32 @@ export class TransferComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   setOfCheckedId = new Set<string>();
   checkedItemComment: NzSafeAny[] = [];
-  radioValue: any = '';
+  radioValue: any = 0;
   passwordForm!: FormGroup;
-  dataList: NzSafeAny[] = [
-    {
-      spName: 'Bank of China',
-      currencyPair: '1USD -> EUR',
-      rate: '0.93',
-      commission: '5 w-EUR',
-      amount: '9,305.00 w-EUR',
-    },
-    {
-      spName: 'Bank of Communications',
-      currencyPair: '1USD -> EUR',
-      rate: '0.92',
-      commission: '6 w-EUR',
-      amount: '9,305.00 w-EUR',
-    }
-  ];
+  dataList: NzSafeAny[] = [];
   isVisible: boolean = false;
   isVisibleEnterPassword: boolean = false;
+  beneficiaryCurrency = '';
+  availableCurrecy: {
+    value: string;
+    label: string;
+    bankName: string;
+    cbdcCount: string;
+  }[] = [];
+  availableCurrecyModel = '';
+  settlementStatus = false;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
-  ) { }
+    private transferService: TransferService,
+    private modal: NzModalService
+  ) {}
   ngAfterViewInit(): void {
+    this.fromEventBeneficialWalletAddress();
+    this.formEventCurrencyInterbankSettlementAmount();
     this.pageHeaderInfo = {
       title: ``,
       breadcrumb: ['Remittance Management', 'Transfer'],
@@ -80,20 +80,212 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.initData();
     this.validateForm = this.fb.group({
-      beneficialBankName: [null, [Validators.required]],
+      beneficialBankName: ['', [Validators.required]],
+      beneficialBankId: ['', [Validators.required]],
       beneficialWalletAddress: [null, [Validators.required]],
       amount: [null, [Validators.required]],
       remitterWalletAddress: [null, [Validators.required]],
       availableBalance: [null, [Validators.required]],
       remitterBankName: [null, [Validators.required]],
-      remittanceInformation: [null, [Validators.required]],
-    })
+      remitterBankId: ['', [Validators.required]],
+      remittanceInformation: [null, [Validators.required]]
+    });
+
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
+  initData() {
+    this.transferService.fetchBankList().subscribe((res: any) => {
+      res.forEach((item: any) => {
+        this.beneficialBankNameList.push({
+          label: item.bank_name,
+          value: item.central_bank_id,
+          currencyName: item.digital_currency_name
+        });
+      });
+    });
+    this.transferService.fetchAllWalletList().subscribe((res: any) => {
+      res.forEach((item: any, i: number) => {
+        if (i === 0) {
+          this.validateForm
+            .get('remitterWalletAddress')
+            ?.setValue(item.chainAccountAddress);
+          this.availableCurrecy = [];
+          item.walletExtendInfo.forEach((items: any, is: number) => {
+            if (is === 0) {
+              this.availableCurrecyModel = items.digitalCurrencyName;
+              this.validateForm
+                .get('remitterBankName')
+                ?.setValue(items.bankName);
+              this.validateForm
+                .get('remitterBankId')
+                ?.setValue(items.bankAccountId);
+              this.validateForm
+                .get('availableBalance')
+                ?.setValue(items.cbdcCount);
+            }
 
+            this.availableCurrecy.push({
+              label: items.digitalCurrencyName,
+              value: items.digitalCurrencyName,
+              bankName: items.bankName,
+              cbdcCount: items.cbdcCount
+            });
+          });
+        }
+        this.remitterWalletAddressList.push({
+          label: item.chainAccountAddress,
+          value: item.chainAccountAddress,
+          walletList: item.walletExtendInfo
+        });
+      });
+    });
+  }
+  onRemitterWalletAddressChange(e: any) {
+    const val = this.remitterWalletAddressList.filter(
+      (item: any) => item.value === e
+    );
+    if (val.length === 0) {
+      return;
+    }
+    this.availableCurrecy = [];
+    val[0].walletList.forEach((items: any, is: number) => {
+      if (is === 0) {
+        this.availableCurrecyModel = items.digitalCurrencyName;
+        this.validateForm.get('remitterBankName')?.setValue(items.bankName);
+        this.validateForm.get('remitterBankId')?.setValue(items.bankAccountId);
+      }
+
+      this.availableCurrecy.push({
+        label: items.digitalCurrencyName,
+        value: items.digitalCurrencyName,
+        bankName: items.bankName,
+        cbdcCount: items.cbdcCount
+      });
+      if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+        this.getExchange();
+      } else {
+        this.settlementStatus = false;
+      }
+    });
+  }
+  // Check field
+  getExchange() {
+    this.validateForm.controls['beneficialWalletAddress'].markAsDirty();
+    this.validateForm.controls[
+      'beneficialWalletAddress'
+    ].updateValueAndValidity({ onlySelf: true });
+    this.findExchange();
+  }
+  // Query exchange rate information
+  findExchange() {
+    this.settlementStatus = true;
+    this.nzLoading = true;
+    this.cdr.markForCheck();
+    if (this.validateForm.get('beneficialWalletAddress')?.valid) {
+      this.transferService
+        .exchange({
+          from: this.validateForm.get('beneficialWalletAddress')?.value,
+          to: this.validateForm.get('remitterWalletAddress')?.value
+        })
+        .subscribe((res) => {
+          let resultData: any[] = [];
+          res.forEach((item: any) => {
+            resultData.push({
+              rateId: item.rateId,
+              sp: item.provider,
+              currency: '1 ' + item.to + '->' + item.from,
+              rate: String(1 / item.rate).replace(/^(.*\..{4}).*$/, '$1'),
+              com:
+                item.smChargeModel === 0
+                  ? item.smValue > item.smMaxFee
+                    ? item.smMaxFee
+                    : item.smValue
+                  : item.smValue,
+              total: String(
+                this.validateForm.get('amount')?.value * item.rate +
+                  (item.smChargeModel === 0
+                    ? item.smValue > item.smMaxFee
+                      ? item.smMaxFee
+                      : item.smValue
+                    : item.smValue)
+              ).replace(/^(.*\..{4}).*$/, '$1')
+            });
+          });
+          this.nzLoading = false;
+          this.dataList = resultData.sort(this.compare('total'));
+          this.dataList.forEach((item: any, index: number) => {
+            if (this.radioValue === 0) {
+              this.checkedItemComment.push(item);
+            }
+          });
+          this.cdr.markForCheck();
+        });
+    }
+  }
+  compare(p: string) {
+    return function (m: any, n: any) {
+      var a = m[p];
+      var b = n[p];
+      return a - b;
+    };
+  }
+  // Monitor Currency & Interbank Settlement Amount input
+  fromEventBeneficialWalletAddress() {
+    this.validateForm
+      .get('beneficialWalletAddress')
+      ?.valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+          this.findExchange();
+        }
+      });
+  }
+  // Monitor Currency & Interbank Settlement Amount input
+  formEventCurrencyInterbankSettlementAmount() {
+    this.validateForm
+      .get('amount')
+      ?.valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        if (
+          this.beneficiaryCurrency !== '' &&
+          this.beneficiaryCurrency !== this.availableCurrecyModel
+        ) {
+          this.findExchange();
+        }
+      });
+  }
+  onAvailableCurrecy(e: any) {
+    const val = this.availableCurrecy.filter((item: any) => item.value === e);
+    this.availableCurrecyModel = e;
+    this.validateForm.get('availableBalance')?.setValue(val[0].cbdcCount);
+    this.validateForm.get('remitterBankName')?.setValue(val[0].bankName);
+    if (this.beneficiaryCurrency !== e) {
+      this.getExchange();
+    } else {
+      this.settlementStatus = false;
+    }
+  }
+  onBeneficialBankNameChange(e: any) {
+    if (e === 'all') {
+      this.beneficiaryCurrency = '';
+      return;
+    }
+
+    const val = this.beneficialBankNameList.filter(
+      (item: any) => item.value === e
+    );
+    this.validateForm.get('beneficialBankName')?.setValue(val[0].label);
+    this.beneficiaryCurrency = val[0].currencyName;
+    if (this.availableCurrecyModel !== val[0].currencyName) {
+      this.getExchange();
+    } else {
+      this.settlementStatus = false;
+    }
+  }
   onItemChecked(id: string, checked: boolean): void {
     this.updateCheckedSet(id, checked);
   }
@@ -105,7 +297,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
         this.checkedItemComment.push(item);
       }
     });
-    console.log(this.checkedItemComment);
   }
 
   updateCheckedSet(id: string, checked: boolean): void {
@@ -123,8 +314,26 @@ export class TransferComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSubmit() { 
-    this.isVisible = true;
+  onSubmit() {
+    if (this.validateForm.valid) {
+      if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+        if (this.checkedItemComment.length === 0) {
+          this.modal.error({
+            nzTitle: 'Error',
+            nzContent: 'Please select an exchange rate !'
+          });
+          return;
+        }
+      }
+      this.isVisible = true;
+    } else {
+      Object.values(this.validateForm.controls).forEach((control) => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
   }
 
   cancelView() {
@@ -132,12 +341,44 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   confirmView() {
-    this.isVisible = false;
+    // this.isVisible = false;
     this.isVisibleEnterPassword = true;
   }
 
   cancelEnterPassword() {
     this.isVisibleEnterPassword = false;
   }
-  confirmEnterPassword() {}
+  confirmEnterPassword() {
+    this.isVisibleEnterPassword = false;
+    this.isLoading = true;
+    this.transferService
+      .transfer({
+        beneficiaryBankId: this.validateForm.get('beneficialBankId')?.value,
+        beneficiaryWalletAddress: this.validateForm.get(
+          'beneficialWalletAddress'
+        )?.value,
+        nterbankSettlementAmount: this.validateForm.get('amount')?.value,
+        remittanceInformation: this.validateForm.get('remittanceInformation')
+          ?.value,
+        remitterWalletId: this.validateForm.get('remitterBankId')?.value,
+        rateId: this.checkedItemComment[0].rateId,
+        passWord: this.passwordForm.get('password')?.value
+      })
+      .subscribe((res) => {
+        if (res) {
+          this.modal
+            .success({
+              nzTitle: 'Success',
+              nzContent: 'Transfer successful!'
+            })
+            .afterClose.subscribe((_) => {
+              this.initData();
+              this.validateForm.reset();
+              this.passwordForm.reset();
+            });
+        }
+        this.isLoading = false;
+        this.isVisible = false;
+      });
+  }
 }
