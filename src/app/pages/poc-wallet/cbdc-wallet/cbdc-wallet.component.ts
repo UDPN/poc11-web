@@ -16,8 +16,11 @@ import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.compo
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface SearchParam {
   chainAccountAddress: string;
@@ -46,12 +49,11 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   centralBankTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('balanceTpl', { static: true })
-  balanceTpl!: TemplateRef<NzSafeAny>;
   isVisibleTopUp: boolean = false;
   isVisibleWithdraw: boolean = false;
   isVisibleEnterPassword: boolean = false;
   isLoading: boolean = false;
+  isOkLoading: boolean = false;
   topUpForm!: FormGroup;
   withdrawForm!: FormGroup;
   passwordForm!: FormGroup;
@@ -79,12 +81,17 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     footer: ''
   };
   currency: any;
+  txType: number = 0;
+  balance: any = '';
   constructor(
     private cbdcWalletService: CbdcWalletService,
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
+    private message: NzMessageService,
+    private location: Location,
+    private router: Router,
   ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -100,15 +107,15 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.initTable();
     this.getCentralBank();
     this.topUpForm = this.fb.group({
-      chainAccountAddress: ['1111', [Validators.required]],
-      amount: ['', [Validators.required]],
+      chainAccountAddress: [null, [Validators.required]],
+      amount: [null, [Validators.required]],
     });
     this.withdrawForm = this.fb.group({
-      chainAccountAddress: ['222', [Validators.required]],
-      amount: ['', [Validators.required]],
+      chainAccountAddress: [null, [Validators.required]],
+      amount: [null, [Validators.required]],
     });
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required]],
+      password: [null, [Validators.required]],
     });
   }
 
@@ -167,13 +174,17 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getTopUp(currency: string) {
+  getTopUp(currency: string, chainAccountAddress: string, balance: any) {
     this.currency = currency;
+    this.balance = balance;
+    this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.isVisibleTopUp = true;
   }
 
-  getWithdraw(currency: string) {
+  getWithdraw(currency: string, chainAccountAddress: string, balance: any) {
     this.currency = currency;
+    this.balance = balance;
+    this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.isVisibleWithdraw = true;
   }
 
@@ -190,22 +201,56 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   cancelEnterPassword() {
     this.isVisibleEnterPassword = false;
     this.passwordForm.reset();
+    this.topUpForm.reset();
+    this.withdrawForm.reset();
   }
 
   topUp() {
     this.isVisibleTopUp = false;
     this.isVisibleEnterPassword = true;
-    this.topUpForm.reset();
+    this.txType = 1;
   }
 
   withdraw() {
     this.isVisibleWithdraw = false;
     this.isVisibleEnterPassword = true;
-    this.withdrawForm.reset();
+    this.txType = 2;
   }
 
-  confirmEnterPassword() {}
-  
+  confirmEnterPassword() {
+    this.isLoading = true;
+    const params = {
+      amount: this.txType === 1 ? this.topUpForm.get('amount')?.value : this.withdrawForm.get('amount')?.value,
+      password: this.passwordForm.get('password')?.value,
+      txType: this.txType === 1 ? 1 : 2,
+      walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
+    }
+    const amount = thousandthMark(this.balance) + ' ' +  this.currency;
+    this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isLoading = false)).subscribe({
+      next: res => {
+        this.isVisibleEnterPassword = false;        
+        if (res) {
+          this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
+            this.getDataList();
+          });
+        }
+        if (this.txType === 1) {
+          this.topUpForm.reset();
+        } else {
+          this.withdrawForm.reset();
+        }
+        this.passwordForm.reset();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: err => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
+    })
+
+  }
+
   private initTable(): void {
     this.tableConfig = {
       headers: [
@@ -233,7 +278,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Balance',
-          tdTemplate: this.balanceTpl,
+          field: 'balance',
+          pipe: 'toThousandthMark',
           width: 150
         },
         {
@@ -245,7 +291,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
         {
           title: 'state',
           tdTemplate: this.statusTpl,
-          pipe: 'walletStatus',
           width: 180
         },
         {

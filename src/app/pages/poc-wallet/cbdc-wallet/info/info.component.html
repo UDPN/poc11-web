@@ -5,68 +5,93 @@
 </ng-template>
 <div class="normal-detail-table-wrap">
   <nz-card>
-    <nz-tabset>
+    <nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
       <nz-tab *ngFor="let tab of detailsTabs; index as i" [nzTitle]="tab">
         <ng-container *ngIf="i === 0">
           <nz-card nzTitle="Wallet Information" nzBordered="false" class="none-bottom">
             <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
               [nzBordered]="true">
-              <nz-descriptions-item nzTitle="Wallet Address">{{ info.businessApplicationCode }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Business Node ID">{{ info.spName }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Wallet Address">{{ info.chainAccountAddress }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Business Node ID">{{ info.bnCode }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Central Bank">
-                {{ info.country }}
+                {{ info.centralBankName }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Currency">
-                {{ info.introduction }}
+                {{ info.currency }}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Created By">{{ info.description }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Creation Time">{{ info.bnCode }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Status">{{ info.spBesuWalletAddress }}</nz-descriptions-item>
+              <!-- <nz-descriptions-item nzTitle="Created By">{{ info.createUser }}</nz-descriptions-item> -->
+              <nz-descriptions-item nzTitle="Creation Time">{{ info.createTime | map:'timeStamp'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Status"><nz-tag [nzColor]="info.state | map:'walletStatusColor'">{{
+                  info.state | map:'walletStatus' }}</nz-tag></nz-descriptions-item>
             </nz-descriptions>
           </nz-card>
           <nz-card nzTitle="Approval Information" nzBordered="false" class="none-bottom">
             <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
               [nzBordered]="true">
-              <nz-descriptions-item nzTitle="Approval Result">{{ info.businessApplicationCode }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Comments">{{ info.spName }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Approval Result">{{ info.state | map:'walletApprovalResult'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Comments">{{ info.reviewerRemark | map:'nullValue'
+                }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Approved By">
-                {{ info.country }}
+                {{ info.reviewerUser | map:'nullValue' }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Approval Time">
-                {{ info.introduction }}
+                {{ info.reviewerTime | map:'timeStamp' }}
               </nz-descriptions-item>
             </nz-descriptions>
           </nz-card>
           <nz-card nzTitle="Transaction Information" nzBordered="false" class="none-bottom">
             <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
               [nzBordered]="true">
-              <nz-descriptions-item nzTitle="Transaction Hash">{{ info.businessApplicationCode }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Transaction Time">{{ info.spName }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map:'timeStamp'
+                }}</nz-descriptions-item>
             </nz-descriptions>
           </nz-card>
         </ng-container>
         <ng-container *ngIf="i === 1">
           <nz-card nzTitle="Transaction Summary" nzBordered="false" class="none-bottom">
-            <div nz-row class="m-l-10 m-r-10 m-t-10">
-              <div *ngFor="let item of list; index as i" nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12"
-                [nzSm]="24" [nzXs]="24">
+            <div nz-row class="m-l-10 m-r-10 m-t-10" nzAlign="middle" nzJustify="space-between">
+              <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
                 <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
                   <div nz-row>
-                    <div nz-col [nzXXl]="5" [nzXl]="5" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
-                      img
+                    <div nz-col [nzXXl]="6" [nzXl]="6" [nzLg]="6" [nzMd]="6" [nzSm]="6" [nzXs]="12">
+                      <img src="../../../../../assets/imgs/wallet/Inflow.png" alt="">
                     </div>
-                    <div nz-col [nzXXl]="18" [nzXl]="18" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
+                    <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
                       <div>
-                        <h4 nz-typography> {{'CBDC Inflow: ' + item.amount + ' ' + item.currency}} </h4>
-                        <h5 nz-typography>{{ '(' + (i === 0 ? 'Total Top-ups: ' : 'Total Withdrawals: ') +
-                          item.maxAmount + ' ' +
-                          item.currency
-                          + ')' }}</h5>
+                        <h4 nz-typography> {{'CBDC Inflow: ' + summaryInfo.inflowSum + ' ' + summaryCurrency }} </h4>
+                        <ng-container *ngIf="summaryRegion === '1'">
+                          <h5 nz-typography>{{ '(Total Top-ups: ' + summaryInfo.inflowSum + ' ' +
+                            summaryCurrency
+                            + ')' }}</h5>
+                        </ng-container>
+
                       </div>
                     </div>
                   </div>
                 </nz-card>
-
+              </div>
+              <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
+                  <div nz-row>
+                    <div nz-col [nzXXl]="6" [nzXl]="6" [nzLg]="6" [nzMd]="6" [nzSm]="6" [nzXs]="12">
+                      <img src="../../../../../assets/imgs/wallet/Outflow.png" alt="">
+                    </div>
+                    <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
+                      <div>
+                        <h4 nz-typography> {{'CBDC Outflow: ' + summaryInfo.inflowSum + ' ' + summaryCurrency }} </h4>
+                        <ng-container *ngIf="summaryRegion === '1'">
+                          <h5 nz-typography>{{ '(Total Withdrawals: ' + summaryInfo.inflowSum + ' ' +
+                            summaryCurrency
+                            + ')' }}</h5>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </nz-card>
               </div>
             </div>
           </nz-card>
@@ -75,12 +100,12 @@
               [tableData]="transactionList"></app-ant-table>
           </nz-card>
         </ng-container>
-        <ng-container *ngIf="i === 2">
+        <!-- <ng-container *ngIf="i === 2">
           <nz-card nzTitle="Operation Record" nzBordered="false" class="none-bottom">
             <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="recordTableConfig"
               [tableData]="recordList"></app-ant-table>
           </nz-card>
-        </ng-container>
+        </ng-container> -->
       </nz-tab>
     </nz-tabset>
   </nz-card>

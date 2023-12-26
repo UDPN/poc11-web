@@ -101,27 +101,30 @@
     <ng-template #statusTpl let-state="state">
       <nz-tag [nzColor]="state | map:'walletStatusColor'">{{ state | map:'walletStatus' }}</nz-tag>
     </ng-template>
-    <ng-template #balanceTpl let-balance="balance">
-      <span>{{ balance | map:'toThousandthMark' }}</span>
-    </ng-template>
     <ng-template #walletAddressTpl let-chainAccountAddress="chainAccountAddress">
-      <p [title]="chainAccountAddress" nz-typography nzCopyable [nzCopyText]="chainAccountAddress">{{
-        chainAccountAddress.length > 12 ?
-        chainAccountAddress.slice(0,12) + '...' : chainAccountAddress }}</p>
+      <ng-container *ngIf="chainAccountAddress">
+        <p [title]="chainAccountAddress" nz-typography nzCopyable [nzCopyText]="chainAccountAddress">{{
+          chainAccountAddress.length > 12 ?
+          chainAccountAddress.slice(0,12) + '...' : chainAccountAddress }}</p>
+      </ng-container>
+      <ng-container *ngIf="!chainAccountAddress">
+        <span>{{ '--' }}</span>
+      </ng-container>
     </ng-template>
-    <ng-template #operationTpl let-state="state" let-currency="currency">
+    <ng-template #operationTpl let-bankAccountId="bankAccountId" let-balance="balance" let-region="region"
+      let-chainAccountAddress="chainAccountAddress" let-state="state" let-currency="currency">
       <ng-container>
-        <span class="operate-text" (click)="getTopUp(currency)" *ngIf="state === 5">
+        <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Top up
         </span>
       </ng-container>
       <ng-container>
-        <span class="operate-text" (click)="getWithdraw(currency)" *ngIf="state === 5">
+        <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Withdraw
         </span>
       </ng-container>
       <ng-container>
-        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{}">
+        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{bankAccountId, currency, region}">
           Details
         </span>
       </ng-container>
@@ -144,7 +147,7 @@
               Wallet Address
             </nz-form-label>
             <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="18" class="m-b-20">
-              <input nz-input formControlName="walletAddress" readonly class="onboard-disabled" />
+              <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
               </ng-template>
@@ -156,7 +159,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18" class="m-b-20">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" />
+                <input nz-input formControlName="amount" type="number" [maxlength]="10" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
@@ -195,7 +198,7 @@
               Wallet Address
             </nz-form-label>
             <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="18" class="m-b-20">
-              <input nz-input formControlName="walletAddress" readonly class="onboard-disabled" />
+              <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
               </ng-template>
@@ -207,7 +210,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" />
+                <input nz-input formControlName="amount" type="number" [maxlength]="10" />
               </nz-input-group>
               <div>
                 Available Amount: 90,000.00 w-CNY
@@ -254,7 +257,7 @@
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="cancelEnterPassword()">Cancel</button>
-    <button nz-button nzType="primary" (click)="confirmEnterPassword()" [nzLoading]="isLoading"
+    <button nz-button nzType="primary" (click)="confirmEnterPassword()" [nzLoading]="isOkLoading"
       [disabled]="!this.passwordForm.valid">Confirm</button>
   </div>
 </nz-modal>

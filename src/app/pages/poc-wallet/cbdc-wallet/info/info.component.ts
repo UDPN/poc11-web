@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@a
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -56,11 +57,16 @@ export class InfoComponent implements OnInit {
       maxAmount: '100000000',
     }
   ];
-  detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
+  // detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
+  detailsTabs = ['Basic Information', 'Transaction'];
+  summaryCurrency: string = '';
+  summaryInfo: any = {};
+  summaryRegion: any = 0;
   constructor(
     public routeInfo: ActivatedRoute,
     private commonService: CommonService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private cbdcWalletService: CbdcWalletService
   ) { }
 
   ngAfterViewInit(): void {
@@ -84,6 +90,37 @@ export class InfoComponent implements OnInit {
 
   ngOnInit() {
     this.initTable();
+    this.getBasicInfo();
+  }
+
+  tabIndexChange(event: any) {
+    if (event === 0) {
+      this.getBasicInfo();
+    } else if (event === 1) {
+      this.getTransactionSummary();
+    }
+  }
+
+  getBasicInfo() {
+    this.routeInfo.queryParams.subscribe(params => {
+      this.cbdcWalletService.getBasicInfo({ bankAccountId: params['bankAccountId'] }).subscribe(res => {
+        this.info = res;
+        this.cdr.markForCheck();
+        this.cdr.detectChanges();
+      });
+    });
+  }
+
+  getTransactionSummary() {
+    this.routeInfo.queryParams.subscribe(params => {
+      this.summaryCurrency = params['currency'];
+      this.summaryRegion = params['region'];
+      this.cbdcWalletService.getTransactionSummary({ bankAccountId: params['bankAccountId'] }).subscribe(res => {
+        this.summaryInfo = res;
+        this.cdr.markForCheck();
+        this.cdr.detectChanges();
+      });
+    });
   }
 
   changePageSize(e: number): void {

@@ -12,6 +12,13 @@ export interface Sdata {
   walletAddress?: string;
 }
 
+export interface Tdata {
+  amount: number;
+  password: string;
+  txType: any; //  1: Top Up 2: Withdraw
+  walletAddress?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -76,4 +83,17 @@ export class CbdcWalletService {
   public save(params: Sdata): Observable<any> {
     return this.http.post(`/v1/wallet/save`, params);
   }
+  
+  public topUpOrWithdraw(params: Tdata): Observable<any> {
+    return this.http.post(`/v1/wallet/applyCbdcTx`, params);
+  }
+
+  public getBasicInfo(params: {bankAccountId: any}): Observable<any> {
+    return this.http.post(`/v1/wallet/detail/basic`, params);
+  }
+
+  public getTransactionSummary(params: {bankAccountId: any}): Observable<any> {
+    return this.http.post(`/v1/wallet/detail/transaction/summary`, params);
+  }
+
 }

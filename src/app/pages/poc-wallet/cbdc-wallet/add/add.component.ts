@@ -76,6 +76,7 @@ export class AddComponent implements OnInit {
 
   centralBankChanges() {
     this.validateForm.get('centralBankId')?.valueChanges.subscribe((value: number) => {
+      this.validateForm.get('walletAddress')?.reset('');
       this.centralBankList.forEach(item => {
         if (value === item.centralBankId) {
           this.getWalletAddress(item.centralBankId);
@@ -118,10 +119,7 @@ export class AddComponent implements OnInit {
     })
   }
 
-  onSubmit() { 
-    if (!fnCheckForm(this.validateForm)) {
-      return;
-    }
+  onSubmit() {
     this.isLoading = true;
     const params = {
       bnCode: this.validateForm.value.bnCode,

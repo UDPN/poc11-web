@@ -105,23 +105,21 @@ export const MapSet = {
   },
   walletTransactionsStatus: {
     1: 'Pending Approval',
-    2: 'Processing',
-    3: 'Success',
-    4: 'Failed',
-    5: 'Rejected'
+    3: 'Processing',
+    5: 'Success',
+    6: 'Failed',
+    2: 'Rejected'
   },
   walletTransactionsStatusColor: {
     1: 'volcano',
-    2: 'purple',
-    3: 'cyan',
-    4: 'red',
-    5: 'red'
+    3: 'purple',
+    5: 'cyan',
+    6: 'red',
+    2: 'red'
   },
   walletTransactionsType: {
     1: 'Top-up',
-    2: 'Withdrawal',
-    3: 'Transfer',
-    4: 'Exchange'
+    2: 'Withdrawal'
   },
   region: {
     1: 'Domestic',
@@ -142,6 +140,16 @@ export const MapSet = {
     6: 'red',
     7: 'purple',
     8: 'default',
+  },
+  walletApprovalResult: {
+    1: '--',
+    2: 'Rejected',
+    3: 'Agree',
+    4: 'Agree',
+    5: 'Agree',
+    6: '--',
+    7: '--',
+    8: '--',
   },
 };
 
@@ -205,7 +213,11 @@ export class MapPipe implements PipeTransform {
       }
     }
     if (arg === 'toThousandthMark') {
-      return thousandthMark(value);
+      if (value === null || value === '' || value === undefined) {
+        return (value = '--');
+      } else {
+        return thousandthMark(value);
+      }
     }
     if (arg === 'monthStamp') {
       if (!value) {
