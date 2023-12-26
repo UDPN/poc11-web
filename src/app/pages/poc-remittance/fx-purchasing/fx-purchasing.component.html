@@ -76,9 +76,10 @@
                                 <nz-form-control [nzErrorTip]="transactionWalletAddressError">
                                     <div nz-row>
                                         <div nz-col nzSpan="24">
-                                            <nz-select formControlName="transactionWalletAddress">
-                                                <nz-option *ngFor="let item of transactionWalletAddressList"
-                                                    [nzValue]="" [nzLabel]="''"></nz-option>
+                                            <nz-select formControlName="transactionWalletAddressId"
+                                                (ngModelChange)="onPurchase($event)">
+                                                <nz-option *ngFor="let item of fxPurchaseData;let i=index" [nzValue]="i"
+                                                    [nzLabel]="item.walletAddress"></nz-option>
                                             </nz-select>
                                         </div>
                                     </div>
@@ -114,7 +115,7 @@
                                 <nz-form-control [nzErrorTip]="availableBalanceError">
                                     <div nz-row>
                                         <div nz-col nzSpan="24">
-                                            <nz-input-group [nzAddOnAfter]="'w-CNY'">
+                                            <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1">
                                                 <input nz-input formControlName="availableBalance" readonly
                                                     class="onboard-disabled" />
                                             </nz-input-group>
@@ -130,66 +131,72 @@
                     </form>
                 </nz-card>
             </div>
-            <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24" class="m-t-60"
-                style="background: #fff; border-radius: 16px;padding: 4px;">
-                <div>
-                    <nz-card nzTitle="Settlement Information" nzBordered="false" class="none-bottom">
-                        <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="dataList" [nzLoading]="nzLoading">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>FX SP</th>
-                                    <th>Currency Pair</th>
-                                    <th>FX Rate</th>
-                                    <th>Commission</th>
-                                    <th>Total Payment Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of rowSelectionTable.data, index as i">
-                                    <!-- <td [nzChecked]="setOfCheckedId.has(i.toString())"
+            <ng-container *ngIf="!showStatus">
+                <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24"
+                    class="m-t-60" style="background: #fff; border-radius: 16px;padding: 4px;">
+                    <div>
+                        <nz-card nzTitle="Settlement Information" nzBordered="false" class="none-bottom">
+                            <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="dataList" [nzLoading]="nzLoading">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>FX SP</th>
+                                        <th>Currency Pair</th>
+                                        <th>FX Rate</th>
+                                        <th>Commission</th>
+                                        <th>Total Payment Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of rowSelectionTable.data, index as i">
+                                        <!-- <td [nzChecked]="setOfCheckedId.has(i.toString())"
                                         (nzCheckedChange)="onItemChecked(i.toString(), $event)"
                                         style="display: flex; justify-content: center; align-items: center;"> 
                                     </td> -->
-                                    <td style="display: flex; justify-content: center; align-items: center;">
-                                        <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="onChecked()">
-                                            <label nz-radio [nzValue]="i"></label>
-                                        </nz-radio-group>
-                                    </td>
-                                    <td>{{ data.spName }}</td>
-                                    <td>{{ data.currencyPair }}</td>
-                                    <td>{{ data.rate }}</td>
-                                    <td>{{ data.commission }}</td>
-                                    <td>{{ data.amount }} <span style="color: blue;font-size:x-small;font-weight: 600;"
-                                            *ngIf="i === 0">{{
-                                            ' Recommendation!' }}</span> </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                        <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25 m-b-10">
-                            <div nz-col nzSpan="24" style="text-align: end">
-                                <button nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
-                                    (click)="onSubmit()">
-                                    Submit
-                                </button>
-                            </div>
-                        </div>
-                    </nz-card>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="onChecked()">
+                                                <label nz-radio [nzValue]="i"></label>
+                                            </nz-radio-group>
+                                        </td>
+                                        <td>{{ data.sp }}</td>
+                                        <td>{{ data.currency}}</td>
+                                        <td>{{ data.rate }}</td>
+                                        <td>{{ data.com + ' ' + purchCurrecy}}
+                                        </td>
+                                        <td> <b>{{ data.total + ' ' + purchCurrecy}}</b> <span
+                                                style="color: blue;font-weight: 600;margin-left: 30px;"
+                                                *ngIf="i === 0">{{
+                                                ' Recommendation!' }}</span> </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </nz-card>
+                    </div>
                 </div>
+            </ng-container>
 
-            </div>
         </div>
     </nz-card>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25 m-b-10 m-r-60">
+        <div nz-col nzSpan="24" style="text-align: end">
+            <button nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading" (click)="onSubmit()">
+                Submit
+            </button>
+        </div>
+    </div>
 </div>
 <ng-template #selectRadioTpl let-key>
     <label nz-radio ngModel></label>
 </ng-template>
 <ng-template #addOnAfterTemplate>
-    <nz-select [ngModel]="'1'">
-        <nz-option nzLabel="w-CNY" nzValue="1"></nz-option>
-        <nz-option nzLabel="w-HKD" nzValue="2"></nz-option>
-        <nz-option nzLabel="w-EUR" nzValue="3"></nz-option>
-        <nz-option nzLabel="w-USD" nzValue="4"></nz-option>
+    <nz-select [ngModel]="0" (ngModelChange)="onReceiving($event)">
+        <nz-option *ngFor="let item of fxReceivingData;let i = index" [nzLabel]="item.currecy"
+            [nzValue]="i"></nz-option>
+    </nz-select>
+</ng-template>
+<ng-template #addOnAfterTemplate1>
+    <nz-select [ngModel]="0" (ngModelChange)="onPurchCurrecy($event)">
+        <nz-option *ngFor="let item of purchCurrecyList;let i = index" [nzLabel]="item" [nzValue]="i"></nz-option>
     </nz-select>
 </ng-template>
 
@@ -201,11 +208,13 @@
                 <nz-card nzTitle="Remittance Information" class="info-none-bottom">
                     <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false"
                         [nzBordered]="false" class="card-descriptions-vertical">
-                        <nz-descriptions-item nzTitle="Payment Amount">{{ '9,100.00 w-CNY'
+                        <nz-descriptions-item nzTitle="Payment Amount">{{ checkedItemComment[0].total +" "+
+                            reveingCurrecy
                             }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Transaction Wallet Address">{{
-                            '0x11c0E25E62C1dBD32E505446062B26AECB00CN00'}}</nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Transaction Bank Name">{{ "People's Bank of China"
+                            validateForm.controls["transactionWalletAddress"].value }}</nz-descriptions-item>
+                        <nz-descriptions-item nzTitle="Transaction Bank Name">{{
+                            validateForm.controls["transactionBankName"].value
                             }}</nz-descriptions-item>
                     </nz-descriptions>
                 </nz-card>
@@ -217,11 +226,14 @@
                 <nz-card nzTitle="Receipt of Funds Information" class="info-none-bottom">
                     <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false"
                         [nzBordered]="false" class="card-descriptions-vertical">
-                        <nz-descriptions-item nzTitle="FX Purchase Amount">{{ '10,000.00 w-HKD'
+                        <nz-descriptions-item nzTitle="FX Purchase Amount">{{
+                            validateForm.controls["availableBalance"].value +" "+
+                            purchCurrecy
                             }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="FX Receiving Wallet Address">{{
-                            '0x11c0E25E62C1dBD32E505446062B26AECB00CN00'}}</nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="Receiving Bank Name">{{ "People's Bank of China"
+                            validateForm.controls["receivingWalletAddress"].value}}</nz-descriptions-item>
+                        <nz-descriptions-item nzTitle="Receiving Bank Name">{{
+                            validateForm.controls["receivingBankName"].value
                             }}</nz-descriptions-item>
                     </nz-descriptions>
                 </nz-card>
@@ -229,10 +241,10 @@
             <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
                 <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }"
                     [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical m-t-25">
-                    <nz-descriptions-item nzTitle="Settlement Bank">{{ 'Bank of China'
+                    <nz-descriptions-item nzTitle="Settlement Bank">{{ checkedItemComment[0].sp
                         }}</nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Exchange Rate">{{
-                        '1 HKD : 0.91 CNY'}}</nz-descriptions-item>
+                        checkedItemComment[0].currency}}</nz-descriptions-item>
                 </nz-descriptions>
             </div>
             <div nz-col [nzXXl]="1" [nzXl]="1" [nzLg]="1" [nzMd]="1" [nzSm]="0" [nzXs]="0">
@@ -240,10 +252,12 @@
             <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
                 <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }"
                     [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical m-t-25">
-                    <nz-descriptions-item nzTitle="Commission">{{ '5.00 w-CNY'
+                    <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].rate +" "+
+                        reveingCurrecy
                         }}</nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Total Payment Amount">{{
-                        '9,105.00 w-CNY'}}</nz-descriptions-item>
+                        checkedItemComment[0].total +" "+
+                        reveingCurrecy}}</nz-descriptions-item>
                 </nz-descriptions>
             </div>
         </div>

@@ -54,6 +54,7 @@ export class TransferService {
     remittanceInformation: string;
     remitterWalletId: number;
     rateId: string;
+    passWord: string;
   }): Observable<any> {
     return this.http.post(`/v1/remittanceManagement/transfer`, params);
   }

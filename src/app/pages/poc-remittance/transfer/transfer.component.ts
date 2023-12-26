@@ -44,7 +44,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   setOfCheckedId = new Set<string>();
   checkedItemComment: NzSafeAny[] = [];
-  radioValue: any = '';
+  radioValue: any = 0;
   passwordForm!: FormGroup;
   dataList: NzSafeAny[] = [];
   isVisible: boolean = false;
@@ -89,6 +89,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       remitterWalletAddress: [null, [Validators.required]],
       availableBalance: [null, [Validators.required]],
       remitterBankName: [null, [Validators.required]],
+      remitterBankId: ['', [Validators.required]],
       remittanceInformation: [null, [Validators.required]]
     });
 
@@ -119,6 +120,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
               this.validateForm
                 .get('remitterBankName')
                 ?.setValue(items.bankName);
+              this.validateForm
+                .get('remitterBankId')
+                ?.setValue(items.bankAccountId);
               this.validateForm
                 .get('availableBalance')
                 ?.setValue(items.cbdcCount);
@@ -152,6 +156,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       if (is === 0) {
         this.availableCurrecyModel = items.digitalCurrencyName;
         this.validateForm.get('remitterBankName')?.setValue(items.bankName);
+        this.validateForm.get('remitterBankId')?.setValue(items.bankAccountId);
       }
 
       this.availableCurrecy.push({
@@ -167,7 +172,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  // 校验字段
+  // Check field
   getExchange() {
     this.validateForm.controls['beneficialWalletAddress'].markAsDirty();
     this.validateForm.controls[
@@ -175,10 +180,11 @@ export class TransferComponent implements OnInit, AfterViewInit {
     ].updateValueAndValidity({ onlySelf: true });
     this.findExchange();
   }
-  // 查询汇率信息
+  // Query exchange rate information
   findExchange() {
     this.settlementStatus = true;
     this.nzLoading = true;
+    this.cdr.markForCheck();
     if (this.validateForm.get('beneficialWalletAddress')?.valid) {
       this.transferService
         .exchange({
@@ -186,14 +192,13 @@ export class TransferComponent implements OnInit, AfterViewInit {
           to: this.validateForm.get('remitterWalletAddress')?.value
         })
         .subscribe((res) => {
-          console.log(res);
           let resultData: any[] = [];
           res.forEach((item: any) => {
             resultData.push({
               rateId: item.rateId,
               sp: item.provider,
-              currency: '1 ' + item.from + '->' + item.to,
-              rate: item.rate,
+              currency: '1 ' + item.to + '->' + item.from,
+              rate: String(1 / item.rate).replace(/^(.*\..{4}).*$/, '$1'),
               com:
                 item.smChargeModel === 0
                   ? item.smValue > item.smMaxFee
@@ -212,6 +217,11 @@ export class TransferComponent implements OnInit, AfterViewInit {
           });
           this.nzLoading = false;
           this.dataList = resultData.sort(this.compare('total'));
+          this.dataList.forEach((item: any, index: number) => {
+            if (this.radioValue === 0) {
+              this.checkedItemComment.push(item);
+            }
+          });
           this.cdr.markForCheck();
         });
     }
@@ -223,7 +233,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       return a - b;
     };
   }
-  // 监听beneficialWalletAddress输入
+  // Monitor Currency & Interbank Settlement Amount input
   fromEventBeneficialWalletAddress() {
     this.validateForm
       .get('beneficialWalletAddress')
@@ -234,7 +244,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         }
       });
   }
-  // 监听Currency & Interbank Settlement Amount输入
+  // Monitor Currency & Interbank Settlement Amount input
   formEventCurrencyInterbankSettlementAmount() {
     this.validateForm
       .get('amount')
@@ -268,8 +278,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     const val = this.beneficialBankNameList.filter(
       (item: any) => item.value === e
     );
-    this.validateForm.get('beneficialBankId')?.setValue(e);
-    // this.validateForm.get('beneficialBankName')?.setValue(ss);
+    this.validateForm.get('beneficialBankName')?.setValue(val[0].label);
     this.beneficiaryCurrency = val[0].currencyName;
     if (this.availableCurrecyModel !== val[0].currencyName) {
       this.getExchange();
@@ -288,7 +297,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
         this.checkedItemComment.push(item);
       }
     });
-    console.log(this.checkedItemComment);
   }
 
   updateCheckedSet(id: string, checked: boolean): void {
@@ -307,19 +315,17 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    // this.isVisible = true;
     if (this.validateForm.valid) {
       if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
         if (this.checkedItemComment.length === 0) {
           this.modal.error({
             nzTitle: 'Error',
-            nzContent: '请选择汇率 !'
+            nzContent: 'Please select an exchange rate !'
           });
           return;
         }
       }
       this.isVisible = true;
-      console.log('submit', this.validateForm.value);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -335,12 +341,44 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   confirmView() {
-    this.isVisible = false;
+    // this.isVisible = false;
     this.isVisibleEnterPassword = true;
   }
 
   cancelEnterPassword() {
     this.isVisibleEnterPassword = false;
   }
-  confirmEnterPassword() {}
+  confirmEnterPassword() {
+    this.isVisibleEnterPassword = false;
+    this.isLoading = true;
+    this.transferService
+      .transfer({
+        beneficiaryBankId: this.validateForm.get('beneficialBankId')?.value,
+        beneficiaryWalletAddress: this.validateForm.get(
+          'beneficialWalletAddress'
+        )?.value,
+        nterbankSettlementAmount: this.validateForm.get('amount')?.value,
+        remittanceInformation: this.validateForm.get('remittanceInformation')
+          ?.value,
+        remitterWalletId: this.validateForm.get('remitterBankId')?.value,
+        rateId: this.checkedItemComment[0].rateId,
+        passWord: this.passwordForm.get('password')?.value
+      })
+      .subscribe((res) => {
+        if (res) {
+          this.modal
+            .success({
+              nzTitle: 'Success',
+              nzContent: 'Transfer successful!'
+            })
+            .afterClose.subscribe((_) => {
+              this.initData();
+              this.validateForm.reset();
+              this.passwordForm.reset();
+            });
+        }
+        this.isLoading = false;
+        this.isVisible = false;
+      });
+  }
 }

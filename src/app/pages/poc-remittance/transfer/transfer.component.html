@@ -13,7 +13,7 @@
                 <nz-form-control [nzErrorTip]="beneficialBankNameError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-select formControlName="beneficialBankName"
+                      <nz-select formControlName="beneficialBankId"
                         (ngModelChange)="onBeneficialBankNameChange($event)">
                         <!-- <nz-option nzLabel="ALL" nzValue="all"></nz-option> -->
                         <nz-option *ngFor="let item of beneficialBankNameList" [nzValue]="item.value"
@@ -260,10 +260,9 @@
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
           validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Remitter's Wallet Address">
-          {{ 'Remittance Information: Commercial Bank of CNY'}}
-          <br>
-          {{ '0x11c0E25E62C1dBD32E505446062B26AECB00CN00' }}
+        <nz-descriptions-item nzTitle="Remittance Information">
+          {{
+          validateForm.controls["remittanceInformation"].value }}
         </nz-descriptions-item>
       </nz-descriptions>
     </nz-card>
