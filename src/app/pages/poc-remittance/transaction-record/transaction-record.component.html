@@ -8,7 +8,7 @@
           <nz-form-item>
             <nz-form-label>Transaction No.</nz-form-label>
             <nz-form-control>
-              <input nz-input placeholder="" name="transactionNo" [(ngModel)]="searchParam.transactionNo" />
+              <input nz-input placeholder="" name="transactionNo" [(ngModel)]="searchParam.serialNumber" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -16,7 +16,7 @@
           <nz-form-item>
             <nz-form-label>From</nz-form-label>
             <nz-form-control>
-              <input nz-input placeholder="" name="from" [(ngModel)]="searchParam.from" />
+              <input nz-input placeholder="" name="from" [(ngModel)]="searchParam.fromAccountAddress" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -24,7 +24,7 @@
           <nz-form-item>
             <nz-form-label>To</nz-form-label>
             <nz-form-control>
-              <input nz-input placeholder="" name="to" [(ngModel)]="searchParam.to" />
+              <input nz-input placeholder="" name="to" [(ngModel)]="searchParam.toAccountAddress" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -34,7 +34,10 @@
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="type" [(ngModel)]="searchParam.type">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of typeList" [nzValue]="" [nzLabel]="''">
+                <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
+                <nz-option nzValue="2" nzLabel="Exchange">
+                </nz-option>
+                <nz-option nzValue="1" nzLabel="Swap">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -44,9 +47,10 @@
           <nz-form-item>
             <nz-form-label>Currency</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="currency" [(ngModel)]="searchParam.currency">
+              <nz-select nzPlaceHolder="" name="currency" [(ngModel)]="searchParam.centralBankId">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of currencyList" [nzValue]="" [nzLabel]="''">
+                <nz-option *ngFor="let item of currencyList" [nzValue]="item.central_bank_id"
+                  [nzLabel]="item.digital_currency_name">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -65,10 +69,12 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Status</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="status" [(ngModel)]="searchParam.status">
+              <nz-select nzPlaceHolder="" name="status" [(ngModel)]="searchParam.state">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of statusList" [nzValue]="" [nzLabel]="''">
-                </nz-option>
+                <nz-option nzValue="1" nzLabel="Pending"></nz-option>
+                <nz-option nzValue="5" nzLabel="Success"></nz-option>
+                <nz-option nzValue="6" nzLabel="Failed"></nz-option>
+                <nz-option nzValue="4" nzLabel="Processing"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -93,15 +99,51 @@
   <app-card-table-wrap [isNormalTable]="true" tableTitle="Transaction List">
     <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-    <ng-template #transactionNoTpl let-transactionNo="transactionNo">
-      <p [title]="transactionNo" nz-typography nzCopyable>{{ transactionNo.length > 12 ? transactionNo.slice(0,12) +
-        '...' : transactionNo }}</p>
+
+    <ng-template #transactionNoTpl let-serialNumber="serialNumber">
+      <ng-container *ngIf="serialNumber">
+        <p [title]="serialNumber" nz-typography nzCopyable [nzCopyText]="serialNumber"> {{ (
+          serialNumber.length > 12) ?
+          serialNumber.slice(0,12) +
+          '...' : serialNumber }}</p>
+      </ng-container>
+      <ng-container *ngIf="serialNumber === '' || serialNumber === null">
+        {{ serialNumber | map:'nullValue'}}
+      </ng-container>
+
     </ng-template>
-    <ng-template #fromTpl let-from="from">
-      <p [title]="from" nz-typography nzCopyable>{{ from.length > 12 ? from.slice(0,12) + '...' : from }}</p>
+    <ng-template #fromTpl let-fromAccountAddress="fromAccountAddress">
+      <ng-container *ngIf="fromAccountAddress">
+        <p [title]="fromAccountAddress" nz-typography nzCopyable [nzCopyText]="fromAccountAddress"> {{ (
+          fromAccountAddress.length > 12) ?
+          fromAccountAddress.slice(0,12) +
+          '...' : fromAccountAddress }}</p>
+      </ng-container>
+      <ng-container *ngIf="fromAccountAddress === '' || fromAccountAddress === null">
+        {{ fromAccountAddress | map:'nullValue'}}
+      </ng-container>
     </ng-template>
-    <ng-template #toTpl let-to="to">
-      <p [title]="to" nz-typography nzCopyable>{{ to.length > 12 ? to.slice(0,12) + '...' : to }}</p>
+
+    <ng-template #toTpl let-toAccountAddress="toAccountAddress">
+      <ng-container *ngIf="toAccountAddress">
+        <p [title]="toAccountAddress" nz-typography nzCopyable [nzCopyText]="toAccountAddress"> {{ (
+          toAccountAddress.length > 12) ?
+          toAccountAddress.slice(0,12) +
+          '...' : toAccountAddress }}</p>
+      </ng-container>
+      <ng-container *ngIf="toAccountAddress === '' || toAccountAddress === null">
+        {{ toAccountAddress | map:'nullValue'}}
+      </ng-container>
+
+    </ng-template>
+    <ng-template #amountTpl let-cbdcCount="cbdcCount" let-type="type">
+      <span [style]="{'color': (type === 1 || type ===3) ? '#39A16A' : '#E53E3E'}">{{
+        cbdcCount |
+        map:'toThousandthMark' }}</span>
+    </ng-template>
+    <ng-template #statusTpl let-state="state">
+      <nz-tag [nzColor]="state | map:'transactionsRecordStatusColor'">{{ state | map:'walletTransactionsRecordStatus'
+        }}</nz-tag>
     </ng-template>
     <ng-template #operationTpl let-currency="currency">
       <ng-container>

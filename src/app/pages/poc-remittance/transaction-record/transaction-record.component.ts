@@ -9,6 +9,8 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { TransactionRecordService } from '@app/core/services/http/poc-remittance/transaction/transaction.service';
+import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -18,13 +20,13 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  transactionNo: string;
-  from: string;
-  to: string;
-  type: string;
-  currency: string;
+  centralBankId: number;
+  fromAccountAddress: string;
+  serialNumber: string;
   creationTime: any;
-  status: string;
+  state: string;
+  toAccountAddress: string;
+  type: string;
 }
 
 @Component({
@@ -53,11 +55,14 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   topUpForm!: FormGroup;
   withdrawForm!: FormGroup;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('amountTpl', { static: true })
+  amountTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creationTime: [],
-    status: '',
-    type: '',
-    currency: ''
+    state: '',
+    type: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -94,7 +99,9 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
-  ) { }
+    private transactionRecordService: TransactionRecordService,
+    private transferService: TransferService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -107,6 +114,9 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initTable();
+    this.transferService.fetchBankList().subscribe((res: any) => {
+      this.currencyList = res;
+    });
   }
 
   tableChangeDectction(): void {
@@ -122,7 +132,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {};
     this.searchParam.creationTime = '';
-    this.searchParam.status = '';
+    this.searchParam.state = '';
     this.getDataList(this.tableQueryParams);
   }
 
@@ -131,31 +141,32 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.pocCapitalPoolService
-    //   .fetchList()
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _?.resultPageInfo?.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.transactionRecordService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        console.log(_);
+        this.dataList = _.data.rows;
+        this.dataList.forEach((item: any, i: any) => {
+          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+        });
+        this.tableConfig.total = _?.page?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
-  
+
   private initTable(): void {
     this.tableConfig = {
       headers: [
@@ -177,11 +188,12 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         {
           title: 'Type',
           field: 'type',
+          pipe: 'transactionsRecordType',
           width: 100
         },
         {
           title: 'Amount',
-          field: 'amount',
+          tdTemplate: this.amountTpl,
           width: 100
         },
         {
@@ -197,7 +209,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Status',
-          field: 'status',
+          tdTemplate: this.statusTpl,
           width: 150
         },
         {
