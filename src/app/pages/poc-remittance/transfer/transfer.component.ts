@@ -197,8 +197,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
             resultData.push({
               rateId: item.rateId,
               sp: item.provider,
-              currency: '1 ' + item.to + '->' + item.from,
-              rate: String(1 / item.rate).replace(/^(.*\..{4}).*$/, '$1'),
+              currency: '1 ' + item.from + '->' + item.to,
+              rate: item.rate,
               com:
                 item.smChargeModel === 0
                   ? item.smValue > item.smMaxFee
@@ -206,7 +206,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                     : item.smValue
                   : item.smValue,
               total: String(
-                this.validateForm.get('amount')?.value * item.rate +
+                this.validateForm.get('amount')?.value / item.rate +
                   (item.smChargeModel === 0
                     ? item.smValue > item.smMaxFee
                       ? item.smMaxFee

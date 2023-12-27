@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-30 15:07:07
+ * @LastEditTime: 2023-12-27 15:04:22
  * @Description: 
 -->
 <div>
@@ -47,7 +47,12 @@
                                         <nz-form-control [nzErrorTip]="capitalPoolAddressError">
                                             <div nz-row>
                                                 <div nz-col nzSpan="16">
-                                                    <input nz-input [formControlName]="control.capitalPoolAddress" />
+                                                    <nz-select [formControlName]="control.capitalPoolAddress"
+                                                        [nzDisabled]="validateForm.get(control.status)?.value">
+                                                        <nz-option *ngFor="let item of selectOptionPool$ | async"
+                                                            [nzValue]="item.chainAccountAddress"
+                                                            [nzLabel]="item.chainAccountAddress"></nz-option>
+                                                    </nz-select>
                                                 </div>
 
                                             </div>
@@ -170,8 +175,8 @@
     </div>
     <div nz-row nzJustify="center" nzAlign="middle" class="m-t-15 m-b-30" nzGutter="8">
         <div nz-col nzXs="24" nzSm="24" nzXl="24" nzXXl="20" style="text-align: end;">
-            <button nz-button type="button" nzType="primary" [nzLoading]="isLoading" [nzSize]="'large'"
-            [disabled]=""  *appAuth="'R020101'"  (click)="onSubmit()">Submit</button>
+            <button nz-button type="button" nzType="primary" [nzLoading]="isLoading" [nzSize]="'large'" [disabled]=""
+                *appAuth="'R020101'" (click)="onSubmit()">Submit</button>
         </div>
     </div>
 </div>

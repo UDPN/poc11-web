@@ -1,12 +1,19 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-12-21 10:39:21
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2023-12-27 15:34:14
+ * @Description: 
+-->
 <!-- <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header> -->
 <div class="normal-table-wrap">
   <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
     <ng-container *ngIf="updateStatus === 5 || updateStatus === 10">
-      <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1"
-        class="m-b-10"></nz-alert>
+      <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1" class="m-b-10"></nz-alert>
       <ng-template #descriptionTemplate1>
         <h5 nz-typography>
-          The application for activating the settlement business is under approval. We kindly ask for your patience while
+          The application for activating the settlement business is under approval. We kindly ask for your patience
+          while
           we process your application. Thank you.
         </h5>
       </ng-template>
@@ -34,7 +41,8 @@
         <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
           [nzColon]="false" [nzBordered]="false">
           <nz-descriptions-item nzTitle="Commercial Bank Name">{{ info.spName }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Central Bank">{{ '' }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="BIC">{{ info.bankBic }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Central Bank">{{ info.centralBankName }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">
             {{ info.spBriefIntroduction }}
           </nz-descriptions-item>
