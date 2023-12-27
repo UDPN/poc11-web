@@ -1,6 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import { thousandthMark, timestampToMonth, timestampToTime } from '@app/utils/tools';
+import {
+  thousandthMark,
+  timestampToMonth,
+  timestampToTime
+} from '@app/utils/tools';
 
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
@@ -110,6 +114,15 @@ export const MapSet = {
     6: 'Failed',
     2: 'Rejected'
   },
+  walletTransactionsRecordStatus: {
+    1: 'Pending authorization',
+    2: 'Authorization is successful',
+    3: 'Authorization failed',
+    4: 'Transferring ',
+    5: 'The transfer was successful',
+    6: 'The transfer failed ',
+    7: 'The transfer failed, and the authorization was cancelled successfully'
+  },
   walletTransactionsStatusColor: {
     1: 'volcano',
     3: 'purple',
@@ -121,6 +134,20 @@ export const MapSet = {
     1: 'Top-up',
     2: 'Withdrawal'
   },
+  transactionsRecordType: {
+    1: 'Transfer',
+    2: 'Exchange',
+    3: 'Swap'
+  },
+  transactionsRecordStatusColor: {
+    1: 'volcano',
+    4: 'purple',
+    2: 'cyan',
+    5: 'cyan',
+    3: 'red',
+    6: 'red',
+    7: 'red'
+  },
   region: {
     1: 'Domestic',
     2: 'Foreign'
@@ -131,7 +158,7 @@ export const MapSet = {
     5: 'Active',
     6: 'Failed',
     7: 'Processing',
-    8: 'Inactive',
+    8: 'Inactive'
   },
   walletStatusColor: {
     1: 'volcano',
@@ -139,7 +166,7 @@ export const MapSet = {
     5: 'cyan',
     6: 'red',
     7: 'purple',
-    8: 'default',
+    8: 'default'
   },
   walletApprovalResult: {
     1: '--',
@@ -149,8 +176,8 @@ export const MapSet = {
     5: 'Agree',
     6: '--',
     7: '--',
-    8: '--',
-  },
+    8: '--'
+  }
 };
 
 export interface MapItem {

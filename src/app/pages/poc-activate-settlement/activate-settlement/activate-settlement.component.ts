@@ -79,8 +79,7 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
     private loginOutService: LoginInOutService,
     private cdr: ChangeDetectorRef,
     private router: Router
-
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -101,7 +100,6 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
     if (e) {
       this.isEdit = e;
     }
-    console.log(this.isEdit);
   }
 
   getInfo() {
@@ -113,7 +111,7 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
           this.infoMemberLicense = 'data:image/jpg;base64,' + resu;
           this.cdr.markForCheck();
         });
-    })
+    });
   }
 
   getResourceInfo(): void {
@@ -145,6 +143,6 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
       }
       this.cdr.markForCheck();
       return;
-    })
+    });
   }
 }
