@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-25 16:09:45
+ * @LastEditTime: 2023-12-27 13:44:46
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -50,7 +50,7 @@ export class DeatilsGuardChild implements CanActivateChild {
           this.router.navigateByUrl('/information/detail');
           return false;
         }
-        if (data  !== null && data.spStatus === 15) {
+        if (data !== null && data.spStatus === 15) {
           this.router.navigateByUrl('/information/detail');
           return false;
         }

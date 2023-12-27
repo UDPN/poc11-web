@@ -5,17 +5,15 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
 export interface Sdata {
-  fileList: any,
-  capitalPoolList: any
+  fileList: any;
+  capitalPoolList: any;
 }
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class PocActivateSettlementService {
-
-  constructor(private http: BaseHttpService, private https: HttpClient) { }
+  constructor(private http: BaseHttpService, private https: HttpClient) {}
   public save(param: Sdata): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/upgrade/save`, param);
   }
@@ -24,7 +22,7 @@ export class PocActivateSettlementService {
     return this.http.post(`/v1/fxsp/sys/upgrade/detail`, {});
   }
 
-  public getWalletAdress(param: {currency: any}): Observable<any> {
+  public getWalletAdress(param: { currency: any }): Observable<any> {
     return this.http.post(`/v1/wallet/listByCurrency`, param);
   }
 }

@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-30 19:37:23
+ * @LastEditTime: 2023-12-27 16:15:27
  * @Description:
  */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -35,6 +35,7 @@ export class AddPoolComponent implements OnInit {
   public selectOptionPacths$ = new BehaviorSubject<any[]>([]);
   protected selectOptionPacthsLenght = 0;
   public selectOptionAll$ = new BehaviorSubject<any[]>([]);
+  public selectOptionPool$ = new BehaviorSubject<any[]>([]);
   public newOptionArr: any[] = [];
   public zeroShowStatus$ = this._currencyStoreService.zeroShowStatus$;
   isLoading = false;
@@ -70,40 +71,60 @@ export class AddPoolComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) { }
+  ) {}
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
-    // this.edit();
+    this.edit();
   }
 
-  // edit() {
-  //   this.pocActivateSettlementService.getInfo().subscribe((res: any) => {
-  //     this.editCapitalPoolList = res.capitalPoolList;
-  //     this.editFileList = res.fileList;
-  //     this.addField();
-  //     if (res.fileList && res.fileList.length > 0) {
-  //       this.editFileList.forEach((item: any, index: number) => {
-  //         const control = {
-  //           id: index,
-  //           status: false,
-  //           fileCode: `file${index}`,
-  //           fileUrl: `fileUrl${index}`
-  //         };
-  //         const indexs = this.fileListOfControl.push(control);
-  //         this.fileForm.addControl(
-  //           this.fileListOfControl[indexs - 1].fileCode,
-  //           this.fb.control('', Validators.required)
-  //         );
-  //         this.fileListOfControl[indexs - 1].fileUrl = item.fileUrl;
-  //         this.fileForm.get(`fileCode${index}`)?.setValue(item.fileCode);
-  //       })
-  //     }
-  //     this.cdr.markForCheck();
-  //     return;
-  //   })
-  // }
+  edit() {
+    this.pocActivateSettlementService.getInfo().subscribe((res: any) => {
+      this.editCapitalPoolList = res.capitalPoolList;
+      this.editFileList = res.fileList;
+      if (this.isFirstEdit === true) {
+        console.log(123213);
+        console.log(this.validateForm.value);
+        let i = 0;
+        do {
+          this.addField();
+          this.validateForm
+            .get(`currency${i}`)
+            ?.setValue(this.editCapitalPoolList[i].capitalPoolCurrency);
+          this.validateForm
+            .get(`capitalPoolAddress${i}`)
+            ?.setValue(this.editCapitalPoolList[i].capitalPoolAddress);
+          i++;
+        } while (i < 1);
+        this.cdr.markForCheck();
+      }
 
-  capitalPoolAddressValidator = (control: FormControl): { [s: string]: boolean } => {
+      this.addField();
+
+      if (res.fileList && res.fileList.length > 0) {
+        this.editFileList.forEach((item: any, index: number) => {
+          const control = {
+            id: index,
+            status: false,
+            fileCode: `file${index}`,
+            fileUrl: `fileUrl${index}`
+          };
+          const indexs = this.fileListOfControl.push(control);
+          this.fileForm.addControl(
+            this.fileListOfControl[indexs - 1].fileCode,
+            this.fb.control('', Validators.required)
+          );
+          this.fileListOfControl[indexs - 1].fileUrl = item.fileUrl;
+          this.fileForm.get(`fileCode${index}`)?.setValue(item.fileCode);
+        });
+      }
+      this.cdr.markForCheck();
+      return;
+    });
+  }
+
+  capitalPoolAddressValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^[0][x][0-9a-fA-F]{40}$/.test(control.value)) {
@@ -129,7 +150,12 @@ export class AddPoolComponent implements OnInit {
       this.fileListOfControl[index - 1].fileCode,
       this.fb.control('', Validators.required)
     );
-    const isImgType = $event.target.files[0]?.type === 'image/jpeg' || $event.target.files[0]?.type === 'image/png' || $event.target.files[0]?.type === 'image/gif' || $event.target.files[0]?.type === 'image/bmp' || $event.target.files[0]?.type === 'application/pdf';
+    const isImgType =
+      $event.target.files[0]?.type === 'image/jpeg' ||
+      $event.target.files[0]?.type === 'image/png' ||
+      $event.target.files[0]?.type === 'image/gif' ||
+      $event.target.files[0]?.type === 'image/bmp' ||
+      $event.target.files[0]?.type === 'application/pdf';
     const isImgSize = $event.target.files[0]?.size! / 1024 / 1024 < 5;
     if (!isImgType && $event.target.files[0] !== undefined) {
       this.message.error('You can only upload png/jpg/gif/bmp/jpeg/pdf file !');
@@ -151,13 +177,12 @@ export class AddPoolComponent implements OnInit {
     this.cdr.markForCheck();
     this.fileListOfControl[index - 1].status = true;
     this.isUpload = true;
-    this._commonService.uploadImg($event.target.files[0])
-      .subscribe((res) => {
-        this.isUpload = false;
-        this.fileListOfControl[index - 1].fileCode = res;
-        this.fileListOfControl[index - 1].status = false;
-        this.cdr.markForCheck();
-      })
+    this._commonService.uploadImg($event.target.files[0]).subscribe((res) => {
+      this.isUpload = false;
+      this.fileListOfControl[index - 1].fileCode = res;
+      this.fileListOfControl[index - 1].status = false;
+      this.cdr.markForCheck();
+    });
     $event.target.value = '';
   }
 
@@ -198,7 +223,10 @@ export class AddPoolComponent implements OnInit {
 
       this.validateForm.addControl(
         this.listOfControl[index - 1].capitalPoolAddress,
-        this.fb.control('', [Validators.required, this.capitalPoolAddressValidator])
+        this.fb.control('', [
+          Validators.required,
+          this.capitalPoolAddressValidator
+        ])
       );
       if (id > 0) {
         this.watchSelectOptionPacth(
@@ -208,12 +236,6 @@ export class AddPoolComponent implements OnInit {
         );
       }
       this.initNewSelectOption();
-      if (this.isFirstEdit === true) {
-        this.editCapitalPoolList.forEach((item: any, index: number) => {
-          this.validateForm.get(`currency${index}`)?.setValue(item.capitalPoolCurrency + '-' + item.capitalPoolPlatform);
-          this.validateForm.get(`capitalPoolAddress${index}`)?.setValue(item.capitalPoolAddress);
-        })
-      }
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -232,7 +254,7 @@ export class AddPoolComponent implements OnInit {
       .subscribe((res: any) => {
         let arr: string[] = [];
         res.dataInfo.map((item: any) => {
-          arr.push(item.currency + '-' + item.platform);
+          arr.push(item.currency);
         });
         if (type === 1) {
           this.selectOptionPacths$.next(arr);
@@ -259,9 +281,7 @@ export class AddPoolComponent implements OnInit {
         .subscribe((items: any[]) => {
           if (items !== null) {
             items.forEach((item, i) => {
-              arr.push(
-                item.capitalPoolCurrency + '-' + item.capitalPoolPlatform
-              );
+              arr.push(item.capitalPoolCurrency);
             });
           }
         });
@@ -355,18 +375,26 @@ export class AddPoolComponent implements OnInit {
   ) {
     this.setOldArr(i.id, e.toString());
     this.initNewSelectOption();
+    this.validateForm.controls[i.capitalPoolAddress].setValue('');
+    this.pocActivateSettlementService
+      .getWalletAdress({ currency: e.toString() })
+      .subscribe((res) => {
+        this.selectOptionPool$.next(res);
+      });
   }
   private setOldArr(index: number, str: string) {
     let ss =
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-          ? []
-          : this.listCheckArr[index];
+        ? []
+        : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
     if (this.validateForm.valid) {
+      console.log(this.validateForm.value);
+      return;
       let settlementInformations: any[] = [];
       let ss1 = Object.keys(this.validateForm.value);
       ss1.forEach((item: any, i: number) => {
@@ -409,8 +437,9 @@ export class AddPoolComponent implements OnInit {
   ): any {
     if (type === 1) {
       return {
-        capitalPoolPlatform: currency.split('-')[2],
-        capitalPoolCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
+        capitalPoolPlatform: 'UDPN',
+        capitalPoolCurrency:
+          currency.split('-')[0] + '-' + currency.split('-')[1],
         capitalPoolAddress: targetCurrency
       };
     }
@@ -418,7 +447,8 @@ export class AddPoolComponent implements OnInit {
       fromPlatform: currency.split('-')[2],
       fromCurrency: currency.split('-')[0] + currency.split('-')[1],
       toPlatform: targetCurrency.split('-')[2],
-      toCurrency: targetCurrency.split('-')[0] + '-' + targetCurrency.split('-')[1]
+      toCurrency:
+        targetCurrency.split('-')[0] + '-' + targetCurrency.split('-')[1]
     };
   }
   private addData(arr: any[], arr1: any[]) {
@@ -427,7 +457,7 @@ export class AddPoolComponent implements OnInit {
     this.fileList = Object.assign([], this.fileListOfControl);
     this.fileList.forEach((item: any) => {
       array.push({ fileCode: item.fileCode, fileUrl: item.fileUrl });
-    })
+    });
     this.fileList = array;
     this.pocActivateSettlementService
       .save({

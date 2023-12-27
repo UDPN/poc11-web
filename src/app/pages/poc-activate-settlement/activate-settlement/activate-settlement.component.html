@@ -1,3 +1,10 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-12-21 10:39:21
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2023-12-27 14:08:57
+ * @Description: 
+-->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 <ng-container *ngIf="updateStatus === 0 || isEdit === true">
   <div class="normal-table-wrap">
@@ -12,7 +19,8 @@
           <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
             [nzColon]="false" [nzBordered]="false">
             <nz-descriptions-item nzTitle="Commercial Bank Name">{{ info.spName }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Central Bank">{{ '' }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="BIC">{{ info.bankBic }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Central Bank">{{ info.centralBankName }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">
               {{ info.spBriefIntroduction }}
             </nz-descriptions-item>
