@@ -6,7 +6,7 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
@@ -14,6 +14,7 @@ import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
@@ -71,6 +72,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
+    public message: NzMessageService
   ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
@@ -163,7 +165,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   getEdit(capitalPoolCurrency: string, capitalPoolPlatform: string, capitalPoolAddress: string) {
     this.isVisible = true;
     this.editInfo = {
-      capitalPool: capitalPoolCurrency + '-' + capitalPoolPlatform,
+      capitalPool: capitalPoolCurrency,
       capitalPoolAddress
     }
   }
@@ -172,7 +174,30 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.isVisible = false;
   }
 
-  edit() {}
+  edit() {
+    this.isLoading = true;
+    const params = {
+      amount: this.editValidateForm.get('amount')?.value,
+      chainAccountAddress: this.editInfo.capitalPoolAddress,
+      currency: this.editInfo.capitalPool
+    }
+    this.pocCapitalPoolService.edit(params).pipe(finalize(() => this.isLoading = false)).subscribe({
+      next: res => {
+        if (res) {
+          this.isVisible = false;
+          this.message.success('Edit successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
+            this.getDataList();
+          });
+        }
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: err => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
+    })
+  }
 
   private initTable(): void {
     this.tableConfig = {

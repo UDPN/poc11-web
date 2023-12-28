@@ -140,11 +140,13 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
               .addForm(this.validateForm.value)
               .subscribe((result) => {
                 this.onSubmitStatus = false;
-                this.message
+                if (result) {
+                  this.message
                   .success('The data has been submitted, please be patient!')
                   .onClose.subscribe((_) => {
                     this.router.navigateByUrl('/information/detail');
                   });
+                }
                 this.cdr.markForCheck();
               });
           });

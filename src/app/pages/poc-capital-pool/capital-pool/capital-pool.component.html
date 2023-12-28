@@ -36,7 +36,7 @@
 </ng-template>
 <ng-template #capitalTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolPlatform="capitalPoolPlatform">
   <span>{{
-    capitalPoolCurrency + '-' + capitalPoolPlatform + ' Capital Pool'
+    capitalPoolCurrency + ' Capital Pool'
     }}</span>
 </ng-template>
 <ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency"
@@ -49,7 +49,8 @@
 <ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolPlatform="capitalPoolPlatform"
   let-capitalPoolAddress="capitalPoolAddress">
   <ng-container>
-    <span class="operate-text" *appAuth="'R020204'" (click)="getEdit(capitalPoolCurrency, capitalPoolPlatform, capitalPoolAddress)">
+    <span class="operate-text" *appAuth="'R020204'"
+      (click)="getEdit(capitalPoolCurrency, capitalPoolPlatform, capitalPoolAddress)">
       Edit
     </span>
   </ng-container>
@@ -69,9 +70,16 @@
           </nz-switch>
         </nz-descriptions-item>
         <nz-descriptions-item [nzTitle]="amountTitle" [nzSpan]="3">
-          <nz-input-group [nzAddOnAfter]="editInfo.capitalPool">
-            <input nz-input formControlName="amount" />
-          </nz-input-group>
+          <nz-form-control [nzErrorTip]="amountError">
+            <nz-input-group [nzAddOnAfter]="editInfo.capitalPool">
+              <input nz-input type="number" formControlName="amount" />
+            </nz-input-group>
+          </nz-form-control>
+          <ng-template #amountError let-control>
+            <ng-container *ngIf="control.hasError('required')">Please input your
+              Amount</ng-container>
+            <ng-container *ngIf="control.hasError('regular')">Please enter numeric digits only</ng-container>
+          </ng-template>
         </nz-descriptions-item>
         <ng-template #authorizedTitle>
           <span style="color: red;" class="m-r-8">*</span> Pre-authorized Debit

@@ -150,11 +150,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       currency: 'w-HKD',
       walletList: [
         {
-          walletAddress: '0x3234234234234234321',
+          walletAddress: '0x3234234234234234317',
           amount: '40,000'
         },
         {
-          walletAddress: '0x3453453453463454352',
+          walletAddress: '0x3453453453463454336',
           amount: '30,000'
         },
       ]
@@ -177,7 +177,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-  walletAddress: any = '';
+  walletAddress: any = [];
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
@@ -211,17 +211,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  chanWalletAddress(event: any, index?: any) {
+  chanWalletAddress(event?: any, index?: any) {
     console.log(event, index);
-    this.walletBalanceList.forEach((item: any) => {
-      console.log(item.walletList);
-      item.walletList.forEach((wallet: any) => {
-        const array = [];
-        array.push({ amount: wallet.amount, walletAddress: wallet.walletAddress });
-        this.walletList = array;
-        console.log(array, '11111');
+    if (!event) {
+      this.walletBalanceList.forEach((item: any) => {
+        this.walletAddress === item.walletList[0].amount;
       });
-    });
+    }
   }
 
   ngOnInit() {
@@ -229,6 +225,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initTable();
     this.initSelect();
     // this.fetchNumbers();
+    this.chanWalletAddress();
     this.validateForm = this.fb.group({
       pairedExchangeRate: [1]
     });

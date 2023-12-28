@@ -113,17 +113,17 @@
     </ng-template>
     <ng-template #operationTpl let-bankAccountId="bankAccountId" let-balance="balance" let-region="region"
       let-chainAccountAddress="chainAccountAddress" let-state="state" let-currency="currency">
-      <ng-container>
+      <ng-container *appAuth="'R01010103'">
         <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Top up
         </span>
       </ng-container>
-      <!-- <ng-container>
+      <!-- <ng-container *appAuth="'R01010104'">
         <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Withdraw
         </span>
       </ng-container> -->
-      <ng-container>
+      <ng-container *appAuth="'R01010105'">
         <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{bankAccountId, currency, region}">
           Details
         </span>
@@ -132,7 +132,7 @@
   </app-card-table-wrap>
 </div>
 <ng-template #tableBtns>
-  <button nz-button nzType="primary" class="m-r-8" routerLink="/poc/poc-wallet/cbdc-wallet/add">
+  <button nz-button nzType="primary" class="m-r-8" routerLink="/poc/poc-wallet/cbdc-wallet/add" *appAuth="'R01010102'">
     Create
   </button>
 </ng-template>

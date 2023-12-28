@@ -19,6 +19,12 @@ export interface Rdata {
   settlementInformations: any;
 }
 
+export interface Edata {
+  amount: number;
+  chainAccountAddress: string;
+  currency: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -63,5 +69,9 @@ export class PocCapitalPoolService {
 
   public reduceList(): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/capital/pool/delete/searches`,{});
+  }
+
+  public edit(params: Edata): Observable<any> {
+    return this.http.post(`/v1/capitalpool/authorize`, params);
   }
 }
