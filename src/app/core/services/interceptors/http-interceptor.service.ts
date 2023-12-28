@@ -25,6 +25,7 @@ import { el } from 'date-fns/locale';
 
 interface CustomHttpConfig {
   headers?: HttpHeaders;
+  url?: string;
 }
 const APP_XHR_TIMEOUT = 60000;
 @Injectable()
@@ -39,7 +40,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private modal: NzModalService,
     private translate: TranslateService,
     private router: Router
-  ) { }
+  ) {}
 
   intercept(
     req: HttpRequest<NzSafeAny>,
@@ -49,7 +50,14 @@ export class HttpInterceptorService implements HttpInterceptor {
     const token: any = sessionStorage.getItem('token');
     let httpConfig: CustomHttpConfig = {};
     if (req.url.indexOf('fxsp') === -1) {
-      httpConfig = { headers: req.headers.set('token', token) }
+      httpConfig = {
+        headers: req.headers.set('token', token),
+        url: (environment.production ? '/wcbdccommercial' : '') + req.url
+      };
+    } else {
+      httpConfig = {
+        url: (environment.production ? '/fxsp' : '') + req.url
+      };
     }
     req = req.clone({
       withCredentials: environment.production ? true : false
