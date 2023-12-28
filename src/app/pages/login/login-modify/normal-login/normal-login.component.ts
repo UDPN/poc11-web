@@ -75,7 +75,7 @@ export class NormalLoginComponent implements OnInit {
   isLoadingName: boolean = true;
   isFirstLogin: any = '';
   _themesOptions: SettingInterface = {
-    color: "#3c5686",
+    color: '#3c5686',
     colorWeak: false,
     fixedHead: true,
     fixedLeftNav: true,
@@ -85,9 +85,9 @@ export class NormalLoginComponent implements OnInit {
     hasNavArea: true,
     hasNavHeadArea: true,
     hasTopArea: true,
-    mode: "mixi",
+    mode: 'mixi',
     splitNav: false,
-    theme: "dark"
+    theme: 'dark'
   };
   constructor(
     private destroy$: DestroyService,
@@ -103,8 +103,8 @@ export class NormalLoginComponent implements OnInit {
     private login1StoreService: Login1StoreService,
     private message: NzMessageService,
     private windowService: WindowService,
-    private themesService: ThemeService, 
-    private nzConfigService: NzConfigService,
+    private themesService: ThemeService,
+    private nzConfigService: NzConfigService
   ) {}
 
   submitForm(): void {
@@ -117,38 +117,43 @@ export class NormalLoginComponent implements OnInit {
       ?.setValue(this.srcUrl.substring(this.srcUrl.indexOf('keySuffix=') + 10));
     const param = this.validateForm.getRawValue();
     const code = fnEncrypts(param, aesKey, aesVi);
-    this.dataService.login({ code }).pipe(
-      finalize(() => {
-        this.spinService.setCurrentGlobalSpinStore(false);
-      })
-    ).subscribe(result => {
-      if (result) {
-        sessionStorage.setItem('clientName', result.realName);
-        sessionStorage.setItem('email', result.email);
-        sessionStorage.setItem('token', result.token);
-        let dataFromat: any = {
-          aud: [],
-          user_name: {
-            resourceList: result.userResourceList ? result.userResourceList : [],
-            clientId: 1,
-          },
-          scope: [],
-          exp: 1676862164,
-          authorities: [],
-          jti: '',
-          client_id: '',
-        };
-        let secret = 'bejson';
-        let tokens = sign(dataFromat, secret);
-        this.loginInOutService.loginIn(tokens).then(() => {
-          this.message
-            .success('Login successfully!', { nzDuration: 1000 })
-            .onClose!.subscribe(() => {
-              this.router.navigateByUrl('/poc/poc-home/home');
-            });
-        });
-      }
-    })
+    this.dataService
+      .login({ code })
+      .pipe(
+        finalize(() => {
+          this.spinService.setCurrentGlobalSpinStore(false);
+        })
+      )
+      .subscribe((result) => {
+        if (result) {
+          sessionStorage.setItem('clientName', result.realName);
+          sessionStorage.setItem('email', result.email);
+          sessionStorage.setItem('token', result.token);
+          let dataFromat: any = {
+            aud: [],
+            user_name: {
+              resourceList: result.userResourceList
+                ? result.userResourceList
+                : [],
+              clientId: 1
+            },
+            scope: [],
+            exp: 1676862164,
+            authorities: [],
+            jti: '',
+            client_id: ''
+          };
+          let secret = 'bejson';
+          let tokens = sign(dataFromat, secret);
+          this.loginInOutService.loginIn(tokens).then(() => {
+            this.message
+              .success('Login successfully!', { nzDuration: 1000 })
+              .onClose!.subscribe(() => {
+                this.router.navigateByUrl('/poc/poc-home/home');
+              });
+          });
+        }
+      });
   }
 
   goOtherWay(type: LoginType): void {
@@ -199,7 +204,7 @@ export class NormalLoginComponent implements OnInit {
     if (environment.production) {
       this.srcUrl =
         environment.localUrl +
-        '/v1/fxsp/anon/generate/captcha?' +
+        '/fxsp/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
     } else {
       this.srcUrl =
