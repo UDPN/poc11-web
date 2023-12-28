@@ -3,9 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
+import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-info',
@@ -21,6 +24,8 @@ export class InfoComponent implements OnInit {
   fromTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('toTpl', { static: true })
   toTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -33,30 +38,7 @@ export class InfoComponent implements OnInit {
   recordTableConfig!: AntTableConfig;
   transactionTableConfig!: AntTableConfig;
   recordList: NzSafeAny[] = [];
-  transactionList: NzSafeAny[] = [
-    {
-      transactionNo: 'F9160189-E5F9160189',
-      from: '0x000000000000',
-      to: '0x000000000000',
-      type: 'Top-up',
-      amount: '100,000.00',
-      transactionHash: '0x0b219221ef20d9',
-      transactionTime: 1654231412,
-      status: 'Success'
-    }
-  ];
-  list: any[] = [
-    {
-      amount: '200000000',
-      currency: 'w-CNY',
-      maxAmount: '500000000',
-    },
-    {
-      amount: '200000000',
-      currency: 'w-CNY',
-      maxAmount: '100000000',
-    }
-  ];
+  transactionList: NzSafeAny[] = [];
   // detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
   detailsTabs = ['Basic Information', 'Transaction'];
   summaryCurrency: string = '';
@@ -98,6 +80,7 @@ export class InfoComponent implements OnInit {
       this.getBasicInfo();
     } else if (event === 1) {
       this.getTransactionSummary();
+      this.getTransactionList();
     }
   }
 
@@ -125,6 +108,44 @@ export class InfoComponent implements OnInit {
 
   changePageSize(e: number): void {
     this.recordTableConfig.pageSize = e;
+  }
+
+
+  tableChangeDectction(): void {
+    this.transactionList = [...this.transactionList];
+    this.cdr.detectChanges();
+  }
+
+  tableLoading(isLoading: boolean): void {
+    this.transactionTableConfig.loading = isLoading;
+    this.tableChangeDectction();
+  }
+
+  getTransactionList(e?: NzTableQueryParams): void {
+    this.transactionTableConfig.loading = true;
+    this.routeInfo.queryParams.subscribe(param => {
+      const params: SearchCommonVO<any> = {
+        pageSize: this.transactionTableConfig.pageSize!,
+        pageNum: e?.pageIndex || this.transactionTableConfig.pageIndex!,
+        filters: {
+          bankAccountId: param['bankAccountId']
+        }
+      };
+      this.cbdcWalletService
+        .getTransactionList(params.pageNum, params.pageSize, params.filters)
+        .pipe(
+          finalize(() => {
+            this.tableLoading(false);
+          })
+        )
+        .subscribe((_: any) => {
+          this.transactionList = _.data?.rows;
+          this.transactionTableConfig.total = _.data.page.total;
+          this.transactionTableConfig.pageIndex = params.pageNum;
+          this.tableLoading(false);
+          this.cdr.markForCheck();
+        });
+    });
   }
 
   private initTable(): void {
@@ -178,11 +199,13 @@ export class InfoComponent implements OnInit {
         {
           title: 'Type',
           field: 'type',
+          pipe: 'walletInfoType',
           width: 100
         },
         {
           title: 'Amount',
-          field: 'amount',
+          field: 'cbdcCount',
+          pipe: 'toThousandthMark',
           width: 100
         },
         {
@@ -192,13 +215,13 @@ export class InfoComponent implements OnInit {
         },
         {
           title: 'Transaction Time',
-          field: 'transactionTime',
+          field: 'txTime',
           pipe: 'timeStamp',
           width: 100
         },
         {
           title: 'Status',
-          field: 'status',
+          tdTemplate: this.statusTpl,
           width: 100
         }
       ],

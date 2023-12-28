@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../../base-http.service';
-import { timeToTimestamp } from '@app/utils/tools';
+import { timeToTimestamp, timeToTimestampMillisecond } from '@app/utils/tools';
 import { DatePipe } from '@angular/common';
 
 export interface Sdata {
@@ -36,13 +36,13 @@ export class CbdcWalletService {
         centralBankId: filters.centralBankId || '',
         chainAccountAddress: filters.chainAccountAddress || '',
         createTimeBegin: filters.createTime[0]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
             this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
             ' 00:00:00'
           )
           : '',
         createTimeEnd: filters.createTime[1]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
             this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
             ' 23:59:59'
           )
@@ -76,24 +76,46 @@ export class CbdcWalletService {
     return this.http.post(`/v1/commercial/bank/bnCodeSelect`, {});
   }
 
-  public getWalletAddress(params: {centralBankId: any}): Observable<any> {
+  public getWalletAddress(params: { centralBankId: any }): Observable<any> {
     return this.http.post(`/v1/wallet/address/list`, params);
   }
 
   public save(params: Sdata): Observable<any> {
     return this.http.post(`/v1/wallet/save`, params);
   }
-  
+
   public topUpOrWithdraw(params: Tdata): Observable<any> {
     return this.http.post(`/v1/wallet/applyCbdcTx`, params);
   }
 
-  public getBasicInfo(params: {bankAccountId: any}): Observable<any> {
+  public getBasicInfo(params: { bankAccountId: any }): Observable<any> {
     return this.http.post(`/v1/wallet/detail/basic`, params);
   }
 
-  public getTransactionSummary(params: {bankAccountId: any}): Observable<any> {
+  public getTransactionSummary(params: { bankAccountId: any }): Observable<any> {
     return this.http.post(`/v1/wallet/detail/transaction/summary`, params);
+  }
+
+  public getTransactionList(
+    pageIndex: number,
+    pageSize: number,
+    filters: any
+  ): Observable<any> {
+    const param: any = {
+      data: {
+        bankAccountId: filters.bankAccountId || '',
+      },
+      page: {
+        pageSize: pageSize,
+        pageNum: pageIndex
+      }
+    };
+    return this.https.post('/v1/wallet/detail/transaction/listPage', param)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 
 }
