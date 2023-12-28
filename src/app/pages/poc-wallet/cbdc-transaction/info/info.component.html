@@ -6,7 +6,7 @@
 <div class="normal-detail-table-wrap">
   <div nz-row class="m-t-10">
     <div nz-col [nzXXl]="14" [nzXl]="14" [nzLg]="24" [nzMd]="14" [nzSm]="24" [nzXs]="24">
-      <nz-card nzTitle="" class="m-r-8 none-bottom">
+      <nz-card nzTitle="" class="m-r-8 none-bottom" style="border: none;">
         <nz-card nzBordered="false" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
           <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
             [nzBordered]="false" class="card-descriptions-order">
@@ -19,32 +19,36 @@
 
         <!-- title: (Top-up: Top-up, Withdrawal: Withdrawal) Information -->
         <nz-card [nzTitle]="info.type === 1 ? 'Top-up Information' : 'Withdrawal Information'" nzBordered="false"
-          class="m-t-25" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          class="m-t-25" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}" style="border: none;">
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
-            <nz-descriptions-item nzTitle="Transaction No.">{{ 'F9160189-E5D5-4E64-1EEB-7DAAF4EF9999'
+            <nz-descriptions-item nzTitle="Transaction No.">{{ info.transactionNo
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Creation Time">{{ 1654231412 | map:'timeStamp'
+            <nz-descriptions-item nzTitle="Creation Time">{{ info.creationTime | map:'timeStamp'
               }}</nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
         <!-- Transfer & Exchange -->
-        <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25">
+        <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25" style="border: none;">
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
-            <nz-descriptions-item nzTitle="Transaction Hash">{{ '--'
+            <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Transaction Time">{{ '--'
+            <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map:'timeStamp'
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Status">{{ 'Pending Approval'}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Status"><nz-tag
+                [nzColor]="info.status | map:'walletTransactionsStatusColor'">{{
+                info.status | map:'walletTransactionsStatus'
+                }}</nz-tag></nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
 
       </nz-card>
     </div>
-    <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="24" [nzMd]="10" [nzSm]="24" [nzXs]="24">
-      <nz-card nzTitle="" [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
-        <app-cbdc-timeline [info] ="info" />
+    <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="24" [nzMd]="10" [nzSm]="24" [nzXs]="24"
+      style="background-color: #fff;">
+      <nz-card nzTitle="" class="m-r-8 m-t-30" style="border: none;">
+        <app-cbdc-timeline [info]="info" />
       </nz-card>
     </div>
   </div>

@@ -39,15 +39,17 @@ export class HttpInterceptorService implements HttpInterceptor {
     private modal: NzModalService,
     private translate: TranslateService,
     private router: Router
-  ) {}
+  ) { }
 
   intercept(
     req: HttpRequest<NzSafeAny>,
     next: HttpHandler
   ): Observable<HttpEvent<NzSafeAny>> {
-    const token = this.windowServe.getSessionStorage(TokenKey);
+    // const token = this.windowServe.getSessionStorage(TokenKey);
+    const token: any = sessionStorage.getItem('token');
     let httpConfig: CustomHttpConfig = {};
-    if (!!token) {
+    if (req.url.indexOf('fxsp') === -1) {
+      httpConfig = { headers: req.headers.set('token', token) }
     }
     req = req.clone({
       withCredentials: environment.production ? true : false

@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../../base-http.service';
-import { timeToTimestamp } from '@app/utils/tools';
+import { timeToTimestamp, timeToTimestampMillisecond } from '@app/utils/tools';
 import { DatePipe } from '@angular/common';
 
 export interface Sdata {
@@ -45,19 +45,19 @@ export class TransactionRecordService {
       data: {
         centralBankId: filters.centralBankId || '',
         startCreateTime: filters.creationTime[0]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
               this.date.transform(filters.creationTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
         endCreateTime: filters.creationTime[1]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
               this.date.transform(filters.creationTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )
           : '',
         fromAccountAddress: filters.fromAccountAddress || '',
-        serialNumber: filters.fromAccountAddress || '',
+        serialNumber: filters.serialNumber || '',
         state: filters.state,
         type: filters.type,
         toAccountAddress: filters.toAccountAddress || ''
@@ -77,6 +77,6 @@ export class TransactionRecordService {
   }
 
   public getInfo(param: { transferId: any }): Observable<any> {
-    return this.http.post(`/v1/CBDCTransaction/details`, param);
+    return this.http.post(`/v1/remittanceManagement/transaction/details`, param);
   }
 }

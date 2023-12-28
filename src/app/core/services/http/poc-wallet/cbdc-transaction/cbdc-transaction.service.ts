@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../../base-http.service';
-import { timeToTimestamp } from '@app/utils/tools';
+import { timeToTimestamp, timeToTimestampMillisecond } from '@app/utils/tools';
 import { DatePipe } from '@angular/common';
 
 export interface Sdata {
@@ -36,13 +36,13 @@ export class CbdcTransactionService {
         centralBankId: filters.centralBankId || '',
         bankAccountId: filters.bankAccountId || '',
         creationTimeStart: filters.createTime[0]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
             this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
             ' 00:00:00'
           )
           : '',
         creationTimeEnd: filters.createTime[1]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
             this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
             ' 23:59:59'
           )

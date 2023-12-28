@@ -10,14 +10,14 @@
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-control class="m-t-30">
-                  <nz-select [(ngModel)]="balance[i]" (ngModelChange)="chanWalletAddress($event)">
+                  <nz-select [(ngModel)]="balance.walletList[0].walletAddress" (ngModelChange)="chanWalletAddress($event, i)">
                     <nz-option *ngFor="let item of balance.walletList" [nzValue]="item.walletAddress"
                       [nzLabel]="item.walletAddress">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
                 <nz-form-control class="m-t-30">
-                  <h2 nz-typography style="text-align: center;">{{ '11111' }}</h2>
+                  <h2 nz-typography style="text-align: center;">{{ balance.walletList[0].amount }}</h2>
                 </nz-form-control>
               </nz-form-item>
             </div>

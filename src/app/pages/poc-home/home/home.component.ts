@@ -160,6 +160,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ]
     },
   ]
+  walletList: any = [];
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
@@ -210,17 +211,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  chanWalletAddress(event: any) {
+  chanWalletAddress(event: any, index?: any) {
+    console.log(event, index);
     this.walletBalanceList.forEach((item: any) => {
-      console.log(item);
-      
+      console.log(item.walletList);
       item.walletList.forEach((wallet: any) => {
-        if (wallet.walletAddress === event) {
-          this.walletAddress = wallet.walletAddress;
-        }
+        const array = [];
+        array.push({ amount: wallet.amount, walletAddress: wallet.walletAddress });
+        this.walletList = array;
+        console.log(array, '11111');
       });
     });
-
   }
 
   ngOnInit() {

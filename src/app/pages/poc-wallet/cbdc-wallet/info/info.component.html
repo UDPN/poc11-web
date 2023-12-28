@@ -31,7 +31,7 @@
               [nzBordered]="true">
               <nz-descriptions-item nzTitle="Approval Result">{{ info.state | map:'walletApprovalResult'
                 }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Comments">{{ info.reviewerRemark | map:'nullValue'
+              <nz-descriptions-item nzTitle="Comments">{{ info.reviewerRemarks | map:'nullValue'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Approved By">
                 {{ info.reviewerUser | map:'nullValue' }}
@@ -64,7 +64,7 @@
                       <div>
                         <h4 nz-typography> {{'CBDC Inflow: ' + summaryInfo.inflowSum + ' ' + summaryCurrency }} </h4>
                         <ng-container *ngIf="summaryRegion === '1'">
-                          <h5 nz-typography>{{ '(Total Top-ups: ' + summaryInfo.inflowSum + ' ' +
+                          <h5 nz-typography>{{ '(Total Top-ups: ' + summaryInfo.topUpSum + ' ' +
                             summaryCurrency
                             + ')' }}</h5>
                         </ng-container>
@@ -82,9 +82,9 @@
                     </div>
                     <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
                       <div>
-                        <h4 nz-typography> {{'CBDC Outflow: ' + summaryInfo.inflowSum + ' ' + summaryCurrency }} </h4>
+                        <h4 nz-typography> {{'CBDC Outflow: ' + summaryInfo.outflowSum + ' ' + summaryCurrency }} </h4>
                         <ng-container *ngIf="summaryRegion === '1'">
-                          <h5 nz-typography>{{ '(Total Withdrawals: ' + summaryInfo.inflowSum + ' ' +
+                          <h5 nz-typography>{{ '(Total Withdrawals: ' + summaryInfo.withdrawSum + ' ' +
                             summaryCurrency
                             + ')' }}</h5>
                         </ng-container>
@@ -96,8 +96,8 @@
             </div>
           </nz-card>
           <nz-card nzTitle="Transaction List" nzBordered="false" class="none-bottom">
-            <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="transactionTableConfig"
-              [tableData]="transactionList"></app-ant-table>
+            <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getTransactionList($event)"
+              [tableConfig]="transactionTableConfig" [tableData]="transactionList"></app-ant-table>
           </nz-card>
         </ng-container>
         <!-- <ng-container *ngIf="i === 2">
@@ -111,16 +111,47 @@
   </nz-card>
 </div>
 <ng-template #transactionNoTpl let-transactionNo="transactionNo">
-  <p [title]="transactionNo" nz-typography nzCopyable>{{ transactionNo.length > 12 ? transactionNo.slice(0,12) +
-    '...' : transactionNo }}</p>
+  <ng-container *ngIf="transactionNo">
+    <p [title]="transactionNo" nz-typography nzCopyable [nzCopyText]="transactionNo">{{ transactionNo.length > 12 ?
+      transactionNo.slice(0,12) +
+      '...' : transactionNo }}</p>
+  </ng-container>
+  <ng-container *ngIf="!transactionNo">
+    {{ transactionNo | map:'nullValue' }}
+  </ng-container>
 </ng-template>
-<ng-template #fromTpl let-from="from">
-  <p [title]="from" nz-typography nzCopyable>{{ from.length > 12 ? from.slice(0,12) + '...' : from }}</p>
+<ng-template #fromTpl let-fromAccountAddress="fromAccountAddress">
+  <ng-container *ngIf="fromAccountAddress">
+    <p [title]="fromAccountAddress" nz-typography nzCopyable [nzCopyText]="fromAccountAddress">{{
+      fromAccountAddress.length > 12 ? fromAccountAddress.slice(0,12) + '...' : fromAccountAddress }}</p>
+  </ng-container>
+  <ng-container *ngIf="!fromAccountAddress">
+    {{ fromAccountAddress | map:'nullValue' }}
+  </ng-container>
 </ng-template>
-<ng-template #toTpl let-to="to">
-  <p [title]="to" nz-typography nzCopyable>{{ to.length > 12 ? to.slice(0,12) + '...' : to }}</p>
+<ng-template #toTpl let-toAccountAddress="toAccountAddress">
+  <ng-container *ngIf="toAccountAddress">
+    <p [title]="toAccountAddress" nz-typography nzCopyable [nzCopyText]="toAccountAddress">{{
+      toAccountAddress.length > 12 ? toAccountAddress.slice(0,12) + '...' : toAccountAddress }}</p>
+  </ng-container>
+  <ng-container *ngIf="!toAccountAddress">
+    {{ toAccountAddress | map:'nullValue' }}
+  </ng-container>
 </ng-template>
-<ng-template #transactionHashTpl let-transactionHash="transactionHash">
-  <p [title]="transactionHash" nz-typography nzCopyable>{{ transactionHash.length > 12 ? transactionHash.slice(0,12)
-    + '...' : transactionHash }}</p>
+<ng-template #transactionHashTpl let-txHash="txHash">
+  <ng-container *ngIf="txHash">
+    <p [title]="txHash" nz-typography nzCopyable [nzCopyText]="txHash">{{
+      txHash.length > 12 ? txHash.slice(0,12) + '...' : txHash }}</p>
+  </ng-container>
+  <ng-container *ngIf="!txHash">
+    {{ txHash | map:'nullValue' }}
+  </ng-container>
+</ng-template>
+<ng-template #statusTpl let-state="state" let-type="type">
+  <ng-container *ngIf="type === 4 || type === 5">
+    <span>{{ state | map:'walletInfoTopUpStatus' }}</span>
+  </ng-container>
+  <ng-container *ngIf="type === 1 || type === 2 || type === 3">
+    <span>{{ state | map:'walletInfoTransactionStatus' }}</span>
+  </ng-container>
 </ng-template>

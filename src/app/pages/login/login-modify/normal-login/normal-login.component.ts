@@ -125,6 +125,7 @@ export class NormalLoginComponent implements OnInit {
       if (result) {
         sessionStorage.setItem('clientName', result.realName);
         sessionStorage.setItem('email', result.email);
+        sessionStorage.setItem('token', result.token);
         let dataFromat: any = {
           aud: [],
           user_name: {
