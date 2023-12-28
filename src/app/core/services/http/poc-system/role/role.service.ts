@@ -72,6 +72,6 @@ export class RoleService {
   // }
 
   public treeList(): Observable<any> {
-    return this.http.post(`/v1/fxplt/resource/manage/all/searches`, {});
+    return this.http.post(`/v1/fxsp/resource/manage/all/searches`, {});
   }
 }
