@@ -2,10 +2,16 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-27 16:15:27
+ * @LastEditTime: 2023-12-28 10:21:07
  * @Description:
  */
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { DestroyService } from '@app/core/services/common/destory.service';
 import { BehaviorSubject, takeUntil } from 'rxjs';
 import { ForeignExchangeApplyService } from '@app/core/services/http/poc-profile/foreign-exchange-apply/foreign-exchange-apply.service';
@@ -21,6 +27,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { CurrencyStoreService } from '@app/pages/poc-profile/foreign-exchange-apply/store/currency.service';
 import { PocActivateSettlementService } from '@app/core/services/http/poc-activate-settlement/poc-activate-settlement.service';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 
 @Component({
   selector: 'app-add-pool',
@@ -59,6 +67,10 @@ export class AddPoolComponent implements OnInit {
   editCapitalPoolList: any = [];
   isFirstEdit: boolean = true;
   editFileList: any = [];
+  @ViewChild('authorizedTpl', { static: true })
+  authorizedTpl!: TemplateRef<NzSafeAny>;
+  tableConfig!: AntTableConfig;
+  dataList: NzSafeAny[] = [];
   constructor(
     private fb: NonNullableFormBuilder,
     private _currencyStoreService: CurrencyStoreService,
@@ -75,50 +87,40 @@ export class AddPoolComponent implements OnInit {
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
     this.edit();
+    this.initTable();
   }
 
   edit() {
     this.pocActivateSettlementService.getInfo().subscribe((res: any) => {
-      this.editCapitalPoolList = res.capitalPoolList;
-      this.editFileList = res.fileList;
-      if (this.isFirstEdit === true) {
-        console.log(123213);
-        console.log(this.validateForm.value);
-        let i = 0;
-        do {
-          this.addField();
-          this.validateForm
-            .get(`currency${i}`)
-            ?.setValue(this.editCapitalPoolList[i].capitalPoolCurrency);
-          this.validateForm
-            .get(`capitalPoolAddress${i}`)
-            ?.setValue(this.editCapitalPoolList[i].capitalPoolAddress);
-          i++;
-        } while (i < 1);
+      if (res.updateStatus === 0) {
+        this.isFirstEdit = false;
+      } else {
+        this.isFirstEdit = true;
+        this.dataList = res.capitalPoolList;
+        this.editFileList = res.fileList;
+        this.dataList.forEach((item: any, i: any) => {
+          Object.assign(item, { key: i });
+        });
+        if (res.fileList && res.fileList.length > 0) {
+          this.editFileList.forEach((item: any, index: number) => {
+            const control = {
+              id: index,
+              status: false,
+              fileCode: `file${index}`,
+              fileUrl: `fileUrl${index}`
+            };
+            const indexs = this.fileListOfControl.push(control);
+            this.fileForm.addControl(
+              this.fileListOfControl[indexs - 1].fileCode,
+              this.fb.control('', Validators.required)
+            );
+            this.fileListOfControl[indexs - 1].fileUrl = item.fileUrl;
+            this.fileForm.get(`fileCode${index}`)?.setValue(item.fileCode);
+          });
+        }
         this.cdr.markForCheck();
       }
-
       this.addField();
-
-      if (res.fileList && res.fileList.length > 0) {
-        this.editFileList.forEach((item: any, index: number) => {
-          const control = {
-            id: index,
-            status: false,
-            fileCode: `file${index}`,
-            fileUrl: `fileUrl${index}`
-          };
-          const indexs = this.fileListOfControl.push(control);
-          this.fileForm.addControl(
-            this.fileListOfControl[indexs - 1].fileCode,
-            this.fb.control('', Validators.required)
-          );
-          this.fileListOfControl[indexs - 1].fileUrl = item.fileUrl;
-          this.fileForm.get(`fileCode${index}`)?.setValue(item.fileCode);
-        });
-      }
-      this.cdr.markForCheck();
-      return;
     });
   }
 
@@ -317,6 +319,7 @@ export class AddPoolComponent implements OnInit {
           res.splice(res.indexOf(str), 1);
         }
       }
+
       if (type === 2) {
         this.validateForm.get(`status${index - 1}`)?.setValue('false');
         if (str !== '') {
@@ -341,7 +344,7 @@ export class AddPoolComponent implements OnInit {
     e: MouseEvent
   ): void {
     e.preventDefault();
-    this.isFirstEdit = false;
+    // this.isFirstEdit = false;
     this.editCapitalPoolList = [];
     if (this.listOfControl.length > 1) {
       this.watchSelectOptionPacth(
@@ -349,6 +352,7 @@ export class AddPoolComponent implements OnInit {
         this.validateForm.get(`currency${i.id}`)?.value,
         i.id
       );
+
       if (
         this.newOptionArr.includes(
           this.validateForm.get(`currency${i.id}`)?.value
@@ -376,6 +380,9 @@ export class AddPoolComponent implements OnInit {
     this.setOldArr(i.id, e.toString());
     this.initNewSelectOption();
     this.validateForm.controls[i.capitalPoolAddress].setValue('');
+    this.setSelectOptionPool(e);
+  }
+  private setSelectOptionPool(e: any) {
     this.pocActivateSettlementService
       .getWalletAdress({ currency: e.toString() })
       .subscribe((res) => {
@@ -392,9 +399,7 @@ export class AddPoolComponent implements OnInit {
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
-    if (this.validateForm.valid) {
-      console.log(this.validateForm.value);
-      return;
+    if (this.isFirstEdit) {
       let settlementInformations: any[] = [];
       let ss1 = Object.keys(this.validateForm.value);
       ss1.forEach((item: any, i: number) => {
@@ -420,7 +425,74 @@ export class AddPoolComponent implements OnInit {
           settlementInformations.map((item) => [item.capitalPoolAddress, item])
         ).values()
       ];
-      this.addData(uniqueArr, []);
+      let arrs: any[] = [];
+      if (uniqueArr.length > 0) {
+        uniqueArr.forEach((item: any, index: number) => {
+          arrs.push(item.capitalPoolCurrency);
+        });
+      }
+      if (arrs.length > 0) {
+        this.dataList.forEach((item: any, index: number) => {
+          if (arrs.includes(item.capitalPoolCurrency)) {
+            let indexs = uniqueArr.findIndex(
+              (val) => val.capitalPoolCurrency == item.capitalPoolCurrency
+            );
+            item.capitalPoolAddress = uniqueArr[indexs].capitalPoolAddress;
+          }
+        });
+      }
+
+      for (const key in this.dataList) {
+        delete this.dataList[key].key;
+      }
+      this.addData(this.dataList, []);
+    } else if (this.validateForm.valid) {
+      let settlementInformations: any[] = [];
+      let ss1 = Object.keys(this.validateForm.value);
+      ss1.forEach((item: any, i: number) => {
+        if (
+          this.validateForm.get(
+            'capitalPoolAddress' + parseInt((i / 3).toString())
+          )?.value !== ''
+        ) {
+          settlementInformations.push(
+            this.initFormData(
+              this.validateForm.get('currency' + parseInt((i / 3).toString()))
+                ?.value,
+              this.validateForm.get(
+                'capitalPoolAddress' + parseInt((i / 3).toString())
+              )?.value,
+              1
+            )
+          );
+        }
+      });
+      const uniqueArr = [
+        ...new Map(
+          settlementInformations.map((item) => [item.capitalPoolAddress, item])
+        ).values()
+      ];
+      let arrs: any[] = [];
+      if (uniqueArr.length > 0) {
+        uniqueArr.forEach((item: any, index: number) => {
+          arrs.push(item.capitalPoolCurrency);
+        });
+      }
+      if (arrs.length > 0) {
+        this.dataList.forEach((item: any, index: number) => {
+          if (arrs.includes(item.capitalPoolCurrency)) {
+            let indexs = uniqueArr.findIndex(
+              (val) => val.capitalPoolCurrency == item.capitalPoolCurrency
+            );
+            item.capitalPoolAddress = uniqueArr[indexs].capitalPoolAddress;
+          }
+        });
+      }
+
+      for (const key in this.dataList) {
+        delete this.dataList[key].key;
+      }
+      this.addData(this.dataList, []);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -481,5 +553,34 @@ export class AddPoolComponent implements OnInit {
           this.cdr.markForCheck();
         }
       });
+  }
+  private initTable(): void {
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'Currency',
+          field: 'capitalPoolCurrency',
+          width: 180
+        },
+        {
+          title: 'Account/Wallet (Capital Pool Address)',
+          field: 'capitalPoolAddress',
+          width: 300
+        },
+        {
+          title: 'Action',
+          tdTemplate: this.authorizedTpl,
+          width: 120
+        }
+      ],
+      total: 0,
+      showCheckbox: false,
+      loading: false,
+      pageSize: 10,
+      pageIndex: 1
+    };
+  }
+  onDel(index: number) {
+    this.dataList.splice(index, 1);
   }
 }

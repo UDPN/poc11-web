@@ -2,11 +2,21 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-27 15:04:22
+ * @LastEditTime: 2023-12-27 18:24:25
  * @Description: 
 -->
 <div>
     <div class="access-title">Capital Pool Information</div>
+    <div *ngIf="isFirstEdit" nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+        <div nz-col [nzXXl]="20" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
+            <app-ant-table [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+
+        </div>
+    </div>
+    <ng-template #authorizedTpl let-key="key">
+        <ng-container *ngIf="key>1"> <a nz-button nzType="link" nzDanger (click)="onDel(key)">Delete</a></ng-container>
+        <ng-container *ngIf="key <= 1"> --</ng-container>
+    </ng-template>
     <div nz-row nzJustify="center" nzAlign="middle">
         <div nz-col [nzXXl]="20" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
             <form nz-form [formGroup]="validateForm">
