@@ -1,5 +1,5 @@
 {
-  "name": "a4r-poc11",
+  "name": "poc11-web",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
@@ -12,7 +12,7 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/a4r-poc11",
+        "outputPath": "dist/poc11-web",
         "index": "./src/index.html",
         "main": "./src/main.ts",
         "polyfills": [
@@ -128,10 +128,10 @@
       },
       "configurations": {
         "production": {
-          "browserTarget": "a4r-poc11:build:production"
+          "browserTarget": "poc11-web:build:production"
         },
         "development": {
-          "browserTarget": "a4r-poc11:build:development"
+          "browserTarget": "poc11-web:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -139,7 +139,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "a4r-poc11:build"
+        "browserTarget": "poc11-web:build"
       }
     },
     "lint": {
@@ -173,7 +173,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "a4r-poc11:build"
+        "buildTarget": "poc11-web:build"
       }
     }
   }
