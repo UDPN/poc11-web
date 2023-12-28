@@ -20,6 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { CurrencyStoreService } from '@app/pages/poc-profile/foreign-exchange-apply/store/currency.service';
+import { PocActivateSettlementService } from '@app/core/services/http/poc-activate-settlement/poc-activate-settlement.service';
 
 @Component({
   selector: 'app-add-pool',
@@ -34,6 +35,7 @@ export class AddPoolComponent implements OnInit {
   public selectOptionPacths$ = new BehaviorSubject<any[]>([]);
   protected selectOptionPacthsLenght = 0;
   public selectOptionAll$ = new BehaviorSubject<any[]>([]);
+  public selectOptionPool$ = new BehaviorSubject<any[]>([]);
   public newOptionArr: any[] = [];
   public zeroShowStatus$ = this._currencyStoreService.zeroShowStatus$;
   isLoading = false;
@@ -50,13 +52,14 @@ export class AddPoolComponent implements OnInit {
     private _currencyStoreService: CurrencyStoreService,
     private destroy$: DestroyService,
     private _foreignExchangeApplyService: ForeignExchangeApplyService,
+    private pocActivateSettlementService: PocActivateSettlementService,
     public _commonService: CommonService,
     public message: NzMessageService,
     private modal: NzModalService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.addField();
     this.initSelectOptionEdit(0);
@@ -134,7 +137,7 @@ export class AddPoolComponent implements OnInit {
       .subscribe((res: any) => {
         let arr: string[] = [];
         res.dataInfo.map((item: any) => {
-          arr.push(item.currency + '-' + item.platform);
+          arr.push(item.currency);
         });
         if (type === 1) {
           this.selectOptionPacths$.next(arr);
@@ -146,6 +149,7 @@ export class AddPoolComponent implements OnInit {
         }
       });
   }
+
 
   private initSelectOptionEdit(type: number) {
     this._foreignExchangeApplyService.getSpApprovedInfo().subscribe((res) => {
@@ -255,14 +259,26 @@ export class AddPoolComponent implements OnInit {
   ) {
     this.setOldArr(i.id, e.toString());
     this.initNewSelectOption();
+    this.validateForm.controls[i.capitalPoolAddress].reset();
+    this.setSelectOptionPool(e);
   }
+
+  private setSelectOptionPool(e: any) {
+    this.pocActivateSettlementService
+      .getWalletAdress({ currency: e.toString() })
+      .subscribe((res) => {
+        this.selectOptionPool$.next(res);
+        console.log(this.selectOptionPool$);
+      });
+  }
+
   private setOldArr(index: number, str: string) {
     let ss =
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-        ? []
-        : this.listCheckArr[index];
+          ? []
+          : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
@@ -309,8 +325,8 @@ export class AddPoolComponent implements OnInit {
   ): any {
     if (type === 1) {
       return {
-        capitalPoolPlatform: currency.split('-')[1],
-        capitalPoolCurrency: currency.split('-')[0],
+        capitalPoolPlatform: currency.split('-')[2],
+        capitalPoolCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
         capitalPoolAddress: targetCurrency
       };
     }

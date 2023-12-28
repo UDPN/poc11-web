@@ -146,7 +146,7 @@
         }}</nz-tag>
     </ng-template>
     <ng-template #operationTpl let-transferId="transferId">
-      <ng-container>
+      <ng-container  *appAuth="'R010203'">
         <span class="operate-text" routerLink="/poc/poc-remittance/transaction-record/info" [queryParams]="{transferId}">
           Details
         </span>

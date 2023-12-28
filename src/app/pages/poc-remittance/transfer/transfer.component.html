@@ -199,7 +199,7 @@
   </nz-card>
   <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25 m-b-10 m-r-60">
     <div nz-col nzSpan="24" style="text-align: end">
-      <button nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading" (click)="onSubmit()">
+      <button *appAuth="'R01020101'" nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading" (click)="onSubmit()">
         Submit
       </button>
     </div>

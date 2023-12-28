@@ -11,7 +11,7 @@ const routes: Routes = [
     path: '',
     component: DefaultComponent,
     data: { shouldDetach: 'no', preload: true },
-    // canActivateChild: [JudgeLoginGuard, JudgeAuthGuard, DeatilsGuardChild],
+    canActivateChild: [JudgeLoginGuard, JudgeAuthGuard, DeatilsGuardChild],
     children: [
       { path: '', redirectTo: 'poc-home', pathMatch: 'full' },
       {
