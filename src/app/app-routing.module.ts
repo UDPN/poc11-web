@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 10:48:53
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-28 19:15:32
+ * @LastEditTime: 2023-12-28 19:20:27
  * @Description:
  */
 import { NgModule } from '@angular/core';
@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path: 'information',
     data: { preload: true },
-    canActivateChild: [JudgeLoginGuard, DeatilsGuardChild],
+    canActivateChild: [JudgeLoginGuard],
     loadChildren: () =>
       import('./pages/information/information.module').then(
         (m) => m.InformationModule
