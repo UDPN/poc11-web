@@ -33,8 +33,12 @@
                                 <nz-form-control [nzErrorTip]="receivingWalletAddressError">
                                     <div nz-row>
                                         <div nz-col nzSpan="24">
-                                            <input nz-input formControlName="receivingWalletAddress" maxlength="100"
-                                                readonly class="onboard-disabled" />
+
+                                            <nz-select formControlName="receivingWalletAddress">
+                                                <nz-option *ngFor="let item of receivingWalletAddressList;let i=index"
+                                                    [nzValue]="item.bankAccountId"
+                                                    [nzLabel]="item.chainAccountAddress"></nz-option>
+                                            </nz-select>
                                         </div>
                                     </div>
                                     <ng-template #receivingWalletAddressError let-control>
@@ -79,7 +83,7 @@
                                             <nz-select formControlName="transactionWalletAddressId"
                                                 (ngModelChange)="onPurchase($event)">
                                                 <nz-option *ngFor="let item of fxPurchaseData;let i=index" [nzValue]="i"
-                                                    [nzLabel]="item.walletAddress"></nz-option>
+                                                    [nzLabel]="item.chainAccountAddress"></nz-option>
                                             </nz-select>
                                         </div>
                                     </div>

@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-26 17:21:10
+ * @LastEditTime: 2023-12-28 12:51:52
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -17,25 +17,25 @@ export class TransferService {
   constructor(public http: BaseHttpService, private https: HttpClient) {}
   // List of all wallets (aggregated)
   public fetchAllWalletList(): Observable<any> {
-    // return this.http.post(`/v1/common/allWalletList`);
-    return this.http.post(
-      `https://2f488421-27a1-4b4d-98d1-9f667c1d7020.mock.pstmn.io/v1/common/allWalletList`
-    );
+    return this.http.post(`/v1/common/allWalletList`);
+    // return this.http.post(
+    //   `https://2f488421-27a1-4b4d-98d1-9f667c1d7020.mock.pstmn.io/v1/common/allWalletList`
+    // );
   }
   // Query the list of central banks
   public fetchBankList(): Observable<any> {
-    // return this.http.post(`/v1/common/centralBankList`);
-    return this.http.post(
-      `https://4b376e97-faaa-4d8d-a88f-4380dd38ed43.mock.pstmn.io/v1/common/centralBankList`
-    );
+    return this.http.post(`/v1/common/centralBankList`);
+    // return this.http.post(
+    //   `https://4b376e97-faaa-4d8d-a88f-4380dd38ed43.mock.pstmn.io/v1/common/centralBankList`
+    // );
   }
   // exchange rate information
   public exchange(params: { from: string; to: string }): Observable<any> {
-    // return this.http.post(`/v1/common/fxRates`, params);
-    return this.http.post(
-      `https://d29e6f43-176f-486c-9330-e6bb3e4c0143.mock.pstmn.io/v1/common/fxRates`,
-      params
-    );
+    return this.http.post(`/v1/common/fxRates`, params);
+    // return this.http.post(
+    //   `https://d29e6f43-176f-486c-9330-e6bb3e4c0143.mock.pstmn.io/v1/common/fxRates`,
+    //   params
+    // );
   }
   // National central bank information
   public nationalInformation(): Observable<any> {
