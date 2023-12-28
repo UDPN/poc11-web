@@ -66,28 +66,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   isVisible: boolean = false;
   isLoading: boolean = false;
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [
-    {
-      transactionNo: 'F9160189-E5D5-4E64-1EEB-7DAAF4EF9999',
-      from: '0x00000000000000',
-      to: '0x11c0E25E62C1dB',
-      type: 1,
-      amount: '10000000',
-      currency: 'w-CNY',
-      creationTime: 1702952079,
-      status: 1
-    },
-    {
-      transactionNo: 'F9160188-E5D5-4E64-1EEB-7DAAF4EF8888',
-      from: '0x33e0E25E62C1dBD32E505446062B26AECB00EU33',
-      to: '0x9110c9FCE1C71B6CCF18Cb89E4A9e03Ac51c7777',
-      type: 2,
-      amount: '1000000',
-      currency: 'w-EUR',
-      creationTime: 1702952079,
-      status: 2
-    },
-  ];
+  dataList: NzSafeAny[] = [];
   typeList: any[] = [];
   currencyList: any[] = [];
   statusList: any[] = [];

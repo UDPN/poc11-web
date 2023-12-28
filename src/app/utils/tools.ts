@@ -223,10 +223,10 @@ const strToBase64 = function strToBase64(str: string) {
 
 
 const timestampToTime = function timestampToTime(str: string) {
-
+  str = str.toString();
   let timeZone = new Date().getTimezoneOffset() / -60;
 
-  const time = new Date(Number(str) * 1000);
+  const time = str.length > 10 ? new Date(Number(str)) : new Date(Number(str) * 1000);
   const len = time.getTime();
   const offset = time.getTimezoneOffset() * 60000;
   const utcTime = len + offset;
@@ -305,6 +305,11 @@ const timeToTimestamp = function timeToTimestamp(str: any) {
   return date.valueOf() / 1000;
 }
 
+const timeToTimestampMillisecond = function timeToTimestamp(str: any) {
+  let date = new Date(str);
+  return date.valueOf();
+}
+
 
 const timeZone = function timeZone(t: any) {
   return new Date().getTimezoneOffset() / -60;
@@ -381,5 +386,6 @@ export {
   timestampToDate,
   timestampToMonth,
   objPushKv,
-  thousandthMark
+  thousandthMark,
+  timeToTimestampMillisecond
 };

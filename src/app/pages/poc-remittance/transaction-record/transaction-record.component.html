@@ -47,7 +47,7 @@
           <nz-form-item>
             <nz-form-label>Currency</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="currency" [(ngModel)]="searchParam.centralBankId">
+              <nz-select nzPlaceHolder="" name="centralBankId" [(ngModel)]="searchParam.centralBankId">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let item of currencyList" [nzValue]="item.central_bank_id"
                   [nzLabel]="item.digital_currency_name">
@@ -136,8 +136,8 @@
       </ng-container>
 
     </ng-template>
-    <ng-template #amountTpl let-cbdcCount="cbdcCount" let-type="type">
-      <span [style]="{'color': (type === 1 || type ===3) ? '#39A16A' : '#E53E3E'}">{{
+    <ng-template #amountTpl let-cbdcCount="cbdcCount">
+      <span [style]="{'color': cbdcCount > 0 ? '#39A16A' : '#E53E3E'}">{{
         cbdcCount |
         map:'toThousandthMark' }}</span>
     </ng-template>
@@ -145,9 +145,9 @@
       <nz-tag [nzColor]="state | map:'transactionsRecordStatusColor'">{{ state | map:'walletTransactionsRecordStatus'
         }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-currency="currency">
+    <ng-template #operationTpl let-transferId="transferId">
       <ng-container>
-        <span class="operate-text" routerLink="/poc/poc-remittance/transaction-record/info" [queryParams]="{}">
+        <span class="operate-text" routerLink="/poc/poc-remittance/transaction-record/info" [queryParams]="{transferId}">
           Details
         </span>
       </ng-container>

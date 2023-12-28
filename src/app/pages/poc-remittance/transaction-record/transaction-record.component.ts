@@ -20,7 +20,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  centralBankId: number;
+  centralBankId: any;
   fromAccountAddress: string;
   serialNumber: string;
   creationTime: any;
@@ -62,7 +62,8 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   searchParam: Partial<SearchParam> = {
     creationTime: [],
     state: '',
-    type: ''
+    type: '',
+    centralBankId: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -94,7 +95,6 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
     footer: ''
   };
   constructor(
-    private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
@@ -114,9 +114,9 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initTable();
-    this.transferService.fetchBankList().subscribe((res: any) => {
-      this.currencyList = res;
-    });
+    // this.transferService.fetchBankList().subscribe((res: any) => {
+    //   this.currencyList = res;
+    // });
   }
 
   tableChangeDectction(): void {
@@ -131,8 +131,10 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
 
   resetForm(): void {
     this.searchParam = {};
-    this.searchParam.creationTime = '';
+    this.searchParam.creationTime = [];
     this.searchParam.state = '';
+    this.searchParam.type = '';
+    this.searchParam.centralBankId = '';
     this.getDataList(this.tableQueryParams);
   }
 
@@ -155,12 +157,8 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((_: any) => {
-        console.log(_);
-        this.dataList = _.data.rows;
-        this.dataList.forEach((item: any, i: any) => {
-          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-        });
-        this.tableConfig.total = _?.page?.total;
+        this.dataList = _.data?.rows;
+        this.tableConfig.total = _.data.page.total;
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
         this.cdr.markForCheck();

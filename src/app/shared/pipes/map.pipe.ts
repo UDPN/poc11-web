@@ -109,44 +109,38 @@ export const MapSet = {
   },
   walletTransactionsStatus: {
     1: 'Pending Approval',
+    2: 'Rejected',
     3: 'Processing',
-    5: 'Success',
-    6: 'Failed',
-    2: 'Rejected'
+    6: 'Success',
+    7: 'Failed'
   },
   walletTransactionsRecordStatus: {
-    1: 'Pending authorization',
-    2: 'Authorization is successful',
-    3: 'Authorization failed',
-    4: 'Transferring ',
-    5: 'The transfer was successful',
-    6: 'The transfer failed ',
-    7: 'The transfer failed, and the authorization was cancelled successfully'
+    1: 'Pending',
+    4: 'Processing',
+    5: 'Success',
+    6: 'Failed',
   },
   walletTransactionsStatusColor: {
     1: 'volcano',
+    2: 'red',
     3: 'purple',
-    5: 'cyan',
-    6: 'red',
-    2: 'red'
+    6: 'cyan',
+    7: 'red'
   },
   walletTransactionsType: {
     1: 'Top-up',
     2: 'Withdrawal'
   },
   transactionsRecordType: {
-    1: 'Transfer',
+    1: 'Swap',
     2: 'Exchange',
-    3: 'Swap'
+    3: 'Transfer'
   },
   transactionsRecordStatusColor: {
     1: 'volcano',
     4: 'purple',
-    2: 'cyan',
     5: 'cyan',
-    3: 'red',
-    6: 'red',
-    7: 'red'
+    6: 'red'
   },
   region: {
     1: 'Domestic',
@@ -155,6 +149,8 @@ export const MapSet = {
   walletStatus: {
     1: 'Pending Approval',
     2: 'Rejected',
+    3: 'Processing',
+    4: 'Processing',
     5: 'Active',
     6: 'Failed',
     7: 'Processing',
@@ -163,6 +159,8 @@ export const MapSet = {
   walletStatusColor: {
     1: 'volcano',
     2: 'red',
+    3: 'purple',
+    4: 'purple',
     5: 'cyan',
     6: 'red',
     7: 'purple',
@@ -176,8 +174,37 @@ export const MapSet = {
     5: 'Agree',
     6: '--',
     7: '--',
-    8: '--'
-  }
+    8: '--',
+  },
+  walletInfoType: {
+    1: 'Swap',
+    2: 'Exchange',
+    3: 'Transfer',
+    4: 'Top-up',
+    5: 'Withdrawal',
+  },
+  walletInfoTransactionStatus: {
+    1: 'Pending',
+    2: 'Processing',
+    3: 'Failed',
+    4: 'Processing',
+    5: 'Success',
+    6: 'Failed',
+    7: 'Failed',
+  },
+  walletInfoTopUpStatus: {
+    1: 'Pending Approval',
+    2: 'Rejected',
+    3: 'Processing',
+    4: 'Processing',
+    5: 'Active',
+    6: 'Failed',
+  },
+  logTreeStatus: {
+    1: 'process',
+    2: 'finish',
+    3: 'error'
+  },
 };
 
 export interface MapItem {

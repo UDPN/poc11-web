@@ -108,7 +108,7 @@
           chainAccountAddress.slice(0,12) + '...' : chainAccountAddress }}</p>
       </ng-container>
       <ng-container *ngIf="!chainAccountAddress">
-        <span>{{ '--' }}</span>
+        <span>{{ chainAccountAddress | map:'nullValue' }}</span>
       </ng-container>
     </ng-template>
     <ng-template #operationTpl let-bankAccountId="bankAccountId" let-balance="balance" let-region="region"
@@ -118,11 +118,11 @@
           Top up
         </span>
       </ng-container>
-      <ng-container>
+      <!-- <ng-container>
         <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5">
           Withdraw
         </span>
-      </ng-container>
+      </ng-container> -->
       <ng-container>
         <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{bankAccountId, currency, region}">
           Details
