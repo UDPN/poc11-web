@@ -74,9 +74,9 @@ const routes: Routes = [
         path: 'poc-activate-settlement',
         data: { preload: true },
         loadChildren: () =>
-          import('../../pages/poc-activate-settlement/poc-activate-settlement.module').then(
-            (m) => m.PocActivateSettlementModule
-          )
+          import(
+            '../../pages/poc-activate-settlement/poc-activate-settlement.module'
+          ).then((m) => m.PocActivateSettlementModule)
       },
       {
         path: 'poc-wallet',
