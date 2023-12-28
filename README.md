@@ -7,7 +7,7 @@
 
 ## Start the app
 
-To start the development server run `nx serve a4r-poc11`. Open your browser and navigate to http://localhost:4200/. Happy coding!
+To start the development server run `nx serve poc11-web`. Open your browser and navigate to http://localhost:4200/. Happy coding!
 
 
 ## Generate code

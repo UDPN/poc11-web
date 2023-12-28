@@ -14,6 +14,7 @@ import { ThemeService } from '@app/core/services/store/common-store/theme.servic
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { debounceTime } from 'rxjs';
 
 @Component({
@@ -54,13 +55,16 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   purchCurrecyList: any[] = [];
   reveingCurrecy!: string;
   showStatus = false;
+  receivingWalletAddressList: any[] = [];
+  purIndex: number = 0;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
-    private fxPurchasingService: FxPurchasingService
+    private fxPurchasingService: FxPurchasingService,
+    private modal: NzModalService
   ) {}
   ngAfterViewInit(): void {
     this.fromEventAmount();
@@ -81,6 +85,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       receivingWalletAddress: [null, [Validators.required]],
       amount: [null, [Validators.required]],
       transactionWalletAddressId: [0, [Validators.required]],
+      bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
       availableBalance: [null, [Validators.required]],
       transactionBankName: [null, [Validators.required]]
@@ -95,14 +100,22 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       this.onPurchase(0);
     });
     this.fxPurchasingService.fetchFxReceiving().subscribe((res) => {
-      this.fxReceivingData = res;
+      this.fxReceivingData = [];
+      res.forEach((item: any, i: number) => {
+        this.fxReceivingData.push({
+          bankId: item.bankId,
+          bankName: item.bankName,
+          currecy: item.digitalCurrencyName,
+          walletAddress: item.wallets
+        });
+      });
       this.onReceiving(0);
     });
   }
   onReceiving(e: any) {
     this.validateForm
       .get('receivingWalletAddress')
-      ?.setValue(this.fxReceivingData[e].walletAddress);
+      ?.setValue(this.fxReceivingData[e].walletAddress[0]['bankAccountId']);
     this.validateForm
       .get('receivingBankName')
       ?.setValue(this.fxReceivingData[e].bankName);
@@ -110,6 +123,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       .get('receivingBankId')
       ?.setValue(this.fxReceivingData[e].bankId);
     this.reveingCurrecy = this.fxReceivingData[e].currecy;
+    this.receivingWalletAddressList = this.fxReceivingData[e].walletAddress;
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
@@ -117,16 +131,23 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     }
   }
   onPurchase(e: any) {
+    this.purIndex = e;
     this.validateForm
       .get('transactionWalletAddress')
-      ?.setValue(this.fxPurchaseData[e].walletAddress);
+      ?.setValue(this.fxPurchaseData[e].chainAccountAddress);
+    this.validateForm
+      .get('bankAccountId')
+      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].bankAccountId);
     this.validateForm
       .get('transactionBankName')
-      ?.setValue(this.fxPurchaseData[e].bankName);
+      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].bankName);
     this.validateForm
       .get('availableBalance')
-      ?.setValue(this.fxPurchaseData[e].balance);
-    this.purchCurrecyList = this.fxPurchaseData[e].currecy;
+      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].cbdcCount);
+    this.purchCurrecyList = Array.from(
+      this.fxPurchaseData[e]['walletExtendInfo'],
+      ({ digitalCurrencyName }) => digitalCurrencyName
+    );
     this.onPurchCurrecy(0);
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
@@ -136,6 +157,16 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   }
   onPurchCurrecy(e: number) {
     this.purchCurrecy = this.purchCurrecyList[e];
+    this.validateForm
+      .get('transactionBankName')
+      ?.setValue(
+        this.fxPurchaseData[this.purIndex]['walletExtendInfo'][e].bankName
+      );
+    this.validateForm
+      .get('availableBalance')
+      ?.setValue(
+        this.fxPurchaseData[this.purIndex]['walletExtendInfo'][e].cbdcCount
+      );
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
@@ -232,7 +263,16 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    this.isVisible = true;
+    if (this.validateForm.valid) {
+      this.isVisible = true;
+    } else {
+      Object.values(this.validateForm.controls).forEach((control) => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
   }
 
   cancelView() {
@@ -240,12 +280,41 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   }
 
   confirmView() {
-    this.isVisible = false;
+    // this.isVisible = false;
     this.isVisibleEnterPassword = true;
   }
 
   cancelEnterPassword() {
     this.isVisibleEnterPassword = false;
   }
-  confirmEnterPassword() {}
+  confirmEnterPassword() {
+    this.isVisibleEnterPassword = false;
+    this.isLoading = true;
+    this.fxPurchasingService
+      .transfer({
+        fxPurchaseAmount: this.validateForm.get('amount')?.value,
+        fxPurchasingInformation: '',
+        fxReceivingWalletId: this.validateForm.get('receivingWalletAddress')
+          ?.value,
+        passWord: this.passwordForm.get('password')?.value,
+        rateId: this.checkedItemComment[0].rateId,
+        transactionWalletId: this.validateForm.get('bankAccountId')?.value
+      })
+      .subscribe((res) => {
+        if (res) {
+          this.modal
+            .success({
+              nzTitle: 'Success',
+              nzContent: 'Transfer successful!'
+            })
+            .afterClose.subscribe((_) => {
+              this.initData();
+              this.validateForm.reset();
+              this.passwordForm.reset();
+            });
+        }
+        this.isLoading = false;
+        this.isVisible = false;
+      });
+  }
 }
