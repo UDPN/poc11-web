@@ -50,7 +50,7 @@ export class TransferService {
   public transfer(params: {
     beneficiaryBankId: number;
     beneficiaryWalletAddress: string;
-    nterbankSettlementAmount: number;
+    interbankSettlementAmount: number;
     remittanceInformation: string;
     remitterWalletId: number;
     rateId: string;

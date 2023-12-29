@@ -199,7 +199,8 @@
   </nz-card>
   <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25 m-b-10 m-r-60">
     <div nz-col nzSpan="24" style="text-align: end">
-      <button *appAuth="'R01020101'" nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading" (click)="onSubmit()">
+      <button *appAuth="'R01020101'" nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
+        (click)="onSubmit()">
         Submit
       </button>
     </div>
@@ -221,23 +222,26 @@
       <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
         class="card-descriptions-vertical title-order">
         <nz-descriptions-item nzTitle="Currency & Interbank Settlement Amount"><span class="text-right"
-            [ngStyle]="{'color': 'red'}">{{
-            '-' +checkedItemComment[0].total + ' ' + availableCurrecyModel
+            [ngStyle]="{'color': 'red'}">{{ checkedItemComment.length > 0 ?
+            ('-' +checkedItemComment[0].total + ' ' + availableCurrecyModel ): ('-' +
+            validateForm.controls["amount"].value + ' ' +availableCurrecyModel)
             }}</span>
         </nz-descriptions-item>
       </nz-descriptions>
     </nz-card>
+    <ng-container *ngIf="checkedItemComment.length > 0">
+      <nz-card nzTitle="FX Information" nzBordered="false" class="info-none-bottom">
+        <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 3, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }"
+          [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
+          <nz-descriptions-item nzTitle="Settlement Bank">{{ checkedItemComment[0].sp
+            }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ checkedItemComment[0].rate}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].com + ' ' +
+            availableCurrecyModel}}</nz-descriptions-item>
+        </nz-descriptions>
+      </nz-card>
+    </ng-container>
 
-    <nz-card nzTitle="FX Information" nzBordered="false" class="info-none-bottom">
-      <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 3, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }"
-        [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
-        <nz-descriptions-item nzTitle="Settlement Bank">{{ checkedItemComment[0].sp
-          }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ checkedItemComment[0].rate}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].com + ' ' +
-          availableCurrecyModel}}</nz-descriptions-item>
-      </nz-descriptions>
-    </nz-card>
 
     <nz-card nzTitle="Beneficiary Information" nzBordered="false" class="info-none-bottom">
       <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
@@ -259,7 +263,7 @@
           {{ validateForm.controls["availableBalance"].value+ ' ' + availableCurrecyModel}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
-          validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>
+          validateForm.controls["amount"].value }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remittance Information">
           {{
           validateForm.controls["remittanceInformation"].value }}
