@@ -224,7 +224,7 @@
         <nz-descriptions-item nzTitle="Currency & Interbank Settlement Amount"><span class="text-right"
             [ngStyle]="{'color': 'red'}">{{ checkedItemComment.length > 0 ?
             ('-' +checkedItemComment[0].total + ' ' + availableCurrecyModel ): ('-' +
-            validateForm.controls["availableBalance"].value + ' ' +availableCurrecyModel)
+            validateForm.controls["amount"].value + ' ' +availableCurrecyModel)
             }}</span>
         </nz-descriptions-item>
       </nz-descriptions>
@@ -263,7 +263,7 @@
           {{ validateForm.controls["availableBalance"].value+ ' ' + availableCurrecyModel}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
-          validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>
+          validateForm.controls["amount"].value }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remittance Information">
           {{
           validateForm.controls["remittanceInformation"].value }}
