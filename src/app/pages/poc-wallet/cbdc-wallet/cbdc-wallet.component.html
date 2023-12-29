@@ -159,13 +159,14 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18" class="m-b-20">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" type="number" [maxlength]="10" />
+                <input nz-input formControlName="amount" maxlength="6" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
+                <ng-container *ngIf="control.hasError('regular')"></ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -210,7 +211,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" type="number" [maxlength]="10" />
+                <input nz-input formControlName="amount" maxlength="6" />
               </nz-input-group>
               <div>
                 Available Amount: 90,000.00 w-CNY
@@ -220,6 +221,7 @@
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
+                <ng-container *ngIf="control.hasError('regular')"></ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
