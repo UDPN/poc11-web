@@ -1,14 +1,37 @@
 {
   "MSG_FXSP_ELEVEN_": "------ As a Service Provider ------",
+  "MSG_FXSP_ELEVEN_22021": "The value of parameter is incorrect, please refer to the interface documentation",
+
   "MSG_FXSP_ELEVEN_20001": "businessApplicationCode id not null",
   "MSG_FXSP_ELEVEN_20002": "Blockchain call failed",
   "MSG_FXSP_ELEVEN_20003": "Fund pool containing opened business",
   "MSG_FXSP_ELEVEN_20004": "Include exchange rate information for opened services",
   "MSG_FXSP_ELEVEN_20005": "businessType id not null",
 
+  "MSG_FXSP_ELEVEN_20200": "Description Failed to call bn remotely",
+
+  "MSG_FXSP_ELEVEN_20300": "Receipt abnormal state",
+  "MSG_FXSP_ELEVEN_20301": "Failure to obtain receipt",
+  "MSG_FXSP_ELEVEN_20302": "File upload call failed",
+  "MSG_FXSP_ELEVEN_20303": "File download call failed",
+  "MSG_FXSP_ELEVEN_20304": "File does not exist",
+
+  "MSG_FXSP_ELEVEN_20201": "sp name cannot be empty",
+  "MSG_FXSP_ELEVEN_20202": "country id cannot be empty",
+  "MSG_FXSP_ELEVEN_20203": "sp brief introduction cannot be empty",
+  "MSG_FXSP_ELEVEN_20204": "sp description cannot be empty",
+  "MSG_FXSP_ELEVEN_20205": "sp besu wallet address cannot be empty",
+  "MSG_FXSP_ELEVEN_20206": "bn code cannot be empty",
+  "MSG_FXSP_ELEVEN_20207": "contact name cannot be empty",
+  "MSG_FXSP_ELEVEN_20208": "mobile number cannot be empty",
+  "MSG_FXSP_ELEVEN_20209": "email cannot be empty",
   "MSG_FXSP_ELEVEN_20210": "Contract event strategy does not exist",
+  "MSG_FXSP_ELEVEN_20211": "detailed address cannot be empty",
+  "MSG_FXSP_ELEVEN_20212": "business license file hash cannot be empty",
+  "MSG_FXSP_ELEVEN_20213": "sp code cannot be empty",
   "MSG_FXSP_ELEVEN_20214": "Already exist",
   "MSG_FXSP_ELEVEN_20215": "Does not exist",
+  "MSG_FXSP_ELEVEN_20216": "The current state does not support editing",
   "MSG_FXSP_ELEVEN_20217": "settlement model name cannot be empty",
   "MSG_FXSP_ELEVEN_20218": "The file key cannot be empty",
   "MSG_FXSP_ELEVEN_20219": "From platform cannot be empty",
@@ -21,11 +44,9 @@
   "MSG_FXSP_ELEVEN_20226": "ratio commission cannot be empty",
   "MSG_FXSP_ELEVEN_20227": "max commission cannot be empty",
   "MSG_FXSP_ELEVEN_20228": "The settlement model name already exists",
+
+  "MSG_FXSP_ELEVEN_20239": "transaction no can not be empty",
   
-
-  "MSG_FXSP_ELEVEN_20300": "Receipt abnormal state",
-  "MSG_FXSP_ELEVEN_20301": "Failure to obtain receipt",
-
   "MSG_FXSP_ELEVEN_20401": "Role code not null",
   "MSG_FXSP_ELEVEN_20402": "Role locked state not null",
   "MSG_FXSP_ELEVEN_20403": "Role name not null",
@@ -109,6 +130,14 @@
   "MSG_FXSP_ELEVEN_21203": "File generation failed",
   "MSG_FXSP_ELEVEN_21204": "The transaction data has exceeded 500,000, and export is not supported for the time being.",
   "MSG_FXSP_ELEVEN_21205": "Please submit the next export in 2 minutes",
+
+  "MSG_FXSP_ELEVEN_21601": "capital pool address cannot be empty",
+  "MSG_FXSP_ELEVEN_21602": "capital pool platform cannot be empty",
+  "MSG_FXSP_ELEVEN_21603": "capital pool currency cannot be empty",
+  "MSG_FXSP_ELEVEN_21604": "file url cannot be empty",
+  "MSG_FXSP_ELEVEN_21605": "file code cannot be empty",
+  "MSG_FXSP_ELEVEN_21606": "attachments cannot be empty",
+  "MSG_FXSP_ELEVEN_21607": "capital pool cannot be empty",
   
   "MSG_FXSP_ELEVEN_40100000": "Unauthorized access",
   "MSG_FXSP_ELEVEN_40100001": "The user has been disabled",
@@ -117,6 +146,25 @@
 
 
   "MSG_00": "------ As a Commercial Bank ------",
+  "MSG_00_0001": "System abnormality",
+  "MSG_00_0002": "The system is currently busy, please try again later",
+  "MSG_00_0003": "Gateway error",
+  "MSG_00_0004": "TOKEN cannot be empty",
+  "MSG_00_0005": "TOKEN verification failed",
+  "MSG_00_0006": "Abnormal access",
+  "MSG_00_0007": "Operate too frequently",
+  "MSG_00_0008": "User does not exist",
+  "MSG_00_0009": "Paging information cannot be empty",
+  "MSG_00_0010": "The number of pages cannot be empty",
+  "MSG_00_0011": "The quantity per page cannot be empty",
+  "MSG_00_0012": "check Token verification failed",
+  "MSG_00_0013": "The role is bound to the user and cannot be deleted",
+
+  "MSG_00_0100": "Network anomaly",
+  "MSG_00_0101": "Data acquisition exception",
+  "MSG_00_0102": "Data parsing exception",
+  "MSG_00_0103": "Business exception",
+
   "MSG_00_1000": "Creation method cannot be empty",
   "MSG_00_1001": "Central bank cannot be empty",
   "MSG_00_1002": "Business node cannot be empty",
@@ -136,7 +184,13 @@
   "MSG_00_1016": "Wallet account is unavailable",
   "MSG_00_1017": "Top up save failed",
   "MSG_00_1018": "Top up and withdrawal type not selected",
+  "MSG_00_1019": "Failed to update wallet balance after deposit and withdrawal",
+  "MSG_00_1020": "Account address is unavailable",
+  "MSG_00_1021": "Bank account id cannot be empty",
+  
+  "MSG_00_2001": "The transfer information cannot be empty",
 
+  "MSG_02_1000": "Central banks don't exist",
   "MSG_02_1001": "bank name cannot be empty",
   "MSG_02_1002": "bank bic cannot be empty",
   "MSG_02_1003": "bank brief introduction cannot be empty",
@@ -152,6 +206,13 @@
   "MSG_02_1013": "bank code cannot be empty",  
   "MSG_02_1014": "Already exist",
   "MSG_02_1015": "Does not exist",
-  "MSG_02_1016": "The current state does not support editing"
+  "MSG_02_1016": "The current state does not support editing",
+
+  "MSG_02_1030": "Currency cannot be empty",
+  "MSG_02_1031": "Amount cannot be empty",
+  "MSG_02_1035": "Central banks don't exist",
+  "MSG_02_1036": "Chain address don't exist",
+  "MSG_02_1037": "Wallet don't exist",
+  "MSG_02_1038": "The wallet status is incorrect"
 
 }
