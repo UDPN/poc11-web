@@ -101,9 +101,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
         this.beneficialBankNameList.push({
-          label: item.bank_name,
-          value: item.central_bank_id,
-          currencyName: item.digital_currency_name
+          label: item.bankName,
+          value: item.centralBankId,
+          currencyName: item.digitalCurrencyName
         });
       });
     });
