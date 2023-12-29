@@ -250,7 +250,7 @@ const menuNav: Menu[] = [
       {
         id: 4,
         fatherId: 12,
-        menuName: 'System Color',
+        menuName: 'Style Configuration',
         open: false,
         selected: false,
         menuType: 'C',

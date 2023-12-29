@@ -159,6 +159,7 @@
   "MSG_00_0011": "The quantity per page cannot be empty",
   "MSG_00_0012": "check Token verification failed",
   "MSG_00_0013": "The role is bound to the user and cannot be deleted",
+  "MSG_00_0014": "There are no permissions",
 
   "MSG_00_0100": "Network anomaly",
   "MSG_00_0101": "Data acquisition exception",

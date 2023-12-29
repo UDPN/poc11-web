@@ -16,6 +16,7 @@ import { finalize } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { fnFormatToHump } from '@utils/tools';
 import { DOCUMENT } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface SettingInterface {
   theme: 'dark' | 'light';
@@ -93,8 +94,24 @@ export class SystemStyleComponent implements OnInit {
     splitNav: false,
     theme: "dark"
   };
+  validateForm!: FormGroup;
+  fileImg: any = '';
+  fileImgWord!: File;
+  isLoading: boolean = false;
   tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] }
-  constructor(@Inject(DOCUMENT) private doc: Document, private rd2: Renderer2, private themesService: ThemeService, private nzConfigService: NzConfigService, private windowServe: WindowService, private userService: UserService, private message: NzMessageService, private cdr: ChangeDetectorRef, private modal: NzModalService, private loginOutService: LoginInOutService) { }
+  constructor(
+    @Inject(DOCUMENT) private doc: Document,
+    private fb: FormBuilder,
+    private rd2: Renderer2,
+    private themesService: ThemeService,
+    private nzConfigService: NzConfigService,
+    private windowServe: WindowService,
+    private message: NzMessageService,
+    private cdr: ChangeDetectorRef,
+    private modal: NzModalService,
+    private loginOutService: LoginInOutService
+  ) { }
+
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `User Management`,
@@ -105,8 +122,14 @@ export class SystemStyleComponent implements OnInit {
     };
   }
   ngOnInit() {
-    const themeOptionsKey:any = this.windowServe.getStorage(ThemeOptionsKey);
+    this.validateForm = this.fb.group({
+      systemName: [null, [Validators.required]],
+      logo: [null, [Validators.required]],
+      themeColor: ['#3c5686', [Validators.required]],
+    });
+    const themeOptionsKey: any = this.windowServe.getStorage(ThemeOptionsKey);
     this.hex = JSON.parse(themeOptionsKey).color;
+    this.validateForm.get('themeColor')?.setValue(this.hex);
     this.changeColor(this.hex);
   }
 
@@ -121,4 +144,27 @@ export class SystemStyleComponent implements OnInit {
     );
   }
 
+  uploadFileImg($event: any) {
+    if ($event.target.files.length === 0) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL($event.target.files[0]);
+    reader.onload = () => {
+      this.fileImg = reader.result;
+      this.fileImgWord = $event.target.files[0];
+      this.cdr.markForCheck();
+      this.validateForm
+        .get('fileName')
+        ?.setValue(this.fileImgWord['name']);
+      this.validateForm.get('logo')?.setValue(this.fileImg);
+      // this.validateForm.get('logoName')?.setValue(this.fileImgWord['name']);
+    };
+  }
+
+
+  onSubmit() {
+    console.log(this.validateForm.value);
+    
+  }
 }
