@@ -13,7 +13,7 @@
       <nz-step nzTitle="Awaiting Submission" [nzStatus]="'process'" [nzDescription]="step3Tpl"></nz-step>
     </nz-steps>
   </ng-container>
-  <ng-container *ngIf="info.status === 7">
+  <ng-container *ngIf="info.status === 6">
     <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
       <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
       <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step4Tpl"></nz-step>
@@ -27,7 +27,7 @@
       <nz-step [nzTitle]="'Failed'" [nzStatus]="'error'"></nz-step>
     </nz-steps>
   </ng-container>
-  <ng-container *ngIf="info.status === 6">
+  <ng-container *ngIf="info.status === 5">
     <nz-steps [nzCurrent]="2" nzDirection="vertical" nzSize="small">
       <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
       <nz-step [nzTitle]="'Approved'" [nzDescription]="step4Tpl"></nz-step>
