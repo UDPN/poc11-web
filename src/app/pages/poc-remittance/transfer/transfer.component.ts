@@ -174,10 +174,10 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
   // Check field
   getExchange() {
-    this.validateForm.controls['beneficialWalletAddress'].markAsDirty();
-    this.validateForm.controls[
-      'beneficialWalletAddress'
-    ].updateValueAndValidity({ onlySelf: true });
+    // this.validateForm.controls['beneficialWalletAddress'].markAsDirty();
+    // this.validateForm.controls[
+    //   'beneficialWalletAddress'
+    // ].updateValueAndValidity({ onlySelf: true });
     this.findExchange();
   }
   // Query exchange rate information
@@ -185,46 +185,44 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.settlementStatus = true;
     this.nzLoading = true;
     this.cdr.markForCheck();
-    if (this.validateForm.get('beneficialWalletAddress')?.valid) {
-      this.transferService
-        .exchange({
-          from: this.validateForm.get('beneficialWalletAddress')?.value,
-          to: this.validateForm.get('remitterWalletAddress')?.value
-        })
-        .subscribe((res) => {
-          let resultData: any[] = [];
-          res.forEach((item: any) => {
-            resultData.push({
-              rateId: item.rateId,
-              sp: item.provider,
-              currency: '1 ' + item.from + '->' + item.to,
-              rate: item.rate,
-              com:
-                item.smChargeModel === 0
+    this.transferService
+      .exchange({
+        from: this.availableCurrecyModel,
+        to: this.beneficiaryCurrency
+      })
+      .subscribe((res) => {
+        let resultData: any[] = [];
+        res.forEach((item: any) => {
+          resultData.push({
+            rateId: item.rateId,
+            sp: item.provider,
+            currency: '1 ' + item.from + '->' + item.to,
+            rate: item.rate,
+            com:
+              item.smChargeModel === 0
+                ? item.smValue > item.smMaxFee
+                  ? item.smMaxFee
+                  : item.smValue
+                : item.smValue,
+            total: String(
+              this.validateForm.get('amount')?.value / item.rate +
+                (item.smChargeModel === 0
                   ? item.smValue > item.smMaxFee
                     ? item.smMaxFee
                     : item.smValue
-                  : item.smValue,
-              total: String(
-                this.validateForm.get('amount')?.value / item.rate +
-                  (item.smChargeModel === 0
-                    ? item.smValue > item.smMaxFee
-                      ? item.smMaxFee
-                      : item.smValue
-                    : item.smValue)
-              ).replace(/^(.*\..{4}).*$/, '$1')
-            });
+                  : item.smValue)
+            ).replace(/^(.*\..{4}).*$/, '$1')
           });
-          this.nzLoading = false;
-          this.dataList = resultData.sort(this.compare('total'));
-          this.dataList.forEach((item: any, index: number) => {
-            if (this.radioValue === 0) {
-              this.checkedItemComment.push(item);
-            }
-          });
-          this.cdr.markForCheck();
         });
-    }
+        this.nzLoading = false;
+        this.dataList = resultData.sort(this.compare('total'));
+        this.dataList.forEach((item: any, index: number) => {
+          if (this.radioValue === 0) {
+            this.checkedItemComment.push(item);
+          }
+        });
+        this.cdr.markForCheck();
+      });
   }
   compare(p: string) {
     return function (m: any, n: any) {
