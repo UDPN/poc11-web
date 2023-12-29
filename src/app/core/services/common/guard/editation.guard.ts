@@ -25,7 +25,7 @@ import { IsFirstLogin, TokenKey } from '@app/config/constant';
 @Injectable({
   providedIn: 'root'
 })
-export class InfomationGuard implements CanActivate {
+export class EditGuard implements CanActivate {
   constructor(
     private windowSrc: WindowService,
     private router: Router,
@@ -43,15 +43,15 @@ export class InfomationGuard implements CanActivate {
     return this._informationService.detail().pipe(
       map((data) => {
         if (data === null) {
-          return true;
+          this.router.navigateByUrl('/information/form');
+          return false;
         }
         if (data !== null && data.spStatus === 5) {
           this.router.navigateByUrl('/information/detail');
           return false;
         }
         if (data !== null && data.spStatus === 15) {
-          this.router.navigateByUrl('/information/detail');
-          return false;
+          return true;
         }
         // if (data !== null && data.spStatus === 10) {
         //   this.router.navigateByUrl('/poc/poc-home/home');
