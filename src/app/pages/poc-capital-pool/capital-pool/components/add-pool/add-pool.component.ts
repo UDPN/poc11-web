@@ -228,6 +228,7 @@ export class AddPoolComponent implements OnInit {
   ): void {
     e.preventDefault();
     if (this.listOfControl.length > 1) {
+      this.setSelectOptionPool(this.validateForm.get(`currency${i.id - 1}`)?.value);
       this.watchSelectOptionPacth(
         2,
         this.validateForm.get(`currency${i.id}`)?.value,
@@ -268,7 +269,6 @@ export class AddPoolComponent implements OnInit {
       .getWalletAdress({ currency: e.toString() })
       .subscribe((res) => {
         this.selectOptionPool$.next(res);
-        console.log(this.selectOptionPool$);
       });
   }
 

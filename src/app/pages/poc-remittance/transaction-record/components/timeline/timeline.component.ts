@@ -8,7 +8,5 @@ import { Component, Input, OnInit, } from '@angular/core';
 })
 export class TimelineComponent implements OnInit {
   @Input() info: any;
-  ngOnInit() {
-    console.log(this.info);
-  }
+  ngOnInit() {}
 }

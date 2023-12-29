@@ -1,7 +1,7 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
+  <!-- <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="6" *ngFor="let balance of walletBalanceList; index as i">
         <nz-card class="card base-card">
@@ -32,9 +32,9 @@
         <div id="chart-container" style="max-width:1200px;height:400px"></div>
       </div>
     </div>
-  </nz-card>
+  </nz-card> -->
   <nz-card>
-    <h4 nz-typography style="font-weight: 700;">{{ 'As a FX Service Provider' }}</h4>
+    <h4 nz-typography style="font-weight: 700;margin-bottom: 0;">{{ 'As a FX Service Provider' }}</h4>
   </nz-card>
   <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
     <div nz-row [nzGutter]="24">
@@ -288,114 +288,3 @@
     {{ 'Unavailable Currencies (' + this.nonactivatedCurrencyCount + ')'}}
   </span>
 </ng-template>
-
-<div nz-row class="m-l-10 m-r-10 m-t-10">
-  <div nz-col [nzXXl]="10" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
-    <nz-card nzTitle="CBDC Wallet List" [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
-      class="m-r-8">
-      <nz-collapse [nzExpandIconPosition]="'right'" nzAccordion>
-        <nz-collapse-panel *ngFor="let panel of panels" [nzHeader]="headerTpl" [nzActive]="panel.active"
-          [nzExtra]="extraTpl" [nzDisabled]="panel.disabled">
-          <div style="margin-left: 45px;">
-            <p>
-              0x11c0...00CN00
-              <label class="m-l-10">
-                <nz-tag [nzColor]="'cyan'">Active</nz-tag>
-              </label>
-            </p>
-            <p>
-              <span style="color: #91929E;">Balance: </span>
-              <span style="font-weight: 500;">90,000.00 w-CNY</span>
-            </p>
-          </div>
-          <nz-divider></nz-divider>
-          <div style="margin-left: 45px;">
-            <p>
-              0x11c0...00CN00
-              <label class="m-l-10">
-                <nz-tag [nzColor]="'cyan'">Active</nz-tag>
-              </label>
-            </p>
-            <p>
-              <span style="color: #91929E;">Balance: </span>
-              <span style="font-weight: 500;">90,000.00 w-CNY</span>
-            </p>
-          </div>
-
-        </nz-collapse-panel>
-      </nz-collapse>
-      <ng-template #headerTpl>
-        <nz-comment>
-          <nz-avatar nz-comment-avatar nzIcon="user"
-            nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
-          <nz-comment-content>
-            <p style="font-weight: 600;color: #3C5686;">
-              w-CNY
-            </p>
-            <span>Balance: 1,000,000.00 w-CNY</span>
-          </nz-comment-content>
-        </nz-comment>
-      </ng-template>
-      <ng-template #extraTpl>
-        <!-- You can use stopPropagation if you don't want the panel to toggle -->
-        <nz-badge nzStandalone [nzCount]="2"
-          [nzStyle]="{ backgroundColor: '#fff', color: '#3C5686', boxShadow: '0 0 0 1px #d9d9d9 inset' }"
-          class="m-t-30"> </nz-badge>
-      </ng-template>
-    </nz-card>
-  </div>
-  <div nz-col [nzXXl]="14" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
-    <nz-card nzTitle="Overview" [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }">
-      <div nz-row>
-        <div nz-col [nzXXl]="10" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
-          <p>Balance</p>
-          <p>910,000.00 w-CNY </p>
-          <p>(Available: 910,000.00 w-CNY)</p>
-
-          <button nz-button nzType="primary" class="m-t-20">
-            Cross-Border Remittance</button>
-        </div>
-        <div nz-col [nzXXl]="13" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24" class="flex-around">
-          <div>
-            <p>Total Top-ups</p>
-            <p>910,000.00 w-CNY </p>
-
-            <button nz-button nzType="primary" class="m-t-20">
-              Top-up</button>
-          </div>
-          <div>
-            <p>Total Withdrawals</p>
-            <p>910,000.00 w-CNY </p>
-
-            <button nz-button nzType="primary" class="m-t-20">
-              Withdrawal</button>
-          </div>
-        </div>
-      </div>
-    </nz-card>
-    <nz-card nzTitle="CBDC Wallet Details" class="m-t-10"
-      [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }">
-      <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
-        [nzBordered]="true">
-        <nz-descriptions-item nzTitle="Wallet Address" [nzSpan]="3">{{
-          '0x11c0E25E62C1dBD32E505446062B26AECB00CN00'
-          }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Currency" [nzSpan]="3">{{
-          'w-CNY'
-          }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Central Bank" [nzSpan]="3">{{
-          "People's Bank of China"
-          }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Creation Time" [nzSpan]="3">{{
-          'Nov 7, 2023, 10:14:41 UTC+08:00'
-          }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">{{
-          '0x19151ccd6719173e0d97c1c81e54e73eb2395df55e9a40a8ba1c4381422ba65d'
-          }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Transaction Time" [nzSpan]="3">{{
-          'Nov 7, 2023, 10:14:41 UTC+08:00'
-          }}</nz-descriptions-item>
-      </nz-descriptions>
-    </nz-card>
-  </div>
-</div>
