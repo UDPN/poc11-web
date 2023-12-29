@@ -355,7 +355,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         beneficiaryWalletAddress: this.validateForm.get(
           'beneficialWalletAddress'
         )?.value,
-        nterbankSettlementAmount: this.validateForm.get('amount')?.value,
+        interbankSettlementAmount: this.validateForm.get('amount')?.value,
         remittanceInformation: this.validateForm.get('remittanceInformation')
           ?.value,
         remitterWalletId: this.validateForm.get('remitterBankId')?.value,
