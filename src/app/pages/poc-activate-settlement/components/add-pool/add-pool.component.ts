@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-28 10:21:07
+ * @LastEditTime: 2023-12-28 20:03:02
  * @Description:
  */
 import {
@@ -445,7 +445,7 @@ export class AddPoolComponent implements OnInit {
       for (const key in this.dataList) {
         delete this.dataList[key].key;
       }
-      this.addData(this.dataList, []);
+      this.addData(this.dataList.length === 0 ? uniqueArr : this.dataList, []);
     } else if (this.validateForm.valid) {
       let settlementInformations: any[] = [];
       let ss1 = Object.keys(this.validateForm.value);
