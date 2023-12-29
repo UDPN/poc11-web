@@ -6,7 +6,7 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
@@ -108,16 +108,27 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.getCentralBank();
     this.topUpForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.amountValidator]],
     });
     this.withdrawForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.amountValidator]],
     });
     this.passwordForm = this.fb.group({
       password: [null, [Validators.required]],
     });
   }
+
+  amountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^((-?\d+\.\d+)|(-?\d+)|(-?\.\d+))$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   getCentralBank() {
     this.cbdcWalletService.getCentralBankQuery().subscribe((res) => {
@@ -225,10 +236,10 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       txType: this.txType === 1 ? 1 : 2,
       walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
     }
-    const amount = thousandthMark(this.balance) + ' ' +  this.currency;
+    const amount = thousandthMark(this.balance) + ' ' + this.currency;
     this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isLoading = false)).subscribe({
       next: res => {
-        this.isVisibleEnterPassword = false;        
+        this.isVisibleEnterPassword = false;
         if (res) {
           this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
             this.getDataList();
