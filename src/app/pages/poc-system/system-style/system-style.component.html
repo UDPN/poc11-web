@@ -1,4 +1,87 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 <div class="normal-table-wrap">
-  <nz-color-picker nzShowText nzFormat="hex" [(ngModel)]="hex" (nzOnChange)="changeColor(hex)"></nz-color-picker>
+  <nz-card>
+    <form nz-form [formGroup]="validateForm">
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">
+            System Name
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="systemNameError">
+            <div nz-row>
+              <div nz-col nzSpan="12">
+                <input nz-input formControlName="systemName" maxlength="100" />
+              </div>
+            </div>
+            <ng-template #systemNameError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please input your System Name</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">
+            Logo
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="logoError">
+            <div nz-row [formGroup]="validateForm">
+              <div nz-col nzSpan="24" style="text-align: left;" class="m-b-20">
+                <button nz-button [nzSize]="'large'" nzType="primary" (click)='upFiles.click()'>Upload</button>
+                <input type="file" accept="image/png" hidden #upFiles (change)="uploadFileImg($event)" />
+              </div>
+              <div nz-col nzSpan="24" class="m-b-10">
+                <div class="onboard-div onboard-postion">
+                  <input type="text" hidden formControlName="logo" nz-input />
+                  <img nz-image width="160px" height="160px" [nzSrc]="fileImg" *ngIf="fileImg" alt="" />
+                </div>
+              </div>
+              <div nz-col nzSpan="12">
+                <div class="onboard-div-info">
+                  It is recommended to provide pictures with 160 * 160 (PNG / JPG / GIF / BMP /
+                  JPEG)
+                  pixels and size less than 10M, and
+                  It must be a company or product logo and not deformed.
+                </div>
+              </div>
+            </div>
+            <ng-template #logoError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please upload your Logo</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10">
+            Theme Color
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="themeColorError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-color-picker nzShowText nzFormat="hex" formControlName="themeColor"
+                  (nzOnChange)="changeColor(this.validateForm.get('themeColor')?.value)"></nz-color-picker>
+              </div>
+            </div>
+            <ng-template #themeColorError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please select your Theme Color</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <div nz-row>
+            <div nz-col nzSpan="24" style="text-align: end">
+              <nz-space>
+                <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
+                  [disabled]="!this.validateForm.valid" (click)="onSubmit()">
+                  onSubmit
+                </button></nz-space>
+            </div>
+          </div>
+        </nz-form-item>
+      </div>
+    </form>
+  </nz-card>
 </div>

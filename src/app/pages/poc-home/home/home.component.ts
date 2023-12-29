@@ -211,12 +211,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  chanWalletAddress(event?: any, index?: any) {
-    if (!event) {
-      this.walletBalanceList.forEach((item: any) => {
-        this.walletAddress === item.walletList[0].amount;
-      });
-    }
+  defaultBalance() {
+    let walletBalanceList: any = [];
+    walletBalanceList = this.walletBalanceList;
+    walletBalanceList.map((item: any, i: any) => {
+      Object.assign(item, { value: item.walletList[0].amount})
+    })
   }
 
   ngOnInit() {
@@ -224,7 +224,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initTable();
     this.initSelect();
     // this.fetchNumbers();
-    this.chanWalletAddress();
+    this.defaultBalance();
     this.validateForm = this.fb.group({
       pairedExchangeRate: [1]
     });

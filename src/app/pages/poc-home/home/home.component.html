@@ -1,7 +1,10 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <!-- <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
+  <!-- <nz-card>
+    <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a Commercial Bank' }}</h4>
+  </nz-card>
+  <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="6" *ngFor="let balance of walletBalanceList; index as i">
         <nz-card class="card base-card">
@@ -10,14 +13,14 @@
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-control class="m-t-30">
-                  <nz-select [(ngModel)]="balance.amount">
+                  <nz-select [(ngModel)]="balance.value">
                     <nz-option *ngFor="let item of balance.walletList; index as i" [nzValue]="item.amount"
                       [nzLabel]="item.walletAddress">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
                 <nz-form-control class="m-t-30">
-                  <h2 nz-typography style="text-align: center;">{{ balance.amount  }}</h2>
+                  <h2 nz-typography style="text-align: center;">{{ balance.value }}</h2>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -25,8 +28,8 @@
         </nz-card>
       </div>
     </div>
-  </nz-card>
-  <nz-card nzTitle="CBDC Movements In the Last 7 Days" class="m-b-10">
+  </nz-card> -->
+  <!-- <nz-card nzTitle="CBDC Movements In the Last 7 Days" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="24" nzOffset="2">
         <div id="chart-container" style="max-width:1200px;height:400px"></div>
@@ -34,7 +37,7 @@
     </div>
   </nz-card> -->
   <nz-card>
-    <h4 nz-typography style="font-weight: 700;margin-bottom: 0;">{{ 'As a FX Service Provider' }}</h4>
+    <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a FX Service Provider' }}</h4>
   </nz-card>
   <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
     <div nz-row [nzGutter]="24">
