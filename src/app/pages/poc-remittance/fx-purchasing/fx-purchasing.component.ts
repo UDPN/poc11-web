@@ -244,7 +244,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         this.checkedItemComment.push(item);
       }
     });
-    console.log(this.checkedItemComment);
   }
 
   updateCheckedSet(id: string, checked: boolean): void {

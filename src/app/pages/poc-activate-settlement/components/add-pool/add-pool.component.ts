@@ -83,7 +83,7 @@ export class AddPoolComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
     this.edit();
@@ -347,6 +347,7 @@ export class AddPoolComponent implements OnInit {
     // this.isFirstEdit = false;
     this.editCapitalPoolList = [];
     if (this.listOfControl.length > 1) {
+      this.setSelectOptionPool(this.validateForm.get(`currency${i.id - 1}`)?.value);
       this.watchSelectOptionPacth(
         2,
         this.validateForm.get(`currency${i.id}`)?.value,
@@ -379,7 +380,7 @@ export class AddPoolComponent implements OnInit {
   ) {
     this.setOldArr(i.id, e.toString());
     this.initNewSelectOption();
-    this.validateForm.controls[i.capitalPoolAddress].setValue('');
+    this.validateForm.controls[i.capitalPoolAddress].reset();
     this.setSelectOptionPool(e);
   }
   private setSelectOptionPool(e: any) {
@@ -394,8 +395,8 @@ export class AddPoolComponent implements OnInit {
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-        ? []
-        : this.listCheckArr[index];
+          ? []
+          : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
