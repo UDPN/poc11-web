@@ -493,7 +493,7 @@ export class AddPoolComponent implements OnInit {
       for (const key in this.dataList) {
         delete this.dataList[key].key;
       }
-      this.addData(this.dataList, []);
+      this.addData(this.dataList.length === 0 ? uniqueArr : this.dataList, []);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
