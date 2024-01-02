@@ -41,6 +41,8 @@
                   <ng-template #beneficialWalletAddressError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your Beneficiary's Wallet
                       Address</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">Please enter a 42 digit hexadecimal starting with
+                      '0x'</ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -61,6 +63,9 @@
                     <ng-container *ngIf="control.hasError('required')">Please input your Currency & Interbank
                       Settlement
                       Amount</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">Currency&Interbank Settlement Amount cannot be
+                      greater than Available Balance
+                    </ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>

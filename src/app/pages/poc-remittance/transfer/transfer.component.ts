@@ -6,7 +6,7 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
@@ -84,8 +84,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.validateForm = this.fb.group({
       beneficialBankName: ['', [Validators.required]],
       beneficialBankId: ['', [Validators.required]],
-      beneficialWalletAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      beneficialWalletAddress: [null, [Validators.required, this.beneficialWalletAddressValidator]],
+      amount: [null, [Validators.required, this.amountValidator]],
       remitterWalletAddress: [null, [Validators.required]],
       availableBalance: [null, [Validators.required]],
       remitterBankName: [null, [Validators.required]],
@@ -97,6 +97,25 @@ export class TransferComponent implements OnInit, AfterViewInit {
       password: ['', [Validators.required]]
     });
   }
+  
+  beneficialWalletAddressValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^[0][x][0-9a-fA-F]{40}$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+  
+  amountValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value > Number(this.validateForm.get('availableBalance')?.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
   initData() {
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {

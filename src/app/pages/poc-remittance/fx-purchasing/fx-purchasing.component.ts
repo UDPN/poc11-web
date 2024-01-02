@@ -115,15 +115,15 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   onReceiving(e: any) {
     this.validateForm
       .get('receivingWalletAddress')
-      ?.setValue(this.fxReceivingData[e].walletAddress[0]['bankAccountId']);
+      ?.setValue(this.fxReceivingData[e]?.walletAddress[0]['bankAccountId']);
     this.validateForm
       .get('receivingBankName')
-      ?.setValue(this.fxReceivingData[e].bankName);
+      ?.setValue(this.fxReceivingData[e]?.bankName);
     this.validateForm
       .get('receivingBankId')
-      ?.setValue(this.fxReceivingData[e].bankId);
-    this.reveingCurrecy = this.fxReceivingData[e].currecy;
-    this.receivingWalletAddressList = this.fxReceivingData[e].walletAddress;
+      ?.setValue(this.fxReceivingData[e]?.bankId);
+    this.reveingCurrecy = this.fxReceivingData[e]?.currecy;
+    this.receivingWalletAddressList = this.fxReceivingData[e]?.walletAddress;
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
