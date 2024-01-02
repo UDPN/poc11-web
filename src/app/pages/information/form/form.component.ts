@@ -53,15 +53,15 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     private destroy$: DestroyService
   ) {}
   ngAfterViewInit(): void {
-    this._commonService
-      .commonApi({
-        dropDownTypeCode: 'drop_down_country_info',
-        csePCode: ''
-      })
-      .subscribe((res) => {
-        this.countryListData = res.dataInfo;
-        this.cdr.markForCheck();
-      });
+    // this._commonService
+    //   .commonApi({
+    //     dropDownTypeCode: 'drop_down_country_info',
+    //     csePCode: ''
+    //   })
+    //   .subscribe((res) => {
+    //     this.countryListData = res.dataInfo;
+    //     this.cdr.markForCheck();
+    //   });
   }
 
   ngOnInit(): void {
