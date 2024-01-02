@@ -166,7 +166,7 @@ export class AddPoolComponent implements OnInit {
           if (items !== null) {
             items.forEach((item, i) => {
               arr.push(
-                item.capitalPoolCurrency + '-' + item.capitalPoolPlatform
+                item.capitalPoolCurrency
               );
             });
           }
