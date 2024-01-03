@@ -58,6 +58,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }[] = [];
   availableCurrecyModel = '';
   settlementStatus = false;
+  beneficiaryCurrencyName: any = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -122,7 +123,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
         this.beneficialBankNameList.push({
           label: item.bankName,
           value: item.centralBankId,
-          currencyName: item.digitalCurrencyName
+          currencyName: item.digitalSymbol,
+          currencyValue: item.digitalCurrencyName
         });
       });
     });
@@ -148,7 +150,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
             }
 
             this.availableCurrecy.push({
-              label: items.digitalCurrencyName,
+              label: items.digitalSymbol,
               value: items.digitalCurrencyName,
               bankName: items.bankName,
               cbdcCount: items.cbdcCount
@@ -224,14 +226,15 @@ export class TransferComponent implements OnInit, AfterViewInit {
                   ? item.smMaxFee
                   : item.smValue
                 : item.smValue,
-            total: String(
-              this.validateForm.get('amount')?.value / item.rate +
-              (item.smChargeModel === 0
-                ? item.smValue > item.smMaxFee
-                  ? item.smMaxFee
-                  : item.smValue
-                : item.smValue)
-            ).replace(/^(.*\..{4}).*$/, '$1')
+            // total: String(
+            //   this.validateForm.get('amount')?.value / item.rate +
+            //   (item.smChargeModel === 0
+            //     ? item.smValue > item.smMaxFee
+            //       ? item.smMaxFee
+            //       : item.smValue
+            //     : item.smValue)
+            // ).replace(/^(.*\..{4}).*$/, '$1')
+            total: 1
           });
         });
         this.nzLoading = false;
@@ -297,8 +300,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
       (item: any) => item.value === e
     );
     this.validateForm.get('beneficialBankName')?.setValue(val[0].label);
-    this.beneficiaryCurrency = val[0].currencyName;
-    if (this.availableCurrecyModel !== val[0].currencyName) {
+    this.beneficiaryCurrency = val[0].currencyValue;
+    this.beneficiaryCurrencyName = val[0].currencyName;
+    if (this.availableCurrecyModel !== val[0].currencyValue) {
       this.getExchange();
     } else {
       this.settlementStatus = false;
