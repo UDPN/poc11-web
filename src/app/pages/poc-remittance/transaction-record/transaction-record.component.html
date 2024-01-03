@@ -49,8 +49,8 @@
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="centralBankId" [(ngModel)]="searchParam.centralBankId">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of currencyList" [nzValue]="item.central_bank_id"
-                  [nzLabel]="item.digital_currency_name">
+                <nz-option *ngFor="let item of currencyList" [nzValue]="item.centralBankId"
+                  [nzLabel]="item.digitalSymbol">
                 </nz-option>
               </nz-select>
             </nz-form-control>
