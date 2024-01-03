@@ -325,7 +325,7 @@ export class AddPoolComponent implements OnInit {
   ): any {
     if (type === 1) {
       return {
-        capitalPoolPlatform: currency.split('-')[2],
+        capitalPoolPlatform: 'UDPN',
         capitalPoolCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
         capitalPoolAddress: targetCurrency
       };

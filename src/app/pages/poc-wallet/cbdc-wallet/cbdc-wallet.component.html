@@ -114,12 +114,12 @@
     <ng-template #operationTpl let-bankAccountId="bankAccountId" let-balance="balance" let-region="region"
       let-chainAccountAddress="chainAccountAddress" let-state="state" let-currency="currency">
       <ng-container *appAuth="'R01010103'">
-        <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)" *ngIf="state === 5">
+        <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)" *ngIf="state === 5 && region === 1">
           Top up
         </span>
       </ng-container>
       <!-- <ng-container *appAuth="'R01010104'">
-        <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5">
+        <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5 && region === 1">
           Withdraw
         </span>
       </ng-container> -->
