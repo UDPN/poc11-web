@@ -510,7 +510,7 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
       fromPlatform: 'UDPN',
       fromCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
       toPlatform: 'UDPN',
-      toCurrency: targetCurrency.split('-')[0] + '-' + currency.split('-')[1]
+      toCurrency: targetCurrency.split('-')[0] + '-' + targetCurrency.split('-')[1]
     };
   }
   private addData(arr: any[], arr1: any[]) {
