@@ -14,6 +14,8 @@ import { ThemeService } from '@store/common-store/theme.service';
 import { NormalLoginComponent } from './normal-login/normal-login.component';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { LogoService } from '@app/core/services/http/poc-system/logo.service';
+import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
+import { CommonService } from '@app/core/services/http/common/common.service';
 
 
 export enum LoginType {
@@ -41,7 +43,7 @@ export class LoginModifyComponent implements OnInit {
   isNightTheme$ = this.themesService.getIsNightTheme();
   hasUser: boolean = true;
   isDefaultLogo: boolean = true;
-  logoImg: string = '../../../../assets/imgs/system/bn.png';
+  logoImg: string = '';
   @ViewChild(AdDirective) set adHost1(content: AdDirective) {
     if (content) {
       this.adHost = content;
@@ -64,6 +66,8 @@ export class LoginModifyComponent implements OnInit {
     private themesService: ThemeService,
     private dataService: LoginService,
     private logoService: LogoService,
+    private styleService: StyleService,
+    private commonService: CommonService
   ) { }
 
   getCurrentComponent(type: LoginType): LoginFormComponentInterface {
@@ -106,16 +110,20 @@ export class LoginModifyComponent implements OnInit {
         this.login1StoreService.setIsLogin1OverModelStore(res.matches);
         this.cdr.detectChanges();
       });
-    // this.logoService.search({ logoType: 2 }).subscribe((res: any) => {
-    //   if (res.length <= 0) {
-    //     this.logoImg = '../../../../assets/imgs/system/bn.png';
-    //     this.isDefaultLogo = true;
-    //   } else {
-    //     this.logoImg = res[0].logoBase64;
-    //     this.isDefaultLogo = false;
-    //   }
-    //   this.cdr.markForCheck();
-    // })
+      this.styleService.search().subscribe((res: any) => {
+      if (res.logoFileHash) {
+        this.commonService
+        .downImg({ hash: res.logoFileHash })
+        .subscribe((resu) => {
+          this.logoImg = 'data:image/jpg;base64,' + resu;
+          this.cdr.markForCheck();
+        });
+        this.isDefaultLogo = false;
+      } else {
+        this.isDefaultLogo = true;
+      }
+      this.cdr.markForCheck();
+    })
 
   }
 

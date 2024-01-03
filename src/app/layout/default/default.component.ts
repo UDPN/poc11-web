@@ -27,6 +27,7 @@ export class DefaultComponent implements OnInit, AfterViewInit {
   isOverMode = false; 
   isDefaultLogo: boolean = true;
   logoImg: any = '';
+  systemName: any = '';
   @ViewChild('navDrawer') navDrawer!: NavDrawerComponent;
   version: any;
   constructor(private destroy$: DestroyService,private logoService: LogoService,private cdr: ChangeDetectorRef, private themesService: ThemeService, private driverService: DriverService, private windowService: WindowService) {}
@@ -66,6 +67,7 @@ export class DefaultComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.subTheme();
+    this.systemName = sessionStorage.getItem('systemName');
     this.version = sessionStorage.getItem('version');
     // this.logoService.search({ logoType: 2 }).subscribe((res: any) => {
     //   if (res.length <= 0) {

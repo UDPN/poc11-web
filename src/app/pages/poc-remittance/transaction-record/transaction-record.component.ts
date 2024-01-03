@@ -201,7 +201,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Creation Time',
-          field: 'creationTime',
+          field: 'createTime',
           pipe: 'timeStamp',
           width: 150
         },

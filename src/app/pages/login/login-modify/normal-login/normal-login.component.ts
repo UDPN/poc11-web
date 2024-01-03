@@ -38,6 +38,7 @@ import { environment } from '@env/environment';
 import sign from 'jwt-encode';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
+import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
 
 export interface SettingInterface {
   theme: 'dark' | 'light';
@@ -89,6 +90,7 @@ export class NormalLoginComponent implements OnInit {
     splitNav: false,
     theme: 'dark'
   };
+  systemTitle: string = '';
   constructor(
     private destroy$: DestroyService,
     private userInfoService: UserInfoService,
@@ -104,8 +106,9 @@ export class NormalLoginComponent implements OnInit {
     private message: NzMessageService,
     private windowService: WindowService,
     private themesService: ThemeService,
-    private nzConfigService: NzConfigService
-  ) {}
+    private nzConfigService: NzConfigService,
+    private styleService: StyleService
+  ) { }
 
   submitForm(): void {
     if (!fnCheckForm(this.validateForm)) {
@@ -117,6 +120,7 @@ export class NormalLoginComponent implements OnInit {
       ?.setValue(this.srcUrl.substring(this.srcUrl.indexOf('keySuffix=') + 10));
     const param = this.validateForm.getRawValue();
     const code = fnEncrypts(param, aesKey, aesVi);
+    // const code = '1bcff460ba8a17469300babb1d812bf707a5fc7b77f5366bc14f21974cdee5b796ed97bb47cd4dd48b6497deb4649e08b6eb9943293263d5518905fbd32d9ae0';
     this.dataService
       .login({ code })
       .pipe(
@@ -160,19 +164,38 @@ export class NormalLoginComponent implements OnInit {
     this.login1StoreService.setLoginTypeStore(type);
   }
 
-  ngOnInit(): void {
-    this.isFirstLogin = this.windowService.getStorage(IsFirstLogin);
-    if (this.isFirstLogin === null) {
-      this.nzConfigService.set('theme', {
-        primaryColor: '#3c5686'
-      });
-      this._themesOptions.color = '#3c5686';
-      this.windowServe.setStorage(
-        ThemeOptionsKey,
-        JSON.stringify(this._themesOptions)
-      );
-    }
+  getThemeOptions() {
+    this.styleService.search().subscribe((res: any) => {
+      console.log(res);
+      if (res.themeColor) {
+        this.systemTitle = res.systemName;
+        sessionStorage.setItem('systemName', res.systemName);
+        this.nzConfigService.set('theme', {
+          primaryColor: res.themeColor
+        });
+        this._themesOptions.color = res.themeColor;
+        this.windowServe.setStorage(
+          ThemeOptionsKey,
+          JSON.stringify(this._themesOptions)
+        );
+      } else {
+        this.nzConfigService.set('theme', {
+          primaryColor: '#3c5686'
+        });
+        this._themesOptions.color = '#3c5686';
+        this.windowServe.setStorage(
+          ThemeOptionsKey,
+          JSON.stringify(this._themesOptions)
+        );
+      }
+      this.cdr.markForCheck();
+      return;
+    })
 
+  }
+
+  ngOnInit(): void {
+    this.getThemeOptions();
     this.onRefresh();
     this.login1StoreService
       .getIsLogin1OverModelStore()

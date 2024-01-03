@@ -17,6 +17,9 @@ import { first } from 'rxjs/operators';
 import { fnFormatToHump } from '@utils/tools';
 import { DOCUMENT } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
+import { CommonService } from '@app/core/services/http/common/common.service';
+import { Router } from '@angular/router';
 
 export interface SettingInterface {
   theme: 'dark' | 'light';
@@ -40,23 +43,6 @@ interface NormalModel {
   isChecked: boolean;
 }
 
-interface Theme extends NormalModel {
-  key: 'dark' | 'light';
-}
-
-type SpecialTheme = 'color-weak' | 'grey-theme';
-type SpecialThemeHump = 'colorWeak' | 'greyTheme';
-
-interface Color extends NormalModel {
-  key: string;
-  color: string;
-}
-
-interface Mode extends NormalModel {
-  key: 'side' | 'top' | 'mixi';
-}
-
-
 @Component({
   selector: 'app-system-style',
   templateUrl: './system-style.component.html',
@@ -77,7 +63,6 @@ export class SystemStyleComponent implements OnInit {
   @ViewChild('numberTpl', { static: true })
   numberTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
-  hex: string = '';
   _isNightTheme = false;
   _themesOptions: SettingInterface = {
     color: "#3c5686",
@@ -98,6 +83,7 @@ export class SystemStyleComponent implements OnInit {
   fileImg: any = '';
   fileImgWord!: File;
   isLoading: boolean = false;
+  originalLogo!: string;
   tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] }
   constructor(
     @Inject(DOCUMENT) private doc: Document,
@@ -109,7 +95,10 @@ export class SystemStyleComponent implements OnInit {
     private message: NzMessageService,
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-    private loginOutService: LoginInOutService
+    private loginOutService: LoginInOutService,
+    private styleService: StyleService,
+    private commonService: CommonService,
+    private router: Router
   ) { }
 
   ngAfterViewInit(): void {
@@ -124,13 +113,32 @@ export class SystemStyleComponent implements OnInit {
   ngOnInit() {
     this.validateForm = this.fb.group({
       systemName: [null, [Validators.required]],
-      logo: [null, [Validators.required]],
+      logoFileHash: [null, [Validators.required]],
       themeColor: ['#3c5686', [Validators.required]],
     });
-    const themeOptionsKey: any = this.windowServe.getStorage(ThemeOptionsKey);
-    this.hex = JSON.parse(themeOptionsKey).color;
-    this.validateForm.get('themeColor')?.setValue(this.hex);
-    this.changeColor(this.hex);
+    this.editTheme();
+    // const themeOptionsKey: any = this.windowServe.getStorage(ThemeOptionsKey);
+    // this.hex = JSON.parse(themeOptionsKey).color;
+    // this.validateForm.get('themeColor')?.setValue(this.hex);
+    
+  }
+
+  editTheme() {
+    this.styleService.search().subscribe((res: any) => {
+      if (res.logoFileHash) {
+        this.validateForm.get('systemName')?.setValue(res.systemName);
+        this.validateForm.get('themeColor')?.setValue(res.themeColor);
+        this.validateForm.get('logoFileHash')?.setValue(res.logoFileHash);
+        this.originalLogo = res.logoFileHash;
+        this.changeColor(res.themeColor);
+        this.commonService
+          .downImg({ hash: res.logoFileHash })
+          .subscribe((resu) => {
+            this.fileImg = 'data:image/jpg;base64,' + resu;
+            this.cdr.markForCheck();
+          });
+      }
+    });
   }
 
   changeColor(color: string) {
@@ -154,17 +162,67 @@ export class SystemStyleComponent implements OnInit {
       this.fileImg = reader.result;
       this.fileImgWord = $event.target.files[0];
       this.cdr.markForCheck();
-      this.validateForm
-        .get('fileName')
-        ?.setValue(this.fileImgWord['name']);
-      this.validateForm.get('logo')?.setValue(this.fileImg);
-      // this.validateForm.get('logoName')?.setValue(this.fileImgWord['name']);
+      this.validateForm.get('logoFileHash')?.setValue(this.fileImg);
     };
   }
 
 
   onSubmit() {
-    console.log(this.validateForm.value);
-    
+    if (this.validateForm.valid) {
+      this.isLoading = true;
+      this.modal.confirm({
+        nzTitle: 'Are you sure you want to modify it ?',
+        nzContent: '',
+        nzOnOk: () =>
+          new Promise((resolve, reject) => {
+            if (this.originalLogo === this.validateForm.get('logoFileHash')?.value) {
+              this.styleService.submit(this.validateForm.value).pipe(finalize(() => this.isLoading = false)).subscribe({
+                next: res => {
+                  resolve(true);
+                  if (res) {
+                    this.message.success(`Submit successfully, please login again !`).onClose!.subscribe(() => {
+                      // sessionStorage.clear();
+                      // this.loginOutService.loginOut().then((_) => {
+                      //   this.router.navigateByUrl('/login/login-modify');
+                      // });
+                    });
+                  }
+                  this.cdr.markForCheck();
+                },
+                error: err => {
+                  reject(true);
+                  this.cdr.markForCheck();
+                }
+              })
+            } else {
+              this.commonService
+                .uploadImg(this.fileImgWord)
+                .subscribe((result) => {
+                  if (result) {
+                    this.validateForm.get('logoFileHash')?.setValue(result);
+                    this.styleService.submit(this.validateForm.value).pipe(finalize(() => this.isLoading = false)).subscribe({
+                      next: res => {
+                        resolve(true);
+                        if (res) {
+                          this.message.success(`Submit successfully, please login again !`).onClose!.subscribe(() => {
+                            // sessionStorage.clear();
+                            // this.loginOutService.loginOut().then((_) => {
+                            //   this.router.navigateByUrl('/login/login-modify');
+                            // });
+                          });
+                        }
+                        this.cdr.markForCheck();
+                      },
+                      error: err => {
+                        reject(true);
+                        this.cdr.markForCheck();
+                      }
+                    })
+                  }
+                })
+            }
+          }).catch(() => console.log('Oops errors!'))
+      });
+    }
   }
 }
