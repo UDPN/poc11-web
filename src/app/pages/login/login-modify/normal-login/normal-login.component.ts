@@ -166,7 +166,6 @@ export class NormalLoginComponent implements OnInit {
 
   getThemeOptions() {
     this.styleService.search().subscribe((res: any) => {
-      console.log(res);
       if (res.themeColor) {
         this.systemTitle = res.systemName;
         sessionStorage.setItem('systemName', res.systemName);
