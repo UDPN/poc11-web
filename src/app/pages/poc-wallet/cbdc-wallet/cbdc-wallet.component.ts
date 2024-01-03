@@ -124,7 +124,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!/^((-?\d+\.\d+)|(-?\d+)|(-?\.\d+))$/.test(control.value)) {
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};

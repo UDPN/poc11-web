@@ -110,6 +110,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (control.value > Number(this.validateForm.get('availableBalance')?.value)) {
       return { regular: true, error: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
