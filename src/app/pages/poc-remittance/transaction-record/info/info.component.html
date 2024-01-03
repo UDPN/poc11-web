@@ -53,7 +53,7 @@
           </nz-descriptions>
         </nz-card>
         <nz-card nzTitle="FX Information" nzBordered="false" class="m-t-25"
-          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}" *ngIf="info.fromCurrency !== info.toCurrency">
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
             <nz-descriptions-item nzTitle="Settlement Bank">{{ info.settlementBank

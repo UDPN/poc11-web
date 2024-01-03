@@ -154,17 +154,16 @@
               <nz-form-item>
                 <nz-form-label nzSpan="24">Mobile Number
                 </nz-form-label>
-                <nz-form-control [nzErrorTip]="phoneError">
+                <nz-form-control [nzErrorTip]="">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
                       <input nz-input formControlName="mobileNumber" class="onboard-input" maxlength="20" />
                     </div>
                   </div>
-                  <ng-template #phoneError let-control>
+                  <!-- <ng-template #phoneError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your Mobile
                       Number</ng-container>
-
-                  </ng-template>
+                  </ng-template> -->
                 </nz-form-control>
               </nz-form-item>
             </div>

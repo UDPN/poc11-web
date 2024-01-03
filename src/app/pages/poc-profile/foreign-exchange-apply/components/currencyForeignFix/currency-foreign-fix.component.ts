@@ -266,7 +266,7 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
           let newArr: any[] = [];
           res.forEach((item: any) => {
             newArr.push(
-              item.capitalPoolCurrency + '-' + item.capitalPoolPlatform
+              item.capitalPoolCurrency
             );
           });
           let ssr = this.permutationAndCombination(newArr, 2);
@@ -501,16 +501,16 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
   ): any {
     if (type === 1) {
       return {
-        capitalPoolPlatform: currency.split('-')[1],
-        capitalPoolCurrency: currency.split('-')[0],
+        capitalPoolPlatform: currency.split('-')[2],
+        capitalPoolCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
         capitalPoolAddress: targetCurrency
       };
     }
     return {
-      fromPlatform: currency.split('-')[1],
-      fromCurrency: currency.split('-')[0],
-      toPlatform: targetCurrency.split('-')[1],
-      toCurrency: targetCurrency.split('-')[0]
+      fromPlatform: 'UDPN',
+      fromCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
+      toPlatform: 'UDPN',
+      toCurrency: targetCurrency.split('-')[0] + '-' + currency.split('-')[1]
     };
   }
   private addData(arr: any[], arr1: any[]) {
