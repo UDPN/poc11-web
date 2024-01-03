@@ -9,14 +9,14 @@
     <form nz-form [formGroup]="validateForm">
         <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'Currency Information'" class="m-b-10">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
-                <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12" style="text-align: start">
+                <div nz-col nzXs="24" nzSm="18" nzXl="18" nzXXl="18" style="text-align: start">
                     <p class="m-b-10" style="font-weight: 700; color:#7d8592">Please select the currency to be
                         activated:
                     </p>
                 </div>
             </div>
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
-                <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+                <div nz-col nzXs="24" nzSm="18" nzXl="18" nzXXl="18">
                     <!-- <div nz-row nzJustify="space-between" nzGutter="8"
                         *ngFor="let item of outCapitalPool$ | async; index as i">
                         <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
@@ -52,7 +52,7 @@
                     <ng-container>
                         <div nz-row nzJustify="space-between" nzGutter="8"
                             *ngFor="let control of listOfControl; index as i">
-                            <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                            <div nz-col [nzXXl]="6" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
                                 <nz-form-item>
                                     <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Currency
                                     </nz-form-label>
@@ -74,7 +74,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                            <div nz-col [nzXXl]="10" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
                                 <nz-form-item>
                                     <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Account/Wallet (Capital Pool
                                         Address)

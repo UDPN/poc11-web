@@ -156,8 +156,7 @@
         </nz-card>
       </div>
 
-      <ng-container *ngIf="settlementStatus">
-
+      <ng-container *ngIf="settlementStatus && this.validateForm.get('amount')?.value">
         <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24" class="m-t-60"
           style="background: #fff; border-radius: 16px;padding: 4px;">
           <div>

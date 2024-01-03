@@ -114,9 +114,9 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initTable();
-    // this.transferService.fetchBankList().subscribe((res: any) => {
-    //   this.currencyList = res;
-    // });
+    this.transferService.fetchBankList().subscribe((res: any) => {
+      this.currencyList = res;
+    });
   }
 
   tableChangeDectction(): void {

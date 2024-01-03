@@ -347,10 +347,10 @@ export class TransferComponent implements OnInit, AfterViewInit {
           return;
         }
       }
-      if (this.checkedItemComment[0]?.total > this.validateForm.controls["availableBalance"].value) {
+      if (this.checkedItemComment[0]?.total.toString() > this.validateForm.controls["availableBalance"].value.toString()) {
         this.modal.error({
           nzTitle: 'Error',
-          nzContent: 'Settlement Amount cannot be greater than Available Balance !'
+          nzContent: 'Total Payment Amount cannot be greater than Available Balance !'
         });
         return;
       }

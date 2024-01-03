@@ -47,7 +47,7 @@ interface SearchParam {
   styleUrls: ['./information-modify.component.less']
 })
 export class InformationModifyComponent implements OnInit, AfterViewInit {
-  @ViewChild('authorizedTpl', { static: true }) 
+  @ViewChild('authorizedTpl', { static: true })
   authorizedTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
@@ -65,7 +65,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
   fileImg: any = '';
   fileImgWord!: File;
   onSubmitStatus: boolean = false;
-  businessLicenseUrlOld!: string; 
+  businessLicenseUrlOld!: string;
   spCode: any = '';
   tableConfig!: AntTableConfig;
   capitalPoolList: NzSafeAny[] = [];
@@ -79,7 +79,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     public _informationService: InformationService,
     public _commonService: CommonService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -105,7 +105,8 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     this.getCapital();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required, this.spNameValidator]],
-      countryInfoId: ['AL', [Validators.required]],
+      bankBic: [null, [Validators.required]],
+      centralBankName: [null, [Validators.required]],
       spBriefIntroduction: [null, [Validators.required]],
       spDescription: [null, [Validators.required]],
       bnCode: [null, [Validators.required]],
@@ -114,7 +115,8 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
       detailedAddress: [null, [Validators.required]],
-      businessLicenseUrl: [null, [Validators.required]]
+      businessLicenseUrl: [null, [Validators.required]],
+      fileName: [null, [Validators.required]],
     });
   }
 
@@ -126,6 +128,8 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     this._informationService.detail().subscribe((res) => {
       this.spCode = res.spCode;
       this.validateForm.get('spName')?.setValue(res.spName);
+      this.validateForm.get('bankBic')?.setValue(res.bankBic);
+      this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
       this.validateForm.get('countryInfoId')?.setValue(res.countryName);
       this.validateForm
         .get('spBriefIntroduction')
@@ -142,6 +146,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       this.validateForm
         .get('businessLicenseUrl')
         ?.setValue(res.businessLicenseUrl);
+      this.validateForm.get('fileName')?.setValue(res.fileName);
       this.businessLicenseUrlOld = res.businessLicenseUrl;
       this._informationService
         .downImg({ hash: res.businessLicenseUrl })
@@ -191,9 +196,10 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     if (!fnCheckForm(this.validateForm)) {
       return;
     }
+    const name = this.bankType === 1 ? 'Commercial Bank' : 'SP';
     this.modalService.confirm({
       nzClassName: 'n-modal',
-      nzTitle: 'Are you sure you want to modify the information of this SP ?',
+      nzTitle: `Are you sure you want to modify the information of this ${name} ?`,
       nzOnOk: () => {
         this.onSubmitStatus = true;
         const editParam = {
@@ -230,23 +236,8 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
             .uploadImg(this.fileImgWord)
             .subscribe((res) => {
               this.validateForm.get('businessLicenseUrl')?.setValue(res);
-              const editParams = {
-                spBriefIntroduction: this.validateForm.get(
-                  'spBriefIntroduction'
-                )?.value,
-                spDescription: this.validateForm.get('spDescription')?.value,
-                bnCode: this.validateForm.get('bnCode')?.value,
-                contactName: this.validateForm.get('contactName')?.value,
-                mobileNumber: this.validateForm.get('mobileNumber')?.value,
-                email: this.validateForm.get('email')?.value,
-                detailedAddress:
-                  this.validateForm.get('detailedAddress')?.value,
-                businessLicenseUrl: res,
-                spCode: this.spCode
-              }
-
               this._informationService
-                .editForm(editParams)
+                .editForm(editParam)
                 .subscribe((result) => {
                   this.onSubmitStatus = false;
                   this.modalService
@@ -280,6 +271,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
         .get('businessLicense')
         ?.setValue(this.fileImgWord['name']);
       this.validateForm.get('businessLicenseUrl')?.setValue(this.fileImg);
+      this.validateForm.get('fileName')?.setValue(this.fileImgWord['name']);
     };
   }
 
@@ -291,7 +283,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     this._location.back();
   }
 
-  
+
   private base64ToBlob(urlData: string, type: string) {
     let arr = urlData.split(',');
     let array = arr[0].match(/:(.*?);/);
