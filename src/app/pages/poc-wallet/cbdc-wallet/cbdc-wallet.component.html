@@ -159,7 +159,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18" class="m-b-20">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" maxlength="6" />
+                <input nz-input formControlName="amount" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
@@ -211,7 +211,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="amountError" nzSpan="18">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-                <input nz-input formControlName="amount" maxlength="6" />
+                <input nz-input formControlName="amount" />
               </nz-input-group>
               <div>
                 Available Amount: 90,000.00 w-CNY

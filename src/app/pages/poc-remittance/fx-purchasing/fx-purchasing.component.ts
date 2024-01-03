@@ -6,7 +6,7 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -83,7 +83,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       receivingBankName: [null, [Validators.required]],
       receivingBankId: [null, [Validators.required]],
       receivingWalletAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
+      amount: [null, [Validators.required,this.amountValidator]],
       transactionWalletAddressId: [0, [Validators.required]],
       bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
@@ -94,6 +94,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       password: ['', [Validators.required]]
     });
   }
+
+  amountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
   initData() {
     this.fxPurchasingService.fetchFXPurchase().subscribe((res) => {
       this.fxPurchaseData = res;
