@@ -48,6 +48,8 @@ export class HttpInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<NzSafeAny>> {
     // const token = this.windowServe.getSessionStorage(TokenKey);
     const token: any = sessionStorage.getItem('token');
+    
+    // const token: any = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDQxOTQxNzQsInN1YiI6ImFkbWluIiwiZXhwIjoxNzA0MjgwNTc0LCJvdXRKd3RUb2tlbkluZm8iOnsicm9sZUxpc3QiOlsiYWRtaW4iXSwiY2xpZW50SWQiOjEsImNsaWVudFJlYWxOYW1lIjoiYWRtaW4ifX0.4n2pjZ4h1PBCiNgf-i5TAwJj9Sul5sjGgbZxkgrRmO5mX07dimFFSZ25lCD7Aun8C8lYM2N1si29yZIC4eJ32A';
     let httpConfig: CustomHttpConfig = {};
     if (req.url.indexOf('fxsp') === -1) {
       httpConfig = {
