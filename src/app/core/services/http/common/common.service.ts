@@ -22,7 +22,7 @@ export class CommonService {
 
   public commonApi(params: CommonData): Observable<any> {
     return this.http.post(
-      `/v1/fxsp/annon/common/drop/down/box/searches`,
+      `/v1/fxsp/anon/common/drop/down/box/searches`,
       params
     );
   }

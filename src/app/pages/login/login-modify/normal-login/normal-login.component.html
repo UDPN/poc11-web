@@ -2,8 +2,11 @@
   <!-- <h2 class="m-b-8" [class.is-over-model]="isOverModel">
     BN Name: {{ instance }}
   </h2> -->
-  <p class="m-b-50 title" [class.is-over-model]="isOverModel">
+  <p class="m-b-50 title" [class.is-over-model]="isOverModel" *ngIf="!this.systemTitle">
     CBDC Commercial Bank System
+  </p>
+  <p class="m-b-50 title" [class.is-over-model]="isOverModel" *ngIf="this.systemTitle">
+    {{ this.systemTitle }}
   </p>
   <div class="full-with">
     <form nz-form nzLayout="vertical" class="login-form-wrap" [formGroup]="validateForm" (ngSubmit)="submitForm()">
@@ -67,8 +70,7 @@
           Please check it !
         </div>
       </div> -->
-      <button nz-button nzSize="large" class="full-with m-t-15 btn" [nzType]="'primary'"
-        [ngClass]="{'ant-btn-primary': isFirstLogin !== null, 'btn-primary': isFirstLogin === null}">
+      <button nz-button nzSize="large" class="full-with m-t-15 btn" [nzType]="'primary'">
         LOGIN
       </button>
     </form>

@@ -33,7 +33,7 @@
             <!-- <img class="m-l-10" style="max-height: 32px; max-width: 54px" src="assets/imgs/logo.svg" alt="" /> -->
             <span class="m-l-50" [style]="{color: '#fff'}"
               [ngClass]="{'logo': !(isCollapsed$ | async), 'collapseLogo': (isCollapsed$ | async) } ">
-              {{'Multiple Wholesale CBDC Commercial Bank System'}}
+              {{ this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}
             </span>
           </ng-container>
           <div class="flex-1">
@@ -58,7 +58,7 @@
         <div class="left-start-center flex-1" style="z-index: 100">
           <span class="m-l-50" [style]="{color: '#fff'}"
             [ngClass]="{'logo': !(isCollapsed$ | async), 'collapseLogo': (isCollapsed$ | async) } ">
-            {{'Multiple Wholesale CBDC Commercial Bank System'}}
+            {{ this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}
           </span>
           <span class="sp-18 m-r-25"></span>
           <div class="flex-1">
