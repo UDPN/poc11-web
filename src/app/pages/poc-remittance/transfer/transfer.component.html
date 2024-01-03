@@ -253,7 +253,10 @@
         [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
         <nz-descriptions-item nzTitle="Beneficiary's Wallet Address">{{
           validateForm.controls["beneficialWalletAddress"].value
-          }}</nz-descriptions-item>
+          }}
+          <br>
+          {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency}}
+        </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Beneficiary's Bank Name">{{
           validateForm.controls["beneficialBankName"].value}}</nz-descriptions-item>
       </nz-descriptions>
@@ -265,10 +268,11 @@
         <nz-descriptions-item nzTitle="Remitter's Wallet Address">
           {{ validateForm.controls["remitterWalletAddress"].value }}
           <br>
-          {{ validateForm.controls["availableBalance"].value+ ' ' + availableCurrecyModel}}
+          {{ (beneficiaryCurrency !== availableCurrecyModel ? this.checkedItemComment[0].total :
+          validateForm.controls["amount"].value) + ' ' + availableCurrecyModel}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
-          validateForm.controls["amount"].value }}</nz-descriptions-item>
+          validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remittance Information">
           {{
           validateForm.controls["remittanceInformation"].value }}

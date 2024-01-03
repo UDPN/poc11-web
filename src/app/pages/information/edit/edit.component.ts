@@ -77,7 +77,7 @@ export class EditComponent implements OnInit, AfterViewInit {
       bnCode: [null, [Validators.required]],
       spBesuWalletAddress: [null, [Validators.required]],
       contactName: [null, [Validators.required]],
-      mobileNumber: [null, [Validators.required]],
+      mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
       detailedAddress: [null, [Validators.required]],
       businessLicenseUrl: [null, [Validators.required]],

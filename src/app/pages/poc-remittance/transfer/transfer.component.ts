@@ -66,7 +66,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private transferService: TransferService,
     private modal: NzModalService
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.fromEventBeneficialWalletAddress();
     this.formEventCurrencyInterbankSettlementAmount();
@@ -97,7 +97,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
       password: ['', [Validators.required]]
     });
   }
-  
   beneficialWalletAddressValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
@@ -106,7 +105,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
     }
     return {};
   };
-  
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
@@ -176,6 +174,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         this.availableCurrecyModel = items.digitalCurrencyName;
         this.validateForm.get('remitterBankName')?.setValue(items.bankName);
         this.validateForm.get('remitterBankId')?.setValue(items.bankAccountId);
+        this.validateForm.get('availableBalance')?.setValue(items.cbdcCount);
       }
 
       this.availableCurrecy.push({
@@ -184,7 +183,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         bankName: items.bankName,
         cbdcCount: items.cbdcCount
       });
-      if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+      if (this.beneficiaryCurrency && (this.beneficiaryCurrency !== this.availableCurrecyModel)) {
         this.getExchange();
       } else {
         this.settlementStatus = false;
@@ -225,11 +224,11 @@ export class TransferComponent implements OnInit, AfterViewInit {
                 : item.smValue,
             total: String(
               this.validateForm.get('amount')?.value / item.rate +
-                (item.smChargeModel === 0
-                  ? item.smValue > item.smMaxFee
-                    ? item.smMaxFee
-                    : item.smValue
-                  : item.smValue)
+              (item.smChargeModel === 0
+                ? item.smValue > item.smMaxFee
+                  ? item.smMaxFee
+                  : item.smValue
+                : item.smValue)
             ).replace(/^(.*\..{4}).*$/, '$1')
           });
         });
@@ -256,7 +255,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       .get('beneficialWalletAddress')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+        if (this.beneficiaryCurrency && (this.beneficiaryCurrency !== this.availableCurrecyModel)) {
           this.findExchange();
         }
       });
@@ -269,7 +268,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       .subscribe((res) => {
         if (
           this.beneficiaryCurrency !== '' &&
-          this.beneficiaryCurrency !== this.availableCurrecyModel
+          (this.beneficiaryCurrency !== this.availableCurrecyModel)
         ) {
           this.findExchange();
         }
@@ -341,6 +340,13 @@ export class TransferComponent implements OnInit, AfterViewInit {
           });
           return;
         }
+      }
+      if (this.checkedItemComment[0]?.total > this.validateForm.controls["availableBalance"].value) {
+        this.modal.error({
+          nzTitle: 'Error',
+          nzContent: 'Settlement Amount cannot be greater than Available Balance !'
+        });
+        return;
       }
       this.isVisible = true;
     } else {
