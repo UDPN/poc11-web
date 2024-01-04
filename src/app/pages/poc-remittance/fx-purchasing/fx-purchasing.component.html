@@ -167,9 +167,9 @@
                                         <td>{{ data.sp }}</td>
                                         <td>{{ data.currency}}</td>
                                         <td>{{ data.rate }}</td>
-                                        <td>{{ data.com + ' ' + purchCurrecy}}
+                                        <td>{{ data.com + ' ' + purchCurrecy.replace('-UDPN', '')}}
                                         </td>
-                                        <td> <b>{{ data.total + ' ' + purchCurrecy}}</b> <span
+                                        <td> <b>{{ data.total + ' ' + purchCurrecy.replace('-UDPN', '')}}</b> <span
                                                 style="color: blue;font-weight: 600;margin-left: 30px;"
                                                 *ngIf="i === 0">{{
                                                 ' Recommendation!' }}</span> </td>
@@ -234,11 +234,11 @@
                     <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false"
                         [nzBordered]="false" class="card-descriptions-vertical">
                         <nz-descriptions-item nzTitle="FX Purchase Amount">{{
-                            validateForm.controls["availableBalance"].value +" "+
+                            validateForm.controls["amount"].value +" "+
                             purchCurrecy.replace('-UDPN', '')
                             }}</nz-descriptions-item>
-                        <nz-descriptions-item nzTitle="FX Receiving Wallet Address">{{
-                            validateForm.controls["receivingWalletAddress"].value}}</nz-descriptions-item>
+                        <nz-descriptions-item
+                            nzTitle="FX Receiving Wallet Address">{{receivingWalletAddressShow}}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Receiving Bank Name">{{
                             validateForm.controls["receivingBankName"].value
                             }}</nz-descriptions-item>
@@ -251,7 +251,7 @@
                     <nz-descriptions-item nzTitle="Settlement Bank">{{ checkedItemComment[0].sp
                         }}</nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Exchange Rate">{{
-                        checkedItemComment[0].currency}}</nz-descriptions-item>
+                        checkedItemComment[0].currencyShow}}</nz-descriptions-item>
                 </nz-descriptions>
             </div>
             <div nz-col [nzXXl]="1" [nzXl]="1" [nzLg]="1" [nzMd]="1" [nzSm]="0" [nzXs]="0">
@@ -259,7 +259,7 @@
             <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
                 <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }"
                     [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical m-t-25">
-                    <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].rate +" "+
+                    <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].com +" "+
                         reveingCurrecy.replace('-UDPN', '')
                         }}</nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Total Payment Amount">{{
