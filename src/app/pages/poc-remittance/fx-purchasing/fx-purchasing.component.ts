@@ -64,6 +64,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   receivingWalletAddressList: any[] = [];
   purIndex: number = 0;
   transferTitle: string = '';
+  receivingWalletAddressShow: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -143,6 +144,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       ?.setValue(this.fxReceivingData[e]?.bankId);
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.receivingWalletAddressList = this.fxReceivingData[e]?.walletAddress;
+    this.receivingWalletAddressShow = this.receivingWalletAddressList.filter(
+      (item: any) =>
+        item.bankAccountId === this.validateForm.value.receivingWalletAddress
+    )[0]['chainAccountAddress'];
+
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
@@ -209,8 +215,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
           this.cdr.markForCheck();
           this.fxPurchasingService
             .fetchRateInfo({
-              from: this.reveingCurrecy,
-              to: this.purchCurrecy
+              from: this.purchCurrecy,
+              to: this.reveingCurrecy
             })
             .subscribe((res) => {
               let resultData: any[] = [];
@@ -227,6 +233,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                     '1 ' +
                     item.from.replace('-UDPN', '') +
                     '->' +
+                    item.to.replace('-UDPN', ''),
+                  currencyShow:
+                    '1 ' +
+                    item.from.replace('-UDPN', '') +
+                    '->' +
+                    item.rate +
                     item.to.replace('-UDPN', ''),
                   rate: item.rate,
                   com: String(
