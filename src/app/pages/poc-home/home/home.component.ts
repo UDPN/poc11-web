@@ -66,7 +66,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   testSeries: any[] = [];
 
-
   // colorScheme: Color = {
   //   domain: ['#5AA454', '#E44D25', '#7aa3e5', '#a8385d', '#aae3f5'],
   //   name: '',
@@ -89,7 +88,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     {
       title: 'Currency Pair Pending Activation',
       value: ''
-    },
+    }
     // {
     //   title: 'Unavailable Currency Pair'
     // }
@@ -117,7 +116,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         {
           walletAddress: '0x3453453453463454353',
           amount: '30,000'
-        },
+        }
       ]
     },
     {
@@ -130,7 +129,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         {
           walletAddress: '0x3453453453463454352',
           amount: '23,000'
-        },
+        }
       ]
     },
     {
@@ -143,7 +142,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         {
           walletAddress: '0x3453453453463454334',
           amount: '50,000'
-        },
+        }
       ]
     },
     {
@@ -156,10 +155,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         {
           walletAddress: '0x3453453453463454336',
           amount: '30,000'
-        },
+        }
       ]
-    },
-  ]
+    }
+  ];
   walletList: any = [];
   constructor(
     private pocHomeService: PocHomeService,
@@ -167,7 +166,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private _commonService: CommonService,
     private fb: FormBuilder,
     private _defaultStoreService: DefaultStoreService
-  ) { }
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -215,8 +214,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     let walletBalanceList: any = [];
     walletBalanceList = this.walletBalanceList;
     walletBalanceList.map((item: any, i: any) => {
-      Object.assign(item, { value: item.walletList[0].amount})
-    })
+      Object.assign(item, { value: item.walletList[0].amount });
+    });
   }
 
   ngOnInit() {
@@ -255,7 +254,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   initSelect() {
     this._commonService
-      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info', csePCode: 'FXSP_EXCHANGE_RATE_VAILD' })
+      .commonApi({
+        dropDownTypeCode: 'drop_down_exchange_rate_info',
+        csePCode: 'FXSP_EXCHANGE_RATE_VAILD'
+      })
       .subscribe((res) => {
         this.pairedList = res.dataInfo;
         this.pairedList.map((item: any, i: any) => {
@@ -413,10 +415,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   onQuery() {
     this.pairedList.map((item: any) => {
       if (this.validateForm.get('pairedExchangeRate')?.value === item.key) {
-        (this.listParam.sourceCurrency = item.sourceCurrency);
-        (this.listParam.sourcePlatform = item.sourcePlatform);
-        (this.listParam.targetCurrency = item.targetCurrency);
-        (this.listParam.targetPlatform = item.targetPlatform);
+        this.listParam.sourceCurrency = item.sourceCurrency;
+        this.listParam.sourcePlatform = item.sourcePlatform;
+        this.listParam.targetCurrency = item.targetCurrency;
+        this.listParam.targetPlatform = item.targetPlatform;
       }
     });
     this.fetchNumber(this.listParam);
@@ -446,6 +448,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           title: 'Date',
           field: 'date',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 120
         },
         {
@@ -550,7 +553,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   //     ],
   //   };
 
-
   //   // myChart.on('brushSelected', function (params: any) {
   //   //   var brushed = [];
   //   //   var brushComponent = params.batch[0];
@@ -588,8 +590,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     },
     {
       active: false,
-      disabled: false,
+      disabled: false
       // name: 'This is panel header 2'
-    },
+    }
   ];
 }

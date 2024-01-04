@@ -6,7 +6,13 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { Route, Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
@@ -59,6 +65,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   availableCurrecyModel = '';
   settlementStatus = false;
   beneficiaryCurrencyName: any = '';
+  transferTitle: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -66,8 +73,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private transferService: TransferService,
-    private modal: NzModalService
-  ) { }
+    private modal: NzModalService,
+    private router: Router
+  ) {}
   ngAfterViewInit(): void {
     this.fromEventBeneficialWalletAddress();
     this.formEventCurrencyInterbankSettlementAmount();
@@ -85,7 +93,10 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.validateForm = this.fb.group({
       beneficialBankName: ['', [Validators.required]],
       beneficialBankId: ['', [Validators.required]],
-      beneficialWalletAddress: [null, [Validators.required, this.beneficialWalletAddressValidator]],
+      beneficialWalletAddress: [
+        null,
+        [Validators.required, this.beneficialWalletAddressValidator]
+      ],
       amount: [null, [Validators.required, this.amountValidator]],
       remitterWalletAddress: [null, [Validators.required]],
       availableBalance: [null, [Validators.required]],
@@ -98,7 +109,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
       password: ['', [Validators.required]]
     });
   }
-  beneficialWalletAddressValidator = (control: FormControl): { [s: string]: boolean } => {
+  beneficialWalletAddressValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^[0][x][0-9a-fA-F]{40}$/.test(control.value)) {
@@ -109,7 +122,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (control.value > Number(this.validateForm.get('availableBalance')?.value)) {
+    } else if (
+      control.value > Number(this.validateForm.get('availableBalance')?.value)
+    ) {
       return { regular: true, error: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
       return { regular1: true, error: true };
@@ -118,6 +133,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   };
 
   initData() {
+    this.beneficialBankNameList = [];
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
         this.beneficialBankNameList.push({
@@ -187,7 +203,10 @@ export class TransferComponent implements OnInit, AfterViewInit {
         bankName: items.bankName,
         cbdcCount: items.cbdcCount
       });
-      if (this.beneficiaryCurrency && (this.beneficiaryCurrency !== this.availableCurrecyModel)) {
+      if (
+        this.beneficiaryCurrency &&
+        this.beneficiaryCurrency !== this.availableCurrecyModel
+      ) {
         this.getExchange();
       } else {
         this.settlementStatus = false;
@@ -214,27 +233,43 @@ export class TransferComponent implements OnInit, AfterViewInit {
       })
       .subscribe((res) => {
         let resultData: any[] = [];
+        this.transferTitle =
+          this.availableCurrecyModel.replace('-UDPN', '') +
+          '/' +
+          this.beneficiaryCurrency.replace('-UDPN', '') +
+          ' Fx Rate';
         res.forEach((item: any) => {
           resultData.push({
             rateId: item.rateId,
             sp: item.provider,
-            currency: '1 ' + item.from + '->' + item.to,
+            currency:
+              '1 ' +
+              item.from.replace('-UDPN', '') +
+              '->' +
+              item.to.replace('-UDPN', ''),
             rate: item.rate,
-            com:
+            com: String(
               item.smChargeModel === 0
-                ? item.smValue > item.smMaxFee
+                ? (this.validateForm.get('amount')?.value / item.rate) *
+                    item.smValue >
+                  item.smMaxFee
                   ? item.smMaxFee
-                  : item.smValue
-                : item.smValue,
-            // total: String(
-            //   this.validateForm.get('amount')?.value / item.rate +
-            //   (item.smChargeModel === 0
-            //     ? item.smValue > item.smMaxFee
-            //       ? item.smMaxFee
-            //       : item.smValue
-            //     : item.smValue)
-            // ).replace(/^(.*\..{4}).*$/, '$1')
-            total: 1
+                  : (this.validateForm.get('amount')?.value / item.rate) *
+                    item.smValue
+                : item.smValue
+            ).replace(/^(.*\..{8}).*$/, '$1'),
+            total: String(
+              this.validateForm.get('amount')?.value / item.rate +
+                (item.smChargeModel === 0
+                  ? (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue >
+                    item.smMaxFee
+                    ? item.smMaxFee
+                    : (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue
+                  : item.smValue)
+            ).replace(/^(.*\..{8}).*$/, '$1')
+            // total: 1
           });
         });
         this.nzLoading = false;
@@ -260,7 +295,10 @@ export class TransferComponent implements OnInit, AfterViewInit {
       .get('beneficialWalletAddress')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (this.beneficiaryCurrency && (this.beneficiaryCurrency !== this.availableCurrecyModel)) {
+        if (
+          this.beneficiaryCurrency &&
+          this.beneficiaryCurrency !== this.availableCurrecyModel
+        ) {
           this.findExchange();
         }
       });
@@ -273,7 +311,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       .subscribe((res) => {
         if (
           this.beneficiaryCurrency !== '' &&
-          (this.beneficiaryCurrency !== this.availableCurrecyModel)
+          this.beneficiaryCurrency !== this.availableCurrecyModel
         ) {
           this.findExchange();
         }
@@ -347,10 +385,14 @@ export class TransferComponent implements OnInit, AfterViewInit {
           return;
         }
       }
-      if (this.checkedItemComment[0]?.total.toString() > this.validateForm.controls["availableBalance"].value.toString()) {
+      if (
+        Number(this.checkedItemComment[0]?.total.toString()) >
+        Number(this.validateForm.controls['availableBalance'].value.toString())
+      ) {
         this.modal.error({
           nzTitle: 'Error',
-          nzContent: 'Total Payment Amount cannot be greater than Available Balance !'
+          nzContent:
+            'Total Payment Amount cannot be greater than Available Balance !'
         });
         return;
       }
@@ -404,9 +446,12 @@ export class TransferComponent implements OnInit, AfterViewInit {
               nzContent: 'Transfer successful!'
             })
             .afterClose.subscribe((_) => {
-              this.initData();
+              // this.initData();
               this.validateForm.reset();
               this.passwordForm.reset();
+              this.router.navigateByUrl(
+                '/poc/poc-remittance/transaction-record'
+              );
             });
         }
         this.isLoading = false;

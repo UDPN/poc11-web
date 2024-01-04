@@ -188,9 +188,9 @@
                     <td>{{ data.sp }}</td>
                     <td>{{ data.currency}}</td>
                     <td>{{ data.rate }}</td>
-                    <td>{{ data.com + ' ' + availableCurrecyModel}}
+                    <td>{{ data.com + ' ' + availableCurrecyModel.replace('-UDPN', '')}}
                     </td>
-                    <td> <b>{{ data.total + ' ' + availableCurrecyModel}}</b> <span
+                    <td> <b>{{ data.total + ' ' + availableCurrecyModel.replace('-UDPN', '')}}</b> <span
                         style="color: blue;font-weight: 600;margin-left: 30px;" *ngIf="i === 0">{{
                         ' Recommendation!' }}</span> </td>
                   </tr>
@@ -228,8 +228,8 @@
         class="card-descriptions-vertical title-order">
         <nz-descriptions-item nzTitle="Currency & Interbank Settlement Amount"><span class="text-right"
             [ngStyle]="{'color': 'red'}">{{ checkedItemComment.length > 0 ?
-            ('-' +checkedItemComment[0].total + ' ' + availableCurrecyModel ): ('-' +
-            validateForm.controls["amount"].value + ' ' +availableCurrecyModel)
+            ('-' +checkedItemComment[0].total + ' ' + availableCurrecyModel.replace('-UDPN', '') ): ('-' +
+            validateForm.controls["amount"].value + ' ' +availableCurrecyModel.replace('-UDPN', ''))
             }}</span>
         </nz-descriptions-item>
       </nz-descriptions>
@@ -240,9 +240,9 @@
           [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
           <nz-descriptions-item nzTitle="Settlement Bank">{{ checkedItemComment[0].sp
             }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ checkedItemComment[0].rate}}</nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="transferTitle">{{ checkedItemComment[0].rate}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].com + ' ' +
-            availableCurrecyModel}}</nz-descriptions-item>
+            availableCurrecyModel.replace('-UDPN', '')}}</nz-descriptions-item>
         </nz-descriptions>
       </nz-card>
     </ng-container>
@@ -255,7 +255,7 @@
           validateForm.controls["beneficialWalletAddress"].value
           }}
           <br>
-          {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency}}
+          {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency.replace('-UDPN', '')}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Beneficiary's Bank Name">{{
           validateForm.controls["beneficialBankName"].value}}</nz-descriptions-item>
@@ -269,7 +269,7 @@
           {{ validateForm.controls["remitterWalletAddress"].value }}
           <br>
           {{ (beneficiaryCurrency !== availableCurrecyModel ? this.checkedItemComment[0].total :
-          validateForm.controls["amount"].value) + ' ' + availableCurrecyModel}}
+          validateForm.controls["amount"].value) + ' ' + availableCurrecyModel.replace('-UDPN', '')}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
           validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>

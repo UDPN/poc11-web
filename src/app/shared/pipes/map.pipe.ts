@@ -118,7 +118,7 @@ export const MapSet = {
     1: 'Pending',
     4: 'Processing',
     5: 'Success',
-    6: 'Failed',
+    6: 'Failed'
   },
   walletTransactionsStatusColor: {
     1: 'volcano',
@@ -174,14 +174,14 @@ export const MapSet = {
     5: 'Agree',
     6: '--',
     7: '--',
-    8: '--',
+    8: '--'
   },
   walletInfoType: {
     1: 'Swap',
     2: 'Exchange',
     3: 'Transfer',
     4: 'Top-up',
-    5: 'Withdrawal',
+    5: 'Withdrawal'
   },
   walletInfoTransactionStatus: {
     1: 'Pending',
@@ -190,7 +190,7 @@ export const MapSet = {
     4: 'Processing',
     5: 'Success',
     6: 'Failed',
-    7: 'Failed',
+    7: 'Failed'
   },
   walletInfoTopUpStatus: {
     1: 'Pending Approval',
@@ -198,13 +198,13 @@ export const MapSet = {
     3: 'Processing',
     4: 'Processing',
     5: 'Active',
-    6: 'Failed',
+    6: 'Failed'
   },
   logTreeStatus: {
     1: 'process',
     2: 'finish',
     3: 'error'
-  },
+  }
 };
 
 export interface MapItem {
@@ -263,7 +263,13 @@ export class MapPipe implements PipeTransform {
       if (!value) {
         return (value = '--');
       } else {
-        return timestampToTime(value);
+        // return timestampToTime(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss a zzzz');
+        return res?.replace('GMT', 'UTC');
       }
     }
     if (arg === 'toThousandthMark') {

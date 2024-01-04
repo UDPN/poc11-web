@@ -1,5 +1,15 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginInOutService } from '@app/core/services/common/login-in-out.service';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { InformationService } from '@app/core/services/http/information/information.service';
 import { PocActivateSettlementService } from '@app/core/services/http/poc-activate-settlement/poc-activate-settlement.service';
@@ -13,9 +23,9 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.less']
 })
-
 export class InfoComponent implements OnInit {
-  @ViewChild('authorizedTpl', { static: true }) authorizedTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('authorizedTpl', { static: true })
+  authorizedTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -42,8 +52,9 @@ export class InfoComponent implements OnInit {
     public _informationService: InformationService,
     public pocActivateSettlementService: PocActivateSettlementService,
     private router: Router,
-    private commonService: CommonService
-  ) { }
+    private commonService: CommonService,
+    private loginOutService: LoginInOutService
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -61,11 +72,15 @@ export class InfoComponent implements OnInit {
     this.getResourceInfo();
   }
 
-
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
-
+  login() {
+    sessionStorage.clear();
+    this.loginOutService.loginOut().then((_) => {
+      this.router.navigateByUrl('/login/login-modify');
+    });
+  }
   getInfo(): void {
     this._informationService.detail().subscribe((res) => {
       this.info = res;
@@ -75,21 +90,23 @@ export class InfoComponent implements OnInit {
           this.infoMemberLicense = 'data:image/jpg;base64,' + resu;
           this.cdr.markForCheck();
         });
-    })
+    });
   }
 
   getResourceInfo(): void {
     this.pocActivateSettlementService.getInfo().subscribe((res: any) => {
       this.updateStatus = res.updateStatus;
       if (this.updateStatus === 0) {
-        this.router.navigateByUrl('/poc/poc-activate-settlement/activate-settlement');
+        this.router.navigateByUrl(
+          '/poc/poc-activate-settlement/activate-settlement'
+        );
       }
       this.reason = res.remark;
       this.dataList = res.capitalPoolList;
       this.attachmentsList = res.fileList;
       this.cdr.markForCheck();
       return;
-    })
+    });
   }
 
   private base64ToBlob(urlData: string, type: string) {
@@ -143,7 +160,7 @@ export class InfoComponent implements OnInit {
 
   onUpdate() {
     const status = true;
-  	this.toEdit.emit(status);
+    this.toEdit.emit(status);
   }
 
   private initTable(): void {
@@ -163,13 +180,13 @@ export class InfoComponent implements OnInit {
           title: 'Pre-authorized Debit',
           tdTemplate: this.authorizedTpl,
           width: 120
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

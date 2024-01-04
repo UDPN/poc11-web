@@ -297,6 +297,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           title: 'Creation Time',
           field: 'createTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 180
         },
         {

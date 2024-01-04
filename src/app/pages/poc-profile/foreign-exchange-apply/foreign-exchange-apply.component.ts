@@ -1,4 +1,11 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocHomeService } from '@app/core/services/http/poc-home/poc-home.service';
@@ -22,13 +29,17 @@ interface SearchParam {
 @Component({
   selector: 'app-foreign-exchange-apply',
   templateUrl: './foreign-exchange-apply.component.html',
-  styleUrls: ['./foreign-exchange-apply.component.less'],
+  styleUrls: ['./foreign-exchange-apply.component.less']
 })
 export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
-  @ViewChild('headerContent', { static: false }) headerContent!: TemplateRef<NzSafeAny>;
-  @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('currencyTpl', { static: true }) currencyTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerContent', { static: false })
+  headerContent!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerExtra', { static: false })
+  headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
+  currencyTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -45,9 +56,17 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
   dataList: NzSafeAny[] = [];
   statusList: any = [];
   businessTypeList: any = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
-  constructor(private foreignExchangeApplyService: ForeignExchangeApplyService, private cdr: ChangeDetectorRef,
-    public _commonService: CommonService) { }
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
+  constructor(
+    private foreignExchangeApplyService: ForeignExchangeApplyService,
+    private cdr: ChangeDetectorRef,
+    public _commonService: CommonService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -83,14 +102,23 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
   }
 
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_FOREIGN_EXCHANGE_APPLICATION' }).subscribe((res) => {
-      this.statusList = res.dataInfo;
-    })
+    this._commonService
+      .commonApi({
+        dropDownTypeCode: 'drop_down_business_status_info',
+        csePCode: 'FXSP_FOREIGN_EXCHANGE_APPLICATION'
+      })
+      .subscribe((res) => {
+        this.statusList = res.dataInfo;
+      });
 
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_EXCHANGE_BUSINESS_TYPE' }).subscribe((res) => {
-      this.businessTypeList = res.dataInfo;
-    })
-
+    this._commonService
+      .commonApi({
+        dropDownTypeCode: 'drop_down_business_status_info',
+        csePCode: 'FXSP_EXCHANGE_BUSINESS_TYPE'
+      })
+      .subscribe((res) => {
+        this.businessTypeList = res.dataInfo;
+      });
   }
 
   changePageSize(e: number): void {
@@ -104,15 +132,20 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-    this.foreignExchangeApplyService.getList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.foreignExchangeApplyService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -138,12 +171,14 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           title: 'Application Time',
           field: 'applicationTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Approval Time',
           field: 'approvalTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 200
         },
         {
@@ -159,14 +194,13 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           fixedDir: 'right',
           showAction: false,
           width: 160
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

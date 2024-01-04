@@ -6,7 +6,13 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -57,6 +63,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   showStatus = false;
   receivingWalletAddressList: any[] = [];
   purIndex: number = 0;
+  transferTitle: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -64,7 +71,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private fxPurchasingService: FxPurchasingService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private router: Router
   ) {}
   ngAfterViewInit(): void {
     this.fromEventAmount();
@@ -83,7 +91,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       receivingBankName: [null, [Validators.required]],
       receivingBankId: [null, [Validators.required]],
       receivingWalletAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required,this.amountValidator]],
+      amount: [null, [Validators.required, this.amountValidator]],
       transactionWalletAddressId: [0, [Validators.required]],
       bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
@@ -95,9 +103,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  amountValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
+  amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
@@ -117,7 +123,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         this.fxReceivingData.push({
           bankId: item.bankId,
           bankName: item.bankName,
-          currecy: item.digitalCurrencyName,
+          currecy: item.digitalSymbol,
+          currecySymbol: item.digitalCurrencyName,
           walletAddress: item.wallets
         });
       });
@@ -134,7 +141,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     this.validateForm
       .get('receivingBankId')
       ?.setValue(this.fxReceivingData[e]?.bankId);
-    this.reveingCurrecy = this.fxReceivingData[e]?.currecy;
+    this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.receivingWalletAddressList = this.fxReceivingData[e]?.walletAddress;
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
@@ -158,7 +165,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].cbdcCount);
     this.purchCurrecyList = Array.from(
       this.fxPurchaseData[e]['walletExtendInfo'],
-      ({ digitalCurrencyName }) => digitalCurrencyName
+      ({ digitalSymbol }) => digitalSymbol
     );
     this.onPurchCurrecy(0);
     if (this.reveingCurrecy === this.purchCurrecy) {
@@ -168,7 +175,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     }
   }
   onPurchCurrecy(e: number) {
-    this.purchCurrecy = this.purchCurrecyList[e];
+    this.purchCurrecy =
+      this.fxPurchaseData[this.purIndex]['walletExtendInfo'][
+        e
+      ].digitalCurrencyName;
     this.validateForm
       .get('transactionBankName')
       ?.setValue(
@@ -199,31 +209,48 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
           this.cdr.markForCheck();
           this.fxPurchasingService
             .fetchRateInfo({
-              from: this.validateForm.get('receivingWalletAddress')?.value,
-              to: this.validateForm.get('transactionWalletAddress')?.value
+              from: this.reveingCurrecy,
+              to: this.purchCurrecy
             })
             .subscribe((res) => {
               let resultData: any[] = [];
+              this.transferTitle =
+                this.reveingCurrecy.replace('-UDPN', '') +
+                '/' +
+                this.purchCurrecy.replace('-UDPN', '') +
+                ' Fx Rate';
               res.forEach((item: any) => {
                 resultData.push({
                   rateId: item.rateId,
                   sp: item.provider,
-                  currency: '1 ' + item.from + '->' + item.to,
+                  currency:
+                    '1 ' +
+                    item.from.replace('-UDPN', '') +
+                    '->' +
+                    item.to.replace('-UDPN', ''),
                   rate: item.rate,
-                  com:
+                  com: String(
                     item.smChargeModel === 0
-                      ? item.smValue > item.smMaxFee
+                      ? (this.validateForm.get('amount')?.value / item.rate) *
+                          item.smValue >
+                        item.smMaxFee
                         ? item.smMaxFee
-                        : item.smValue
-                      : item.smValue,
+                        : (this.validateForm.get('amount')?.value / item.rate) *
+                          item.smValue
+                      : item.smValue
+                  ).replace(/^(.*\..{8}).*$/, '$1'),
                   total: String(
-                    this.validateForm.get('amount')?.value * item.rate +
+                    this.validateForm.get('amount')?.value / item.rate +
                       (item.smChargeModel === 0
-                        ? item.smValue > item.smMaxFee
+                        ? (this.validateForm.get('amount')?.value / item.rate) *
+                            item.smValue >
+                          item.smMaxFee
                           ? item.smMaxFee
-                          : item.smValue
+                          : (this.validateForm.get('amount')?.value /
+                              item.rate) *
+                            item.smValue
                         : item.smValue)
-                  ).replace(/^(.*\..{4}).*$/, '$1')
+                  ).replace(/^(.*\..{8}).*$/, '$1')
                 });
               });
               this.nzLoading = false;
@@ -319,9 +346,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
               nzContent: 'Transfer successful!'
             })
             .afterClose.subscribe((_) => {
-              this.initData();
+              // this.initData();
               this.validateForm.reset();
               this.passwordForm.reset();
+              this.router.navigateByUrl(
+                '/poc/poc-remittance/transaction-record'
+              );
             });
         }
         this.isLoading = false;
