@@ -6,7 +6,12 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -83,7 +88,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       receivingBankName: [null, [Validators.required]],
       receivingBankId: [null, [Validators.required]],
       receivingWalletAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required,this.amountValidator]],
+      amount: [null, [Validators.required, this.amountValidator]],
       transactionWalletAddressId: [0, [Validators.required]],
       bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
@@ -95,9 +100,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  amountValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
+  amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
@@ -117,7 +120,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         this.fxReceivingData.push({
           bankId: item.bankId,
           bankName: item.bankName,
-          currecy: item.digitalCurrencyName,
+          currecy: item.digitalSymbol,
+          currecySymbol: item.digitalCurrencyName,
           walletAddress: item.wallets
         });
       });
@@ -134,7 +138,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     this.validateForm
       .get('receivingBankId')
       ?.setValue(this.fxReceivingData[e]?.bankId);
-    this.reveingCurrecy = this.fxReceivingData[e]?.currecy;
+    this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.receivingWalletAddressList = this.fxReceivingData[e]?.walletAddress;
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
@@ -158,7 +162,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].cbdcCount);
     this.purchCurrecyList = Array.from(
       this.fxPurchaseData[e]['walletExtendInfo'],
-      ({ digitalCurrencyName }) => digitalCurrencyName
+      ({ digitalSymbol }) => digitalSymbol
     );
     this.onPurchCurrecy(0);
     if (this.reveingCurrecy === this.purchCurrecy) {
@@ -168,7 +172,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     }
   }
   onPurchCurrecy(e: number) {
-    this.purchCurrecy = this.purchCurrecyList[e];
+    this.purchCurrecy =
+      this.fxPurchaseData[this.purIndex]['walletExtendInfo'][
+        e
+      ].digitalCurrencyName;
     this.validateForm
       .get('transactionBankName')
       ?.setValue(
@@ -199,8 +206,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
           this.cdr.markForCheck();
           this.fxPurchasingService
             .fetchRateInfo({
-              from: this.validateForm.get('receivingWalletAddress')?.value,
-              to: this.validateForm.get('transactionWalletAddress')?.value
+              from: this.reveingCurrecy,
+              to: this.purchCurrecy
             })
             .subscribe((res) => {
               let resultData: any[] = [];
@@ -212,16 +219,20 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                   rate: item.rate,
                   com:
                     item.smChargeModel === 0
-                      ? item.smValue > item.smMaxFee
+                      ? this.validateForm.get('amount')?.value * item.smValue >
+                        item.smMaxFee
                         ? item.smMaxFee
-                        : item.smValue
+                        : this.validateForm.get('amount')?.value * item.smValue
                       : item.smValue,
                   total: String(
                     this.validateForm.get('amount')?.value * item.rate +
                       (item.smChargeModel === 0
-                        ? item.smValue > item.smMaxFee
+                        ? this.validateForm.get('amount')?.value *
+                            item.smValue >
+                          item.smMaxFee
                           ? item.smMaxFee
-                          : item.smValue
+                          : this.validateForm.get('amount')?.value *
+                            item.smValue
                         : item.smValue)
                   ).replace(/^(.*\..{4}).*$/, '$1')
                 });
