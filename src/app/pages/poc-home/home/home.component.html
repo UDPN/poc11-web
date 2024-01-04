@@ -60,7 +60,7 @@
   <nz-card [nzTitle]="pendingCurrencyTpl" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let currency of pendingCurrency">
-        <nz-card class="card">
+        <nz-card class="card base-card">
           <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]=" false">
             <nz-descriptions-item nzTitle="Currency"><span>{{ currency.currency + '-' + currency.platform
                 }}</span></nz-descriptions-item>
@@ -74,7 +74,7 @@
   <!-- <nz-card [nzTitle]="nonactivatedCurrencyTpl" class="m-b-10">
     <div nz-row [nzGutter]="24">
       <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="12">
-        <nz-card class="card">
+        <nz-card class="card base-card">
           <nz-descriptions nzLayout="vertical" [nzColumn]="3" [nzColon]="false"
             *ngFor="let currency of nonactivatedCurrency; index as i">
             <nz-descriptions-item [nzTitle]="i === 0 ? 'Currency' : ''" nzSpan="2">
@@ -96,7 +96,7 @@
       <div nz-col [nzSpan]="8">
         <nz-card nzTitle="Activated Currencies">
           <div>
-            <nz-card class="card" *ngFor="let currency of approveCurrency">
+            <nz-card class="card base-card" *ngFor="let currency of approveCurrency">
               <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
                 [nzColon]="false">
                 <nz-descriptions-item nzTitle="Currency"><span>1111</span></nz-descriptions-item>
@@ -110,7 +110,7 @@
       <div nz-col [nzSpan]="8">
         <nz-card [nzTitle]="pendingCurrencyTpl">
           <div>
-            <nz-card class="card" *ngFor="let currency of pendingCurrency">
+            <nz-card class="card base-card" *ngFor="let currency of pendingCurrency">
               <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
                 [nzColon]="false">
                 <nz-descriptions-item nzTitle="Currency"><span>{{ currency.currency + '-' + currency.platform
@@ -125,7 +125,7 @@
       <div nz-col [nzSpan]="8">
         <nz-card [nzTitle]="approveCurrencyTpl">
           <div>
-            <nz-card class="card">
+            <nz-card class="card base-card">
               <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
                 <nz-descriptions-item [nzTitle]="i === 0 ? 'Currency' : ''"
                   *ngFor="let currency of nonactivatedCurrency; index as i">

@@ -47,10 +47,10 @@
   <span>{{ 'Yes' }}</span>
 </ng-template>
 <ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolPlatform="capitalPoolPlatform"
-  let-capitalPoolAddress="capitalPoolAddress">
+  let-capitalPoolAddress="capitalPoolAddress" let-currencyPrecision="currencyPrecision">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
-      (click)="getEdit(capitalPoolCurrency, capitalPoolPlatform, capitalPoolAddress)">
+      (click)="getEdit(capitalPoolCurrency, capitalPoolPlatform, capitalPoolAddress, currencyPrecision)">
       Edit
     </span>
   </ng-container>
@@ -75,11 +75,6 @@
               <input nz-input type="number" formControlName="amount" />
             </nz-input-group>
           </nz-form-control>
-          <ng-template #amountError let-control>
-            <ng-container *ngIf="control.hasError('required')">Please input your
-              Amount</ng-container>
-            <ng-container *ngIf="control.hasError('regular')">Please enter numeric digits only</ng-container>
-          </ng-template>
         </nz-descriptions-item>
         <ng-template #authorizedTitle>
           <span style="color: red;" class="m-r-8">*</span> Pre-authorized Debit
@@ -96,3 +91,9 @@
       [disabled]="!this.editValidateForm.valid">Confirm</button>
   </div>
 </nz-modal>
+<ng-template #amountError let-control>
+  <ng-container *ngIf="control.hasError('required')">Please input your
+    Amount</ng-container>
+  <ng-container *ngIf="control.hasError('regular')">{{ 'The max precision of amount is: ' +
+    this.editInfo.currencyPrecision }}</ng-container>
+</ng-template>
