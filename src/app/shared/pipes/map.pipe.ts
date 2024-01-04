@@ -264,6 +264,10 @@ export class MapPipe implements PipeTransform {
         return (value = '--');
       } else {
         // return timestampToTime(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
         let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss a zzzz');
         return res?.replace('GMT', 'UTC');
       }
