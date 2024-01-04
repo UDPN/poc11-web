@@ -21,10 +21,10 @@
           <nz-descriptions-item nzTitle="Bank Name">{{
             info.bankName
             }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Txn Currency ">{{(info.formCurrency + '-' + info.formPlatform + '->' +
-            info.toCurrency + '-' + info.toPlatform) | map:'null'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Txn Currency ">{{(info.formCurrency + '->' +
+            info.toCurrency) | map:'null'}}</nz-descriptions-item>
           <nz-descriptions-item
-            [nzTitle]="'Billing Amount (' + info.formCurrency + '-' + info.formPlatform + ')'">{{info.billAmount}}</nz-descriptions-item>
+            [nzTitle]="'Billing Amount (' + info.formCurrency + ')'">{{info.billAmount}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Creation Time">{{
             info.createDate | map: 'timeStamp'
             }}</nz-descriptions-item>

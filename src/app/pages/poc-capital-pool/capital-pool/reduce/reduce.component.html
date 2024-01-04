@@ -53,9 +53,9 @@
             <tr *ngFor="let data of rowSelectionTable.data">
               <td class="p-l-16" [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
                 (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-              <td [title]="data.capitalPoolCurrency + '-' +  data.capitalPoolPlatform">
+              <td [title]="data.capitalPoolCurrency">
                 {{
-                data.capitalPoolCurrency + '-' + data.capitalPoolPlatform }}</td>
+                data.capitalPoolCurrency }}</td>
             </tr>
           </tbody>
         </nz-table>

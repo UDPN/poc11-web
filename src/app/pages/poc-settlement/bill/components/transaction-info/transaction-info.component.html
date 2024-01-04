@@ -43,17 +43,15 @@
     <br>
     <span [title]="fromBankId + '-' + fromBankName">{{ fromBankId + '-' + fromBankName }}</span>
   </ng-template>
-  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
-    let-formPlatform="formPlatform" let-toCurrency="toCurrency" let-toPlatform="toPlatform">
+  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency" let-toCurrency="toCurrency">
     <span
-      [title]="(fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount  + ' ' + toCurrency + '-' + toPlatform)">{{
-      (fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform )
+      [title]="(fromAmount + ' ' + formCurrency + '->' + toAmount  + ' ' + toCurrency)">{{
+      (fromAmount + ' ' + formCurrency + '->' + toAmount + ' ' + toCurrency)
       }}</span>
   </ng-template>
-  <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency"
-    let-formPlatform="formPlatform">
-    <span [title]="commissionFee + ' ' +  formCurrency + '-' + formPlatform">{{ commissionFee + ' ' +
-      formCurrency + '-' + formPlatform }}</span>
+  <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency">
+    <span [title]="commissionFee + ' ' +  formCurrency">{{ commissionFee + ' ' +
+      formCurrency }}</span>
   </ng-template>
 </div>
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Export" (nzOnCancel)="cancelExport()" [nzClosable]="false">

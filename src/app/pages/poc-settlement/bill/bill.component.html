@@ -43,7 +43,7 @@
               <nz-select nzPlaceHolder="" name="currencyPair" [(ngModel)]="searchParam.currencyPair">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let item of currencyList" [nzValue]="item.key"
-                  [nzLabel]="item.sourceCurrency + '-' + item.sourcePlatform + '->' + item.targetCurrency + '-' + item.targetPlatform">
+                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -77,16 +77,15 @@
   <app-card-table-wrap [tableTitle]="'Billing List'" [isNormalTable]="true">
     <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-    <ng-template #currencyTpl let-formCurrency="formCurrency" let-formPlatform="formPlatform"
-      let-toCurrency="toCurrency" let-toPlatform="toPlatform">
-      <span [title]="(formCurrency + '-' + formPlatform + '->' + toCurrency + '-' + toPlatform)">{{
-        (formCurrency + '-' + formPlatform + '->' + toCurrency + '-' + toPlatform)
+    <ng-template #currencyTpl let-formCurrency="formCurrency"
+      let-toCurrency="toCurrency">
+      <span [title]="(formCurrency + '->' + toCurrency)">{{
+        (formCurrency + '->' + toCurrency)
         }}</span>
     </ng-template>
-    <ng-template #billingAmountTpl let-billAmount="billAmount" let-formCurrency="formCurrency"
-      let-formPlatform="formPlatform">
-      <span [title]="billAmount + ' ' + formCurrency + '-' + formPlatform">{{
-        (billAmount + ' ' + formCurrency + '-' + formPlatform) | map:'null'
+    <ng-template #billingAmountTpl let-billAmount="billAmount" let-formCurrency="formCurrency">
+      <span [title]="billAmount + ' ' + formCurrency">{{
+        (billAmount + ' ' + formCurrency) | map:'null'
         }}</span>
     </ng-template>
     <ng-template #operationTpl let-billNo="billNo">
@@ -109,7 +108,7 @@
     <div *nzModalContent class="card-tpl">
       <nz-card class="m-b-10" style="background-color: #f7f9fe;">
         <div style="font-size: 18px;" class="m-b-10">Billing Amount <span class="m-l-15" style="font-weight: 500;">{{
-            (invoiceInfo.billAmount + ' ' + invoiceInfo.formCurrency + '-' + invoiceInfo.formPlatform) | map:'null'
+            (invoiceInfo.billAmount + ' ' + invoiceInfo.formCurrency) | map:'null'
             }}</span></div>
         <nz-descriptions class="card" nzLayout="vertical" [nzColumn]="{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }"
           [nzColon]="false" [nzBordered]="false">
@@ -121,8 +120,7 @@
             (invoiceInfo.bankId + '-' + invoiceInfo.bankName) | map:'null'
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Txn Currency">{{
-            (invoiceInfo.formCurrency + '-' + invoiceInfo.formPlatform + '->' + invoiceInfo.toCurrency + '-' +
-            invoiceInfo.toPlatform) | map:'null'
+            (invoiceInfo.formCurrency + '->' + invoiceInfo.toCurrency) | map:'null'
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Creation Time">{{
             invoiceInfo.createDate | map: 'timeStamp'
@@ -155,16 +153,14 @@
     <br>
     <span [title]="fromBankId + '-' + fromBankName">{{ fromBankId + '-' + fromBankName }}</span>
   </ng-template>
-  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
-    let-formPlatform="formPlatform" let-toCurrency="toCurrency" let-toPlatform="toPlatform">
+  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency" let-toCurrency="toCurrency">
     <span
-      [title]="fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform">{{
-      fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform
+      [title]="fromAmount + ' ' + formCurrency + '->' + toAmount + ' ' + toCurrency">{{
+      fromAmount + ' ' + formCurrency + '->' + toAmount + ' ' + toCurrency
       }}</span>
   </ng-template>
-  <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency"
-    let-formPlatform="formPlatform">
-    <span title="">{{ commissionFee + ' ' + formCurrency + '-' + formPlatform}}</span>
+  <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency">
+    <span title="">{{ commissionFee + ' ' + formCurrency }}</span>
   </ng-template> -->
 </ng-container>
 <nz-modal [(nzVisible)]="isVisibleExport" nzTitle="Export" (nzOnCancel)="cancelExportPdf()" [nzClosable]="false">
