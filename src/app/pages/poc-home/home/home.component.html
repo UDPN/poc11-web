@@ -45,8 +45,7 @@
         <nz-card class="card base-card">
           <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }"
             [nzColon]=" false">
-            <nz-descriptions-item nzTitle="Currency"><span>{{ currency.capitalPoolCurrency + '-' +
-                currency.capitalPoolPlatform
+            <nz-descriptions-item nzTitle="Currency"><span>{{ currency.capitalPoolCurrency
                 }}</span></nz-descriptions-item>
             <nz-descriptions-item nzTitle="Capital Pool Balance"><span>{{ currency.capitalPoolBalance
                 }}</span></nz-descriptions-item>
@@ -150,7 +149,8 @@
             <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of approveList">
               <nz-card class="card base-card">
                 <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
-                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.sourceCurrency + '->' + item.targetCurrency
+                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.sourceCurrency + '->' +
+                      item.targetCurrency
                       }}</span></nz-descriptions-item>
                   <nz-descriptions-item nzTitle="Currency Pair ID"><span>{{ item.chainRateId
                       }}</span></nz-descriptions-item>
@@ -164,7 +164,8 @@
             <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of pendingRate">
               <nz-card class="card base-card">
                 <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
-                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.fromCurrency + '->' + item.toCurrency
+                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.fromCurrency + '->' +
+                      item.toCurrency
                       }}</span></nz-descriptions-item>
                 </nz-descriptions>
               </nz-card>

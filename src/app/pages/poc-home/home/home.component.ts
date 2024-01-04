@@ -166,7 +166,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private _commonService: CommonService,
     private fb: FormBuilder,
     private _defaultStoreService: DefaultStoreService
-  ) {}
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -351,12 +351,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
               multi.push({
                 name:
                   item.sourceCurrency +
-                  '-' +
-                  item.sourcePlatform +
                   '->' +
-                  item.targetCurrency +
-                  '-' +
-                  item.targetPlatform,
+                  item.targetCurrency,
                 series: series
               });
               this.multi = multi;
@@ -384,12 +380,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
               series1.push({
                 name:
                   items.sourceCurrency +
-                  '-' +
-                  items.sourcePlatform +
                   '->' +
-                  items.targetCurrency +
-                  '-' +
-                  items.targetPlatform,
+                  items.targetCurrency,
                 value: items.transactionNumber
                   .toString()
                   .replace(/\d{1,3}(?=(\d{3})+(\.|$))/gy, '$&,')
