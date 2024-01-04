@@ -52,7 +52,7 @@ export class JudgeAuthGuard implements CanActivateChild {
       return true;
     } else {
       if (!this.resultCode) {
-        this.resultCode = this.message.error('You do not have permission to login the module');
+        // this.resultCode = this.message.error('You do not have permission to login the module');
         this.loginOutService.loginOut();
       }
       return this.router.parseUrl('/login');
