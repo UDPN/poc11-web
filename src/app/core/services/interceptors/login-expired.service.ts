@@ -102,7 +102,7 @@ export class LoginExpiredService implements HttpInterceptor {
               error => {
                 
                 
-                this.message.error('You do not have permission to login the module');
+                // this.message.error('You do not have permission to login the module');
                 this.loginOut();
               }
             );

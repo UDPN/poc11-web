@@ -110,8 +110,8 @@
     <div nz-row nzJustify="center" nzAlign="middle" class="m-b-30 card">
       <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
         <label *ngFor="let item of attachmentsList">
-          <button nz-button nzType="primary" class="m-r-25" (click)="onLoad(item.fileCode, item.fileUrl)">{{
-            item.fileUrl }}</button>
+          <button nz-button nzType="text" class="m-t-15 m-r-25" (click)="onLoad(item.fileCode, item.fileUrl)">{{
+            item.fileUrl }}<span nz-icon nzType="download" class="m-l-15"></span></button>
         </label>
       </div>
     </div>

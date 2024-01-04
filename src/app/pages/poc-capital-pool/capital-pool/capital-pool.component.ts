@@ -80,7 +80,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     public message: NzMessageService
-  ) {}
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -198,6 +198,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
 
   cancelEdit() {
     this.isVisible = false;
+    this.editValidateForm.get('amount')?.reset();
   }
 
   edit() {
@@ -212,8 +213,9 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
+          this.isVisible = false;
+          this.editValidateForm.get('amount')?.reset();
           if (res) {
-            this.isVisible = false;
             this.message
               .success('Edit successfully!', { nzDuration: 1000 })
               .onClose.subscribe(() => {

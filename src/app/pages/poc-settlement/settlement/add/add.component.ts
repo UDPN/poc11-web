@@ -181,15 +181,17 @@ export class AddComponent implements OnInit {
     }
   }
 
-  onChangeModel(event: any) {  
+  onChangeModel(event: any) {
     this.validateForm?.get('commission')?.reset();
     this.pairedList?.map((item: any) => {
       if (item.key === this.validateForm.get('pairedExchangeRate')?.value) {
         if (event === '1') {
+          console.log(22222);
           this.commissionAfter = '%';
           this.maxCommissionAfter = item.sourceCurrency + '-' + item.sourcePlatform + ' (Per Transaction)';
           this.validateForm?.addControl('maxCommission', new FormControl('', [Validators.required]));
         } else {
+          console.log(33333333);
           this.commissionAfter = item.sourceCurrency + '-' + item.sourcePlatform + ' (Per Transaction)';
           this.validateForm?.removeControl('maxCommission');
         }
@@ -206,7 +208,7 @@ export class AddComponent implements OnInit {
       this.validateForm.get('maxCommission')?.setValue(res.maxCommission);
       this.pairedList.map((item: any) => {
         if (item.sourceCurrency === res.formRateCurrency && item.sourcePlatform === res.formRatePlatform && item.targetCurrency === res.toRateCurrency && item.targetPlatform === res.toRatePlatform) {
-          this.validateForm.get('pairedExchangeRate')?.setValue(item.key);    
+          this.validateForm.get('pairedExchangeRate')?.setValue(item.key);
           this.cdr.markForCheck();
         }
       })
