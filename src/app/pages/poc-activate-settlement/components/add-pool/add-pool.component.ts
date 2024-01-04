@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-04 15:55:59
+ * @LastEditTime: 2024-01-04 18:16:26
  * @Description:
  */
 import {
@@ -92,7 +92,6 @@ export class AddPoolComponent implements OnInit {
 
   edit() {
     this.pocActivateSettlementService.getInfo().subscribe((res: any) => {
-      console.log(res);
       if (res.updateStatus === 0) {
         this.isFirstEdit = false;
       } else {
@@ -547,7 +546,10 @@ export class AddPoolComponent implements OnInit {
             this.message
               .success('The data has been submitted!')
               .onClose.subscribe((_) => {
-                this.router.navigateByUrl('/poc/poc-capital-pool/capital-pool');
+                location.reload();
+                // this.router.navigateByUrl(
+                //   '/poc/poc-activate-settlement/activate-settlement'
+                // );
               });
           }
           this.isLoading = false;
