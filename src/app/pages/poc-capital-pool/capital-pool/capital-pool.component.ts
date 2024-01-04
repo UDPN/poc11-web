@@ -6,7 +6,7 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
@@ -66,6 +66,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false;
   editValidateForm!: FormGroup;
   editInfo: any = {};
+  reg: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -113,6 +114,21 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       amount: ['', [Validators.required]],
     });
   }
+
+  amountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    this.reg =
+      this.editInfo.currencyPrecision > 0
+        ? `^[+]?\\d+(?:\\.\\d{1,` + this.editInfo.currencyPrecision + `})?$`
+        : '';
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (Validators.pattern(this.reg)(control)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -162,11 +178,12 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getEdit(capitalPoolCurrency: string, capitalPoolPlatform: string, capitalPoolAddress: string) {
+  getEdit(capitalPoolCurrency: string, capitalPoolPlatform: string, capitalPoolAddress: string, currencyPrecision: number) {
     this.isVisible = true;
     this.editInfo = {
       capitalPool: capitalPoolCurrency,
-      capitalPoolAddress
+      capitalPoolAddress,
+      currencyPrecision
     }
   }
 

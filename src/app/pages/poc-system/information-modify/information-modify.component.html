@@ -14,7 +14,7 @@
           <div nz-row nzJustify="space-between" nzGutter="8">
             <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24">{{ this.bankType === 2 ? 'SP Name' : 'Commercial Bank Name' }}
+                <nz-form-label nzRequired nzSpan="24">{{ this.bankType === 2 ? 'FX SP Name' : 'Commercial Bank Name' }}
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="enterpriseError">
                   <div nz-row [formGroup]="validateForm">

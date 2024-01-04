@@ -208,6 +208,12 @@
   "MSG_02_1014": "Already exist",
   "MSG_02_1015": "Does not exist",
   "MSG_02_1016": "The current state does not support editing",
+  "MSG_02_1018": "the commercial bank does not belong to this central bank",
+  "MSG_02_1019": "invalid account address",
+  "MSG_02_1020": "bank info has existed",
+  "MSG_02_1021": "account address has existed",
+  "MSG_02_1022": "business license file has existed",
+
 
   "MSG_02_1030": "Currency cannot be empty",
   "MSG_02_1031": "Amount cannot be empty",
