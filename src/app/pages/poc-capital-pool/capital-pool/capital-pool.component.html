@@ -69,11 +69,19 @@
           </nz-switch>
         </nz-descriptions-item>
         <nz-descriptions-item [nzTitle]="amountTitle" [nzSpan]="3">
-          <nz-form-control [nzErrorTip]="amountError">
-            <nz-input-group [nzAddOnAfter]="editInfo.capitalPool">
-              <input nz-input type="number" formControlName="amount" />
-            </nz-input-group>
-          </nz-form-control>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="amountError">
+              <nz-input-group [nzAddOnAfter]="editInfo.capitalPool">
+                <input nz-input type="number" formControlName="amount" />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #amountError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please input your
+                Amount</ng-container>
+              <ng-container *ngIf="control.hasError('regular')">{{ 'The max precision of amount is: ' +
+                this.editInfo.currencyPrecision }}</ng-container>
+            </ng-template>
+          </nz-form-item>
         </nz-descriptions-item>
         <ng-template #authorizedTitle>
           <span style="color: red;" class="m-r-8">*</span> Pre-authorized Debit
@@ -90,9 +98,3 @@
       [disabled]="!this.editValidateForm.valid">Confirm</button>
   </div>
 </nz-modal>
-<ng-template #amountError let-control>
-  <ng-container *ngIf="control.hasError('required')">Please input your
-    Amount</ng-container>
-  <ng-container *ngIf="control.hasError('regular')">{{ 'The max precision of amount is: ' +
-    this.editInfo.currencyPrecision }}</ng-container>
-</ng-template>
