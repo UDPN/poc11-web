@@ -66,8 +66,6 @@ export class AddComponent implements OnInit {
     this.initSelect();
     this.routeInfo.queryParams.subscribe((params: any) => {
       if (JSON.stringify(params) !== '{}') {
-        const chargingModel = this.validateForm.get('chargingModel')?.value.toString();
-        this.onChangeModel(chargingModel);
         this.tempStatus = false;
         this.getInfo(params['formRateCurrency'], params['formRatePlatform'], params['toRateCurrency'], params['toRatePlatform']);
       } else {
@@ -203,6 +201,8 @@ export class AddComponent implements OnInit {
       this.info = res;
       this.validateForm.get('settlementModelName')?.setValue(res.settlementModelName);
       this.validateForm.get('chargingModel')?.setValue(res.chargingModel === 1 ? '1' : '2');
+      const chargingModel = this.validateForm.get('chargingModel')?.value;
+      this.onChangeModel(chargingModel);
       this.validateForm.get('commission')?.setValue(res.chargingModel === 1 ? res.ratioCommission : res.regularCommission);
       this.validateForm.get('maxCommission')?.setValue(res.maxCommission);
       this.pairedList.map((item: any) => {
