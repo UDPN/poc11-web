@@ -66,7 +66,8 @@ export class AddComponent implements OnInit {
     this.initSelect();
     this.routeInfo.queryParams.subscribe((params: any) => {
       if (JSON.stringify(params) !== '{}') {
-        this.onChangeModel(this.validateForm.get('chargingModel')?.value);
+        const chargingModel = this.validateForm.get('chargingModel')?.value.toString();
+        this.onChangeModel(chargingModel);
         this.tempStatus = false;
         this.getInfo(params['formRateCurrency'], params['formRatePlatform'], params['toRateCurrency'], params['toRatePlatform']);
       } else {
@@ -82,7 +83,7 @@ export class AddComponent implements OnInit {
       this.pairedList.map((item: any, i: any) => {
         Object.assign(item, { key: i + 1 })
       })
-      this.maxCommissionAfter = this.pairedList[0].sourceCurrency + '-' + this.pairedList[0].sourcePlatform + ' (Per Transaction)';
+      this.maxCommissionAfter = this.pairedList[0].sourceCurrency + ' (Per Transaction)';
     })
     this.commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_CHARGING_MODEL' }).subscribe((res) => {
       this.chargingModelList = res.dataInfo;
@@ -175,9 +176,9 @@ export class AddComponent implements OnInit {
       }
     })
     if (this.validateForm.get('chargingModel')?.value === '1') {
-      this.maxCommissionAfter = this.rateList.sourceCurrency + '-' + this.rateList.sourcePlatform + ' (Per Transaction)';
+      this.maxCommissionAfter = this.rateList.sourceCurrency + ' (Per Transaction)';
     } else {
-      this.commissionAfter = this.rateList.sourceCurrency + '-' + this.rateList.sourcePlatform + ' (Per Transaction)';
+      this.commissionAfter = this.rateList.sourceCurrency + ' (Per Transaction)';
     }
   }
 
@@ -186,13 +187,11 @@ export class AddComponent implements OnInit {
     this.pairedList?.map((item: any) => {
       if (item.key === this.validateForm.get('pairedExchangeRate')?.value) {
         if (event === '1') {
-          console.log(22222);
           this.commissionAfter = '%';
-          this.maxCommissionAfter = item.sourceCurrency + '-' + item.sourcePlatform + ' (Per Transaction)';
+          this.maxCommissionAfter = item.sourceCurrency + ' (Per Transaction)';
           this.validateForm?.addControl('maxCommission', new FormControl('', [Validators.required]));
         } else {
-          console.log(33333333);
-          this.commissionAfter = item.sourceCurrency + '-' + item.sourcePlatform + ' (Per Transaction)';
+          this.commissionAfter = item.sourceCurrency + ' (Per Transaction)';
           this.validateForm?.removeControl('maxCommission');
         }
       }
