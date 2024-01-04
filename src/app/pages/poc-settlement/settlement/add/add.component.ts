@@ -83,7 +83,7 @@ export class AddComponent implements OnInit {
       this.pairedList.map((item: any, i: any) => {
         Object.assign(item, { key: i + 1 })
       })
-      this.maxCommissionAfter = this.pairedList[0].sourceCurrency + '-' + this.pairedList[0].sourcePlatform + ' (Per Transaction)';
+      this.maxCommissionAfter = this.pairedList[0].sourceCurrency + ' (Per Transaction)';
     })
     this.commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_CHARGING_MODEL' }).subscribe((res) => {
       this.chargingModelList = res.dataInfo;
@@ -176,9 +176,9 @@ export class AddComponent implements OnInit {
       }
     })
     if (this.validateForm.get('chargingModel')?.value === '1') {
-      this.maxCommissionAfter = this.rateList.sourceCurrency + '-' + this.rateList.sourcePlatform + ' (Per Transaction)';
+      this.maxCommissionAfter = this.rateList.sourceCurrency + ' (Per Transaction)';
     } else {
-      this.commissionAfter = this.rateList.sourceCurrency + '-' + this.rateList.sourcePlatform + ' (Per Transaction)';
+      this.commissionAfter = this.rateList.sourceCurrency + ' (Per Transaction)';
     }
   }
 
