@@ -2,13 +2,13 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-21 10:39:21
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-27 15:34:14
+ * @LastEditTime: 2024-01-04 16:25:15
  * @Description: 
 -->
 <!-- <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header> -->
 <div class="normal-table-wrap">
   <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
-    <ng-container *ngIf="updateStatus === 5 || updateStatus === 10">
+    <ng-container *ngIf="updateStatus === 5 ">
       <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1" class="m-b-10"></nz-alert>
       <ng-template #descriptionTemplate1>
         <h5 nz-typography>
@@ -16,6 +16,20 @@
           while
           we process your application. Thank you.
         </h5>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngIf="updateStatus === 10">
+      <nz-alert nzShowIcon nzType="success"
+        nzMessage="Unfortunately, the application for activation of settlement business failed to be approved."
+        [nzAction]="actionTemplate" [nzDescription]="descriptionTemplate3" class="m-b-10"></nz-alert>
+      <ng-template #descriptionTemplate3>
+        <h5 nz-typography>Successfully upgraded settlement bank. Please log in again to obtain settlement bank
+          permissions.</h5>
+      </ng-template>
+      <ng-template #actionTemplate>
+        <button nz-button nzSize="small" nzType="primary" (click)="login()">
+          Log in
+        </button>
       </ng-template>
     </ng-container>
     <ng-container *ngIf="updateStatus === 15">

@@ -386,8 +386,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
         }
       }
       if (
-        this.checkedItemComment[0]?.total.toString() >
-        this.validateForm.controls['availableBalance'].value.toString()
+        Number(this.checkedItemComment[0]?.total.toString()) >
+        Number(this.validateForm.controls['availableBalance'].value.toString())
       ) {
         this.modal.error({
           nzTitle: 'Error',

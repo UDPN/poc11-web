@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-28 20:03:02
+ * @LastEditTime: 2024-01-04 15:55:59
  * @Description:
  */
 import {
@@ -83,7 +83,7 @@ export class AddPoolComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) { }
+  ) {}
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
     this.edit();
@@ -92,6 +92,7 @@ export class AddPoolComponent implements OnInit {
 
   edit() {
     this.pocActivateSettlementService.getInfo().subscribe((res: any) => {
+      console.log(res);
       if (res.updateStatus === 0) {
         this.isFirstEdit = false;
       } else {
@@ -106,7 +107,8 @@ export class AddPoolComponent implements OnInit {
             const control = {
               id: index,
               status: false,
-              fileCode: `file${index}`,
+              // fileCode: `file${index}`,
+              fileCode: item.fileCode,
               fileUrl: `fileUrl${index}`
             };
             const indexs = this.fileListOfControl.push(control);
@@ -347,7 +349,9 @@ export class AddPoolComponent implements OnInit {
     // this.isFirstEdit = false;
     this.editCapitalPoolList = [];
     if (this.listOfControl.length > 1) {
-      this.setSelectOptionPool(this.validateForm.get(`currency${i.id - 1}`)?.value);
+      this.setSelectOptionPool(
+        this.validateForm.get(`currency${i.id - 1}`)?.value
+      );
       this.watchSelectOptionPacth(
         2,
         this.validateForm.get(`currency${i.id}`)?.value,
@@ -395,8 +399,8 @@ export class AddPoolComponent implements OnInit {
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-          ? []
-          : this.listCheckArr[index];
+        ? []
+        : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
