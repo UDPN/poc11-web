@@ -82,8 +82,8 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder,
-  ) { }
+    private fb: FormBuilder
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -115,8 +115,6 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     this.searchParam.type = '';
     this.getDataList(this.tableQueryParams);
   }
-
-
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
@@ -183,6 +181,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           title: 'Creation Time',
           field: 'creationTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 150
         },
         {

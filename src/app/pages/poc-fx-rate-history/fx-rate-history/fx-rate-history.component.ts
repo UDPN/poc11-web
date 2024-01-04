@@ -1,4 +1,11 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
@@ -13,33 +20,34 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  currency:string;
-  createTime:any
+  currency: string;
+  createTime: any;
 }
 interface ListParam {
-
-  formRatePlatform: string,
-  formRateCurrency: string,
-  toRatePlatform: string,
-  toRateCurrency: string,
+  formRatePlatform: string;
+  formRateCurrency: string;
+  toRatePlatform: string;
+  toRateCurrency: string;
 }
 
 @Component({
   selector: 'app-fx-rate-history',
   templateUrl: './fx-rate-history.component.html',
-  styleUrls: ['./fx-rate-history.component.less'],
+  styleUrls: ['./fx-rate-history.component.less']
 })
 export class FxRateHistoryComponent implements OnInit, AfterViewInit {
-  @ViewChild('headerContent', { static: false }) headerContent!: TemplateRef<NzSafeAny>;
-  @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;
-   @ViewChild('currencyTpl', { static: true })
+  @ViewChild('headerContent', { static: false })
+  headerContent!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerExtra', { static: false })
+  headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
   currencyTpl!: TemplateRef<NzSafeAny>;
   operationTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     createTime: [],
     currency: ''
   };
-   listParam: Partial<ListParam> = {
+  listParam: Partial<ListParam> = {
     formRatePlatform: '',
     formRateCurrency: '',
     toRatePlatform: '',
@@ -47,14 +55,20 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
   };
   currencyList: any = [];
 
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
   compareList: any = [];
   constructor(
-    private pocFxRateHistoryService: PocFxRateHistoryService, 
-    private router: Router, private cdr: ChangeDetectorRef, 
+    private pocFxRateHistoryService: PocFxRateHistoryService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
     public routeInfo: ActivatedRoute,
-    public _commonService: CommonService,
-    ) { }
+    public _commonService: CommonService
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -78,8 +92,7 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {};
     this.listParam = {};
-    this.searchParam.createTime = '',
-    this.searchParam.currency = ''
+    (this.searchParam.createTime = ''), (this.searchParam.currency = '');
     this.getDataList(this.tableQueryParams);
   }
 
@@ -88,48 +101,54 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
     this.initSelect();
     this.routeInfo.queryParams.subscribe((params: any) => {
       if (JSON.stringify(params) !== '{}') {
-        this.listParam.formRatePlatform = params['sourcePlatform'],
-        this.listParam.formRateCurrency = params['sourceCurrency'],
-        this.listParam.toRatePlatform = params['targetPlatform'],
-        this.listParam.toRateCurrency = params['targetCurrency']
+        (this.listParam.formRatePlatform = params['sourcePlatform']),
+          (this.listParam.formRateCurrency = params['sourceCurrency']),
+          (this.listParam.toRatePlatform = params['targetPlatform']),
+          (this.listParam.toRateCurrency = params['targetCurrency']);
       } else {
-        this.listParam.formRatePlatform = '',
-        this.listParam.formRateCurrency = '',
-        this.listParam.toRatePlatform = '',
-        this.listParam.toRateCurrency = ''
+        (this.listParam.formRatePlatform = ''),
+          (this.listParam.formRateCurrency = ''),
+          (this.listParam.toRatePlatform = ''),
+          (this.listParam.toRateCurrency = '');
       }
-    })
+    });
     if (this.router.url.indexOf('?') !== -1) {
-      history.replaceState(this.router.url, "", this.router.url.substring(0, this.router.url.indexOf('?')));
+      history.replaceState(
+        this.router.url,
+        '',
+        this.router.url.substring(0, this.router.url.indexOf('?'))
+      );
     }
   }
 
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' }).subscribe((res) => {
-      this.currencyList = res.dataInfo;
-      this.currencyList.map((item: any, i: any) => {
-        Object.assign(item, { key: i + 1 })
-      })
-      if (this.currencyList) {
-        this.routeInfo.queryParams.subscribe(params => {
-          if (JSON.stringify(params) !== '{}') {
-            this.currencyList.map((item: any, index: number) => {
-              const compareList = {
-                sourceCurrency: item.sourceCurrency,
-                sourcePlatform: item.sourcePlatform,
-                targetCurrency: item.targetCurrency,
-                targetPlatform: item.targetPlatform
-              };
-              if (JSON.stringify(params) === JSON.stringify(compareList)) {
-                this.searchParam.currency = item.key;
-                this.cdr.markForCheck();
-                this.cdr.detectChanges();
-              }
-            })
-          }
-        })
-      }
-    })
+    this._commonService
+      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
+      .subscribe((res) => {
+        this.currencyList = res.dataInfo;
+        this.currencyList.map((item: any, i: any) => {
+          Object.assign(item, { key: i + 1 });
+        });
+        if (this.currencyList) {
+          this.routeInfo.queryParams.subscribe((params) => {
+            if (JSON.stringify(params) !== '{}') {
+              this.currencyList.map((item: any, index: number) => {
+                const compareList = {
+                  sourceCurrency: item.sourceCurrency,
+                  sourcePlatform: item.sourcePlatform,
+                  targetCurrency: item.targetCurrency,
+                  targetPlatform: item.targetPlatform
+                };
+                if (JSON.stringify(params) === JSON.stringify(compareList)) {
+                  this.searchParam.currency = item.key;
+                  this.cdr.markForCheck();
+                  this.cdr.detectChanges();
+                }
+              });
+            }
+          });
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -147,21 +166,19 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-
-
     this.currencyList.map((item: any) => {
       if (this.searchParam.currency === item.key) {
-        this.listParam.formRatePlatform = item.sourcePlatform,
-        this.listParam.formRateCurrency = item.sourceCurrency,
-        this.listParam.toRatePlatform = item.targetPlatform,
-        this.listParam.toRateCurrency = item.targetCurrency
+        (this.listParam.formRatePlatform = item.sourcePlatform),
+          (this.listParam.formRateCurrency = item.sourceCurrency),
+          (this.listParam.toRatePlatform = item.targetPlatform),
+          (this.listParam.toRateCurrency = item.targetCurrency);
       } else if (this.searchParam.currency === '') {
-        this.listParam.formRatePlatform = '',
-        this.listParam.formRateCurrency = '',
-        this.listParam.toRatePlatform = '',
-        this.listParam.toRateCurrency = ''
+        (this.listParam.formRatePlatform = ''),
+          (this.listParam.formRateCurrency = ''),
+          (this.listParam.toRatePlatform = ''),
+          (this.listParam.toRateCurrency = '');
       }
-    })
+    });
 
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
@@ -175,16 +192,21 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
         createTime: this.searchParam.createTime
       }
     };
-    this.pocFxRateHistoryService.fetchList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
+    this.pocFxRateHistoryService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
 
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -204,14 +226,15 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
           title: 'Date',
           field: 'rateDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 200
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

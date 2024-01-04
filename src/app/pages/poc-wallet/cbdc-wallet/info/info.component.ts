@@ -217,6 +217,7 @@ export class InfoComponent implements OnInit {
           title: 'Transaction Time',
           field: 'txTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 100
         },
         {

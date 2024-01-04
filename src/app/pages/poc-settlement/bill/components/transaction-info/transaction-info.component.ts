@@ -1,5 +1,20 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef, Input } from '@angular/core';
-import { FormControl, FormGroup, FormRecord, NonNullableFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef,
+  Input
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormRecord,
+  NonNullableFormBuilder,
+  UntypedFormControl,
+  Validators
+} from '@angular/forms';
 import { DestroyService } from '@app/core/services/common/destory.service';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { BillService } from '@app/core/services/http/poc-settlement/bill/bill.service';
@@ -27,7 +42,8 @@ interface SearchParam {
 export class TransactionInfoComponent implements OnInit {
   @ViewChild('amountTpl', { static: true }) amountTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('fromTpl', { static: true }) fromTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('commissionFeeTpl', { static: true }) commissionFeeTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('commissionFeeTpl', { static: true })
+  commissionFeeTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     transactionNo: '',
     billNo: '',
@@ -35,7 +51,12 @@ export class TransactionInfoComponent implements OnInit {
   };
 
   currencyList: any = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
   isVisibleInvoice: boolean = false;
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
@@ -50,13 +71,12 @@ export class TransactionInfoComponent implements OnInit {
     private fb: NonNullableFormBuilder,
     private message: NzMessageService,
     private modal: NzModalService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initTable();
     this.initSelect();
     this.addField();
-
   }
 
   tableChangeDectction(): void {
@@ -70,12 +90,14 @@ export class TransactionInfoComponent implements OnInit {
   }
 
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' }).subscribe((res) => {
-      this.currencyList = res.dataInfo;
-      this.currencyList.map((item: any, i: any) => {
-        Object.assign(item, { key: i + 1 })
-      })
-    })
+    this._commonService
+      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
+      .subscribe((res) => {
+        this.currencyList = res.dataInfo;
+        this.currencyList.map((item: any, i: any) => {
+          Object.assign(item, { key: i + 1 });
+        });
+      });
   }
 
   changePageSize(e: number): void {
@@ -90,15 +112,20 @@ export class TransactionInfoComponent implements OnInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-    this.billService.getTransactionList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.billService
+      .getTransactionList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   getExport() {
@@ -108,15 +135,21 @@ export class TransactionInfoComponent implements OnInit {
   cancelExport(): void {
     this.isVisible = false;
     this.validateForm.reset();
-    this.validateForm = this.fb.record({'email0': ''});
+    this.validateForm = this.fb.record({ email0: '' });
     this.listOfControl = [{ id: 0, controlInstance: 'email0' }];
-    this.validateForm.get(this.listOfControl[0].controlInstance)?.setValue(sessionStorage.getItem('email'));
+    this.validateForm
+      .get(this.listOfControl[0].controlInstance)
+      ?.setValue(sessionStorage.getItem('email'));
   }
 
   emailValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/).test(control.value)) {
+    } else if (
+      !/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/.test(
+        control.value
+      )
+    ) {
       return { regular: true, error: true };
     }
     return {};
@@ -124,7 +157,10 @@ export class TransactionInfoComponent implements OnInit {
 
   addField(e?: MouseEvent): void {
     e?.preventDefault();
-    const id = this.listOfControl.length > 0 ? this.listOfControl[this.listOfControl.length - 1].id + 1 : 0;
+    const id =
+      this.listOfControl.length > 0
+        ? this.listOfControl[this.listOfControl.length - 1].id + 1
+        : 0;
     const control = {
       id,
       controlInstance: `email${id}`
@@ -134,7 +170,9 @@ export class TransactionInfoComponent implements OnInit {
       this.listOfControl[index - 1].controlInstance,
       this.fb.control('', [Validators.required, this.emailValidator])
     );
-    this.validateForm.get(this.listOfControl[0].controlInstance)?.setValue(sessionStorage.getItem('email'));
+    this.validateForm
+      .get(this.listOfControl[0].controlInstance)
+      ?.setValue(sessionStorage.getItem('email'));
   }
 
   removeField(i: { id: number; controlInstance: string }, e: MouseEvent): void {
@@ -157,30 +195,38 @@ export class TransactionInfoComponent implements OnInit {
         recipientList
       };
       this.isLoading = true;
-      this.billService.getExport(params).pipe(finalize(() => this.isLoading = false)).subscribe({
-        next: res => {
-          if (res) {
-            this.modal.success({
-              nzTitle: 'Export successfully !',
-              nzContent: '<p style="color: red;">please submit the next export in 2 minutes</p>'
-            }).afterClose.subscribe(() => {
-              this.validateForm.reset();
-              this.listOfControl = [{ id: 0, controlInstance: 'email0' }];
-              this.validateForm.get(this.listOfControl[0].controlInstance)?.setValue(sessionStorage.getItem('email'));
-            });
+      this.billService
+        .getExport(params)
+        .pipe(finalize(() => (this.isLoading = false)))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.modal
+                .success({
+                  nzTitle: 'Export successfully !',
+                  nzContent:
+                    '<p style="color: red;">please submit the next export in 2 minutes</p>'
+                })
+                .afterClose.subscribe(() => {
+                  this.validateForm.reset();
+                  this.listOfControl = [{ id: 0, controlInstance: 'email0' }];
+                  this.validateForm
+                    .get(this.listOfControl[0].controlInstance)
+                    ?.setValue(sessionStorage.getItem('email'));
+                });
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+            this.isVisible = false;
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
+            this.isVisible = false;
           }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-          this.isVisible = false;
-        },
-        error: err => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-          this.isVisible = false;
-        }
-      })
+        });
     } else {
-      Object.values(this.validateForm.controls).forEach(control => {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -226,20 +272,20 @@ export class TransactionInfoComponent implements OnInit {
           title: 'Date',
           field: 'transactionDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Settle Model Code',
           field: 'settlementModelCode',
           width: 160
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
-
   }
 }

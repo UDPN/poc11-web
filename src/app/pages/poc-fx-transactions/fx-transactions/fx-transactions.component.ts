@@ -1,4 +1,11 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocFxTransactionsService } from '@app/core/services/http/poc-fx-transactions/poc-fx-transactions.service';
 import { SearchCommonVO } from '@app/core/services/types';
@@ -16,21 +23,24 @@ interface SearchParam {
 }
 
 interface ListParam {
-  formRatePlatform: string,
-  formRateCurrency: string,
-  toRatePlatform: string,
-  toRateCurrency: string,
+  formRatePlatform: string;
+  formRateCurrency: string;
+  toRatePlatform: string;
+  toRateCurrency: string;
 }
 
 @Component({
   selector: 'app-fx-transactions',
   templateUrl: './fx-transactions.component.html',
-  styleUrls: ['./fx-transactions.component.less'],
+  styleUrls: ['./fx-transactions.component.less']
 })
 export class FxTransactionsComponent implements OnInit, AfterViewInit {
-  @ViewChild('headerContent', { static: false }) headerContent!: TemplateRef<NzSafeAny>;
-  @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerContent', { static: false })
+  headerContent!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerExtra', { static: false })
+  headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true }) amountTpl!: TemplateRef<NzSafeAny>;
 
   searchParam: Partial<SearchParam> = {
@@ -46,8 +56,17 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     toRateCurrency: ''
   };
   currencyList: any = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
-  constructor(private pocFxTransactionsService: PocFxTransactionsService, private cdr: ChangeDetectorRef, private _commonService: CommonService) { }
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
+  constructor(
+    private pocFxTransactionsService: PocFxTransactionsService,
+    private cdr: ChangeDetectorRef,
+    private _commonService: CommonService
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -67,12 +86,11 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     this.tableConfig.loading = isLoading;
     this.tableChangeDectction();
   }
-  
+
   resetForm(): void {
     this.searchParam = {};
     this.listParam = {};
-    this.searchParam.creation = [],
-    this.searchParam.currency = ''
+    (this.searchParam.creation = []), (this.searchParam.currency = '');
     this.getDataList(this.tableQueryParams);
   }
 
@@ -80,27 +98,29 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     this.initTable();
     this.initSelect();
   }
-  
+
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' }).subscribe((res) => {
-      this.currencyList = res.dataInfo;
-      this.currencyList.map((item: any, i: any) => {
-        Object.assign(item, { key: i + 1 })
-      })
-      this.cdr.markForCheck();
-    })
+    this._commonService
+      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
+      .subscribe((res) => {
+        this.currencyList = res.dataInfo;
+        this.currencyList.map((item: any, i: any) => {
+          Object.assign(item, { key: i + 1 });
+        });
+        this.cdr.markForCheck();
+      });
   }
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: [ 'FX Transactions'],
+      breadcrumb: ['FX Transactions'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
     };
   }
-  
+
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -108,17 +128,17 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
   getDataList(e?: NzTableQueryParams): void {
     this.currencyList.map((item: any) => {
       if (this.searchParam.currency === item.key) {
-        this.listParam.formRatePlatform = item.sourcePlatform,
-        this.listParam.formRateCurrency = item.sourceCurrency,
-        this.listParam.toRatePlatform = item.targetPlatform,
-        this.listParam.toRateCurrency = item.targetCurrency
+        (this.listParam.formRatePlatform = item.sourcePlatform),
+          (this.listParam.formRateCurrency = item.sourceCurrency),
+          (this.listParam.toRatePlatform = item.targetPlatform),
+          (this.listParam.toRateCurrency = item.targetCurrency);
       } else if (this.searchParam.currency === '') {
-        this.listParam.formRatePlatform = '',
-        this.listParam.formRateCurrency = '',
-        this.listParam.toRatePlatform = '',
-        this.listParam.toRateCurrency = ''
+        (this.listParam.formRatePlatform = ''),
+          (this.listParam.formRateCurrency = ''),
+          (this.listParam.toRatePlatform = ''),
+          (this.listParam.toRateCurrency = '');
       }
-    })
+    });
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
@@ -130,18 +150,23 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         formCurrency: this.listParam.formRateCurrency,
         toPlatform: this.listParam.toRatePlatform,
         toCurrency: this.listParam.toRateCurrency,
-        creation: this.searchParam.creation,
+        creation: this.searchParam.creation
       }
     };
-    this.pocFxTransactionsService.getList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.pocFxTransactionsService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -166,6 +191,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           title: 'Date',
           field: 'transactionDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 180
         },
         {
@@ -181,13 +207,13 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           fixedDir: 'right',
           showAction: false,
           width: 120
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }
