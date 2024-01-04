@@ -34,23 +34,22 @@
       Documentation</a>
   </button> -->
 </ng-template>
-<ng-template #capitalTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolPlatform="capitalPoolPlatform">
+<ng-template #capitalTpl let-capitalPoolCurrency="capitalPoolCurrency">
   <span>{{
     capitalPoolCurrency + ' Capital Pool'
     }}</span>
 </ng-template>
-<ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency"
-  let-capitalPoolPlatform="capitalPoolPlatform">
+<ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency">
   <span>{{ capitalPoolBalance + ' ' + capitalPoolCurrency }}</span>
 </ng-template>
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>
-<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolPlatform="capitalPoolPlatform"
+<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency"
   let-capitalPoolAddress="capitalPoolAddress" let-currencyPrecision="currencyPrecision">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
-      (click)="getEdit(capitalPoolCurrency, capitalPoolPlatform, capitalPoolAddress, currencyPrecision)">
+      (click)="getEdit(capitalPoolCurrency, capitalPoolAddress, currencyPrecision)">
       Edit
     </span>
   </ng-container>

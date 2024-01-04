@@ -184,7 +184,6 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
 
   getEdit(
     capitalPoolCurrency: string,
-    capitalPoolPlatform: string,
     capitalPoolAddress: string,
     currencyPrecision: number
   ) {

@@ -51,9 +51,9 @@
               <td class="p-l-16" [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
                 (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
               <td
-                [title]="data.sourceCurrency + '-' +  data.sourcePlatform + '->' + data.targetCurrency + '-' + data.targetPlatform">
+                [title]="data.sourceCurrency + '->' + data.targetCurrency">
                 {{
-                data.sourceCurrency + '-' + data.sourcePlatform + '->' + data.targetCurrency + '-' + data.targetPlatform }}</td>
+                data.sourceCurrency + '->' + data.targetCurrency }}</td>
             </tr>
           </tbody>
         </nz-table>

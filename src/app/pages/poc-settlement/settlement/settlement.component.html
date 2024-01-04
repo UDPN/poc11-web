@@ -27,7 +27,7 @@
               <nz-select nzPlaceHolder="" name="pairedExchangeRate" [(ngModel)]="searchParam.pairedExchangeRate">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let item of pairedList" [nzValue]="item.key"
-                  [nzLabel]="item.sourceCurrency + '-' + item.sourcePlatform + '->' + item.targetCurrency + '-' + item.targetPlatform">
+                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -65,10 +65,10 @@
   <app-card-table-wrap [tableTitle]="'Settlement Model List'" [isNormalTable]="true" [btnTpl]="tableBtns">
     <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-    <ng-template #exchangeRateTpl let-formRateCurrency="formRateCurrency" let-formRatePlatform="formRatePlatform"
-      let-toRateCurrency="toRateCurrency" let-toRatePlatform="toRatePlatform">
-      <span [title]="formRateCurrency + '-' + formRatePlatform + '->' + toRateCurrency + '-' + toRatePlatform">{{
-        formRateCurrency + '-' + formRatePlatform + '->' + toRateCurrency + '-' + toRatePlatform
+    <ng-template #exchangeRateTpl let-formRateCurrency="formRateCurrency"
+      let-toRateCurrency="toRateCurrency">
+      <span [title]="formRateCurrency + '->' + toRateCurrency">{{
+        formRateCurrency + '->' + toRateCurrency
         }}</span>
     </ng-template>
     <ng-template #operationTpl let-formRateCurrency="formRateCurrency" let-formRatePlatform="formRatePlatform"
