@@ -228,7 +228,8 @@
         class="card-descriptions-vertical title-order">
         <nz-descriptions-item nzTitle="Currency & Interbank Settlement Amount"><span class="text-right"
             [ngStyle]="{'color': 'red'}">{{ checkedItemComment.length > 0 ?
-            ('-' +checkedItemComment[0].total + ' ' + availableCurrecyModel.replace('-UDPN', '') ): ('-' +
+            ((checkedItemComment[0].total > 0 ?'-': ' ') + checkedItemComment[0].total + ' ' +
+            availableCurrecyModel.replace('-UDPN', '') ): ('-' +
             validateForm.controls["amount"].value + ' ' +availableCurrecyModel.replace('-UDPN', ''))
             }}</span>
         </nz-descriptions-item>
