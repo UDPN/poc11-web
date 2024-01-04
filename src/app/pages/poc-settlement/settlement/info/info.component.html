@@ -14,17 +14,16 @@
         info.settlementModelName
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Currency Pair">{{
-        info.formRateCurrency + '-' + info.formRatePlatform + '->' + info.toRateCurrency + '-' + info.toRatePlatform
+        info.formRateCurrency + '->' + info.toRateCurrency
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Charging Model">{{
         info.chargingModel | map: 'chargingModel'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Commission">{{
-        info.chargingModel === 1 ? (info.ratioCommission + '%') : (info.regularCommission + ' ' + info.formRateCurrency + '-'
-        + info.formRatePlatform)
+        info.chargingModel === 1 ? (info.ratioCommission + '%') : (info.regularCommission + ' ' + info.formRateCurrency)
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Max Commission" *ngIf="info.chargingModel === 1">{{
-        info.maxCommission + ' ' + info.formRateCurrency + '-' + info.formRatePlatform + '(Per transaction)'
+        info.maxCommission + ' ' + info.formRateCurrency + '(Per transaction)'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Creation Time">{{
         info.createDate | map: 'timeStamp'
@@ -36,18 +35,14 @@
       [tableData]="dataList">
     </app-ant-table>
     <ng-template #commissionTpl let-ratioCommission="ratioCommission" let-regularCommission="regularCommission"
-      let-chargingModel="chargingModel" let-formRateCurrency="formRateCurrency" let-formRatePlatform="formRatePlatform">
-      <span [title]="chargingModel === 1 ? (ratioCommission + '%') : (regularCommission + ' ' + formRateCurrency + '-' +
-      formRatePlatform)">{{
-        chargingModel === 1 ? (ratioCommission + '%') : (regularCommission + ' ' + formRateCurrency + '-' +
-        formRatePlatform)
+      let-chargingModel="chargingModel" let-formRateCurrency="formRateCurrency">
+      <span [title]="chargingModel === 1 ? (ratioCommission + '%') : (regularCommission + ' ' + formRateCurrency )">{{
+        chargingModel === 1 ? (ratioCommission + '%') : (regularCommission + ' ' + formRateCurrency)
         }}</span>
     </ng-template>
-    <ng-template #maxCommissionTpl let-maxCommission="maxCommission" let-formRateCurrency="formRateCurrency"
-      let-formRatePlatform="formRatePlatform">
-      <span [title]="maxCommission ? maxCommission + ' ' + formRateCurrency + '-' +
-      formRatePlatform : '--'">{{maxCommission ? maxCommission + ' ' + formRateCurrency + '-' +
-        formRatePlatform : '--'}}</span>
+    <ng-template #maxCommissionTpl let-maxCommission="maxCommission" let-formRateCurrency="formRateCurrency">
+      <span [title]="maxCommission ? maxCommission + ' ' + formRateCurrency : '--'">{{maxCommission ? maxCommission + '
+        ' + formRateCurrency : '--'}}</span>
     </ng-template>
   </nz-card>
 

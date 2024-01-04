@@ -31,7 +31,7 @@
               <div nz-col nzSpan="24">
                 <nz-select formControlName="pairedExchangeRate" (ngModelChange)="onChangeRate($event)">
                   <nz-option *ngFor="let item of pairedList" [nzValue]="item.key" [nzDisabled]="!tempStatus"
-                    [nzLabel]="item.sourceCurrency + '-' + item.sourcePlatform + '->' + item.targetCurrency + '-' + item.targetPlatform">
+                    [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency">
                   </nz-option>
                 </nz-select>
               </div>

@@ -27,7 +27,7 @@
               <nz-select nzPlaceHolder="" name="currency" [(ngModel)]="searchParam.currency">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let item of currencyList" [nzValue]="item.key"
-                  [nzLabel]="item.sourceCurrency + '-' + item.sourcePlatform + '->' + item.targetCurrency + '-' + item.targetPlatform">
+                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -62,10 +62,10 @@
     <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
     <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
-      let-formPlatform="formPlatform" let-toCurrency="toCurrency" let-toPlatform="toPlatform">
+      let-toCurrency="toCurrency">
       <span
-        [title]="(fromAmount + ' ' +  formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform)">{{
-        (fromAmount + ' ' + formCurrency + '-' + formPlatform + '->' + toAmount + ' ' + toCurrency + '-' + toPlatform)
+        [title]="(fromAmount + ' ' +  formCurrency + '->' + toAmount + ' ' + toCurrency)">{{
+        (fromAmount + ' ' + formCurrency + '->' + toAmount + ' ' + toCurrency)
          }}</span>
     </ng-template>
     <ng-template #operationTpl let-transactionNo="transactionNo">
