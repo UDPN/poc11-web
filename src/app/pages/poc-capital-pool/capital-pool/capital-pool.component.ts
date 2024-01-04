@@ -80,7 +80,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     public message: NzMessageService
-  ) { }
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -117,7 +117,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     }
     this.editValidateForm = this.fb.group({
       status: [true, [Validators.required]],
-      amount: ['', [Validators.required]]
+      amount: ['', [Validators.required, this.amountValidator]]
     });
   }
 

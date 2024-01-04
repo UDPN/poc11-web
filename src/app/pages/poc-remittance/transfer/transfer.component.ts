@@ -198,7 +198,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       }
 
       this.availableCurrecy.push({
-        label: items.digitalCurrencyName,
+        label: items.digitalSymbol,
         value: items.digitalCurrencyName,
         bankName: items.bankName,
         cbdcCount: items.cbdcCount
