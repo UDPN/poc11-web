@@ -216,7 +216,7 @@
                     <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false"
                         [nzBordered]="false" class="card-descriptions-vertical">
                         <nz-descriptions-item nzTitle="Payment Amount">{{ checkedItemComment[0].total +" "+
-                            reveingCurrecy
+                            reveingCurrecy.replace('-UDPN', '')
                             }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Transaction Wallet Address">{{
                             validateForm.controls["transactionWalletAddress"].value }}</nz-descriptions-item>
@@ -235,7 +235,7 @@
                         [nzBordered]="false" class="card-descriptions-vertical">
                         <nz-descriptions-item nzTitle="FX Purchase Amount">{{
                             validateForm.controls["availableBalance"].value +" "+
-                            purchCurrecy
+                            purchCurrecy.replace('-UDPN', '')
                             }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="FX Receiving Wallet Address">{{
                             validateForm.controls["receivingWalletAddress"].value}}</nz-descriptions-item>
@@ -260,11 +260,11 @@
                 <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }"
                     [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical m-t-25">
                     <nz-descriptions-item nzTitle="Commission">{{ checkedItemComment[0].rate +" "+
-                        reveingCurrecy
+                        reveingCurrecy.replace('-UDPN', '')
                         }}</nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Total Payment Amount">{{
                         checkedItemComment[0].total +" "+
-                        reveingCurrecy}}</nz-descriptions-item>
+                        reveingCurrecy.replace('-UDPN', '')}}</nz-descriptions-item>
                 </nz-descriptions>
             </div>
         </div>

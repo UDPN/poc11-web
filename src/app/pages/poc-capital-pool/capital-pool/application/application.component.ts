@@ -1,4 +1,11 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { SearchCommonVO } from '@app/core/services/types';
@@ -18,25 +25,38 @@ interface SearchParam {
 @Component({
   selector: 'app-application',
   templateUrl: './application.component.html',
-  styleUrls: ['./application.component.less'],
+  styleUrls: ['./application.component.less']
 })
 export class ApplicationComponent implements OnInit {
-  @ViewChild('headerContent', { static: false }) headerContent!: TemplateRef<NzSafeAny>;
-  @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('currencyTpl', { static: true }) currencyTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerContent', { static: false })
+  headerContent!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerExtra', { static: false })
+  headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
+  currencyTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     businessApplicationStatus: '',
     applicationType: '',
     applicationDate: [],
-    approvalDate: [],
+    approvalDate: []
   };
   statusList: any = [];
   businessTypeList: any = [];
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
-  constructor(private pocCapitalPoolService: PocCapitalPoolService, private cdr: ChangeDetectorRef, public _commonService: CommonService) { }
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
+  constructor(
+    private pocCapitalPoolService: PocCapitalPoolService,
+    private cdr: ChangeDetectorRef,
+    public _commonService: CommonService
+  ) {}
   ngOnInit() {
     this.initTable();
     this.initSelect();
@@ -62,13 +82,23 @@ export class ApplicationComponent implements OnInit {
   }
 
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_FOREIGN_EXCHANGE_APPLICATION' }).subscribe((res) => {
-      this.statusList = res.dataInfo;
-    })
+    this._commonService
+      .commonApi({
+        dropDownTypeCode: 'drop_down_business_status_info',
+        csePCode: 'FXSP_FOREIGN_EXCHANGE_APPLICATION'
+      })
+      .subscribe((res) => {
+        this.statusList = res.dataInfo;
+      });
 
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_EXCHANGE_BUSINESS_TYPE' }).subscribe((res) => {
-      this.businessTypeList = res.dataInfo;
-    })
+    this._commonService
+      .commonApi({
+        dropDownTypeCode: 'drop_down_business_status_info',
+        csePCode: 'FXSP_EXCHANGE_BUSINESS_TYPE'
+      })
+      .subscribe((res) => {
+        this.businessTypeList = res.dataInfo;
+      });
   }
 
   changePageSize(e: number): void {
@@ -82,15 +112,20 @@ export class ApplicationComponent implements OnInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-    this.pocCapitalPoolService.getApplicationList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.pocCapitalPoolService
+      .getApplicationList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -116,12 +151,14 @@ export class ApplicationComponent implements OnInit {
           title: 'Application Time',
           field: 'applicationTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Approval Time',
           field: 'approvalTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 180
         },
         {
@@ -137,14 +174,13 @@ export class ApplicationComponent implements OnInit {
           fixedDir: 'right',
           showAction: false,
           width: 160
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { BillService } from '@app/core/services/http/poc-settlement/bill/bill.service';
@@ -13,8 +19,10 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
   styleUrls: ['./info.component.less']
 })
 export class InfoComponent implements OnInit {
-  @ViewChild('commissionTpl', { static: true }) commissionTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('maxCommissionTpl', { static: true }) maxCommissionTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('commissionTpl', { static: true })
+  commissionTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('maxCommissionTpl', { static: true })
+  maxCommissionTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -33,7 +41,12 @@ export class InfoComponent implements OnInit {
       title: 'Transaction Details'
     }
   ];
-  constructor(public routeInfo: ActivatedRoute, private billService: BillService, private commonService: CommonService, private cdr: ChangeDetectorRef) { }
+  constructor(
+    public routeInfo: ActivatedRoute,
+    private billService: BillService,
+    private commonService: CommonService,
+    private cdr: ChangeDetectorRef
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Detail`,
@@ -58,10 +71,12 @@ export class InfoComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.routeInfo.queryParams.subscribe(params => {
-      this.billService.getInfo({billNo: params['billNo'] }).subscribe((res) => {
-        this.info = res;
-      })
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.billService
+        .getInfo({ billNo: params['billNo'] })
+        .subscribe((res) => {
+          this.info = res;
+        });
     });
   }
 
@@ -89,20 +104,20 @@ export class InfoComponent implements OnInit {
           title: 'Modification Time',
           field: 'createDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Modified By',
-          field:'modifyUser',
+          field: 'modifyUser',
           width: 220
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

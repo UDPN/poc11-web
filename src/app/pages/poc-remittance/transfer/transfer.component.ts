@@ -12,6 +12,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { Route, Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
@@ -64,6 +65,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   availableCurrecyModel = '';
   settlementStatus = false;
   beneficiaryCurrencyName: any = '';
+  transferTitle: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -71,7 +73,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private transferService: TransferService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private router: Router
   ) {}
   ngAfterViewInit(): void {
     this.fromEventBeneficialWalletAddress();
@@ -130,6 +133,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   };
 
   initData() {
+    this.beneficialBankNameList = [];
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
         this.beneficialBankNameList.push({
@@ -229,28 +233,42 @@ export class TransferComponent implements OnInit, AfterViewInit {
       })
       .subscribe((res) => {
         let resultData: any[] = [];
+        this.transferTitle =
+          this.availableCurrecyModel.replace('-UDPN', '') +
+          '/' +
+          this.beneficiaryCurrency.replace('-UDPN', '') +
+          ' Fx Rate';
         res.forEach((item: any) => {
           resultData.push({
             rateId: item.rateId,
             sp: item.provider,
-            currency: '1 ' + item.from + '->' + item.to,
+            currency:
+              '1 ' +
+              item.from.replace('-UDPN', '') +
+              '->' +
+              item.to.replace('-UDPN', ''),
             rate: item.rate,
-            com:
+            com: String(
               item.smChargeModel === 0
-                ? this.validateForm.get('amount')?.value * item.smValue >
+                ? (this.validateForm.get('amount')?.value / item.rate) *
+                    item.smValue >
                   item.smMaxFee
                   ? item.smMaxFee
-                  : this.validateForm.get('amount')?.value * item.smValue
-                : item.smValue,
+                  : (this.validateForm.get('amount')?.value / item.rate) *
+                    item.smValue
+                : item.smValue
+            ).replace(/^(.*\..{8}).*$/, '$1'),
             total: String(
               this.validateForm.get('amount')?.value / item.rate +
                 (item.smChargeModel === 0
-                  ? this.validateForm.get('amount')?.value * item.smValue >
+                  ? (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue >
                     item.smMaxFee
                     ? item.smMaxFee
-                    : this.validateForm.get('amount')?.value * item.smValue
+                    : (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue
                   : item.smValue)
-            ).replace(/^(.*\..{4}).*$/, '$1')
+            ).replace(/^(.*\..{8}).*$/, '$1')
             // total: 1
           });
         });
@@ -428,9 +446,12 @@ export class TransferComponent implements OnInit, AfterViewInit {
               nzContent: 'Transfer successful!'
             })
             .afterClose.subscribe((_) => {
-              this.initData();
+              // this.initData();
               this.validateForm.reset();
               this.passwordForm.reset();
+              this.router.navigateByUrl(
+                '/poc/poc-remittance/transaction-record'
+              );
             });
         }
         this.isLoading = false;

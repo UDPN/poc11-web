@@ -12,6 +12,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -62,6 +63,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   showStatus = false;
   receivingWalletAddressList: any[] = [];
   purIndex: number = 0;
+  transferTitle: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -69,7 +71,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private fxPurchasingService: FxPurchasingService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private router: Router
   ) {}
   ngAfterViewInit(): void {
     this.fromEventAmount();
@@ -211,30 +214,43 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
             })
             .subscribe((res) => {
               let resultData: any[] = [];
+              this.transferTitle =
+                this.reveingCurrecy.replace('-UDPN', '') +
+                '/' +
+                this.purchCurrecy.replace('-UDPN', '') +
+                ' Fx Rate';
               res.forEach((item: any) => {
                 resultData.push({
                   rateId: item.rateId,
                   sp: item.provider,
-                  currency: '1 ' + item.from + '->' + item.to,
+                  currency:
+                    '1 ' +
+                    item.from.replace('-UDPN', '') +
+                    '->' +
+                    item.to.replace('-UDPN', ''),
                   rate: item.rate,
-                  com:
+                  com: String(
                     item.smChargeModel === 0
-                      ? this.validateForm.get('amount')?.value * item.smValue >
+                      ? (this.validateForm.get('amount')?.value / item.rate) *
+                          item.smValue >
                         item.smMaxFee
                         ? item.smMaxFee
-                        : this.validateForm.get('amount')?.value * item.smValue
-                      : item.smValue,
+                        : (this.validateForm.get('amount')?.value / item.rate) *
+                          item.smValue
+                      : item.smValue
+                  ).replace(/^(.*\..{8}).*$/, '$1'),
                   total: String(
-                    this.validateForm.get('amount')?.value * item.rate +
+                    this.validateForm.get('amount')?.value / item.rate +
                       (item.smChargeModel === 0
-                        ? this.validateForm.get('amount')?.value *
+                        ? (this.validateForm.get('amount')?.value / item.rate) *
                             item.smValue >
                           item.smMaxFee
                           ? item.smMaxFee
-                          : this.validateForm.get('amount')?.value *
+                          : (this.validateForm.get('amount')?.value /
+                              item.rate) *
                             item.smValue
                         : item.smValue)
-                  ).replace(/^(.*\..{4}).*$/, '$1')
+                  ).replace(/^(.*\..{8}).*$/, '$1')
                 });
               });
               this.nzLoading = false;
@@ -330,9 +346,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
               nzContent: 'Transfer successful!'
             })
             .afterClose.subscribe((_) => {
-              this.initData();
+              // this.initData();
               this.validateForm.reset();
               this.passwordForm.reset();
+              this.router.navigateByUrl(
+                '/poc/poc-remittance/transaction-record'
+              );
             });
         }
         this.isLoading = false;

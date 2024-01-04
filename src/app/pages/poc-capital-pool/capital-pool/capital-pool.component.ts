@@ -6,7 +6,13 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  UntypedFormControl,
+  Validators
+} from '@angular/forms';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
@@ -74,7 +80,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     public message: NzMessageService
-  ) { }
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -111,13 +117,11 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     }
     this.editValidateForm = this.fb.group({
       status: [true, [Validators.required]],
-      amount: ['', [Validators.required]],
+      amount: ['', [Validators.required]]
     });
   }
 
-  amountValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
+  amountValidator = (control: FormControl): { [s: string]: boolean } => {
     this.reg =
       this.editInfo.currencyPrecision > 0
         ? `^[+]?\\d+(?:\\.\\d{1,` + this.editInfo.currencyPrecision + `})?$`
@@ -178,13 +182,18 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getEdit(capitalPoolCurrency: string, capitalPoolPlatform: string, capitalPoolAddress: string, currencyPrecision: number) {
+  getEdit(
+    capitalPoolCurrency: string,
+    capitalPoolPlatform: string,
+    capitalPoolAddress: string,
+    currencyPrecision: number
+  ) {
     this.isVisible = true;
     this.editInfo = {
       capitalPool: capitalPoolCurrency,
       capitalPoolAddress,
       currencyPrecision
-    }
+    };
   }
 
   cancelEdit() {
@@ -197,23 +206,28 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       amount: this.editValidateForm.get('amount')?.value,
       chainAccountAddress: this.editInfo.capitalPoolAddress,
       currency: this.editInfo.capitalPool
-    }
-    this.pocCapitalPoolService.edit(params).pipe(finalize(() => this.isLoading = false)).subscribe({
-      next: res => {
-        if (res) {
-          this.isVisible = false;
-          this.message.success('Edit successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
-            this.getDataList();
-          });
+    };
+    this.pocCapitalPoolService
+      .edit(params)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.isVisible = false;
+            this.message
+              .success('Edit successfully!', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                this.getDataList();
+              });
+          }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
         }
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      },
-      error: err => {
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      }
-    })
+      });
   }
 
   private initTable(): void {
@@ -243,6 +257,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
           title: 'Date',
           field: 'createDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 180
         },
         {

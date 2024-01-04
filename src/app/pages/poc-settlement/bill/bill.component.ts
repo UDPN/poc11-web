@@ -1,5 +1,18 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormControl, FormRecord, NonNullableFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
+import {
+  FormControl,
+  FormRecord,
+  NonNullableFormBuilder,
+  UntypedFormControl,
+  Validators
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { BillService } from '@app/core/services/http/poc-settlement/bill/bill.service';
@@ -21,26 +34,32 @@ interface SearchParam {
 }
 
 interface ListParam {
-  formPlatform: string,
-  formCurrency: string,
-  toPlatform: string,
-  toCurrency: string,
+  formPlatform: string;
+  formCurrency: string;
+  toPlatform: string;
+  toCurrency: string;
 }
 
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.component.html',
-  styleUrls: ['./bill.component.less'],
+  styleUrls: ['./bill.component.less']
 })
 export class BillComponent implements OnInit, AfterViewInit {
-  @ViewChild('headerContent', { static: false }) headerContent!: TemplateRef<NzSafeAny>;
-  @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('currencyTpl', { static: true }) currencyTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerContent', { static: false })
+  headerContent!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerExtra', { static: false })
+  headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
+  currencyTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('fromTpl', { static: true }) fromTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true }) amountTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('commissionFeeTpl', { static: true }) commissionFeeTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('billingAmountTpl', { static: true }) billingAmountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('commissionFeeTpl', { static: true })
+  commissionFeeTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('billingAmountTpl', { static: true })
+  billingAmountTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -60,7 +79,12 @@ export class BillComponent implements OnInit, AfterViewInit {
     toCurrency: ''
   };
   currencyList: any = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
   isVisibleInvoice: boolean = false;
   isVisibleExport: boolean = false;
   tableConfig!: AntTableConfig;
@@ -68,19 +92,19 @@ export class BillComponent implements OnInit, AfterViewInit {
   dataList: NzSafeAny[] = [];
   invoiceList: any = [];
   invoiceInfo: any = {
-    billNo: '',
+    billNo: ''
   };
   isLoading: boolean = false;
   listOfControl: Array<{ id: number; controlInstance: string }> = [];
   validateForm: FormRecord<FormControl<string>> = this.fb.record({});
   constructor(
-    private billService: BillService, 
+    private billService: BillService,
     private cdr: ChangeDetectorRef,
-    public _commonService: CommonService, 
-    private router: Router, 
+    public _commonService: CommonService,
+    private router: Router,
     private fb: NonNullableFormBuilder,
     private modal: NzModalService
-    ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -100,7 +124,11 @@ export class BillComponent implements OnInit, AfterViewInit {
   emailValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!(/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/).test(control.value)) {
+    } else if (
+      !/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/.test(
+        control.value
+      )
+    ) {
       return { regular: true, error: true };
     }
     return {};
@@ -119,18 +147,20 @@ export class BillComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {};
     this.listParam = {};
-    this.searchParam.creation = '',
-      this.searchParam.currencyPair = '',
+    (this.searchParam.creation = ''),
+      (this.searchParam.currencyPair = ''),
       this.getDataList(this.tableQueryParams);
   }
 
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' }).subscribe((res) => {
-      this.currencyList = res.dataInfo;
-      this.currencyList.map((item: any, i: any) => {
-        Object.assign(item, { key: i + 1 })
-      })
-    })
+    this._commonService
+      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
+      .subscribe((res) => {
+        this.currencyList = res.dataInfo;
+        this.currencyList.map((item: any, i: any) => {
+          Object.assign(item, { key: i + 1 });
+        });
+      });
   }
 
   changePageSize(e: number): void {
@@ -140,17 +170,17 @@ export class BillComponent implements OnInit, AfterViewInit {
   getDataList(e?: NzTableQueryParams): void {
     this.currencyList.map((item: any) => {
       if (this.searchParam.currencyPair === item.key) {
-        this.listParam.formPlatform = item.sourcePlatform,
-          this.listParam.formCurrency = item.sourceCurrency,
-          this.listParam.toPlatform = item.targetPlatform,
-          this.listParam.toCurrency = item.targetCurrency
+        (this.listParam.formPlatform = item.sourcePlatform),
+          (this.listParam.formCurrency = item.sourceCurrency),
+          (this.listParam.toPlatform = item.targetPlatform),
+          (this.listParam.toCurrency = item.targetCurrency);
       } else if (this.searchParam.currencyPair === '') {
-        this.listParam.formPlatform = '',
-          this.listParam.formCurrency = '',
-          this.listParam.toPlatform = '',
-          this.listParam.toCurrency = ''
+        (this.listParam.formPlatform = ''),
+          (this.listParam.formCurrency = ''),
+          (this.listParam.toPlatform = ''),
+          (this.listParam.toCurrency = '');
       }
-    })
+    });
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
@@ -167,15 +197,20 @@ export class BillComponent implements OnInit, AfterViewInit {
         creation: this.searchParam.creation
       }
     };
-    this.billService.getList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.billService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   onInvoice(billNo: string) {
@@ -184,11 +219,13 @@ export class BillComponent implements OnInit, AfterViewInit {
       this.invoiceInfo = res;
       // this.invoiceList = res.billInvoiceList;
       this.cdr.markForCheck();
-    })
+    });
   }
 
   onDetail(billNo: string) {
-    this.router.navigate(['/poc/poc-settlement/billing/info'], { queryParams: { billNo } });
+    this.router.navigate(['/poc/poc-settlement/billing/info'], {
+      queryParams: { billNo }
+    });
     sessionStorage.setItem('billNo', billNo);
     this.cdr.markForCheck();
   }
@@ -201,15 +238,19 @@ export class BillComponent implements OnInit, AfterViewInit {
   cancelExportPdf(): void {
     this.isVisibleExport = false;
     this.validateForm.reset();
-    this.validateForm = this.fb.record({'pdfEmail0': ''});
+    this.validateForm = this.fb.record({ pdfEmail0: '' });
     this.listOfControl = [{ id: 0, controlInstance: 'pdfEmail0' }];
-    this.validateForm.get(this.listOfControl[0].controlInstance)?.setValue(sessionStorage.getItem('email'));
-    
+    this.validateForm
+      .get(this.listOfControl[0].controlInstance)
+      ?.setValue(sessionStorage.getItem('email'));
   }
 
   addField(e?: MouseEvent): void {
     e?.preventDefault();
-    const id = this.listOfControl.length > 0 ? this.listOfControl[this.listOfControl.length - 1].id + 1 : 0;
+    const id =
+      this.listOfControl.length > 0
+        ? this.listOfControl[this.listOfControl.length - 1].id + 1
+        : 0;
     const control = {
       id,
       controlInstance: `pdfEmail${id}`
@@ -219,7 +260,9 @@ export class BillComponent implements OnInit, AfterViewInit {
       this.listOfControl[index - 1].controlInstance,
       this.fb.control('', [Validators.required, this.emailValidator])
     );
-    this.validateForm.get(this.listOfControl[0].controlInstance)?.setValue(sessionStorage.getItem('email'));
+    this.validateForm
+      .get(this.listOfControl[0].controlInstance)
+      ?.setValue(sessionStorage.getItem('email'));
   }
 
   removeField(i: { id: number; controlInstance: string }, e: MouseEvent): void {
@@ -240,30 +283,39 @@ export class BillComponent implements OnInit, AfterViewInit {
         recipientList
       };
       this.isLoading = true;
-      this.billService.getExportPdf(params).pipe(finalize(() => this.isLoading = false)).subscribe({
-        next: res => {
-          if (res) {
-            this.modal.success({
-              nzTitle: 'Export successfully !',
-              nzContent: ''
-            }).afterClose.subscribe(() => {
-              this.validateForm.reset();
-              this.listOfControl = [{ id: 0, controlInstance: 'pdfEmail0' }];
-              this.validateForm.get(this.listOfControl[0].controlInstance)?.setValue(sessionStorage.getItem('email'));
-            });
+      this.billService
+        .getExportPdf(params)
+        .pipe(finalize(() => (this.isLoading = false)))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.modal
+                .success({
+                  nzTitle: 'Export successfully !',
+                  nzContent: ''
+                })
+                .afterClose.subscribe(() => {
+                  this.validateForm.reset();
+                  this.listOfControl = [
+                    { id: 0, controlInstance: 'pdfEmail0' }
+                  ];
+                  this.validateForm
+                    .get(this.listOfControl[0].controlInstance)
+                    ?.setValue(sessionStorage.getItem('email'));
+                });
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+            this.isVisibleExport = false;
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
+            this.isVisibleExport = false;
           }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-          this.isVisibleExport = false;
-        },
-        error: err => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-          this.isVisibleExport = false;
-        }
-      })
+        });
     } else {
-      Object.values(this.validateForm.controls).forEach(control => {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -314,6 +366,7 @@ export class BillComponent implements OnInit, AfterViewInit {
           title: 'Creation Time',
           field: 'createDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 180
         },
         {
@@ -323,14 +376,13 @@ export class BillComponent implements OnInit, AfterViewInit {
           fixedDir: 'right',
           showAction: false,
           width: 150
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
     // this.invoiceConfig = {
     //   headers: [
@@ -363,6 +415,7 @@ export class BillComponent implements OnInit, AfterViewInit {
     //       title: 'Date',
     //       field: 'transactionDate',
     //       pipe: 'timeStamp',
+
     //       width: 150
     //     }
     //   ],

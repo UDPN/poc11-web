@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { SettlementService } from '@app/core/services/http/poc-settlement/settlement/settlement.service';
@@ -12,8 +18,10 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
   styleUrls: ['./info.component.less']
 })
 export class InfoComponent implements OnInit {
-  @ViewChild('commissionTpl', { static: true }) commissionTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('maxCommissionTpl', { static: true }) maxCommissionTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('commissionTpl', { static: true })
+  commissionTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('maxCommissionTpl', { static: true })
+  maxCommissionTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -24,13 +32,21 @@ export class InfoComponent implements OnInit {
   info: any = {};
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
-  constructor(public routeInfo: ActivatedRoute, private settlementService: SettlementService, private commonService: CommonService, private cdr: ChangeDetectorRef) { }
+  constructor(
+    public routeInfo: ActivatedRoute,
+    private settlementService: SettlementService,
+    private commonService: CommonService,
+    private cdr: ChangeDetectorRef
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Detail`,
       breadcrumbs: [
         { name: 'Settlement Management' },
-        { name: 'Settlement Model Management', url: '/poc/poc-settlement/settlement' },
+        {
+          name: 'Settlement Model Management',
+          url: '/poc/poc-settlement/settlement'
+        },
         { name: 'Detail' }
       ],
       extra: '',
@@ -49,23 +65,25 @@ export class InfoComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.routeInfo.queryParams.subscribe(params => {
+    this.routeInfo.queryParams.subscribe((params) => {
       const data = {
-        formRatePlatform: params['formRatePlatform'] || params['sourcePlatform'],
-        formRateCurrency: params['formRateCurrency'] || params['sourceCurrency'],
+        formRatePlatform:
+          params['formRatePlatform'] || params['sourcePlatform'],
+        formRateCurrency:
+          params['formRateCurrency'] || params['sourceCurrency'],
         toRatePlatform: params['toRatePlatform'] || params['targetPlatform'],
         toRateCurrency: params['toRateCurrency'] || params['targetCurrency']
-      }
+      };
       this.settlementService.getInfo(data).subscribe((res: any) => {
         this.info = res;
         this.cdr.markForCheck();
         return;
-      })
+      });
       this.settlementService.getInfoHistory(data).subscribe((res: any) => {
         this.dataList = res;
         this.cdr.markForCheck();
         return;
-      })
+      });
     });
   }
 
@@ -93,20 +111,20 @@ export class InfoComponent implements OnInit {
           title: 'Modification Time',
           field: 'createDate',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Modified By',
-          field:'modifyUser',
+          field: 'modifyUser',
           width: 220
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }
