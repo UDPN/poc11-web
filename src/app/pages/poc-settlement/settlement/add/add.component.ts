@@ -66,7 +66,8 @@ export class AddComponent implements OnInit {
     this.initSelect();
     this.routeInfo.queryParams.subscribe((params: any) => {
       if (JSON.stringify(params) !== '{}') {
-        this.onChangeModel(this.validateForm.get('chargingModel')?.value);
+        const chargingModel = this.validateForm.get('chargingModel')?.value.toString();
+        this.onChangeModel(chargingModel);
         this.tempStatus = false;
         this.getInfo(params['formRateCurrency'], params['formRatePlatform'], params['toRateCurrency'], params['toRatePlatform']);
       } else {
