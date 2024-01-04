@@ -160,15 +160,14 @@
                             </button>
                             <input type="file" accept="" hidden #upFiles (change)="uploadFileImg($event)" id="files" />
                         </div>
-                        <div nz-col nzSpan="24" class="m-b-10" *ngFor="let fileControl of fileListOfControl">
+                        <div nz-col nzSpan="24" class="m-b-10" *ngFor="let fileControl of fileListOfControl;index as i">
                             <div>
                                 <input type="text" hidden [formControlName]="fileControl.fileCode" nz-input />
                                 <div nzAlign="end">
                                     <ng-container *ngIf="fileControl.fileCode">
                                         <div>{{ fileControl.fileUrl }}
-                                            <a nz-button nzType="link" (click)="onDeleteFile(fileControl.id)"
-                                                style="color: red;" class="p-t-15"
-                                                [nzLoading]="fileControl.status">delete</a>
+                                            <a nz-button nzType="link" (click)="onDeleteFile(i)" style="color: red;"
+                                                class="p-t-15" [nzLoading]="fileControl.status">delete</a>
                                         </div>
                                     </ng-container>
                                 </div>
