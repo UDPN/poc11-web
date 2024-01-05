@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-05 11:16:09
+ * @LastEditTime: 2024-01-05 13:27:59
  * @Description:
  */
 import {
@@ -553,7 +553,7 @@ export class AddPoolComponent implements OnInit {
             this.message
               .success('The data has been submitted!')
               .onClose.subscribe((_) => {
-                // location.reload();
+                location.reload();
                 // this.router.navigateByUrl(
                 //   '/poc/poc-activate-settlement/activate-settlement'
                 // );
