@@ -254,7 +254,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R0',
+        code: 'R0304',
         path: '/poc/poc-system/system-style'
       },
     ]

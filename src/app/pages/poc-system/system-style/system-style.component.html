@@ -72,11 +72,10 @@
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
           <div nz-row>
             <div nz-col nzSpan="24" style="text-align: end">
-              <nz-space>
-                <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
-                  [disabled]="!this.validateForm.valid" (click)="onSubmit()">
-                  Submit
-                </button></nz-space>
+              <button nz-button *appAuth="'R030401'" [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
+                [disabled]="!this.validateForm.valid" (click)="onSubmit()">
+                Submit
+              </button>
             </div>
           </div>
         </nz-form-item>
