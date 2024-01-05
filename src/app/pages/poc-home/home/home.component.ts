@@ -22,6 +22,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 import * as echarts from 'echarts';
+import { InformationService } from '@app/core/services/http/information/information.service';
 
 @Component({
   selector: 'app-home',
@@ -160,12 +161,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   ];
   walletList: any = [];
+  bankType: any = '';
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
     private _commonService: CommonService,
     private fb: FormBuilder,
-    private _defaultStoreService: DefaultStoreService
+    private _defaultStoreService: DefaultStoreService,
+    public _informationService: InformationService,
   ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
@@ -224,6 +227,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.initSelect();
     // this.fetchNumbers();
     this.defaultBalance();
+    this._informationService.detail().subscribe((res: any) => {
+      if (res) {
+        this.bankType = res.bankType;
+      }
+    });
     this.validateForm = this.fb.group({
       pairedExchangeRate: [1]
     });
@@ -238,6 +246,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.legend = false;
       this.view = [300, 300];
     }
+
   }
 
   ngAfterViewInit(): void {
