@@ -274,15 +274,15 @@ export class TransferComponent implements OnInit, AfterViewInit {
             // total: 1
           });
         });
-        this.nzLoading = false;
         this.dataList = resultData.sort(this.compare('total'));
         this.checkedItemComment = [];
-        this.radioValue = 0;
+        // this.radioValue = 0;
         this.dataList.forEach((item: any, index: number) => {
-          if (this.radioValue === 0) {
+          if (this.radioValue === index) {
             this.checkedItemComment.push(item);
           }
         });
+        this.nzLoading = false;
         this.cdr.markForCheck();
       });
   }
