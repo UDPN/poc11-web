@@ -190,20 +190,6 @@ export class HttpInterceptorService implements HttpInterceptor {
             });
             this.router.navigateByUrl('/login/login-modify');
           });
-          // if (!this.reLoginCode) {
-          //   this.reLoginCode =
-          //   this.modal.info({
-          //     nzTitle: 'Login information expired, log in again',
-          //     nzContent: '',
-          //     nzOnOk: () => {
-          //       this.windowServe.clearStorage();
-          //       this.windowServe.clearSessionStorage();
-          //       this.loginOutService.loginOut().then(_ => {
-          //         this.router.navigateByUrl('/login/login-modify')
-          //       });
-          //     }
-          //   })
-          // }
         }
       }
     }

@@ -65,7 +65,7 @@ export class SystemStyleComponent implements OnInit {
   tableConfig!: AntTableConfig;
   _isNightTheme = false;
   _themesOptions: SettingInterface = {
-    color: "#3c5686",
+    color: "",
     colorWeak: false,
     fixedHead: true,
     fixedLeftNav: true,
@@ -117,10 +117,8 @@ export class SystemStyleComponent implements OnInit {
       themeColor: ['#3c5686', [Validators.required]],
     });
     this.editTheme();
-    // const themeOptionsKey: any = this.windowServe.getStorage(ThemeOptionsKey);
-    // this.hex = JSON.parse(themeOptionsKey).color;
-    // this.validateForm.get('themeColor')?.setValue(this.hex);
-    
+
+
   }
 
   editTheme() {
@@ -137,6 +135,10 @@ export class SystemStyleComponent implements OnInit {
             this.fileImg = 'data:image/jpg;base64,' + resu;
             this.cdr.markForCheck();
           });
+      } else {
+        const themeOptionsKey: any = this.windowServe.getStorage(ThemeOptionsKey);
+        const hex = JSON.parse(themeOptionsKey).color;
+        this.validateForm.get('themeColor')?.setValue(hex);
       }
     });
   }

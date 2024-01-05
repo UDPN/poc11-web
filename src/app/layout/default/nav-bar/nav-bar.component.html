@@ -172,7 +172,7 @@
                 (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
               " nz-submenu (nzOpenChange)="changeOpen(menu, menus)" [(nzOpen)]="menu.open" [nzTitle]="(isCollapsed$ | async) && !(isOverMode$ | async)
                 ? menu.groupCollapseName
-                : menu.groupName" [ngClass]="{ disabled: menu.disabled }" style="color: #3c5686;">
+                : menu.groupName" [ngClass]="{ disabled: menu.disabled }" class="menus-color">
               <ul>
                 <ng-container *ngFor="
                     let menuSecond of menu.children;
