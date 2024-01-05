@@ -236,7 +236,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       txType: this.txType === 1 ? 1 : 2,
       walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
     }
-    const amount = thousandthMark(this.balance) + ' ' + this.currency;
+    const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isLoading = false)).subscribe({
       next: res => {
         this.isVisibleEnterPassword = false;
