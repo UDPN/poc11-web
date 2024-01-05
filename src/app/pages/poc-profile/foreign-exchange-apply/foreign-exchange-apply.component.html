@@ -17,8 +17,7 @@
           <nz-form-item>
             <nz-form-label>Exchange Business Type</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="businessApplicationStatus"
-                [(ngModel)]="searchParam.applicationType">
+              <nz-select nzPlaceHolder="" name="businessApplicationStatus" [(ngModel)]="searchParam.applicationType">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let item of businessTypeList" [nzValue]="item.cseValue" [nzLabel]="item.cseDesc">
                 </nz-option>
@@ -58,8 +57,7 @@
           </nz-form-item>
         </div>
 
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24"
-          class="m-b-8 text-right p-0">
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24" class="m-b-8 text-right p-0">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>
@@ -80,7 +78,8 @@
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
     <ng-template #currencyTpl let-currency="currency">
       <span *ngFor="let item of currency; index as i">
-        <span [title]="item">{{ item }}</span>
+        <span [title]="item">{{ item.split('-')[0] + '-' + item.split('-')[1] + '-' + item.split('-')[3] + '-' +
+          item.split('-')[4] }}</span>
         <br>
       </span>
     </ng-template>
@@ -99,8 +98,8 @@
         class="m-r-8">
         Activate Exchange Business
       </button>
-      <button routerLink="/poc/poc-profile/foreign-exchange-apply/reduce" *appAuth="'R020303'" nz-button nzType="primary"
-        class="m-r-8">
+      <button routerLink="/poc/poc-profile/foreign-exchange-apply/reduce" *appAuth="'R020303'" nz-button
+        nzType="primary" class="m-r-8">
         Reduce Exchange Business
       </button>
     </ng-template>
