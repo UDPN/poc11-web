@@ -272,7 +272,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
               this.dataList = resultData.sort(this.compare('total'));
               this.checkedItemComment = [];
               this.dataList.forEach((item: any, index: number) => {
-                if (this.radioValue === 0) {
+                if (this.radioValue === index) {
                   this.checkedItemComment.push(item);
                 }
               });
