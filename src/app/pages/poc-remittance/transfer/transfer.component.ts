@@ -277,6 +277,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         this.nzLoading = false;
         this.dataList = resultData.sort(this.compare('total'));
         this.checkedItemComment = [];
+        this.radioValue = 0;
         this.dataList.forEach((item: any, index: number) => {
           if (this.radioValue === 0) {
             this.checkedItemComment.push(item);
