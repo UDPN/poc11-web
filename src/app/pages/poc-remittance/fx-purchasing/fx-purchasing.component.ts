@@ -156,19 +156,22 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     }
   }
   onPurchase(e: any) {
+    console.log(e);
+    console.log(this.fxPurchaseData[e]);
+    console.log(this.fxPurchaseData[e]['walletExtendInfo']);
     this.purIndex = e;
     this.validateForm
       .get('transactionWalletAddress')
       ?.setValue(this.fxPurchaseData[e].chainAccountAddress);
     this.validateForm
       .get('bankAccountId')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].bankAccountId);
+      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].bankAccountId);
     this.validateForm
       .get('transactionBankName')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].bankName);
+      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].bankName);
     this.validateForm
       .get('availableBalance')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][e].cbdcCount);
+      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].cbdcCount);
     this.purchCurrecyList = Array.from(
       this.fxPurchaseData[e]['walletExtendInfo'],
       ({ digitalSymbol }) => digitalSymbol
