@@ -152,10 +152,12 @@ export class NormalLoginComponent implements OnInit {
           this.loginInOutService.loginIn(tokens).then(() => {
             this.message
               .success('Login successfully!', { nzDuration: 1000 })
-              .onClose!.subscribe(() => {
+              .onClose!.subscribe((res) => {
                 this.router.navigateByUrl('/poc/poc-home/home');
               });
           });
+        } else {
+          this.onRefresh();
         }
       });
   }
@@ -222,17 +224,19 @@ export class NormalLoginComponent implements OnInit {
     return {};
   };
 
-  onRefresh(): void {
+  onRefresh() {
     if (environment.production) {
       this.srcUrl =
         environment.localUrl +
         '/fxsp/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
+        this.cdr.markForCheck();
     } else {
       this.srcUrl =
         environment.localUrl +
         '/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
+        this.cdr.markForCheck();
     }
   }
 }
