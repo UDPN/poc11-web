@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-04 19:41:59
+ * @LastEditTime: 2024-01-05 11:16:09
  * @Description:
  */
 import {
@@ -449,7 +449,11 @@ export class AddPoolComponent implements OnInit {
       for (const key in this.dataList) {
         delete this.dataList[key].key;
       }
-      this.addData(this.dataList.length === 0 ? uniqueArr : this.dataList, []);
+
+      this.addData(
+        this.dataList.length < uniqueArr.length ? uniqueArr : this.dataList,
+        []
+      );
     } else if (this.validateForm.valid) {
       let settlementInformations: any[] = [];
       let ss1 = Object.keys(this.validateForm.value);
@@ -496,7 +500,10 @@ export class AddPoolComponent implements OnInit {
       for (const key in this.dataList) {
         delete this.dataList[key].key;
       }
-      this.addData(this.dataList.length === 0 ? uniqueArr : this.dataList, []);
+      this.addData(
+        this.dataList.length < uniqueArr.length ? uniqueArr : this.dataList,
+        []
+      );
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -546,7 +553,7 @@ export class AddPoolComponent implements OnInit {
             this.message
               .success('The data has been submitted!')
               .onClose.subscribe((_) => {
-                location.reload();
+                // location.reload();
                 // this.router.navigateByUrl(
                 //   '/poc/poc-activate-settlement/activate-settlement'
                 // );
