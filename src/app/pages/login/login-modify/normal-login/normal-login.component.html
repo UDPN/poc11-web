@@ -47,9 +47,7 @@
               <input nz-input nzSize="large" [placeholder]="" type="text" nz-input formControlName="captchaCode" />
             </div>
             <div nz-col [nzSpan]="8" class="text-right">
-              <!-- <button nz-button nzSize="large" (click)="onRefresh()" *ngIf="this.srcUrl"> -->
               <img [src]="this.srcUrl" style="height: 40px;" (click)="onRefresh()" alt="" />
-              <!-- </button> -->
             </div>
           </div>
           <ng-template #codeError let-control>
