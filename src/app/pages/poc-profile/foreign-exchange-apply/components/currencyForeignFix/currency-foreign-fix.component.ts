@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:26:57
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-30 20:39:49
+ * @LastEditTime: 2024-01-05 10:49:11
  * @Description:
  */
 import {
@@ -230,14 +230,15 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
         if (res !== null) {
           let newArr: any[] = [];
           res.forEach((item: any, i: number) => {
-            newArr[i] =
-              item.formCurrency +
-              '-' +
-              item.formPlatform +
-              ',' +
-              item.toCurrency +
-              '-' +
-              item.toPlatform;
+            // newArr[i] =
+            //   item.formCurrency +
+            //   '-' +
+            //   item.formPlatform +
+            //   ',' +
+            //   item.toCurrency +
+            //   '-' +
+            //   item.toPlatform;
+            newArr[i] = item.formCurrency + ',' + item.toCurrency;
           });
 
           newArr.forEach((items: any, is: number) => {
@@ -265,9 +266,7 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
         if (res !== null) {
           let newArr: any[] = [];
           res.forEach((item: any) => {
-            newArr.push(
-              item.capitalPoolCurrency
-            );
+            newArr.push(item.capitalPoolCurrency);
           });
           let ssr = this.permutationAndCombination(newArr, 2);
           this.allSsr = ssr;
@@ -502,7 +501,8 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
     if (type === 1) {
       return {
         capitalPoolPlatform: currency.split('-')[2],
-        capitalPoolCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
+        capitalPoolCurrency:
+          currency.split('-')[0] + '-' + currency.split('-')[1],
         capitalPoolAddress: targetCurrency
       };
     }
@@ -510,7 +510,8 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
       fromPlatform: 'UDPN',
       fromCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
       toPlatform: 'UDPN',
-      toCurrency: targetCurrency.split('-')[0] + '-' + targetCurrency.split('-')[1]
+      toCurrency:
+        targetCurrency.split('-')[0] + '-' + targetCurrency.split('-')[1]
     };
   }
   private addData(arr: any[], arr1: any[]) {
