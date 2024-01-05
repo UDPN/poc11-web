@@ -180,7 +180,7 @@ export class SystemStyleComponent implements OnInit {
                 next: res => {
                   resolve(true);
                   if (res) {
-                    this.message.success(`Submit successfully, please login again !`).onClose!.subscribe(() => {
+                    this.message.success(`Submit successfully !`).onClose!.subscribe(() => {
                       // sessionStorage.clear();
                       // this.loginOutService.loginOut().then((_) => {
                       //   this.router.navigateByUrl('/login/login-modify');
@@ -204,7 +204,7 @@ export class SystemStyleComponent implements OnInit {
                       next: res => {
                         resolve(true);
                         if (res) {
-                          this.message.success(`Submit successfully, please login again !`).onClose!.subscribe(() => {
+                          this.message.success(`Submit successfully !`).onClose!.subscribe(() => {
                             // sessionStorage.clear();
                             // this.loginOutService.loginOut().then((_) => {
                             //   this.router.navigateByUrl('/login/login-modify');
