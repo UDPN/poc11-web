@@ -4,7 +4,7 @@
   <ng-container *ngIf="bankType === 1">
     <nz-card class="operate-text" style="padding-bottom: 600px; font-weight: 600; font-size: 24px;">{{ 'To be developed !' }}</nz-card>
     <!-- <nz-card>
-      <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a Commercial Bank' }}</h4>
+      <h4 nz-typography class="menus-color" style="font-weight: 500;margin-bottom: 0">{{ 'As a Commercial Bank' }}</h4>
     </nz-card>
     <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
       <div nz-row [nzGutter]="24">
@@ -41,7 +41,7 @@
   </ng-container>
   <ng-container *ngIf="bankType === 2">
     <nz-card>
-      <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a FX Service Provider' }}</h4>
+      <h4 nz-typography class="menus-color" style="font-weight: 500;margin-bottom: 0">{{ 'As a FX Service Provider' }}</h4>
     </nz-card>
     <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
       <div nz-row [nzGutter]="24">
