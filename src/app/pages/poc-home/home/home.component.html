@@ -1,273 +1,278 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <!-- <nz-card>
-    <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a Commercial Bank' }}</h4>
-  </nz-card>
-  <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
-    <div nz-row [nzGutter]="24">
-      <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="6" *ngFor="let balance of walletBalanceList; index as i">
-        <nz-card class="card base-card">
-          <h3 nz-typography>{{ balance.currency }}</h3>
-          <div nz-row nzJustify="space-between" [nzGutter]="8">
-            <div nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-control class="m-t-30">
-                  <nz-select [(ngModel)]="balance.value">
-                    <nz-option *ngFor="let item of balance.walletList; index as i" [nzValue]="item.amount"
-                      [nzLabel]="item.walletAddress">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-                <nz-form-control class="m-t-30">
-                  <h2 nz-typography style="text-align: center;">{{ balance.value }}</h2>
-                </nz-form-control>
-              </nz-form-item>
+  <ng-container *ngIf="bankType === 1">
+    <nz-card class="operate-text" style="padding-bottom: 600px; font-weight: 600; font-size: 24px;">{{ 'To be developed !' }}</nz-card>
+    <!-- <nz-card>
+      <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a Commercial Bank' }}</h4>
+    </nz-card>
+    <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="6" *ngFor="let balance of walletBalanceList; index as i">
+          <nz-card class="card base-card">
+            <h3 nz-typography>{{ balance.currency }}</h3>
+            <div nz-row nzJustify="space-between" [nzGutter]="8">
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-control class="m-t-30">
+                    <nz-select [(ngModel)]="balance.value">
+                      <nz-option *ngFor="let item of balance.walletList; index as i" [nzValue]="item.amount"
+                        [nzLabel]="item.walletAddress">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                  <nz-form-control class="m-t-30">
+                    <h2 nz-typography style="text-align: center;">{{ balance.value }}</h2>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
             </div>
-          </div>
-        </nz-card>
+          </nz-card>
+        </div>
       </div>
-    </div>
-  </nz-card> -->
-  <!-- <nz-card nzTitle="CBDC Movements In the Last 7 Days" class="m-b-10">
-    <div nz-row [nzGutter]="24">
-      <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="24" nzOffset="2">
-        <div id="chart-container" style="max-width:1200px;height:400px"></div>
+    </nz-card>
+    <nz-card nzTitle="CBDC Movements In the Last 7 Days" class="m-b-10">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="24" nzOffset="2">
+          <div id="chart-container" style="max-width:1200px;height:400px"></div>
+        </div>
       </div>
-    </div>
-  </nz-card> -->
-  <nz-card>
-    <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a FX Service Provider' }}</h4>
-  </nz-card>
-  <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
-    <div nz-row [nzGutter]="24">
-      <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let currency of approveCurrency">
-        <nz-card class="card base-card">
-          <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }"
-            [nzColon]=" false">
-            <nz-descriptions-item nzTitle="Currency"><span>{{ currency.capitalPoolCurrency
-                }}</span></nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Capital Pool Balance"><span>{{ currency.capitalPoolBalance
-                }}</span></nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.capitalPoolAddress
-                }}</span></nz-descriptions-item>
-          </nz-descriptions>
-        </nz-card>
+    </nz-card> -->
+  </ng-container>
+  <ng-container *ngIf="bankType === 2">
+    <nz-card>
+      <h4 nz-typography style="font-weight: 500;margin-bottom: 0;color:#3c5686">{{ 'As a FX Service Provider' }}</h4>
+    </nz-card>
+    <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let currency of approveCurrency">
+          <nz-card class="card base-card">
+            <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }"
+              [nzColon]=" false">
+              <nz-descriptions-item nzTitle="Currency"><span>{{ currency.capitalPoolCurrency
+                  }}</span></nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Capital Pool Balance"><span>{{ currency.capitalPoolBalance
+                  }}</span></nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.capitalPoolAddress
+                  }}</span></nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+        </div>
       </div>
-    </div>
-  </nz-card>
-  <nz-card [nzTitle]="pendingCurrencyTpl" class="m-b-10">
-    <div nz-row [nzGutter]="24">
-      <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let currency of pendingCurrency">
-        <nz-card class="card base-card">
-          <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]=" false">
-            <nz-descriptions-item nzTitle="Currency"><span>{{ currency.currency + '-' + currency.platform
-                }}</span></nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.address
-                }}</span></nz-descriptions-item>
-          </nz-descriptions>
-        </nz-card>
+    </nz-card>
+    <nz-card [nzTitle]="pendingCurrencyTpl" class="m-b-10">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let currency of pendingCurrency">
+          <nz-card class="card base-card">
+            <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]=" false">
+              <nz-descriptions-item nzTitle="Currency"><span>{{ currency.currency + '-' + currency.platform
+                  }}</span></nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.address
+                  }}</span></nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+        </div>
       </div>
-    </div>
-  </nz-card>
-  <!-- <nz-card [nzTitle]="nonactivatedCurrencyTpl" class="m-b-10">
-    <div nz-row [nzGutter]="24">
-      <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="12">
-        <nz-card class="card base-card">
-          <nz-descriptions nzLayout="vertical" [nzColumn]="3" [nzColon]="false"
-            *ngFor="let currency of nonactivatedCurrency; index as i">
-            <nz-descriptions-item [nzTitle]="i === 0 ? 'Currency' : ''" nzSpan="2">
-              <div>{{ currency.currency + '-' + currency.platform }}</div>
-            </nz-descriptions-item>
-            <nz-descriptions-item nzSpan="1">
-              <button nz-button nzType="primary" routerLink="/poc/poc-capital-pool/capital-pool/add"
-                [queryParams]="{currency : currency.currency + '-' + currency.platform}">
-                Activate</button>
-            </nz-descriptions-item>
-          </nz-descriptions>
-        </nz-card>
+    </nz-card>
+    <!-- <nz-card [nzTitle]="nonactivatedCurrencyTpl" class="m-b-10">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="12">
+          <nz-card class="card base-card">
+            <nz-descriptions nzLayout="vertical" [nzColumn]="3" [nzColon]="false"
+              *ngFor="let currency of nonactivatedCurrency; index as i">
+              <nz-descriptions-item [nzTitle]="i === 0 ? 'Currency' : ''" nzSpan="2">
+                <div>{{ currency.currency + '-' + currency.platform }}</div>
+              </nz-descriptions-item>
+              <nz-descriptions-item nzSpan="1">
+                <button nz-button nzType="primary" routerLink="/poc/poc-capital-pool/capital-pool/add"
+                  [queryParams]="{currency : currency.currency + '-' + currency.platform}">
+                  Activate</button>
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+        </div>
+  
       </div>
-
-    </div>
-  </nz-card> -->
-  <!-- <div class="m-b-10">
-    <div nz-row [nzGutter]="8">
-      <div nz-col [nzSpan]="8">
-        <nz-card nzTitle="Activated Currencies">
-          <div>
-            <nz-card class="card base-card" *ngFor="let currency of approveCurrency">
-              <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
-                [nzColon]="false">
-                <nz-descriptions-item nzTitle="Currency"><span>1111</span></nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Capital Pool Balance"><span>2222</span></nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Capital Pool Address"><span>3333</span></nz-descriptions-item>
-              </nz-descriptions>
-            </nz-card>
-          </div>
-        </nz-card>
-      </div>
-      <div nz-col [nzSpan]="8">
-        <nz-card [nzTitle]="pendingCurrencyTpl">
-          <div>
-            <nz-card class="card base-card" *ngFor="let currency of pendingCurrency">
-              <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
-                [nzColon]="false">
-                <nz-descriptions-item nzTitle="Currency"><span>{{ currency.currency + '-' + currency.platform
-                    }}</span></nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.address
-                    }}</span></nz-descriptions-item>
-              </nz-descriptions>
-            </nz-card>
-          </div>
-        </nz-card>
-      </div>
-      <div nz-col [nzSpan]="8">
-        <nz-card [nzTitle]="approveCurrencyTpl">
-          <div>
-            <nz-card class="card base-card">
-              <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
-                <nz-descriptions-item [nzTitle]="i === 0 ? 'Currency' : ''"
-                  *ngFor="let currency of nonactivatedCurrency; index as i">
-                  <span style="display: flex; justify-content: space-between;">
-                    <span>{{ currency.currency + '-' + currency.platform }}</span>
-                    <button nz-button nzType="primary" class="m-l-20">
-                      remove obstacles from</button>
-                  </span>
-                </nz-descriptions-item>
-              </nz-descriptions>
-            </nz-card>
-          </div>
-        </nz-card>
-      </div>
-    </div>
-  </div> -->
-  <nz-card>
-    <div class="card-container">
-      <nz-tabset nzType="card" [nzTabBarExtraContent]="extraTemplate">
-        <nz-tab *ngFor="let tab of exchangeRate; index as i" [nzTitle]="tab.title + ' (' + tab.value + ')'">
-          <div nz-row [nzGutter]="24" *ngIf="i === 0">
-            <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of approveList">
+    </nz-card> -->
+    <!-- <div class="m-b-10">
+      <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="8">
+          <nz-card nzTitle="Activated Currencies">
+            <div>
+              <nz-card class="card base-card" *ngFor="let currency of approveCurrency">
+                <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+                  [nzColon]="false">
+                  <nz-descriptions-item nzTitle="Currency"><span>1111</span></nz-descriptions-item>
+                  <nz-descriptions-item nzTitle="Capital Pool Balance"><span>2222</span></nz-descriptions-item>
+                  <nz-descriptions-item nzTitle="Capital Pool Address"><span>3333</span></nz-descriptions-item>
+                </nz-descriptions>
+              </nz-card>
+            </div>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-card [nzTitle]="pendingCurrencyTpl">
+            <div>
+              <nz-card class="card base-card" *ngFor="let currency of pendingCurrency">
+                <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+                  [nzColon]="false">
+                  <nz-descriptions-item nzTitle="Currency"><span>{{ currency.currency + '-' + currency.platform
+                      }}</span></nz-descriptions-item>
+                  <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.address
+                      }}</span></nz-descriptions-item>
+                </nz-descriptions>
+              </nz-card>
+            </div>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-card [nzTitle]="approveCurrencyTpl">
+            <div>
               <nz-card class="card base-card">
                 <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
-                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.sourceCurrency + '->' +
-                      item.targetCurrency
-                      }}</span></nz-descriptions-item>
-                  <nz-descriptions-item nzTitle="Currency Pair ID"><span>{{ item.chainRateId
-                      }}</span></nz-descriptions-item>
-                  <nz-descriptions-item nzTitle="Latest Exchange Rate"><span>{{ item.exchangeRate
-                      }}</span></nz-descriptions-item>
+                  <nz-descriptions-item [nzTitle]="i === 0 ? 'Currency' : ''"
+                    *ngFor="let currency of nonactivatedCurrency; index as i">
+                    <span style="display: flex; justify-content: space-between;">
+                      <span>{{ currency.currency + '-' + currency.platform }}</span>
+                      <button nz-button nzType="primary" class="m-l-20">
+                        remove obstacles from</button>
+                    </span>
+                  </nz-descriptions-item>
                 </nz-descriptions>
               </nz-card>
             </div>
-          </div>
-          <div nz-row [nzGutter]="24" *ngIf="i === 1">
-            <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of pendingRate">
-              <nz-card class="card base-card">
-                <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
-                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.fromCurrency + '->' +
-                      item.toCurrency
-                      }}</span></nz-descriptions-item>
-                </nz-descriptions>
-              </nz-card>
+          </nz-card>
+        </div>
+      </div>
+    </div> -->
+    <nz-card>
+      <div class="card-container">
+        <nz-tabset nzType="card" [nzTabBarExtraContent]="extraTemplate">
+          <nz-tab *ngFor="let tab of exchangeRate; index as i" [nzTitle]="tab.title + ' (' + tab.value + ')'">
+            <div nz-row [nzGutter]="24" *ngIf="i === 0">
+              <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of approveList">
+                <nz-card class="card base-card">
+                  <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
+                    <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.sourceCurrency + '->' +
+                        item.targetCurrency
+                        }}</span></nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Currency Pair ID"><span>{{ item.chainRateId
+                        }}</span></nz-descriptions-item>
+                    <nz-descriptions-item nzTitle="Latest Exchange Rate"><span>{{ item.exchangeRate
+                        }}</span></nz-descriptions-item>
+                  </nz-descriptions>
+                </nz-card>
+              </div>
             </div>
-          </div>
-          <!-- <div nz-row [nzGutter]="24" *ngIf="i === 2">
-            <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of nonactivatedRate; index as i">
-              <nz-card class="card base-card">
-                <nz-descriptions nzLayout="vertical" [nzColumn]="3" [nzColon]="false">
-                  <nz-descriptions-item nzTitle="Currency Pair" nzSpan="2"><span>{{ item
-                      }}</span></nz-descriptions-item>
-                  <nz-descriptions-item [nzTitle]="titleTpl" nzSpan="1"></nz-descriptions-item>
-                </nz-descriptions>
-              </nz-card>
-              <ng-template #titleTpl>
-                <button nz-button nzType="primary" class="text-right"
-                  routerLink="/poc/poc-profile/foreign-exchange-apply/add"
-                  [queryParams]="{transactionCurrency: item}">Activate</button>
-              </ng-template>
+            <div nz-row [nzGutter]="24" *ngIf="i === 1">
+              <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of pendingRate">
+                <nz-card class="card base-card">
+                  <nz-descriptions nzLayout="vertical" [nzColumn]="1" [nzColon]="false">
+                    <nz-descriptions-item nzTitle="Currency Pair" nzSpan="3"><span>{{ item.fromCurrency + '->' +
+                        item.toCurrency
+                        }}</span></nz-descriptions-item>
+                  </nz-descriptions>
+                </nz-card>
+              </div>
             </div>
-          </div> -->
-        </nz-tab>
-      </nz-tabset>
-      <ng-template #extraTemplate>
-        <!-- <button nz-button nzType="primary" class="m-r-8">
-          <a href="https://github.com/UDPN/Poc9-contract-document" target="_blank"> View API
-            Documentation</a>
-        </button> -->
+            <!-- <div nz-row [nzGutter]="24" *ngIf="i === 2">
+              <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="8" *ngFor="let item of nonactivatedRate; index as i">
+                <nz-card class="card base-card">
+                  <nz-descriptions nzLayout="vertical" [nzColumn]="3" [nzColon]="false">
+                    <nz-descriptions-item nzTitle="Currency Pair" nzSpan="2"><span>{{ item
+                        }}</span></nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titleTpl" nzSpan="1"></nz-descriptions-item>
+                  </nz-descriptions>
+                </nz-card>
+                <ng-template #titleTpl>
+                  <button nz-button nzType="primary" class="text-right"
+                    routerLink="/poc/poc-profile/foreign-exchange-apply/add"
+                    [queryParams]="{transactionCurrency: item}">Activate</button>
+                </ng-template>
+              </div>
+            </div> -->
+          </nz-tab>
+        </nz-tabset>
+        <ng-template #extraTemplate>
+          <!-- <button nz-button nzType="primary" class="m-r-8">
+            <a href="https://github.com/UDPN/Poc9-contract-document" target="_blank"> View API
+              Documentation</a>
+          </button> -->
+        </ng-template>
+      </div>
+    </nz-card>
+    <!-- <app-card-table-wrap [tableTitle]="'Latest Exchange Rate'" [isNormalTable]="true" [btnTpl]="tableBtns">
+      <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
+        [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+      <ng-template #currencyTpl let-sourceCurrency="sourceCurrency"
+        let-targetCurrency="targetCurrency" let-targetPlatform="targetPlatform">
+        <span>{{ sourceCurrency + '->' + targetCurrency }}</span>
       </ng-template>
-    </div>
-  </nz-card>
-  <!-- <app-card-table-wrap [tableTitle]="'Latest Exchange Rate'" [isNormalTable]="true" [btnTpl]="tableBtns">
-    <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
-      [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-    <ng-template #currencyTpl let-sourceCurrency="sourceCurrency"
-      let-targetCurrency="targetCurrency" let-targetPlatform="targetPlatform">
-      <span>{{ sourceCurrency + '->' + targetCurrency }}</span>
-    </ng-template>
-    <ng-template #operationTpl let-sourceCurrency="sourceCurrency" let-sourcePlatform="sourcePlatform"
-      let-targetCurrency="targetCurrency" let-targetPlatform="targetPlatform"
-      let-settlementModelCode="settlementModelCode">
-      <ng-container>
-        <span class="operate-text" *ngIf="settlementModelCode" routerLink="/poc/poc-settlement/settlement/info"
-          [queryParams]="{sourceCurrency,sourcePlatform,targetCurrency,targetPlatform}">
-          Settlement Model
-        </span>
-      </ng-container>
-      <ng-container>
-        <span class="operate-text" routerLink="/poc/poc-fx-rate-history/fx-rate-history"
-          [queryParams]="{sourceCurrency,sourcePlatform,targetCurrency,targetPlatform}">
-          Historical Rate
-        </span>
-      </ng-container>
-    </ng-template>
-  </app-card-table-wrap> -->
-  <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
-    [nzTitle]="'Exchange Rate Dynamics In the Last 7 days'" class="m-t-10">
-    <form nz-form [formGroup]="validateForm" nzLayout="vertical" class="m-l-50 m-b-50">
-      <div nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
-        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
-          <div nz-row nzJustify="space-between" [nzGutter]="8">
-            <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
-              <nz-form-item>
-                <nz-form-label>Transaction Currency</nz-form-label>
-                <nz-form-control>
-                  <nz-select nzPlaceHolder="" formControlName="pairedExchangeRate">
-                    <!-- <nz-option nzValue="" nzLabel="All"></nz-option> -->
-                    <nz-option *ngFor="let item of pairedList" [nzValue]="item.key"
-                      [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24" class="text-right">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"></nz-form-label>
-                <nz-form-control>
-                  <div nz-col [nzSpan]="24">
-                    <button nz-button [nzType]="'primary'" (click)="onQuery()">
-                      Query
-                    </button>
-                  </div>
-                </nz-form-control>
-              </nz-form-item>
+      <ng-template #operationTpl let-sourceCurrency="sourceCurrency" let-sourcePlatform="sourcePlatform"
+        let-targetCurrency="targetCurrency" let-targetPlatform="targetPlatform"
+        let-settlementModelCode="settlementModelCode">
+        <ng-container>
+          <span class="operate-text" *ngIf="settlementModelCode" routerLink="/poc/poc-settlement/settlement/info"
+            [queryParams]="{sourceCurrency,sourcePlatform,targetCurrency,targetPlatform}">
+            Settlement Model
+          </span>
+        </ng-container>
+        <ng-container>
+          <span class="operate-text" routerLink="/poc/poc-fx-rate-history/fx-rate-history"
+            [queryParams]="{sourceCurrency,sourcePlatform,targetCurrency,targetPlatform}">
+            Historical Rate
+          </span>
+        </ng-container>
+      </ng-template>
+    </app-card-table-wrap> -->
+    <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
+      [nzTitle]="'Exchange Rate Dynamics In the Last 7 days'" class="m-t-10">
+      <form nz-form [formGroup]="validateForm" nzLayout="vertical" class="m-l-50 m-b-50">
+        <div nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+            <div nz-row nzJustify="space-between" [nzGutter]="8">
+              <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                <nz-form-item>
+                  <nz-form-label>Transaction Currency</nz-form-label>
+                  <nz-form-control>
+                    <nz-select nzPlaceHolder="" formControlName="pairedExchangeRate">
+                      <!-- <nz-option nzValue="" nzLabel="All"></nz-option> -->
+                      <nz-option *ngFor="let item of pairedList" [nzValue]="item.key"
+                        [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24" class="text-right">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"></nz-form-label>
+                  <nz-form-control>
+                    <div nz-col [nzSpan]="24">
+                      <button nz-button [nzType]="'primary'" (click)="onQuery()">
+                        Query
+                      </button>
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
-    <ngx-charts-line-chart [view]="view" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel" [autoScale]="true" [timeline]="timeline" [results]="multi">
-    </ngx-charts-line-chart>
-  </nz-card>
-  <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
-    [nzTitle]="'Transaction Volume In the Last 7 Days'" class="m-t-10">
-    <ngx-charts-bar-vertical-2d [view]="view" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-      [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-      [xAxisLabel]="xAxisLabel1" [yAxisLabel]="yAxisLabel1" [results]="multi1">
-    </ngx-charts-bar-vertical-2d>
-  </nz-card>
+      </form>
+      <ngx-charts-line-chart [view]="view" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel" [autoScale]="true" [timeline]="timeline" [results]="multi">
+      </ngx-charts-line-chart>
+    </nz-card>
+    <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
+      [nzTitle]="'Transaction Volume In the Last 7 Days'" class="m-t-10">
+      <ngx-charts-bar-vertical-2d [view]="view" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
+        [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel1" [yAxisLabel]="yAxisLabel1" [results]="multi1">
+      </ngx-charts-bar-vertical-2d>
+    </nz-card>
+  </ng-container>
 </div>
 <ng-template #tableBtns>
   <!-- <button nz-button nzType="primary" class="m-r-8">

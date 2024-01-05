@@ -18,8 +18,10 @@ export class SideNavComponent implements OnInit {
   isDefaultLogo: boolean = true;
   logoImg: any = '';
   constructor(private themesService: ThemeService, private logoService: LogoService, private cdr: ChangeDetectorRef ) {}
+  systemName: any = '';
 
   ngOnInit(): void {
+    this.systemName = localStorage.getItem('systemName');
     // this.logoService.search({ logoType: 2 }).subscribe((res: any) => {
     //   if (res.length <= 0) {
     //     this.logoImg = '../../../../assets/imgs/system/bn.png';
