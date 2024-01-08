@@ -133,6 +133,29 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (filterCode.includes(event.body.code)) {
           return event;
         }
+        if (event.body.code !== 'FXSP_ELEVEN_20420' && event.body.message !== 'MSG_00_0005') {
+          if (!this.firstCode) {
+            if (event.body.code !== 1) {
+              this.modal.error({
+                nzTitle: 'error',
+                nzContent: this.translate.instant(`MSG_${event.body.code}`)
+              });
+            }
+          }
+        } else {
+          this.windowServe.clearStorage();
+          this.windowServe.clearSessionStorage();
+          this.loginOutService.loginOut().then((_) => {
+            this.router.navigateByUrl('/login/login-modify');
+            if (this.reLoginCode) {
+              this.reLoginCode.close();
+            }
+            this.reLoginCode = this.modal.error({
+              nzTitle: 'Login information expired, log in again',
+              nzContent: ''
+            });
+          });
+        }
         if (
           event.body.code === 1 &&
           event.body.message.indexOf('MSG_') !== -1 && 
@@ -167,29 +190,6 @@ export class HttpInterceptorService implements HttpInterceptor {
             })
           });
           return event;
-        }
-        if (event.body.code !== 'FXSP_ELEVEN_20420' && event.body.message !== 'MSG_00_0005') {
-          if (!this.firstCode) {
-            if (event.body.code !== 1) {
-              this.modal.error({
-                nzTitle: 'error',
-                nzContent: this.translate.instant(`MSG_${event.body.code}`)
-              });
-            }
-          }
-        } else {
-          this.windowServe.clearStorage();
-          this.windowServe.clearSessionStorage();
-          this.loginOutService.loginOut().then((_) => {
-            if (this.reLoginCode) {
-              this.reLoginCode.close();
-            }
-            this.reLoginCode = this.modal.error({
-              nzTitle: 'Login information expired, log in again',
-              nzContent: ''
-            });
-            this.router.navigateByUrl('/login/login-modify');
-          });
         }
       }
     }
