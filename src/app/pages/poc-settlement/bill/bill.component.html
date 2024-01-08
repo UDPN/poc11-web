@@ -77,15 +77,14 @@
   <app-card-table-wrap [tableTitle]="'Billing List'" [isNormalTable]="true">
     <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-    <ng-template #currencyTpl let-formCurrency="formCurrency"
-      let-toCurrency="toCurrency">
+    <ng-template #currencyTpl let-formCurrency="formCurrency" let-toCurrency="toCurrency">
       <span [title]="(formCurrency + '->' + toCurrency)">{{
         (formCurrency + '->' + toCurrency)
         }}</span>
     </ng-template>
     <ng-template #billingAmountTpl let-billAmount="billAmount" let-formCurrency="formCurrency">
-      <span [title]="billAmount + ' ' + formCurrency">{{
-        (billAmount + ' ' + formCurrency) | map:'null'
+      <span [title]="(billAmount | map:'toThousandthMark') + ' ' + formCurrency">{{
+        ((billAmount | map:'toThousandthMark') + ' ' + formCurrency) | map:'null'
         }}</span>
     </ng-template>
     <ng-template #operationTpl let-billNo="billNo">
@@ -108,7 +107,7 @@
     <div *nzModalContent class="card-tpl">
       <nz-card class="m-b-10" style="background-color: #f7f9fe;">
         <div style="font-size: 18px;" class="m-b-10">Billing Amount <span class="m-l-15" style="font-weight: 500;">{{
-            (invoiceInfo.billAmount + ' ' + invoiceInfo.formCurrency) | map:'null'
+            ((invoiceInfo.billAmount | map:'toThousandthMark') + ' ' + invoiceInfo.formCurrency) | map:'null'
             }}</span></div>
         <nz-descriptions class="card" nzLayout="vertical" [nzColumn]="{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }"
           [nzColon]="false" [nzBordered]="false">

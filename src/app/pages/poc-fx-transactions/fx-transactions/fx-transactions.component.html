@@ -64,9 +64,10 @@
     <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
       let-toCurrency="toCurrency">
       <span
-        [title]="(fromAmount + ' ' +  formCurrency + '->' + toAmount + ' ' + toCurrency)">{{
-        (fromAmount + ' ' + formCurrency + '->' + toAmount + ' ' + toCurrency)
-         }}</span>
+        [title]="((fromAmount | map:'toThousandthMark') + ' ' +  formCurrency + '->' + (toAmount | map:'toThousandthMark') + ' ' + toCurrency)">{{
+        ((fromAmount | map:'toThousandthMark') + ' ' + formCurrency + '->' + (toAmount | map:'toThousandthMark') + ' ' +
+        toCurrency)
+        }}</span>
     </ng-template>
     <ng-template #operationTpl let-transactionNo="transactionNo">
       <ng-container *appAuth="'R020501'">

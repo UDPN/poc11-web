@@ -43,14 +43,17 @@
     <br>
     <span [title]="fromBankId + '-' + fromBankName">{{ fromBankId + '-' + fromBankName }}</span>
   </ng-template>
-  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency" let-toCurrency="toCurrency">
+  <ng-template #amountTpl let-fromAmount="fromAmount" let-toAmount="toAmount" let-formCurrency="formCurrency"
+    let-toCurrency="toCurrency">
     <span
-      [title]="(fromAmount + ' ' + formCurrency + '->' + toAmount  + ' ' + toCurrency)">{{
-      (fromAmount + ' ' + formCurrency + '->' + toAmount + ' ' + toCurrency)
+      [title]="((fromAmount | map:'toThousandthMark') + ' ' + formCurrency + '->' + (toAmount | map:'toThousandthMark')  + ' ' + toCurrency)">{{
+      ((fromAmount | map:'toThousandthMark') + ' ' + formCurrency + '->' + (toAmount | map:'toThousandthMark') + ' ' +
+      toCurrency)
       }}</span>
   </ng-template>
   <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency">
-    <span [title]="commissionFee + ' ' +  formCurrency">{{ commissionFee + ' ' +
+    <span [title]="(commissionFee | map:'toThousandthMark') + ' ' +  formCurrency">{{ (commissionFee |
+      map:'toThousandthMark') + ' ' +
       formCurrency }}</span>
   </ng-template>
 </div>

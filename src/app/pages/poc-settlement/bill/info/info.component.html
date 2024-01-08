@@ -24,7 +24,7 @@
           <nz-descriptions-item nzTitle="Txn Currency ">{{(info.formCurrency + '->' +
             info.toCurrency) | map:'null'}}</nz-descriptions-item>
           <nz-descriptions-item
-            [nzTitle]="'Billing Amount (' + info.formCurrency + ')'">{{info.billAmount}}</nz-descriptions-item>
+            [nzTitle]="'Billing Amount (' + info.formCurrency + ')'">{{info.billAmount | map:'toThousandthMark'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Creation Time">{{
             info.createDate | map: 'timeStamp'
             }}</nz-descriptions-item>

@@ -40,13 +40,13 @@
     }}</span>
 </ng-template>
 <ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency">
-  <span>{{ capitalPoolBalance + ' ' + capitalPoolCurrency }}</span>
+  <span>{{ (capitalPoolBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
 </ng-template>
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>
-<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency"
-  let-capitalPoolAddress="capitalPoolAddress" let-currencyPrecision="currencyPrecision">
+<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress"
+  let-currencyPrecision="currencyPrecision">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
       (click)="getEdit(capitalPoolCurrency, capitalPoolAddress, currencyPrecision)">
