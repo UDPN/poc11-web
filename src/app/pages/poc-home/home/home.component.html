@@ -2,7 +2,8 @@
 
 <div class="normal-table-wrap">
   <ng-container *ngIf="bankType === 1">
-    <nz-card class="operate-text" style="padding-bottom: 600px; font-weight: 600; font-size: 24px;">{{ 'To be developed !' }}</nz-card>
+    <nz-card class="operate-text" style="padding-bottom: 600px; font-weight: 600; font-size: 24px;">{{ 'To be developed
+      !' }}</nz-card>
     <!-- <nz-card>
       <h4 nz-typography class="menus-color" style="font-weight: 500;margin-bottom: 0">{{ 'As a Commercial Bank' }}</h4>
     </nz-card>
@@ -41,7 +42,8 @@
   </ng-container>
   <ng-container *ngIf="bankType === 2">
     <nz-card>
-      <h4 nz-typography class="menus-color" style="font-weight: 500;margin-bottom: 0">{{ 'As a FX Service Provider' }}</h4>
+      <h4 nz-typography class="menus-color" style="font-weight: 500;margin-bottom: 0">{{ 'As a FX Service Provider' }}
+      </h4>
     </nz-card>
     <nz-card [nzTitle]="approveCurrencyTpl" class="m-b-10">
       <div nz-row [nzGutter]="24">
@@ -51,7 +53,8 @@
               [nzColon]=" false">
               <nz-descriptions-item nzTitle="Currency"><span>{{ currency.capitalPoolCurrency
                   }}</span></nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Capital Pool Balance"><span>{{ currency.capitalPoolBalance
+              <nz-descriptions-item nzTitle="Capital Pool Balance"><span>{{ currency.capitalPoolBalance |
+                  map:'toThousandthMark'
                   }}</span></nz-descriptions-item>
               <nz-descriptions-item nzTitle="Capital Pool Address"><span>{{ currency.capitalPoolAddress
                   }}</span></nz-descriptions-item>
@@ -158,7 +161,7 @@
                         }}</span></nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Currency Pair ID"><span>{{ item.chainRateId
                         }}</span></nz-descriptions-item>
-                    <nz-descriptions-item nzTitle="Latest Exchange Rate"><span>{{ item.exchangeRate
+                    <nz-descriptions-item nzTitle="Latest Exchange Rate"><span>{{ item.exchangeRate | map:'toThousandRate'
                         }}</span></nz-descriptions-item>
                   </nz-descriptions>
                 </nz-card>

@@ -220,6 +220,7 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
         {
           title: 'Exchange Rate',
           field: 'exchangeRate',
+          pipe: 'toThousandRate',
           width: 200
         },
         {

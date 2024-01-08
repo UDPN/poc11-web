@@ -11,7 +11,8 @@
           <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
             [nzBordered]="false" class="card-descriptions-order">
             <nz-descriptions-item [nzTitle]="info.type | map: 'transactionsRecordType'"><span
-                [style]="{'color': info.cbdcCount > 0 ? '#39A16A' : '#E53E3E'}">{{ (info.cbdcCount |
+                [style]="{'color': info.cbdcCount > 0 ? '#39A16A' : '#E53E3E'}">{{
+                info.cbdcCount > 0 ? '+' : ''}}{{ (info.cbdcCount |
                 map:'toThousandthMark') + ' ' +
                 info.fromCurrency
                 }}</span></nz-descriptions-item>
@@ -48,7 +49,7 @@
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
             <nz-descriptions-item [nzTitle]="info.cbdcCount > 0 ? 'Payment Information' : 'Remittance Information'">
-             {{ info.remarks }}
+              {{ info.remarks }}
             </nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
@@ -61,7 +62,7 @@
             <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ '1 ' + info.fromCurrency?.split('-')[1]
               + ' = ' + info.exchangeRate + ' ' + info.toCurrency?.split('-')[1]
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Commission">{{ info.commission + ' ' +
+            <nz-descriptions-item nzTitle="Commission">{{ (info.commission | map:'toThousandthMark') + ' ' +
               info.fromCurrency }}</nz-descriptions-item>
           </nz-descriptions>
         </nz-card>

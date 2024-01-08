@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import {
+  thousandRate,
   thousandthMark,
   timestampToMonth,
   timestampToTime
@@ -279,6 +280,15 @@ export class MapPipe implements PipeTransform {
         return thousandthMark(value);
       }
     }
+    // Rate
+    if (arg === 'toThousandRate') {
+      if (value === null || value === '' || value === undefined) {
+        return (value = '--');
+      } else {
+        return thousandRate(value);
+      }
+    }
+    
     if (arg === 'monthStamp') {
       if (!value) {
         return (value = '--');

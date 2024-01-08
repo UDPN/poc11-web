@@ -113,7 +113,7 @@
       {{'with FX: 1 '+ info.fromCurrency.split('-')[1] + ' = ' + info.exchangeRate + ' ' +
       info.toCurrency.split('-')[1] }}
     </li>
-    <li>{{ 'Commission: ' + info.commission + ' ' + info.fromCurrency }}</li>
+    <li>{{ 'Commission: ' + (info.commission | map:'toThousandthMark') + ' ' + info.fromCurrency }}</li>
     <li>
       {{ info.transactionLogTrees[1]?.txTime | map:'timeStamp' }}
     </li>

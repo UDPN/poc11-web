@@ -352,7 +352,15 @@ const objPushKv = function objPushKv(t: any, k: string) {
 }
 
 const thousandthMark = function thousandthMark(x: any) {
-  // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if(x) {
+    x = Number(x);
+		return x.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+	} else {
+		return '0'
+  }
+}
+
+const thousandRate = function thousandthRate(x: any) {
   var parts = x.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return parts.join(".");
@@ -387,5 +395,6 @@ export {
   timestampToMonth,
   objPushKv,
   thousandthMark,
-  timeToTimestampMillisecond
+  timeToTimestampMillisecond,
+  thousandRate
 };
