@@ -107,7 +107,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};

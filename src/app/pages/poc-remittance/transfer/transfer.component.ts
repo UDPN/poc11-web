@@ -128,7 +128,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       this.availableCurrecyModel === this.beneficiaryCurrency
     ) {
       return { regular: true, error: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,8})?$/.test(control.value)) {
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular1: true, error: true };
     }
     return {};

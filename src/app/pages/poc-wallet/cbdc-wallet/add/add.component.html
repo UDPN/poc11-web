@@ -121,7 +121,7 @@
           </div>
         </nz-form-item>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15">
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15" *ngIf="this.validateForm.get('creationMethod')?.value === 0">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
           <div nz-row>
             <div nz-col nzSpan="24">
