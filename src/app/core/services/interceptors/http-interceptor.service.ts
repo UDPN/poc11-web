@@ -8,8 +8,8 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError, map, TimeoutError } from 'rxjs';
-import { catchError, filter, timeout } from 'rxjs/operators';
+import { Observable, throwError, map, TimeoutError, Subject } from 'rxjs';
+import { catchError, filter, takeUntil, timeout } from 'rxjs/operators';
 
 import { TokenKey } from '@config/constant';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -33,6 +33,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   reLoginCode: any = null;
   firstCode: any = null;
   errorCode: any = null;
+  public cancelPenddingRequest$ = new Subject<void>();
   constructor(
     private windowServe: WindowService,
     public message: NzMessageService,
@@ -40,7 +41,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private modal: NzModalService,
     private translate: TranslateService,
     private router: Router
-  ) { }
+  ) {}
 
   intercept(
     req: HttpRequest<NzSafeAny>,
@@ -48,7 +49,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<NzSafeAny>> {
     // const token = this.windowServe.getSessionStorage(TokenKey);
     const token: any = sessionStorage.getItem('token');
-    
+
     // const token: any = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDQxOTQxNzQsInN1YiI6ImFkbWluIiwiZXhwIjoxNzA0MjgwNTc0LCJvdXRKd3RUb2tlbkluZm8iOnsicm9sZUxpc3QiOlsiYWRtaW4iXSwiY2xpZW50SWQiOjEsImNsaWVudFJlYWxOYW1lIjoiYWRtaW4ifX0.4n2pjZ4h1PBCiNgf-i5TAwJj9Sul5sjGgbZxkgrRmO5mX07dimFFSZ25lCD7Aun8C8lYM2N1si29yZIC4eJ32A';
     let httpConfig: CustomHttpConfig = {};
     if (req.url.indexOf('fxsp') === -1) {
@@ -70,7 +71,8 @@ export class HttpInterceptorService implements HttpInterceptor {
       filter((e) => e.type !== 0),
       map((res) => this.handleSuccess(res)),
       timeout(APP_XHR_TIMEOUT),
-      catchError((error) => this.handleError(error))
+      catchError((error) => this.handleError(error)),
+      takeUntil(this.cancelPenddingRequest$.asObservable())
     );
   }
 
@@ -133,7 +135,10 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (filterCode.includes(event.body.code)) {
           return event;
         }
-        if (event.body.code !== 'FXSP_ELEVEN_20420' && event.body.message !== 'MSG_00_0005') {
+        if (
+          event.body.code !== 'FXSP_ELEVEN_20420' &&
+          event.body.message !== 'MSG_00_0005'
+        ) {
           if (!this.firstCode) {
             if (event.body.code !== 1) {
               this.modal.error({
@@ -143,6 +148,7 @@ export class HttpInterceptorService implements HttpInterceptor {
             }
           }
         } else {
+          this.cancelPenddingRequest$.next();
           this.windowServe.clearStorage();
           this.windowServe.clearSessionStorage();
           this.loginOutService.loginOut().then((_) => {
@@ -158,7 +164,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         }
         if (
           event.body.code === 1 &&
-          event.body.message.indexOf('MSG_') !== -1 && 
+          event.body.message.indexOf('MSG_') !== -1 &&
           event.body.message !== 'MSG_00_0005'
         ) {
           this.modal.error({
@@ -167,7 +173,10 @@ export class HttpInterceptorService implements HttpInterceptor {
           });
           return event;
         }
-        if (event.body.code === -1 || (event.body.code === 1 && event.body.message !== 'MSG_00_0005')) {
+        if (
+          event.body.code === -1 ||
+          (event.body.code === 1 && event.body.message !== 'MSG_00_0005')
+        ) {
           this.modal.error({
             nzTitle: 'Error',
             nzContent: 'System error, please try again later !'
