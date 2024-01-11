@@ -205,6 +205,17 @@ export const MapSet = {
     1: 'process',
     2: 'finish',
     3: 'error'
+  },
+  operationType: {
+    0: 'Create',
+    1: 'Freeze',
+    2: 'Unfreeze'
+  },
+  operationStatus: {
+    3: 'Pending Approval',
+    4: 'Processing',
+    5: 'Success',
+    6: 'Rejected'
   }
 };
 

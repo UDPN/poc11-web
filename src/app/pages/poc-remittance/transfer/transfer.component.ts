@@ -109,7 +109,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     });
 
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required]]
+      pwd: ['', [Validators.required]]
     });
   }
   beneficialWalletAddressValidator = (
@@ -446,7 +446,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
             ? this.checkedItemComment[0].rateId
             : ' ',
         passWord: fnEncrypts(
-          this.passwordForm.get('password')?.value,
+          this.passwordForm.getRawValue(),
           aesKey,
           aesVi
         )

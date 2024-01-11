@@ -19,7 +19,7 @@
               <nz-descriptions-item nzTitle="Currency">
                 {{ info.currency }}
               </nz-descriptions-item>
-              <!-- <nz-descriptions-item nzTitle="Created By">{{ info.createUser }}</nz-descriptions-item> -->
+              <nz-descriptions-item nzTitle="Created By">{{ info.createUser }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Creation Time">{{ info.createTime | map:'timeStamp'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Status"><nz-tag [nzColor]="info.state | map:'walletStatusColor'">{{
@@ -100,12 +100,12 @@
               [tableConfig]="transactionTableConfig" [tableData]="transactionList"></app-ant-table>
           </nz-card>
         </ng-container>
-        <!-- <ng-container *ngIf="i === 2">
+        <ng-container *ngIf="i === 2">
           <nz-card nzTitle="Operation Record" nzBordered="false" class="none-bottom">
-            <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="recordTableConfig"
+            <app-ant-table (changePageSize)="recordChangePageSize($event)" [tableConfig]="recordTableConfig"
               [tableData]="recordList"></app-ant-table>
           </nz-card>
-        </ng-container> -->
+        </ng-container>
       </nz-tab>
     </nz-tabset>
   </nz-card>

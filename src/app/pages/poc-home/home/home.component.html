@@ -1,10 +1,8 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <ng-container *ngIf="bankType === 1">
-    <nz-card class="operate-text" style="padding-bottom: 600px; font-weight: 600; font-size: 24px;">{{ 'To be developed
-      !' }}</nz-card>
-    <!-- <nz-card>
+  <ng-container>
+    <nz-card>
       <h4 nz-typography class="menus-color" style="font-weight: 500;margin-bottom: 0">{{ 'As a Commercial Bank' }}</h4>
     </nz-card>
     <nz-card nzTitle="CBDC Wallet Balance" class="m-b-10">
@@ -17,13 +15,13 @@
                 <nz-form-item>
                   <nz-form-control class="m-t-30">
                     <nz-select [(ngModel)]="balance.value">
-                      <nz-option *ngFor="let item of balance.walletList; index as i" [nzValue]="item.amount"
-                        [nzLabel]="item.walletAddress">
+                      <nz-option *ngFor="let item of balance.walletList; index as i" [nzValue]="item.balance"
+                        [nzLabel]="item.chainAccountAddress">
                       </nz-option>
                     </nz-select>
                   </nz-form-control>
                   <nz-form-control class="m-t-30">
-                    <h2 nz-typography style="text-align: center;">{{ balance.value }}</h2>
+                    <h2 nz-typography style="text-align: center;">{{ balance.value | map: 'toThousandthMark'}}</h2>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -33,12 +31,35 @@
       </div>
     </nz-card>
     <nz-card nzTitle="CBDC Movements In the Last 7 Days" class="m-b-10">
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="24" nzOffset="2">
-          <div id="chart-container" style="max-width:1200px;height:400px"></div>
+      <form nz-form [formGroup]="currencyForm" nzLayout="vertical" class="m-l-50 m-b-50">
+        <div nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+            <div nz-row nzJustify="space-between" [nzGutter]="8">
+              <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                <nz-form-item>
+                  <nz-form-label>Currency</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="currency">
+                      <!-- <nz-option nzValue="" nzLabel="All"></nz-option> -->
+                      <nz-option *ngFor="let item of currencyList; index as i" [nzValue]="item"
+                        [nzLabel]="item">
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="24">
+        <div nz-col nzXs="24" nzSm="18" nzXl="16" nzXXl="16">
+          <div nz-col nzSpan="24">
+            <div nz-row id="chart-container" style="max-width:900px;height:400px"></div>
+          </div>
         </div>
       </div>
-    </nz-card> -->
+    </nz-card>
   </ng-container>
   <ng-container *ngIf="bankType === 2">
     <nz-card>
@@ -161,7 +182,8 @@
                         }}</span></nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Currency Pair ID"><span>{{ item.chainRateId
                         }}</span></nz-descriptions-item>
-                    <nz-descriptions-item nzTitle="Latest Exchange Rate"><span>{{ item.exchangeRate | map:'toThousandRate'
+                    <nz-descriptions-item nzTitle="Latest Exchange Rate"><span>{{ item.exchangeRate |
+                        map:'toThousandRate'
                         }}</span></nz-descriptions-item>
                   </nz-descriptions>
                 </nz-card>
@@ -252,7 +274,7 @@
                   <nz-form-label [nzNoColon]="true"></nz-form-label>
                   <nz-form-control>
                     <div nz-col [nzSpan]="24">
-                      <button nz-button [nzType]="'primary'" (click)="onQuery()">
+                      <button nz-button [nzType]="'primary'" [disabled]="this.validateForm.valid" (click)="onQuery()">
                         Query
                       </button>
                     </div>

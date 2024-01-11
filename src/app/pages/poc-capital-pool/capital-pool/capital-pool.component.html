@@ -42,6 +42,9 @@
 <ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency">
   <span>{{ (capitalPoolBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
 </ng-template>
+<ng-template #authorTpl let-capitalPoolRealBalance="capitalPoolRealBalance" let-capitalPoolCurrency="capitalPoolCurrency">
+  <span>{{ (capitalPoolRealBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
+</ng-template>
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>

@@ -38,7 +38,7 @@
 <ng-template #step1Tpl>
   <ul>
     <li>{{ 'Transaction No.: ' + info.transactionNo }}</li>
-    <li>{{ 'on ' + (info.creationTime | map:'timeStamp') }}</li>
+    <li>{{ 'on ' + (info.creationTime | map:'timeStamp') + ' by ' +  info.createUser }}</li>
   </ul>
 </ng-template>
 <ng-template #step2Tpl>

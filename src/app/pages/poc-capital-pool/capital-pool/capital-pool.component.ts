@@ -55,7 +55,8 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   balanceTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('authorizedTpl', { static: true })
   authorizedTpl!: TemplateRef<NzSafeAny>;
-
+  @ViewChild('authorTpl', { static: true })
+  authorTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creation: [],
     status: ''
@@ -252,6 +253,11 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Balance',
           tdTemplate: this.balanceTpl,
+          width: 200
+        },
+        {
+          title: 'Authorized',
+          tdTemplate: this.authorTpl,
           width: 200
         },
         {
