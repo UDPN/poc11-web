@@ -109,18 +109,29 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.getCentralBank();
     this.topUpForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.amountValidator]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
     });
     this.withdrawForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.amountValidator]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
     });
     this.passwordForm = this.fb.group({
       pwd: [null, [Validators.required]],
     });
   }
 
-  amountValidator = (
+  topUpAmountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
+  withdrawAmountValidator = (
     control: FormControl
   ): { [s: string]: boolean } => {
     if (!control.value) {

@@ -134,7 +134,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     });
     this.topUpForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.withdrawAmountValidator]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
     });
     this.withdrawForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
@@ -144,6 +144,17 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       pwd: [null, [Validators.required]],
     });
   }
+
+  topUpAmountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   withdrawAmountValidator = (
     control: FormControl
