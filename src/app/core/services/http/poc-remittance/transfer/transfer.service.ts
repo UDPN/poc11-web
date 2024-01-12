@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-12 11:26:49
+ * @LastEditTime: 2024-01-12 13:25:14
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -57,7 +57,8 @@ export class TransferService {
     passWord: string;
     toCommercialBankId: number;
   }): Observable<any> {
-    return this.http.post(`/v1/remittanceManagement/transfer`, params);
+    console.log(params);
+    return this.http.post(`/v1/remittanceManagement/transferzzz`, params);
   }
   public fetchAllOhter(params: {
     bankName: string;

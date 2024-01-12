@@ -71,6 +71,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
   transferTitle: string = '';
   BeneficiaryArr: any[] = [];
   newAmountArr: any[] = [];
+  newBeneficialBankId = 0;
+  newBeneficialWalletAddress: string = '';
+  newToCommercialBankId = 0;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -149,7 +152,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
       .subscribe((res: any) => {
         this.beneficialBankNameListAll = res;
         // set Beneficiary's Name
-        console.log(res);
       });
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
@@ -351,13 +353,15 @@ export class TransferComponent implements OnInit, AfterViewInit {
     }
   }
   onBeneficialWalletAddressChange(e: number) {
-    // 设置amount单位的数组
+    this.newBeneficialWalletAddress =
+      this.BeneficiaryArr[e]['chainAccountAddress'];
+    // Set the array of amount units
     this.newAmountArr = this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'];
     this.beneficiaryCurrency =
       this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
         'digitalCurrencyName'
       ];
-    // 设置Beneficiary's Bank Name
+    // set Beneficiary's Bank Name
     this.validateForm
       .get('newBeneficialBankName')
       ?.setValue(
@@ -365,6 +369,10 @@ export class TransferComponent implements OnInit, AfterViewInit {
           'centralBankName'
         ]
       );
+    this.newToCommercialBankId =
+      this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
+        'centralBankId'
+      ];
   }
   onBeneficiaryCurrency(e: any) {
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
@@ -374,11 +382,14 @@ export class TransferComponent implements OnInit, AfterViewInit {
     }
   }
   onBeneficialBankNameChange(e: number) {
-    // 获取对应的Beneficiary's Wallet Address数组
+    // set ID
+    this.newBeneficialBankId = this.beneficialBankNameListAll[e]['bankId'];
+
+    // get Beneficiary's Wallet Address
     this.BeneficiaryArr =
       this.beneficialBankNameListAll[e]['beneficiaryWallets'];
     this.validateForm.get('beneficialWalletAddress')?.setValue(0);
-    // 设置amount单位的数组
+    // set amount array
     this.newAmountArr =
       this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
         'beneficiaryWalletExtendeds'
@@ -387,7 +398,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
         'beneficiaryWalletExtendeds'
       ][0]['digitalCurrencyName'];
-    // 设置Beneficiary's Bank Name
+    // set Beneficiary's Bank Name
     this.validateForm
       .get('newBeneficialBankName')
       ?.setValue(
@@ -396,19 +407,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
         ][0]['centralBankName']
       );
     this.cdr.markForCheck();
-    return;
-
-    const val = this.beneficialBankNameList.filter(
-      (item: any) => item.value === e
-    );
-    this.validateForm.get('beneficialBankName')?.setValue(val[0].label);
-    this.beneficiaryCurrency = val[0].currencyValue;
-    this.beneficiaryCurrencyName = val[0].currencyName;
-    if (this.availableCurrecyModel !== val[0].currencyValue) {
-      this.getExchange();
-    } else {
-      this.settlementStatus = false;
-    }
   }
   onItemChecked(id: string, checked: boolean): void {
     this.updateCheckedSet(id, checked);
@@ -488,10 +486,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.transferService
       .transfer({
-        beneficiaryBankId: this.validateForm.get('beneficialBankId')?.value,
-        beneficiaryWalletAddress: this.validateForm.get(
-          'beneficialWalletAddress'
-        )?.value,
+        beneficiaryBankId: this.newBeneficialBankId,
+        beneficiaryWalletAddress: this.newBeneficialWalletAddress,
         interbankSettlementAmount: this.validateForm.get('amount')?.value,
         remittanceInformation: this.validateForm.get('remittanceInformation')
           ?.value,
@@ -501,7 +497,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
             ? this.checkedItemComment[0].rateId
             : ' ',
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
-        toCommercialBankId:0
+        toCommercialBankId: this.newToCommercialBankId
       })
       .subscribe((res) => {
         if (res) {
