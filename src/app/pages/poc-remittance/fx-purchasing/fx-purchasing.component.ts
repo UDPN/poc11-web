@@ -13,12 +13,14 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { aesKey, aesVi } from '@app/config/constant';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { fnEncrypts } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { debounceTime } from 'rxjs';
