@@ -48,6 +48,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   nzLoading: boolean = false;
   isLoading: boolean = false;
   beneficialBankNameList: any[] = [];
+  beneficialBankNameListAll: any[] = [];
   remitterWalletAddressList: any[] = [];
   tableConfig!: AntTableConfig;
   setOfCheckedId = new Set<string>();
@@ -68,6 +69,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
   settlementStatus = false;
   beneficiaryCurrencyName: any = '';
   transferTitle: string = '';
+  BeneficiaryArr: any[] = [];
+  newAmountArr: any[] = [];
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -94,6 +97,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initData();
     this.validateForm = this.fb.group({
+      newBeneficialBankName: [''],
       beneficialBankName: ['', [Validators.required]],
       beneficialBankId: ['', [Validators.required]],
       beneficialWalletAddress: [
@@ -139,6 +143,14 @@ export class TransferComponent implements OnInit, AfterViewInit {
 
   initData() {
     this.beneficialBankNameList = [];
+    this.beneficialBankNameListAll = [];
+    this.transferService
+      .fetchAllOhter({ bankName: '', chainAccountAddress: '' })
+      .subscribe((res: any) => {
+        this.beneficialBankNameListAll = res;
+        // set Beneficiary's Name
+        console.log(res);
+      });
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
         this.beneficialBankNameList.push({
@@ -186,6 +198,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       });
     });
   }
+
   onRemitterWalletAddressChange(e: any) {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.value === e
@@ -337,11 +350,53 @@ export class TransferComponent implements OnInit, AfterViewInit {
       this.settlementStatus = false;
     }
   }
-  onBeneficialBankNameChange(e: any) {
-    if (e === 'all') {
-      this.beneficiaryCurrency = '';
-      return;
+  onBeneficialWalletAddressChange(e: number) {
+    // 设置amount单位的数组
+    this.newAmountArr = this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'];
+    this.beneficiaryCurrency =
+      this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
+        'digitalCurrencyName'
+      ];
+    // 设置Beneficiary's Bank Name
+    this.validateForm
+      .get('newBeneficialBankName')
+      ?.setValue(
+        this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
+          'centralBankName'
+        ]
+      );
+  }
+  onBeneficiaryCurrency(e: any) {
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+      this.getExchange();
+    } else {
+      this.settlementStatus = false;
     }
+  }
+  onBeneficialBankNameChange(e: number) {
+    // 获取对应的Beneficiary's Wallet Address数组
+    this.BeneficiaryArr =
+      this.beneficialBankNameListAll[e]['beneficiaryWallets'];
+    this.validateForm.get('beneficialWalletAddress')?.setValue(0);
+    // 设置amount单位的数组
+    this.newAmountArr =
+      this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
+        'beneficiaryWalletExtendeds'
+      ];
+    this.beneficiaryCurrency =
+      this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
+        'beneficiaryWalletExtendeds'
+      ][0]['digitalCurrencyName'];
+    // 设置Beneficiary's Bank Name
+    this.validateForm
+      .get('newBeneficialBankName')
+      ?.setValue(
+        this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
+          'beneficiaryWalletExtendeds'
+        ][0]['centralBankName']
+      );
+    this.cdr.markForCheck();
+    return;
 
     const val = this.beneficialBankNameList.filter(
       (item: any) => item.value === e
@@ -445,11 +500,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
           this.checkedItemComment.length > 0
             ? this.checkedItemComment[0].rateId
             : ' ',
-        passWord: fnEncrypts(
-          this.passwordForm.getRawValue(),
-          aesKey,
-          aesVi
-        )
+        passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
+        toCommercialBankId:0
       })
       .subscribe((res) => {
         if (res) {
