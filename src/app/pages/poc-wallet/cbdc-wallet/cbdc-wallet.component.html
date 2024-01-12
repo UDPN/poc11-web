@@ -214,7 +214,7 @@
                 <input nz-input formControlName="amount" />
               </nz-input-group>
               <div>
-                Available Amount: 90,000.00 w-CNY
+                {{'Available Amount: '}} {{ (this.balance | map:'toThousandthMark') + ' ' + this.currency }}
               </div>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>

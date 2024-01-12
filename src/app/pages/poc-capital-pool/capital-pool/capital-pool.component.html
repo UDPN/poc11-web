@@ -39,21 +39,32 @@
     capitalPoolCurrency + ' Capital Pool'
     }}</span>
 </ng-template>
-<ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency">
-  <span>{{ (capitalPoolBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
-</ng-template>
-<ng-template #authorTpl let-capitalPoolRealBalance="capitalPoolRealBalance" let-capitalPoolCurrency="capitalPoolCurrency">
+<ng-template #balanceTpl let-capitalPoolRealBalance="capitalPoolRealBalance" let-capitalPoolCurrency="capitalPoolCurrency">
   <span>{{ (capitalPoolRealBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
+</ng-template>
+<ng-template #authorTpl let-capitalPoolBalance="capitalPoolBalance"
+  let-capitalPoolCurrency="capitalPoolCurrency">
+  <span>{{ (capitalPoolBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
 </ng-template>
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>
 <ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress"
-  let-currencyPrecision="currencyPrecision">
+  let-currencyPrecision="currencyPrecision" let-capitalPoolBalance="capitalPoolBalance">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
       (click)="getEdit(capitalPoolCurrency, capitalPoolAddress, currencyPrecision)">
       Edit
+    </span>
+  </ng-container>
+  <ng-container *appAuth="'R020205'">
+    <span class="operate-text" (click)="getTopUp(capitalPoolCurrency, capitalPoolAddress, capitalPoolBalance)">
+      Top up
+    </span>
+  </ng-container>
+  <ng-container *appAuth="'R020206'">
+    <span class="operate-text" (click)="getWithdraw(capitalPoolCurrency, capitalPoolAddress, capitalPoolBalance)">
+      Withdraw
     </span>
   </ng-container>
 </ng-template>
@@ -99,5 +110,132 @@
     <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
     <button nz-button nzType="primary" (click)="edit()" [nzLoading]="isLoading"
       [disabled]="!this.editValidateForm.valid">Confirm</button>
+  </div>
+</nz-modal>
+<nz-modal [(nzVisible)]="isVisibleTopUp" nzTitle="Top up" (nzOnCancel)="cancelTopUp()" [nzClosable]="false"
+  [nzWidth]="700" nzCentered="true">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="topUpForm">
+      <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+        <div nz-col nzSpan="20">
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="6" class="text-left">
+              Wallet Address
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="18" class="m-b-20">
+              <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
+              <ng-template #walletAddressError let-control>
+                <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="6" class="text-left">
+              Amount
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="amountError" nzSpan="18" class="m-b-20">
+              <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                <input nz-input formControlName="amount" />
+              </nz-input-group>
+              <ng-template #addOnAfterTemplate>
+                <label>{{ currency }}</label>
+              </ng-template>
+              <ng-template #amountError let-control>
+                <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
+                <ng-container *ngIf="control.hasError('regular')"></ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-alert nzType="info" [nzDescription]="descriptionTemplate" nzShowIcon></nz-alert>
+          <ng-template #descriptionTemplate>
+            <h5 nz-typography>
+              Please ensure that your fiat collateral account has sufficient balance as insufficient balance may result
+              in
+              failed recharge.
+            </h5>
+          </ng-template>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelTopUp()">Back</button>
+    <button nz-button nzType="primary" (click)="topUp()" [nzLoading]="isLoading"
+      [disabled]="!this.topUpForm.valid">Submit</button>
+  </div>
+</nz-modal>
+<nz-modal [(nzVisible)]="isVisibleWithdraw" nzTitle="Withdraw" (nzOnCancel)="cancelWithdraw()" [nzClosable]="false"
+  [nzWidth]="700" nzCentered="true">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="withdrawForm">
+      <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+        <div nz-col nzSpan="20">
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="6" class="text-left">
+              Wallet Address
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="18" class="m-b-20">
+              <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
+              <ng-template #walletAddressError let-control>
+                <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item class="m-t-15">
+            <nz-form-label nzRequired nzSpan="6" class="text-left">
+              Amount
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="amountError" nzSpan="18">
+              <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                <input nz-input formControlName="amount" />
+              </nz-input-group>
+              <div>
+                {{'Available Amount: '}} {{ (this.balance | map:'toThousandthMark') + ' ' + this.currency }}
+              </div>
+              <ng-template #addOnAfterTemplate>
+                <label>{{ currency }}</label>
+              </ng-template>
+              <ng-template #amountError let-control>
+                <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
+                <ng-container *ngIf="control.hasError('regular')"></ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelWithdraw()">Back</button>
+    <button nz-button nzType="primary" (click)="withdraw()" [nzLoading]="isLoading"
+      [disabled]="!this.withdrawForm.valid">Submit</button>
+  </div>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisibleEnterPassword" nzTitle="Enter Login Password" (nzOnCancel)="cancelEnterPassword()"
+  [nzClosable]="false" [nzWidth]="700" nzCentered="true">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="passwordForm">
+      <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+        <div nz-col nzSpan="20">
+          <nz-form-item class="m-t-15">
+            <nz-form-label nzRequired nzSpan="6" class="text-left">
+              Password
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="passwordError" nzSpan="18">
+              <input [type]="'password'" nz-input formControlName="pwd" />
+              <ng-template #passwordError let-control>
+                <ng-container *ngIf="control.hasError('required')">Please input your Password</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelEnterPassword()">Cancel</button>
+    <button nz-button nzType="primary" (click)="confirmEnterPassword()" [nzLoading]="isOkLoading"
+      [disabled]="!this.passwordForm.valid">Confirm</button>
   </div>
 </nz-modal>
