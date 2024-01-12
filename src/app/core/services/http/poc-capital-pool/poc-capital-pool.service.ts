@@ -25,6 +25,14 @@ export interface Edata {
   currency: string;
 }
 
+export interface Tdata {
+  amount: number;
+  currency: string;
+  password: string;
+  txType: any; //  1: Top Up 2: Withdraw
+  walletAddress?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -73,5 +81,9 @@ export class PocCapitalPoolService {
 
   public edit(params: Edata): Observable<any> {
     return this.http.post(`/v1/capitalpool/authorize`, params);
+  }
+
+  public topUpOrWithdraw(params: Tdata): Observable<any> {
+    return this.http.post(`/v1/wallet/capitalPool/applyCbdcTx`, params);
   }
 }
