@@ -118,7 +118,7 @@
                 <div class="upDiv" (click)="upFileSig.click()">
                   <span style="font-size: 28px" *ngIf="fileStatus === 1" nz-icon nzType="plus" nzTheme="outline">
                   </span>
-                  <span style="font-size: 28px" *ngIf="fileStatus === 2" nz-icon nzType="file-text" nzTheme="outline">
+                  <span style="font-size: 28px" *ngIf="fileStatus === 2" nz-icon nzType="file-done" nzTheme="outline">
                   </span>
                 </div>
               </div>
@@ -128,7 +128,7 @@
                     nzType="text" style="color: red">delete</button></span>
               </div>
               <input type="text" hidden formControlName="file" />
-              <input type="file" accept=".txt" hidden #upFileSig (change)="uploadFileSig($event)" id="files" />
+              <input type="file" accept=".json" hidden #upFileSig (change)="uploadFileSig($event)" id="files" />
               <ng-template #keyStoreFileError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please upload your Keystore File</ng-container>
               </ng-template>

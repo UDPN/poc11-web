@@ -142,6 +142,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.initTable();
           this.initSelect();
         } 
+        this.cdr.markForCheck();
       }
     });
     this.validateForm = this.fb.group({

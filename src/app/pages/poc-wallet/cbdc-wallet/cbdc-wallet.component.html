@@ -222,6 +222,7 @@
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
                 <ng-container *ngIf="control.hasError('regular')"></ng-container>
+                <ng-container *ngIf="control.hasError('regular1')"></ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
