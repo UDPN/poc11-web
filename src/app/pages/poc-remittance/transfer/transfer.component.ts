@@ -74,6 +74,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   newBeneficialBankId = 0;
   newBeneficialWalletAddress: string = '';
   newToCommercialBankId = 0;
+  remitterBankName = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -146,6 +147,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
   initData() {
     this.beneficialBankNameList = [];
     this.beneficialBankNameListAll = [];
+    this.transferService.bankInformation().subscribe(res=>{
+      this.remitterBankName = res.bankName;
+    })
     this.transferService
       .fetchAllOhter({ bankName: '', chainAccountAddress: '' })
       .subscribe((res: any) => {
