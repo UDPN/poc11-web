@@ -158,6 +158,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     }
   }
   onPurchase(e: any) {
+    console.log(e);
+    console.log(this.fxPurchaseData[e]);
+    console.log(this.fxPurchaseData[e]['walletExtendInfo']);
     this.purIndex = e;
     this.validateForm
       .get('transactionWalletAddress')
@@ -234,9 +237,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                   currency:
                     '1 ' +
                     item.from.replace('-UDPN', '') +
-                    ' : ' +
-                    item.rate +
-                    ' ' +
+                    '->' +
                     item.to.replace('-UDPN', ''),
                   currencyShow:
                     '1 ' +
@@ -254,7 +255,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                         : (this.validateForm.get('amount')?.value / item.rate) *
                           item.smValue
                       : item.smValue
-                  ).replace(/^(.*\..{2}).*$/, '$1'),
+                  ).replace(/^(.*\..{8}).*$/, '$1'),
                   total: String(
                     this.validateForm.get('amount')?.value / item.rate +
                       (item.smChargeModel === 0
@@ -266,7 +267,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                               item.rate) *
                             item.smValue
                         : item.smValue)
-                  ).replace(/^(.*\..{2}).*$/, '$1')
+                  ).replace(/^(.*\..{8}).*$/, '$1')
                 });
               });
               this.nzLoading = false;
