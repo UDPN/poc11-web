@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-12 13:58:10
+ * @LastEditTime: 2024-01-12 14:27:37
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -45,7 +45,10 @@ export class TransferService {
   public nationalWallets(): Observable<any> {
     return this.http.post(`/v1/common/nationalWalletList`);
   }
-
+  // bank information
+  public bankInformation(): Observable<any> {
+    return this.http.post(`/v1/common/bankInfo`);
+  }
   // transfer
   public transfer(params: {
     beneficiaryBankId: number;
