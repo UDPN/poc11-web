@@ -1,0 +1,181 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-system/user'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="''"
+    class="m-b-10"
+  >
+    <form nz-form [formGroup]="validateForm">
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired  nzSpan="10"
+            >User Name
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="userNameError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input
+                  nz-input
+                  formControlName="userName"
+                  [ngClass]="{'onboard-disabled': !tempStatus}"
+                  [readonly]="!tempStatus"
+                  maxlength="20"
+                />
+              </div>
+            </div>
+            <ng-template #userNameError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your User Name</ng-container
+              >
+              <ng-container *ngIf="control.hasError('regular')"
+                >Numbers, letters or a combination of both,2-30
+                characters</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired  nzSpan="10"
+            >Real Name
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="realNameError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input nz-input formControlName="realName" maxlength="20" />
+              </div>
+            </div>
+            <ng-template #realNameError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Real Name</ng-container
+              >
+              <ng-container *ngIf="control.hasError('regular')"
+                >Composed of 2-30 characters</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired  nzSpan="10">
+            Telephone Number
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="phoneError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input nz-input formControlName="telephone" maxlength="20" />
+              </div>
+            </div>
+            <ng-template #phoneError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Telephone Number</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired  nzSpan="10"> Email </nz-form-label>
+          <nz-form-control [nzErrorTip]="emailError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input nz-input formControlName="email" maxlength="200" />
+              </div>
+            </div>
+            <ng-template #emailError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Email</ng-container
+              >
+              <ng-container *ngIf="control.hasError('regular')"
+                >Incorrect mailbox format
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired  nzSpan="24">Role</nz-form-label>
+          <nz-form-control [nzErrorTip]="roleError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-select
+                  nzMode="multiple"
+                  nzPlaceHolder=""
+                  [nzOptions]="roleList"
+                  formControlName="roleIdList"
+                  [nzShowArrow]="true"
+                ></nz-select>
+              </div>
+            </div>
+            <ng-template #roleError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please select your Role</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired  nzSpan="24">Status </nz-form-label>
+          <nz-form-control [nzErrorTip]="statusError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-select formControlName="lockable">
+                  <nz-option [nzValue]="1" nzLabel="Disable"></nz-option>
+                  <nz-option [nzValue]="2" nzLabel="Enable"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+            <ng-template #statusError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please select your Status</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <div nz-row>
+            <div nz-col nzSpan="24" style="text-align: end">
+              <nz-space>
+                <button
+                  *nzSpaceItem
+                  nz-button
+                  [nzSize]="'large'"
+                  nzType="default"
+                  (click)="onBack()"
+                >
+                  Back
+                </button>
+                <button
+                  *nzSpaceItem
+                  nz-button
+                  [nzSize]="'large'"
+                  nzType="primary"
+                  [nzLoading]="isLoading"
+                  [disabled]="!this.validateForm.valid"
+                  (click)="onSubmit()"
+                >
+                  {{ this.tempStatus === true ? 'Save' : 'Edit' }}
+                </button></nz-space
+              >
+            </div>
+          </div>
+        </nz-form-item>
+      </div>
+    </form>
+  </nz-card>
+</div>

@@ -1,0 +1,92 @@
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-remittance/transaction-record'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <div nz-row class="m-t-10">
+    <div nz-col [nzXXl]="14" [nzXl]="14" [nzLg]="24" [nzMd]="14" [nzSm]="24" [nzXs]="24">
+      <nz-card nzTitle="" class="m-r-8 none-bottom">
+        <nz-card nzBordered="false" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+            [nzBordered]="false" class="card-descriptions-order">
+            <nz-descriptions-item [nzTitle]="info.type | map: 'transactionsRecordType'"><span
+                [style]="{'color': info.cbdcCount > 0 ? '#39A16A' : '#E53E3E'}">{{
+                info.cbdcCount > 0 ? '+' : ''}}{{ (info.cbdcCount |
+                map:'toThousandthMark') + ' ' +
+                info.fromCurrency
+                }}</span></nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+        <nz-card [nzTitle]="info.fromCbdcCount > 0 ? 'Receiving Information' : 'Payment Information'" nzBordered="false"
+          class="m-t-25" [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+            class="card-descriptions-order">
+            <nz-descriptions-item nzTitle="Transaction No.">{{ info.serialNumber | map:'nullValue'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Creation Time">{{ info.createTime | map:'timeStamp'
+              }}</nz-descriptions-item>
+          </nz-descriptions>
+          <nz-divider></nz-divider>
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+            class="card-descriptions-order">
+            <nz-descriptions-item nzTitle="From">
+              {{ info.fromBankName }}
+              <br>
+              {{ info.fromAccountAddress }}
+              <br>
+              {{ (info.fromCbdcCount | map:'toThousandthMark') + ' ' + info.fromCurrency }}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="To">
+              {{ info.toBankName }}
+              <br>
+              {{ info.toAccountAddress }}
+              <br>
+              {{ (info.toCbdcCount | map:'toThousandthMark') + ' ' + info.toCurrency }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+          <nz-divider></nz-divider>
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+            class="card-descriptions-order">
+            <nz-descriptions-item [nzTitle]="info.cbdcCount > 0 ? 'Payment Information' : 'Remittance Information'">
+              {{ info.remarks }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+        <nz-card nzTitle="FX Information" nzBordered="false" class="m-t-25"
+          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}" *ngIf="info.fromCurrency !== info.toCurrency">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+            class="card-descriptions-order">
+            <nz-descriptions-item nzTitle="Settlement Bank">{{ info.settlementBank
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ '1 ' + info.fromCurrency?.split('-')[1]
+              + ' = ' + info.exchangeRate + ' ' + info.toCurrency?.split('-')[1]
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Commission">{{ (info.commission | map:'toThousandthMark') + ' ' +
+              info.fromCurrency }}</nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+        <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25"
+          [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+          <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+            class="card-descriptions-order">
+            <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map: 'timeStamp'
+              }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Status"> <nz-tag
+                [nzColor]="info.state | map:'transactionsRecordStatusColor'">{{
+                info.state | map:'walletTransactionsRecordStatus'
+                }}</nz-tag></nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+
+      </nz-card>
+    </div>
+    <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="24" [nzMd]="10" [nzSm]="24" [nzXs]="24">
+      <nz-card nzTitle="" [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
+        <app-record-timeline [info]="info" />
+      </nz-card>
+    </div>
+  </div>
+</div>

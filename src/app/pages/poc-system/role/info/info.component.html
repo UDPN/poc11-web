@@ -1,0 +1,115 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-system/role'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="''"
+    class="m-b-10"
+  >
+    <form nz-form>
+      <div
+        nz-row
+        nzJustify="center"
+        nzAlign="middle"
+        class="m-b-10"
+        nzGutter="8"
+      >
+        <div nz-col nzXs="24" nzSm="24" nzXl="24" nzXXl="24">
+          <div nz-row nzJustify="space-around" nzGutter="8">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColon]="false"
+                [nzBordered]="true"
+              >
+                <nz-descriptions-item nzTitle="Role Name" [nzSpan]="3">{{
+                  info.roleName
+                }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Status" [nzSpan]="3">{{
+                  info.lockable | map : 'lockable'
+                }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{
+                  info.description
+                }}</nz-descriptions-item>
+              </nz-descriptions>
+            </div>
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColon]="false"
+                [nzBordered]="true"
+              >
+                <nz-descriptions-item
+                  nzTitle="Permission list
+                  "
+                  [nzSpan]="3"
+                  ><div class="mt-2">
+                    <nz-tree-view
+                      [nzTreeControl]="treeControl"
+                      [nzDataSource]="dataSource"
+                    >
+                      <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
+                        <nz-tree-node-toggle
+                          nzTreeNodeNoopToggle
+                        ></nz-tree-node-toggle>
+                        <nz-tree-node-option
+                          [nzDisabled]="node.disabled"
+                          [nzSelected]="selectListSelection.isSelected(node)"
+                          (nzClick)="selectListSelection.toggle(node)"
+                        >
+                          {{ node.name }}
+                        </nz-tree-node-option>
+                      </nz-tree-node>
+
+                      <nz-tree-node
+                        *nzTreeNodeDef="let node; when: hasChild"
+                        nzTreeNodePadding
+                      >
+                        <nz-tree-node-toggle>
+                          <span
+                            nz-icon
+                            nzType="caret-down"
+                            nzTreeNodeToggleRotateIcon
+                          ></span>
+                        </nz-tree-node-toggle>
+                        <nz-tree-node-option
+                          [nzDisabled]="node.disabled"
+                          [nzSelected]="selectListSelection.isSelected(node)"
+                          (nzClick)="selectListSelection.toggle(node)"
+                        >
+                          {{ node.name }}
+                        </nz-tree-node-option>
+                      </nz-tree-node>
+                    </nz-tree-view>
+                  </div></nz-descriptions-item
+                >
+              </nz-descriptions>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form></nz-card
+  >
+</div>

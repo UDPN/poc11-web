@@ -1,0 +1,76 @@
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-capital-pool/capital-pool'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card [nzTitle]="'Basic Information'" [nzBordered]="true" class="m-b-10">
+    <nz-descriptions [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="FX SP Name">{{
+        info.spName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="BIC">{{
+        info.bicName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Central Bank" [nzSpan]="3">{{
+        info.centralBankName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">{{
+        info.introduction
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{
+        info.description
+        }}</nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+  <!-- <nz-card [nzTitle]="'Settlement Information'" [nzBordered]="true" class="m-b-10">
+    <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="setTableConfig"
+      [tableData]="settlementList">
+    </app-ant-table>
+  </nz-card> -->
+  <nz-card [nzTitle]="'Currency Information'" [nzBordered]="true" class="m-b-10">
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12" style="text-align: start">
+        <p class="m-b-10" style="font-weight: 700; color:#7d8592">Please select the currency to be reduced:
+        </p>
+        <p style="color: red;">
+          Note : Reduce operations are only supported on capital pools that have not opened exchange rate business.
+        </p>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+        <nz-table #rowSelectionTable [nzShowPagination]="false" nzShowSizeChanger [nzData]="dataList"
+          (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+          <thead>
+            <tr>
+              <th class="p-l-16" [nzChecked]="checked" [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="onAllChecked($event)"><span class="m-l-8" style="color: red;">*</span>All</th>
+              <th>Currency</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of rowSelectionTable.data">
+              <td class="p-l-16" [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+                (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+              <td [title]="data.capitalPoolCurrency">
+                {{
+                data.capitalPoolCurrency }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-50 m-t-50" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12" style="text-align: end">
+        <nz-space>
+          <button *nzSpaceItem nz-button type="button" nzType="default" [nzSize]="'large'"
+            (click)="onBack()">Back</button>
+          <button *nzSpaceItem nz-button type="button" nzType="primary" [nzSize]="'large'" [nzLoading]="isLoading"
+            (click)="onSubmit()" [disabled]="this.submitCurrency.length === 0">Submit</button>
+        </nz-space>
+      </div>
+    </div>
+  </nz-card>
+
+</div>

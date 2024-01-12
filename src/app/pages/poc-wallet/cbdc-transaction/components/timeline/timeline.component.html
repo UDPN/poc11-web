@@ -1,0 +1,73 @@
+<div class="time-line">
+  <ng-container *ngIf="info.status === 1">
+    <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzStatus]="'finish'"  [nzDescription]="step1Tpl"></nz-step>
+      <nz-step [nzTitle]="'Awaiting Approval'" [nzDescription]="step2Tpl"></nz-step>
+      <nz-step nzTitle="Awaiting Submission" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
+    </nz-steps>
+  </ng-container>
+  <ng-container *ngIf="info.status === 3">
+    <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
+      <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step4Tpl"></nz-step>
+      <nz-step nzTitle="Awaiting Submission" [nzStatus]="'process'" [nzDescription]="step3Tpl"></nz-step>
+    </nz-steps>
+  </ng-container>
+  <ng-container *ngIf="info.status === 6">
+    <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
+      <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step4Tpl"></nz-step>
+      <nz-step [nzTitle]="'Failed'" [nzStatus]="'error'" [nzDescription]="step5Tpl"></nz-step>
+    </nz-steps>
+  </ng-container>
+  <ng-container *ngIf="info.status === 2">
+    <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
+      <nz-step [nzTitle]="'Rejected'" [nzStatus]="'error'" [nzDescription]="step4Tpl"></nz-step>
+      <nz-step [nzTitle]="'Failed'" [nzStatus]="'error'"></nz-step>
+    </nz-steps>
+  </ng-container>
+  <ng-container *ngIf="info.status === 5">
+    <nz-steps [nzCurrent]="2" nzDirection="vertical" nzSize="small">
+      <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
+      <nz-step [nzTitle]="'Approved'" [nzDescription]="step4Tpl"></nz-step>
+      <nz-step [nzTitle]="'Success'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
+    </nz-steps>
+  </ng-container>
+</div>
+<ng-template #step1Tpl>
+  <ul>
+    <li>{{ 'Transaction No.: ' + info.transactionNo }}</li>
+    <li>{{ 'on ' + (info.creationTime | map:'timeStamp') }}</li>
+  </ul>
+</ng-template>
+<ng-template #step2Tpl>
+  <ul>
+    <li>{{'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is awaiting confirmation' }}</li>
+  </ul>
+</ng-template>
+<ng-template #step3Tpl>
+  <ul>
+    <li>{{ 'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is waiting to be executed on the chain'
+      }}</li>
+  </ul>
+</ng-template>
+<ng-template #step4Tpl>
+  <ul>
+    <li>{{ 'on ' + (info.reviewerTime | map:'timeStamp') + ' by ' +  info.reviewerUser }}</li>
+  </ul>
+</ng-template>
+<ng-template #step5Tpl>
+  <ul>
+    <li>{{ 'Reason: ' + info.reviewerRemarks }}</li>
+    <li>{{ info.creationTime | map:'timeStamp' }}</li>
+  </ul>
+</ng-template>
+<ng-template #step6Tpl>
+  <ul>
+    <li>{{'Txn Hash:'}}
+      <p>{{ info.txHash | map:'nullValue' }}</p>
+    </li>
+    <li>{{ info.txTime | map:'timeStamp' }}</li>
+  </ul>
+</ng-template>

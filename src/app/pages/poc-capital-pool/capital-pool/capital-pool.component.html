@@ -1,0 +1,100 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-10-27 14:08:17
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2023-10-30 20:28:21
+ * @Description: 
+-->
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card>
+    <nz-tabset (nzSelectedIndexChange)="onChangeTab($event)" [nzSelectedIndex]="tabIndex">
+      <nz-tab *ngFor="let tab of capitalPoolTabs; index as i" [nzTitle]="tab">
+        <ng-container *ngIf="i === 0">
+          <app-card-table-wrap [isNormalTable]="true" [btnTpl]="tableBtns">
+            <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
+              [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+          </app-card-table-wrap>
+        </ng-container>
+        <ng-container *ngIf="i === 1">
+          <app-application />
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>
+<ng-template #tableBtns>
+  <button nz-button nzType="primary" class="m-r-8" routerLink="/poc/poc-capital-pool/capital-pool/add"
+    *appAuth="'R020201'">Activate Currency</button>
+  <button nz-button nzType="primary" class="m-r-8" routerLink="/poc/poc-capital-pool/capital-pool/reduce"
+    *appAuth="'R020203'">Reduce Currency</button>
+  <!-- <button nz-button nzType="primary" class="m-r-8">
+    <a href="https://github.com/UDPN/Poc9-contract-document" target="_blank"> View API
+      Documentation</a>
+  </button> -->
+</ng-template>
+<ng-template #capitalTpl let-capitalPoolCurrency="capitalPoolCurrency">
+  <span>{{
+    capitalPoolCurrency + ' Capital Pool'
+    }}</span>
+</ng-template>
+<ng-template #balanceTpl let-capitalPoolBalance="capitalPoolBalance" let-capitalPoolCurrency="capitalPoolCurrency">
+  <span>{{ (capitalPoolBalance | map:'toThousandthMark') + ' ' + capitalPoolCurrency }}</span>
+</ng-template>
+<ng-template #authorizedTpl>
+  <span>{{ 'Yes' }}</span>
+</ng-template>
+<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress"
+  let-currencyPrecision="currencyPrecision">
+  <ng-container>
+    <span class="operate-text" *appAuth="'R020204'"
+      (click)="getEdit(capitalPoolCurrency, capitalPoolAddress, currencyPrecision)">
+      Edit
+    </span>
+  </ng-container>
+</ng-template>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Edit" (nzOnCancel)="cancelEdit()" [nzClosable]="false" [nzWidth]="700"
+  nzCentered="true">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="editValidateForm">
+      <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+        class="card-descriptions-order">
+        <nz-descriptions-item nzTitle="Capital Pool" [nzSpan]="3">{{ editInfo.capitalPool + ' Capital Pool'
+          }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Account/Wallet" [nzSpan]="3">{{ editInfo.capitalPoolAddress
+          }}</nz-descriptions-item>
+        <nz-descriptions-item [nzTitle]="authorizedTitle" [nzSpan]="3">
+          <nz-switch formControlName="status" [nzDisabled]="true" class="pool-switch">
+          </nz-switch>
+        </nz-descriptions-item>
+        <nz-descriptions-item [nzTitle]="amountTitle" [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="amountError">
+              <nz-input-group [nzAddOnAfter]="editInfo.capitalPool">
+                <input nz-input type="number" formControlName="amount" />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #amountError let-control>
+              <ng-container *ngIf="control.hasError('required')">Please input your
+                Amount</ng-container>
+              <ng-container *ngIf="control.hasError('regular')">{{ 'The max precision of amount is: ' +
+                this.editInfo.currencyPrecision }}</ng-container>
+            </ng-template>
+          </nz-form-item>
+        </nz-descriptions-item>
+        <ng-template #authorizedTitle>
+          <span style="color: red;" class="m-r-8">*</span> Pre-authorized Debit
+        </ng-template>
+        <ng-template #amountTitle>
+          <span style="color: red;" class="m-r-8">*</span> Deductible Amount
+        </ng-template>
+      </nz-descriptions>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelEdit()">Cancel</button>
+    <button nz-button nzType="primary" (click)="edit()" [nzLoading]="isLoading"
+      [disabled]="!this.editValidateForm.valid">Confirm</button>
+  </div>
+</nz-modal>

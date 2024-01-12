@@ -1,0 +1,36 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-system/user'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card [nzBordered]="true" class="m-b-10">
+    <nz-descriptions
+      nzTitle=""
+      [nzColon]="false"
+      [nzBordered]="true"
+    >
+      <nz-descriptions-item nzTitle="User Name" [nzSpan]="3">{{
+        info.userName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Real Name	" [nzSpan]="3">{{
+        info.realName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Telephone Number" [nzSpan]="3">{{
+        info.telephone
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Email" [nzSpan]="3">{{
+        info.email
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Role" [nzSpan]="3">{{
+        this.roleList
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Status" [nzSpan]="3">{{
+        info.lockable | map: 'lockable'
+      }}</nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+</div>

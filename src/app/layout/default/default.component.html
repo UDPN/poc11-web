@@ -1,0 +1,90 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-10-17 10:48:53
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2023-10-27 13:51:35
+ * @Description: 
+-->
+<app-def-layout-content>
+  <ng-container sider>
+    <app-side-nav *ngIf="isOverMode || (themeOptions$ | async)!.mode === 'side'"></app-side-nav>
+  </ng-container>
+
+  <ng-container sider-header>
+    <ng-container *ngTemplateOutlet="headerTpl"></ng-container>
+  </ng-container>
+
+  <ng-container top-header>
+    <ng-container *ngTemplateOutlet="headerTpl"></ng-container>
+  </ng-container>
+
+  <ng-template #headerTpl>
+    <app-tool-bar>
+      <ng-container left *ngIf="
+          isOverMode || (themeOptions$ | async)!.mode === 'side';
+          else topHeadTpl
+        ">
+        <i id="trigger" class="trigger" nz-icon [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"
+          (click)="changeCollapsed()"></i>
+      </ng-container>
+      <ng-template #topHeadTpl>
+        <div class="left-start-center flex-1" style="z-index: 100">
+          <ng-container *ngIf="(themeOptions$ | async)!.hasNavHeadArea">
+            <!-- <img class="m-l-10" style="max-height: 32px; max-width: 54px" src="assets/imgs/logo.svg" alt="" /> -->
+            <span class="m-l-50" [style]="{color: '#fff'}"
+              [ngClass]="{'logo': !(isCollapsed$ | async), 'collapseLogo': (isCollapsed$ | async) } ">
+              {{ this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}
+            </span>
+          </ng-container>
+          <div class="flex-1">
+            <app-nav-bar></app-nav-bar>
+          </div>
+        </div>
+      </ng-template>
+      <ng-container right>
+        <!-- <app-layout-head-right-menu></app-layout-head-right-menu> -->
+      </ng-container>
+    </app-tool-bar>
+  </ng-template>
+
+  <ng-container mixheader>
+    <app-tool-bar>
+      <ng-container left *ngIf="isOverMode">
+        <i id="trigger" class="trigger" nz-icon [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"
+          (click)="changeCollapsed()"></i>
+      </ng-container>
+
+      <ng-container left *ngIf="!isOverMode">
+        <div class="left-start-center flex-1" style="z-index: 100">
+          <span class="m-l-50" [style]="{color: '#fff'}"
+            [ngClass]="{'logo': !(isCollapsed$ | async), 'collapseLogo': (isCollapsed$ | async) } ">
+            {{ this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}
+          </span>
+          <span class="sp-18 m-r-25"></span>
+          <div class="flex-1">
+            <app-nav-bar *ngIf="(themeOptions$ | async)!.splitNav" [isMixiHead]="true"></app-nav-bar>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container right>
+        <app-layout-head-right-menu></app-layout-head-right-menu>
+      </ng-container>
+    </app-tool-bar>
+  </ng-container>
+
+  <ng-container mixsider>
+    <div class="mix-sider-height" style="overflow: hidden auto">
+      <app-nav-bar [isMixiLeft]="(themeOptions$ | async)!.splitNav"></app-nav-bar>
+    </div>
+  </ng-container>
+
+  <ng-container content>
+    <div>
+      <!-- <app-tab></app-tab> -->
+      <div [@fadeRouteAnimation]="prepareRoute(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </div>
+    </div>
+  </ng-container>
+</app-def-layout-content>
+<app-nav-drawer #navDrawer></app-nav-drawer>

@@ -1,0 +1,68 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'Query'" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Role Name</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="roleName" [(ngModel)]="searchParam.roleName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="16" [nzXl]="16" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24" class="text-right">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button nz-button [nzType]="'primary'" (click)="getDataList(this.tableQueryParams)">
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()">Reset</a>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap [tableTitle]="'Role List'" [isNormalTable]="true" [btnTpl]="createBtn">
+    <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #operationTpl let-lockable="lockable" let-superRole="superRole" let-roleCode="roleCode"
+      let-roleName="roleName">
+      <ng-container *appAuth="'R030202'">
+        <span class="operate-text" *ngIf="superRole === 2" routerLink="/poc/poc-system/role/edit"
+          [queryParams]="{roleCode}">
+          Edit
+        </span>
+      </ng-container>
+      <ng-container *appAuth="lockable === 3 ? '' : (lockable === 2 ? 'R030204' : 'R030203')">
+        <span class="operate-text" *ngIf="superRole === 2"
+          (click)="onStatusUpdate(roleCode, lockable === 3 ? '' : (lockable === 1 ? 2 : 1), roleName)">
+          {{ lockable === 3 ? '' : (lockable === 2 ? 'Disable' : 'Enable') }}
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R030206'">
+        <span class="operate-text" routerLink="/poc/poc-system/role/info" [queryParams]="{roleCode}">
+          View
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R030205'">
+        <span class="operate-text" *ngIf="lockable === 1 && superRole === 2" (click)="onDelete(roleCode)">
+          Delete
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>
+<ng-template #createBtn>
+  <button routerLink="/poc/poc-system/role/add" *appAuth="'R030201'" nz-button nzType="primary" class="m-r-8">
+    <i nz-icon nzType="plus"></i>
+    Add
+  </button>
+</ng-template>

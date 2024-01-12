@@ -1,0 +1,38 @@
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-settlement/billing'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <nz-tabset>
+      <nz-tab *ngFor="let tab of exchangeRate; index as i" [nzTitle]="tab.title">
+        <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+          [nzBordered]="true" *ngIf="i === 0">
+          <nz-descriptions-item nzTitle="Billing No.">{{
+            info.billNo
+            }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Billing Cycle">{{
+            info.billCycle | map:'monthStamp'
+            }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Bank ID">{{
+            info.bankId
+            }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Bank Name">{{
+            info.bankName
+            }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Txn Currency ">{{(info.formCurrency + '->' +
+            info.toCurrency) | map:'null'}}</nz-descriptions-item>
+          <nz-descriptions-item
+            [nzTitle]="'Billing Amount (' + info.formCurrency + ')'">{{info.billAmount | map:'toThousandthMark'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Creation Time">{{
+            info.createDate | map: 'timeStamp'
+            }}</nz-descriptions-item>
+        </nz-descriptions>
+        <div *ngIf="i === 1">
+          <app-transaction-info />
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>

@@ -1,0 +1,62 @@
+:host ::ng-deep {
+  .ant-tabs-tab {
+    transition: background-color 0s !important;
+  }
+  .ant-tabs-nav {
+    transition: background-color 0s!important;
+    margin-bottom: 0!important;
+  }
+
+
+}
+.fixed-tab{
+  transition: width 0.2s;
+  width: calc(100% - 290px);
+  position: fixed;
+  right: 0;
+  z-index: 999;
+  i{
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 0;
+  }
+}
+
+
+.fixed-collapsed {
+  width: calc(100% - 48px);
+}
+
+.fixed-over-mode {
+  width: 100%;
+}
+
+.tab{
+  width: calc(100% - 290px);
+  height: 55px;
+  position: fixed;
+  z-index: 20;
+  top: 64px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  div{
+    width: 25%;
+    height: 100%;
+    cursor: pointer;
+    border-left: 1px solid rgb(240, 240, 240);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+  }
+  div:hover{
+    color: #3c5686;
+  }
+}
+.ant-card {
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}

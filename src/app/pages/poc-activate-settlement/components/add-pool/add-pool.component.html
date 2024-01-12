@@ -1,0 +1,196 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-10-27 14:54:28
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2024-01-04 16:06:46
+ * @Description: 
+-->
+<div>
+    <div class="access-title">Capital Pool Information</div>
+    <div class="m-b-20">To become a Service Provider, you need to provide a capital pool address for at least two
+        currencies.
+
+        <a routerLink="/poc/poc-wallet/cbdc-wallet/add"> <b>Go And Create A Account/Wallet</b> </a>
+    </div>
+    <div *ngIf="isFirstEdit" nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+        <div nz-col [nzXXl]="24" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
+            <app-ant-table [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+
+        </div>
+    </div>
+    <ng-template #authorizedTpl let-key="key">
+        <ng-container *ngIf="key>1"> <a nz-button nzType="link" nzDanger (click)="onDel(key)">Delete</a></ng-container>
+        <ng-container *ngIf="key <= 1"> --</ng-container>
+    </ng-template>
+    <div nz-row nzJustify="center" nzAlign="middle">
+        <div nz-col [nzXXl]="24" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
+            <form nz-form [formGroup]="validateForm">
+                <div nz-row nzGutter="20">
+                    <div nz-col nzSpan="24">
+                        <ng-container>
+                            <div nz-row nzJustify="space-between" nzGutter="24"
+                                *ngFor="let control of listOfControl; index as i" class="m-t-25">
+                                <div nz-col [nzXXl]="6" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                                    <nz-form-item>
+                                        <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Currency
+                                        </nz-form-label>
+                                        <nz-form-control [nzErrorTip]="currencyError">
+                                            <div nz-row>
+                                                <div nz-col nzSpan="16">
+                                                    <nz-select [attr.id]="control.id"
+                                                        [formControlName]="control.crrency"
+                                                        (ngModelChange)="onChange(control, $event)"
+                                                        [nzDisabled]="validateForm.get(control.status)?.value">
+                                                        <nz-option *ngFor="let item of selectOptionPacths$ | async"
+                                                            [nzValue]="item" [nzLabel]="item"></nz-option>
+                                                    </nz-select>
+                                                </div>
+                                            </div>
+                                            <ng-template #currencyError let-control>
+                                                <ng-container *ngIf="control.hasError('required')">Please select your
+                                                    Currency</ng-container>
+                                            </ng-template>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col [nzXXl]="10" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                                    <nz-form-item>
+                                        <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Account/Wallet (Capital
+                                            Pool
+                                            Address)
+                                        </nz-form-label>
+                                        <nz-form-control [nzErrorTip]="capitalPoolAddressError">
+                                            <div nz-row>
+                                                <div nz-col nzSpan="16">
+                                                    <nz-select [formControlName]="control.capitalPoolAddress"
+                                                        [nzDisabled]="validateForm.get(control.status)?.value">
+                                                        <nz-option *ngFor="let item of selectOptionPool$ | async"
+                                                            [nzValue]="item.chainAccountAddress"
+                                                            [nzLabel]="item.chainAccountAddress"></nz-option>
+                                                    </nz-select>
+                                                </div>
+
+                                            </div>
+                                            <ng-template #capitalPoolAddressError let-control>
+                                                <ng-container *ngIf="control.hasError('required')">Please input your
+                                                    Capital
+                                                    Pool
+                                                    Address</ng-container>
+                                                <ng-container *ngIf="control.hasError('regular')">Please enter a 42
+                                                    digit
+                                                    hexadecimal starting with '0x'
+                                                </ng-container>
+                                            </ng-template>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col [nzXXl]="8" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                                    <nz-form-item>
+                                        <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">Pre-authorized Debit
+                                        </nz-form-label>
+                                        <nz-form-control [nzErrorTip]="currencyError">
+                                            <div nz-row>
+                                                <div nz-col nzSpan="16" class="pool-switch">
+                                                    <nz-switch [formControlName]="control.status"
+                                                        [nzDisabled]="true"></nz-switch>
+                                                </div>
+                                                <ng-container *ngIf="i !== selectOptionPacthsLenght - 1">
+                                                    <div nz-col nzSpan="4" (click)="addField($event)"
+                                                        *ngIf="i <= selectOptionPacthsLenght && i === listOfControl.length - 1">
+                                                        <button nz-button nzType="text"
+                                                            style="color: #3c5686; font-size: 16px;">
+                                                            <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
+                                                            Add
+                                                        </button>
+                                                    </div>
+                                                    <div nz-col nzSpan="4" class="m-l-2"
+                                                        *ngIf="i >0 && i === listOfControl.length - 1"
+                                                        (click)="removeField(control, $event)">
+                                                        <button nz-button nzType="text"
+                                                            style="color: #ff4d4f; font-size: 16px; margin-left: 10px;">
+                                                            <i nz-icon nzType="minus-circle" nzTheme="fill"></i>
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="i === selectOptionPacthsLenght - 1">
+                                                    <div nz-col nzSpan="4" class="m-l-2" *ngIf="i >0 "
+                                                        (click)="removeField(control, $event)">
+                                                        <button nz-button nzType="text"
+                                                            style="color: #ff4d4f; font-size: 16px;">
+                                                            <i nz-icon nzType="minus-circle" nzTheme="fill"></i>
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25">
+        <div nz-col nzXs="24" nzSm="24" nzXl="24" nzXXl="24">
+            <div class="access-title">Attachments</div>
+        </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25">
+        <div nz-col nzXs="24" nzSm="24" nzXl="24" nzXXl="20">
+            <p style="font-weight: 600; color: #91929E; font-size:medium;">Including but not limited to
+                qualification certificates or agreement attachments, etc</p>
+        </div>
+        <div nz-col nzXs="24" nzSm="24" nzXl="24" nzXXl="20" class="m-t-25">
+            <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+                <nz-form-label nzSpan="24">
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="businessLicenseError">
+                    <div nz-row [formGroup]="fileForm">
+                        <div nz-col nzSpan="24" style="text-align: left;" class="m-b-20">
+                            <button nz-button [nzSize]="'large'" nzType="primary"
+                                [disabled]="fileListOfControl.length > 9" (click)="upFiles.click()"
+                                [nzLoading]="isUpload">
+                                Upload
+                            </button>
+                            <input type="file" accept="" hidden #upFiles (change)="uploadFileImg($event)" id="files" />
+                        </div>
+                        <div nz-col nzSpan="24" class="m-b-10" *ngFor="let fileControl of fileListOfControl;index as i">
+                            <div>
+                                <input type="text" hidden [formControlName]="fileControl.fileCode" nz-input />
+                                <div nzAlign="end">
+                                    <ng-container *ngIf="fileControl.fileCode">
+                                        <div>{{ fileControl.fileUrl }}
+                                            <a nz-button nzType="link" (click)="onDeleteFile(i)" style="color: red;"
+                                                class="p-t-15" [nzLoading]="fileControl.status">delete</a>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <div class="onboard-div-info" style="color: #3c5686;font-weight: 600;">
+                                Supports PNG/JPG/GIF/BMP/JPEG/PDF formats
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #businessLicenseError let-control>
+                        <ng-container *ngIf="control.hasError('required')">Please upload your Business
+                            License</ng-container>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-t-15 m-b-30" nzGutter="8">
+        <div nz-col nzXs="24" nzSm="24" nzXl="24" nzXXl="20" style="text-align: end;">
+            <button nz-button type="button" nzType="primary" [nzLoading]="isLoading" [nzSize]="'large'" [disabled]=""
+                *appAuth="'R020101'" (click)="onSubmit()">Submit</button>
+        </div>
+    </div>
+</div>

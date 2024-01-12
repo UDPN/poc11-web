@@ -1,0 +1,157 @@
+<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-wallet/cbdc-wallet'"
+  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
+      <nz-tab *ngFor="let tab of detailsTabs; index as i" [nzTitle]="tab">
+        <ng-container *ngIf="i === 0">
+          <nz-card nzTitle="Wallet Information" nzBordered="false" class="none-bottom">
+            <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+              [nzBordered]="true">
+              <nz-descriptions-item nzTitle="Wallet Address">{{ info.chainAccountAddress }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Business Node ID">{{ info.bnCode }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Central Bank">
+                {{ info.centralBankName }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Currency">
+                {{ info.currency }}
+              </nz-descriptions-item>
+              <!-- <nz-descriptions-item nzTitle="Created By">{{ info.createUser }}</nz-descriptions-item> -->
+              <nz-descriptions-item nzTitle="Creation Time">{{ info.createTime | map:'timeStamp'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Status"><nz-tag [nzColor]="info.state | map:'walletStatusColor'">{{
+                  info.state | map:'walletStatus' }}</nz-tag></nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+          <nz-card nzTitle="Approval Information" nzBordered="false" class="none-bottom">
+            <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+              [nzBordered]="true">
+              <nz-descriptions-item nzTitle="Approval Result">{{ info.state | map:'walletApprovalResult'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Comments">{{ info.reviewerRemarks | map:'nullValue'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Approved By">
+                {{ info.reviewerUser | map:'nullValue' }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Approval Time">
+                {{ info.reviewerTime | map:'timeStamp' }}
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+          <nz-card nzTitle="Transaction Information" nzBordered="false" class="none-bottom">
+            <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
+              [nzBordered]="true">
+              <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map:'timeStamp'
+                }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+        </ng-container>
+        <ng-container *ngIf="i === 1">
+          <nz-card nzTitle="Transaction Summary" nzBordered="false" class="none-bottom">
+            <div nz-row class="m-l-10 m-r-10 m-t-10" nzAlign="middle" nzJustify="space-between">
+              <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
+                  <div nz-row>
+                    <div nz-col [nzXXl]="6" [nzXl]="6" [nzLg]="6" [nzMd]="6" [nzSm]="6" [nzXs]="12">
+                      <img src="../../../../../assets/imgs/wallet/Inflow.png" alt="">
+                    </div>
+                    <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
+                      <div>
+                        <h4 nz-typography> {{'CBDC Inflow: ' + summaryInfo.inflowSum + ' ' + summaryCurrency }} </h4>
+                        <ng-container *ngIf="summaryRegion === '1'">
+                          <h5 nz-typography>{{ '(Total Top-ups: ' + summaryInfo.topUpSum + ' ' +
+                            summaryCurrency
+                            + ')' }}</h5>
+                        </ng-container>
+
+                      </div>
+                    </div>
+                  </div>
+                </nz-card>
+              </div>
+              <div nz-col [nzXXl]="12" [nzXl]="12" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+                <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" class="m-r-8">
+                  <div nz-row>
+                    <div nz-col [nzXXl]="6" [nzXl]="6" [nzLg]="6" [nzMd]="6" [nzSm]="6" [nzXs]="12">
+                      <img src="../../../../../assets/imgs/wallet/Outflow.png" alt="">
+                    </div>
+                    <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
+                      <div>
+                        <h4 nz-typography> {{'CBDC Outflow: ' + summaryInfo.outflowSum + ' ' + summaryCurrency }} </h4>
+                        <ng-container *ngIf="summaryRegion === '1'">
+                          <h5 nz-typography>{{ '(Total Withdrawals: ' + summaryInfo.withdrawSum + ' ' +
+                            summaryCurrency
+                            + ')' }}</h5>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </nz-card>
+              </div>
+            </div>
+          </nz-card>
+          <nz-card nzTitle="Transaction List" nzBordered="false" class="none-bottom">
+            <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getTransactionList($event)"
+              [tableConfig]="transactionTableConfig" [tableData]="transactionList"></app-ant-table>
+          </nz-card>
+        </ng-container>
+        <!-- <ng-container *ngIf="i === 2">
+          <nz-card nzTitle="Operation Record" nzBordered="false" class="none-bottom">
+            <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="recordTableConfig"
+              [tableData]="recordList"></app-ant-table>
+          </nz-card>
+        </ng-container> -->
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>
+<ng-template #transactionNoTpl let-transactionNo="transactionNo">
+  <ng-container *ngIf="transactionNo">
+    <p [title]="transactionNo" nz-typography nzCopyable [nzCopyText]="transactionNo">{{ transactionNo.length > 12 ?
+      transactionNo.slice(0,12) +
+      '...' : transactionNo }}</p>
+  </ng-container>
+  <ng-container *ngIf="!transactionNo">
+    {{ transactionNo | map:'nullValue' }}
+  </ng-container>
+</ng-template>
+<ng-template #fromTpl let-fromAccountAddress="fromAccountAddress">
+  <ng-container *ngIf="fromAccountAddress">
+    <p [title]="fromAccountAddress" nz-typography nzCopyable [nzCopyText]="fromAccountAddress">{{
+      fromAccountAddress.length > 12 ? fromAccountAddress.slice(0,12) + '...' : fromAccountAddress }}</p>
+  </ng-container>
+  <ng-container *ngIf="!fromAccountAddress">
+    {{ fromAccountAddress | map:'nullValue' }}
+  </ng-container>
+</ng-template>
+<ng-template #toTpl let-toAccountAddress="toAccountAddress">
+  <ng-container *ngIf="toAccountAddress">
+    <p [title]="toAccountAddress" nz-typography nzCopyable [nzCopyText]="toAccountAddress">{{
+      toAccountAddress.length > 12 ? toAccountAddress.slice(0,12) + '...' : toAccountAddress }}</p>
+  </ng-container>
+  <ng-container *ngIf="!toAccountAddress">
+    {{ toAccountAddress | map:'nullValue' }}
+  </ng-container>
+</ng-template>
+<ng-template #transactionHashTpl let-txHash="txHash">
+  <ng-container *ngIf="txHash">
+    <p [title]="txHash" nz-typography nzCopyable [nzCopyText]="txHash">{{
+      txHash.length > 12 ? txHash.slice(0,12) + '...' : txHash }}</p>
+  </ng-container>
+  <ng-container *ngIf="!txHash">
+    {{ txHash | map:'nullValue' }}
+  </ng-container>
+</ng-template>
+<ng-template #statusTpl let-state="state" let-type="type">
+  <ng-container *ngIf="type === 4 || type === 5">
+    <span>{{ state | map:'walletInfoTopUpStatus' }}</span>
+  </ng-container>
+  <ng-container *ngIf="type === 1 || type === 2 || type === 3">
+    <span>{{ state | map:'walletInfoTransactionStatus' }}</span>
+  </ng-container>
+</ng-template>

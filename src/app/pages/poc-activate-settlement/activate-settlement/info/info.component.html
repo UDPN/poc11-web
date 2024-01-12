@@ -1,0 +1,119 @@
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2023-12-21 10:39:21
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2024-01-04 16:25:15
+ * @Description: 
+-->
+<!-- <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header> -->
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+    <ng-container *ngIf="updateStatus === 5 ">
+      <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1" class="m-b-10"></nz-alert>
+      <ng-template #descriptionTemplate1>
+        <h5 nz-typography>
+          The application for activating the settlement business is under approval. We kindly ask for your patience
+          while
+          we process your application. Thank you.
+        </h5>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngIf="updateStatus === 10">
+      <nz-alert nzShowIcon nzType="success"
+        nzMessage="Unfortunately, the application for activation of settlement business failed to be approved."
+        [nzAction]="actionTemplate" [nzDescription]="descriptionTemplate3" class="m-b-10"></nz-alert>
+      <ng-template #descriptionTemplate3>
+        <h5 nz-typography>Successfully upgraded settlement bank. Please log in again to obtain settlement bank
+          permissions.</h5>
+      </ng-template>
+      <ng-template #actionTemplate>
+        <button nz-button nzSize="small" nzType="primary" (click)="login()">
+          Log in
+        </button>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngIf="updateStatus === 15">
+      <nz-alert nzShowIcon nzType="error"
+        nzMessage="Unfortunately, the application for activation of settlement business failed to be approved."
+        [nzAction]="actionTemplate" [nzDescription]="descriptionTemplate3" class="m-b-10"></nz-alert>
+      <ng-template #descriptionTemplate3>
+        <h5 nz-typography>{{ 'Failure Reason:' + reason }}</h5>
+      </ng-template>
+      <ng-template #actionTemplate>
+        <button nz-button nzSize="small" nzType="primary" (click)="onUpdate()">
+          Update
+        </button>
+      </ng-template>
+    </ng-container>
+    <div nz-row nzJustify="center" nzAlign="middle">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+        <div class="access-title">Node Information</div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
+        <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+          [nzColon]="false" [nzBordered]="false">
+          <nz-descriptions-item nzTitle="Commercial Bank Name">{{ info.spName }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="BIC">{{ info.bankBic }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Central Bank">{{ info.centralBankName }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">
+            {{ info.spBriefIntroduction }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Description" [nzSpan]="3"> {{ info.spDescription }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="BN ID"> {{ info.bnCode }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Wallet Address(Besu)"> {{ info.spBesuWalletAddress }}</nz-descriptions-item>
+        </nz-descriptions>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+        <div class="access-title">Contact Information</div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
+        <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+          [nzColon]="false" [nzBordered]="false">
+          <nz-descriptions-item nzTitle="Contact Name">{{ info.contactName }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Mobile Number">{{ info.mobileNumber }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Email">
+            {{ info.email }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Detailed Address"> {{ info.detailedAddress }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Business License">
+            <img nz-image style="width: 160px; height: 160px" [nzSrc]="this.infoMemberLicense"
+              *ngIf="this.infoMemberLicense" alt="" />
+          </nz-descriptions-item>
+        </nz-descriptions>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+        <div class="access-title">Capital Pool Information</div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
+        <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="tableConfig"
+          [tableData]="dataList"></app-ant-table>
+        <ng-template #authorizedTpl>
+          <span>{{ 'Yes' }}</span>
+        </ng-template>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+        <div class="access-title">Attachments</div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-30 card">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
+        <label *ngFor="let item of attachmentsList">
+          <button nz-button nzType="text" class="m-t-15 m-r-25" (click)="onLoad(item.fileCode, item.fileUrl)">{{
+            item.fileUrl }}<span nz-icon nzType="download" class="m-l-15"></span></button>
+        </label>
+      </div>
+    </div>
+  </nz-card>
+</div>

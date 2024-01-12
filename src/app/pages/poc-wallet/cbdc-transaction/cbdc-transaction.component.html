@@ -1,0 +1,129 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card nzTitle="Query" [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Transaction No.</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="transactionNo" [(ngModel)]="searchParam.transactionNo" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>From</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="from" [(ngModel)]="searchParam.from" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>To</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="to" [(ngModel)]="searchParam.to" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Type</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="" name="type" [(ngModel)]="searchParam.type">
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="1" nzLabel="Top-up"></nz-option>
+                <nz-option nzValue="2" nzLabel="Withdrawal"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Creation Time</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker style="width: 100%" name="createTime"
+                [(ngModel)]="searchParam.createTime"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Status</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="" name="status" [(ngModel)]="searchParam.status">
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="1" nzLabel="Pending Approval"></nz-option>
+                <nz-option nzValue="3" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="5" nzLabel="Success"></nz-option>
+                <nz-option nzValue="6" nzLabel="Failed"></nz-option>
+                <nz-option nzValue="2" nzLabel="Rejected"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24" class="m-b-8 text-right p-0">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button nz-button [nzType]="'primary'" (click)="getDataList(this.tableQueryParams)">
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()">Reset</a>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap [isNormalTable]="true" tableTitle="CBDC Transaction List">
+    <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+    <ng-template #transactionNoTpl let-transactionNo="transactionNo">
+      <ng-container *ngIf="transactionNo">
+        <p [title]="transactionNo" nz-typography nzCopyable [nzCopyText]="transactionNo">{{ transactionNo.length > 12 ?
+          transactionNo.slice(0,12) +
+          '...' : transactionNo }}</p>
+      </ng-container>
+      <ng-container *ngIf="!transactionNo">
+        {{ transactionNo | map:'nullValue' }}
+      </ng-container>
+    </ng-template>
+    <ng-template #fromTpl let-from="from">
+      <ng-container *ngIf="from">
+        <p [title]="from" nz-typography nzCopyable [nzCopyText]="from">{{ from.length > 12 ? from.slice(0,12) + '...' :
+          from }}</p>
+      </ng-container>
+      <ng-container *ngIf="!from">
+        {{ from | map:'nullValue' }}
+      </ng-container>
+    </ng-template>
+    <ng-template #toTpl let-to="to">
+      <ng-container *ngIf="to">
+        <p [title]="to" nz-typography nzCopyable [nzCopyText]="to">{{ to.length > 12 ? to.slice(0,12) + '...' : to }}</p>
+      </ng-container>
+      <ng-container *ngIf="!to">
+        {{ to | map:'nullValue' }}
+      </ng-container>
+    </ng-template>
+    <ng-template #amountTpl let-amount="amount" let-type="type">
+      <span [style]="{'color': type === 1 ? '#39A16A' : '#E53E3E'}">{{ type === 1 ? '+': '-' }}{{ amount |
+        map:'toThousandthMark' }}</span>
+    </ng-template>
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="status | map:'walletTransactionsStatusColor'">{{ status | map:'walletTransactionsStatus'
+        }}</nz-tag>
+    </ng-template>
+    <ng-template #operationTpl let-transferId="transferId">
+      <ng-container *appAuth="'R01010201'">
+        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-transaction/info" [queryParams]="{transferId}">
+          Details
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>

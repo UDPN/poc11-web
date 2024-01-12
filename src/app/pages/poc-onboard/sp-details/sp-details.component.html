@@ -1,0 +1,261 @@
+<div class="bn-onboarding-details">
+  <ng-container *ngIf="initData['state'] === 1 || initData['state'] === 2">
+    <nz-alert
+      nzShowIcon
+      nzType="info"
+      nzMessage="BN onboarding"
+      [nzDescription]="descriptionTemplate1"
+      class="m-b-10"
+    ></nz-alert>
+    <ng-template #descriptionTemplate1>
+      <h5 nz-typography>
+        Your BN onboarding application is currently being reviewed for approval.
+        We kindly ask for your patience while we process your application. Thank
+        you.
+      </h5>
+    </ng-template>
+  </ng-container>
+
+  <!-- <ng-container
+    *ngIf="
+      initData['state'] === 3 ||
+      initData['state'] === 4 ||
+      initData['state'] === 5
+    "
+  >
+    <nz-alert
+      nzShowIcon
+      nzType="success"
+      nzMessage=""
+      [nzDescription]="descriptionTemplate2"
+      [nzAction]="actionTemplate"
+      class="m-b-10"
+    ></nz-alert>
+    <ng-template #descriptionTemplate2>
+      <h5 nz-typography>
+        BN has been installed and connected successfully. Please set the user
+        name/password for logging in to BN management system first. After
+        logging in successfully, you can modify it at any time.
+      </h5>
+    </ng-template>
+    <ng-template #actionTemplate>
+      <button nz-button nzSize="small" nzType="primary" (click)="doSign()">
+        Create Account
+      </button>
+    </ng-template>
+  </ng-container> -->
+
+  <ng-container>
+    <nz-alert
+      nzShowIcon
+      nzType="warning"
+      nzMessage="Unfortunately, the SP onboarding application did not pass the approval process"
+      [nzAction]="actionTemplate"
+      *ngIf="initData['state'] === 6"
+      class="m-b-10"
+    ></nz-alert>
+    <nz-alert
+      nzShowIcon
+      nzType="warning"
+      nzMessage="Reason for repulsed"
+      [nzDescription]="descriptionTemplate3"
+      [nzAction]="actionTemplate"
+      *ngIf="initData['state'] === 2010"
+      class="m-b-10"
+    ></nz-alert>
+    <ng-template #descriptionTemplate3>
+      <h5 nz-typography>{{ initData['nodeRepulseReason'] }}</h5>
+    </ng-template>
+    <ng-template #actionTemplate>
+      <button nz-button nzSize="small" nzType="primary" (click)="doAction()">
+        Update
+      </button>
+    </ng-template>
+  </ng-container>
+
+  <form nz-form>
+    <div nz-row nzJustify="center" nzAlign="middle">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <div class="onboarding-title">Basic Information</div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <div nz-row nzJustify="space-between" nzGutter="8">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="enterpriseName" nzSpan="24"
+                >BN Version
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>
+                  {{ initData['version'] === 1 ? 'Enterprise' : 'Standard' }}
+                </h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="countryId" nzSpan="24"
+                >Select The Connected VN Node
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['connectedVnNode'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <nz-form-label nzFor="email" nzSpan="24"
+          >DID Document for the node
+        </nz-form-label>
+        <nz-form-control>
+          <textarea
+            class="onboard-div"
+            style="font-weight: 600; background: aliceblue"
+            [value]="documentDid"
+            nz-input
+            rows="27"
+            readonly
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <div nz-row nzJustify="space-between" nzGutter="8">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="enterpriseName" nzSpan="24"
+                >Did Signature Value
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['didSignatureValue'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="countryId" nzSpan="24"
+                >Enterprise Name
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['enterpriseName'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <div nz-row nzJustify="space-between" nzGutter="8">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="enterpriseName" nzSpan="24"
+                >Country
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['nodeCountryName'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="countryId" nzSpan="24"
+                >Node name
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['udpnPeerName'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <nz-form-label nzFor="nodeName" nzSpan="10"
+          >Brief Introduction
+        </nz-form-label>
+        <nz-form-control>
+          <h5 nz-typography>{{ initData['udpnPeerTitle'] }}</h5>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <nz-form-label nzFor="nodeName" nzSpan="10"
+          >Description
+        </nz-form-label>
+        <nz-form-control>
+          <h5 nz-typography>{{ initData['udpnPeerDesc'] }}</h5>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <div class="onboarding-title">Contact Information</div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <div nz-row nzJustify="space-between" nzGutter="8">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="enterpriseName" nzSpan="24"
+                >Contact Name
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['nodeContact'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzFor="countryId" nzSpan="24"
+                >Mobile Number
+              </nz-form-label>
+              <nz-form-control>
+                <h5 nz-typography>{{ initData['nodePhone'] }}</h5>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <nz-form-label nzFor="nodeName" nzSpan="10"
+          >Contact Email Address
+        </nz-form-label>
+        <nz-form-control>
+          <h5 nz-typography>{{ initData['nodeEmail'] }}</h5>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <nz-form-label nzFor="nodeName" nzSpan="10"
+          >Detailed Address
+        </nz-form-label>
+        <nz-form-control>
+          <h5 nz-typography>{{ initData['nodeAddr'] }}</h5>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+        <nz-form-label nzFor="nodeName" nzSpan="10"
+          >Business License
+        </nz-form-label>
+        <nz-form-control>
+          <img nz-image width="160px" height="160px" *ngIf="srcUrl" [nzSrc]="srcUrl" alt="" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+</div>
