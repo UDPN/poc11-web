@@ -13,14 +13,12 @@ import {
   Validators
 } from '@angular/forms';
 import { Route, Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { fnEncrypts } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { debounceTime, map } from 'rxjs';
@@ -85,7 +83,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
     private router: Router
   ) {}
   ngAfterViewInit(): void {
-    // console.log(fnEncrypts('123456', aesKey, aesVi));
     this.fromEventBeneficialWalletAddress();
     this.formEventCurrencyInterbankSettlementAmount();
     this.pageHeaderInfo = {
@@ -265,9 +262,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
             currency:
               '1 ' +
               item.from.replace('-UDPN', '') +
-              ' : ' +
-              item.rate +
-              ' ' +
+              '->' +
               item.to.replace('-UDPN', ''),
             rate: item.rate,
             com: String(
@@ -279,7 +274,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                   : (this.validateForm.get('amount')?.value / item.rate) *
                     item.smValue
                 : item.smValue
-            ).replace(/^(.*\..{2}).*$/, '$1'),
+            ).replace(/^(.*\..{8}).*$/, '$1'),
             total: String(
               this.validateForm.get('amount')?.value / item.rate +
                 (item.smChargeModel === 0
@@ -290,7 +285,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                     : (this.validateForm.get('amount')?.value / item.rate) *
                       item.smValue
                   : item.smValue)
-            ).replace(/^(.*\..{2}).*$/, '$1')
+            ).replace(/^(.*\..{8}).*$/, '$1')
             // total: 1
           });
         });
