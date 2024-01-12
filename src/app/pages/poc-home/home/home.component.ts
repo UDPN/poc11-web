@@ -136,13 +136,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this._informationService.detail().subscribe((res: any) => {
       if (res) {
         this.bankType = res.bankType;
-        if (this.bankType === 1) {
-          this.defaultBalance();
-          this.getCurrencyList();
-        } else {
+        this.defaultBalance();
+        this.getCurrencyList();
+        if (this.bankType === 2) {
           this.initTable();
           this.initSelect();
-        }
+        } 
       }
     });
     this.validateForm = this.fb.group({
