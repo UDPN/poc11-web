@@ -134,16 +134,29 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     });
     this.topUpForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.amountValidator]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
     });
     this.withdrawForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.amountValidator]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
     });
     this.passwordForm = this.fb.group({
       pwd: [null, [Validators.required]],
     });
   }
+
+  withdrawAmountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
 
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     this.reg =
@@ -311,8 +324,8 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.pocCapitalPoolService.topUpOrWithdraw(params).pipe(finalize(() => this.isOkLoading = false)).subscribe({
       next: res => {
-        this.isVisibleEnterPassword = false;
         if (res) {
+          this.isVisibleEnterPassword = false;
           this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
             this.getDataList();
           });

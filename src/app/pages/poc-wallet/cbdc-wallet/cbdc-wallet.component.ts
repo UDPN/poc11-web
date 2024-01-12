@@ -127,6 +127,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -241,8 +243,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isOkLoading = false)).subscribe({
       next: res => {
-        this.isVisibleEnterPassword = false;
         if (res) {
+          this.isVisibleEnterPassword = false;
           this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
             this.getDataList();
           });

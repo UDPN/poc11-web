@@ -112,12 +112,12 @@ export class AddComponent implements OnInit {
   }
 
   uploadFileSig($event: NzSafeAny) {
-    const fielSize = $event.target.files[0]?.size! / 1024 > 50;
+    const fielSize = $event.target.files[0]?.size! / 1000 > 50;
     if (fielSize && $event.target.files[0] !== undefined) {
-      this.message.error('Size less than 50 KB');
+      this.message.error('The file size cannot exceed 50KB');
     }
-    if ($event.target.files[0].type !== 'text/plain') {
-      this.message.error('Please upload the keystore file in JSON format, the file size cannot exceed 50KB.');
+    if ($event.target.files[0].name.indexOf('.json') === -1) {
+      this.message.error('Please upload the keystore file in JSON format !');
       return;
     }
     const reader = new FileReader();

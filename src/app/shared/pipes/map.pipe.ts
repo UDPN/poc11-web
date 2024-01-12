@@ -113,7 +113,9 @@ export const MapSet = {
     2: 'Rejected',
     3: 'Processing',
     5: 'Success',
-    6: 'Failed'
+    6: 'Failed',
+    7: 'Processing',
+    
   },
   walletTransactionsRecordStatus: {
     1: 'Pending',
@@ -126,7 +128,8 @@ export const MapSet = {
     2: 'red',
     3: 'purple',
     5: 'cyan',
-    6: 'red'
+    6: 'red',
+    7: 'purple',
   },
   walletTransactionsType: {
     1: 'Top-up',
@@ -198,6 +201,7 @@ export const MapSet = {
     2: 'Rejected',
     3: 'Processing',
     4: 'Processing',
+    7: 'Processing',
     5: 'Active',
     6: 'Failed'
   },
