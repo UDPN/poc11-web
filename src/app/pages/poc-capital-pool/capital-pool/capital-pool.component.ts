@@ -13,12 +13,14 @@ import {
   UntypedFormControl,
   Validators
 } from '@angular/forms';
+import { aesKey, aesVi } from '@app/config/constant';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { fnEncrypts, thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -55,7 +57,8 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   balanceTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('authorizedTpl', { static: true })
   authorizedTpl!: TemplateRef<NzSafeAny>;
-
+  @ViewChild('authorTpl', { static: true })
+  authorTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creation: [],
     status: ''
@@ -73,6 +76,16 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   editValidateForm!: FormGroup;
   editInfo: any = {};
   reg: string = '';
+  isVisibleTopUp: boolean = false;
+  isVisibleWithdraw: boolean = false;
+  isVisibleEnterPassword: boolean = false;
+  topUpForm!: FormGroup;
+  withdrawForm!: FormGroup;
+  passwordForm!: FormGroup;
+  currency: any;
+  txType: number = 0;
+  balance: any = '';
+  isOkLoading: boolean = false;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -80,7 +93,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     public message: NzMessageService
-  ) {}
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -118,6 +131,17 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.editValidateForm = this.fb.group({
       status: [true, [Validators.required]],
       amount: ['', [Validators.required, this.amountValidator]]
+    });
+    this.topUpForm = this.fb.group({
+      chainAccountAddress: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.amountValidator]],
+    });
+    this.withdrawForm = this.fb.group({
+      chainAccountAddress: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.amountValidator]],
+    });
+    this.passwordForm = this.fb.group({
+      pwd: [null, [Validators.required]],
     });
   }
 
@@ -231,6 +255,85 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       });
   }
 
+  getTopUp(currency: string, chainAccountAddress: string, capitalPoolBalance: string) {
+    this.currency = currency;
+    this.balance = capitalPoolBalance;
+    this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.isVisibleTopUp = true;
+  }
+
+  getWithdraw(currency: string, chainAccountAddress: string, capitalPoolBalance: string) {
+    this.currency = currency;
+    this.balance = capitalPoolBalance;
+    this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.isVisibleWithdraw = true;
+  }
+
+  cancelTopUp() {
+    this.isVisibleTopUp = false;
+    this.topUpForm.reset();
+  }
+
+  cancelWithdraw() {
+    this.isVisibleWithdraw = false;
+    this.withdrawForm.reset();
+  }
+
+  cancelEnterPassword() {
+    this.isVisibleEnterPassword = false;
+    this.passwordForm.reset();
+    this.topUpForm.reset();
+    this.withdrawForm.reset();
+  }
+
+  topUp() {
+    this.isVisibleTopUp = false;
+    this.isVisibleEnterPassword = true;
+    this.txType = 1;
+  }
+
+  withdraw() {
+    this.isVisibleWithdraw = false;
+    this.isVisibleEnterPassword = true;
+    this.txType = 2;
+  }
+
+  confirmEnterPassword() {
+    this.isOkLoading = true;
+    const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
+    const params = {
+      currency: this.currency,
+      amount: this.txType === 1 ? this.topUpForm.get('amount')?.value : this.withdrawForm.get('amount')?.value,
+      password: code,
+      txType: this.txType === 1 ? 1 : 2,
+      walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
+    }
+    const amount = thousandthMark(params.amount) + ' ' + this.currency;
+    this.pocCapitalPoolService.topUpOrWithdraw(params).pipe(finalize(() => this.isOkLoading = false)).subscribe({
+      next: res => {
+        this.isVisibleEnterPassword = false;
+        if (res) {
+          this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
+            this.getDataList();
+          });
+        }
+        if (this.txType === 1) {
+          this.topUpForm.reset();
+        } else {
+          this.withdrawForm.reset();
+        }
+        this.passwordForm.reset();
+        this.isOkLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: err => {
+        this.isOkLoading = false;
+        this.cdr.markForCheck();
+      }
+    })
+
+  }
+
   private initTable(): void {
     this.tableConfig = {
       headers: [
@@ -252,6 +355,11 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Balance',
           tdTemplate: this.balanceTpl,
+          width: 200
+        },
+        {
+          title: 'Authorized',
+          tdTemplate: this.authorTpl,
           width: 200
         },
         {

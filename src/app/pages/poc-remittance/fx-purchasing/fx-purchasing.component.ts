@@ -100,7 +100,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       transactionBankName: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required]]
+      pwd: ['', [Validators.required]]
     });
   }
 
@@ -350,7 +350,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         fxPurchasingInformation: '',
         fxReceivingWalletId: this.validateForm.get('receivingWalletAddress')
           ?.value,
-        passWord: this.passwordForm.get('password')?.value,
+        passWord: fnEncrypts(
+          this.passwordForm.getRawValue(),
+          aesKey,
+          aesVi
+        ),
         rateId: this.checkedItemComment[0].rateId,
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })

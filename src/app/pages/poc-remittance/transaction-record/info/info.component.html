@@ -31,18 +31,22 @@
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
             <nz-descriptions-item nzTitle="From">
-              {{ info.fromBankName }}
+              {{ info.fromCommercialBankName }}
               <br>
               {{ info.fromAccountAddress }}
               <br>
               {{ (info.fromCbdcCount | map:'toThousandthMark') + ' ' + info.fromCurrency }}
+              <br>
+              {{ info.fromBankName }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="To">
-              {{ info.toBankName }}
+              {{ info.fromCommercialBankName }}
               <br>
               {{ info.toAccountAddress }}
               <br>
               {{ (info.toCbdcCount | map:'toThousandthMark') + ' ' + info.toCurrency }}
+              <br>
+              {{ info.toCommercialBankName }}
             </nz-descriptions-item>
           </nz-descriptions>
           <nz-divider></nz-divider>

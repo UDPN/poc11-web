@@ -188,7 +188,14 @@
   "MSG_00_1019": "Failed to update wallet balance after deposit and withdrawal",
   "MSG_00_1020": "Account address is unavailable",
   "MSG_00_1021": "Bank account id cannot be empty",
-  
+  "MSG_00_1022": "Password and confirmation password are inconsistent",
+  "MSG_00_1023": "File parsing failed",
+  "MSG_00_1024": "Password cannot be parsed by keystore",
+  "MSG_00_1025": "Wallet address already exists",
+  "MSG_00_1026": "Insufficient wallet balance",
+  "MSG_00_1027": "Wrong password entered",
+  "MSG_00_1028": "Password verification failed",
+
   "MSG_00_2001": "The transfer information cannot be empty",
 
   "MSG_02_1000": "Central banks don't exist",
@@ -222,4 +229,5 @@
   "MSG_02_1037": "Wallet don't exist",
   "MSG_02_1038": "The wallet status is incorrect"
 
+  
 }

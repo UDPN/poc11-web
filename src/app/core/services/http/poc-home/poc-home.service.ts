@@ -26,6 +26,11 @@ export interface Data {
   targetPlatform: string;
 }
 
+export interface Wdata {
+  chainAccountAddress?: string;
+  currency?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -77,6 +82,16 @@ export class PocHomeService {
   //   return this.https.post(`/v1/fxsp/sys/home/approve/currency`, {});
   // }
 
-  
-  
+  public walletBalance(params: Wdata): Observable<any> {
+    return this.http.post(`/v1/cockpit/walletInfo`, params);
+  }
+
+  public getMovements(params: {currency: any}): Observable<any> {
+    return this.http.post(`/v1/cockpit/transaction/stat`, params);
+  }
+
+  public getCurrencyList(): Observable<any> {
+    return this.http.post(`/v1/cockpit/getActiveCurrency`, {});
+  }
+
 }

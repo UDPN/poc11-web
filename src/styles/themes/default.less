@@ -26,6 +26,10 @@
   border-color: #3c5686 !important;
 }
 
+.avatar-color {
+  background-color: var(--ant-primary-color-deprecated-l-20);
+}
+
 .operate-text {
   color: @primary-color;
 }
@@ -207,7 +211,7 @@
 }
 
 .base-card {
-  background-color: var(--ant-primary-color-active-deprecated-f-30);
+  background-color: var(--ant-primary-color-deprecated-t-50);
 }
 
 .ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input) .ant-select-selector {
@@ -350,7 +354,7 @@
 
 .card {
   .ant-descriptions-item-label {
-    color: #91929E !important;
+    color: #696a72 !important;
     margin-top: 20px !important;
     font-weight: 600 !important;
   }
@@ -407,7 +411,7 @@ table tr td.ant-table-selection-column {
 .info-none-bottom {
   .ant-card-head {
     border-bottom: none !important;
-    background: var(--ant-primary-color-active-deprecated-f-30) !important;
+    background: var(--ant-primary-color-deprecated-t-50) !important;
   }
 }
 
@@ -503,5 +507,27 @@ table tr td.ant-table-selection-column {
 
   ul li {
     list-style-type: square !important;
+  }
+}
+
+.upDiv {
+  width: 6rem;
+  height: 6rem;
+  border: 1px solid rgb(247, 226, 226);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.set-postion {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+
+  .del {
+    cursor: pointer;
+    opacity: 0.9;
   }
 }

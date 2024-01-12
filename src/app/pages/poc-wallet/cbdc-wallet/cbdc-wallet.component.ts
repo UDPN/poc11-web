@@ -14,13 +14,14 @@ import { ThemeService } from '@app/core/services/store/common-store/theme.servic
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { thousandthMark } from '@app/utils/tools';
+import { fnEncrypts, thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { aesKey, aesVi } from '@app/config/constant';
 
 interface SearchParam {
   chainAccountAddress: string;
@@ -115,7 +116,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       amount: [null, [Validators.required, this.amountValidator]],
     });
     this.passwordForm = this.fb.group({
-      password: [null, [Validators.required]],
+      pwd: [null, [Validators.required]],
     });
   }
 
@@ -229,15 +230,16 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   }
 
   confirmEnterPassword() {
-    this.isLoading = true;
+    this.isOkLoading = true;
+    const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
     const params = {
       amount: this.txType === 1 ? this.topUpForm.get('amount')?.value : this.withdrawForm.get('amount')?.value,
-      password: this.passwordForm.get('password')?.value,
+      password: code,
       txType: this.txType === 1 ? 1 : 2,
       walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
     }
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
-    this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isLoading = false)).subscribe({
+    this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isOkLoading = false)).subscribe({
       next: res => {
         this.isVisibleEnterPassword = false;
         if (res) {
@@ -251,11 +253,11 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           this.withdrawForm.reset();
         }
         this.passwordForm.reset();
-        this.isLoading = false;
+        this.isOkLoading = false;
         this.cdr.markForCheck();
       },
       error: err => {
-        this.isLoading = false;
+        this.isOkLoading = false;
         this.cdr.markForCheck();
       }
     })

@@ -1,15 +1,21 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../../base-http.service';
 import { timeToTimestamp, timeToTimestampMillisecond } from '@app/utils/tools';
 import { DatePipe } from '@angular/common';
+import { head } from 'lodash';
 
 export interface Sdata {
-  bnCode: string;
-  centralBankId: any;
-  creationMethod: any;
-  walletAddress?: string;
+  bankWalletAddReqVO: {
+    bnCode: any;
+    centralBankId: any;
+    creationMethod: any;
+    walletAddress?: any;
+    keyStorePassword?: any;
+    verifyKeyStorePassword?: any;
+  };
+  file?: any;
 }
 
 export interface Tdata {
@@ -81,7 +87,16 @@ export class CbdcWalletService {
   }
 
   public save(params: Sdata): Observable<any> {
-    return this.http.post(`/v1/wallet/save`, params);
+    let file: File = params.file;
+    let formData: FormData = new FormData();
+    formData.append('bankWalletAddReqVO', new Blob([JSON.stringify(params.bankWalletAddReqVO)], {
+      type: 'application/json'
+    }));
+    if (params.file) {
+      formData.append('file', file, file.name);
+    }
+    return this.http.post(`/v1/wallet/save`, formData);
+
   }
 
   public topUpOrWithdraw(params: Tdata): Observable<any> {
@@ -117,5 +132,29 @@ export class CbdcWalletService {
         })
       );
   }
+
+  public getRecordList(
+    pageIndex: number,
+    pageSize: number,
+    filters: any
+  ): Observable<any> {
+    const param: any = {
+      data: {
+        bankAccountId: filters.bankAccountId || '',
+      },
+      page: {
+        pageSize: pageSize,
+        pageNum: pageIndex
+      }
+    };
+    return this.https.post('/v1/wallet/detail/operation/listPage', param)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+
 
 }

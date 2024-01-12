@@ -11,7 +11,7 @@ import { el } from 'date-fns/locale';
 import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
 import { finalize } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { fnCheckForm } from '@app/utils/tools';
+import { fnCheckForm, isJSON } from '@app/utils/tools';
 
 @Component({
   selector: 'app-add',
@@ -30,6 +30,13 @@ export class AddComponent implements OnInit {
   centralBankList: any[] = [];
   walletAddressList: any[] = [];
   isLoading: boolean = false;
+  walletAddressListLength: any = '';
+  showKeyStore: boolean = false;
+  orginalWalletAddressList: any = [];
+  fileText: any = '';
+  fileTextWord: any = '';
+  fileTextName: any = '';
+  fileStatus: number = 1;
   constructor(
     public routeInfo: ActivatedRoute,
     private commonService: CommonService,
@@ -43,6 +50,7 @@ export class AddComponent implements OnInit {
   ngAfterViewInit(): void {
     this.creationMethodChanges();
     this.centralBankChanges();
+    this.walletAddressChanges();
     this.pageHeaderInfo = {
       title: `Create`,
       breadcrumbs: [
@@ -86,6 +94,12 @@ export class AddComponent implements OnInit {
     })
   }
 
+  walletAddressChanges() {
+    this.validateForm.get('walletAddress')?.valueChanges.subscribe((value: string) => {
+      this.onSelectWalletAddress(value);
+    })
+  }
+
   ngOnInit() {
     this.getCentralBank();
     this.getBnNode();
@@ -95,6 +109,39 @@ export class AddComponent implements OnInit {
       currency: ['', [Validators.required]],
       bnCode: [null, [Validators.required]],
     })
+  }
+
+  uploadFileSig($event: NzSafeAny) {
+    const fielSize = $event.target.files[0]?.size! / 1024 > 50;
+    if (fielSize && $event.target.files[0] !== undefined) {
+      this.message.error('Size less than 50 KB');
+    }
+    if ($event.target.files[0].type !== 'text/plain') {
+      this.message.error('Please upload the keystore file in JSON format, the file size cannot exceed 50KB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL($event.target.files[0]);
+    reader.onload = () => {
+      this.fileText = reader.result;
+      this.fileTextWord = $event.target.files[0];
+      this.fileTextName = $event.target.files[0].name;
+      this.cdr.markForCheck();
+      this.validateForm.get('file')?.setValue(this.fileText);
+      if (this.validateForm.get('file')?.value !== '') {
+        this.fileStatus = 2;
+      } else {
+        this.fileStatus = 1;
+      }
+    };
+  }
+
+  onDeleteFile(): void {
+    let ss: any = window.document.getElementById("files")!;
+    ss.value = "";
+    this.fileStatus = 1;
+    this.validateForm.get('file')?.setValue('');
+    this.fileTextName = '';
   }
 
   getCentralBank() {
@@ -112,20 +159,60 @@ export class AddComponent implements OnInit {
   }
 
   getWalletAddress(centralBankId?: any) {
-    this.cbdcWalletService.getWalletAddress({centralBankId}).subscribe((res) => {
+    this.cbdcWalletService.getWalletAddress({ centralBankId }).subscribe((res) => {
       if (res) {
+        this.orginalWalletAddressList = res;
         this.walletAddressList = res;
+        this.walletAddressListLength = this.walletAddressList.length;
       }
     })
+  }
+
+  onSelectWalletAddress(event: NzSafeAny) {
+    if (this.orginalWalletAddressList.indexOf(event) !== -1) {
+      this.showKeyStore = false;
+      this.walletAddressList = this.orginalWalletAddressList;
+      this.validateForm.removeControl('keyStorePassword');
+      this.validateForm.removeControl('verifyKeyStorePassword');
+      this.validateForm.removeControl('file');
+    } else {
+      this.validateForm.addControl('keyStorePassword', this.fb.control('', [Validators.required]));
+      this.validateForm.addControl('verifyKeyStorePassword', this.fb.control('', [Validators.required]));
+      this.validateForm.addControl('file', this.fb.control('', [Validators.required]));
+    }
+  }
+
+  addItem(input: HTMLInputElement): void {
+    const value = input.value;
+    if (this.walletAddressList.indexOf(value) === -1) {
+      if (this.walletAddressList.length > this.walletAddressListLength) {
+        this.walletAddressList[this.walletAddressListLength] = input.value;
+        this.validateForm.get('walletAddress')?.setValue(input.value);
+      } else {
+        this.walletAddressList = [...this.walletAddressList, input.value];
+        this.validateForm.get('walletAddress')?.setValue(input.value);
+      }
+      this.showKeyStore = true;
+    }
   }
 
   onSubmit() {
     this.isLoading = true;
     const params = {
-      bnCode: this.validateForm.value.bnCode,
-      centralBankId: this.validateForm.value.centralBankId,
-      creationMethod: this.validateForm.value.creationMethod,
-      walletAddress: this.validateForm.value.walletAddress
+      bankWalletAddReqVO: this.showKeyStore ? {
+        bnCode: this.validateForm.value.bnCode,
+        centralBankId: this.validateForm.value.centralBankId,
+        creationMethod: this.validateForm.value.creationMethod,
+        walletAddress: this.validateForm.value.walletAddress,
+        keyStorePassword: this.validateForm.value.keyStorePassword,
+        verifyKeyStorePassword: this.validateForm.value.verifyKeyStorePassword
+      } : {
+        bnCode: this.validateForm.value.bnCode,
+        centralBankId: this.validateForm.value.centralBankId,
+        creationMethod: this.validateForm.value.creationMethod,
+        walletAddress: this.validateForm.value.walletAddress,
+      },
+      file: this.fileTextWord
     }
     this.cbdcWalletService.save(params).pipe(finalize(() => this.isLoading = false)).subscribe({
       next: res => {

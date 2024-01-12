@@ -273,10 +273,10 @@ const timestampToMonth = function timestampToMonth(str: string) {
 }
 
 const timestampToDate = function timestampToTime(str: string) {
-
+  str = str.toString();
   let timeZone = new Date().getTimezoneOffset() / -60;
 
-  const time = new Date(Number(str) * 1000);
+  const time = str.length > 10 ? new Date(Number(str)) : new Date(Number(str) * 1000);
   const len = time.getTime();
   const offset = time.getTimezoneOffset() * 60000;
   const utcTime = len + offset;
@@ -366,6 +366,22 @@ const thousandRate = function thousandthRate(x: any) {
   return parts.join(".");
 }
 
+const isJSON = function isJSON(str: string): boolean {
+  if (typeof str == 'string') {
+    try {
+      var obj = JSON.parse(str);
+      if (typeof obj == 'object' && obj) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
+}
+
 export {
   fnFormatToHump,
   fnGetReuseStrategyKeyFn,
@@ -396,5 +412,6 @@ export {
   objPushKv,
   thousandthMark,
   timeToTimestampMillisecond,
-  thousandRate
+  thousandRate,
+  isJSON
 };

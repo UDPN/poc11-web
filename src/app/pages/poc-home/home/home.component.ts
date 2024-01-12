@@ -16,7 +16,7 @@ import { SearchCommonVO } from '@app/core/services/types';
 import { DefaultStoreService } from '@app/layout/default/store/default.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { timestampToDate, timestampToTime } from '@app/utils/tools';
+import { thousandthMark, timestampToDate, timestampToTime } from '@app/utils/tools';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -106,62 +106,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   pendingRateCount: any = '';
   approveList: any = [];
   validateForm!: FormGroup;
-  walletBalanceList: any = [
-    {
-      currency: 'w-THB',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234324',
-          amount: '40,000'
-        },
-        {
-          walletAddress: '0x3453453453463454353',
-          amount: '30,000'
-        }
-      ]
-    },
-    {
-      currency: 'w-EUR',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234321',
-          amount: '15,000'
-        },
-        {
-          walletAddress: '0x3453453453463454352',
-          amount: '23,000'
-        }
-      ]
-    },
-    {
-      currency: 'w-USD',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234332',
-          amount: '10,000'
-        },
-        {
-          walletAddress: '0x3453453453463454334',
-          amount: '50,000'
-        }
-      ]
-    },
-    {
-      currency: 'w-HKD',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234317',
-          amount: '40,000'
-        },
-        {
-          walletAddress: '0x3453453453463454336',
-          amount: '30,000'
-        }
-      ]
-    }
-  ];
+  currencyForm!: FormGroup;
+  walletBalanceList: any = [];
   walletList: any = [];
   bankType: any = '';
+  currencyList: any = [];
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
@@ -181,6 +130,41 @@ export class HomeComponent implements OnInit, AfterViewInit {
   };
   walletAddress: any = [];
   @HostListener('window:resize', ['$event'])
+  ngOnInit() {
+    this.isFirstLogin();
+    // this.fetchNumbers();
+    this._informationService.detail().subscribe((res: any) => {
+      if (res) {
+        this.bankType = res.bankType;
+        if (this.bankType === 1) {
+          this.defaultBalance();
+          this.getCurrencyList();
+        } else {
+          this.initTable();
+          this.initSelect();
+        }
+      }
+    });
+    this.validateForm = this.fb.group({
+      pairedExchangeRate: [1]
+    });
+    this.currencyForm = this.fb.group({
+      currency: ['']
+    });
+
+    this.getScreenWidth = window.innerWidth;
+    if (this.getScreenWidth > 900) {
+      this.legend = true;
+      this.view = [this.getScreenWidth - 400, 400];
+    } else if (this.getScreenWidth > 500 && this.getScreenWidth < 900) {
+      this.legend = false;
+      this.view = [this.getScreenWidth - 200, 400];
+    } else {
+      this.legend = false;
+      this.view = [300, 300];
+    }
+
+  }
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
     if (this.getScreenWidth > 900) {
@@ -213,44 +197,78 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  defaultBalance() {
-    let walletBalanceList: any = [];
-    walletBalanceList = this.walletBalanceList;
-    walletBalanceList.map((item: any, i: any) => {
-      Object.assign(item, { value: item.walletList[0].amount });
-    });
-  }
-
-  ngOnInit() {
-    this.isFirstLogin();
-    this.initTable();
-    this.initSelect();
-    // this.fetchNumbers();
-    this.defaultBalance();
-    this._informationService.detail().subscribe((res: any) => {
-      if (res) {
-        this.bankType = res.bankType;
+  defaultBalance(value?: any) {
+    this.pocHomeService.walletBalance({}).subscribe((res) => {
+      let temObj: any = {};
+      for (let i = 0; i < res.length; i++) {
+        let item = res[i];
+        if (!temObj[item['currency']]) {
+          temObj[item['currency']] = [item]
+        } else {
+          temObj[item['currency']].push(item)
+        }
       }
-    });
-    this.validateForm = this.fb.group({
-      pairedExchangeRate: [1]
-    });
-    this.getScreenWidth = window.innerWidth;
-    if (this.getScreenWidth > 900) {
-      this.legend = true;
-      this.view = [this.getScreenWidth - 400, 400];
-    } else if (this.getScreenWidth > 500 && this.getScreenWidth < 900) {
-      this.legend = false;
-      this.view = [this.getScreenWidth - 200, 400];
-    } else {
-      this.legend = false;
-      this.view = [300, 300];
-    }
-
+      let resArr: any = [];
+      Object.keys(temObj).forEach(key => {
+        resArr.push({
+          currency: key,
+          walletList: temObj[key],
+        })
+      })
+      this.walletBalanceList = resArr;
+      let walletBalanceList: any = [];
+      walletBalanceList = this.walletBalanceList;
+      walletBalanceList.map((item: any, i: any) => {
+        Object.assign(item, { value: item.walletList[0].balance });
+      });
+    })
   }
+
+  getCurrencyList() {
+    this.pocHomeService.getCurrencyList().subscribe((res) => {
+      if (res) {
+        this.currencyList = res;
+        this.currencyForm.get('currency')?.setValue(res[0]);
+      }
+    })
+  }
+
+  // selectWalletAddress(currency: any) {
+  //   this.walletBalanceList.map((item: any) => {
+  //     if (item.currency === currency) {
+  //       this.defaultBalance(currency);
+  //     }
+  //   })
+  // }
+
+  getMovements(currency?: any) {
+    this.pocHomeService.getMovements({ currency }).subscribe((res) => {
+      if (res) {
+        res.daysList = res.daysList.map((item: any) => {
+          return timestampToDate(item);
+        })
+        let length = res.daysList;
+        length = res.daysList.map((item: any) => {
+          return 0;
+        })
+        const params = {
+          topUpAmount: res.topUpAmountList,
+          withdrawAmount: res.withdrawAmountList,
+          transferOutAmount: res.transferOutAmountList,
+          transferInAmount: res.transferInAmountList,
+          days: res.daysList,
+          length
+        }
+        this.getEcharts(params);
+      }
+    })
+  }
+
 
   ngAfterViewInit(): void {
-    // this.getEcharts();
+    this.currencyForm.get('currency')?.valueChanges.subscribe((item: number) => {
+      this.getMovements(item);
+    })
     this.fetchNumbers();
     this.pageHeaderInfo = {
       title: ``,
@@ -469,119 +487,150 @@ export class HomeComponent implements OnInit, AfterViewInit {
     };
   }
 
-  // getEcharts() {
-  //   var dom = document.getElementById('chart-container');
-  //   var myChart = echarts.init(dom, null, {
-  //     renderer: 'canvas',
-  //     useDirtyRect: false
-  //   });
-  //   var app = {};
+  getEcharts(param: any) {
+    var dom = document.getElementById('chart-container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    var option;
+    var emphasisStyle = {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowColor: 'rgba(0,0,0,0.3)'
+      }
+    };
+    option = {
+      title: {
+        text: 'CBDC Movements In the Last 7 Days',
+        left: 'center',
+        bottom: '0'
+      },
+      color: ['#A8385D', '#7AA3E5', '#A280A8', '#AAE3F5', '#ADCDCF', '#A95963'],
+      legend: {
+        data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        right: '10%',
+      },
+      tooltip: {},
+      xAxis: {
+        data: param.days,
+        name: '',
+        axisLine: { onZero: false },
+        splitLine: { show: false },
+        splitArea: { show: false }
+      },
+      yAxis: {},
+      grid: {
+        bottom: 100
+      },
+      series: [
+        {
+          name: 'Transfer In',
+          type: 'bar',
+          stack: 'one',
+          emphasis: emphasisStyle,
+          data: param.transferInAmount,
+          label: {
+            show: true,
+            formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex])
+          }
+        },
+        {
+          name: 'Top-up',
+          type: 'bar',
+          stack: 'one',
+          emphasis: emphasisStyle,
+          data: param.topUpAmount,
+          label: {
+            show: true,
+            formatter: (params: any) => thousandthMark(param.topUpAmount[params.dataIndex])
+          }
+        },
+        {
+          name: 'Transfer Out',
+          type: 'bar',
+          stack: 'two',
+          emphasis: emphasisStyle,
+          data: param.transferOutAmount,
+          label: {
+            show: true,
+            formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex])
+          }
+        },
+        {
+          name: 'Withdraw',
+          type: 'bar',
+          stack: 'two',
+          emphasis: emphasisStyle,
+          data: param.withdrawAmount,
+          label: {
+            show: true,
+            formatter: (params: any) => thousandthMark(param.withdrawAmount[params.dataIndex])
+          }
+        },
+        {
+          name: 'total',
+          type: 'bar',
+          stack: 'two',
+          emphasis: emphasisStyle,
+          label: {
+            show: true,
+            position: 'top',
+            formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex] + param.withdrawAmount[params.dataIndex]),
+          },
+          data: param.length,
+          tooltip: {
+            show: false
+          }
+        },
+        {
+          name: 'total',
+          type: 'bar',
+          stack: 'one',
+          emphasis: emphasisStyle,
 
-  //   var option;
+          label: {
+            show: true,
+            position: 'top',
+            formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex] + param.topUpAmount[params.dataIndex]),
+          },
+          data: param.length,
+          tooltip: {
+            show: false
+          }
+        }
+      ],
+    };
 
-  //   let xAxisData: string[] = [];
-  //   let data1: number[] = [];
-  //   let data2: number[] = [];
-  //   let data3: number[] = [];
-  //   let data4: number[] = [];
+    // myChart.on('brushSelected', function (params: any) {
+    //   var brushed = [];
+    //   var brushComponent = params.batch[0];
 
-  //   for (let i = 0; i < 10; i++) {
-  //     xAxisData.push('Class' + i);
-  //     data1.push(+(Math.random() * 2).toFixed(2));
-  //     data2.push(+(Math.random() * 5).toFixed(2));
-  //     data3.push(+(Math.random() + 0.3).toFixed(2));
-  //     data4.push(+Math.random().toFixed(2));
-  //   }
+    //   for (var sIdx = 0; sIdx < brushComponent.selected.length; sIdx++) {
+    //     var rawIndices = brushComponent.selected[sIdx].dataIndex;
+    //     brushed.push('[Series ' + sIdx + '] ' + rawIndices.join(', '));
+    //   }
 
-  //   var emphasisStyle = {
-  //     itemStyle: {
-  //       shadowBlur: 10,
-  //       shadowColor: 'rgba(0,0,0,0.3)'
-  //     }
-  //   };
-  //   option = {
-  //     title: {
-  //       text: 'CBDC Movements In the Last 7 Days',
-  //       left: 'center',
-  //       bottom: '0'
-  //     },
-  //     color: ['#A8385D', '#7AA3E5', '#A280A8', '#AAE3F5', '#ADCDCF', '#A95963'],
-  //     legend: {
-  //       data: ['bar', 'bar2', 'bar3', 'bar4'],
-  //       right: '10%',
-  //     },
-  //     tooltip: {},
-  //     xAxis: {
-  //       data: xAxisData,
-  //       name: '',
-  //       axisLine: { onZero: false },
-  //       splitLine: { show: false },
-  //       splitArea: { show: false }
-  //     },
-  //     yAxis: {},
-  //     grid: {
-  //       bottom: 100
-  //     },
-  //     series: [
-  //       {
-  //         name: 'bar',
-  //         type: 'bar',
-  //         stack: 'one',
-  //         emphasis: emphasisStyle,
-  //         data: data1
-  //       },
-  //       {
-  //         name: 'bar2',
-  //         type: 'bar',
-  //         stack: 'one',
-  //         emphasis: emphasisStyle,
-  //         data: data2
-  //       },
-  //       {
-  //         name: 'bar3',
-  //         type: 'bar',
-  //         stack: 'two',
-  //         emphasis: emphasisStyle,
-  //         data: data3
-  //       },
-  //       {
-  //         name: 'bar4',
-  //         type: 'bar',
-  //         stack: 'two',
-  //         emphasis: emphasisStyle,
-  //         data: data4
-  //       }
-  //     ],
-  //   };
+    //   myChart.setOption<echarts.EChartsOption>({
+    //     title: {
+    //       backgroundColor: '#333',
+    //       text: 'SELECTED DATA INDICES: \n' + brushed.join('\n'),
+    //       bottom: 0,
+    //       right: '10%',
+    //       width: 100,
+    //       textStyle: {
+    //         fontSize: 12,
+    //         color: '#fff'
+    //       }
+    //     }
+    //   });
+    // });
 
-  //   // myChart.on('brushSelected', function (params: any) {
-  //   //   var brushed = [];
-  //   //   var brushComponent = params.batch[0];
-
-  //   //   for (var sIdx = 0; sIdx < brushComponent.selected.length; sIdx++) {
-  //   //     var rawIndices = brushComponent.selected[sIdx].dataIndex;
-  //   //     brushed.push('[Series ' + sIdx + '] ' + rawIndices.join(', '));
-  //   //   }
-
-  //   //   myChart.setOption<echarts.EChartsOption>({
-  //   //     title: {
-  //   //       backgroundColor: '#333',
-  //   //       text: 'SELECTED DATA INDICES: \n' + brushed.join('\n'),
-  //   //       bottom: 0,
-  //   //       right: '10%',
-  //   //       width: 100,
-  //   //       textStyle: {
-  //   //         fontSize: 12,
-  //   //         color: '#fff'
-  //   //       }
-  //   //     }
-  //   //   });
-  //   // });
-
-  //   if (option && typeof option === 'object') {
-  //     myChart.setOption(option);
-  //   }
-  // }
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+  }
 
   panels = [
     {
