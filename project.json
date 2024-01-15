@@ -15,9 +15,7 @@
         "outputPath": "dist/poc11-web",
         "index": "./src/index.html",
         "main": "./src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": "src/polyfills.ts",
         "tsConfig": "./tsconfig.app.json",
         "assets": [
           "./src/favicon.ico",
@@ -50,6 +48,9 @@
           "node_modules/driver.js/dist/driver.min.js"
         ],
         "allowedCommonJsDependencies": [
+          "@ethereumjs/tx",
+          "@ethereumjs/common",
+          "web3",
           "rfdc",
           "jwt-encode",
           "@env/environment",

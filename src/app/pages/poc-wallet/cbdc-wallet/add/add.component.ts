@@ -12,6 +12,7 @@ import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-walle
 import { finalize } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { fnCheckForm, isJSON } from '@app/utils/tools';
+import { MetaMaskService } from '@app/core/services/common/metaMask.service';
 
 @Component({
   selector: 'app-add',
@@ -37,6 +38,8 @@ export class AddComponent implements OnInit {
   fileTextWord: any = '';
   fileTextName: any = '';
   fileStatus: number = 1;
+  public metaArr$ = this.metaMaskService.MetaArray$
+  
   constructor(
     public routeInfo: ActivatedRoute,
     private commonService: CommonService,
@@ -45,6 +48,8 @@ export class AddComponent implements OnInit {
     private location: Location,
     private cbdcWalletService: CbdcWalletService,
     private message: NzMessageService,
+    
+    private metaMaskService: MetaMaskService
   ) { }
 
   ngAfterViewInit(): void {
@@ -101,6 +106,7 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.metaMaskService.clearMetaArray$();
     this.getCentralBank();
     this.getBnNode();
     this.validateForm = this.fb.group({
@@ -234,5 +240,8 @@ export class AddComponent implements OnInit {
 
   onBack() {
     this.location.back();
+  }
+  onMetaMask(){
+    this.metaMaskService.checkMeataMask();
   }
 }
