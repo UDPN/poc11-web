@@ -74,7 +74,12 @@
                 <div nz-col nzSpan="24">
                   <nz-select formControlName="walletAddress" nzShowSearch [nzDropdownRender]="renderTemplate"
                     (ngModelChange)="onSelectWalletAddress($event)">
+                    <nz-option-group nzLabel="MetaMask">
+                      <nz-option *ngFor="let items of metaArr$ | async" [nzValue]="items" [nzLabel]="items"> </nz-option>
+                    </nz-option-group>
+                    <nz-option-group nzLabel="Local">
                     <nz-option *ngFor="let item of walletAddressList" [nzValue]="item" [nzLabel]="item"> </nz-option>
+                  </nz-option-group>
                   </nz-select>
                 </div>
               </div>
@@ -221,5 +226,6 @@
         </div>
       </ng-template>
     </nz-input-group>
+    <div> <a nz-button nzType="link" (click)="onMetaMask()">Get a Wallet Address in MetaMask</a></div>
   </div>
 </ng-template>
