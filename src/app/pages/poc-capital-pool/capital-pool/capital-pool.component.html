@@ -50,7 +50,7 @@
   <span>{{ 'Yes' }}</span>
 </ng-template>
 <ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress"
-  let-currencyPrecision="currencyPrecision" let-capitalPoolBalance="capitalPoolBalance">
+  let-currencyPrecision="currencyPrecision" let-capitalPoolRealBalance="capitalPoolRealBalance">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
       (click)="getEdit(capitalPoolCurrency, capitalPoolAddress, currencyPrecision)">
@@ -58,12 +58,12 @@
     </span>
   </ng-container>
   <ng-container *appAuth="'R020205'">
-    <span class="operate-text" (click)="getTopUp(capitalPoolCurrency, capitalPoolAddress, capitalPoolBalance)">
+    <span class="operate-text" (click)="getTopUp(capitalPoolCurrency, capitalPoolAddress, capitalPoolRealBalance)">
       Top up
     </span>
   </ng-container>
   <ng-container *appAuth="'R020206'">
-    <span class="operate-text" (click)="getWithdraw(capitalPoolCurrency, capitalPoolAddress, capitalPoolBalance)">
+    <span class="operate-text" (click)="getWithdraw(capitalPoolCurrency, capitalPoolAddress, capitalPoolRealBalance)">
       Withdraw
     </span>
   </ng-container>
