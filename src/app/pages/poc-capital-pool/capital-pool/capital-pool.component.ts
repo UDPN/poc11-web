@@ -340,11 +340,11 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
           this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
             this.getDataList();
           });
-        }
-        if (this.txType === 1) {
-          this.topUpForm.reset();
-        } else {
-          this.withdrawForm.reset();
+          if (this.txType === 1) {
+            this.topUpForm.reset();
+          } else {
+            this.withdrawForm.reset();
+          }
         }
         this.passwordForm.reset();
         this.isOkLoading = false;
