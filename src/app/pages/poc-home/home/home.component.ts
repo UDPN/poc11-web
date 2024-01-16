@@ -17,13 +17,20 @@ import { SearchCommonVO } from '@app/core/services/types';
 import { DefaultStoreService } from '@app/layout/default/store/default.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { thousandthMark, timestampToDate, timestampToTime } from '@app/utils/tools';
+import {
+  thousandthMark,
+  timestampToDate,
+  timestampToTime
+} from '@app/utils/tools';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 import * as echarts from 'echarts';
 import { InformationService } from '@app/core/services/http/information/information.service';
+import { SocketService } from '@app/core/services/common/socket.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { WindowService } from '@app/core/services/common/window.service';
 
 @Component({
   selector: 'app-home',
@@ -119,7 +126,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder,
     private _defaultStoreService: DefaultStoreService,
     public _informationService: InformationService,
-  ) { }
+    private socketService: SocketService,
+    private notification: NzNotificationService,
+    private windowService: WindowService
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -132,6 +142,22 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   walletAddress: any = [];
   @HostListener('window:resize', ['$event'])
   ngOnInit() {
+    let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
+    this.socketService.connect(
+      ws + this.windowService.getSessionStorage('token')
+    );
+    this.socketService.messageSubject.subscribe((res: any) => {
+      if (res.type === 0) {
+        if (res.message === 'Server:connected OK!') {
+          return;
+        }
+        this.notification.create(
+          res.type === 0 ? 'success' : 'warning',
+          'Message',
+          res.message
+        );
+      }
+    });
     this.isFirstLogin();
     // this.fetchNumbers();
     this._informationService.detail().subscribe((res: any) => {
@@ -171,7 +197,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.legend = false;
       this.view = [300, 300];
     }
-
   }
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
@@ -211,25 +236,25 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       for (let i = 0; i < res.length; i++) {
         let item = res[i];
         if (!temObj[item['currency']]) {
-          temObj[item['currency']] = [item]
+          temObj[item['currency']] = [item];
         } else {
-          temObj[item['currency']].push(item)
+          temObj[item['currency']].push(item);
         }
       }
       let resArr: any = [];
-      Object.keys(temObj).forEach(key => {
+      Object.keys(temObj).forEach((key) => {
         resArr.push({
           currency: key,
-          walletList: temObj[key],
-        })
-      })
+          walletList: temObj[key]
+        });
+      });
       this.walletBalanceList = resArr;
       let walletBalanceList: any = [];
       walletBalanceList = this.walletBalanceList;
       walletBalanceList.map((item: any, i: any) => {
         Object.assign(item, { value: item.walletList[0].balance });
       });
-    })
+    });
   }
 
   getCurrencyList() {
@@ -238,7 +263,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.currencyList = res;
         this.currencyForm.get('currency')?.setValue(res[0]);
       }
-    })
+    });
   }
 
   // selectWalletAddress(currency: any) {
@@ -254,11 +279,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       if (res) {
         res.daysList = res.daysList.map((item: any) => {
           return timestampToDate(item);
-        })
+        });
         let length = res.daysList;
         length = res.daysList.map((item: any) => {
           return 0;
-        })
+        });
         const params = {
           topUpAmount: res.topUpAmountList,
           withdrawAmount: res.withdrawAmountList,
@@ -267,17 +292,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           days: res.daysList,
           length
         }
-
         this.getEcharts(params);
       }
-    })
+    });
   }
 
-
   ngAfterViewInit(): void {
-    this.currencyForm.get('currency')?.valueChanges.subscribe((item: number) => {
-      this.getMovements(item);
-    })
+    this.currencyForm
+      .get('currency')
+      ?.valueChanges.subscribe((item: number) => {
+        this.getMovements(item);
+      });
     this.fetchNumbers();
     this.pageHeaderInfo = {
       title: ``,
@@ -385,10 +410,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
               });
               multi.push({
-                name:
-                  item.sourceCurrency +
-                  '->' +
-                  item.targetCurrency,
+                name: item.sourceCurrency + '->' + item.targetCurrency,
                 series: series
               });
               this.multi = multi;
@@ -414,10 +436,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             let series1: any = [];
             item.outTransactionVolumeInfoList.forEach((items: any) => {
               series1.push({
-                name:
-                  items.sourceCurrency +
-                  '->' +
-                  items.targetCurrency,
+                name: items.sourceCurrency + '->' + items.targetCurrency,
                 value: items.transactionNumber
                   .toString()
                   .replace(/\d{1,3}(?=(\d{3})+(\.|$))/gy, '$&,')
@@ -518,7 +537,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         trigger: 'axis'
       },
       legend: {
-        data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out']
+        data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        right: '10%',
       },
       xAxis: {
         type: 'category',
@@ -534,6 +554,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           stack: 'Total',
           data: param.transferInAmount,
           label: {
+            show: true,
             formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex])
           }
         },
@@ -543,6 +564,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           stack: 'Total',
           data: param.topUpAmount,
           label: {
+            show: true,
             formatter: (params: any) => thousandthMark(param.topUpAmount[params.dataIndex])
           }
         },
@@ -552,6 +574,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           stack: 'Total',
           data: param.transferOutAmount,
           label: {
+            show: true,
             formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex])
           }
         },
@@ -561,10 +584,42 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           stack: 'Total',
           data: param.withdrawAmount,
           label: {
+            show: true,
             formatter: (params: any) => thousandthMark(param.withdrawAmount[params.dataIndex])
           }
+        },
+        {
+          name: 'total',
+          type: 'bar',
+          stack: 'two',
+          emphasis: emphasisStyle,
+          label: {
+            show: true,
+            position: 'top',
+            formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex] + param.withdrawAmount[params.dataIndex]),
+          },
+          data: param.length,
+          tooltip: {
+            show: false
+          }
+        },
+        {
+          name: 'total',
+          type: 'bar',
+          stack: 'one',
+          emphasis: emphasisStyle,
+
+          label: {
+            show: true,
+            position: 'top',
+            formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex] + param.topUpAmount[params.dataIndex]),
+          },
+          data: param.length,
+          tooltip: {
+            show: false
+          }
         }
-      ]
+      ],
     };
     // myChart.on('brushSelected', function (params: any) {
     //   var brushed = [];
