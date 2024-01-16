@@ -40,13 +40,13 @@
               {{ info.fromBankName }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="To">
-              {{ info.fromCommercialBankName }}
+              {{ info.toCommercialBankName }}
               <br>
               {{ info.toAccountAddress }}
               <br>
               {{ (info.toCbdcCount | map:'toThousandthMark') + ' ' + info.toCurrency }}
               <br>
-              {{ info.toCommercialBankName }}
+              {{ info.toBankName }}
             </nz-descriptions-item>
           </nz-descriptions>
           <nz-divider></nz-divider>
