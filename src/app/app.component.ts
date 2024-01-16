@@ -23,6 +23,7 @@ import { ThemeOptionsKey } from './config/constant';
 import { WindowService } from './core/services/common/window.service';
 import { ThemeService } from './core/services/store/common-store/theme.service';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
+import { SocketService } from './core/services/common/socket.service';
 
 @Component({
   selector: 'app-root',
@@ -100,6 +101,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private windowService: WindowService,
     private themesService: ThemeService, 
     private nzConfigService: NzConfigService,
+    private socketService:SocketService
   ) {
         this.initTranslate();
   }
@@ -107,8 +109,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   initTranslate() {
     this.translateService.addLangs(['en', 'zh']);
     this.translateService.setDefaultLang('en');
-      
-    
   }
 
 
@@ -125,6 +125,16 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
+    // this.socketService.connect(ws+this.windowService.getSessionStorage('token'))
+    // // 接收消息
+    // this.socketService.messageSubject.subscribe(res=>{
+    //   console.log(res)
+    // })
+    // this.socketService.onMessage = (res) => {
+    //   console.log(res)
+    // }
+
     const themeOptionsKey:any = this.windowService.getStorage(ThemeOptionsKey);
     this.nzConfigService.set('theme', {
       primaryColor: JSON.parse(themeOptionsKey).color

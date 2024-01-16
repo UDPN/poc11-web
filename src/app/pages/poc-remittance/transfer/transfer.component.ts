@@ -280,7 +280,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                   : (this.validateForm.get('amount')?.value / item.rate) *
                     item.smValue
                 : item.smValue
-            ).replace(/^(.*\..{8}).*$/, '$1'),
+            ).replace(/^(.*\..{2}).*$/, '$1'),
             total: String(
               this.validateForm.get('amount')?.value / item.rate +
                 (item.smChargeModel === 0
@@ -291,7 +291,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                     : (this.validateForm.get('amount')?.value / item.rate) *
                       item.smValue
                   : item.smValue)
-            ).replace(/^(.*\..{8}).*$/, '$1')
+            ).replace(/^(.*\..{2}).*$/, '$1')
             // total: 1
           });
         });
