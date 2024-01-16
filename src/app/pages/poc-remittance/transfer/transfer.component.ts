@@ -482,7 +482,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.transferService
       .transfer({
-        beneficiaryBankId: this.newBeneficialBankId,
+        beneficiaryBankId: this.newToCommercialBankId,
         beneficiaryWalletAddress: this.newBeneficialWalletAddress,
         interbankSettlementAmount: this.validateForm.get('amount')?.value,
         remittanceInformation: this.validateForm.get('remittanceInformation')
@@ -493,7 +493,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
             ? this.checkedItemComment[0].rateId
             : ' ',
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
-        toCommercialBankId: this.newToCommercialBankId
+        toCommercialBankId: this.newBeneficialBankId
       })
       .subscribe((res) => {
         if (res.code === 0) {
