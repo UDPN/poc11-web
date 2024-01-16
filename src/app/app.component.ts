@@ -102,8 +102,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private windowService: WindowService,
     private themesService: ThemeService,
     private nzConfigService: NzConfigService,
-    private socketService: SocketService,
-    private notification: NzNotificationService
+
   ) {
     this.initTranslate();
   }
@@ -124,22 +123,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
-    this.socketService.connect(
-      ws + this.windowService.getSessionStorage('token')
-    );
-    this.socketService.messageSubject.subscribe((res: any) => {
-      if (res.type === 0) {
-        if (res.message === 'Server:connected OK!') {
-          return;
-        }
-        this.notification.create(
-          res.type === 0 ? 'success' : 'warning',
-          'Message',
-          res.message
-        );
-      }
-    });
     const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
     this.nzConfigService.set('theme', {
       primaryColor: JSON.parse(themeOptionsKey).color
