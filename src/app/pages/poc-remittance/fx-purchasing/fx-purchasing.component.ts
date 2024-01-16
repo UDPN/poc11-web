@@ -361,7 +361,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res) {
+        if (res.code  === 0) {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -375,9 +375,14 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                 '/poc/poc-remittance/transaction-record'
               );
             });
+            this.isLoading = false;
+            this.isVisible = false;
+        }else{
+          this.passwordForm.reset();
+          this.isVisibleEnterPassword = true;
+          this.isLoading = false;
         }
-        this.isLoading = false;
-        this.isVisible = false;
+        this.cdr.markForCheck();
       });
   }
 }

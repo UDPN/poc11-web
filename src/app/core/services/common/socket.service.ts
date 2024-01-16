@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2024-01-15 14:09:16
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-16 14:50:02
+ * @LastEditTime: 2024-01-16 14:59:57
  * @Description:
  */
 import { Injectable } from '@angular/core';
@@ -22,8 +22,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   providedIn: 'root'
 })
 export class SocketService {
-  public MetaArray$ = new BehaviorSubject<string[]>([]);
-  private metaArray: string[] = [];
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
