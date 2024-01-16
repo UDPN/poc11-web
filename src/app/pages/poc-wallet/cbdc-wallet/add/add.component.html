@@ -74,12 +74,13 @@
                 <div nz-col nzSpan="24">
                   <nz-select formControlName="walletAddress" nzShowSearch [nzDropdownRender]="renderTemplate"
                     (ngModelChange)="onSelectWalletAddress($event)">
-                    <nz-option-group nzLabel="MetaMask">
-                      <nz-option *ngFor="let items of metaArr$ | async" [nzValue]="items" [nzLabel]="items"> </nz-option>
-                    </nz-option-group>
+                  <nz-option-group nzLabel="MetaMask">
+                    <nz-option *ngFor="let items of metaArr$ | async" [nzValue]="items" [nzLabel]="items"> </nz-option>
+                  </nz-option-group>
                     <nz-option-group nzLabel="Local">
                     <nz-option *ngFor="let item of walletAddressList" [nzValue]="item" [nzLabel]="item"> </nz-option>
                   </nz-option-group>
+
                   </nz-select>
                 </div>
               </div>
@@ -99,10 +100,10 @@
                 <input nz-input formControlName="bnCode" readonly class="onboard-disabled" />
               </div>
               <div>
-                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>{{'A unique
-                ID for service providers to access
-                the
-                CBDC system. After the BN is deployed, the UDPN will generate this ID.'}}
+                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>{{ "A uniqu\e
+                ID for service providers to acces\s
+                th\e
+                CBDC system. After the BN is deployed, the UDPN will generate this ID." }}
               </div>
             </div>
             <ng-template #nodeError let-control>
