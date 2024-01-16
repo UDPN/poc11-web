@@ -284,13 +284,13 @@
       <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
         [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
         <nz-descriptions-item nzTitle="Beneficiary's Wallet Address">{{
-          validateForm.controls["beneficialWalletAddress"].value
+          newBeneficialWalletAddress
           }}
           <br>
           {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency.replace('-UDPN', '')}}
         </nz-descriptions-item>
         <nz-descriptions-item nzTitle="Beneficiary's Bank Name">{{
-          validateForm.controls["beneficialBankName"].value}}</nz-descriptions-item>
+          validateForm.controls["newBeneficialBankName"].value}}</nz-descriptions-item>
       </nz-descriptions>
     </nz-card>
 

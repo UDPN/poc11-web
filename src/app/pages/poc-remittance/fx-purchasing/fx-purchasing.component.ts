@@ -255,7 +255,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                         : (this.validateForm.get('amount')?.value / item.rate) *
                           item.smValue
                       : item.smValue
-                  ).replace(/^(.*\..{8}).*$/, '$1'),
+                  ).replace(/^(.*\..{2}).*$/, '$1'),
                   total: String(
                     this.validateForm.get('amount')?.value / item.rate +
                       (item.smChargeModel === 0
@@ -267,7 +267,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                               item.rate) *
                             item.smValue
                         : item.smValue)
-                  ).replace(/^(.*\..{8}).*$/, '$1')
+                  ).replace(/^(.*\..{2}).*$/, '$1')
                 });
               });
               this.nzLoading = false;
@@ -361,7 +361,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res) {
+        if (res.code  === 0) {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -375,9 +375,14 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                 '/poc/poc-remittance/transaction-record'
               );
             });
+            this.isLoading = false;
+            this.isVisible = false;
+        }else{
+          this.passwordForm.reset();
+          this.isVisibleEnterPassword = true;
+          this.isLoading = false;
         }
-        this.isLoading = false;
-        this.isVisible = false;
+        this.cdr.markForCheck();
       });
   }
 }

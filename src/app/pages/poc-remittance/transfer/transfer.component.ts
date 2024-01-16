@@ -101,7 +101,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.initData();
     this.validateForm = this.fb.group({
       newBeneficialBankName: [''],
-      beneficialBankName: ['', [Validators.required]],
+      beneficialBankName: [''],
       beneficialBankId: ['', [Validators.required]],
       beneficialWalletAddress: [
         null,
@@ -122,10 +122,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
   beneficialWalletAddressValidator = (
     control: FormControl
   ): { [s: string]: boolean } => {
-    if (!control.value) {
+    if (control.value === '') {
       return { error: true, required: true };
-    } else if (!/^[0][x][0-9a-fA-F]{40}$/.test(control.value)) {
-      return { regular: true, error: true };
     }
     return {};
   };
@@ -147,9 +145,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
   initData() {
     this.beneficialBankNameList = [];
     this.beneficialBankNameListAll = [];
-    this.transferService.bankInformation().subscribe(res=>{
+    this.transferService.bankInformation().subscribe((res) => {
       this.remitterBankName = res.bankName;
-    })
+    });
     this.transferService
       .fetchAllOhter({ bankName: '', chainAccountAddress: '' })
       .subscribe((res: any) => {
@@ -280,7 +278,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                   : (this.validateForm.get('amount')?.value / item.rate) *
                     item.smValue
                 : item.smValue
-            ).replace(/^(.*\..{8}).*$/, '$1'),
+            ).replace(/^(.*\..{2}).*$/, '$1'),
             total: String(
               this.validateForm.get('amount')?.value / item.rate +
                 (item.smChargeModel === 0
@@ -291,7 +289,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                     : (this.validateForm.get('amount')?.value / item.rate) *
                       item.smValue
                   : item.smValue)
-            ).replace(/^(.*\..{8}).*$/, '$1')
+            ).replace(/^(.*\..{2}).*$/, '$1')
             // total: 1
           });
         });
@@ -371,9 +369,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         ]
       );
     this.newToCommercialBankId =
-      this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
-        'centralBankId'
-      ];
+      this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0]['centralBankId'];
   }
   onBeneficiaryCurrency(e: any) {
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
@@ -483,7 +479,6 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.isVisibleEnterPassword = false;
   }
   confirmEnterPassword() {
-    this.isVisibleEnterPassword = false;
     this.isLoading = true;
     this.transferService
       .transfer({
@@ -501,7 +496,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
         toCommercialBankId: this.newToCommercialBankId
       })
       .subscribe((res) => {
-        if (res) {
+        if (res.code === 0) {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -514,10 +509,16 @@ export class TransferComponent implements OnInit, AfterViewInit {
               this.router.navigateByUrl(
                 '/poc/poc-remittance/transaction-record'
               );
+              this.isVisibleEnterPassword = false;
             });
+          this.isLoading = false;
+          this.isVisible = false;
+        } else {
+          this.passwordForm.reset();
+          this.isVisibleEnterPassword = true;
+          this.isLoading = false;
         }
-        this.isLoading = false;
-        this.isVisible = false;
+        this.cdr.markForCheck();
       });
   }
 }
