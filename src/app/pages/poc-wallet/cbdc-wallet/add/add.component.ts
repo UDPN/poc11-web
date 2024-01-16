@@ -177,11 +177,12 @@ export class AddComponent implements OnInit {
   onSelectWalletAddress(event: NzSafeAny) {
     if (this.orginalWalletAddressList.indexOf(event) !== -1) {
       this.showKeyStore = false;
-      this.walletAddressList = this.orginalWalletAddressList;
+      this.walletAddressList = this.orginalWalletAddressList; 
       this.validateForm.removeControl('keyStorePassword');
       this.validateForm.removeControl('verifyKeyStorePassword');
       this.validateForm.removeControl('file');
     } else {
+      this.showKeyStore = true;
       this.validateForm.addControl('keyStorePassword', this.fb.control('', [Validators.required]));
       this.validateForm.addControl('verifyKeyStorePassword', this.fb.control('', [Validators.required]));
       this.validateForm.addControl('file', this.fb.control('', [Validators.required]));
@@ -241,7 +242,11 @@ export class AddComponent implements OnInit {
   onBack() {
     this.location.back();
   }
-  onMetaMask(){
-    this.metaMaskService.checkMeataMask();
+  async onMetaMask(){
+   let  accounts:string[] = await this.metaMaskService.checkMeataMask();
+   if(accounts.length > 0){
+    this.validateForm.get("walletAddress")?.setValue(accounts[0]);
+    this.showKeyStore = true;
+   }
   }
 }
