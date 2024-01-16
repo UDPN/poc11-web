@@ -5,7 +5,8 @@ import {
   AfterViewInit,
   OnInit,
   ChangeDetectorRef,
-  HostListener
+  HostListener,
+  OnDestroy
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
@@ -29,7 +30,7 @@ import { InformationService } from '@app/core/services/http/information/informat
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -141,7 +142,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (this.bankType === 2) {
           this.initTable();
           this.initSelect();
-        } 
+        }
         this.cdr.markForCheck();
       }
     });
@@ -151,7 +152,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currencyForm = this.fb.group({
       currency: ['']
     });
+    const fn = () => {
+      const myChart: any = echarts.init(
+        document.getElementById('chart-container')
+      );
+      myChart.resize();
+    };
 
+    window.addEventListener('resize', fn);
     this.getScreenWidth = window.innerWidth;
     if (this.getScreenWidth > 900) {
       this.legend = true;
@@ -259,6 +267,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           days: res.daysList,
           length
         }
+
         this.getEcharts(params);
       }
     })
@@ -503,106 +512,60 @@ export class HomeComponent implements OnInit, AfterViewInit {
     };
     option = {
       title: {
-        text: 'CBDC Movements In the Last 7 Days',
-        left: 'center',
-        bottom: '0'
+        text: ''
       },
-      color: ['#A8385D', '#7AA3E5', '#A280A8', '#AAE3F5', '#ADCDCF', '#A95963'],
+      tooltip: {
+        trigger: 'axis'
+      },
       legend: {
-        data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
-        right: '10%',
+        data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out']
       },
-      tooltip: {},
       xAxis: {
+        type: 'category',
         data: param.days,
-        name: '',
-        axisLine: { onZero: false },
-        splitLine: { show: false },
-        splitArea: { show: false }
       },
-      yAxis: {},
-      grid: {
-        bottom: 100
+      yAxis: {
+        type: 'value'
       },
       series: [
         {
           name: 'Transfer In',
-          type: 'bar',
-          stack: 'one',
-          emphasis: emphasisStyle,
+          type: 'line',
+          stack: 'Total',
           data: param.transferInAmount,
           label: {
-            show: true,
             formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex])
           }
         },
         {
           name: 'Top-up',
-          type: 'bar',
-          stack: 'one',
-          emphasis: emphasisStyle,
+          type: 'line',
+          stack: 'Total',
           data: param.topUpAmount,
           label: {
-            show: true,
             formatter: (params: any) => thousandthMark(param.topUpAmount[params.dataIndex])
           }
         },
         {
           name: 'Transfer Out',
-          type: 'bar',
-          stack: 'two',
-          emphasis: emphasisStyle,
+          type: 'line',
+          stack: 'Total',
           data: param.transferOutAmount,
           label: {
-            show: true,
             formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex])
           }
         },
         {
           name: 'Withdraw',
-          type: 'bar',
-          stack: 'two',
-          emphasis: emphasisStyle,
+          type: 'line',
+          stack: 'Total',
           data: param.withdrawAmount,
           label: {
-            show: true,
             formatter: (params: any) => thousandthMark(param.withdrawAmount[params.dataIndex])
           }
-        },
-        {
-          name: 'total',
-          type: 'bar',
-          stack: 'two',
-          emphasis: emphasisStyle,
-          label: {
-            show: true,
-            position: 'top',
-            formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex] + param.withdrawAmount[params.dataIndex]),
-          },
-          data: param.length,
-          tooltip: {
-            show: false
-          }
-        },
-        {
-          name: 'total',
-          type: 'bar',
-          stack: 'one',
-          emphasis: emphasisStyle,
-
-          label: {
-            show: true,
-            position: 'top',
-            formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex] + param.topUpAmount[params.dataIndex]),
-          },
-          data: param.length,
-          tooltip: {
-            show: false
-          }
         }
-      ],
+      ]
     };
-
     // myChart.on('brushSelected', function (params: any) {
     //   var brushed = [];
     //   var brushComponent = params.batch[0];
@@ -644,4 +607,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // name: 'This is panel header 2'
     }
   ];
+
+  ngOnDestroy(): void {
+    window.addEventListener('resize', () => { });
+  }
 }

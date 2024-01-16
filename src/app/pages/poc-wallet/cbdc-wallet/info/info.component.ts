@@ -202,6 +202,7 @@ export class InfoComponent implements OnInit {
         {
           title: 'Transaction Hash',
           field: 'txHash',
+          pipe: 'nullValue',
           width: 280
         },
         {
