@@ -6,9 +6,10 @@
 <div class="normal-detail-table-wrap">
   <nz-card [nzBordered]="true">
     <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
-      class="card-descriptions">
+      class="card-descriptions m-t-20">
       <nz-descriptions-item nzTitle="Cross-Border Remittance" [nzSpan]="3">{{
-        '11112w12sewd'
+        ((info.fromAmount | map:'toThousandthMark') + ' ' + info.formCurrency) |
+        map:'null'
         }}</nz-descriptions-item>
     </nz-descriptions>
   </nz-card>

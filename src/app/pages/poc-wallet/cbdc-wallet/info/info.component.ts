@@ -26,6 +26,8 @@ export class InfoComponent implements OnInit {
   toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('amountTpl', { static: true })
+  amountTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -154,6 +156,9 @@ export class InfoComponent implements OnInit {
         )
         .subscribe((_: any) => {
           this.transactionList = _.data?.rows;
+          this.transactionList.forEach(item => {
+            Object.assign(item, { chainAccountAddress: param['chainAccountAddress'] });
+          })
           this.transactionTableConfig.total = _.data.page.total;
           this.transactionTableConfig.pageIndex = params.pageNum;
           this.tableLoading(false);
@@ -250,8 +255,7 @@ export class InfoComponent implements OnInit {
         },
         {
           title: 'Amount',
-          field: 'cbdcCount',
-          pipe: 'toThousandthMark',
+          tdTemplate: this.amountTpl,
           width: 100
         },
         {
