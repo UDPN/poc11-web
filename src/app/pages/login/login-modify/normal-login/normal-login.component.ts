@@ -110,7 +110,7 @@ export class NormalLoginComponent implements OnInit {
     private themesService: ThemeService,
     private nzConfigService: NzConfigService,
     private styleService: StyleService,
-    private socketService: SocketService,
+    
     private notification: NzNotificationService,
   ) { }
 
@@ -138,10 +138,6 @@ export class NormalLoginComponent implements OnInit {
           sessionStorage.setItem('email', result.email);
           sessionStorage.setItem('token', result.token);
 
-          let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
-          this.socketService.connect(
-            ws + result.token
-          );
 
           let dataFromat: any = {
             aud: [],
