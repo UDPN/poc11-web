@@ -16,6 +16,7 @@ import { getDeepReuseStrategyKeyFn } from '@utils/tools';
 import { fnFlatDataHasParentToTree } from '@utils/treeTableTools';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SocketService } from './socket.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class LoginInOutService {
     private menuService: MenuStoreService,
     private windowServe: WindowService,
     private socketService: SocketService,
+    private notification: NzNotificationService,
   ) { }
 
   
@@ -42,7 +44,18 @@ export class LoginInOutService {
     this.socketService.connect(
       ws + this.windowServe.getSessionStorage('token'),
     );
-
+    this.socketService.messageSubject.subscribe((res: any) => {
+      if (res.type === 0) {
+        if (res.message === 'Server:connected OK!') {
+          return;
+        }
+        this.notification.create(
+          res.type === 0 ? 'success' : 'warning',
+          'Message',
+          res.message
+        );
+      }
+    });
     return new Promise(resolve => {
       
       
