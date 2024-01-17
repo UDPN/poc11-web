@@ -40,7 +40,7 @@ export class LoginInOutService {
   loginIn(token: string): Promise<void> {
     let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
     this.socketService.connect(
-      ws + token
+      ws + this.windowServe.getSessionStorage('token'),
     );
 
     return new Promise(resolve => {
