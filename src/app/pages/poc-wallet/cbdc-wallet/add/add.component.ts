@@ -1,5 +1,16 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
@@ -38,8 +49,8 @@ export class AddComponent implements OnInit {
   fileTextWord: any = '';
   fileTextName: any = '';
   fileStatus: number = 1;
-  public metaArr$ = this.metaMaskService.MetaArray$
-  
+  public metaArr$ = this.metaMaskService.MetaArray$;
+
   constructor(
     public routeInfo: ActivatedRoute,
     private commonService: CommonService,
@@ -48,9 +59,9 @@ export class AddComponent implements OnInit {
     private location: Location,
     private cbdcWalletService: CbdcWalletService,
     private message: NzMessageService,
-    
+
     private metaMaskService: MetaMaskService
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     this.creationMethodChanges();
@@ -75,34 +86,43 @@ export class AddComponent implements OnInit {
   }
 
   creationMethodChanges() {
-    this.validateForm.get('creationMethod')?.valueChanges.subscribe((item: number) => {
-      this.validateForm.get('centralBankId')?.reset('');
-      this.validateForm.get('currency')?.reset('');
-      if (item === 1) {
-        this.validateForm.addControl('walletAddress', this.fb.control('', [Validators.required]));
-        this.getWalletAddress();
-      } else {
-        this.validateForm.removeControl('walletAddress');
-      }
-    })
+    this.validateForm
+      .get('creationMethod')
+      ?.valueChanges.subscribe((item: number) => {
+        this.validateForm.get('centralBankId')?.reset('');
+        this.validateForm.get('currency')?.reset('');
+        if (item === 1) {
+          this.validateForm.addControl(
+            'walletAddress',
+            this.fb.control('', [Validators.required])
+          );
+          this.getWalletAddress();
+        } else {
+          this.validateForm.removeControl('walletAddress');
+        }
+      });
   }
 
   centralBankChanges() {
-    this.validateForm.get('centralBankId')?.valueChanges.subscribe((value: number) => {
-      this.validateForm.get('walletAddress')?.reset('');
-      this.centralBankList.forEach(item => {
-        if (value === item.centralBankId) {
-          this.getWalletAddress(item.centralBankId);
-          this.validateForm.get('currency')?.setValue(item.digitalSymbol);
-        }
-      })
-    })
+    this.validateForm
+      .get('centralBankId')
+      ?.valueChanges.subscribe((value: number) => {
+        this.validateForm.get('walletAddress')?.reset('');
+        this.centralBankList.forEach((item) => {
+          if (value === item.centralBankId) {
+            this.getWalletAddress(item.centralBankId);
+            this.validateForm.get('currency')?.setValue(item.digitalSymbol);
+          }
+        });
+      });
   }
 
   walletAddressChanges() {
-    this.validateForm.get('walletAddress')?.valueChanges.subscribe((value: string) => {
-      this.onSelectWalletAddress(value);
-    })
+    this.validateForm
+      .get('walletAddress')
+      ?.valueChanges.subscribe((value: string) => {
+        this.onSelectWalletAddress(value);
+      });
   }
 
   ngOnInit() {
@@ -113,8 +133,8 @@ export class AddComponent implements OnInit {
       creationMethod: [0, [Validators.required]],
       centralBankId: ['', [Validators.required]],
       currency: ['', [Validators.required]],
-      bnCode: [null, [Validators.required]],
-    })
+      bnCode: [null, [Validators.required]]
+    });
   }
 
   uploadFileSig($event: NzSafeAny) {
@@ -143,8 +163,8 @@ export class AddComponent implements OnInit {
   }
 
   onDeleteFile(): void {
-    let ss: any = window.document.getElementById("files")!;
-    ss.value = "";
+    let ss: any = window.document.getElementById('files')!;
+    ss.value = '';
     this.fileStatus = 1;
     this.validateForm.get('file')?.setValue('');
     this.fileTextName = '';
@@ -153,7 +173,7 @@ export class AddComponent implements OnInit {
   getCentralBank() {
     this.cbdcWalletService.getCentralBankAdd().subscribe((res) => {
       this.centralBankList = res;
-    })
+    });
   }
 
   getBnNode() {
@@ -161,34 +181,54 @@ export class AddComponent implements OnInit {
       if (res) {
         this.validateForm.get('bnCode')?.setValue(res);
       }
-    })
+    });
   }
 
   getWalletAddress(centralBankId?: any) {
-    this.cbdcWalletService.getWalletAddress({ centralBankId }).subscribe((res) => {
-      if (res) {
-        this.orginalWalletAddressList = res;
-        this.walletAddressList = res;
-        this.walletAddressListLength = this.walletAddressList.length;
-      }
-    })
+    this.cbdcWalletService
+      .getWalletAddress({ centralBankId })
+      .subscribe((res) => {
+        if (res) {
+          this.orginalWalletAddressList = res;
+          this.walletAddressList = res;
+          this.walletAddressListLength = this.walletAddressList.length;
+        }
+      });
   }
 
   onSelectWalletAddress(event: NzSafeAny) {
     if (this.orginalWalletAddressList.indexOf(event) !== -1) {
       this.showKeyStore = false;
-      this.walletAddressList = this.orginalWalletAddressList; 
+      this.walletAddressList = this.orginalWalletAddressList;
       this.validateForm.removeControl('keyStorePassword');
       this.validateForm.removeControl('verifyKeyStorePassword');
       this.validateForm.removeControl('file');
     } else {
       this.showKeyStore = true;
-      this.validateForm.addControl('keyStorePassword', this.fb.control('', [Validators.required]));
-      this.validateForm.addControl('verifyKeyStorePassword', this.fb.control('', [Validators.required]));
-      this.validateForm.addControl('file', this.fb.control('', [Validators.required]));
+      this.validateForm.addControl(
+        'keyStorePassword',
+        this.fb.control('', [Validators.required])
+      );
+      this.validateForm.addControl(
+        'verifyKeyStorePassword',
+        this.fb.control('', [Validators.required, this.verifyKeyValidator])
+      );
+      this.validateForm.addControl(
+        'file',
+        this.fb.control('', [Validators.required])
+      );
     }
   }
-
+  verifyKeyValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (
+      control.value !== this.validateForm.controls['keyStorePassword'].value
+    ) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
   addItem(input: HTMLInputElement): void {
     const value = input.value;
     if (this.walletAddressList.indexOf(value) === -1) {
@@ -206,47 +246,55 @@ export class AddComponent implements OnInit {
   onSubmit() {
     this.isLoading = true;
     const params = {
-      bankWalletAddReqVO: this.showKeyStore ? {
-        bnCode: this.validateForm.value.bnCode,
-        centralBankId: this.validateForm.value.centralBankId,
-        creationMethod: this.validateForm.value.creationMethod,
-        walletAddress: this.validateForm.value.walletAddress,
-        keyStorePassword: this.validateForm.value.keyStorePassword,
-        verifyKeyStorePassword: this.validateForm.value.verifyKeyStorePassword
-      } : {
-        bnCode: this.validateForm.value.bnCode,
-        centralBankId: this.validateForm.value.centralBankId,
-        creationMethod: this.validateForm.value.creationMethod,
-        walletAddress: this.validateForm.value.walletAddress,
-      },
+      bankWalletAddReqVO: this.showKeyStore
+        ? {
+            bnCode: this.validateForm.value.bnCode,
+            centralBankId: this.validateForm.value.centralBankId,
+            creationMethod: this.validateForm.value.creationMethod,
+            walletAddress: this.validateForm.value.walletAddress,
+            keyStorePassword: this.validateForm.value.keyStorePassword,
+            verifyKeyStorePassword:
+              this.validateForm.value.verifyKeyStorePassword
+          }
+        : {
+            bnCode: this.validateForm.value.bnCode,
+            centralBankId: this.validateForm.value.centralBankId,
+            creationMethod: this.validateForm.value.creationMethod,
+            walletAddress: this.validateForm.value.walletAddress
+          },
       file: this.fileTextWord
-    }
-    this.cbdcWalletService.save(params).pipe(finalize(() => this.isLoading = false)).subscribe({
-      next: res => {
-        if (res) {
-          this.message.success('Add successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
-            this.validateForm.reset();
-            this.location.back();
-          });
+    };
+    this.cbdcWalletService
+      .save(params)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message
+              .success('Add successfully!', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                this.validateForm.reset();
+                this.location.back();
+              });
+          }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
         }
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      },
-      error: err => {
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      }
-    })
+      });
   }
 
   onBack() {
     this.location.back();
   }
-  async onMetaMask(){
-   let  accounts:string[] = await this.metaMaskService.checkMeataMask();
-   if(accounts.length > 0){
-    this.validateForm.get("walletAddress")?.setValue(accounts[0]);
-    this.showKeyStore = true;
-   }
+  async onMetaMask() {
+    let accounts: string[] = await this.metaMaskService.checkMeataMask();
+    if (accounts.length > 0) {
+      this.validateForm.get('walletAddress')?.setValue(accounts[0]);
+      this.showKeyStore = true;
+    }
   }
 }

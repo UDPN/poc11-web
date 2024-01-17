@@ -246,7 +246,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                     item.rate +
                     item.to.replace('-UDPN', ''),
                   rate: item.rate,
-                  com: String(
+                  com: Number(
                     item.smChargeModel === 0
                       ? (this.validateForm.get('amount')?.value / item.rate) *
                           item.smValue >
@@ -255,8 +255,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                         : (this.validateForm.get('amount')?.value / item.rate) *
                           item.smValue
                       : item.smValue
-                  ).replace(/^(.*\..{2}).*$/, '$1'),
-                  total: String(
+                  ).toFixed(2),
+                  total: Number(
                     this.validateForm.get('amount')?.value / item.rate +
                       (item.smChargeModel === 0
                         ? (this.validateForm.get('amount')?.value / item.rate) *
@@ -267,7 +267,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                               item.rate) *
                             item.smValue
                         : item.smValue)
-                  ).replace(/^(.*\..{2}).*$/, '$1')
+                  ).toFixed(2)
                 });
               });
               this.nzLoading = false;
