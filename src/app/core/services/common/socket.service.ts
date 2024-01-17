@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2024-01-15 14:09:16
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-16 14:59:57
+ * @LastEditTime: 2024-01-17 16:54:26
  * @Description:
  */
 import { Injectable } from '@angular/core';
@@ -13,10 +13,17 @@ import {
   Router,
   UrlSegment
 } from '@angular/router';
-import { BehaviorSubject, Observable, Subject, Subscription, interval } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  Subscription,
+  interval
+} from 'rxjs';
 
 import _ from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +32,8 @@ export class SocketService {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private notification: NzNotificationService
   ) {
     this.messageSubject = new Subject();
     console.log('Start heartbeat detection');
@@ -39,13 +47,12 @@ export class SocketService {
   private webSocket!: WebSocket; // Websocket object
   connectSuccess = false; // websocket connection successful
   period = 60 * 1000 * 10; // Check every 10 minutes
-  serverTimeoutSubscription!:Subscription; // Periodically detect connection objects
+  serverTimeoutSubscription!: Subscription; // Periodically detect connection objects
   reconnectFlag = false; // Reconnection
   reconnectPeriod = 5 * 1000; // If reconnection fails, reconnect once every 5 seconds.
-  reconnectSubscription!:Subscription; // Reconnect subscription object
+  reconnectSubscription!: Subscription; // Reconnect subscription object
   runTimeSubscription: any; // Record running connection subscription
   runTimePeriod = 60 * 10000; // Record running connection time
-
 
   sendMessage(message: string) {
     this.webSocket.send(message);
@@ -58,7 +65,6 @@ export class SocketService {
     // Create websocket object
     this.createWebSocket();
   }
-
 
   createWebSocket() {
     // If no connection has been established, establish the connection and add time monitoring
@@ -73,8 +79,7 @@ export class SocketService {
     this.webSocket.onerror = (e) => this.onError(e);
   }
 
-
-  onOpen(e:any) {
+  onOpen(e: any) {
     console.log('websocket connected');
     // Set up connection successfully
     this.connectSuccess = true;
@@ -89,17 +94,26 @@ export class SocketService {
     }
   }
 
-
-  onMessage(event:any) {
+  onMessage(event: any) {
     console.log('message received', event.data);
-    // Publish received messages
     const message = JSON.parse(event.data);
-    console.log('Message received time', new Date().getTime());
-    this.messageSubject.next(message);
+
+    if (message.message === 'Server:connected OK!') {
+      return;
+    }
+    this.notification.create(
+      message.type === 1 ? 'success' : 'warning',
+      'Message',
+      message.message.message
+    );
+    // console.log('message received', event.data);
+    // Publish received messages
+    // const message = JSON.parse(event.data);
+    // console.log('Message received time', new Date().getTime());
+    // this.messageSubject.next(message);
   }
 
-
-  private onClose(e:any) {
+  private onClose(e: any) {
     console.log('connection closed', e);
     this.connectSuccess = false;
     this.webSocket.close();
@@ -109,14 +123,12 @@ export class SocketService {
     // throw new Error('webSocket connection closed:)');
   }
 
-
-  private onError(e:any) {
+  private onError(e: any) {
     // When an exception occurs, on close will always be entered, so only one reconnection action is performed on close.
     console.log('Connection abnormality', e);
     this.connectSuccess = false;
     // throw new Error('webSocket connection error:)');
   }
-
 
   reconnect() {
     // If it has been reconnected, return directly to avoid repeated connections.
@@ -143,7 +155,6 @@ export class SocketService {
     );
   }
 
-
   stopReconnect() {
     // The connection flag is set to false
     this.reconnectFlag = false;
@@ -155,7 +166,6 @@ export class SocketService {
       this.reconnectSubscription.unsubscribe();
     }
   }
-
 
   heartCheckStart() {
     this.serverTimeoutSubscription = interval(this.period).subscribe((val) => {
@@ -170,9 +180,7 @@ export class SocketService {
     });
   }
 
-
   heartCheckStop() {
-
     if (
       typeof this.serverTimeoutSubscription !== 'undefined' &&
       this.serverTimeoutSubscription != null
@@ -180,7 +188,6 @@ export class SocketService {
       this.serverTimeoutSubscription.unsubscribe();
     }
   }
-
 
   calcRunTime() {
     this.runTimeSubscription = interval(this.runTimePeriod).subscribe(
