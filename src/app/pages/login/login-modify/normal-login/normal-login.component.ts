@@ -39,6 +39,8 @@ import sign from 'jwt-encode';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
+import { SocketService } from '@app/core/services/common/socket.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 export interface SettingInterface {
   theme: 'dark' | 'light';
@@ -107,7 +109,9 @@ export class NormalLoginComponent implements OnInit {
     private windowService: WindowService,
     private themesService: ThemeService,
     private nzConfigService: NzConfigService,
-    private styleService: StyleService
+    private styleService: StyleService,
+    private socketService: SocketService,
+    private notification: NzNotificationService,
   ) { }
 
   submitForm(): void {
@@ -133,6 +137,12 @@ export class NormalLoginComponent implements OnInit {
           sessionStorage.setItem('clientName', result.realName);
           sessionStorage.setItem('email', result.email);
           sessionStorage.setItem('token', result.token);
+
+          let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
+          this.socketService.connect(
+            ws + result.token
+          );
+
           let dataFromat: any = {
             aud: [],
             user_name: {

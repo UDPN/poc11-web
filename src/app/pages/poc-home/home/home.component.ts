@@ -142,22 +142,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   walletAddress: any = [];
   @HostListener('window:resize', ['$event'])
   ngOnInit() {
-    let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
-    this.socketService.connect(
-      ws + this.windowService.getSessionStorage('token')
-    );
-    this.socketService.messageSubject.subscribe((res: any) => {
-      if (res.type === 0) {
-        if (res.message === 'Server:connected OK!') {
-          return;
-        }
-        this.notification.create(
-          res.type === 0 ? 'success' : 'warning',
-          'Message',
-          res.message
-        );
-      }
-    });
+
     this.isFirstLogin();
     // this.fetchNumbers();
     this._informationService.detail().subscribe((res: any) => {
