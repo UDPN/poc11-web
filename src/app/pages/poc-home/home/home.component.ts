@@ -129,7 +129,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private socketService: SocketService,
     private notification: NzNotificationService,
     private windowService: WindowService
-  ) {}
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -519,10 +519,40 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         text: ''
       },
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: (params: any) => {
+          let tips = params[0].axisValue;
+          params.forEach((item: any) => {
+            tips +=
+              '<br /> ' +
+              item.marker +
+              item.seriesName +
+              ': ' +
+              (item.value === 0 ? 0 : thousandthMark(item.value));
+          });
+          return tips;
+        },
       },
       legend: {
-        data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        // data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        data: [
+          {
+            name: 'Top-up',
+            icon: 'circle',
+          },
+          {
+            name: 'Transfer In',
+            icon: 'circle',
+          },
+          {
+            name: 'Withdraw',
+            icon: 'circle',
+          },
+          {
+            name: 'Transfer Out',
+            icon: 'circle',
+          },
+        ],
         right: '10%',
       },
       xAxis: {
@@ -537,73 +567,26 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           name: 'Transfer In',
           type: 'line',
           stack: 'Total',
-          data: param.transferInAmount,
-          label: {
-            show: true,
-            formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex])
-          }
+          data: param.transferInAmount
         },
         {
           name: 'Top-up',
           type: 'line',
           stack: 'Total',
-          data: param.topUpAmount,
-          label: {
-            show: true,
-            formatter: (params: any) => thousandthMark(param.topUpAmount[params.dataIndex])
-          }
+          data: param.topUpAmount
         },
         {
           name: 'Transfer Out',
           type: 'line',
           stack: 'Total',
-          data: param.transferOutAmount,
-          label: {
-            show: true,
-            formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex])
-          }
+          data: param.transferOutAmount
         },
         {
           name: 'Withdraw',
           type: 'line',
           stack: 'Total',
-          data: param.withdrawAmount,
-          label: {
-            show: true,
-            formatter: (params: any) => thousandthMark(param.withdrawAmount[params.dataIndex])
-          }
+          data: param.withdrawAmount
         },
-        {
-          name: 'total',
-          type: 'bar',
-          stack: 'two',
-          emphasis: emphasisStyle,
-          label: {
-            show: true,
-            position: 'top',
-            formatter: (params: any) => thousandthMark(param.transferOutAmount[params.dataIndex] + param.withdrawAmount[params.dataIndex]),
-          },
-          data: param.length,
-          tooltip: {
-            show: false
-          }
-        },
-        {
-          name: 'total',
-          type: 'bar',
-          stack: 'one',
-          emphasis: emphasisStyle,
-
-          label: {
-            show: true,
-            position: 'top',
-            formatter: (params: any) => thousandthMark(param.transferInAmount[params.dataIndex] + param.topUpAmount[params.dataIndex]),
-          },
-          data: param.length,
-          tooltip: {
-            show: false
-          }
-        }
       ],
     };
     // myChart.on('brushSelected', function (params: any) {
