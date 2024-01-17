@@ -269,7 +269,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
               '->' +
               item.to.replace('-UDPN', ''),
             rate: item.rate,
-            com: String(
+            com: Number(
               item.smChargeModel === 0
                 ? (this.validateForm.get('amount')?.value / item.rate) *
                     item.smValue >
@@ -278,8 +278,8 @@ export class TransferComponent implements OnInit, AfterViewInit {
                   : (this.validateForm.get('amount')?.value / item.rate) *
                     item.smValue
                 : item.smValue
-            ).replace(/^(.*\..{2}).*$/, '$1'),
-            total: String(
+            ).toFixed(2),
+            total: Number(
               this.validateForm.get('amount')?.value / item.rate +
                 (item.smChargeModel === 0
                   ? (this.validateForm.get('amount')?.value / item.rate) *
@@ -289,7 +289,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
                     : (this.validateForm.get('amount')?.value / item.rate) *
                       item.smValue
                   : item.smValue)
-            ).replace(/^(.*\..{2}).*$/, '$1')
+            ).toFixed(2)
             // total: 1
           });
         });
@@ -370,6 +370,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
       );
     this.newToCommercialBankId =
       this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0]['centralBankId'];
+    this.onBeneficiaryCurrency(0);
   }
   onBeneficiaryCurrency(e: any) {
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
