@@ -172,6 +172,7 @@
               <ng-template #verifyKeyStorePasswordError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Verify Keystore
                   Password</ng-container>
+                  <ng-container *ngIf="control.hasError('regular')">Two passwords are inconsistent</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
