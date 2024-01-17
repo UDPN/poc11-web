@@ -155,3 +155,7 @@
     <span>{{ state | map:'walletInfoTransactionStatus' }}</span>
   </ng-container>
 </ng-template>
+<ng-template #amountTpl let-cbdcCount="cbdcCount" let-chainAccountAddress="chainAccountAddress"
+  let-fromAccountAddress="fromAccountAddress">
+  <span>{{ chainAccountAddress === fromAccountAddress ? '-': '+' }}{{ cbdcCount | map:'toThousandthMark' }}</span>
+</ng-template>
