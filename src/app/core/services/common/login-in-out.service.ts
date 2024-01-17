@@ -17,7 +17,6 @@ import { fnFlatDataHasParentToTree } from '@utils/treeTableTools';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SocketService } from './socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +40,7 @@ export class LoginInOutService {
   }
 
   loginIn(token: string): Promise<void> {
-    let ws = environment.production?'/wcbdccommercial/websocket/h5?token=':'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
+    let ws = 'ws://158.178.239.137:6480/wcbdccommercial/websocket/h5?token=';
     this.socketService.connect(
       ws + this.windowServe.getSessionStorage('token'),
     );
