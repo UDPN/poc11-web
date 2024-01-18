@@ -153,14 +153,13 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
 
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
+     
     } else {
+      this.findExchange();
       this.setShowStatus(false);
     }
   }
   onPurchase(e: any) {
-    console.log(e);
-    console.log(this.fxPurchaseData[e]);
-    console.log(this.fxPurchaseData[e]['walletExtendInfo']);
     this.purIndex = e;
     this.validateForm
       .get('transactionWalletAddress')
@@ -210,77 +209,80 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     this.showStatus = status;
     this.cdr.markForCheck();
   }
+  findExchange() {
+    if (this.reveingCurrecy !== this.purchCurrecy) {
+      this.nzLoading = true;
+      this.cdr.markForCheck();
+      this.fxPurchasingService
+        .fetchRateInfo({
+          from: this.purchCurrecy,
+          to: this.reveingCurrecy
+        })
+        .subscribe((res) => {
+          let resultData: any[] = [];
+          this.transferTitle =
+            this.reveingCurrecy.replace('-UDPN', '') +
+            '/' +
+            this.purchCurrecy.replace('-UDPN', '') +
+            ' Fx Rate';
+          res.forEach((item: any) => {
+            resultData.push({
+              rateId: item.rateId,
+              sp: item.provider,
+              currency:
+                '1 ' +
+                item.from.replace('-UDPN', '') +
+                '->' +
+                item.to.replace('-UDPN', ''),
+              currencyShow:
+                '1 ' +
+                item.from.replace('-UDPN', '') +
+                '->' +
+                item.rate +
+                item.to.replace('-UDPN', ''),
+              rate: item.rate,
+              com: Number(
+                item.smChargeModel === 0
+                  ? (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue >
+                    item.smMaxFee
+                    ? item.smMaxFee
+                    : (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue
+                  : item.smValue
+              ).toFixed(2),
+              total: Number(
+                this.validateForm.get('amount')?.value / item.rate +
+                  (item.smChargeModel === 0
+                    ? (this.validateForm.get('amount')?.value / item.rate) *
+                        item.smValue >
+                      item.smMaxFee
+                      ? item.smMaxFee
+                      : (this.validateForm.get('amount')?.value /
+                          item.rate) *
+                        item.smValue
+                    : item.smValue)
+              ).toFixed(2)
+            });
+          });
+          this.nzLoading = false;
+          this.dataList = resultData.sort(this.compare('total'));
+          this.checkedItemComment = [];
+          this.dataList.forEach((item: any, index: number) => {
+            if (this.radioValue === index) {
+              this.checkedItemComment.push(item);
+            }
+          });
+          this.cdr.markForCheck();
+        });
+    }
+  }
   fromEventAmount() {
     this.validateForm
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((_) => {
-        if (this.reveingCurrecy !== this.purchCurrecy) {
-          this.nzLoading = true;
-          this.cdr.markForCheck();
-          this.fxPurchasingService
-            .fetchRateInfo({
-              from: this.purchCurrecy,
-              to: this.reveingCurrecy
-            })
-            .subscribe((res) => {
-              let resultData: any[] = [];
-              this.transferTitle =
-                this.reveingCurrecy.replace('-UDPN', '') +
-                '/' +
-                this.purchCurrecy.replace('-UDPN', '') +
-                ' Fx Rate';
-              res.forEach((item: any) => {
-                resultData.push({
-                  rateId: item.rateId,
-                  sp: item.provider,
-                  currency:
-                    '1 ' +
-                    item.from.replace('-UDPN', '') +
-                    '->' +
-                    item.to.replace('-UDPN', ''),
-                  currencyShow:
-                    '1 ' +
-                    item.from.replace('-UDPN', '') +
-                    '->' +
-                    item.rate +
-                    item.to.replace('-UDPN', ''),
-                  rate: item.rate,
-                  com: Number(
-                    item.smChargeModel === 0
-                      ? (this.validateForm.get('amount')?.value / item.rate) *
-                          item.smValue >
-                        item.smMaxFee
-                        ? item.smMaxFee
-                        : (this.validateForm.get('amount')?.value / item.rate) *
-                          item.smValue
-                      : item.smValue
-                  ).toFixed(2),
-                  total: Number(
-                    this.validateForm.get('amount')?.value / item.rate +
-                      (item.smChargeModel === 0
-                        ? (this.validateForm.get('amount')?.value / item.rate) *
-                            item.smValue >
-                          item.smMaxFee
-                          ? item.smMaxFee
-                          : (this.validateForm.get('amount')?.value /
-                              item.rate) *
-                            item.smValue
-                        : item.smValue)
-                  ).toFixed(2)
-                });
-              });
-              this.nzLoading = false;
-              this.dataList = resultData.sort(this.compare('total'));
-              this.checkedItemComment = [];
-              this.dataList.forEach((item: any, index: number) => {
-                if (this.radioValue === index) {
-                  this.checkedItemComment.push(item);
-                }
-              });
-              this.cdr.markForCheck();
-            });
-        }
+        this.findExchange();
       });
   }
   compare(p: string) {
