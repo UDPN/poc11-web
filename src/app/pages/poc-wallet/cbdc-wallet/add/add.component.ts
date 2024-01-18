@@ -294,7 +294,12 @@ export class AddComponent implements OnInit {
     let accounts: string[] = await this.metaMaskService.checkMeataMask();
     if (accounts.length > 0) {
       this.validateForm.get('walletAddress')?.setValue(accounts[0]);
-      this.showKeyStore = true;
+      if(this.walletAddressList.indexOf(accounts[0]) === -1){
+         this.showKeyStore = true;
+      }else{
+        this.showKeyStore = false;
+      }
+     
     }
   }
 }
