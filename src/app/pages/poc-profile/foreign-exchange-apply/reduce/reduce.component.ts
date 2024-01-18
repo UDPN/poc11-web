@@ -87,7 +87,7 @@ export class ReduceComponent implements OnInit {
   }
 
   onCurrentPageDataChange(listOfCurrentPageData: readonly Data[]): void {
-    this.listOfCurrentPageData = listOfCurrentPageData;
+    this.listOfCurrentPageData = this.dataList;
     this.refreshCheckedStatus();
   }
 
