@@ -153,7 +153,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
 
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
-     
     } else {
       this.findExchange();
       this.setShowStatus(false);
@@ -210,7 +209,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     this.cdr.markForCheck();
   }
   findExchange() {
-    if (this.reveingCurrecy !== this.purchCurrecy) {
+    if (
+      this.reveingCurrecy !== this.purchCurrecy &&
+      this.validateForm.get('amount')?.value !== null
+    ) {
       this.nzLoading = true;
       this.cdr.markForCheck();
       this.fxPurchasingService
@@ -258,8 +260,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                         item.smValue >
                       item.smMaxFee
                       ? item.smMaxFee
-                      : (this.validateForm.get('amount')?.value /
-                          item.rate) *
+                      : (this.validateForm.get('amount')?.value / item.rate) *
                         item.smValue
                     : item.smValue)
               ).toFixed(2)
@@ -354,16 +355,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         fxPurchasingInformation: '',
         fxReceivingWalletId: this.validateForm.get('receivingWalletAddress')
           ?.value,
-        passWord: fnEncrypts(
-          this.passwordForm.getRawValue(),
-          aesKey,
-          aesVi
-        ),
+        passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         rateId: this.checkedItemComment[0].rateId,
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res.code  === 0) {
+        if (res.code === 0) {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -377,9 +374,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                 '/poc/poc-remittance/transaction-record'
               );
             });
-            this.isLoading = false;
-            this.isVisible = false;
-        }else{
+          this.isLoading = false;
+          this.isVisible = false;
+        } else {
           this.passwordForm.reset();
           this.isVisibleEnterPassword = true;
           this.isLoading = false;
