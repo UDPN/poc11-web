@@ -274,7 +274,7 @@
                   <nz-form-label [nzNoColon]="true"></nz-form-label>
                   <nz-form-control>
                     <div nz-col [nzSpan]="24">
-                      <button nz-button [nzType]="'primary'" [disabled]="this.validateForm.valid" (click)="onQuery()">
+                      <button nz-button [nzType]="'primary'" [disabled]="!this.validateForm.valid" (click)="onQuery()">
                         Query
                       </button>
                     </div>
