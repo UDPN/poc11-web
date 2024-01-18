@@ -37,7 +37,7 @@
     </div>
     <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
       <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-        <nz-table #rowSelectionTable [nzShowPagination]="false" nzShowSizeChanger [nzData]="dataList"
+        <nz-table #rowSelectionTable [nzData]="dataList" [nzPageSize]="5"
           (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
           <thead>
             <tr>
