@@ -189,14 +189,14 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         //   width: 350
         // },
         {
-          title: 'Bank ID',
+          title: 'Commercial Bank ID',
           field: 'commercialBankId',
-          width: 350
+          width: 300
         },
         {
-          title: 'Bank Name',
+          title: 'Commercial Bank Name',
           field: 'commercialBankName',
-          width: 150
+          width: 200
         },
         {
           title: 'Amount',
