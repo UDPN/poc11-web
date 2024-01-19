@@ -1,4 +1,5 @@
 import {
+  HttpClient,
   HttpErrorResponse,
   HttpEvent,
   HttpHandler,
@@ -22,6 +23,7 @@ import { Router } from '@angular/router';
 import { LoginInOutService } from '../common/login-in-out.service';
 import { environment } from '@env/environment';
 import { el } from 'date-fns/locale';
+import { PocHomeService } from '../http/poc-home/poc-home.service';
 
 interface CustomHttpConfig {
   headers?: HttpHeaders;
@@ -40,7 +42,8 @@ export class HttpInterceptorService implements HttpInterceptor {
     private loginOutService: LoginInOutService,
     private modal: NzModalService,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private pocHomeService: PocHomeService,
   ) {}
 
   intercept(
@@ -53,6 +56,9 @@ export class HttpInterceptorService implements HttpInterceptor {
     // const token: any = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDQxOTQxNzQsInN1YiI6ImFkbWluIiwiZXhwIjoxNzA0MjgwNTc0LCJvdXRKd3RUb2tlbkluZm8iOnsicm9sZUxpc3QiOlsiYWRtaW4iXSwiY2xpZW50SWQiOjEsImNsaWVudFJlYWxOYW1lIjoiYWRtaW4ifX0.4n2pjZ4h1PBCiNgf-i5TAwJj9Sul5sjGgbZxkgrRmO5mX07dimFFSZ25lCD7Aun8C8lYM2N1si29yZIC4eJ32A';
     let httpConfig: CustomHttpConfig = {};
     if (req.url.indexOf('fxsp') === -1) {
+      this.pocHomeService.isFirstLogin().subscribe((res: any) => {
+        return res;
+      });
       httpConfig = {
         headers: req.headers.set('token', token),
         url: (environment.production ? '/wcbdccommercial' : '') + req.url
