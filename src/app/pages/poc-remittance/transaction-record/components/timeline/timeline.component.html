@@ -88,7 +88,7 @@
 <ng-template #step4Tpl>
   <ul>
     <li>{{ 'Status: ' + (info.state | map:'walletTransactionsRecordStatus') }}</li>
-    <li>{{ 'Reason: --' }}</li>
+    <li>{{ 'Reason: ' + info.failureReason }}</li>
     <li>
       {{ info.transactionLogTrees[1]?.txTime | map:'timeStamp' }}
     </li>
