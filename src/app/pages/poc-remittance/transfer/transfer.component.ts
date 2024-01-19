@@ -373,6 +373,11 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.onBeneficiaryCurrency(0);
   }
   onBeneficiaryCurrency(e: any) {
+    this.newAmountArr.map(item => {
+      if (e === item.digitalCurrencyName) {
+        this.newToCommercialBankId = item.centralBankId
+      }
+    })
     if (e !== 0) {
       this.beneficiaryCurrency = e;
       this.checkedItemComment = [];
