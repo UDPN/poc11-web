@@ -373,6 +373,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
     this.onBeneficiaryCurrency(0);
   }
   onBeneficiaryCurrency(e: any) {
+    this.beneficiaryCurrency = e;
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       this.getExchange();
     } else {

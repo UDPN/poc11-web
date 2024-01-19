@@ -15,13 +15,13 @@
                 <nz-form-item>
                   <nz-form-control class="m-t-30">
                     <nz-select [(ngModel)]="balance.value">
-                      <nz-option *ngFor="let item of balance.walletList; index as i" [nzValue]="item.balance"
+                      <nz-option *ngFor="let item of balance.walletList" [nzValue]="item.balance.toString() + '-' +  item.index.toString()"
                         [nzLabel]="item.chainAccountAddress">
                       </nz-option>
                     </nz-select>
                   </nz-form-control>
                   <nz-form-control class="m-t-30">
-                    <h2 nz-typography style="text-align: center;">{{ balance.value | map: 'toThousandthMark'}}</h2>
+                    <h2 nz-typography style="text-align: center;">{{ balance.value.split('-')[0] | map: 'toThousandthMark'}}</h2>
                   </nz-form-control>
                 </nz-form-item>
               </div>
