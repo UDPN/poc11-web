@@ -20,6 +20,8 @@ interface SearchParam {
   transactionNo: string;
   creation: any;
   transactionHash: any;
+  commercialBankId: string;
+  commercialBankName: string;
 }
 
 interface ListParam {
@@ -47,7 +49,9 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     creation: [],
     currency: '',
     transactionNo: '',
-    transactionHash: ''
+    transactionHash: '',
+    commercialBankId: '',
+    commercialBankName: ''
   };
   listParam: Partial<ListParam> = {
     formRatePlatform: '',
@@ -150,8 +154,10 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         formCurrency: this.listParam.formRateCurrency,
         toPlatform: this.listParam.toRatePlatform,
         toCurrency: this.listParam.toRateCurrency,
-        creation: this.searchParam.creation
-      }
+        creation: this.searchParam.creation,
+        commercialBankId: this.searchParam.commercialBankId,
+        commercialBankName: this.searchParam.commercialBankName
+      },
     };
     this.pocFxTransactionsService
       .getList(params.pageNum, params.pageSize, params.filters)
@@ -182,6 +188,16 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         //   field: 'transactionHash',
         //   width: 350
         // },
+        {
+          title: 'Bank ID',
+          field: 'commercialBankId',
+          width: 350
+        },
+        {
+          title: 'Bank Name',
+          field: 'commercialBankName',
+          width: 150
+        },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
