@@ -375,11 +375,13 @@ export class TransferComponent implements OnInit, AfterViewInit {
   onBeneficiaryCurrency(e: any) {
     if (e !== 0) {
       this.beneficiaryCurrency = e;
+      this.checkedItemComment = [];
     }
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       this.getExchange();
     } else {
       this.settlementStatus = false;
+      this.checkedItemComment = [];
     }
   }
   onBeneficialBankNameChange(e: number) {
