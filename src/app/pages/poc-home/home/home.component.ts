@@ -237,8 +237,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       let walletBalanceList: any = [];
       walletBalanceList = this.walletBalanceList;
       walletBalanceList.map((item: any, i: any) => {
-        Object.assign(item, { value: item.walletList[0].balance });
+        item.walletList.map((items: any, i: any) => {
+          Object.assign(items, { index: i + 1 });
+        });
+        Object.assign(item, { value: item.walletList[0].balance.toString() + '-' + item.walletList[0].index.toString() });
       });
+      this.walletBalanceList = walletBalanceList;
     });
   }
 
