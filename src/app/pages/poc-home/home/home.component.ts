@@ -564,28 +564,24 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       series: [
         {
-          name: 'Transfer In',
-          type: 'line',
-          stack: 'Total',
-          data: param.transferInAmount
-        },
-        {
           name: 'Top-up',
           type: 'line',
-          stack: 'Total',
           data: param.topUpAmount
         },
         {
-          name: 'Transfer Out',
+          name: 'Transfer In',
           type: 'line',
-          stack: 'Total',
-          data: param.transferOutAmount
+          data: param.transferInAmount
         },
         {
           name: 'Withdraw',
           type: 'line',
-          stack: 'Total',
           data: param.withdrawAmount
+        },
+        {
+          name: 'Transfer Out',
+          type: 'line',
+          data: param.transferOutAmount
         },
       ],
     };
