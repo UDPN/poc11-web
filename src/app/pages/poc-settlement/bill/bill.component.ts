@@ -260,9 +260,13 @@ export class BillComponent implements OnInit, AfterViewInit {
       this.listOfControl[index - 1].controlInstance,
       this.fb.control('', [Validators.required, this.emailValidator])
     );
-    this.validateForm
+    if (!this.validateForm
       .get(this.listOfControl[0].controlInstance)
-      ?.setValue(sessionStorage.getItem('email'));
+      ?.value) {
+      this.validateForm
+        .get(this.listOfControl[0].controlInstance)
+        ?.setValue(sessionStorage.getItem('email'));
+    }
   }
 
   removeField(i: { id: number; controlInstance: string }, e: MouseEvent): void {
