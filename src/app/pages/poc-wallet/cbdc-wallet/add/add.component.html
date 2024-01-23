@@ -14,7 +14,7 @@
             <div nz-row>
               <div nz-col nzSpan="24">
                 <nz-select formControlName="creationMethod">
-                  <nz-option [nzValue]="0" nzLabel="System Creation"></nz-option>
+                  <nz-option [nzValue]="0" nzLabel="Default Creation"></nz-option>
                   <nz-option [nzValue]="1" nzLabel="Customization"></nz-option>
                 </nz-select>
               </div>
@@ -74,12 +74,13 @@
                 <div nz-col nzSpan="24">
                   <nz-select formControlName="walletAddress" nzShowSearch [nzDropdownRender]="renderTemplate"
                     (ngModelChange)="onSelectWalletAddress($event)">
-                  <nz-option-group nzLabel="MetaMask">
-                    <nz-option *ngFor="let items of metaArr$ | async" [nzValue]="items" [nzLabel]="items"> </nz-option>
-                  </nz-option-group>
+                    <nz-option-group nzLabel="MetaMask">
+                      <nz-option *ngFor="let items of metaArr$ | async" [nzValue]="items" [nzLabel]="items">
+                      </nz-option>
+                    </nz-option-group>
                     <nz-option-group nzLabel="Local">
-                    <nz-option *ngFor="let item of walletAddressList" [nzValue]="item" [nzLabel]="item"> </nz-option>
-                  </nz-option-group>
+                      <nz-option *ngFor="let item of walletAddressList" [nzValue]="item" [nzLabel]="item"> </nz-option>
+                    </nz-option-group>
 
                   </nz-select>
                 </div>
@@ -100,7 +101,8 @@
                 <input nz-input formControlName="bnCode" readonly class="onboard-disabled" />
               </div>
               <div>
-                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>{{ "A uniqu\e
+                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>{{ "A
+                uniqu\e
                 ID for service providers to acces\s
                 th\e
                 CBDC system. After the BN is deployed, the UDPN will generate this ID." }}
@@ -172,7 +174,7 @@
               <ng-template #verifyKeyStorePasswordError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Verify Keystore
                   Password</ng-container>
-                  <ng-container *ngIf="control.hasError('regular')">Two passwords are inconsistent</ng-container>
+                <ng-container *ngIf="control.hasError('regular')">Two passwords are inconsistent</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>

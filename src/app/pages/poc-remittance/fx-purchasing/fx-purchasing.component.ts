@@ -1,10 +1,12 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   TemplateRef,
   ViewChild,
   AfterViewInit,
   OnInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnDestroy
 } from '@angular/core';
 import {
   FormBuilder,
@@ -23,14 +25,14 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
 import { fnEncrypts } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { debounceTime } from 'rxjs';
+import { Subscription, debounceTime, interval } from 'rxjs';
 
 @Component({
   selector: 'app-fx-purchasing',
   templateUrl: './fx-purchasing.component.html',
   styleUrls: ['./fx-purchasing.component.less']
 })
-export class FxPurchasingComponent implements OnInit, AfterViewInit {
+export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -67,6 +69,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   purIndex: number = 0;
   transferTitle: string = '';
   receivingWalletAddressShow: string = '';
+  timeString: any = '';
+  timeSubscription!: Subscription;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -77,6 +81,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     private modal: NzModalService,
     private router: Router
   ) {}
+  ngOnDestroy(): void {
+    this.timeSubscription.unsubscribe();
+  }
   ngAfterViewInit(): void {
     this.fromEventAmount();
     this.pageHeaderInfo = {
@@ -89,6 +96,17 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    let datePipe: DatePipe = new DatePipe('en-US');
+    const interval$ = interval(1000);
+    this.timeSubscription = interval$.subscribe((number) => {
+      this.timeString = datePipe
+        .transform(new Date().getTime(), 'MMMM d, y HH:mm:ss a zzzz')
+        ?.replace('GMT', 'UTC');
+      if (number % 180 === 0) {
+        this.findExchange();
+      }
+      this.cdr.markForCheck();
+    });
     this.initData();
     this.validateForm = this.fb.group({
       receivingBankName: [null, [Validators.required]],
