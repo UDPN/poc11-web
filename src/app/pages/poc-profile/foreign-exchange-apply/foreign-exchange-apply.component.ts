@@ -70,7 +70,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Foreign Exchange Management'],
+      breadcrumb: ['FX Pair Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -157,12 +157,12 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           width: 350
         },
         {
-          title: 'Foreign Exchange Business',
+          title: 'FX Pair',
           tdTemplate: this.currencyTpl,
           width: 220
         },
         {
-          title: 'Exchange Business Type',
+          title: 'FX Pair Type',
           field: 'applicationType',
           pipe: 'exchangeBusinessType',
           width: 220

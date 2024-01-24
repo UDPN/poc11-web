@@ -108,7 +108,7 @@ export class BillComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Settlement Management', 'Billing'],
+      breadcrumb: ['Settlement Management', 'Monthly income statement'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -336,12 +336,12 @@ export class BillComponent implements OnInit, AfterViewInit {
     this.tableConfig = {
       headers: [
         {
-          title: 'Billing No.',
+          title: 'Statement No.',
           field: 'billNo',
           width: 200
         },
         {
-          title: 'Billing Cycle',
+          title: 'Cycle',
           field: 'billCycle',
           pipe: 'monthStamp',
           width: 150
@@ -357,7 +357,7 @@ export class BillComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Txn Currency',
+          title: 'Currency Pair',
           tdTemplate: this.currencyTpl,
           width: 200
         },

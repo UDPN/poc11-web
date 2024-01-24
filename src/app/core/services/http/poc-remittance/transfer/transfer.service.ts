@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-16 15:51:46
+ * @LastEditTime: 2024-01-23 15:49:01
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -67,8 +67,11 @@ export class TransferService {
     chainAccountAddress: string;
   }): Observable<any> {
     return this.http.post(
-      `/v1/remittanceManagement/beneficiaryWalletList`,
+      `/v1/remittanceManagement/beneficiaryInformation`,
       params
     );
+  }
+  public bankRemitter(): Observable<any> {
+    return this.http.post(`/v1/remittanceManagement/remitterInformation`);
   }
 }

@@ -29,8 +29,11 @@ export interface Tdata {
   providedIn: 'root'
 })
 export class CbdcWalletService {
-
-  constructor(public http: BaseHttpService, private https: HttpClient, private date: DatePipe) { }
+  constructor(
+    public http: BaseHttpService,
+    private https: HttpClient,
+    private date: DatePipe
+  ) {}
 
   public getList(
     pageIndex: number,
@@ -43,31 +46,30 @@ export class CbdcWalletService {
         chainAccountAddress: filters.chainAccountAddress || '',
         createTimeBegin: filters.createTime[0]
           ? timeToTimestampMillisecond(
-            this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
-            ' 00:00:00'
-          )
+              this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
+                ' 00:00:00'
+            )
           : '',
         createTimeEnd: filters.createTime[1]
           ? timeToTimestampMillisecond(
-            this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
-            ' 23:59:59'
-          )
+              this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
+                ' 23:59:59'
+            )
           : '',
         currency: filters.currency || '',
         region: filters.region || '',
-        state: filters.state,
+        state: filters.state
       },
       page: {
         pageSize: pageSize,
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/wallet/listPage', param)
-      .pipe(
-        map((response: any) => {
-          return response;
-        })
-      );
+    return this.https.post('/v1/wallet/listPage', param).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
 
   public getCentralBankQuery(): Observable<any> {
@@ -89,14 +91,16 @@ export class CbdcWalletService {
   public save(params: Sdata): Observable<any> {
     let file: File = params.file;
     let formData: FormData = new FormData();
-    formData.append('bankWalletAddReqVO', new Blob([JSON.stringify(params.bankWalletAddReqVO)], {
-      type: 'application/json'
-    }));
+    formData.append(
+      'bankWalletAddReqVO',
+      new Blob([JSON.stringify(params.bankWalletAddReqVO)], {
+        type: 'application/json'
+      })
+    );
     if (params.file) {
       formData.append('file', file, file.name);
     }
     return this.http.post(`/v1/wallet/save`, formData);
-
   }
 
   public topUpOrWithdraw(params: Tdata): Observable<any> {
@@ -107,7 +111,9 @@ export class CbdcWalletService {
     return this.http.post(`/v1/wallet/detail/basic`, params);
   }
 
-  public getTransactionSummary(params: { bankAccountId: any }): Observable<any> {
+  public getTransactionSummary(params: {
+    bankAccountId: any;
+  }): Observable<any> {
     return this.http.post(`/v1/wallet/detail/transaction/summary`, params);
   }
 
@@ -118,14 +124,15 @@ export class CbdcWalletService {
   ): Observable<any> {
     const param: any = {
       data: {
-        bankAccountId: filters.bankAccountId || '',
+        bankAccountId: filters.bankAccountId || ''
       },
       page: {
         pageSize: pageSize,
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/wallet/detail/transaction/listPage', param)
+    return this.https
+      .post('/v1/wallet/detail/transaction/listPage', param)
       .pipe(
         map((response: any) => {
           return response;
@@ -140,21 +147,21 @@ export class CbdcWalletService {
   ): Observable<any> {
     const param: any = {
       data: {
-        bankAccountId: filters.bankAccountId || '',
+        bankAccountId: filters.bankAccountId || ''
       },
       page: {
         pageSize: pageSize,
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/wallet/detail/operation/listPage', param)
-      .pipe(
-        map((response: any) => {
-          return response;
-        })
-      );
+    return this.https.post('/v1/wallet/detail/operation/listPage', param).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
 
-
-
+  public getSign(param: { account: string }): Observable<any> {
+    return this.http.post(`/v1/remittanceManagement/signTest`, param);
+  }
 }

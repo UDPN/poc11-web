@@ -1,10 +1,12 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   TemplateRef,
   ViewChild,
   AfterViewInit,
   OnInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnDestroy
 } from '@angular/core';
 import {
   FormBuilder,
@@ -23,14 +25,14 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
 import { fnEncrypts } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { debounceTime, map } from 'rxjs';
+import { Subscription, debounceTime, interval, map } from 'rxjs';
 
 @Component({
   selector: 'app-transfer',
   templateUrl: './transfer.component.html',
   styleUrls: ['./transfer.component.less']
 })
-export class TransferComponent implements OnInit, AfterViewInit {
+export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -59,12 +61,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   isVisible: boolean = false;
   isVisibleEnterPassword: boolean = false;
   beneficiaryCurrency = '';
-  availableCurrecy: {
-    value: string;
-    label: string;
-    bankName: string;
-    cbdcCount: string;
-  }[] = [];
+  availableCurrecy: any[] = [];
   availableCurrecyModel = '';
   settlementStatus = false;
   beneficiaryCurrencyName: any = '';
@@ -75,6 +72,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
   newBeneficialWalletAddress: string = '';
   newToCommercialBankId = 0;
   remitterBankName = '';
+  timeString: any = '';
+  timeSubscription!: Subscription;
+  newRemitterWalletAddress: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -85,8 +85,11 @@ export class TransferComponent implements OnInit, AfterViewInit {
     private modal: NzModalService,
     private router: Router
   ) {}
+  ngOnDestroy(): void {
+    this.timeSubscription.unsubscribe();
+  }
   ngAfterViewInit(): void {
-    this.fromEventBeneficialWalletAddress();
+    // this.fromEventBeneficialWalletAddress();
     this.formEventCurrencyInterbankSettlementAmount();
     this.pageHeaderInfo = {
       title: ``,
@@ -98,6 +101,22 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    let datePipe: DatePipe = new DatePipe('en-US');
+    const interval$ = interval(1000);
+    this.timeSubscription = interval$.subscribe((number) => {
+      this.timeString = datePipe
+        .transform(new Date().getTime(), 'MMMM d, y HH:mm:ss a zzzz')
+        ?.replace('GMT', 'UTC');
+      if (number % 180 === 0) {
+        if (
+          this.beneficiaryCurrency &&
+          this.beneficiaryCurrency !== this.availableCurrecyModel
+        ) {
+          this.getExchange();
+        }
+      }
+      this.cdr.markForCheck();
+    });
     this.initData();
     this.validateForm = this.fb.group({
       newBeneficialBankName: [''],
@@ -152,7 +171,32 @@ export class TransferComponent implements OnInit, AfterViewInit {
       .fetchAllOhter({ bankName: '', chainAccountAddress: '' })
       .subscribe((res: any) => {
         this.beneficialBankNameListAll = res;
-        // set Beneficiary's Name
+        this.validateForm.get('beneficialBankId')?.setValue(0);
+        this.newBeneficialBankId = this.beneficialBankNameListAll[0]['bankId'];
+        this.newAmountArr = res[0]['beneficiaryCurrencyRespVOs'];
+        this.BeneficiaryArr =
+          res[0]['beneficiaryCurrencyRespVOs'][0][
+            'beneficiaryWalletExtendedRespVOs'
+          ];
+        this.beneficiaryCurrency =
+          res[0]['beneficiaryCurrencyRespVOs'][0]['digitalCurrencyName'];
+        this.validateForm
+          .get('newBeneficialBankName')
+          ?.setValue(
+            res[0]['beneficiaryCurrencyRespVOs'][0]['centralBankName']
+          );
+
+        this.validateForm
+          .get('beneficialWalletAddress')
+          ?.setValue(
+            res[0]['beneficiaryCurrencyRespVOs'][0][
+              'beneficiaryWalletExtendedRespVOs'
+            ][0]['bankWalletId']
+          );
+        this.newBeneficialWalletAddress =
+          res[0]['beneficiaryCurrencyRespVOs'][0][
+            'beneficiaryWalletExtendedRespVOs'
+          ][0]['chainAccountAddress'];
       });
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
@@ -164,75 +208,42 @@ export class TransferComponent implements OnInit, AfterViewInit {
         });
       });
     });
-    this.transferService.fetchAllWalletList().subscribe((res: any) => {
-      res.forEach((item: any, i: number) => {
-        if (i === 0) {
-          this.validateForm
-            .get('remitterWalletAddress')
-            ?.setValue(item.chainAccountAddress);
-          this.availableCurrecy = [];
-          item.walletExtendInfo.forEach((items: any, is: number) => {
-            if (is === 0) {
-              this.availableCurrecyModel = items.digitalCurrencyName;
-              this.validateForm
-                .get('remitterBankName')
-                ?.setValue(items.bankName);
-              this.validateForm
-                .get('remitterBankId')
-                ?.setValue(items.bankAccountId);
-              this.validateForm
-                .get('availableBalance')
-                ?.setValue(items.cbdcCount);
-            }
-
-            this.availableCurrecy.push({
-              label: items.digitalSymbol,
-              value: items.digitalCurrencyName,
-              bankName: items.bankName,
-              cbdcCount: items.cbdcCount
-            });
-          });
-        }
-        this.remitterWalletAddressList.push({
-          label: item.chainAccountAddress,
-          value: item.chainAccountAddress,
-          walletList: item.walletExtendInfo
-        });
-      });
+    this.transferService.bankRemitter().subscribe((res: any) => {
+      this.availableCurrecy = [];
+      this.availableCurrecy = res;
+      this.availableCurrecyModel = res[0]['digitalCurrencyName'];
+      this.validateForm
+        .get('availableBalance')
+        ?.setValue(res[0]['remitterInformationExtendInfoList'][0]['cbdcCount']);
+      this.remitterWalletAddressList =
+        res[0]['remitterInformationExtendInfoList'];
+      this.validateForm
+        .get('remitterWalletAddress')
+        ?.setValue(
+          res[0]['remitterInformationExtendInfoList'][0]['bankAccountId']
+        );
+      this.newRemitterWalletAddress =
+        res[0]['remitterInformationExtendInfoList'][0]['chainAccountAddress'];
+      this.validateForm.get('remitterBankName')?.setValue(res[0]['bankName']);
+      this.validateForm
+        .get('remitterBankId')
+        ?.setValue(res[0]['centralBankId']);
     });
   }
 
   onRemitterWalletAddressChange(e: any) {
     const val = this.remitterWalletAddressList.filter(
-      (item: any) => item.value === e
+      (item: any) => item.bankAccountId === e
     );
-    if (val.length === 0) {
-      return;
+    this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
+    if (
+      this.beneficiaryCurrency &&
+      this.beneficiaryCurrency !== this.availableCurrecyModel
+    ) {
+      this.getExchange();
+    } else {
+      this.settlementStatus = false;
     }
-    this.availableCurrecy = [];
-    val[0].walletList.forEach((items: any, is: number) => {
-      if (is === 0) {
-        this.availableCurrecyModel = items.digitalCurrencyName;
-        this.validateForm.get('remitterBankName')?.setValue(items.bankName);
-        this.validateForm.get('remitterBankId')?.setValue(items.bankAccountId);
-        this.validateForm.get('availableBalance')?.setValue(items.cbdcCount);
-      }
-
-      this.availableCurrecy.push({
-        label: items.digitalSymbol,
-        value: items.digitalCurrencyName,
-        bankName: items.bankName,
-        cbdcCount: items.cbdcCount
-      });
-      if (
-        this.beneficiaryCurrency &&
-        this.beneficiaryCurrency !== this.availableCurrecyModel
-      ) {
-        this.getExchange();
-      } else {
-        this.settlementStatus = false;
-      }
-    });
   }
   // Check field
   getExchange() {
@@ -244,6 +255,9 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
   // Query exchange rate information
   findExchange() {
+    if (this.validateForm.get('amount')?.value === null) {
+      return;
+    }
     this.settlementStatus = true;
     this.nzLoading = true;
     this.cdr.markForCheck();
@@ -341,10 +355,21 @@ export class TransferComponent implements OnInit, AfterViewInit {
       });
   }
   onAvailableCurrecy(e: any) {
-    const val = this.availableCurrecy.filter((item: any) => item.value === e);
-    this.availableCurrecyModel = e;
-    this.validateForm.get('availableBalance')?.setValue(val[0].cbdcCount);
-    this.validateForm.get('remitterBankName')?.setValue(val[0].bankName);
+    const val = this.availableCurrecy.filter(
+      (item: any) => item.digitalCurrencyName === e
+    );
+    this.validateForm
+      .get('availableBalance')
+      ?.setValue(val[0]['remitterInformationExtendInfoList'][0]['cbdcCount']);
+    this.remitterWalletAddressList =
+      val[0]['remitterInformationExtendInfoList'];
+    this.validateForm
+      .get('remitterWalletAddress')
+      ?.setValue(
+        val[0]['remitterInformationExtendInfoList'][0]['bankAccountId']
+      );
+    this.validateForm.get('remitterBankName')?.setValue(val[0]['bankName']);
+    this.validateForm.get('remitterBankId')?.setValue(val[0]['centralBankId']);
     if (this.beneficiaryCurrency !== e) {
       this.getExchange();
     } else {
@@ -352,36 +377,29 @@ export class TransferComponent implements OnInit, AfterViewInit {
     }
   }
   onBeneficialWalletAddressChange(e: number) {
-    this.newBeneficialWalletAddress =
-      this.BeneficiaryArr[e]['chainAccountAddress'];
-    // Set the array of amount units
-    this.newAmountArr = this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'];
-    this.beneficiaryCurrency =
-      this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
-        'digitalCurrencyName'
-      ];
-    // set Beneficiary's Bank Name
-    this.validateForm
-      .get('newBeneficialBankName')
-      ?.setValue(
-        this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0][
-          'centralBankName'
-        ]
-      );
-    this.newToCommercialBankId =
-      this.BeneficiaryArr[e]['beneficiaryWalletExtendeds'][0]['centralBankId'];
-    this.onBeneficiaryCurrency(0);
-  }
-  onBeneficiaryCurrency(e: any) {
-    this.newAmountArr.map(item => {
-      if (e === item.digitalCurrencyName) {
-        this.newToCommercialBankId = item.centralBankId
-      }
-    })
-    if (e !== 0) {
-      this.beneficiaryCurrency = e;
+    const val = this.BeneficiaryArr.filter(
+      (item: any) => item.bankWalletId === e
+    );
+    this.newBeneficialWalletAddress = val[0]['chainAccountAddress'];
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+      this.getExchange();
+    } else {
+      this.settlementStatus = false;
       this.checkedItemComment = [];
     }
+  }
+  onBeneficiaryCurrency(e: any) {
+    const val = this.newAmountArr.filter(
+      (item: any) => item.digitalCurrencyName === e
+    );
+    this.BeneficiaryArr = val[0]['beneficiaryWalletExtendedRespVOs'];
+    this.beneficiaryCurrency = val[0]['digitalCurrencyName'];
+    this.validateForm
+      .get('newBeneficialBankName')
+      ?.setValue(val[0]['centralBankName']);
+    this.validateForm
+      .get('beneficialWalletAddress')
+      ?.setValue(val[0]['beneficiaryWalletExtendedRespVOs'][0]['bankWalletId']);
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       this.getExchange();
     } else {
@@ -392,29 +410,37 @@ export class TransferComponent implements OnInit, AfterViewInit {
   onBeneficialBankNameChange(e: number) {
     // set ID
     this.newBeneficialBankId = this.beneficialBankNameListAll[e]['bankId'];
-
-    // get Beneficiary's Wallet Address
-    this.BeneficiaryArr =
-      this.beneficialBankNameListAll[e]['beneficiaryWallets'];
-    this.validateForm.get('beneficialWalletAddress')?.setValue(0);
-    // set amount array
     this.newAmountArr =
-      this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
-        'beneficiaryWalletExtendeds'
+      this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'];
+    this.BeneficiaryArr =
+      this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
+        'beneficiaryWalletExtendedRespVOs'
       ];
     this.beneficiaryCurrency =
-      this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
-        'beneficiaryWalletExtendeds'
-      ][0]['digitalCurrencyName'];
-    // set Beneficiary's Bank Name
+      this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
+        'digitalCurrencyName'
+      ];
     this.validateForm
       .get('newBeneficialBankName')
       ?.setValue(
-        this.beneficialBankNameListAll[e]['beneficiaryWallets'][0][
-          'beneficiaryWalletExtendeds'
-        ][0]['centralBankName']
+        this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
+          'centralBankName'
+        ]
+      );
+    this.validateForm
+      .get('beneficialWalletAddress')
+      ?.setValue(
+        this.beneficialBankNameListAll[0]['beneficiaryCurrencyRespVOs'][0][
+          'beneficiaryWalletExtendedRespVOs'
+        ][0]['bankWalletId']
       );
     this.cdr.markForCheck();
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+      this.getExchange();
+    } else {
+      this.settlementStatus = false;
+      this.checkedItemComment = [];
+    }
   }
   onItemChecked(id: string, checked: boolean): void {
     this.updateCheckedSet(id, checked);
@@ -445,6 +471,7 @@ export class TransferComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
+    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
         if (this.checkedItemComment.length === 0) {

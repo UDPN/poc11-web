@@ -49,6 +49,8 @@ export class AddComponent implements OnInit {
   fileTextWord: any = '';
   fileTextName: any = '';
   fileStatus: number = 1;
+  metaArrStr: string[] = [];
+  metaArrStrSignPass: string[] = [];
   public metaArr$ = this.metaMaskService.MetaArray$;
 
   constructor(
@@ -197,7 +199,10 @@ export class AddComponent implements OnInit {
   }
 
   onSelectWalletAddress(event: NzSafeAny) {
-    if (this.orginalWalletAddressList.indexOf(event) !== -1) {
+    if (
+      this.orginalWalletAddressList.indexOf(event) !== -1 ||
+      this.metaArrStr.includes(event)
+    ) {
       this.showKeyStore = false;
       this.walletAddressList = this.orginalWalletAddressList;
       this.validateForm.removeControl('keyStorePassword');
@@ -291,15 +296,37 @@ export class AddComponent implements OnInit {
     this.location.back();
   }
   async onMetaMask() {
+    this.metaArrStr = [];
     let accounts: string[] = await this.metaMaskService.checkMeataMask();
-    if (accounts.length > 0) {
-      this.validateForm.get('walletAddress')?.setValue(accounts[0]);
-      if(this.walletAddressList.indexOf(accounts[0]) === -1){
-         this.showKeyStore = true;
-      }else{
-        this.showKeyStore = false;
-      }
-     
-    }
+    this.metaArrStr = accounts;
+    this.validateForm.get('walletAddress')?.setValue(accounts[0]);
+    // if (accounts.length > 0) {
+    //   this.validateForm.get('walletAddress')?.setValue(accounts[0]);
+    //   if(this.walletAddressList.indexOf(accounts[0]) === -1){
+    //      this.showKeyStore = true;
+    //   }else{
+    //     this.showKeyStore = false;
+    //   }
+    // }
+  }
+  onSign() {
+    this.cbdcWalletService
+      .getSign({ account: this.validateForm.get('walletAddress')?.value })
+      .subscribe((res) => {
+        // signData
+        let result = this.metaMaskService.sign(
+          this.validateForm.get('walletAddress')?.value,
+          res.signData
+        );
+        result.then((ress) => {
+          if (ress !== '') {
+            this.metaArrStrSignPass.push(
+              this.validateForm.get('walletAddress')?.value
+            );
+            this.message.success('Signature successful!');
+            this.cdr.markForCheck();
+          }
+        });
+      });
   }
 }

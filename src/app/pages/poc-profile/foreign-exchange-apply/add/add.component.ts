@@ -54,13 +54,13 @@ export class AddComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: 'Activate Exchange Business',
+      title: 'Active Exchange Pair',
       breadcrumbs: [
         {
-          name: 'Foreign Exchange Management',
+          name: 'FX Pair Management',
           url: '/poc/poc-profile/foreign-exchange-apply'
         },
-        { name: 'Activate Exchange Business' }
+        { name: 'Active Exchange Pair' }
       ],
       extra: '',
       desc: '',

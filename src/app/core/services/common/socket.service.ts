@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2024-01-15 14:09:16
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-17 16:54:26
+ * @LastEditTime: 2024-01-24 17:38:54
  * @Description:
  */
 import { Injectable } from '@angular/core';
@@ -24,6 +24,7 @@ import {
 import _ from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,10 @@ export class SocketService {
     this.messageSubject = new Subject();
     console.log('Start heartbeat detection');
     // Perform heartbeat detection as soon as you enter the program to avoid interruption of the connection at the beginning and no subsequent reconnection.
-    this.heartCheckStart();
-    this.calcRunTime();
+    if (environment.production) {
+      this.heartCheckStart();
+      this.calcRunTime();
+    }
   }
 
   messageSubject; // Subject object, used to send events
