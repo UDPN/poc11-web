@@ -122,7 +122,7 @@
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "options": {
-        "host": "10.0.33.78",
+        "host": "10.0.7.64",
         "port": 4215,
         "proxyConfig": "proxy.conf.json",
         "disableHostCheck": false

@@ -84,7 +84,7 @@
       </div>
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24"
         style="background: #fff; border-radius: 16px;padding: 4px;">
-        <nz-card nzTitle="Remitter Information" nzBordered="false" class="none-bottom">
+        <nz-card nzTitle="Beneficiary Information" nzBordered="false" class="none-bottom">
 
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
@@ -304,7 +304,7 @@
       <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
         [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
         <nz-descriptions-item nzTitle="Remitter's Wallet Address">
-          {{ validateForm.controls["remitterWalletAddress"].value }}
+          {{ newRemitterWalletAddress }}
           <br>
           {{ (beneficiaryCurrency !== availableCurrecyModel ? this.checkedItemComment[0].total :
           validateForm.controls["amount"].value) + ' ' + availableCurrecyModel.replace('-UDPN', '')}}

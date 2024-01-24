@@ -101,11 +101,11 @@
                 <input nz-input formControlName="bnCode" readonly class="onboard-disabled" />
               </div>
               <div>
-                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>{{ "A
-                uniqu\e
-                ID for service providers to acces\s
-                th\e
-                CBDC system. After the BN is deployed, the UDPN will generate this ID." }}
+                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>A
+                unique
+                ID for service providers to access
+                the
+                CBDC system. After the BN is deployed, the UDPN will generate this ID.
               </div>
             </div>
             <ng-template #nodeError let-control>
@@ -114,6 +114,22 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+      <ng-container
+        *ngIf="this.validateForm.get('creationMethod')?.value === 1 && metaArrStr.includes(this.validateForm.get('walletAddress')?.value)">
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
+            <nz-form-control [nzErrorTip]="nodeError">
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <button nz-button nzType="primary"
+                    [disabled]="metaArrStrSignPass.includes(this.validateForm.get('walletAddress')?.value)"
+                    (click)="onSign()">Private Signature Test</button>
+                </div>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </ng-container>
 
       <ng-container *ngIf="showKeyStore">
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">

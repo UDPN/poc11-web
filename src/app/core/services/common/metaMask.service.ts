@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2024-01-15 14:09:16
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-16 10:57:48
+ * @LastEditTime: 2024-01-24 14:48:07
  * @Description:
  */
 import { Injectable } from '@angular/core';
@@ -35,7 +35,7 @@ export class MetaMaskService {
     this.web3 = new Web3((window as any).ethereum);
   }
   async checkMeataMask(): Promise<string[]> {
-    if (!this.web3) {
+    if (typeof (window as any).ethereum === 'undefined') {
       this.modal.warning({
         nzTitle: 'Warning',
         nzContent: 'Please install and unlock Metamask first!'
@@ -58,12 +58,22 @@ export class MetaMaskService {
       return new Promise(_).then(() => []);
     }
   }
-  async getAccount() {
+  private async getAccount() {
     let accounts = await this.web3.eth.getAccounts();
     this.setMetaArray$(accounts);
   }
   getMetaArray$(): Observable<string[]> {
     return this.MetaArray$.asObservable();
+  }
+  async sign(address: string, signData: string) {
+    try {
+      return await this.web3.currentProvider.request({
+        method: 'eth_sign',
+        params: [address, signData]
+      });
+    } catch (e) {
+      console.log('Refuse to sign');
+    }
   }
 
   setMetaArray$(tabArray: string[]): void {

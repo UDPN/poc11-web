@@ -74,6 +74,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   remitterBankName = '';
   timeString: any = '';
   timeSubscription!: Subscription;
+  newRemitterWalletAddress: string = '';
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -169,7 +170,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     this.transferService
       .fetchAllOhter({ bankName: '', chainAccountAddress: '' })
       .subscribe((res: any) => {
-        console.log(res);
         this.beneficialBankNameListAll = res;
         this.validateForm.get('beneficialBankId')?.setValue(0);
         this.newBeneficialBankId = this.beneficialBankNameListAll[0]['bankId'];
@@ -193,6 +193,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
               'beneficiaryWalletExtendedRespVOs'
             ][0]['bankWalletId']
           );
+        this.newBeneficialWalletAddress =
+          res[0]['beneficiaryCurrencyRespVOs'][0][
+            'beneficiaryWalletExtendedRespVOs'
+          ][0]['chainAccountAddress'];
       });
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
@@ -218,6 +222,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         ?.setValue(
           res[0]['remitterInformationExtendInfoList'][0]['bankAccountId']
         );
+      this.newRemitterWalletAddress =
+        res[0]['remitterInformationExtendInfoList'][0]['chainAccountAddress'];
       this.validateForm.get('remitterBankName')?.setValue(res[0]['bankName']);
       this.validateForm
         .get('remitterBankId')
@@ -226,6 +232,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onRemitterWalletAddressChange(e: any) {
+    const val = this.remitterWalletAddressList.filter(
+      (item: any) => item.bankAccountId === e
+    );
+    this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     if (
       this.beneficiaryCurrency &&
       this.beneficiaryCurrency !== this.availableCurrecyModel
@@ -367,6 +377,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onBeneficialWalletAddressChange(e: number) {
+    const val = this.BeneficiaryArr.filter(
+      (item: any) => item.bankWalletId === e
+    );
+    this.newBeneficialWalletAddress = val[0]['chainAccountAddress'];
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       this.getExchange();
     } else {
