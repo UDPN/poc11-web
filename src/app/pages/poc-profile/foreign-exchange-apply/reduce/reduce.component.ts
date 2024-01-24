@@ -53,13 +53,13 @@ export class ReduceComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Reduce Exchange Business`,
+      title: `Deactivate Exchange Pair`,
       breadcrumbs: [
         {
-          name: 'Foreign Exchange Management',
+          name: 'FX Pair Management',
           url: '/poc/poc-profile/foreign-exchange-apply'
         },
-        { name: 'Reduce Exchange Business' }
+        { name: 'Deactivate Exchange Pair' }
       ],
       extra: '',
       desc: '',

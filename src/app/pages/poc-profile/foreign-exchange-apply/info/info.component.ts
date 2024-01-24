@@ -46,7 +46,7 @@ export class InfoComponent implements OnInit {
       title: `Detail`,
       breadcrumbs: [
         {
-          name: 'Foreign Exchange Management',
+          name: 'FX Pair Management',
           url: '/poc/poc-profile/foreign-exchange-apply'
         },
         { name: 'Detail' }

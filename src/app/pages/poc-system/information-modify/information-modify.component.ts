@@ -83,7 +83,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['System Management', 'Bank Information Modification'],
+      breadcrumb: ['System Management', 'Bank Information Configuration'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
