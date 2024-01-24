@@ -237,12 +237,27 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       let walletBalanceList: any = [];
       walletBalanceList = this.walletBalanceList;
       walletBalanceList.map((item: any, i: any) => {
+        let unit: any = '';
+        let totalBance: any = '';
+        if (item.currency === 'w-THB') {
+          unit = '฿';
+        } else if (item.currency === 'w-EUR') {
+          unit = '€';
+        } else if (item.currency === 'w-USD') {
+          unit = '$';
+        } else {
+          unit = 'HK$';
+        }
+        const array: any = [];
         item.walletList.map((items: any, i: any) => {
+          array.push(items.balance);
+          totalBance = eval(array.join("+"));
           Object.assign(items, { index: i + 1 });
         });
-        Object.assign(item, { value: item.walletList[0].balance.toString() + '-' + item.walletList[0].index.toString() });
+        Object.assign(item, { value: item.walletList[0].balance.toString() + '-' + item.walletList[0].index.toString(), unit, totalBance});
       });
       this.walletBalanceList = walletBalanceList;
+      console.log(this.walletBalanceList);
     });
   }
 
@@ -384,7 +399,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       .dynamics(data ? data : this.listParam)
       .subscribe((res) => {
         if (res) {
-          this.xAxisLabel = 'Exchange Rate Dynamics In the Last 7 days';
+          this.xAxisLabel = '';
           let multi: any = [];
 
           if (res.data.length > 0) {
@@ -417,7 +432,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   fetchNumbers() {
     this.pocHomeService.volume().subscribe((res) => {
       if (res) {
-        this.xAxisLabel1 = 'Transaction Volume In the Last 7 Days';
+        this.xAxisLabel1 = '';
         let multi1: any = [];
 
         if (res.data.length > 0) {

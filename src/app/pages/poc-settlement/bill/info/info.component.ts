@@ -52,7 +52,7 @@ export class InfoComponent implements OnInit {
       title: `Detail`,
       breadcrumbs: [
         { name: 'Settlement Management' },
-        { name: 'Billing', url: '/poc/poc-settlement/billing' },
+        { name: 'Monthly income statement', url: '/poc/poc-settlement/billing' },
         { name: 'Detail' }
       ],
       extra: '',

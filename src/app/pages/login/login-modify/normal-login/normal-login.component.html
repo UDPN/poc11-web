@@ -2,11 +2,8 @@
   <!-- <h2 class="m-b-8" [class.is-over-model]="isOverModel">
     BN Name: {{ instance }}
   </h2> -->
-  <p class="m-b-50 title" [class.is-over-model]="isOverModel" *ngIf="!this.systemTitle">
+  <p class="m-b-50 title" [class.is-over-model]="isOverModel">
     CBDC Commercial Bank System
-  </p>
-  <p class="m-b-50 title" [class.is-over-model]="isOverModel" *ngIf="this.systemTitle">
-    {{ this.systemTitle }}
   </p>
   <div class="full-with">
     <form nz-form nzLayout="vertical" class="login-form-wrap" [formGroup]="validateForm" (ngSubmit)="submitForm()">

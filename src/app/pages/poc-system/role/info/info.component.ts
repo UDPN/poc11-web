@@ -86,6 +86,8 @@ export class InfoComponent implements OnInit {
         this.info = res;
         this.permissionList = res.myResourceList;
         this.dataSource.setData(this.permissionList);
+        // Default Unfold
+        this.treeControl.expandAll();
         this.cdr.markForCheck();
         return;
       })
