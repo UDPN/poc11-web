@@ -22,11 +22,11 @@
       <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">{{
         info.transactionHash
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Commercial Bank ID" [nzSpan]="3">{{
-        info.commercialBankId
-        }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Commercial Bank Name" [nzSpan]="3">{{
         info.commercialBankName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Receiving Bank Name" [nzSpan]="3">{{
+        info.receivingBankName
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Currency Pair" [nzSpan]="3">{{
         (info.formCurrency + '->' + info.toCurrency) | map:'null'
@@ -71,7 +71,7 @@
         ((info.maxCommission | map:'toThousandthMark') + ' ' + info.formCurrency) | map:'null'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Commission Fee" [nzSpan]="3"><span style="font-weight: 500;">{{
-          ((info.fee | map:'toThousandthMark') + ' ' + info.formCurrency) | map:'null'
+          ((info.fee | map:'toThousandRate') + ' ' + info.formCurrency) | map:'null'
           }}</span></nz-descriptions-item>
     </nz-descriptions>
   </nz-card>

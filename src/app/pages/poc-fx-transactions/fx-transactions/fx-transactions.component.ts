@@ -22,6 +22,7 @@ interface SearchParam {
   transactionHash: any;
   commercialBankId: string;
   commercialBankName: string;
+  receivingBankName: string;
 }
 
 interface ListParam {
@@ -51,7 +52,8 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     transactionNo: '',
     transactionHash: '',
     commercialBankId: '',
-    commercialBankName: ''
+    commercialBankName: '',
+    receivingBankName: ''
   };
   listParam: Partial<ListParam> = {
     formRatePlatform: '',
@@ -70,7 +72,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     private pocFxTransactionsService: PocFxTransactionsService,
     private cdr: ChangeDetectorRef,
     private _commonService: CommonService
-  ) {}
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -156,7 +158,8 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         toCurrency: this.listParam.toRateCurrency,
         creation: this.searchParam.creation,
         commercialBankId: this.searchParam.commercialBankId,
-        commercialBankName: this.searchParam.commercialBankName
+        commercialBankName: this.searchParam.commercialBankName,
+        receivingBankName: this.searchParam.receivingBankName
       },
     };
     this.pocFxTransactionsService
@@ -183,32 +186,27 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           field: 'transactionNo',
           width: 350
         },
-        // {
-        //   title: 'Transaction Hash',
-        //   field: 'transactionHash',
-        //   width: 350
-        // },
-        {
-          title: 'Commercial Bank ID',
-          field: 'commercialBankId',
-          width: 300
-        },
         {
           title: 'Commercial Bank Name',
           field: 'commercialBankName',
           width: 200
         },
         {
+          title: 'Receiving Bank Name',
+          field: 'receivingBankName',
+          width: 200
+        },
+        {
           title: 'Amount',
           tdTemplate: this.amountTpl,
-          width: 250
+          width: 180
         },
         {
           title: 'Date',
           field: 'transactionDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 180
+          width: 220
         },
         {
           title: 'Status',

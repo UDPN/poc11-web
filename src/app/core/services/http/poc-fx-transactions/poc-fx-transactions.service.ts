@@ -33,6 +33,7 @@ export class PocFxTransactionsService {
       toCurrency: filters.toCurrency || '',
       commercialBankId: filters.commercialBankId || '',
       commercialBankName: filters.commercialBankName || '',
+      receivingBankName: filters.receivingBankName || '',
       startDate: filters.creation[0] ? timeToTimestamp(this.date.transform(filters.creation[0], 'yyyy-MM-dd')+' 00:00:00') : "",
       endDate: filters.creation[1] ? timeToTimestamp (this.date.transform(filters.creation[1], 'yyyy-MM-dd')+' 23:59:59') : "",
       pageSize: pageSize,

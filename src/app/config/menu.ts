@@ -139,7 +139,7 @@ const menuNav: Menu[] = [
     code: 'R0202',
   },
   {
-    menuName: 'Foreign Exchange Management',
+    menuName: 'FX Pair Management',
     id: 8,
     fatherId: 0,
     icon: 'transaction',
@@ -173,7 +173,7 @@ const menuNav: Menu[] = [
       {
         id: 2,
         fatherId: 9,
-        menuName: 'Billing',
+        menuName: 'Monthly income statement',
         open: false,
         selected: false,
         menuType: 'C',
@@ -240,7 +240,7 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 12,
-        menuName: 'Bank Information Modification',
+        menuName: 'Bank Information Configuration',
         open: false,
         selected: false,
         menuType: 'C',
@@ -250,7 +250,18 @@ const menuNav: Menu[] = [
       {
         id: 4,
         fatherId: 12,
-        menuName: 'Style Configuration',
+        menuName: 'API Documentation',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R0305',
+        newLinkFlag: 1,
+        path: 'https://github.com/UDPN/Poc9-contract-document'
+      },
+      {
+        id: 5,
+        fatherId: 12,
+        menuName: 'UI Configuration',
         open: false,
         selected: false,
         menuType: 'C',
