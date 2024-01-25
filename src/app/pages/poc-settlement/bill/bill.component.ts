@@ -362,7 +362,7 @@ export class BillComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Billing Amount',
+          title: 'Statement Amount',
           tdTemplate: this.billingAmountTpl,
           width: 150
         },

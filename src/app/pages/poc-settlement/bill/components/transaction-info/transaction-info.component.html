@@ -52,8 +52,8 @@
       }}</span>
   </ng-template>
   <ng-template #commissionFeeTpl let-commissionFee="commissionFee" let-formCurrency="formCurrency">
-    <span [title]="(commissionFee | map:'toThousandthMark') + ' ' +  formCurrency">{{ (commissionFee |
-      map:'toThousandthMark') + ' ' +
+    <span [title]="(commissionFee | map:'toThousandRate') + ' ' +  formCurrency">{{ (commissionFee |
+      map:'toThousandRate') + ' ' +
       formCurrency }}</span>
   </ng-template>
 </div>

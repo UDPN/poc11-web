@@ -36,7 +36,7 @@
               {{ this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}
             </span>
             <span class="m-l-20" [style]="{color: '#3c5686'}" [ngClass]="{'logo': !(isCollapsed$ | async)}">
-              <img [src]="logoImg" alt="" style="width: 180px; padding-bottom: 5px;" class="m-r-20" *ngIf="logoImg">
+              <img [src]="logoImg" alt="" style="width: 180px;height: 40px; padding-bottom: 5px;" class="m-r-20" *ngIf="logoImg">
               <span *ngIf="!isCollapsed">{{this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}</span>
             </span>
           </ng-container>
@@ -61,7 +61,7 @@
       <ng-container left *ngIf="!isOverMode">
         <div class="left-start-center flex-1" style="z-index: 100">
           <span class="m-l-20" [style]="{color: '#ffff'}" [ngClass]="{'logo': !(isCollapsed$ | async)}">
-            <img [src]="logoImg" alt="" style="width: 180px; padding-bottom: 5px;" class="m-r-20" *ngIf="logoImg">
+            <img [src]="logoImg" alt="" style="width: 180px; height: 40px; padding-bottom: 5px;" class="m-r-20" *ngIf="logoImg">
             <span *ngIf="!isCollapsed">{{this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}</span>
           </span>
           <span class="sp-18 m-r-25"></span>

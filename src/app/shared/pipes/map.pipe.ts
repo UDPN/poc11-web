@@ -303,12 +303,28 @@ export class MapPipe implements PipeTransform {
         return thousandRate(value);
       }
     }
+
+    // fiatTime
+    if (arg === 'fiatTime') {
+      if (value === null || value === '' || value === undefined) {
+        return (value = '--');
+      } else {
+        const number: any = Math.random() * (8000 - 2000) + 2000;
+        return (Number(value) + number).toString();
+      }
+    }
     
     if (arg === 'monthStamp') {
       if (!value) {
         return (value = '--');
       } else {
-        return timestampToMonth(value);
+        // return timestampToMonth(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM y');
+        return res?.replace('GMT', 'UTC');
       }
     }
     let type: string = arg;
