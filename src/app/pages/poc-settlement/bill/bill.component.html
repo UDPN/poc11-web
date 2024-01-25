@@ -106,19 +106,19 @@
     [nzWidth]="1200" nzCentered="true">
     <div *nzModalContent class="card-tpl">
       <nz-card class="m-b-10" style="background-color: #f7f9fe;">
-        <div style="font-size: 18px;" class="m-b-10">Billing Amount <span class="m-l-15" style="font-weight: 500;">{{
+        <div style="font-size: 18px;" class="m-b-10">Statement Amount <span class="m-l-15" style="font-weight: 500;">{{
             ((invoiceInfo.billAmount | map:'toThousandthMark') + ' ' + invoiceInfo.formCurrency) | map:'null'
             }}</span></div>
         <nz-descriptions class="card" nzLayout="vertical" [nzColumn]="{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 1 }"
           [nzColon]="false" [nzBordered]="false">
-          <nz-descriptions-item nzTitle="Billing No.">{{ invoiceInfo.billNo }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Billing Cycle">{{
+          <nz-descriptions-item nzTitle="Statement No.">{{ invoiceInfo.billNo }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Cycle">{{
             invoiceInfo.billCycle | map: 'monthStamp'
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Bank">{{
             (invoiceInfo.bankId + '-' + invoiceInfo.bankName) | map:'null'
             }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Txn Currency">{{
+          <nz-descriptions-item nzTitle="Currency Pair">{{
             (invoiceInfo.formCurrency + '->' + invoiceInfo.toCurrency) | map:'null'
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Creation Time">{{
@@ -167,7 +167,7 @@
     <form nz-form [formGroup]="validateForm">
       <nz-form-item *ngFor="let control of listOfControl; index as i">
         <nz-form-label nzRequired nzSpan="24" *ngIf="i === 0">
-          Please enter the email address for receiving records:
+          Please enter the email address for receiving invoice:
         </nz-form-label>
         <nz-form-control [nzErrorTip]="emailError" nzSpan="24">
           <div nz-row class="flex">
