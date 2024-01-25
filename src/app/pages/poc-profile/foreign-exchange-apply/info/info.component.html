@@ -9,23 +9,20 @@
       <nz-descriptions-item nzTitle="Applicaiton No.">{{
         info.businessApplicationCode
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="SP Name">{{
+      <nz-descriptions-item nzTitle="FX SP Name">{{
         info.spName
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Country of Region">{{
-        info.country
+      <nz-descriptions-item nzTitle="BIC">{{
+        info.bicName
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Brief Introduction">{{
+      <nz-descriptions-item nzTitle="Central Bank">{{
+        info.centralBankName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">{{
         info.introduction
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{
         info.description
-        }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="BN ID">{{
-        info.bnCode
-        }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Wallet Address(Besu)">{{
-        info.spBesuWalletAddress
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Creation Time">{{
         info.creationTime | map: 'timeStamp'
@@ -45,7 +42,7 @@
   </nz-card> -->
   <nz-card [nzTitle]="'Foreign Exchange Information'" [nzBordered]="true" class="m-b-10">
     <nz-descriptions [nzColon]="false" style="font-weight: 600;" class="card-descriptions m-t-15 m-b-20">
-      <nz-descriptions-item nzTitle="Exchange Business Type">{{
+      <nz-descriptions-item nzTitle="FX Pair Type">{{
         info.applicationType | map:'exchangeBusinessType'
         }}</nz-descriptions-item>
     </nz-descriptions>

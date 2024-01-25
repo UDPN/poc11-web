@@ -26,7 +26,7 @@
         info.commercialBankName
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Receiving Bank Name" [nzSpan]="3">{{
-        info.receivingBankName
+        this.receivingBankName
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Currency Pair" [nzSpan]="3">{{
         (info.formCurrency + '->' + info.toCurrency) | map:'null'

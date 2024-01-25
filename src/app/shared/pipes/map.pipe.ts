@@ -303,6 +303,16 @@ export class MapPipe implements PipeTransform {
         return thousandRate(value);
       }
     }
+
+    // fiatTime
+    if (arg === 'fiatTime') {
+      if (value === null || value === '' || value === undefined) {
+        return (value = '--');
+      } else {
+        const number: any = Math.random() * (8000 - 2000) + 2000;
+        return (Number(value) + number).toString();
+      }
+    }
     
     if (arg === 'monthStamp') {
       if (!value) {

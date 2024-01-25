@@ -173,7 +173,7 @@ const menuNav: Menu[] = [
       {
         id: 2,
         fatherId: 9,
-        menuName: 'Monthly income statement',
+        menuName: 'Monthly Income Statement',
         open: false,
         selected: false,
         menuType: 'C',
