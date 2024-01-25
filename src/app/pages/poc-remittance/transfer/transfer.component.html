@@ -124,7 +124,11 @@
                   <ng-template #newAmountError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your Available
                       Balance</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">Currency&Interbank Settlement Amount cannot be
+                      greater than Available Balance
+                    </ng-container>
                   </ng-template>
+
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -154,7 +158,7 @@
 
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzSpan="24">Beneficiary's Bank Name
+                <nz-form-label nzSpan="24">Beneficiary's Central Bank Name
                 </nz-form-label>
                 <nz-form-control>
                   <div nz-row>
