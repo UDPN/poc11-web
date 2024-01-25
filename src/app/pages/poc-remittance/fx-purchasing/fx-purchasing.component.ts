@@ -97,14 +97,15 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     let datePipe: DatePipe = new DatePipe('en-US');
-    const interval$ = interval(1000);
+    this.timeString = datePipe
+      .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
+      ?.replace('GMT', 'UTC');
+    const interval$ = interval(180000);
     this.timeSubscription = interval$.subscribe((number) => {
       this.timeString = datePipe
-        .transform(new Date().getTime(), 'MMMM d, y HH:mm:ss a zzzz')
+        .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
         ?.replace('GMT', 'UTC');
-      if (number % 180 === 0) {
-        this.findExchange();
-      }
+      this.findExchange();
       this.cdr.markForCheck();
     });
     this.initData();
