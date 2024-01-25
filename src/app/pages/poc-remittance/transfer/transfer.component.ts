@@ -102,18 +102,19 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     let datePipe: DatePipe = new DatePipe('en-US');
-    const interval$ = interval(1000);
+    this.timeString = datePipe
+      .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
+      ?.replace('GMT', 'UTC');
+    const interval$ = interval(180000);
     this.timeSubscription = interval$.subscribe((number) => {
       this.timeString = datePipe
-        .transform(new Date().getTime(), 'MMMM d, y HH:mm:ss a zzzz')
+        .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
         ?.replace('GMT', 'UTC');
-      if (number % 180 === 0) {
-        if (
-          this.beneficiaryCurrency &&
-          this.beneficiaryCurrency !== this.availableCurrecyModel
-        ) {
-          this.getExchange();
-        }
+      if (
+        this.beneficiaryCurrency &&
+        this.beneficiaryCurrency !== this.availableCurrecyModel
+      ) {
+        this.getExchange();
       }
       this.cdr.markForCheck();
     });
@@ -235,6 +236,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
+    this.validateForm.get('availableBalance')?.setValue(val[0]['cbdcCount']);
     this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     if (
       this.beneficiaryCurrency &&
