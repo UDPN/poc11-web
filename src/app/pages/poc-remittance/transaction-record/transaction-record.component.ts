@@ -105,7 +105,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Remittance Management', 'Transaction Record'],
+      breadcrumb: ['Remittance Management', 'Transaction Records'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
