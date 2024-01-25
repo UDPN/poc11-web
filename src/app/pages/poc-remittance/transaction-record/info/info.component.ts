@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
@@ -31,7 +37,7 @@ export class InfoComponent implements OnInit {
   info: any = {
     transactionLogTrees: [],
     fromCurrency: '',
-    toCurrency: '',
+    toCurrency: ''
   };
   detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
   constructor(
@@ -39,8 +45,7 @@ export class InfoComponent implements OnInit {
     private commonService: CommonService,
     private cdr: ChangeDetectorRef,
     private transactionRecordService: TransactionRecordService
-
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -50,7 +55,7 @@ export class InfoComponent implements OnInit {
           name: 'Remittance Management'
         },
         {
-          name: 'Transaction Record',
+          name: 'Transaction Records',
           url: '/poc/poc-remittance/transaction-record'
         },
         { name: 'Details' }
@@ -62,12 +67,14 @@ export class InfoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.routeInfo.queryParams.subscribe(params => {
-      this.transactionRecordService.getInfo({ transferId: params['transferId'] }).subscribe(res => {
-        this.info = res;
-        this.cdr.markForCheck();
-        this.cdr.detectChanges();
-      });
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.transactionRecordService
+        .getInfo({ transferId: params['transferId'] })
+        .subscribe((res) => {
+          this.info = res;
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
+        });
     });
   }
 }

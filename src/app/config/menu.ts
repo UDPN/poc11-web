@@ -98,7 +98,7 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 4,
-        menuName: 'Transaction Record',
+        menuName: 'Transaction Records',
         open: false,
         selected: false,
         menuType: 'C',
