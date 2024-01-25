@@ -19,6 +19,7 @@ export class InfoComponent implements OnInit {
   };
   info: any = {};
   agreementUrl: any = '';
+  receivingBankName: any = '';
   constructor(
     public routeInfo: ActivatedRoute,
     private pocFxTransactionsService: PocFxTransactionsService,
@@ -48,6 +49,7 @@ export class InfoComponent implements OnInit {
 
   getInfo(): void {
     this.routeInfo.queryParams.subscribe((params) => {
+      this.receivingBankName = params['receivingBankName'];
       this.pocFxTransactionsService
         .info({ transactionNo: params['transactionNo'] })
         .subscribe((res: any) => {

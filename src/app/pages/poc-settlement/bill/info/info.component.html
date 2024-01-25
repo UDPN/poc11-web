@@ -9,10 +9,10 @@
       <nz-tab *ngFor="let tab of exchangeRate; index as i" [nzTitle]="tab.title">
         <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
           [nzBordered]="true" *ngIf="i === 0">
-          <nz-descriptions-item nzTitle="Billing No.">{{
+          <nz-descriptions-item nzTitle="Statement No.">{{
             info.billNo
             }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Billing Cycle">{{
+          <nz-descriptions-item nzTitle="Cycle">{{
             info.billCycle | map:'monthStamp'
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Bank ID">{{
@@ -21,10 +21,10 @@
           <nz-descriptions-item nzTitle="Bank Name">{{
             info.bankName
             }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Txn Currency ">{{(info.formCurrency + '->' +
+          <nz-descriptions-item nzTitle="Currency Pair">{{(info.formCurrency + '->' +
             info.toCurrency) | map:'null'}}</nz-descriptions-item>
           <nz-descriptions-item
-            [nzTitle]="'Billing Amount (' + info.formCurrency + ')'">{{info.billAmount | map:'toThousandthMark'}}</nz-descriptions-item>
+            [nzTitle]="'Statement Amount (' + info.formCurrency + ')'">{{info.billAmount | map:'toThousandthMark'}}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Creation Time">{{
             info.createDate | map: 'timeStamp'
             }}</nz-descriptions-item>

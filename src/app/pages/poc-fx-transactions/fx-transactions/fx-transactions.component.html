@@ -85,10 +85,10 @@
         toCurrency)
         }}</span>
     </ng-template>
-    <ng-template #operationTpl let-transactionNo="transactionNo">
+    <ng-template #operationTpl let-transactionNo="transactionNo" let-receivingBankName="receivingBankName">
       <ng-container *appAuth="'R020501'">
         <span class="operate-text" routerLink="/poc/poc-fx-transactions/fx-transactions/info"
-          [queryParams]="{transactionNo}">
+          [queryParams]="{transactionNo, receivingBankName}">
           Detail
         </span>
       </ng-container>
