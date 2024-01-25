@@ -318,7 +318,13 @@ export class MapPipe implements PipeTransform {
       if (!value) {
         return (value = '--');
       } else {
-        return timestampToMonth(value);
+        // return timestampToMonth(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM y');
+        return res?.replace('GMT', 'UTC');
       }
     }
     let type: string = arg;
