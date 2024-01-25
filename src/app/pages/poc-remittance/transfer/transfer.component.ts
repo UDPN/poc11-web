@@ -198,6 +198,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           res[0]['beneficiaryCurrencyRespVOs'][0][
             'beneficiaryWalletExtendedRespVOs'
           ][0]['chainAccountAddress'];
+        // centralBankId
+        this.newToCommercialBankId =
+          res[0]['beneficiaryCurrencyRespVOs'][0]['centralBankId'];
       });
     this.transferService.fetchBankList().subscribe((res: any) => {
       res.forEach((item: any) => {
@@ -236,6 +239,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
+    this.validateForm
+      .get('remitterWalletAddress')
+      ?.setValue(val[0]['bankAccountId']);
     this.validateForm.get('availableBalance')?.setValue(val[0]['cbdcCount']);
     this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     if (
@@ -249,10 +255,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // Check field
   getExchange() {
-    // this.validateForm.controls['beneficialWalletAddress'].markAsDirty();
-    // this.validateForm.controls[
-    //   'beneficialWalletAddress'
-    // ].updateValueAndValidity({ onlySelf: true });
+    this.validateForm.controls['amount'].reset();
     this.findExchange();
   }
   // Query exchange rate information
@@ -372,6 +375,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     this.validateForm.get('remitterBankName')?.setValue(val[0]['bankName']);
     this.validateForm.get('remitterBankId')?.setValue(val[0]['centralBankId']);
+    this.availableCurrecyModel = e;
     if (this.beneficiaryCurrency !== e) {
       this.getExchange();
     } else {
@@ -394,8 +398,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.newAmountArr.filter(
       (item: any) => item.digitalCurrencyName === e
     );
+    // centralBankId
+    this.newToCommercialBankId = val[0]['centralBankId'];
     this.BeneficiaryArr = val[0]['beneficiaryWalletExtendedRespVOs'];
-    this.beneficiaryCurrency = val[0]['digitalCurrencyName'];
+    this.beneficiaryCurrency = e;
     this.validateForm
       .get('newBeneficialBankName')
       ?.setValue(val[0]['centralBankName']);
@@ -412,6 +418,11 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   onBeneficialBankNameChange(e: number) {
     // set ID
     this.newBeneficialBankId = this.beneficialBankNameListAll[e]['bankId'];
+    // centralBankId
+    this.newToCommercialBankId =
+      this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
+        'centralBankId'
+      ];
     this.newAmountArr =
       this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'];
     this.BeneficiaryArr =
@@ -527,7 +538,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         interbankSettlementAmount: this.validateForm.get('amount')?.value,
         remittanceInformation: this.validateForm.get('remittanceInformation')
           ?.value,
-        remitterWalletId: this.validateForm.get('remitterBankId')?.value,
+        remitterWalletId: this.validateForm.get('remitterWalletAddress')?.value,
         rateId:
           this.checkedItemComment.length > 0
             ? this.checkedItemComment[0].rateId

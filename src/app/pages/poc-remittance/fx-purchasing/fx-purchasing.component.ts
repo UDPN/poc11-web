@@ -71,6 +71,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   receivingWalletAddressShow: string = '';
   timeString: any = '';
   timeSubscription!: Subscription;
+  transactionWalletAddressArr: any[] = [];
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -137,6 +138,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   initData() {
     this.fxPurchasingService.fetchFXPurchase().subscribe((res) => {
       this.fxPurchaseData = res;
+      this.purchCurrecyList = this.fxPurchaseData;
+      this.onPurchCurrecy(0);
       this.onPurchase(0);
     });
     this.fxPurchasingService.fetchFxReceiving().subscribe((res) => {
@@ -178,24 +181,17 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onPurchase(e: any) {
-    this.purIndex = e;
-    this.validateForm
-      .get('transactionWalletAddress')
-      ?.setValue(this.fxPurchaseData[e].chainAccountAddress);
+    // const val = this.transactionWalletAddressArr.filter(
+    //   (item: any) => item.bankAccountId === e
+    // );
+
     this.validateForm
       .get('bankAccountId')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].bankAccountId);
-    this.validateForm
-      .get('transactionBankName')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].bankName);
+      ?.setValue(this.transactionWalletAddressArr[e]['bankAccountId']);
     this.validateForm
       .get('availableBalance')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].cbdcCount);
-    this.purchCurrecyList = Array.from(
-      this.fxPurchaseData[e]['walletExtendInfo'],
-      ({ digitalSymbol }) => digitalSymbol
-    );
-    this.onPurchCurrecy(0);
+      ?.setValue(this.transactionWalletAddressArr[e]['cbdcCount']);
+
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
@@ -203,19 +199,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onPurchCurrecy(e: number) {
-    this.purchCurrecy =
-      this.fxPurchaseData[this.purIndex]['walletExtendInfo'][
-        e
-      ].digitalCurrencyName;
+    this.transactionWalletAddressArr =
+      this.fxPurchaseData[e].remitterInformationExtendInfoList;
+    this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.validateForm
       .get('transactionBankName')
-      ?.setValue(
-        this.fxPurchaseData[this.purIndex]['walletExtendInfo'][e].bankName
-      );
+      ?.setValue(this.fxPurchaseData[e].bankName);
     this.validateForm
       .get('availableBalance')
       ?.setValue(
-        this.fxPurchaseData[this.purIndex]['walletExtendInfo'][e].cbdcCount
+        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+          'cbdcCount'
+        ]
       );
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
