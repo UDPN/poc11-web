@@ -101,7 +101,8 @@
                 <nz-form-control [nzErrorTip]="receivingWalletAddressError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-select formControlName="receivingWalletAddress">
+                      <nz-select formControlName="receivingWalletAddress"
+                        (ngModelChange)="onReceivingWalletAddressChange($event)">
                         <nz-option *ngFor="
                             let item of receivingWalletAddressList;
                             let i = index
