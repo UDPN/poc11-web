@@ -323,7 +323,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm.get('amount')?.markAsDirty();
     this.validateForm
       .get('amount')
-      ?.updateValueAndValidity({ emitEvent: false });
+      ?.updateValueAndValidity({ emitEvent: true });
     this.cdr.markForCheck();
     // 检查Currency & Interbank Settlement Amount是否存在
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
@@ -431,8 +431,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        console.log(1111);
-        this.getExchange();
+        if (this.validateForm.get('amount')?.value !== res) {
+          this.getExchange();
+        }
       });
   }
   onAvailableCurrecy(e: any) {
