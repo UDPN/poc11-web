@@ -34,7 +34,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select formControlName="transactionWalletAddressId" (ngModelChange)="onPurchase($event)">
-                        <nz-option *ngFor="let item of fxPurchaseData; let i = index" [nzValue]="i"
+                        <nz-option *ngFor="let item of transactionWalletAddressArr; let i = index" [nzValue]="i"
                           [nzLabel]="item.chainAccountAddress"></nz-option>
                       </nz-select>
                     </div>
@@ -210,7 +210,8 @@
 </ng-template>
 <ng-template #addOnAfterTemplate1>
   <nz-select [ngModel]="0" (ngModelChange)="onPurchCurrecy($event)">
-    <nz-option *ngFor="let item of purchCurrecyList; let i = index" [nzLabel]="item" [nzValue]="i"></nz-option>
+    <nz-option *ngFor="let item of purchCurrecyList; let i = index" [nzLabel]="item.digitalSymbol"
+      [nzValue]="i"></nz-option>
   </nz-select>
 </ng-template>
 

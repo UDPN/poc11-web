@@ -205,10 +205,18 @@
                 <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="default" (click)="onBack()">
                   Back
                 </button>
-                <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
-                  [disabled]="!this.validateForm.valid" (click)="onSubmit()">
-                  Submit
-                </button></nz-space>
+                <ng-container
+                  *ngIf="this.validateForm.get('creationMethod')?.value === 1 && metaArrStr.includes(this.validateForm.get('walletAddress')?.value)">
+                  <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
+                    [disabled]="(this.validateForm.valid && testStatus)? false : true" (click)="onSubmit()">
+                    Submit
+                  </button></ng-container>
+                <ng-container *ngIf=" !metaArrStr.includes(this.validateForm.get('walletAddress')?.value)">
+                  <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
+                    [disabled]="!this.validateForm.valid " (click)="onSubmit()">
+                    Submit
+                  </button></ng-container>
+              </nz-space>
             </div>
           </div>
         </nz-form-item>

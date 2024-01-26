@@ -52,6 +52,7 @@ export class AddComponent implements OnInit {
   metaArrStr: string[] = [];
   metaArrStrSignPass: string[] = [];
   addAddressArr: string[] = [];
+  testStatus = false;
   public metaArr$ = this.metaMaskService.MetaArray$;
 
   constructor(
@@ -200,6 +201,15 @@ export class AddComponent implements OnInit {
   }
 
   onSelectWalletAddress(event: NzSafeAny) {
+    if (this.metaArrStr.includes(event)) {
+      if (this.metaArrStrSignPass.includes(event)) {
+        this.testStatus = true;
+      } else {
+        this.testStatus = false;
+      }
+    } else {
+      this.testStatus = false;
+    }
     if (
       this.orginalWalletAddressList.indexOf(event) !== -1 ||
       this.metaArrStr.includes(event) ||
@@ -331,6 +341,7 @@ export class AddComponent implements OnInit {
             return;
           }
           if (ress !== '') {
+            this.testStatus = true;
             this.metaArrStrSignPass.push(
               this.validateForm.get('walletAddress')?.value
             );
