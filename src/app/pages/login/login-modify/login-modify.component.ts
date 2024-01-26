@@ -119,6 +119,7 @@ export class LoginModifyComponent implements OnInit {
             .downImg({ hash: res.logoFileHash })
             .subscribe((resu) => {
               this.logoImg = 'data:image/jpg;base64,' + resu;
+              sessionStorage.setItem('logoImg', this.logoImg);
               this.cdr.markForCheck();
             });
             this.isDefaultLogo = false;

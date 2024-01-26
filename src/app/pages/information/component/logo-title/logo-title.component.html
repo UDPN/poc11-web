@@ -6,7 +6,13 @@
  * @Description: 
 -->
 <div class="information-title">
-    <div class="title"> {{ this.systemName ? this.systemName : 'Multiple Wholesale CBDC Commercial Bank System'}}
+    <div class="title">
+        <span class="m-l-20 title"><img [src]="logoImg" alt="" style="width: 180px;height: 40px" class="m-r-20"
+                *ngIf="logoImg">{{ systemName ? systemName : ''}}
+            <span class="m-l-50">
+                {{'Multiple Wholesale CBDC Settlement Platform System'}}
+            </span>
+        </span>
     </div>
     <div></div>
 </div>

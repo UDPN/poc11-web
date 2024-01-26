@@ -62,7 +62,7 @@
                     </div>
                     <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
                       <div>
-                        <h4 nz-typography> {{'CBDC Inflow: ' + (summaryInfo.inflowSum | map:'toThousandthMark') + ' ' + summaryCurrency }} </h4>
+                        <h4 nz-typography> {{'wCBDC Inflow: ' + (summaryInfo.inflowSum | map:'toThousandthMark') + ' ' + summaryCurrency }} </h4>
                         <ng-container *ngIf="summaryRegion === '1'">
                           <h5 nz-typography>{{ '(Total Top-ups: ' + (summaryInfo.topUpSum | map:'toThousandthMark') + ' ' +
                             summaryCurrency
@@ -82,7 +82,7 @@
                     </div>
                     <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
                       <div>
-                        <h4 nz-typography> {{'CBDC Outflow: ' + (summaryInfo.outflowSum | map:'toThousandthMark') + ' ' + summaryCurrency }} </h4>
+                        <h4 nz-typography> {{'wCBDC Outflow: ' + (summaryInfo.outflowSum | map:'toThousandthMark') + ' ' + summaryCurrency }} </h4>
                         <ng-container *ngIf="summaryRegion === '1'">
                           <h5 nz-typography>{{ '(Total Withdrawals: ' + (summaryInfo.withdrawSum | map:'toThousandthMark') + ' ' +
                             summaryCurrency
