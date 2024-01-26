@@ -323,7 +323,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm.get('amount')?.markAsDirty();
     this.validateForm
       .get('amount')
-      ?.updateValueAndValidity({ emitEvent: true });
+      ?.updateValueAndValidity({ emitEvent: false });
     this.cdr.markForCheck();
     // 检查Currency & Interbank Settlement Amount是否存在
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
@@ -339,6 +339,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         this.findExchange();
       }
     } else {
+      this.checkedItemComment = [];
       this.settlementStatus = false;
     }
   }
@@ -357,6 +358,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         to: this.beneficiaryCurrency
       })
       .subscribe((res) => {
+        this.validateForm.get('amount')?.markAsDirty();
+        this.validateForm
+          .get('amount')
+          ?.updateValueAndValidity({ emitEvent: false });
         let resultData: any[] = [];
         this.transferTitle =
           this.availableCurrecyModel.replace('-UDPN', '') +
@@ -431,9 +436,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (this.validateForm.get('amount')?.value !== res) {
-          this.getExchange();
-        }
+        this.getExchange();
       });
   }
   onAvailableCurrecy(e: any) {
@@ -457,11 +460,13 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getExchange();
   }
   onBeneficialWalletAddressChange(e: number) {
-    const val = this.BeneficiaryArr.filter(
-      (item: any) => item.bankWalletId === e
-    );
-    this.newBeneficialWalletAddress = val[0]['chainAccountAddress'];
-    this.getExchange();
+    setTimeout(() => {
+      const val = this.BeneficiaryArr.filter(
+        (item: any) => item.bankWalletId === e
+      );
+      this.newBeneficialWalletAddress = val[0]['chainAccountAddress'];
+      this.getExchange();
+    }, 500);
   }
   onBeneficiaryCurrency(e: any) {
     const val = this.newAmountArr.filter(
@@ -489,6 +494,13 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       ];
     this.newAmountArr =
       this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'];
+    this.validateForm
+      .get('beneficialWalletAddress')
+      ?.setValue(
+        this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
+          'beneficiaryWalletExtendedRespVOs'
+        ][0]['bankWalletId']
+      );
     this.BeneficiaryArr =
       this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
         'beneficiaryWalletExtendedRespVOs'
@@ -504,13 +516,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           'centralBankName'
         ]
       );
-    this.validateForm
-      .get('beneficialWalletAddress')
-      ?.setValue(
-        this.beneficialBankNameListAll[0]['beneficiaryCurrencyRespVOs'][0][
-          'beneficiaryWalletExtendedRespVOs'
-        ][0]['bankWalletId']
-      );
+
     this.cdr.markForCheck();
     this.getExchange();
   }
