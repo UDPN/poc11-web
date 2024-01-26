@@ -195,6 +195,15 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
+      this.findExchange();
+      this.setShowStatus(false);
+    }
+  }
+  onReceivingWalletAddressChange(e: any) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
+      this.setShowStatus(true);
+    } else {
+      this.findExchange();
       this.setShowStatus(false);
     }
   }
@@ -212,9 +221,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           'cbdcCount'
         ]
       );
+
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
+      this.findExchange();
       this.setShowStatus(false);
     }
   }

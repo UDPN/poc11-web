@@ -129,7 +129,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private socketService: SocketService,
     private notification: NzNotificationService,
     private windowService: WindowService
-  ) { }
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -142,7 +142,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   walletAddress: any = [];
   @HostListener('window:resize', ['$event'])
   ngOnInit() {
-
     this.isFirstLogin();
     // this.fetchNumbers();
     this._informationService.detail().subscribe((res: any) => {
@@ -251,13 +250,19 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         const array: any = [];
         item.walletList.map((items: any, i: any) => {
           array.push(items.balance);
-          totalBance = eval(array.join("+"));
+          totalBance = eval(array.join('+'));
           Object.assign(items, { index: i + 1 });
         });
-        Object.assign(item, { value: item.walletList[0].balance.toString() + '-' + item.walletList[0].index.toString(), unit, totalBance});
+        Object.assign(item, {
+          value:
+            item.walletList[0].balance.toString() +
+            '-' +
+            item.walletList[0].index.toString(),
+          unit,
+          totalBance
+        });
       });
       this.walletBalanceList = walletBalanceList;
-      console.log(this.walletBalanceList);
     });
   }
 
@@ -295,7 +300,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           transferInAmount: res.transferInAmountList,
           days: res.daysList,
           length
-        }
+        };
         this.getEcharts(params);
       }
     });
@@ -550,33 +555,33 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
               (item.value === 0 ? 0 : thousandthMark(item.value));
           });
           return tips;
-        },
+        }
       },
       legend: {
         // data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
         data: [
           {
             name: 'Top-up',
-            icon: 'circle',
+            icon: 'circle'
           },
           {
             name: 'Transfer In',
-            icon: 'circle',
+            icon: 'circle'
           },
           {
             name: 'Withdraw',
-            icon: 'circle',
+            icon: 'circle'
           },
           {
             name: 'Transfer Out',
-            icon: 'circle',
-          },
+            icon: 'circle'
+          }
         ],
-        right: '10%',
+        right: '10%'
       },
       xAxis: {
         type: 'category',
-        data: param.days,
+        data: param.days
       },
       yAxis: {
         type: 'value'
@@ -601,8 +606,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           name: 'Transfer Out',
           type: 'line',
           data: param.transferOutAmount
-        },
-      ],
+        }
+      ]
     };
     // myChart.on('brushSelected', function (params: any) {
     //   var brushed = [];
@@ -647,6 +652,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   ngOnDestroy(): void {
-    window.addEventListener('resize', () => { });
+    window.addEventListener('resize', () => {});
   }
 }
