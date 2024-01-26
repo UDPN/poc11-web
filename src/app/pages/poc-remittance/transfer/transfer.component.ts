@@ -260,12 +260,11 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onRemitterWalletAddressChange(e: any) {
-    // 设置availableBalance显示
-    this.validateForm.get('availableBalance')?.setValue(e);
-
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
+    // 设置availableBalance显示
+    this.validateForm.get('availableBalance')?.setValue(val[0]['cbdcCount']);
     this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     this.getExchange();
   }
