@@ -256,7 +256,7 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R0305',
         newLinkFlag: 1,
-        path: 'https://github.com/UDPN/Poc9-contract-document'
+        path: '../../../../assets/api-documentation/PoC11 APIs.pdf'
       },
       {
         id: 5,
