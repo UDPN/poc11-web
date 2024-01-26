@@ -294,7 +294,7 @@ export class BillComponent implements OnInit, AfterViewInit {
         .pipe(finalize(() => (this.isLoading = false)))
         .subscribe({
           next: (res) => {
-            if (res.data) {
+            if (res.code === '0') {
               this.modal
                 .success({
                   nzTitle: 'Export successfully !',

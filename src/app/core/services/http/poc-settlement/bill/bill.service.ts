@@ -83,7 +83,7 @@ export class BillService {
   }
 
   public getExportPdf(params: Pdata, timeZone: any): Observable<any> {
-    return this.https.post(`/v1/fxsp/sys/bill/invoice/export`, params, { headers: {'timeZone': timeZone }, observe: "response" });
+    return this.https.post(`/v1/fxsp/sys/bill/invoice/export`, params, { headers: {'timeZone': timeZone } });
   }
 
 }
