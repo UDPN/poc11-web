@@ -1,25 +1,48 @@
 <div class="time-line">
   <ng-container *ngIf="info.status === 1">
     <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
-      <nz-step nzTitle="Created" [nzStatus]="'finish'"  [nzDescription]="step1Tpl"></nz-step>
+      <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
       <nz-step [nzTitle]="'Awaiting Approval'" [nzDescription]="step2Tpl"></nz-step>
-      <nz-step [nzTitle]="'Awaiting ' + (info.type === 1 ? 'deposit' : 'refund ') +  ' of the fiat money'" [nzDescription]="step7Tpl"></nz-step>
-      <nz-step nzTitle="Awaiting Submission" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
+      <!-- Top-up -->
+      <ng-container *ngIf="info.type === 1">
+        <nz-step [nzTitle]="'Awaiting deposit of the fiat money'" [nzStatus]="'wait'"
+          [nzDescription]="step7Tpl"></nz-step>
+        <nz-step nzTitle="Awaiting Submission" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
+      </ng-container>
+      <!-- Withdrawal -->
+      <ng-container *ngIf="info.type !== 1">
+        <nz-step nzTitle="Awaiting Submission" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
+        <nz-step [nzTitle]="'Awaiting refund of the fiat money'" [nzStatus]="'wait'"
+          [nzDescription]="step7Tpl"></nz-step>
+      </ng-container>
     </nz-steps>
   </ng-container>
   <ng-container *ngIf="info.status === 3">
     <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
       <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
       <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step4Tpl"></nz-step>
-      <nz-step [nzTitle]="'Awaiting ' + (info.type === 1 ? 'deposit' : 'refund ') +  ' of the fiat money'" [nzStatus]="'process'" [nzDescription]="step7Tpl"></nz-step>
-      <nz-step nzTitle="Awaiting Submission" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
+      <!-- Top-up -->
+      <ng-container *ngIf="info.type === 1">
+        <nz-step [nzTitle]="'Awaiting deposit of the fiat money'" [nzStatus]="'process'"
+          [nzDescription]="step7Tpl"></nz-step>
+        <nz-step nzTitle="Awaiting Submission" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
+      </ng-container>
+      <!-- Withdrawal -->
+      <ng-container *ngIf="info.type !== 1">
+        <nz-step nzTitle="Awaiting Submission" [nzStatus]="'process'" [nzDescription]="step3Tpl"></nz-step>
+        <nz-step [nzTitle]="'Awaiting refund of the fiat money'" [nzStatus]="'wait'"
+          [nzDescription]="step7Tpl"></nz-step>
+      </ng-container>
     </nz-steps>
   </ng-container>
   <ng-container *ngIf="info.status === 6">
     <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
       <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
       <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step4Tpl"></nz-step>
-      <nz-step [nzTitle]="'The fiat money has been successfully ' + (info.type === 1 ? 'deposited' : 'refunded')" [nzStatus]="'finish'" [nzDescription]="step8Tpl"></nz-step>
+      <ng-container *ngIf="info.type === 1">
+        <nz-step [nzTitle]="'The fiat money has been successfully deposited'" [nzStatus]="'finish'"
+          [nzDescription]="step8Tpl"></nz-step>
+      </ng-container>
       <nz-step [nzTitle]="'Failed'" [nzStatus]="'error'" [nzDescription]="step5Tpl"></nz-step>
     </nz-steps>
   </ng-container>
@@ -34,15 +57,25 @@
     <nz-steps [nzCurrent]="2" nzDirection="vertical" nzSize="small">
       <nz-step nzTitle="Created" [nzDescription]="step1Tpl"></nz-step>
       <nz-step [nzTitle]="'Approved'" [nzDescription]="step4Tpl"></nz-step>
-      <nz-step [nzTitle]="'The fiat money has been successfully ' + (info.type === 1 ? 'deposited' : 'refunded')" [nzStatus]="'finish'" [nzDescription]="step8Tpl"></nz-step>
-      <nz-step [nzTitle]="'Success'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
+      <!-- Top-up -->
+      <ng-container *ngIf="info.type === 1">
+        <nz-step [nzTitle]="'The fiat money has been successfully deposited'" [nzStatus]="'finish'"
+          [nzDescription]="step8Tpl"></nz-step>
+        <nz-step [nzTitle]="'Success'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
+      </ng-container>
+      <!-- Withdrawal -->
+      <ng-container *ngIf="info.type !== 1">
+        <nz-step [nzTitle]="'Success'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
+        <nz-step [nzTitle]="'The fiat money has been successfully refunded'" [nzStatus]="'finish'"
+          [nzDescription]="step8Tpl"></nz-step>
+      </ng-container>
     </nz-steps>
   </ng-container>
 </div>
 <ng-template #step1Tpl>
   <ul>
     <li>{{ 'Transaction No.: ' + info.transactionNo }}</li>
-    <li>{{ 'on ' + (info.creationTime | map:'timeStamp') + ' by ' +  (info.createUser  | map: 'null') }}</li>
+    <li>{{ 'on ' + (info.creationTime | map:'timeStamp') + ' by ' + (info.createUser | map: 'null') }}</li>
   </ul>
 </ng-template>
 <ng-template #step2Tpl>
@@ -52,8 +85,14 @@
 </ng-template>
 <ng-template #step3Tpl>
   <ul>
-    <li>{{ 'The ' + (info.type === 1 ? 'top-up' : 'withdrawal') + ' request is waiting to be executed on the chain'
-      }}</li>
+    <ng-container *ngIf="info.type === 1">
+      <li>{{ 'The top-up request is waiting to be executed on the chain'
+        }}</li>
+    </ng-container>
+    <ng-container *ngIf="info.type !== 1">
+      <li>{{ 'The withdrawal request is awaiting confirmation'
+        }}</li>
+    </ng-container>
   </ul>
 </ng-template>
 <ng-template #step4Tpl>
@@ -77,7 +116,8 @@
 </ng-template>
 <ng-template #step7Tpl>
   <ul>
-    <li>{{ info.type === 1 ? 'Waiting for the commercial bank to deposit the fiat currency' : 'Waiting to refund the fiat currency to the commercial bank'}}</li>
+    <li>{{info.type === 1 ? 'Waiting for the commercial bank to deposit the fiat currency' : 'Waiting to refund the
+      fiat currency to the commercial bank'}}</li>
   </ul>
 </ng-template>
 <ng-template #step8Tpl>
