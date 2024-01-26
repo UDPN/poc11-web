@@ -2,10 +2,13 @@
   <!-- <h2 class="m-b-8" [class.is-over-model]="isOverModel">
     BN Name: {{ instance }}
   </h2> -->
-  <p class="m-b-50 title" [class.is-over-model]="isOverModel">
-    CBDC Commercial Bank System
+  <p class="m-b-30 title" [class.is-over-model]="isOverModel">
+    wCBDC Commercial Bank System
   </p>
-  <div class="full-with">
+  <p class="m-b-50 title" [class.is-over-model]="isOverModel">
+    {{'( ' + systemTitle + ' )'}}
+  </p>
+  <div class="full-with" style="display: flex; justify-content: center;align-items: center;">
     <form nz-form nzLayout="vertical" class="login-form-wrap" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label nzRequired [nzFor]="">USERNAME</nz-form-label>

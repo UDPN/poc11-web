@@ -97,7 +97,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
+      breadcrumb: ['Wallet Management', 'wCBDC Wallet Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
