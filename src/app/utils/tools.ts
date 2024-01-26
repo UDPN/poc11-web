@@ -315,6 +315,9 @@ const timeZone = function timeZone(t: any) {
   return new Date().getTimezoneOffset() / -60;
 }
 
+const timeZoneIANA = function timeZoneIANA(t: any) {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
 
 const timeZoneTotime = function timeZoneTotime(t: any) {
   if (!t) t = 8;
@@ -413,5 +416,6 @@ export {
   thousandthMark,
   timeToTimestampMillisecond,
   thousandRate,
-  isJSON
+  isJSON,
+  timeZoneIANA
 };
