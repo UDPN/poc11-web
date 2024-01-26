@@ -45,7 +45,7 @@ const menuNav: Menu[] = [
       {
         id: 1,
         fatherId: 3,
-        menuName: 'CBDC Wallet Management',
+        menuName: 'wCBDC Wallet Management',
         open: false,
         selected: false,
         menuType: 'C',
