@@ -173,10 +173,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         item.bankAccountId === this.validateForm.value.receivingWalletAddress
     )[0]['chainAccountAddress'];
 
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -195,10 +192,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('availableBalance')
       ?.setValue(this.transactionWalletAddressArr[e]['cbdcCount']);
 
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -206,10 +200,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onReceivingWalletAddressChange(e: any) {
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -246,10 +237,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     //       'bankAccountId'
     //     ]
     //   );
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -257,6 +245,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   setShowStatus(status: boolean) {
+    if (this.validateForm.get('amount')?.value === null) {
+      this.showStatus = true;
+      return;
+    }
     this.showStatus = status;
     this.cdr.markForCheck();
   }
@@ -265,6 +257,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.reveingCurrecy !== this.purchCurrecy &&
       this.validateForm.get('amount')?.value !== null
     ) {
+      this.setShowStatus(false);
       this.nzLoading = true;
       this.cdr.markForCheck();
       this.fxPurchasingService
