@@ -5,7 +5,7 @@
   <p class="m-b-30 title" [class.is-over-model]="isOverModel">
     wCBDC Commercial Bank System
   </p>
-  <p class="m-b-50 title" [class.is-over-model]="isOverModel">
+  <p class="m-b-50 title" [class.is-over-model]="isOverModel" *ngIf="systemTitle">
     {{'( ' + systemTitle + ' )'}}
   </p>
   <div class="full-with" style="display: flex; justify-content: center;align-items: center;">
