@@ -20,7 +20,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-home/home',
-    code: 'R0',
+    code: 'R0'
   },
   {
     fatherId: 0,
@@ -55,7 +55,7 @@ const menuNav: Menu[] = [
       {
         id: 2,
         fatherId: 3,
-        menuName: 'CBDC Transactions',
+        menuName: 'Mint & Melt Transactions',
         open: false,
         selected: false,
         menuType: 'C',
@@ -98,7 +98,7 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 4,
-        menuName: 'Transaction Record',
+        menuName: 'Transaction Records',
         open: false,
         selected: false,
         menuType: 'C',
@@ -113,7 +113,7 @@ const menuNav: Menu[] = [
     menuType: 'C',
     code: 'R02',
     menuGroup: true,
-    groupName: 'As a Service Provider',
+    groupName: 'As a FX Service Provider',
     groupCollapseName: 'Commercial'
   },
   {
@@ -125,7 +125,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-activate-settlement/activate-settlement',
-    code: 'R0201',
+    code: 'R0201'
   },
   {
     menuName: 'Capital Pool Management',
@@ -136,10 +136,10 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-capital-pool/capital-pool',
-    code: 'R0202',
+    code: 'R0202'
   },
   {
-    menuName: 'Foreign Exchange Management',
+    menuName: 'FX Pair Management',
     id: 8,
     fatherId: 0,
     icon: 'transaction',
@@ -147,7 +147,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-profile/foreign-exchange-apply',
-    code: 'R0203',
+    code: 'R0203'
   },
   {
     menuName: 'Settlement Management',
@@ -173,7 +173,7 @@ const menuNav: Menu[] = [
       {
         id: 2,
         fatherId: 9,
-        menuName: 'Billing',
+        menuName: 'Monthly Income Statement',
         open: false,
         selected: false,
         menuType: 'C',
@@ -191,7 +191,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-fx-transactions/fx-transactions',
-    code: 'R0205',
+    code: 'R0205'
   },
   {
     menuName: 'Historical FX Rate Query',
@@ -202,7 +202,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-fx-rate-history/fx-rate-history',
-    code: 'R0206',
+    code: 'R0206'
   },
   {
     id: 12,
@@ -240,7 +240,7 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 12,
-        menuName: 'Bank Information Modification',
+        menuName: 'Bank Information Configuration',
         open: false,
         selected: false,
         menuType: 'C',
@@ -250,13 +250,24 @@ const menuNav: Menu[] = [
       {
         id: 4,
         fatherId: 12,
-        menuName: 'Style Configuration',
+        menuName: 'API Documentation',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R0305',
+        newLinkFlag: 1,
+        path: '../../../../assets/api-documentation/PoC11 APIs.pdf'
+      },
+      {
+        id: 5,
+        fatherId: 12,
+        menuName: 'UI Configuration',
         open: false,
         selected: false,
         menuType: 'C',
         code: 'R0304',
         path: '/poc/poc-system/system-style'
-      },
+      }
     ]
-  },
+  }
 ];

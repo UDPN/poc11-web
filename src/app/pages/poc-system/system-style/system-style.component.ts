@@ -104,7 +104,7 @@ export class SystemStyleComponent implements OnInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `User Management`,
-      breadcrumb: ['System Management', 'System Style'],
+      breadcrumb: ['System Management', 'UI Configuration'],
       extra: '',
       desc: '',
       footer: ''

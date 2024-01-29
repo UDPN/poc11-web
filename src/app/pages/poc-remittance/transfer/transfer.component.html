@@ -4,98 +4,19 @@
     <div nz-row style="display: flex; justify-content: space-around;" class="m-t-30">
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24"
         style="background: #fff; border-radius: 16px;padding: 4px;">
-        <nz-card nzTitle="Beneficiary Information" class="none-bottom" nzBordered="false">
+        <nz-card nzTitle="Remitter Information" class="none-bottom" nzBordered="false">
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Beneficiary's Bank Name
+                <nz-form-label nzRequired nzSpan="24">Remitter's Name
                 </nz-form-label>
-                <nz-form-control [nzErrorTip]="beneficialBankNameError">
+                <nz-form-control>
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-select formControlName="beneficialBankId"
-                        (ngModelChange)="onBeneficialBankNameChange($event)">
-                        <!-- <nz-option nzLabel="ALL" nzValue="all"></nz-option> -->
-                        <nz-option *ngFor="let item of beneficialBankNameList" [nzValue]="item.value"
-                          [nzLabel]="item.label"></nz-option>
-                      </nz-select>
+                      <span>{{remitterBankName}}</span>
                     </div>
                   </div>
-                  <ng-template #beneficialBankNameError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please select your Beneficiary's Bank
-                      Name</ng-container>
-                  </ng-template>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
-              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Beneficiary's Wallet Address
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="beneficialWalletAddressError">
-                  <div nz-row>
-                    <div nz-col nzSpan="24">
-                      <input nz-input formControlName="beneficialWalletAddress" maxlength="100" />
-                    </div>
-                  </div>
-                  <ng-template #beneficialWalletAddressError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Beneficiary's Wallet
-                      Address</ng-container>
-                    <ng-container *ngIf="control.hasError('regular')">Please enter a 42 digit hexadecimal starting with
-                      '0x'</ng-container>
-                  </ng-template>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
-              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency & Interbank Settlement Amount
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="amountError">
-                  <div nz-row>
-                    <div nz-col nzSpan="24">
-                      <nz-input-group [nzAddOnAfter]="beneficiaryCurrencyName">
-                        <input type="number" nz-input formControlName="amount" />
-                      </nz-input-group>
-                    </div>
-                  </div>
-                  <ng-template #amountError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Currency & Interbank
-                      Settlement
-                      Amount</ng-container>
-                    <ng-container *ngIf="control.hasError('regular')">Currency&Interbank Settlement Amount cannot be
-                      greater than Available Balance
-                    </ng-container>
-                    <ng-container *ngIf="control.hasError('regular1')"></ng-container>
-                  </ng-template>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </form>
-        </nz-card>
-      </div>
-      <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24"
-        style="background: #fff; border-radius: 16px;padding: 4px;">
-        <nz-card nzTitle="Remitter Information" nzBordered="false" class="none-bottom">
-          <form nz-form [formGroup]="validateForm">
-            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
-              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Remitter's Wallet Address
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="remitterWalletAddressError">
-                  <div nz-row>
-                    <div nz-col nzSpan="24">
-                      <nz-select formControlName="remitterWalletAddress"
-                        (ngModelChange)="onRemitterWalletAddressChange($event)">
-                        <nz-option *ngFor="let item of remitterWalletAddressList" [nzValue]="item.value"
-                          [nzLabel]="item.label"></nz-option>
-                      </nz-select>
-                    </div>
-                  </div>
-                  <ng-template #remitterWalletAddressError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please select your Remitter's Wallet
-                      Address</ng-container>
-                  </ng-template>
+
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -120,7 +41,29 @@
             </div>
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Remitter's Bank Name
+                <nz-form-label nzRequired nzSpan="24">Remitter's Wallet Address
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="remitterWalletAddressError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-select formControlName="remitterWalletAddress"
+                        (ngModelChange)="onRemitterWalletAddressChange($event)">
+                        <nz-option *ngFor="let item of remitterWalletAddressList" [nzValue]="item.bankAccountId"
+                          [nzLabel]="item.chainAccountAddress"></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
+                  <ng-template #remitterWalletAddressError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please select your Remitter's Wallet
+                      Address</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Remitter's Central Bank Name
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="remitterBankNameError">
                   <div nz-row>
@@ -129,9 +72,101 @@
                     </div>
                   </div>
                   <ng-template #remitterBankNameError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Remitter's Bank
+                    <ng-container *ngIf="control.hasError('required')">Please input your Remitter's Central Bank
                       Name</ng-container>
                   </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+          </form>
+        </nz-card>
+      </div>
+      <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24"
+        style="background: #fff; border-radius: 16px;padding: 4px;">
+        <nz-card nzTitle="Beneficiary Information" nzBordered="false" class="none-bottom">
+
+          <form nz-form [formGroup]="validateForm">
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Beneficiary's Name
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="beneficialBankNameError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-select formControlName="beneficialBankId"
+                        (ngModelChange)="onBeneficialBankNameChange($event)">
+                        <!-- <nz-option nzLabel="ALL" nzValue="all"></nz-option> -->
+                        <nz-option *ngFor="let item of beneficialBankNameListAll,index as i" [nzValue]="i"
+                          [nzLabel]="item.bankName"></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
+                  <ng-template #beneficialBankNameError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please select your Beneficiary's Bank
+                      Name</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Currency & Interbank Settlement Amount
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="newAmountError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-input-group [nzAddOnAfter]="addOnAfterTemplate2">
+                        <input nz-input formControlName="amount" />
+                      </nz-input-group>
+                    </div>
+                  </div>
+                  <ng-template #newAmountError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please input your Available
+                      Balance</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">Currency&Interbank Settlement Amount cannot be
+                      greater than Available Balance
+                    </ng-container>
+                  </ng-template>
+
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Beneficiary's Wallet Address
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="beneficialWalletAddressError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-select formControlName="beneficialWalletAddress"
+                        (ngModelChange)="onBeneficialWalletAddressChange($event)">
+                        <nz-option *ngFor="let item of BeneficiaryArr,index as i" [nzValue]="item.bankWalletId"
+                          [nzLabel]="item.chainAccountAddress"></nz-option>
+                      </nz-select>
+                    </div>
+                  </div>
+                  <ng-template #beneficialWalletAddressError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please input your Beneficiary's Wallet
+                      Address</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">Please enter a 42 digit hexadecimal starting with
+                      '0x'</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzSpan="24">Beneficiary's Central Bank Name
+                </nz-form-label>
+                <nz-form-control>
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <input nz-input formControlName="newBeneficialBankName" readonly class="onboard-disabled" />
+                    </div>
+                  </div>
+
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -156,12 +191,12 @@
         </nz-card>
       </div>
 
-      <ng-container *ngIf="settlementStatus && this.validateForm.get('amount')?.value">
+      <ng-container *ngIf="settlementStatus ">
         <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24" class="m-t-60"
           style="background: #fff; border-radius: 16px;padding: 4px;">
           <div>
             <nz-card nzTitle="Settlement Information" nzBordered="false" class="none-bottom">
-
+              <span style="color: rgb(174, 6, 6);">Expiration Time: {{timeString}}</span>
               <nz-table #rowSelectionTable nzShowSizeChanger nzShowPagination="false" [nzData]="dataList"
                 [nzLoading]="nzLoading">
                 <thead>
@@ -216,10 +251,16 @@
 </ng-template>
 <ng-template #addOnAfterTemplate>
   <nz-select (ngModelChange)="onAvailableCurrecy($event)" [ngModel]="availableCurrecyModel">
-    <nz-option *ngFor="let item of availableCurrecy" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+    <nz-option *ngFor="let item of availableCurrecy" [nzValue]="item.digitalCurrencyName"
+      [nzLabel]="item.digitalSymbol"></nz-option>
   </nz-select>
 </ng-template>
-
+<ng-template #addOnAfterTemplate2>
+  <nz-select (ngModelChange)="onBeneficiaryCurrency($event)" [ngModel]="beneficiaryCurrency">
+    <nz-option *ngFor="let item of newAmountArr" [nzValue]="item.digitalCurrencyName"
+      [nzLabel]="item.digitalSymbol"></nz-option>
+  </nz-select>
+</ng-template>
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Remittance Information Confirmation" (nzOnCancel)="cancelView()"
   [nzClosable]="false" [nzWidth]="1000" nzCentered="true">
   <div *nzModalContent>
@@ -253,13 +294,13 @@
       <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
         [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
         <nz-descriptions-item nzTitle="Beneficiary's Wallet Address">{{
-          validateForm.controls["beneficialWalletAddress"].value
+          newBeneficialWalletAddress
           }}
           <br>
           {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency.replace('-UDPN', '')}}
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Beneficiary's Bank Name">{{
-          validateForm.controls["beneficialBankName"].value}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Beneficiary's Central Bank Name">{{
+          validateForm.controls["newBeneficialBankName"].value}}</nz-descriptions-item>
       </nz-descriptions>
     </nz-card>
 
@@ -267,12 +308,12 @@
       <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
         [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
         <nz-descriptions-item nzTitle="Remitter's Wallet Address">
-          {{ validateForm.controls["remitterWalletAddress"].value }}
+          {{ newRemitterWalletAddress }}
           <br>
           {{ (beneficiaryCurrency !== availableCurrecyModel ? this.checkedItemComment[0].total :
           validateForm.controls["amount"].value) + ' ' + availableCurrecyModel.replace('-UDPN', '')}}
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
+        <nz-descriptions-item nzTitle="Remitter's Central Bank Name"> {{
           validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remittance Information">
           {{
@@ -298,7 +339,7 @@
               Password
             </nz-form-label>
             <nz-form-control [nzErrorTip]="passwordError" nzSpan="18">
-              <input [type]="'password'" nz-input formControlName="password" />
+              <input [type]="'password'" nz-input formControlName="pwd" />
               <ng-template #passwordError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Password</ng-container>
               </ng-template>

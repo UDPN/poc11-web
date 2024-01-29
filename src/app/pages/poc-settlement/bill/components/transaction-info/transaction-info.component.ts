@@ -21,6 +21,7 @@ import { BillService } from '@app/core/services/http/poc-settlement/bill/bill.se
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { timeZoneIANA } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -170,9 +171,13 @@ export class TransactionInfoComponent implements OnInit {
       this.listOfControl[index - 1].controlInstance,
       this.fb.control('', [Validators.required, this.emailValidator])
     );
-    this.validateForm
+    if (!this.validateForm
       .get(this.listOfControl[0].controlInstance)
-      ?.setValue(sessionStorage.getItem('email'));
+      ?.value) {
+      this.validateForm
+        .get(this.listOfControl[0].controlInstance)
+        ?.setValue(sessionStorage.getItem('email'));
+    }
   }
 
   removeField(i: { id: number; controlInstance: string }, e: MouseEvent): void {
@@ -195,12 +200,13 @@ export class TransactionInfoComponent implements OnInit {
         recipientList
       };
       this.isLoading = true;
+      const time = timeZoneIANA(this.dataList[0].transactionDate);
       this.billService
-        .getExport(params)
+        .getExport(params, time)
         .pipe(finalize(() => (this.isLoading = false)))
         .subscribe({
           next: (res) => {
-            if (res) {
+            if (res.code === '0') {
               this.modal
                 .success({
                   nzTitle: 'Export successfully !',

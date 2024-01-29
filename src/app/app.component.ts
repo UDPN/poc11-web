@@ -4,7 +4,7 @@ import {
   Component,
   OnInit,
   TemplateRef,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { DrawerWrapService } from '@app/drawer/base-drawer';
 import { PreloaderService } from '@core/services/common/preloader.service';
 import { LockScreenStoreService } from '@store/common-store/lock-screen-store.service';
 import { SpinService } from '@store/common-store/spin.service';
-import { fnStopMouseEvent,   } from '@utils/tools';
+import { fnStopMouseEvent } from '@utils/tools';
 import { ModalWrapService } from '@widget/base-modal';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
@@ -23,6 +23,8 @@ import { ThemeOptionsKey } from './config/constant';
 import { WindowService } from './core/services/common/window.service';
 import { ThemeService } from './core/services/store/common-store/theme.service';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
+import { SocketService } from './core/services/common/socket.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-root',
@@ -80,7 +82,7 @@ import { NzConfigService } from 'ng-zorro-antd/core/config';
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [fadeRouteAnimation],
+  animations: [fadeRouteAnimation]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   loading$ = this.spinService.getCurrentGlobalSpinStore();
@@ -98,22 +100,20 @@ export class AppComponent implements OnInit, AfterViewInit {
     public router: Router,
     public translateService: TranslateService,
     private windowService: WindowService,
-    private themesService: ThemeService, 
+    private themesService: ThemeService,
     private nzConfigService: NzConfigService,
+    private socketService: SocketService,
+    private notification: NzNotificationService,
+
   ) {
-        this.initTranslate();
+    this.initTranslate();
   }
 
   initTranslate() {
     this.translateService.addLangs(['en', 'zh']);
     this.translateService.setDefaultLang('en');
-      
-    
   }
 
-
-
-  
   fullScreenIconClick($event: MouseEvent): void {
     this.modalFullScreenFlag = !this.modalFullScreenFlag;
     fnStopMouseEvent($event);
@@ -125,7 +125,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    const themeOptionsKey:any = this.windowService.getStorage(ThemeOptionsKey);
+
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
     this.nzConfigService.set('theme', {
       primaryColor: JSON.parse(themeOptionsKey).color
     });

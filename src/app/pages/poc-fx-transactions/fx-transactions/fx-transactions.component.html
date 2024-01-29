@@ -12,6 +12,22 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Commercial Bank Name</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="commercialBankName" [(ngModel)]="searchParam.commercialBankName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Receiving Bank Name</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="" name="receivingBankName" [(ngModel)]="searchParam.receivingBankName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <!-- <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
             <nz-form-label>Transaction Hash</nz-form-label>
@@ -41,7 +57,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzXXl]="24" [nzXl]="24" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24"
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24"
           class="m-b-8 text-right p-0">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
@@ -69,10 +85,10 @@
         toCurrency)
         }}</span>
     </ng-template>
-    <ng-template #operationTpl let-transactionNo="transactionNo">
+    <ng-template #operationTpl let-transactionNo="transactionNo" let-receivingBankName="receivingBankName">
       <ng-container *appAuth="'R020501'">
         <span class="operate-text" routerLink="/poc/poc-fx-transactions/fx-transactions/info"
-          [queryParams]="{transactionNo}">
+          [queryParams]="{transactionNo, receivingBankName}">
           Detail
         </span>
       </ng-container>

@@ -88,7 +88,7 @@
 <ng-template #step4Tpl>
   <ul>
     <li>{{ 'Status: ' + (info.state | map:'walletTransactionsRecordStatus') }}</li>
-    <li>{{ 'Reason: --' }}</li>
+    <li>{{ 'Reason: ' + info.failureReason }}</li>
     <li>
       {{ info.transactionLogTrees[1]?.txTime | map:'timeStamp' }}
     </li>
@@ -102,14 +102,14 @@
     <li>{{ 'The remitter transfers ' + info.fromCurrency + " from remitter's wallet to recipient's" + info.toCurrency +
       ' wallet' }}</li>
     <li>{{ 'Transaction No.: ' + info.serialNumber }}</li>
-    <li>{{ 'on ' + (info.createTime | map:'timeStamp') }}</li>
+    <li>{{ 'on ' + (info.createTime | map:'timeStamp') + ' by ' +  (info.createUser | map: 'null')  }}</li>
   </ul>
 </ng-template>
 <ng-template #step6Tpl>
   <ul>
     <li>
-      {{ (info.toCbdcCount | map:'toThousandthMark') + ' ' + info.toCurrency + ' = ' + (info.fromCbdcCount |
-      map:'toThousandthMark') + ' ' + info.fromCurrency }}
+      {{ (info.fromCbdcCount | map:'toThousandthMark') + ' ' + info.fromCurrency + ' = ' + (info.toCbdcCount |
+      map:'toThousandthMark') + ' ' + info.toCurrency }}
       {{'with FX: 1 '+ info.fromCurrency.split('-')[1] + ' = ' + info.exchangeRate + ' ' +
       info.toCurrency.split('-')[1] }}
     </li>
@@ -122,7 +122,7 @@
 <ng-template #step7Tpl>
   <ul>
     <li>{{ 'Status: ' + (info.state | map:'walletTransactionsRecordStatus') }}</li>
-    <li>{{ 'Reason: --' }}</li>
+    <li>{{ 'Reason: ' + info.failureReason }}</li>
     <li>
       {{ info.transactionLogTrees[3]?.txTime | map:'timeStamp' }}
     </li>

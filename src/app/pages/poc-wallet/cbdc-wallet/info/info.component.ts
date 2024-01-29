@@ -26,6 +26,8 @@ export class InfoComponent implements OnInit {
   toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('amountTpl', { static: true })
+  amountTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -39,8 +41,7 @@ export class InfoComponent implements OnInit {
   transactionTableConfig!: AntTableConfig;
   recordList: NzSafeAny[] = [];
   transactionList: NzSafeAny[] = [];
-  // detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
-  detailsTabs = ['Basic Information', 'Transaction'];
+  detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
   summaryCurrency: string = '';
   summaryInfo: any = {};
   summaryRegion: any = 0;
@@ -59,7 +60,7 @@ export class InfoComponent implements OnInit {
           name: 'Wallet Management'
         },
         {
-          name: 'CBDC Wallet Management',
+          name: 'wCBDC Wallet Management',
           url: '/poc/poc-wallet/cbdc-wallet'
         },
         { name: 'Details' }
@@ -81,6 +82,8 @@ export class InfoComponent implements OnInit {
     } else if (event === 1) {
       this.getTransactionSummary();
       this.getTransactionList();
+    } else {
+      this.getRecordList();
     }
   }
 
@@ -107,9 +110,22 @@ export class InfoComponent implements OnInit {
   }
 
   changePageSize(e: number): void {
-    this.recordTableConfig.pageSize = e;
+    this.transactionTableConfig.pageSize = e;
   }
 
+  recordChangePageSize(e: number): void {
+    this.recordTableConfig.pageSize = e;
+  }
+  
+  recordTableChangeDectction(): void {
+    this.recordList = [...this.recordList];
+    this.cdr.detectChanges();
+  }
+
+  recordTableLoading(isLoading: boolean): void {
+    this.recordTableConfig.loading = isLoading;
+    this.recordTableChangeDectction();
+  }
 
   tableChangeDectction(): void {
     this.transactionList = [...this.transactionList];
@@ -140,6 +156,9 @@ export class InfoComponent implements OnInit {
         )
         .subscribe((_: any) => {
           this.transactionList = _.data?.rows;
+          this.transactionList.forEach(item => {
+            Object.assign(item, { chainAccountAddress: param['chainAccountAddress'] });
+          })
           this.transactionTableConfig.total = _.data.page.total;
           this.transactionTableConfig.pageIndex = params.pageNum;
           this.tableLoading(false);
@@ -148,28 +167,60 @@ export class InfoComponent implements OnInit {
     });
   }
 
+  getRecordList(e?: NzTableQueryParams): void {
+    this.recordTableConfig.loading = true;
+    this.routeInfo.queryParams.subscribe(param => {
+      const params: SearchCommonVO<any> = {
+        pageSize: this.recordTableConfig.pageSize!,
+        pageNum: e?.pageIndex || this.recordTableConfig.pageIndex!,
+        filters: {
+          bankAccountId: param['bankAccountId']
+        }
+      };
+      this.cbdcWalletService
+        .getRecordList(params.pageNum, params.pageSize, params.filters)
+        .pipe(
+          finalize(() => {
+            this.recordTableLoading(false);
+          })
+        )
+        .subscribe((_: any) => {
+          this.recordList = _.data?.rows;
+          this.recordTableConfig.total = _.data.page.total;
+          this.recordTableConfig.pageIndex = params.pageNum;
+          this.recordTableLoading(false);
+          this.cdr.markForCheck();
+        });
+    });
+  }
+
+
   private initTable(): void {
     this.recordTableConfig = {
       headers: [
         {
           title: 'Operation Type',
-          field: '',
-          width: 150
+          field: 'type',
+          pipe: 'operationType',
+          width: 100
         },
         {
           title: 'Transaction Hash',
-          field: '',
-          width: 200
+          field: 'txHash',
+          pipe: 'nullValue',
+          width: 280
         },
         {
           title: 'Transaction Time',
-          field: '',
+          field: 'txTime',
+          pipe: 'timeStamp',
           width: 150
         },
         {
           title: 'Status',
-          field: '',
-          width: 100
+          field: 'state',
+          pipe: 'operationStatus',
+          width: 150
         }
       ],
       total: 0,
@@ -204,8 +255,7 @@ export class InfoComponent implements OnInit {
         },
         {
           title: 'Amount',
-          field: 'cbdcCount',
-          pipe: 'toThousandthMark',
+          tdTemplate: this.amountTpl,
           width: 100
         },
         {

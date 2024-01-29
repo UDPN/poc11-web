@@ -14,13 +14,14 @@ import { ThemeService } from '@app/core/services/store/common-store/theme.servic
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { thousandthMark } from '@app/utils/tools';
+import { fnEncrypts, thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { aesKey, aesVi } from '@app/config/constant';
 
 interface SearchParam {
   chainAccountAddress: string;
@@ -96,7 +97,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
+      breadcrumb: ['Wallet Management', 'wCBDC Wallet Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -108,24 +109,37 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.getCentralBank();
     this.topUpForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.amountValidator]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
     });
     this.withdrawForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.amountValidator]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
     });
     this.passwordForm = this.fb.group({
-      password: [null, [Validators.required]],
+      pwd: [null, [Validators.required]],
     });
   }
 
-  amountValidator = (
+  topUpAmountValidator = (
     control: FormControl
   ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    }
+    return {};
+  };
+
+  withdrawAmountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -229,33 +243,34 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   }
 
   confirmEnterPassword() {
-    this.isLoading = true;
+    this.isOkLoading = true;
+    const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
     const params = {
       amount: this.txType === 1 ? this.topUpForm.get('amount')?.value : this.withdrawForm.get('amount')?.value,
-      password: this.passwordForm.get('password')?.value,
+      password: code,
       txType: this.txType === 1 ? 1 : 2,
       walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
     }
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
-    this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isLoading = false)).subscribe({
+    this.cbdcWalletService.topUpOrWithdraw(params).pipe(finalize(() => this.isOkLoading = false)).subscribe({
       next: res => {
-        this.isVisibleEnterPassword = false;
         if (res) {
+          this.isVisibleEnterPassword = false;
           this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
             this.getDataList();
           });
-        }
-        if (this.txType === 1) {
-          this.topUpForm.reset();
-        } else {
-          this.withdrawForm.reset();
+          if (this.txType === 1) {
+            this.topUpForm.reset();
+          } else {
+            this.withdrawForm.reset();
+          }
         }
         this.passwordForm.reset();
-        this.isLoading = false;
+        this.isOkLoading = false;
         this.cdr.markForCheck();
       },
       error: err => {
-        this.isLoading = false;
+        this.isOkLoading = false;
         this.cdr.markForCheck();
       }
     })

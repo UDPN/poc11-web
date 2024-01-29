@@ -6,9 +6,10 @@
 <div class="normal-detail-table-wrap">
   <nz-card [nzBordered]="true">
     <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
-      class="card-descriptions">
+      class="card-descriptions m-t-20">
       <nz-descriptions-item nzTitle="Cross-Border Remittance" [nzSpan]="3">{{
-        '11112w12sewd'
+        ((info.fromAmount | map:'toThousandthMark') + ' ' + info.formCurrency) |
+        map:'null'
         }}</nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
@@ -18,9 +19,15 @@
       <nz-descriptions-item nzTitle="Transaction No." [nzSpan]="3">{{
         info.transactionNo
         }}</nz-descriptions-item>
-      <!-- <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">{{
+      <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">{{
         info.transactionHash
-        }}</nz-descriptions-item> -->
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Commercial Bank Name" [nzSpan]="3">{{
+        info.commercialBankName
+        }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Receiving Bank Name" [nzSpan]="3">{{
+        this.receivingBankName
+        }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Currency Pair" [nzSpan]="3">{{
         (info.formCurrency + '->' + info.toCurrency) | map:'null'
         }}</nz-descriptions-item>
@@ -64,7 +71,7 @@
         ((info.maxCommission | map:'toThousandthMark') + ' ' + info.formCurrency) | map:'null'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Commission Fee" [nzSpan]="3"><span style="font-weight: 500;">{{
-          ((info.fee | map:'toThousandthMark') + ' ' + info.formCurrency) | map:'null'
+          ((info.fee | map:'toThousandRate') + ' ' + info.formCurrency) | map:'null'
           }}</span></nz-descriptions-item>
     </nz-descriptions>
   </nz-card>

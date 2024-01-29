@@ -113,7 +113,9 @@ export const MapSet = {
     2: 'Rejected',
     3: 'Processing',
     5: 'Success',
-    6: 'Failed'
+    6: 'Failed',
+    7: 'Processing',
+    
   },
   walletTransactionsRecordStatus: {
     1: 'Pending',
@@ -126,7 +128,8 @@ export const MapSet = {
     2: 'red',
     3: 'purple',
     5: 'cyan',
-    6: 'red'
+    6: 'red',
+    7: 'purple',
   },
   walletTransactionsType: {
     1: 'Top-up',
@@ -198,6 +201,7 @@ export const MapSet = {
     2: 'Rejected',
     3: 'Processing',
     4: 'Processing',
+    7: 'Processing',
     5: 'Active',
     6: 'Failed'
   },
@@ -205,6 +209,17 @@ export const MapSet = {
     1: 'process',
     2: 'finish',
     3: 'error'
+  },
+  operationType: {
+    0: 'Create',
+    1: 'Freeze',
+    2: 'Unfreeze'
+  },
+  operationStatus: {
+    3: 'Pending Approval',
+    4: 'Processing',
+    5: 'Success',
+    6: 'Rejected'
   }
 };
 
@@ -288,12 +303,28 @@ export class MapPipe implements PipeTransform {
         return thousandRate(value);
       }
     }
+
+    // fiatTime
+    if (arg === 'fiatTime') {
+      if (value === null || value === '' || value === undefined) {
+        return (value = '--');
+      } else {
+        const number: any = Math.random() * (8000 - 2000) + 2000;
+        return (Number(value) + number).toString();
+      }
+    }
     
     if (arg === 'monthStamp') {
       if (!value) {
         return (value = '--');
       } else {
-        return timestampToMonth(value);
+        // return timestampToMonth(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM y');
+        return res?.replace('GMT', 'UTC');
       }
     }
     let type: string = arg;

@@ -1,10 +1,12 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   TemplateRef,
   ViewChild,
   AfterViewInit,
   OnInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnDestroy
 } from '@angular/core';
 import {
   FormBuilder,
@@ -13,22 +15,24 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { aesKey, aesVi } from '@app/config/constant';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { fnEncrypts } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { debounceTime } from 'rxjs';
+import { Subscription, debounceTime, interval } from 'rxjs';
 
 @Component({
   selector: 'app-fx-purchasing',
   templateUrl: './fx-purchasing.component.html',
   styleUrls: ['./fx-purchasing.component.less']
 })
-export class FxPurchasingComponent implements OnInit, AfterViewInit {
+export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -65,6 +69,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   purIndex: number = 0;
   transferTitle: string = '';
   receivingWalletAddressShow: string = '';
+  timeString: any = '';
+  timeSubscription!: Subscription;
+  transactionWalletAddressArr: any[] = [];
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -75,6 +82,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     private modal: NzModalService,
     private router: Router
   ) {}
+  ngOnDestroy(): void {
+    this.timeSubscription.unsubscribe();
+  }
   ngAfterViewInit(): void {
     this.fromEventAmount();
     this.pageHeaderInfo = {
@@ -87,6 +97,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    let datePipe: DatePipe = new DatePipe('en-US');
+    this.timeString = datePipe
+      .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
+      ?.replace('GMT', 'UTC');
+    const interval$ = interval(180000);
+    this.timeSubscription = interval$.subscribe((number) => {
+      this.timeString = datePipe
+        .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
+        ?.replace('GMT', 'UTC');
+      this.findExchange();
+      this.cdr.markForCheck();
+    });
     this.initData();
     this.validateForm = this.fb.group({
       receivingBankName: [null, [Validators.required]],
@@ -96,13 +118,24 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
       transactionWalletAddressId: [0, [Validators.required]],
       bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
-      availableBalance: [null, [Validators.required]],
+      availableBalance: [
+        null,
+        [Validators.required, this.amountAvailableBalance]
+      ],
       transactionBankName: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required]]
+      pwd: ['', [Validators.required]]
     });
   }
+  amountAvailableBalance = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value <= 0) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -116,6 +149,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
   initData() {
     this.fxPurchasingService.fetchFXPurchase().subscribe((res) => {
       this.fxPurchaseData = res;
+      this.purchCurrecyList = this.fxPurchaseData;
+      this.onPurchCurrecy(0);
       this.onPurchase(0);
     });
     this.fxPurchasingService.fetchFxReceiving().subscribe((res) => {
@@ -152,133 +187,159 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
+      this.findExchange();
       this.setShowStatus(false);
     }
   }
   onPurchase(e: any) {
-    console.log(e);
-    console.log(this.fxPurchaseData[e]);
-    console.log(this.fxPurchaseData[e]['walletExtendInfo']);
-    this.purIndex = e;
-    this.validateForm
-      .get('transactionWalletAddress')
-      ?.setValue(this.fxPurchaseData[e].chainAccountAddress);
+    // const val = this.transactionWalletAddressArr.filter(
+    //   (item: any) => item.bankAccountId === e
+    // );
+
     this.validateForm
       .get('bankAccountId')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].bankAccountId);
-    this.validateForm
-      .get('transactionBankName')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].bankName);
+      ?.setValue(this.transactionWalletAddressArr[e]['bankAccountId']);
     this.validateForm
       .get('availableBalance')
-      ?.setValue(this.fxPurchaseData[e]['walletExtendInfo'][0].cbdcCount);
-    this.purchCurrecyList = Array.from(
-      this.fxPurchaseData[e]['walletExtendInfo'],
-      ({ digitalSymbol }) => digitalSymbol
-    );
-    this.onPurchCurrecy(0);
+      ?.setValue(this.transactionWalletAddressArr[e]['cbdcCount']);
+
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
+      this.findExchange();
+      this.setShowStatus(false);
+    }
+  }
+  onReceivingWalletAddressChange(e: any) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
+      this.setShowStatus(true);
+    } else {
+      this.findExchange();
       this.setShowStatus(false);
     }
   }
   onPurchCurrecy(e: number) {
-    this.purchCurrecy =
-      this.fxPurchaseData[this.purIndex]['walletExtendInfo'][
-        e
-      ].digitalCurrencyName;
+    this.transactionWalletAddressArr =
+      this.fxPurchaseData[e].remitterInformationExtendInfoList;
+    this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.validateForm
       .get('transactionBankName')
-      ?.setValue(
-        this.fxPurchaseData[this.purIndex]['walletExtendInfo'][e].bankName
-      );
+      ?.setValue(this.fxPurchaseData[e].bankName);
     this.validateForm
       .get('availableBalance')
       ?.setValue(
-        this.fxPurchaseData[this.purIndex]['walletExtendInfo'][e].cbdcCount
+        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+          'cbdcCount'
+        ]
       );
+
+    this.validateForm
+      .get('transactionWalletAddress')
+      ?.setValue(
+        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+          'chainAccountAddress'
+        ]
+      );
+
+    // this.validateForm
+    //   .get('transactionWalletAddressId')
+    //   ?.setValue(
+    //     this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+    //       'bankAccountId'
+    //     ]
+    //   );
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
+      this.findExchange();
       this.setShowStatus(false);
     }
   }
   setShowStatus(status: boolean) {
+    if (this.validateForm.get('amount')?.value === null) {
+      this.showStatus = true;
+      return;
+    }
     this.showStatus = status;
     this.cdr.markForCheck();
+  }
+  findExchange() {
+    if (
+      this.reveingCurrecy !== this.purchCurrecy &&
+      this.validateForm.get('amount')?.value !== null
+    ) {
+      this.setShowStatus(false);
+      this.nzLoading = true;
+      this.cdr.markForCheck();
+      this.fxPurchasingService
+        .fetchRateInfo({
+          from: this.purchCurrecy,
+          to: this.reveingCurrecy
+        })
+        .subscribe((res) => {
+          let resultData: any[] = [];
+          this.transferTitle =
+            this.reveingCurrecy.replace('-UDPN', '') +
+            '/' +
+            this.purchCurrecy.replace('-UDPN', '') +
+            ' Fx Rate';
+          res.forEach((item: any) => {
+            resultData.push({
+              rateId: item.rateId,
+              sp: item.provider,
+              currency:
+                '1 ' +
+                item.from.replace('-UDPN', '') +
+                '->' +
+                item.to.replace('-UDPN', ''),
+              currencyShow:
+                '1 ' +
+                item.from.replace('-UDPN', '') +
+                '->' +
+                item.rate +
+                item.to.replace('-UDPN', ''),
+              rate: item.rate,
+              com: Number(
+                item.smChargeModel === 0
+                  ? (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue >
+                    item.smMaxFee
+                    ? item.smMaxFee
+                    : (this.validateForm.get('amount')?.value / item.rate) *
+                      item.smValue
+                  : item.smValue
+              ).toFixed(2),
+              total: Number(
+                this.validateForm.get('amount')?.value / item.rate +
+                  (item.smChargeModel === 0
+                    ? (this.validateForm.get('amount')?.value / item.rate) *
+                        item.smValue >
+                      item.smMaxFee
+                      ? item.smMaxFee
+                      : (this.validateForm.get('amount')?.value / item.rate) *
+                        item.smValue
+                    : item.smValue)
+              ).toFixed(2)
+            });
+          });
+          this.nzLoading = false;
+          this.dataList = resultData.sort(this.compare('total'));
+          this.checkedItemComment = [];
+          this.dataList.forEach((item: any, index: number) => {
+            if (this.radioValue === index) {
+              this.checkedItemComment.push(item);
+            }
+          });
+          this.cdr.markForCheck();
+        });
+    }
   }
   fromEventAmount() {
     this.validateForm
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((_) => {
-        if (this.reveingCurrecy !== this.purchCurrecy) {
-          this.nzLoading = true;
-          this.cdr.markForCheck();
-          this.fxPurchasingService
-            .fetchRateInfo({
-              from: this.purchCurrecy,
-              to: this.reveingCurrecy
-            })
-            .subscribe((res) => {
-              let resultData: any[] = [];
-              this.transferTitle =
-                this.reveingCurrecy.replace('-UDPN', '') +
-                '/' +
-                this.purchCurrecy.replace('-UDPN', '') +
-                ' Fx Rate';
-              res.forEach((item: any) => {
-                resultData.push({
-                  rateId: item.rateId,
-                  sp: item.provider,
-                  currency:
-                    '1 ' +
-                    item.from.replace('-UDPN', '') +
-                    '->' +
-                    item.to.replace('-UDPN', ''),
-                  currencyShow:
-                    '1 ' +
-                    item.from.replace('-UDPN', '') +
-                    '->' +
-                    item.rate +
-                    item.to.replace('-UDPN', ''),
-                  rate: item.rate,
-                  com: String(
-                    item.smChargeModel === 0
-                      ? (this.validateForm.get('amount')?.value / item.rate) *
-                          item.smValue >
-                        item.smMaxFee
-                        ? item.smMaxFee
-                        : (this.validateForm.get('amount')?.value / item.rate) *
-                          item.smValue
-                      : item.smValue
-                  ).replace(/^(.*\..{8}).*$/, '$1'),
-                  total: String(
-                    this.validateForm.get('amount')?.value / item.rate +
-                      (item.smChargeModel === 0
-                        ? (this.validateForm.get('amount')?.value / item.rate) *
-                            item.smValue >
-                          item.smMaxFee
-                          ? item.smMaxFee
-                          : (this.validateForm.get('amount')?.value /
-                              item.rate) *
-                            item.smValue
-                        : item.smValue)
-                  ).replace(/^(.*\..{8}).*$/, '$1')
-                });
-              });
-              this.nzLoading = false;
-              this.dataList = resultData.sort(this.compare('total'));
-              this.checkedItemComment = [];
-              this.dataList.forEach((item: any, index: number) => {
-                if (this.radioValue === index) {
-                  this.checkedItemComment.push(item);
-                }
-              });
-              this.cdr.markForCheck();
-            });
-        }
+        this.findExchange();
       });
   }
   compare(p: string) {
@@ -350,12 +411,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
         fxPurchasingInformation: '',
         fxReceivingWalletId: this.validateForm.get('receivingWalletAddress')
           ?.value,
-        passWord: this.passwordForm.get('password')?.value,
+        passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         rateId: this.checkedItemComment[0].rateId,
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res) {
+        if (res.code === 0) {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -369,9 +430,14 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit {
                 '/poc/poc-remittance/transaction-record'
               );
             });
+          this.isLoading = false;
+          this.isVisible = false;
+        } else {
+          this.passwordForm.reset();
+          this.isVisibleEnterPassword = true;
+          this.isLoading = false;
         }
-        this.isLoading = false;
-        this.isVisible = false;
+        this.cdr.markForCheck();
       });
   }
 }

@@ -5,7 +5,8 @@ import {
   AfterViewInit,
   OnInit,
   ChangeDetectorRef,
-  HostListener
+  HostListener,
+  OnDestroy
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
@@ -16,20 +17,27 @@ import { SearchCommonVO } from '@app/core/services/types';
 import { DefaultStoreService } from '@app/layout/default/store/default.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { timestampToDate, timestampToTime } from '@app/utils/tools';
+import {
+  thousandthMark,
+  timestampToDate,
+  timestampToTime
+} from '@app/utils/tools';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 import * as echarts from 'echarts';
 import { InformationService } from '@app/core/services/http/information/information.service';
+import { SocketService } from '@app/core/services/common/socket.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { WindowService } from '@app/core/services/common/window.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -106,62 +114,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   pendingRateCount: any = '';
   approveList: any = [];
   validateForm!: FormGroup;
-  walletBalanceList: any = [
-    {
-      currency: 'w-THB',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234324',
-          amount: '40,000'
-        },
-        {
-          walletAddress: '0x3453453453463454353',
-          amount: '30,000'
-        }
-      ]
-    },
-    {
-      currency: 'w-EUR',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234321',
-          amount: '15,000'
-        },
-        {
-          walletAddress: '0x3453453453463454352',
-          amount: '23,000'
-        }
-      ]
-    },
-    {
-      currency: 'w-USD',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234332',
-          amount: '10,000'
-        },
-        {
-          walletAddress: '0x3453453453463454334',
-          amount: '50,000'
-        }
-      ]
-    },
-    {
-      currency: 'w-HKD',
-      walletList: [
-        {
-          walletAddress: '0x3234234234234234317',
-          amount: '40,000'
-        },
-        {
-          walletAddress: '0x3453453453463454336',
-          amount: '30,000'
-        }
-      ]
-    }
-  ];
+  currencyForm!: FormGroup;
+  walletBalanceList: any = [];
   walletList: any = [];
   bankType: any = '';
+  currencyList: any = [];
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
@@ -169,7 +126,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private _defaultStoreService: DefaultStoreService,
     public _informationService: InformationService,
-  ) { }
+    private socketService: SocketService,
+    private notification: NzNotificationService,
+    private windowService: WindowService
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -181,6 +141,47 @@ export class HomeComponent implements OnInit, AfterViewInit {
   };
   walletAddress: any = [];
   @HostListener('window:resize', ['$event'])
+  ngOnInit() {
+    this.isFirstLogin();
+    // this.fetchNumbers();
+    this._informationService.detail().subscribe((res: any) => {
+      if (res) {
+        this.bankType = res.bankType;
+        this.defaultBalance();
+        this.getCurrencyList();
+        if (this.bankType === 2) {
+          this.initTable();
+          this.initSelect();
+        }
+        this.cdr.markForCheck();
+      }
+    });
+    this.validateForm = this.fb.group({
+      pairedExchangeRate: [1]
+    });
+    this.currencyForm = this.fb.group({
+      currency: ['']
+    });
+    const fn = () => {
+      const myChart: any = echarts.init(
+        document.getElementById('chart-container')
+      );
+      myChart.resize();
+    };
+
+    window.addEventListener('resize', fn);
+    this.getScreenWidth = window.innerWidth;
+    if (this.getScreenWidth > 900) {
+      this.legend = true;
+      this.view = [this.getScreenWidth - 400, 400];
+    } else if (this.getScreenWidth > 500 && this.getScreenWidth < 900) {
+      this.legend = false;
+      this.view = [this.getScreenWidth - 200, 400];
+    } else {
+      this.legend = false;
+      this.view = [300, 300];
+    }
+  }
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
     if (this.getScreenWidth > 900) {
@@ -213,44 +214,104 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  defaultBalance() {
-    let walletBalanceList: any = [];
-    walletBalanceList = this.walletBalanceList;
-    walletBalanceList.map((item: any, i: any) => {
-      Object.assign(item, { value: item.walletList[0].amount });
+  defaultBalance(value?: any) {
+    this.pocHomeService.walletBalance({}).subscribe((res) => {
+      let temObj: any = {};
+      for (let i = 0; i < res.length; i++) {
+        let item = res[i];
+        if (!temObj[item['currency']]) {
+          temObj[item['currency']] = [item];
+        } else {
+          temObj[item['currency']].push(item);
+        }
+      }
+      let resArr: any = [];
+      Object.keys(temObj).forEach((key) => {
+        resArr.push({
+          currency: key,
+          walletList: temObj[key]
+        });
+      });
+      this.walletBalanceList = resArr;
+      let walletBalanceList: any = [];
+      walletBalanceList = this.walletBalanceList;
+      walletBalanceList.map((item: any, i: any) => {
+        let unit: any = '';
+        let totalBance: any = '';
+        if (item.currency === 'w-THB') {
+          unit = '฿';
+        } else if (item.currency === 'w-EUR') {
+          unit = '€';
+        } else if (item.currency === 'w-USD') {
+          unit = '$';
+        } else {
+          unit = 'HK$';
+        }
+        const array: any = [];
+        item.walletList.map((items: any, i: any) => {
+          array.push(items.balance);
+          totalBance = eval(array.join('+'));
+          Object.assign(items, { index: i + 1 });
+        });
+        Object.assign(item, {
+          value:
+            item.walletList[0].balance.toString() +
+            '-' +
+            item.walletList[0].index.toString(),
+          unit,
+          totalBance
+        });
+      });
+      this.walletBalanceList = walletBalanceList;
     });
   }
 
-  ngOnInit() {
-    this.isFirstLogin();
-    this.initTable();
-    this.initSelect();
-    // this.fetchNumbers();
-    this.defaultBalance();
-    this._informationService.detail().subscribe((res: any) => {
+  getCurrencyList() {
+    this.pocHomeService.getCurrencyList().subscribe((res) => {
       if (res) {
-        this.bankType = res.bankType;
+        this.currencyList = res;
+        this.currencyForm.get('currency')?.setValue(res[0]);
       }
     });
-    this.validateForm = this.fb.group({
-      pairedExchangeRate: [1]
-    });
-    this.getScreenWidth = window.innerWidth;
-    if (this.getScreenWidth > 900) {
-      this.legend = true;
-      this.view = [this.getScreenWidth - 400, 400];
-    } else if (this.getScreenWidth > 500 && this.getScreenWidth < 900) {
-      this.legend = false;
-      this.view = [this.getScreenWidth - 200, 400];
-    } else {
-      this.legend = false;
-      this.view = [300, 300];
-    }
+  }
 
+  // selectWalletAddress(currency: any) {
+  //   this.walletBalanceList.map((item: any) => {
+  //     if (item.currency === currency) {
+  //       this.defaultBalance(currency);
+  //     }
+  //   })
+  // }
+
+  getMovements(currency?: any) {
+    this.pocHomeService.getMovements({ currency }).subscribe((res) => {
+      if (res) {
+        res.daysList = res.daysList.map((item: any) => {
+          return timestampToDate(item);
+        });
+        let length = res.daysList;
+        length = res.daysList.map((item: any) => {
+          return 0;
+        });
+        const params = {
+          topUpAmount: res.topUpAmountList,
+          withdrawAmount: res.withdrawAmountList,
+          transferOutAmount: res.transferOutAmountList,
+          transferInAmount: res.transferInAmountList,
+          days: res.daysList,
+          length
+        };
+        this.getEcharts(params);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
-    // this.getEcharts();
+    this.currencyForm
+      .get('currency')
+      ?.valueChanges.subscribe((item: number) => {
+        this.getMovements(item);
+      });
     this.fetchNumbers();
     this.pageHeaderInfo = {
       title: ``,
@@ -343,7 +404,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .dynamics(data ? data : this.listParam)
       .subscribe((res) => {
         if (res) {
-          this.xAxisLabel = 'Exchange Rate Dynamics In the Last 7 days';
+          this.xAxisLabel = '';
           let multi: any = [];
 
           if (res.data.length > 0) {
@@ -358,10 +419,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 });
               });
               multi.push({
-                name:
-                  item.sourceCurrency +
-                  '->' +
-                  item.targetCurrency,
+                name: item.sourceCurrency + '->' + item.targetCurrency,
                 series: series
               });
               this.multi = multi;
@@ -379,7 +437,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fetchNumbers() {
     this.pocHomeService.volume().subscribe((res) => {
       if (res) {
-        this.xAxisLabel1 = 'Transaction Volume In the Last 7 Days';
+        this.xAxisLabel1 = '';
         let multi1: any = [];
 
         if (res.data.length > 0) {
@@ -387,10 +445,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             let series1: any = [];
             item.outTransactionVolumeInfoList.forEach((items: any) => {
               series1.push({
-                name:
-                  items.sourceCurrency +
-                  '->' +
-                  items.targetCurrency,
+                name: items.sourceCurrency + '->' + items.targetCurrency,
                 value: items.transactionNumber
                   .toString()
                   .replace(/\d{1,3}(?=(\d{3})+(\.|$))/gy, '$&,')
@@ -469,119 +524,119 @@ export class HomeComponent implements OnInit, AfterViewInit {
     };
   }
 
-  // getEcharts() {
-  //   var dom = document.getElementById('chart-container');
-  //   var myChart = echarts.init(dom, null, {
-  //     renderer: 'canvas',
-  //     useDirtyRect: false
-  //   });
-  //   var app = {};
+  getEcharts(param: any) {
+    var dom = document.getElementById('chart-container');
+    var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    var option;
+    var emphasisStyle = {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowColor: 'rgba(0,0,0,0.3)'
+      }
+    };
+    option = {
+      title: {
+        text: ''
+      },
+      tooltip: {
+        trigger: 'axis',
+        formatter: (params: any) => {
+          let tips = params[0].axisValue;
+          params.forEach((item: any) => {
+            tips +=
+              '<br /> ' +
+              item.marker +
+              item.seriesName +
+              ': ' +
+              (item.value === 0 ? 0 : thousandthMark(item.value));
+          });
+          return tips;
+        }
+      },
+      legend: {
+        // data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        data: [
+          {
+            name: 'Top-up',
+            icon: 'circle'
+          },
+          {
+            name: 'Transfer In',
+            icon: 'circle'
+          },
+          {
+            name: 'Withdraw',
+            icon: 'circle'
+          },
+          {
+            name: 'Transfer Out',
+            icon: 'circle'
+          }
+        ],
+        right: '10%'
+      },
+      xAxis: {
+        type: 'category',
+        data: param.days
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: 'Top-up',
+          type: 'line',
+          data: param.topUpAmount
+        },
+        {
+          name: 'Transfer In',
+          type: 'line',
+          data: param.transferInAmount
+        },
+        {
+          name: 'Withdraw',
+          type: 'line',
+          data: param.withdrawAmount
+        },
+        {
+          name: 'Transfer Out',
+          type: 'line',
+          data: param.transferOutAmount
+        }
+      ]
+    };
+    // myChart.on('brushSelected', function (params: any) {
+    //   var brushed = [];
+    //   var brushComponent = params.batch[0];
 
-  //   var option;
+    //   for (var sIdx = 0; sIdx < brushComponent.selected.length; sIdx++) {
+    //     var rawIndices = brushComponent.selected[sIdx].dataIndex;
+    //     brushed.push('[Series ' + sIdx + '] ' + rawIndices.join(', '));
+    //   }
 
-  //   let xAxisData: string[] = [];
-  //   let data1: number[] = [];
-  //   let data2: number[] = [];
-  //   let data3: number[] = [];
-  //   let data4: number[] = [];
+    //   myChart.setOption<echarts.EChartsOption>({
+    //     title: {
+    //       backgroundColor: '#333',
+    //       text: 'SELECTED DATA INDICES: \n' + brushed.join('\n'),
+    //       bottom: 0,
+    //       right: '10%',
+    //       width: 100,
+    //       textStyle: {
+    //         fontSize: 12,
+    //         color: '#fff'
+    //       }
+    //     }
+    //   });
+    // });
 
-  //   for (let i = 0; i < 10; i++) {
-  //     xAxisData.push('Class' + i);
-  //     data1.push(+(Math.random() * 2).toFixed(2));
-  //     data2.push(+(Math.random() * 5).toFixed(2));
-  //     data3.push(+(Math.random() + 0.3).toFixed(2));
-  //     data4.push(+Math.random().toFixed(2));
-  //   }
-
-  //   var emphasisStyle = {
-  //     itemStyle: {
-  //       shadowBlur: 10,
-  //       shadowColor: 'rgba(0,0,0,0.3)'
-  //     }
-  //   };
-  //   option = {
-  //     title: {
-  //       text: 'CBDC Movements In the Last 7 Days',
-  //       left: 'center',
-  //       bottom: '0'
-  //     },
-  //     color: ['#A8385D', '#7AA3E5', '#A280A8', '#AAE3F5', '#ADCDCF', '#A95963'],
-  //     legend: {
-  //       data: ['bar', 'bar2', 'bar3', 'bar4'],
-  //       right: '10%',
-  //     },
-  //     tooltip: {},
-  //     xAxis: {
-  //       data: xAxisData,
-  //       name: '',
-  //       axisLine: { onZero: false },
-  //       splitLine: { show: false },
-  //       splitArea: { show: false }
-  //     },
-  //     yAxis: {},
-  //     grid: {
-  //       bottom: 100
-  //     },
-  //     series: [
-  //       {
-  //         name: 'bar',
-  //         type: 'bar',
-  //         stack: 'one',
-  //         emphasis: emphasisStyle,
-  //         data: data1
-  //       },
-  //       {
-  //         name: 'bar2',
-  //         type: 'bar',
-  //         stack: 'one',
-  //         emphasis: emphasisStyle,
-  //         data: data2
-  //       },
-  //       {
-  //         name: 'bar3',
-  //         type: 'bar',
-  //         stack: 'two',
-  //         emphasis: emphasisStyle,
-  //         data: data3
-  //       },
-  //       {
-  //         name: 'bar4',
-  //         type: 'bar',
-  //         stack: 'two',
-  //         emphasis: emphasisStyle,
-  //         data: data4
-  //       }
-  //     ],
-  //   };
-
-  //   // myChart.on('brushSelected', function (params: any) {
-  //   //   var brushed = [];
-  //   //   var brushComponent = params.batch[0];
-
-  //   //   for (var sIdx = 0; sIdx < brushComponent.selected.length; sIdx++) {
-  //   //     var rawIndices = brushComponent.selected[sIdx].dataIndex;
-  //   //     brushed.push('[Series ' + sIdx + '] ' + rawIndices.join(', '));
-  //   //   }
-
-  //   //   myChart.setOption<echarts.EChartsOption>({
-  //   //     title: {
-  //   //       backgroundColor: '#333',
-  //   //       text: 'SELECTED DATA INDICES: \n' + brushed.join('\n'),
-  //   //       bottom: 0,
-  //   //       right: '10%',
-  //   //       width: 100,
-  //   //       textStyle: {
-  //   //         fontSize: 12,
-  //   //         color: '#fff'
-  //   //       }
-  //   //     }
-  //   //   });
-  //   // });
-
-  //   if (option && typeof option === 'object') {
-  //     myChart.setOption(option);
-  //   }
-  // }
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+  }
 
   panels = [
     {
@@ -595,4 +650,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // name: 'This is panel header 2'
     }
   ];
+
+  ngOnDestroy(): void {
+    window.addEventListener('resize', () => {});
+  }
 }

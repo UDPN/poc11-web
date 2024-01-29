@@ -8,8 +8,10 @@ import { timestampToTime } from '@app/utils/tools';
 })
 export class LogoTitleComponent implements OnInit {
   systemName: any = '';
+  logoImg: any = '';
 
   ngOnInit(): void {
     this.systemName = localStorage.getItem('systemName');
+    this.logoImg = localStorage.getItem('logoImg');
   }
 }

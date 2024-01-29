@@ -78,12 +78,12 @@ export class BillService {
       );
   }
 
-  public getExport(params: Edata): Observable<any> {
-    return this.http.post(`/v1/fxsp/sys/bill/export`, params);
+  public getExport(params: Edata, timeZone: any): Observable<any> {
+    return this.https.post(`/v1/fxsp/sys/bill/export`, params, { headers: {'timeZone': timeZone } });
   }
 
-  public getExportPdf(params: Pdata): Observable<any> {
-    return this.http.post(`/v1/fxsp/sys/bill/invoice/export`, params);
+  public getExportPdf(params: Pdata, timeZone: any): Observable<any> {
+    return this.https.post(`/v1/fxsp/sys/bill/invoice/export`, params, { headers: {'timeZone': timeZone } });
   }
 
 }

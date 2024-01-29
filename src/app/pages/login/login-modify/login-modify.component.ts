@@ -44,6 +44,7 @@ export class LoginModifyComponent implements OnInit {
   hasUser: boolean = true;
   isDefaultLogo: boolean = true;
   logoImg: string = '';
+  systemName: any = '';
   @ViewChild(AdDirective) set adHost1(content: AdDirective) {
     if (content) {
       this.adHost = content;
@@ -111,17 +112,21 @@ export class LoginModifyComponent implements OnInit {
         this.cdr.detectChanges();
       });
       this.styleService.search().subscribe((res: any) => {
-      if (res.logoFileHash) {
-        this.commonService
-        .downImg({ hash: res.logoFileHash })
-        .subscribe((resu) => {
-          this.logoImg = 'data:image/jpg;base64,' + resu;
-          this.cdr.markForCheck();
-        });
-        this.isDefaultLogo = false;
-      } else {
-        this.isDefaultLogo = true;
-      }
+        if (res) {
+          this.systemName = res.systemName;
+          if (res.logoFileHash) {
+            this.commonService
+            .downImg({ hash: res.logoFileHash })
+            .subscribe((resu) => {
+              this.logoImg = 'data:image/jpg;base64,' + resu;
+              sessionStorage.setItem('logoImg', this.logoImg);
+              this.cdr.markForCheck();
+            });
+            this.isDefaultLogo = false;
+          } else {
+            this.isDefaultLogo = true;
+          }
+        }
       this.cdr.markForCheck();
     })
 
