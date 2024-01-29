@@ -69,7 +69,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     this.getWalletAddress();
     this.getCentralBank();
     this.validateForm = this.fb.group({
-      spName: [null, [Validators.required, this.spNameValidator]],
+      spName: [null, [Validators.required]],
       bankBic: [null, [Validators.required]],
       centralBankName: [null, [Validators.required]],
       spBriefIntroduction: [null, [Validators.required]],
