@@ -22,6 +22,8 @@
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your Available
                       Balance</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">Please enter the correct Available
+                      Balance</ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>

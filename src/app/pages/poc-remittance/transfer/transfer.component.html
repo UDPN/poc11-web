@@ -299,7 +299,7 @@
           <br>
           {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency.replace('-UDPN', '')}}
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Beneficiary's Bank Name">{{
+        <nz-descriptions-item nzTitle="Beneficiary's Central Bank Name">{{
           validateForm.controls["newBeneficialBankName"].value}}</nz-descriptions-item>
       </nz-descriptions>
     </nz-card>
@@ -313,7 +313,7 @@
           {{ (beneficiaryCurrency !== availableCurrecyModel ? this.checkedItemComment[0].total :
           validateForm.controls["amount"].value) + ' ' + availableCurrecyModel.replace('-UDPN', '')}}
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Remitter's Bank Name"> {{
+        <nz-descriptions-item nzTitle="Remitter's Central Bank Name"> {{
           validateForm.controls["remitterBankName"].value }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Remittance Information">
           {{

@@ -118,13 +118,24 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       transactionWalletAddressId: [0, [Validators.required]],
       bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
-      availableBalance: [null, [Validators.required]],
+      availableBalance: [
+        null,
+        [Validators.required, this.amountAvailableBalance]
+      ],
       transactionBankName: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
       pwd: ['', [Validators.required]]
     });
   }
+  amountAvailableBalance = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value <= 0) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -173,10 +184,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         item.bankAccountId === this.validateForm.value.receivingWalletAddress
     )[0]['chainAccountAddress'];
 
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -195,10 +203,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('availableBalance')
       ?.setValue(this.transactionWalletAddressArr[e]['cbdcCount']);
 
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -206,10 +211,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onReceivingWalletAddressChange(e: any) {
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -246,10 +248,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     //       'bankAccountId'
     //     ]
     //   );
-    if (
-      this.reveingCurrecy === this.purchCurrecy &&
-      this.validateForm.get('amount')?.value !== null
-    ) {
+    if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
       this.findExchange();
@@ -257,6 +256,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   setShowStatus(status: boolean) {
+    if (this.validateForm.get('amount')?.value === null) {
+      this.showStatus = true;
+      return;
+    }
     this.showStatus = status;
     this.cdr.markForCheck();
   }
@@ -265,6 +268,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.reveingCurrecy !== this.purchCurrecy &&
       this.validateForm.get('amount')?.value !== null
     ) {
+      this.setShowStatus(false);
       this.nzLoading = true;
       this.cdr.markForCheck();
       this.fxPurchasingService
@@ -374,7 +378,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       this.isVisible = true;
     } else {
