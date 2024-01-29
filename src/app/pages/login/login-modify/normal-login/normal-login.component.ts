@@ -212,8 +212,8 @@ export class NormalLoginComponent implements OnInit {
         this.cdr.markForCheck();
       });
     this.validateForm = this.fb.group({
-      clientName: ['', [Validators.required]],
-      pwd: ['', [Validators.required, this.pwdValidator]],
+      clientName: ['admin', [Validators.required]],
+      pwd: ['Abcd1234', [Validators.required, this.pwdValidator]],
       captchaCode: ['', [Validators.required]],
       keySuffix: ['']
     });
