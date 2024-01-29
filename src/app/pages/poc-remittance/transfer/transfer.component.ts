@@ -232,30 +232,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       this.availableCurrecy = remCurrencyArr;
       console.log(res);
-      // 2 设置address数组
       this.setRemAddressArr(res[0]['remitterInformationExtendInfoList']);
-      // 3 设置默认值
       this.setRemDefaultValue(res);
-
-      // this.availableCurrecy = [];
-      // this.availableCurrecy = res;
-      // this.availableCurrecyModel = res[0]['digitalCurrencyName'];
-      // this.validateForm
-      //   .get('availableBalance')
-      //   ?.setValue(res[0]['remitterInformationExtendInfoList'][0]['cbdcCount']);
-      // this.remitterWalletAddressList =
-      //   res[0]['remitterInformationExtendInfoList'];
-      // this.validateForm
-      //   .get('remitterWalletAddress')
-      //   ?.setValue(
-      //     res[0]['remitterInformationExtendInfoList'][0]['bankAccountId']
-      //   );
-      // this.newRemitterWalletAddress =
-      //   res[0]['remitterInformationExtendInfoList'][0]['chainAccountAddress'];
-      // this.validateForm.get('remitterBankName')?.setValue(res[0]['bankName']);
-      // this.validateForm
-      //   .get('remitterBankId')
-      //   ?.setValue(res[0]['centralBankId']);
     });
   }
 
@@ -263,39 +241,25 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
-    // 设置availableBalance显示
+
     this.validateForm.get('availableBalance')?.setValue(val[0]['cbdcCount']);
     this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     this.getExchange();
   }
-  // 设置默认值
+
   setRemDefaultValue(data: any) {
-    /**
-     * 1 设置收款的币种
-     * 2 设置默认值
-     * 2-1 资金
-     * 2-2 币种
-     * 2-3 银行地址
-     * 2-4 币种id
-     * 2-5 银行id
-     * 2-6 银行名称
-     */
-    // 设置下拉币种事件
     this.onAvailableCurrecy(data[0]['digitalCurrencyName']);
-    // 设置默认地址
     this.onRemitterWalletAddressChange(
       data[0]['remitterInformationExtendInfoList'][0]['bankAccountId']
     );
-    // 设置银行名称
+
     this.validateForm.get('remitterBankName')?.setValue(data[0]['bankName']);
-    // 设置默认钱包地址
     this.validateForm
       .get('remitterWalletAddress')
       ?.setValue(
         data[0]['remitterInformationExtendInfoList'][0]['bankAccountId']
       );
   }
-  // 设置接收方的地址
   setRemAddressArr(
     arr: {
       bankAccountId: number;
@@ -548,7 +512,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
         if (this.checkedItemComment.length === 0) {
