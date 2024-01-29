@@ -34,16 +34,16 @@
                                     <nz-form-control [nzErrorTip]="enterpriseError">
                                         <div nz-row [formGroup]="validateForm">
                                             <div nz-col nzSpan="24">
-                                                <input nz-input formControlName="spName" class="onboard-input  "
+                                                <input nz-input formControlName="spName" class="onboard-input"
                                                     maxlength="50" />
                                             </div>
                                         </div>
                                         <ng-template #enterpriseError let-control>
                                             <ng-container *ngIf="control.hasError('required')">Please input your
                                                 Commercial Bank Name</ng-container>
-                                            <ng-container *ngIf="control.hasError('regular')">Please enter 2~50
+                                            <!-- <ng-container *ngIf="control.hasError('regular')">Please enter 2~50
                                                 characters of numbers and letters. It cannot start with a
-                                                number.</ng-container>
+                                                number.</ng-container> -->
                                         </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
