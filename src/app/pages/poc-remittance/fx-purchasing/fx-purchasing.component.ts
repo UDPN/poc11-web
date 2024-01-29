@@ -118,13 +118,24 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       transactionWalletAddressId: [0, [Validators.required]],
       bankAccountId: ['', [Validators.required]],
       transactionWalletAddress: ['', [Validators.required]],
-      availableBalance: [null, [Validators.required]],
+      availableBalance: [
+        null,
+        [Validators.required, this.amountAvailableBalance]
+      ],
       transactionBankName: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
       pwd: ['', [Validators.required]]
     });
   }
+  amountAvailableBalance = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value <= 0) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -367,7 +378,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       this.isVisible = true;
     } else {
