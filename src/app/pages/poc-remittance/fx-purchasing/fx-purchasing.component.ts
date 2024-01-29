@@ -378,6 +378,17 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
+    if (
+      Number(this.validateForm.controls['amount'].value.toString()) >
+      Number(this.validateForm.controls['availableBalance'].value.toString())
+    ) {
+      this.modal.error({
+        nzTitle: 'Error',
+        nzContent:
+          'Total Payment Amount cannot be greater than Available Balance !'
+      });
+      return;
+    }
     if (this.validateForm.valid) {
       this.isVisible = true;
     } else {
