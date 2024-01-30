@@ -244,7 +244,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           unit = '€';
         } else if (item.currency === 'w-USD') {
           unit = '$';
-        } else {
+        } else if (item.currency === 'w-AED') {
+          unit = 'د.إ';
+        } else if (item.currency === 'w-CNY') {
+          unit = '¥';
+        } else if (item.currency === 'w-HKD') {
           unit = 'HK$';
         }
         const array: any = [];
