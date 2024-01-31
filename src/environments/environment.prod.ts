@@ -1,4 +1,10 @@
-
+/*
+ * @Author: zhangxuefeng
+ * @Date: 2024-01-11 14:58:13
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2024-01-31 17:32:07
+ * @Description:
+ */
 export const http = window.location.protocol;
 export const ip = window.location.hostname;
 
@@ -10,8 +16,6 @@ export const ip = window.location.hostname;
 // }
 export const environment = {
   production: true,
-
-  localUrl: ''
-
+  localUrl: '',
+  ws: 'wss://poc11-oaigateway.commercial-bank1.svc.cluster.local:6480'
 };
-

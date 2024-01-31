@@ -209,7 +209,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     });
     this.transferService.bankRemitter().subscribe((res: any) => {
-      // 1 设置币种数组
+      // 1 Set currency array
       this.availableCurrecy = [];
       let remCurrencyArr: {
         bankName: string;
@@ -231,7 +231,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
       this.availableCurrecy = remCurrencyArr;
-      console.log(res);
       this.setRemAddressArr(res[0]['remitterInformationExtendInfoList']);
       this.setRemDefaultValue(res);
     });
