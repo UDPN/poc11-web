@@ -16,6 +16,5 @@ export const ip = window.location.hostname;
 // }
 export const environment = {
   production: true,
-  localUrl: '',
-  ws: 'wss://poc11-oaigateway.commercial-bank1.svc.cluster.local:6480'
+  localUrl: ''
 };
