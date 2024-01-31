@@ -43,13 +43,13 @@ export class LoginInOutService {
   }
 
   loginIn(token: string): Promise<void> {
-    // if (environment.production) {
-    //   let ws =
-    //     process.env['NX_API_URL'] + '/wcbdccommercial/websocket/h5?token=';
-    //   this.socketService.connect(
-    //     ws + this.windowServe.getSessionStorage('token')
-    //   );
-    // }
+    if (environment.production) {
+      let ws =
+        'http://poc11-oaigateway.commercial-bank2.svc.cluster.local:6480/wcbdccommercial/websocket/h5?token=';
+      this.socketService.connect(
+        ws + this.windowServe.getSessionStorage('token')
+      );
+    }
 
     return new Promise((resolve) => {
       this.windowServe.setSessionStorage(TokenKey, TokenPre + token);
