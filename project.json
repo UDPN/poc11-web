@@ -7,11 +7,12 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
       "options": {
+        "customWebpackConfig": {
+          "path": "./webpack.config.js"
+        },
         "outputPath": "dist/poc11-web",
         "index": "./src/index.html",
         "main": "./src/main.ts",
@@ -40,13 +41,9 @@
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": [
-            "src/styles/themes"
-          ]
+          "includePaths": ["src/styles/themes"]
         },
-        "scripts": [
-          "node_modules/driver.js/dist/driver.min.js"
-        ],
+        "scripts": ["node_modules/driver.js/dist/driver.min.js"],
         "allowedCommonJsDependencies": [
           "@ethereumjs/tx",
           "@ethereumjs/common",
@@ -120,7 +117,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
       "options": {
         "host": "10.0.7.64",
         "port": 4215,
@@ -140,35 +137,20 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "poc11-web:build"
+        "buildTarget": "poc11-web:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": [
-          "./src/**/*.ts",
-          "./src/**/*.html"
-        ]
+        "lintFilePatterns": ["{projectRoot}/src"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectName}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
-        "jestConfig": "jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "jest.config.ts"
       }
     },
     "serve-static": {
