@@ -156,7 +156,6 @@ export class NormalLoginComponent implements OnInit {
           let tokens = sign(dataFromat, secret);
           console.log(tokens);
           this.loginInOutService.loginIn(tokens).then(() => {
-            console.log(555555);
             this.message
               .success('Login successfully!', { nzDuration: 1000 })
               .onClose!.subscribe((res) => {
