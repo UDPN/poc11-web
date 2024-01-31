@@ -70,13 +70,13 @@ export class ReduceComponent implements OnInit {
   ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Reduce Currency`,
+      title: `Deactivate Currency`,
       breadcrumbs: [
         {
           name: 'Capital Pool Management',
           url: '/poc/poc-capital-pool/capital-pool'
         },
-        { name: 'Reduce Currency' }
+        { name: 'Deactivate Currency' }
       ],
       extra: '',
       desc: '',
