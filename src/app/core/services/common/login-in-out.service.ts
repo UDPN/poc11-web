@@ -43,9 +43,16 @@ export class LoginInOutService {
   }
 
   loginIn(token: string): Promise<void> {
+    let protocl = '';
+    if (location.protocol === 'https:') {
+      protocl = 'wss://';
+    }
+    if (location.protocol === 'http:') {
+      protocl = 'ws://';
+    }
+    let host = protocl + location.host;
     if (environment.production) {
-      let ws =
-        'https://poc11-oaigateway.commercial-bank1.svc.cluster.local:6480/wcbdccommercial/websocket/h5?token=';
+      let ws = host + '/wcbdccommercial/websocket/h5?token=';
       this.socketService.connect(
         ws + this.windowServe.getSessionStorage('token')
       );
@@ -89,6 +96,7 @@ export class LoginInOutService {
   loginOut(): Promise<void> {
     return new Promise((resolve) => {
       this.tabService.clearTabs();
+      this.socketService.stopReconnect();
       this.windowServe.removeSessionStorage(TokenKey);
       SimpleReuseStrategy.handlers = {};
       SimpleReuseStrategy.scrollHandlers = {};
