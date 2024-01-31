@@ -195,7 +195,7 @@
         <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24" class="m-t-60"
           style="background: #fff; border-radius: 16px;padding: 4px;">
           <div>
-            <nz-card nzTitle="Settlement Information" nzBordered="false" class="none-bottom">
+            <nz-card nzTitle="FX Settlement Information" nzBordered="false" class="none-bottom">
               <span style="color: rgb(174, 6, 6);">Expiration Time: {{timeString}}</span>
               <nz-table #rowSelectionTable nzShowSizeChanger nzShowPagination="false" [nzData]="dataList"
                 [nzLoading]="nzLoading">
@@ -289,21 +289,6 @@
       </nz-card>
     </ng-container>
 
-
-    <nz-card nzTitle="Beneficiary Information" nzBordered="false" class="info-none-bottom">
-      <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
-        [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
-        <nz-descriptions-item nzTitle="Beneficiary's Wallet Address">{{
-          newBeneficialWalletAddress
-          }}
-          <br>
-          {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency.replace('-UDPN', '')}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Beneficiary's Central Bank Name">{{
-          validateForm.controls["newBeneficialBankName"].value}}</nz-descriptions-item>
-      </nz-descriptions>
-    </nz-card>
-
     <nz-card nzTitle="Remitter Information" nzBordered="false" class="info-none-bottom">
       <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
         [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
@@ -321,6 +306,21 @@
         </nz-descriptions-item>
       </nz-descriptions>
     </nz-card>
+    
+    <nz-card nzTitle="Beneficiary Information" nzBordered="false" class="info-none-bottom">
+      <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+        [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical">
+        <nz-descriptions-item nzTitle="Beneficiary's Wallet Address">{{
+          newBeneficialWalletAddress
+          }}
+          <br>
+          {{ validateForm.controls["amount"].value + ' ' + beneficiaryCurrency.replace('-UDPN', '')}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Beneficiary's Central Bank Name">{{
+          validateForm.controls["newBeneficialBankName"].value}}</nz-descriptions-item>
+      </nz-descriptions>
+    </nz-card>
+
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="cancelView()">Cancel</button>
