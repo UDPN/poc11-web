@@ -23,6 +23,7 @@ import { ThemeService } from '@app/core/services/store/common-store/theme.servic
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { fnEncrypts } from '@app/utils/tools';
+import { TranslateService } from '@ngx-translate/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription, debounceTime, interval } from 'rxjs';
@@ -80,7 +81,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder,
     private fxPurchasingService: FxPurchasingService,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -381,18 +383,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
-    if (
-      Number(this.validateForm.controls['amount'].value.toString()) >
-      Number(this.validateForm.controls['availableBalance'].value.toString())
-    ) {
-      this.modal.error({
-        nzTitle: 'Error',
-        nzContent:
-          'Total Payment Amount cannot be greater than Available Balance !'
-      });
-      return;
-    }
     if (this.validateForm.valid) {
+      if (
+        Number(this.validateForm.controls['amount'].value.toString()) >
+        Number(this.validateForm.controls['availableBalance'].value.toString())
+      ) {
+        this.modal.error({
+          nzTitle: 'Error',
+          nzContent:
+            'Total Payment Amount cannot be greater than Available Balance !'
+        });
+        return;
+      }
       this.isVisible = true;
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
@@ -430,7 +432,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res.code === 0) {
+        if (res.code === 0 || res.code === '0') {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -447,11 +449,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isLoading = false;
           this.isVisible = false;
         } else {
-          this.passwordForm.reset();
-          this.isVisibleEnterPassword = true;
-          this.isLoading = false;
+          this.modal
+            .error({
+              nzTitle: 'Error',
+              nzContent: this.translate.instant(`${res.message}`)
+            })
+            .afterClose.subscribe((_) => {
+              this.passwordForm.reset();
+              this.isVisibleEnterPassword = true;
+              this.cdr.markForCheck();
+              this.isLoading = false;
+            });
         }
-        this.cdr.markForCheck();
       });
   }
 }
