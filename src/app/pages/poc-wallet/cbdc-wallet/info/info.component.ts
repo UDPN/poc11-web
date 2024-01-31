@@ -41,7 +41,7 @@ export class InfoComponent implements OnInit {
   transactionTableConfig!: AntTableConfig;
   recordList: NzSafeAny[] = [];
   transactionList: NzSafeAny[] = [];
-  detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
+  detailsTabs = ['Basic Information', 'Transactions', 'Operation Records'];
   summaryCurrency: string = '';
   summaryInfo: any = {};
   summaryRegion: any = 0;
