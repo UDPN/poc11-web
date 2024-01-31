@@ -43,7 +43,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private modal: NzModalService,
     private translate: TranslateService,
     private router: Router,
-    private pocHomeService: PocHomeService,
+    private pocHomeService: PocHomeService
   ) {}
 
   intercept(
@@ -127,7 +127,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   private handleSuccess(event: any): HttpResponse<any> {
-    const filterCode = [0, '0', 200, 304];
+    const filterCode = [0, '0', 200, 304, 'MSG_00_1028'];
     const otherFilterCode = ['FXSP_20603'];
     if (event instanceof HttpResponse) {
       if (
@@ -138,7 +138,10 @@ export class HttpInterceptorService implements HttpInterceptor {
         return event;
       }
       if (event.status === 200 && event.body.hasOwnProperty('code')) {
-        if (filterCode.includes(event.body.code)) {
+        if (
+          filterCode.includes(event.body.code) ||
+          filterCode.includes(event.body.message)
+        ) {
           return event;
         }
         if (

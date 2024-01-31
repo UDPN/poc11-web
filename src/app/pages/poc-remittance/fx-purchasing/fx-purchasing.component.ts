@@ -23,6 +23,7 @@ import { ThemeService } from '@app/core/services/store/common-store/theme.servic
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { fnEncrypts } from '@app/utils/tools';
+import { TranslateService } from '@ngx-translate/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription, debounceTime, interval } from 'rxjs';
@@ -80,7 +81,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder,
     private fxPurchasingService: FxPurchasingService,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -106,7 +108,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.timeString = datePipe
         .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
         ?.replace('GMT', 'UTC');
-      this.findExchange();
+      this.findExchange(5);
       this.cdr.markForCheck();
     });
     this.initData();
@@ -168,6 +170,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   onReceiving(e: any) {
+    this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.validateForm
       .get('receivingWalletAddress')
       ?.setValue(this.fxReceivingData[e]?.walletAddress[0]['bankAccountId']);
@@ -177,7 +180,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm
       .get('receivingBankId')
       ?.setValue(this.fxReceivingData[e]?.bankId);
-    this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
+
     this.receivingWalletAddressList = this.fxReceivingData[e]?.walletAddress;
     this.receivingWalletAddressShow = this.receivingWalletAddressList.filter(
       (item: any) =>
@@ -187,7 +190,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
-      this.findExchange();
+      this.findExchange(4);
       this.setShowStatus(false);
     }
   }
@@ -206,7 +209,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
-      this.findExchange();
+      this.findExchange(3);
       this.setShowStatus(false);
     }
   }
@@ -214,14 +217,15 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
-      this.findExchange();
+      this.findExchange(2);
       this.setShowStatus(false);
     }
   }
   onPurchCurrecy(e: number) {
+    this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.transactionWalletAddressArr =
       this.fxPurchaseData[e].remitterInformationExtendInfoList;
-    this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
+
     this.validateForm
       .get('transactionBankName')
       ?.setValue(this.fxPurchaseData[e].bankName);
@@ -251,7 +255,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
-      this.findExchange();
+      this.findExchange(1);
       this.setShowStatus(false);
     }
   }
@@ -263,7 +267,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showStatus = status;
     this.cdr.markForCheck();
   }
-  findExchange() {
+  findExchange(index: number) {
     if (
       this.reveingCurrecy !== this.purchCurrecy &&
       this.validateForm.get('amount')?.value !== null
@@ -322,6 +326,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
               ).toFixed(2)
             });
           });
+          console.log(resultData);
           this.nzLoading = false;
           this.dataList = resultData.sort(this.compare('total'));
           this.checkedItemComment = [];
@@ -339,7 +344,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((_) => {
-        this.findExchange();
+        this.findExchange(6);
       });
   }
   compare(p: string) {
@@ -378,18 +383,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
-    if (
-      Number(this.validateForm.controls['amount'].value.toString()) >
-      Number(this.validateForm.controls['availableBalance'].value.toString())
-    ) {
-      this.modal.error({
-        nzTitle: 'Error',
-        nzContent:
-          'Total Payment Amount cannot be greater than Available Balance !'
-      });
-      return;
-    }
     if (this.validateForm.valid) {
+      if (
+        Number(this.validateForm.controls['amount'].value.toString()) >
+        Number(this.validateForm.controls['availableBalance'].value.toString())
+      ) {
+        this.modal.error({
+          nzTitle: 'Error',
+          nzContent:
+            'Total Payment Amount cannot be greater than Available Balance !'
+        });
+        return;
+      }
       this.isVisible = true;
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
@@ -427,7 +432,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res.code === 0) {
+        if (res.code === 0 || res.code === '0') {
           this.modal
             .success({
               nzTitle: 'Success',
@@ -444,11 +449,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isLoading = false;
           this.isVisible = false;
         } else {
-          this.passwordForm.reset();
-          this.isVisibleEnterPassword = true;
-          this.isLoading = false;
+          this.modal
+            .error({
+              nzTitle: 'Error',
+              nzContent: this.translate.instant(`${res.message}`)
+            })
+            .afterClose.subscribe((_) => {
+              this.passwordForm.reset();
+              this.isVisibleEnterPassword = true;
+              this.cdr.markForCheck();
+              this.isLoading = false;
+            });
         }
-        this.cdr.markForCheck();
       });
   }
 }
