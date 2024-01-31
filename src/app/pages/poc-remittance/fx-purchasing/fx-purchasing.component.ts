@@ -432,7 +432,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         transactionWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
-        if (res.code === 0) {
+        if (res.code === 0 || res.code === '0') {
           this.modal
             .success({
               nzTitle: 'Success',

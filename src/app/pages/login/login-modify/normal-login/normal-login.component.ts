@@ -110,9 +110,9 @@ export class NormalLoginComponent implements OnInit {
     private themesService: ThemeService,
     private nzConfigService: NzConfigService,
     private styleService: StyleService,
-    
-    private notification: NzNotificationService,
-  ) { }
+
+    private notification: NzNotificationService
+  ) {}
 
   submitForm(): void {
     if (!fnCheckForm(this.validateForm)) {
@@ -138,7 +138,6 @@ export class NormalLoginComponent implements OnInit {
           sessionStorage.setItem('email', result.email);
           sessionStorage.setItem('token', result.token);
 
-
           let dataFromat: any = {
             aud: [],
             user_name: {
@@ -155,7 +154,9 @@ export class NormalLoginComponent implements OnInit {
           };
           let secret = 'bejson';
           let tokens = sign(dataFromat, secret);
+          console.log(tokens);
           this.loginInOutService.loginIn(tokens).then(() => {
+            console.log(555555);
             this.message
               .success('Login successfully!', { nzDuration: 1000 })
               .onClose!.subscribe((res) => {
@@ -197,8 +198,7 @@ export class NormalLoginComponent implements OnInit {
       }
       this.cdr.markForCheck();
       return;
-    })
-
+    });
   }
 
   ngOnInit(): void {
@@ -236,13 +236,13 @@ export class NormalLoginComponent implements OnInit {
         environment.localUrl +
         '/fxsp/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
-        this.cdr.markForCheck();
+      this.cdr.markForCheck();
     } else {
       this.srcUrl =
         environment.localUrl +
         '/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
-        this.cdr.markForCheck();
+      this.cdr.markForCheck();
     }
   }
 }

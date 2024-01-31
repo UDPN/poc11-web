@@ -43,6 +43,7 @@ export class LoginInOutService {
   }
 
   loginIn(token: string): Promise<void> {
+    console.log(66666);
     if (environment.production) {
       let ws =
         process.env['NX_API_URL'] + '/wcbdccommercial/websocket/h5?token=';
@@ -57,7 +58,7 @@ export class LoginInOutService {
       const userInfo: UserInfo = this.userInfoService.parsToken(
         TokenPre + token
       );
-
+      console.log(22222);
       userInfo.authCode.push(ActionCode.TabsDetail);
       userInfo.authCode.push(ActionCode.SearchTableDetail);
 
