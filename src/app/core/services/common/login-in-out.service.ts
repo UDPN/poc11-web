@@ -45,7 +45,7 @@ export class LoginInOutService {
   loginIn(token: string): Promise<void> {
     if (environment.production) {
       let ws =
-        'wss://poc11-oaigateway.commercial-bank1.svc.cluster.local:6480/wcbdccommercial/websocket/h5?token=';
+        'https://poc11-oaigateway.commercial-bank1.svc.cluster.local:6480/wcbdccommercial/websocket/h5?token=';
       this.socketService.connect(
         ws + this.windowServe.getSessionStorage('token')
       );
