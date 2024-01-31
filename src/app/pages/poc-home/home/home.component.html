@@ -16,9 +16,10 @@
                 <div>
                   <span>{{'Total Balance' }}</span>
                 </div>
-                <div>
+                <div class="unit-postion">
                   <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.unit }} </span>
-                  <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{ balance.totalBance | map:
+                  <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{
+                    balance.totalBance | map:
                     'toThousandthMark'}}</span>
                 </div>
               </div>
@@ -38,9 +39,10 @@
                         <div>
                           <span>{{'Wallet Balance' }}</span>
                         </div>
-                        <div>
+                        <div class="unit-postion">
                           <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.unit }} </span>
-                          <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{ balance.value.split('-')[0] | map:
+                          <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{
+                            balance.value.split('-')[0] | map:
                             'toThousandthMark'}}</span>
                         </div>
                       </div>
@@ -179,15 +181,15 @@
         </nz-tabset>
         <ng-template #extraTemplate>
           <button nz-button nzType="primary" class="m-r-8">
-              <a href="https://github.com/UDPN/Poc11-contract-document" target="_blank"> View API
-                Documentation</a>
+            <a href="https://github.com/UDPN/Poc11-contract-document" target="_blank"> View API
+              Documentation</a>
           </button>
         </ng-template>
       </div>
       <div class="m-t-50">
         <h5 nz-typography style="font-weight: 500">{{ 'Exchange Rate Dynamics In the Last 7 days' }}</h5>
-        <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
-          [nzTitle]="" class="m-t-20 card base-card">
+        <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" [nzTitle]=""
+          class="m-t-20 card base-card">
           <form nz-form [formGroup]="validateForm" nzLayout="vertical" class="m-l-50 m-b-50">
             <div nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
               <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
@@ -232,13 +234,13 @@
       </div>
       <div class="m-t-50">
         <h5 nz-typography style="font-weight: 500">{{ 'Transaction Volume In the Last 7 Days' }}</h5>
-        <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
-        [nzTitle]="" class="m-t-20 card base-card">
-        <ngx-charts-bar-vertical-2d [view]="view" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-          [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-          [xAxisLabel]="xAxisLabel1" [yAxisLabel]="yAxisLabel1" [results]="multi1">
-        </ngx-charts-bar-vertical-2d>
-      </nz-card>
+        <nz-card [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }" [nzTitle]=""
+          class="m-t-20 card base-card">
+          <ngx-charts-bar-vertical-2d [view]="view" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
+            [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel1" [yAxisLabel]="yAxisLabel1" [results]="multi1">
+          </ngx-charts-bar-vertical-2d>
+        </nz-card>
       </div>
     </nz-card>
 
