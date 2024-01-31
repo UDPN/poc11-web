@@ -44,7 +44,8 @@ export class LoginInOutService {
 
   loginIn(token: string): Promise<void> {
     if (environment.production) {
-      let ws = 'ws://127.0.0.1/wcbdccommercial/websocket/h5?token=';
+      let ws =
+        process.env['NX_API_URL'] + '/wcbdccommercial/websocket/h5?token=';
       this.socketService.connect(
         ws + this.windowServe.getSessionStorage('token')
       );
