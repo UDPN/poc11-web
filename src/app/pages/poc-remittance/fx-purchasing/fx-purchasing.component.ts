@@ -198,6 +198,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     // const val = this.transactionWalletAddressArr.filter(
     //   (item: any) => item.bankAccountId === e
     // );
+    // this.validateForm.get('transactionWalletAddressId')?.setValue(e);
 
     this.validateForm
       .get('bankAccountId')
@@ -248,14 +249,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           'chainAccountAddress'
         ]
       );
-
-    // this.validateForm
-    //   .get('transactionWalletAddressId')
-    //   ?.setValue(
-    //     this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
-    //       'bankAccountId'
-    //     ]
-    //   );
+    this.validateForm.get('transactionWalletAddressId')?.setValue(0);
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
