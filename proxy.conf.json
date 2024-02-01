@@ -1,16 +1,16 @@
 {
   "/v1/fxsp": {
-    "target": "http://213.35.109.168:5603/fxsp/",
+    "target": "http://213.35.109.168:5601/fxsp/",
     "secure": false,
     "changeOrigin": true
   },
   "/fxsp": {
-    "target": "http://213.35.109.168:5603/fxsp/",
+    "target": "http://213.35.109.168:5601/fxsp/",
     "secure": false,
     "changeOrigin": true
   },
   "/v1": {
-    "target": "http://213.35.109.168:5603/wcbdccommercial",
+    "target": "http://213.35.109.168:5601/wcbdccommercial",
     "secure": false,
     "changeOrigin": true
   }
