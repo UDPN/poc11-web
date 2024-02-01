@@ -234,9 +234,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm
       .get('availableBalance')
       ?.setValue(
-        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
-          'cbdcCount'
-        ]
+        thousandthMark(
+          this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+            'cbdcCount'
+          ]
+        )
       );
 
     this.validateForm
