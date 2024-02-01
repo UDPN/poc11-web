@@ -22,7 +22,7 @@ import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-p
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { fnEncrypts } from '@app/utils/tools';
+import { fnEncrypts, thousandthMark } from '@app/utils/tools';
 import { TranslateService } from '@ngx-translate/core';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -198,13 +198,16 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     // const val = this.transactionWalletAddressArr.filter(
     //   (item: any) => item.bankAccountId === e
     // );
+    // this.validateForm.get('transactionWalletAddressId')?.setValue(e);
 
     this.validateForm
       .get('bankAccountId')
       ?.setValue(this.transactionWalletAddressArr[e]['bankAccountId']);
     this.validateForm
       .get('availableBalance')
-      ?.setValue(this.transactionWalletAddressArr[e]['cbdcCount']);
+      ?.setValue(
+        thousandthMark(this.transactionWalletAddressArr[e]['cbdcCount'])
+      );
 
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
@@ -232,9 +235,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm
       .get('availableBalance')
       ?.setValue(
-        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
-          'cbdcCount'
-        ]
+        thousandthMark(
+          this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+            'cbdcCount'
+          ]
+        )
       );
 
     this.validateForm
@@ -244,14 +249,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           'chainAccountAddress'
         ]
       );
-
-    // this.validateForm
-    //   .get('transactionWalletAddressId')
-    //   ?.setValue(
-    //     this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
-    //       'bankAccountId'
-    //     ]
-    //   );
+    this.validateForm.get('transactionWalletAddressId')?.setValue(0);
     if (this.reveingCurrecy === this.purchCurrecy) {
       this.setShowStatus(true);
     } else {
