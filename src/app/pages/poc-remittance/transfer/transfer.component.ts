@@ -22,7 +22,7 @@ import { TransferService } from '@app/core/services/http/poc-remittance/transfer
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
-import { fnEncrypts } from '@app/utils/tools';
+import { fnEncrypts, thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription, debounceTime, interval, map } from 'rxjs';
@@ -241,7 +241,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       (item: any) => item.bankAccountId === e
     );
 
-    this.validateForm.get('availableBalance')?.setValue(val[0]['cbdcCount']);
+    this.validateForm
+      .get('availableBalance')
+      ?.setValue(thousandthMark(val[0]['cbdcCount']));
     this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     this.getExchange();
   }
@@ -409,7 +411,11 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.validateForm
       .get('availableBalance')
-      ?.setValue(val[0]['remitterInformationExtendInfoList'][0]['cbdcCount']);
+      ?.setValue(
+        thousandthMark(
+          val[0]['remitterInformationExtendInfoList'][0]['cbdcCount']
+        )
+      );
     this.remitterWalletAddressList =
       val[0]['remitterInformationExtendInfoList'];
     this.validateForm
