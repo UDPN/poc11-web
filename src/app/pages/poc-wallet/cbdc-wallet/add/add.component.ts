@@ -328,27 +328,27 @@ export class AddComponent implements OnInit {
     // }
   }
   onSign() {
-    this.cbdcWalletService
-      .getSign({ account: this.validateForm.get('walletAddress')?.value })
-      .subscribe((res) => {
-        // signData
-        let result = this.metaMaskService.sign(
-          this.validateForm.get('walletAddress')?.value,
-          res.signData
+    // this.cbdcWalletService
+    //   .getSign({ account: this.validateForm.get('walletAddress')?.value })
+    //   .subscribe((res) => {
+    // signData
+    let result = this.metaMaskService.sign(
+      this.validateForm.get('walletAddress')?.value,
+      '0x74821001be5de68857fac04ad24074d264c5b1d7024cae7dec3f4415592d65b8'
+    );
+    result.then((ress) => {
+      if (typeof ress === 'undefined') {
+        return;
+      }
+      if (ress !== '') {
+        this.testStatus = true;
+        this.metaArrStrSignPass.push(
+          this.validateForm.get('walletAddress')?.value
         );
-        result.then((ress) => {
-          if (typeof ress === 'undefined') {
-            return;
-          }
-          if (ress !== '') {
-            this.testStatus = true;
-            this.metaArrStrSignPass.push(
-              this.validateForm.get('walletAddress')?.value
-            );
-            this.message.success('Signature successful!');
-            this.cdr.markForCheck();
-          }
-        });
-      });
+        this.message.success('Signature successful!');
+        this.cdr.markForCheck();
+      }
+    });
+    // });
   }
 }
