@@ -1,3 +1,10 @@
+/*
+ * @Author: zhangxuefeng
+ * @Date: 2024-01-11 14:58:13
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2024-01-31 19:11:48
+ * @Description:
+ */
 const ip = '69.230.239.221';
 const port = '8082';
 
@@ -5,8 +12,7 @@ export const localUrl = ``;
 
 export const environment = {
   production: false,
-  localUrl: localUrl,
-  ws: 'http://poc11-oaigateway.commercial-bank1.svc.cluster.local:6480'
+  localUrl: localUrl
 };
 
 /*
