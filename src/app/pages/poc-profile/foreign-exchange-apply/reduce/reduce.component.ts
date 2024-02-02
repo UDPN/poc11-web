@@ -138,7 +138,7 @@ export class ReduceComponent implements OnInit {
     this.foreignExchangeApplyService.reduce({ exchangeInformations: this.submitCurrencyPair }).pipe(finalize(() => this.isLoading = false)).subscribe({
       next: res => {
         if (res) {
-          this.message.success('Reduce successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
+          this.message.success('Deactivate successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
             this.location.back();
           });
         }
