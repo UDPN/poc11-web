@@ -83,7 +83,7 @@ export class AddPoolComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
     this.edit();
@@ -398,8 +398,8 @@ export class AddPoolComponent implements OnInit {
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-        ? []
-        : this.listCheckArr[index];
+          ? []
+          : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
@@ -582,7 +582,7 @@ export class AddPoolComponent implements OnInit {
           width: 300
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.authorizedTpl,
           width: 120
         }

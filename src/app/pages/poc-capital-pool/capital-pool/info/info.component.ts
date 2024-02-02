@@ -28,17 +28,17 @@ export class InfoComponent implements OnInit {
     private pocCapitalPoolService: PocCapitalPoolService,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Detail`,
+      title: `Details`,
       breadcrumbs: [
         {
           name: 'Capital Pool Management',
           url: '/poc/poc-capital-pool/capital-pool'
         },
-        { name: 'Detail' }
+        { name: 'Details' }
       ],
       extra: '',
       desc: '',

@@ -110,7 +110,7 @@ export class UserComponent implements OnInit {
               resolve(true);
               this.cdr.markForCheck();
               if (res) {
-                this.message.success(`${toolStatus} the user successfully!`,{ nzDuration: 1000});
+                this.message.success(`${toolStatus} the user successfully!`, { nzDuration: 1000 });
               }
               this.getDataList();
             },
@@ -133,7 +133,7 @@ export class UserComponent implements OnInit {
           this.userService.resetPassword({ userId }).subscribe({
             next: res => {
               resolve(true);
-              this.message.success(`The password of '${userName}' has been reset to '${res.pwd}'`, { nzDuration: 1000}).onClose!.subscribe(() => {
+              this.message.success(`The password of '${userName}' has been reset to '${res.pwd}'`, { nzDuration: 1000 }).onClose!.subscribe(() => {
                 if (realName === clientName) {
                   this.loginOutService.loginOut().then();
                 }
@@ -156,7 +156,7 @@ export class UserComponent implements OnInit {
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          this.userService.statusUpdate({ userId, lockable: 3}).subscribe({
+          this.userService.statusUpdate({ userId, lockable: 3 }).subscribe({
             next: res => {
               resolve(true);
               if (res) {
@@ -211,7 +211,7 @@ export class UserComponent implements OnInit {
           width: 100
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

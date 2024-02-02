@@ -105,7 +105,7 @@ export class BillComponent implements OnInit, AfterViewInit {
     private router: Router,
     private fb: NonNullableFormBuilder,
     private modal: NzModalService
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -376,7 +376,7 @@ export class BillComponent implements OnInit, AfterViewInit {
           width: 180
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

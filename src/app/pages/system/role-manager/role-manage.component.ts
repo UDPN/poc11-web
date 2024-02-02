@@ -44,7 +44,7 @@ export class RoleManageComponent implements OnInit {
     private modalService: RoleManageModalService,
     private router: Router,
     public message: NzMessageService
-  ) {}
+  ) { }
 
   selectedChecked(e: any): void {
     // @ts-ignore
@@ -80,14 +80,14 @@ export class RoleManageComponent implements OnInit {
       });
   }
 
-  
+
   setRole(id: number): void {
     this.router.navigate(['/default/system/role-manager/set-role'], { queryParams: { id: id } });
   }
 
-  
+
   tableChangeDectction(): void {
-    
+
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
@@ -116,7 +116,7 @@ export class RoleManageComponent implements OnInit {
     this.getDataList();
   }
 
-  
+
   edit(id: number): void {
     this.dataService.getRolesDetail(id).subscribe(res => {
       this.modalService.show({ nzTitle: 'The editor' }, res).subscribe(
@@ -158,7 +158,7 @@ export class RoleManageComponent implements OnInit {
       }
     });
   }
-  
+
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
@@ -183,7 +183,7 @@ export class RoleManageComponent implements OnInit {
           field: 'roleDesc'
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

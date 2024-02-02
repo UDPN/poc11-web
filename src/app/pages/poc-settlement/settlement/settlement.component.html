@@ -65,8 +65,7 @@
   <app-card-table-wrap [tableTitle]="'Settlement Model List'" [isNormalTable]="true" [btnTpl]="tableBtns">
     <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-    <ng-template #exchangeRateTpl let-formRateCurrency="formRateCurrency"
-      let-toRateCurrency="toRateCurrency">
+    <ng-template #exchangeRateTpl let-formRateCurrency="formRateCurrency" let-toRateCurrency="toRateCurrency">
       <span [title]="formRateCurrency + '->' + toRateCurrency">{{
         formRateCurrency + '->' + toRateCurrency
         }}</span>
@@ -82,7 +81,7 @@
       <ng-container *appAuth="'R02040103'">
         <span class="operate-text" routerLink="/poc/poc-settlement/settlement/info"
           [queryParams]="{formRateCurrency,formRatePlatform,toRateCurrency,toRatePlatform}">
-          Detail
+          Details
         </span>
       </ng-container>
     </ng-template>
