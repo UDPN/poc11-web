@@ -106,7 +106,7 @@ export const MapSet = {
   },
   exchangeBusinessType: {
     0: 'Activate',
-    1: 'Reduce'
+    1: 'Deactivate'
   },
   walletTransactionsStatus: {
     1: 'Pending Approval',

@@ -37,17 +37,17 @@ export class InfoComponent implements OnInit {
     private settlementService: SettlementService,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Detail`,
+      title: `Details`,
       breadcrumbs: [
         { name: 'Settlement Management' },
         {
           name: 'Settlement Model Management',
           url: '/poc/poc-settlement/settlement'
         },
-        { name: 'Detail' }
+        { name: 'Details' }
       ],
       extra: '',
       desc: '',

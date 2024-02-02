@@ -56,7 +56,7 @@ export class ApplicationComponent implements OnInit {
     private pocCapitalPoolService: PocCapitalPoolService,
     private cdr: ChangeDetectorRef,
     public _commonService: CommonService
-  ) {}
+  ) { }
   ngOnInit() {
     this.initTable();
     this.initSelect();
@@ -168,7 +168,7 @@ export class ApplicationComponent implements OnInit {
           width: 160
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

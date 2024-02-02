@@ -43,13 +43,13 @@ export class InfoComponent implements OnInit {
   ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Detail`,
+      title: `Details`,
       breadcrumbs: [
         {
           name: 'FX Pair Management',
           url: '/poc/poc-profile/foreign-exchange-apply'
         },
-        { name: 'Detail' }
+        { name: 'Details' }
       ],
       extra: '',
       desc: '',

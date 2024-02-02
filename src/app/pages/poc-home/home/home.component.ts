@@ -129,7 +129,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private socketService: SocketService,
     private notification: NzNotificationService,
     private windowService: WindowService
-  ) {}
+  ) { }
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -512,7 +512,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           width: 120
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',
@@ -656,6 +656,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   ngOnDestroy(): void {
-    window.addEventListener('resize', () => {});
+    window.addEventListener('resize', () => { });
   }
 }
