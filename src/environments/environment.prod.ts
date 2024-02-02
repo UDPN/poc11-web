@@ -16,5 +16,7 @@ export const ip = window.location.hostname;
 // }
 export const environment = {
   production: true,
-  localUrl: ''
+  localUrl: '',
+  clientName: 'admin',
+  password: 'Abcd1234'
 };

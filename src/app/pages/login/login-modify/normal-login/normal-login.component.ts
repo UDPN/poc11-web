@@ -112,7 +112,7 @@ export class NormalLoginComponent implements OnInit {
     private styleService: StyleService,
 
     private notification: NzNotificationService
-  ) {}
+  ) { }
 
   submitForm(): void {
     if (!fnCheckForm(this.validateForm)) {
@@ -231,16 +231,34 @@ export class NormalLoginComponent implements OnInit {
 
   onRefresh() {
     if (environment.production) {
-      this.srcUrl =
+      const url =
         environment.localUrl +
         '/fxsp/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
+      this.dataService.getCaptcha(url).subscribe(resp => {
+        const data = JSON.parse(resp.body);
+        this.srcUrl = 'data:image/jpg;base64,' + data.data.baseStr;
+        let randomstr = resp.headers.get('Randomstr');
+        let ss = resp.headers.get('Randomcode');
+        if (randomstr) {
+          this.validateForm.get('captchaCode')?.setValue(ss);
+        }
+      })
       this.cdr.markForCheck();
     } else {
-      this.srcUrl =
+      const url =
         environment.localUrl +
         '/v1/fxsp/anon/generate/captcha?' +
         fnRandomString(8, '');
+      this.dataService.getCaptcha(url).subscribe(resp => {
+        const data = JSON.parse(resp.body);
+        this.srcUrl = 'data:image/jpg;base64,' + data.data.baseStr;
+        let randomstr = resp.headers.get('Randomstr');
+        let ss = resp.headers.get('Randomcode');
+        if (randomstr) {
+          this.validateForm.get('captchaCode')?.setValue(ss);
+        }
+      })
       this.cdr.markForCheck();
     }
   }
