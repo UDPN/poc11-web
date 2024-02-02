@@ -25,17 +25,17 @@ export class InfoComponent implements OnInit {
     private pocFxTransactionsService: PocFxTransactionsService,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Detail`,
+      title: `Details`,
       breadcrumbs: [
         {
           name: 'FX Transactions',
           url: '/poc/poc-fx-transactions/fx-transactions'
         },
-        { name: 'Detail' }
+        { name: 'Details' }
       ],
       extra: '',
       desc: '',

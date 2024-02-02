@@ -21,11 +21,11 @@ export class InfoComponent implements OnInit {
   constructor(public routeInfo: ActivatedRoute, private userService: UserService, private cdr: ChangeDetectorRef) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Detail`,
+      title: `Details`,
       breadcrumbs: [
         { name: 'System Management' },
         { name: 'User Management', url: '/poc/poc-system/user' },
-        { name: 'Detail' }
+        { name: 'Details' }
       ],
       extra: '',
       desc: '',
@@ -41,7 +41,7 @@ export class InfoComponent implements OnInit {
       this.userService.info({ userId: params['userId'] }).subscribe((res: any) => {
         this.info = res;
         this.roleList = res.roleList;
-        const array:any = [];
+        const array: any = [];
         if (res.roleList) {
           this.roleList.map((item) => {
             array.push(item.roleName)

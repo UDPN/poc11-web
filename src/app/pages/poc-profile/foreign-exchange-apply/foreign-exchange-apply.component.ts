@@ -66,7 +66,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
     private foreignExchangeApplyService: ForeignExchangeApplyService,
     private cdr: ChangeDetectorRef,
     public _commonService: CommonService
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -188,7 +188,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           width: 160
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',
