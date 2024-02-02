@@ -82,7 +82,7 @@ export class RoleComponent implements OnInit {
       this.dataList.forEach((item: any, i: any) => {
         Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 })
       })
-      this.tableConfig.total = _?.resultPageInfo?.total;     
+      this.tableConfig.total = _?.resultPageInfo?.total;
       this.tableConfig.pageIndex = params.pageNum;
       this.tableLoading(false);
       this.cdr.markForCheck();
@@ -93,7 +93,7 @@ export class RoleComponent implements OnInit {
     let status = '';
     if (lockable === 1) {
       status = 'disable'
-    } else if (lockable === 2){
+    } else if (lockable === 2) {
       status = 'enable'
     }
     const toolStatus = status.charAt(0).toUpperCase() + status.slice(1);
@@ -126,7 +126,7 @@ export class RoleComponent implements OnInit {
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          this.roleService.statusUpdate({ roleCode, lockable: 3}).subscribe({
+          this.roleService.statusUpdate({ roleCode, lockable: 3 }).subscribe({
             next: res => {
               resolve(true);
               if (res) {
@@ -171,10 +171,10 @@ export class RoleComponent implements OnInit {
           width: 200
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
-          fixedDir: 'right',          
+          fixedDir: 'right',
           showAction: false,
           width: 250
 

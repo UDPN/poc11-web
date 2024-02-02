@@ -101,7 +101,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private transactionRecordService: TransactionRecordService,
     private transferService: TransferService
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -212,7 +212,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

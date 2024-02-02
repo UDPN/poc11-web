@@ -172,7 +172,7 @@ export class SettlementComponent implements OnInit, AfterViewInit {
           width: 220
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

@@ -83,7 +83,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
-  ) {}
+  ) { }
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -190,7 +190,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

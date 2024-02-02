@@ -321,7 +321,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 180
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

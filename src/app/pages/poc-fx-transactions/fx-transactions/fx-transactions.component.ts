@@ -215,7 +215,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           width: 120
         },
         {
-          title: 'Action',
+          title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',

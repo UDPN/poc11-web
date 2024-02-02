@@ -5,7 +5,8 @@
         <nz-form-item>
           <nz-form-label>Application No.</nz-form-label>
           <nz-form-control>
-            <input nz-input placeholder="" name="businessApplicationCode" [(ngModel)]="searchParam.businessApplicationCode" />
+            <input nz-input placeholder="" name="businessApplicationCode"
+              [(ngModel)]="searchParam.businessApplicationCode" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -15,7 +16,8 @@
           <nz-form-control>
             <nz-select nzPlaceHolder="" name="applicationType" [(ngModel)]="searchParam.applicationType">
               <nz-option nzValue="" nzLabel="All"></nz-option>
-              <nz-option *ngFor="let item of businessTypeList" [nzValue]="item.cseValue" [nzLabel]="item.cseDesc"></nz-option>
+              <nz-option *ngFor="let item of businessTypeList" [nzValue]="item.cseValue"
+                [nzLabel]="item.cseDesc"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -42,7 +44,8 @@
         <nz-form-item>
           <nz-form-label [nzNoColon]="true">Status</nz-form-label>
           <nz-form-control>
-            <nz-select nzPlaceHolder="" name="businessApplicationStatus" [(ngModel)]="searchParam.businessApplicationStatus">
+            <nz-select nzPlaceHolder="" name="businessApplicationStatus"
+              [(ngModel)]="searchParam.businessApplicationStatus">
               <nz-option nzValue="" nzLabel="All"></nz-option>
               <nz-option *ngFor="let item of statusList" [nzValue]="item.cseValue" [nzLabel]="item.cseDesc"></nz-option>
             </nz-select>
@@ -77,7 +80,7 @@
       <ng-container>
         <span class="operate-text" *appAuth="'R020202'" routerLink="/poc/poc-capital-pool/capital-pool/info"
           [queryParams]="{businessApplicationCode: applicationNo}">
-          Detail
+          Details
         </span>
       </ng-container>
     </ng-template>
