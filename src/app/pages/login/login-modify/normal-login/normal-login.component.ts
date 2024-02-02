@@ -230,36 +230,19 @@ export class NormalLoginComponent implements OnInit {
   };
 
   onRefresh() {
-    if (environment.production) {
-      const url =
-        environment.localUrl +
-        '/fxsp/v1/fxsp/anon/generate/captcha?' +
-        fnRandomString(8, '');
-      this.dataService.getCaptcha(url).subscribe(resp => {
-        const data = JSON.parse(resp.body);
-        this.srcUrl = 'data:image/jpg;base64,' + data.data.baseStr;
-        let randomstr = resp.headers.get('Randomstr');
-        let ss = resp.headers.get('Randomcode');
-        if (randomstr) {
-          this.validateForm.get('captchaCode')?.setValue(ss);
-        }
-      })
-      this.cdr.markForCheck();
-    } else {
-      const url =
-        environment.localUrl +
-        '/v1/fxsp/anon/generate/captcha?' +
-        fnRandomString(8, '');
-      this.dataService.getCaptcha(url).subscribe(resp => {
-        const data = JSON.parse(resp.body);
-        this.srcUrl = 'data:image/jpg;base64,' + data.data.baseStr;
-        let randomstr = resp.headers.get('Randomstr');
-        let ss = resp.headers.get('Randomcode');
-        if (randomstr) {
-          this.validateForm.get('captchaCode')?.setValue(ss);
-        }
-      })
-      this.cdr.markForCheck();
-    }
+    const url =
+      environment.localUrl +
+      '/v1/fxsp/anon/generate/captcha?' +
+      fnRandomString(8, '');
+    this.dataService.getCaptcha(url).subscribe(resp => {
+      const data = JSON.parse(resp.body);
+      this.srcUrl = 'data:image/jpg;base64,' + data.data.baseStr;
+      let randomstr = resp.headers.get('Randomstr');
+      let ss = resp.headers.get('Randomcode');
+      if (randomstr) {
+        this.validateForm.get('captchaCode')?.setValue(ss);
+      }
+    })
+    this.cdr.markForCheck();
   }
 }
