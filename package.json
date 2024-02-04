@@ -38,7 +38,7 @@
     "jwt-encode": "^1.0.1",
     "lodash": "^4.17.21",
     "ng-antd-color-picker": "^1.1.0",
-    "ng-zorro-antd": "^17.2.0",
+    "ng-zorro-antd": "^16.2.0",
     "ngx-translate-multi-http-loader": "^16.0.1",
     "os-browserify": "^0.3.0",
     "process": "^0.11.10",
