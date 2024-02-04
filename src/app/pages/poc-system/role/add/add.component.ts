@@ -1,5 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  UntypedFormControl,
+  Validators
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { Location } from '@angular/common';
@@ -10,8 +15,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { RoleService } from '@app/core/services/http/poc-system/role/role.service';
-
-
 
 interface TreeNode {
   rsucName: string;
@@ -53,12 +56,12 @@ export class AddComponent implements OnInit {
       existingNode && existingNode.name === node.rsucName
         ? existingNode
         : {
-          expandable: !!node.childNodes && node.childNodes.length > 0,
-          name: node.rsucName,
-          level,
-          disabled: !!node.disabled,
-          id: node.rsucId,
-        };
+            expandable: !!node.childNodes && node.childNodes.length > 0,
+            name: node.rsucName,
+            level,
+            disabled: !!node.disabled,
+            id: node.rsucId
+          };
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
@@ -68,21 +71,28 @@ export class AddComponent implements OnInit {
   checklistSelection = new SelectionModel<FlatNode>(true);
 
   treeControl: any = new FlatTreeControl<any>(
-    node => node.level,
-    node => node.expandable,
+    (node) => node.level,
+    (node) => node.expandable
   );
 
   treeFlattener = new NzTreeFlattener(
     this.transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.childNodes
+    (node) => node.level,
+    (node) => node.expandable,
+    (node) => node.childNodes
   );
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
   getLevel = (node: FlatNode) => node.level;
-  constructor(private fb: FormBuilder, public routeInfo: ActivatedRoute, private message: NzMessageService, private roleService: RoleService, private cdr: ChangeDetectorRef, private location: Location) {}
+  constructor(
+    private fb: FormBuilder,
+    public routeInfo: ActivatedRoute,
+    private message: NzMessageService,
+    private roleService: RoleService,
+    private cdr: ChangeDetectorRef,
+    private location: Location
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: this.tempStatus === true ? 'Create' : 'Edit',
@@ -106,16 +116,17 @@ export class AddComponent implements OnInit {
           this.getInfo(params['roleCode']);
         }, 100);
       }
-    })
+    });
     this.validateForm = this.fb.group({
       roleName: [null, [Validators.required]],
       description: [null],
-      lockable: [2, [Validators.required]],
-    })
+      lockable: [2, [Validators.required]]
+    });
   }
 
   treeList() {
-    this.roleService.treeList().subscribe(data => {
+    this.roleService.treeList().subscribe((data) => {
+      console.log(data);
       this.dataSource.setData(data);
       // Default Unfold
       this.treeControl.expandAll();
@@ -129,14 +140,13 @@ export class AddComponent implements OnInit {
     for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
       if (this.checklistSelection.isSelected(this.treeControl.dataNodes[i])) {
         arrAll.push(this.treeControl.dataNodes[i].id);
-      } else
-        if (this.descendantsAllSelected(this.treeControl.dataNodes[i])) {
-          arrAll.push(this.treeControl.dataNodes[i].id);
-        } else if (
-          this.descendantsPartiallySelected(this.treeControl.dataNodes[i])
-        ) {
-          arrHalf.push(this.treeControl.dataNodes[i].id);
-        }
+      } else if (this.descendantsAllSelected(this.treeControl.dataNodes[i])) {
+        arrAll.push(this.treeControl.dataNodes[i].id);
+      } else if (
+        this.descendantsPartiallySelected(this.treeControl.dataNodes[i])
+      ) {
+        arrHalf.push(this.treeControl.dataNodes[i].id);
+      }
     }
     this.permissionList = arrAll.concat(arrHalf);
   }
@@ -145,7 +155,9 @@ export class AddComponent implements OnInit {
     const array = this.resourceList;
     for (let i = 0; i <= this.treeControl.dataNodes.length; i++) {
       if (array.indexOf(this.treeControl.dataNodes[i]?.id) >= 0) {
-        if (!this.checklistSelection.isSelected(this.treeControl.dataNodes[i])) {
+        if (
+          !this.checklistSelection.isSelected(this.treeControl.dataNodes[i])
+        ) {
           this.checklistSelection.toggle(this.treeControl.dataNodes[i]);
           this.checkAllParentsSelection(this.treeControl.dataNodes[i]);
         }
@@ -154,18 +166,18 @@ export class AddComponent implements OnInit {
   }
 
   selectTeeList(array: any[]) {
-    array.forEach(item => {
+    array.forEach((item) => {
       if (item.childNodes && item.childNodes.length >= 0) {
-        this.selectTeeList(item.childNodes)
+        this.selectTeeList(item.childNodes);
         if (item.childNodes.length === 0) {
-          this.selectTeeList(item.childNodes)
-          this.resourceList.push(item.rsucId)
+          this.selectTeeList(item.childNodes);
+          this.resourceList.push(item.rsucId);
         }
       }
       if (this.permissionList.indexOf(item.rsucId) < 0) {
-        this.permissionList.push(item.rsucId)
+        this.permissionList.push(item.rsucId);
       }
-    })
+    });
   }
 
   descendantsAllSelected(node: FlatNode): boolean {
@@ -180,7 +192,9 @@ export class AddComponent implements OnInit {
 
   descendantsPartiallySelected(node: FlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    const result = descendants.some((child: FlatNode) => this.checklistSelection.isSelected(child));
+    const result = descendants.some((child: FlatNode) =>
+      this.checklistSelection.isSelected(child)
+    );
     return result && !this.descendantsAllSelected(node);
   }
 
@@ -196,10 +210,11 @@ export class AddComponent implements OnInit {
     this.checklistSelection.isSelected(node)
       ? this.checklistSelection.select(...descendants)
       : this.checklistSelection.deselect(...descendants);
-    descendants.forEach((child: FlatNode) => this.checklistSelection.isSelected(child));
+    descendants.forEach((child: FlatNode) =>
+      this.checklistSelection.isSelected(child)
+    );
     this.checkAllParentsSelection(node);
     this.checkAll();
-
   }
 
   checkAllParentsSelection(node: FlatNode): any {
@@ -214,7 +229,10 @@ export class AddComponent implements OnInit {
     const nodeSelected = this.checklistSelection.isSelected(node);
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected =
-      descendants.length > 0 && descendants.every((child: FlatNode) => this.checklistSelection.isSelected(child));
+      descendants.length > 0 &&
+      descendants.every((child: FlatNode) =>
+        this.checklistSelection.isSelected(child)
+      );
     if (nodeSelected && !descAllSelected) {
       this.checklistSelection.deselect(node);
     } else if (!nodeSelected && descAllSelected) {
@@ -251,7 +269,7 @@ export class AddComponent implements OnInit {
       this.selectTeeList(res.myResourceList);
       this.getSelectList();
       return;
-    })
+    });
   }
 
   onSubmit() {
@@ -264,54 +282,62 @@ export class AddComponent implements OnInit {
       description: this.validateForm.get('description')?.value,
       roleName: this.validateForm.get('roleName')?.value,
       rsucIdList: this.permissionList
-    }
+    };
     const editParam = {
       roleCode: this.roleCode,
       lockable: this.validateForm.get('lockable')?.value,
       description: this.validateForm.get('description')?.value,
       roleName: this.validateForm.get('roleName')?.value,
       rsucIdList: this.permissionList
-    }
+    };
     if (this.tempStatus === true) {
-      this.roleService.add(addParam).pipe(finalize(() => this.isLoading = false)).subscribe({
-        next: res => {
-          if (res) {
-            this.message.success('Add successfully!',{ nzDuration: 1000}).onClose.subscribe(() => {
-              this.validateForm.reset();
-              this.location.back();
-            });
+      this.roleService
+        .add(addParam)
+        .pipe(finalize(() => (this.isLoading = false)))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.message
+                .success('Add successfully!', { nzDuration: 1000 })
+                .onClose.subscribe(() => {
+                  this.validateForm.reset();
+                  this.location.back();
+                });
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
           }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: err => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
-      })
+        });
     } else {
-      this.roleService.edit(editParam).pipe(finalize(() => this.isLoading = false)).subscribe({
-        next: res => {
-          if (res) {
-            this.message.success('Edit successfully!',{ nzDuration: 1000}).onClose.subscribe(() => {
-              this.validateForm.reset();
-              this.location.back();
-            });
+      this.roleService
+        .edit(editParam)
+        .pipe(finalize(() => (this.isLoading = false)))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.message
+                .success('Edit successfully!', { nzDuration: 1000 })
+                .onClose.subscribe(() => {
+                  this.validateForm.reset();
+                  this.location.back();
+                });
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
           }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: err => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
-      })
+        });
     }
-
   }
 
   onBack() {
     this.location.back();
   }
-
 }
