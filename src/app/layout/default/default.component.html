@@ -32,9 +32,10 @@
           <ng-container *ngIf="(themeOptions$ | async)!.hasNavHeadArea">
             <!-- <img class="m-l-10" style="max-height: 32px; max-width: 54px" src="assets/imgs/logo.svg" alt="" /> -->
             <span class="m-l-20" [style]="{color: '#3c5686'}" [ngClass]="{'logo': !(isCollapsed$ | async)}">
-              <img [src]="logoImg" alt="" style="width: 180px;height: 40px; padding-bottom: 5px;" class="m-r-20" *ngIf="logoImg">
+              <img [src]="logoImg" alt="" style="width: 180px;height: 40px; padding-bottom: 5px;" class="m-r-20"
+                *ngIf="logoImg">
               <span *ngIf="!isCollapsed">{{this.systemName ? this.systemName : ''}}</span>
-              <span class="m-l-50">{{'Multiple Wholesale CBDC Settlement Platform'}}</span>
+              <span class="m-l-50">{{'Commercial Bank Management System'}}</span>
             </span>
           </ng-container>
           <div class="flex-1">
@@ -58,9 +59,10 @@
       <ng-container left *ngIf="!isOverMode">
         <div class="left-start-center flex-1" style="z-index: 100">
           <span class="m-l-20" [style]="{color: '#ffff'}" [ngClass]="{'logo': !(isCollapsed$ | async)}">
-            <img [src]="logoImg" alt="" style="width: 180px; height: 40px; padding-bottom: 5px;" class="m-r-20" *ngIf="logoImg">
+            <img [src]="logoImg" alt="" style="width: 180px; height: 40px; padding-bottom: 5px;" class="m-r-20"
+              *ngIf="logoImg">
             <span *ngIf="!isCollapsed">{{this.systemName ? this.systemName : ''}}</span>
-            <span class="m-l-50">{{'Multiple Wholesale CBDC Settlement Platform'}}</span>
+            <span class="m-l-50">{{'Commercial Bank Management System'}}</span>
           </span>
           <span class="sp-18 m-r-25"></span>
           <div class="flex-1">

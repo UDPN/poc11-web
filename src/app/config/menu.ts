@@ -113,7 +113,7 @@ const menuNav: Menu[] = [
     menuType: 'C',
     code: 'R02',
     menuGroup: true,
-    groupName: 'As a FX Service Provider',
+    groupName: 'As an FX Service Provider',
     groupCollapseName: 'Commercial'
   },
   {

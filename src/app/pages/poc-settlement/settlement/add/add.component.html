@@ -63,7 +63,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Commission
+          <nz-form-label nzRequired nzSpan="10">Commission Rate
           </nz-form-label>
           <nz-form-control [nzErrorTip]="chargingModelError">
             <div nz-row>
@@ -75,7 +75,7 @@
               </div>
             </div>
             <ng-template #chargingModelError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your Commission</ng-container>
+              <ng-container *ngIf="control.hasError('required')">Please input your Commission Rate</ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -83,7 +83,7 @@
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10"
         [ngStyle]="{'display': this.validateForm.get('chargingModel')?.value !== '1' ? 'none' : ''}">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Max Commission
+          <nz-form-label nzRequired nzSpan="10">Max Commission Amount
           </nz-form-label>
           <nz-form-control [nzErrorTip]="maxCommissionError">
             <div nz-row>
@@ -94,7 +94,7 @@
               </div>
             </div>
             <ng-template #maxCommissionError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your Max Commission</ng-container>
+              <ng-container *ngIf="control.hasError('required')">Please input your Max Commission Amount</ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -110,6 +110,7 @@
                 <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
                   [disabled]="!this.validateForm.valid" (click)="onSubmit()">
                   {{ this.tempStatus === true ? 'Save' : 'Edit' }}
+                  {{ 'Save' }}
                 </button></nz-space>
             </div>
           </div>

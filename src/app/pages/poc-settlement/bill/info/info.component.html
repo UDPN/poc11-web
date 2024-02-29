@@ -12,7 +12,7 @@
           <nz-descriptions-item nzTitle="Statement No.">{{
             info.billNo
             }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Cycle">{{
+          <nz-descriptions-item nzTitle="Date">{{
             info.billCycle | map:'monthStamp'
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Bank ID">{{
@@ -23,9 +23,9 @@
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Currency Pair">{{(info.formCurrency + '->' +
             info.toCurrency) | map:'null'}}</nz-descriptions-item>
-          <nz-descriptions-item
-            [nzTitle]="'Statement Amount (' + info.formCurrency + ')'">{{info.billAmount | map:'toThousandthMark'}}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Creation Time">{{
+          <nz-descriptions-item [nzTitle]="'Statement Amount (' + info.formCurrency + ')'">{{info.billAmount |
+            map:'toThousandthMark'}}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Created on">{{
             info.createDate | map: 'timeStamp'
             }}</nz-descriptions-item>
         </nz-descriptions>
