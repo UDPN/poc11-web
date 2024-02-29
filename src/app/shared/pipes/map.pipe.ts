@@ -77,8 +77,8 @@ export const MapSet = {
     4: 'Official'
   },
   lockable: {
-    1: 'Disable',
-    2: 'Enable'
+    1: 'Inactive',
+    2: 'Active'
   },
   foreignStatus: {
     0: 'Pending',

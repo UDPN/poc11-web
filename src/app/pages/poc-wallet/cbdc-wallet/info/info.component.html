@@ -20,7 +20,7 @@
                 {{ info.currency }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Created By">{{ info.createUser }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Created on">{{ info.createTime | map:'timeStamp'
+              <nz-descriptions-item nzTitle="Created On">{{ info.createTime | map:'timeStamp'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Status"><nz-tag [nzColor]="info.state | map:'walletStatusColor'">{{
                   info.state | map:'walletStatus' }}</nz-tag></nz-descriptions-item>
@@ -36,7 +36,7 @@
               <nz-descriptions-item nzTitle="Approved By">
                 {{ info.reviewerUser | map:'nullValue' }}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Onboarded on">
+              <nz-descriptions-item nzTitle="Onboarded On">
                 {{ info.reviewerTime | map:'timeStamp' }}
               </nz-descriptions-item>
             </nz-descriptions>
