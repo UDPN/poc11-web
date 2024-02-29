@@ -44,7 +44,7 @@
       <ng-container *appAuth="lockable === 3 ? '' : (lockable === 2 ? 'R030204' : 'R030203')">
         <span class="operate-text" *ngIf="superRole === 2"
           (click)="onStatusUpdate(roleCode, lockable === 3 ? '' : (lockable === 1 ? 2 : 1), roleName)">
-          {{ lockable === 3 ? '' : (lockable === 2 ? 'Disable' : 'Enable') }}
+          {{ lockable === 3 ? '' : (lockable === 2 ? 'Inactive' : 'Active') }}
         </span>
       </ng-container>
       <ng-container *appAuth="'R030206'">

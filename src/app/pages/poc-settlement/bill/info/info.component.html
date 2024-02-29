@@ -25,7 +25,7 @@
             info.toCurrency) | map:'null'}}</nz-descriptions-item>
           <nz-descriptions-item [nzTitle]="'Statement Amount (' + info.formCurrency + ')'">{{info.billAmount |
             map:'toThousandthMark'}}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Created on">{{
+          <nz-descriptions-item nzTitle="Created On">{{
             info.createDate | map: 'timeStamp'
             }}</nz-descriptions-item>
         </nz-descriptions>

@@ -168,14 +168,14 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           width: 220
         },
         {
-          title: 'Created on',
+          title: 'Created On',
           field: 'applicationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 200
         },
         {
-          title: 'Onboarded on',
+          title: 'Onboarded On',
           field: 'approvalTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
