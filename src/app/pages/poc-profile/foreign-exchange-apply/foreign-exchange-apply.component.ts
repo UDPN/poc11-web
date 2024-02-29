@@ -162,20 +162,20 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           width: 220
         },
         {
-          title: 'FX Pair Type',
+          title: 'Application Type',
           field: 'applicationType',
           pipe: 'exchangeBusinessType',
           width: 220
         },
         {
-          title: 'Application Time',
+          title: 'Created on',
           field: 'applicationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 200
         },
         {
-          title: 'Approval Time',
+          title: 'Onboarded on',
           field: 'approvalTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

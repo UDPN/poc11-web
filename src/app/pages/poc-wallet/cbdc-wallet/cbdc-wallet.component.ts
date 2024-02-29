@@ -292,7 +292,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 260
         },
         {
-          title: 'Region',
+          title: 'Wallet Type',
           field: 'region',
           pipe: 'region',
           width: 150
@@ -309,14 +309,14 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Creation Time',
+          title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 180
         },
         {
-          title: 'state',
+          title: 'Status',
           tdTemplate: this.statusTpl,
           width: 180
         },

@@ -90,12 +90,12 @@ export class InfoComponent implements OnInit {
           width: 220
         },
         {
-          title: 'Commission',
+          title: 'Commission Rate',
           tdTemplate: this.commissionTpl,
           width: 220
         },
         {
-          title: 'Max Commission',
+          title: 'Max Commission Amount',
           tdTemplate: this.maxCommissionTpl,
           pipe: 'nullValue',
           width: 300

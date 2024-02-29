@@ -27,7 +27,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label>Region</nz-form-label>
+            <nz-form-label>Wallet Type</nz-form-label>
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="region" [(ngModel)]="searchParam.region">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
@@ -52,7 +52,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Creation Time</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Creation Date</nz-form-label>
             <nz-form-control>
               <nz-range-picker style="width: 100%" name="createTime"
                 [(ngModel)]="searchParam.createTime"></nz-range-picker>
