@@ -240,7 +240,7 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 12,
-        menuName: 'Bank Information Configuration',
+        menuName: 'Bank Information',
         open: false,
         selected: false,
         menuType: 'C',
