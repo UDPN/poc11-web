@@ -387,7 +387,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Date',
+          title: 'Onboarded On',
           field: 'createDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
