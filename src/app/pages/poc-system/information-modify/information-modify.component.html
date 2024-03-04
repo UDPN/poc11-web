@@ -75,7 +75,7 @@
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="spBriefIntroduction" class="onboard-input" maxlength="255" />
+                <input nz-input formControlName="spBriefIntroduction"  class="onboard-disabled onboard-input" readonly maxlength="255" />
               </div>
             </div>
             <ng-template #nodeNameError let-control>
@@ -93,7 +93,7 @@
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="spDescription" class="onboard-input" maxlength="500" />
+                <input nz-input formControlName="spDescription" class="onboard-disabled onboard-input" readonly maxlength="500" />
               </div>
             </div>
             <ng-template #nodeNameError let-control>
@@ -111,7 +111,7 @@
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="bnCode" class="onboard-input" maxlength="255" />
+                <input nz-input formControlName="bnCode" class="onboard-disabled onboard-input" readonly maxlength="255" />
               </div>
             </div>
             <ng-template #nodeNameError let-control>
@@ -157,7 +157,7 @@
                 <nz-form-control [nzErrorTip]="contactNameError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
-                      <input nz-input formControlName="contactName" class="onboard-input" maxlength="50" />
+                      <input nz-input formControlName="contactName" class="onboard-disabled onboard-input" readonly maxlength="50" />
                     </div>
                   </div>
                   <ng-template #contactNameError let-control>
@@ -174,7 +174,7 @@
                 <nz-form-control [nzErrorTip]="">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
-                      <input nz-input formControlName="mobileNumber" class="onboard-input" maxlength="20" />
+                      <input nz-input formControlName="mobileNumber" class="onboard-disabled onboard-input" readonly maxlength="20" />
                     </div>
                   </div>
                   <!-- <ng-template #phoneError let-control>
@@ -194,7 +194,7 @@
           <nz-form-control [nzErrorTip]="emailError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="email" class="onboard-input" maxlength="50" />
+                <input nz-input formControlName="email" class="onboard-disabled onboard-input" readonly maxlength="50" />
               </div>
             </div>
             <ng-template #emailError let-control>
@@ -213,7 +213,7 @@
           <nz-form-control [nzErrorTip]="addressError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="detailedAddress" class="onboard-input" maxlength="50" />
+                <input nz-input formControlName="detailedAddress" class="onboard-disabled onboard-input" readonly maxlength="50" />
               </div>
             </div>
             <ng-template #addressError let-control>
@@ -231,10 +231,10 @@
           </nz-form-label>
           <nz-form-control [nzErrorTip]="businessLicenseError">
             <div nz-row [formGroup]="validateForm">
-              <div nz-col nzSpan="24" style="text-align: left;" class="m-b-20">
+              <!-- <div nz-col nzSpan="24" style="text-align: left;" class="m-b-20">
                 <button nz-button [nzSize]="'large'" nzType="primary" (click)='upFiles.click()'>Upload</button>
                 <input type="file" accept="image/png" hidden #upFiles (change)="uploadFileImg($event)" />
-              </div>
+              </div> -->
               <div nz-col nzSpan="24" class="m-b-10">
                 <div class="onboard-div onboard-postion">
                   <input type="text" hidden formControlName="businessLicenseUrl" nz-input />
