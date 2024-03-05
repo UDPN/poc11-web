@@ -275,7 +275,7 @@ export class TransactionInfoComponent implements OnInit {
           width: 150
         },
         {
-          title: 'Date',
+          title: 'Created On',
           field: 'transactionDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

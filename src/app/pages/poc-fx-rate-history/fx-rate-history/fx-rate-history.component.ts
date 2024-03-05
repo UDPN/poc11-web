@@ -224,7 +224,7 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Date',
+          title: 'Created On',
           field: 'rateDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

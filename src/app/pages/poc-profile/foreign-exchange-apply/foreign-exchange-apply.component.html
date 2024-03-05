@@ -15,7 +15,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label>FX Pair Type</nz-form-label>
+            <nz-form-label>Application Type</nz-form-label>
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="businessApplicationStatus" [(ngModel)]="searchParam.applicationType">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
@@ -27,7 +27,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Application Date</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created On</nz-form-label>
             <nz-form-control>
               <nz-range-picker style="width: 100%" name="applicationTime"
                 [(ngModel)]="searchParam.applicationTime"></nz-range-picker>
@@ -36,7 +36,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Approval Date</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Onboarded On</nz-form-label>
             <nz-form-control>
               <nz-range-picker style="width: 100%" name="approvalTime"
                 [(ngModel)]="searchParam.approvalTime"></nz-range-picker>
@@ -96,7 +96,7 @@
     <ng-template #createBtn>
       <button routerLink="/poc/poc-profile/foreign-exchange-apply/add" *appAuth="'R020301'" nz-button nzType="primary"
         class="m-r-8">
-        Active Exchange Pair
+        Activate Exchange Pair
       </button>
       <button routerLink="/poc/poc-profile/foreign-exchange-apply/reduce" *appAuth="'R020303'" nz-button
         nzType="primary" class="m-r-8">

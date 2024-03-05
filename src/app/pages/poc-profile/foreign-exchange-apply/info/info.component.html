@@ -6,7 +6,7 @@
 <div class="normal-detail-table-wrap">
   <nz-card [nzTitle]="'Basic Information'" [nzBordered]="true" class="m-b-10">
     <nz-descriptions [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false" [nzBordered]="true">
-      <nz-descriptions-item nzTitle="Applicaiton No.">{{
+      <nz-descriptions-item nzTitle="Application No.">{{
         info.businessApplicationCode
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="FX SP Name">{{
@@ -24,13 +24,13 @@
       <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{
         info.description
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Creation Time">{{
+      <nz-descriptions-item nzTitle="Created On">{{
         info.creationTime | map: 'timeStamp'
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Application Time">{{
+      <!-- <nz-descriptions-item nzTitle="Created On">{{
         info.applicationTime | map: 'timeStamp'
-        }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Status" [nzSpan]="3">{{
+        }}</nz-descriptions-item> -->
+      <nz-descriptions-item nzTitle="Status">{{
         info.status | map: 'foreignStatus'
         }}</nz-descriptions-item>
     </nz-descriptions>
@@ -42,7 +42,7 @@
   </nz-card> -->
   <nz-card [nzTitle]="'Foreign Exchange Information'" [nzBordered]="true" class="m-b-10">
     <nz-descriptions [nzColon]="false" style="font-weight: 600;" class="card-descriptions m-t-15 m-b-20">
-      <nz-descriptions-item nzTitle="FX Pair Type">{{
+      <nz-descriptions-item nzTitle="Application Type">{{
         info.applicationType | map:'exchangeBusinessType'
         }}</nz-descriptions-item>
     </nz-descriptions>
@@ -78,7 +78,7 @@
       <nz-descriptions-item nzTitle="Approval Result">{{
         info.approvalResult | map: 'approvalResult'
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Approval Time">{{
+      <nz-descriptions-item nzTitle="Onboarded On">{{
         info.approvalTime | map:'timeStamp'
         }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Comments">{{

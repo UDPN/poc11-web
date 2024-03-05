@@ -202,7 +202,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           width: 180
         },
         {
-          title: 'Date',
+          title: 'Created On',
           field: 'transactionDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

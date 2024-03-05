@@ -27,7 +27,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label>Region</nz-form-label>
+            <nz-form-label>Wallet Type</nz-form-label>
             <nz-form-control>
               <nz-select nzPlaceHolder="" name="region" [(ngModel)]="searchParam.region">
                 <nz-option nzValue="" nzLabel="All"></nz-option>
@@ -52,7 +52,7 @@
         </div>
         <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Creation Time</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created On</nz-form-label>
             <nz-form-control>
               <nz-range-picker style="width: 100%" name="createTime"
                 [(ngModel)]="searchParam.createTime"></nz-range-picker>
@@ -114,17 +114,20 @@
     <ng-template #operationTpl let-bankAccountId="bankAccountId" let-balance="balance" let-region="region"
       let-chainAccountAddress="chainAccountAddress" let-state="state" let-currency="currency">
       <ng-container *appAuth="'R01010103'">
-        <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)" *ngIf="state === 5 && region === 1">
+        <span class="operate-text" (click)="getTopUp(currency, chainAccountAddress, balance)"
+          *ngIf="state === 5 && region === 1">
           Top up
         </span>
       </ng-container>
       <ng-container *appAuth="'R01010104'">
-        <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)" *ngIf="state === 5 && region === 1">
+        <span class="operate-text" (click)="getWithdraw(currency, chainAccountAddress, balance)"
+          *ngIf="state === 5 && region === 1">
           Withdraw
         </span>
       </ng-container>
       <ng-container *appAuth="'R01010105'">
-        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info" [queryParams]="{bankAccountId, currency, region, chainAccountAddress}">
+        <span class="operate-text" routerLink="/poc/poc-wallet/cbdc-wallet/info"
+          [queryParams]="{bankAccountId, currency, region, chainAccountAddress}">
           Details
         </span>
       </ng-container>

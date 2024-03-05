@@ -178,7 +178,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Creation Time',
+          title: 'Created On',
           field: 'creationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

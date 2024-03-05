@@ -113,7 +113,7 @@ const menuNav: Menu[] = [
     menuType: 'C',
     code: 'R02',
     menuGroup: true,
-    groupName: 'As a FX Service Provider',
+    groupName: 'As an FX Service Provider',
     groupCollapseName: 'Commercial'
   },
   {
@@ -240,7 +240,7 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 12,
-        menuName: 'Bank Information Configuration',
+        menuName: 'Bank Information',
         open: false,
         selected: false,
         menuType: 'C',

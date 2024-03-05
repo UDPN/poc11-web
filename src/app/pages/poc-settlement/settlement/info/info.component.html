@@ -19,14 +19,14 @@
       <nz-descriptions-item nzTitle="Charging Model">{{
         info.chargingModel | map: 'chargingModel'
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Commission">{{
+      <nz-descriptions-item nzTitle="Commission Rate">{{
         info.chargingModel === 1 ? ((info.ratioCommission | map:'toThousandthMark') + ' %') : ((info.regularCommission |
         map:'toThousandthMark') + ' ' + info.formRateCurrency)
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Max Commission" *ngIf="info.chargingModel === 1">{{
+      <nz-descriptions-item nzTitle="Max Commission Amount" *ngIf="info.chargingModel === 1">{{
         (info.maxCommission | map:'toThousandthMark') + ' ' + info.formRateCurrency + '(Per transaction)'
         }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Creation Time">{{
+      <nz-descriptions-item nzTitle="Created On">{{
         info.createDate | map: 'timeStamp'
         }}</nz-descriptions-item>
     </nz-descriptions>

@@ -20,7 +20,7 @@
                 {{ info.currency }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Created By">{{ info.createUser }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Creation Time">{{ info.createTime | map:'timeStamp'
+              <nz-descriptions-item nzTitle="Created On">{{ info.createTime | map:'timeStamp'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Status"><nz-tag [nzColor]="info.state | map:'walletStatusColor'">{{
                   info.state | map:'walletStatus' }}</nz-tag></nz-descriptions-item>
@@ -36,7 +36,7 @@
               <nz-descriptions-item nzTitle="Approved By">
                 {{ info.reviewerUser | map:'nullValue' }}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Approval Time">
+              <nz-descriptions-item nzTitle="Onboarded On">
                 {{ info.reviewerTime | map:'timeStamp' }}
               </nz-descriptions-item>
             </nz-descriptions>
@@ -62,9 +62,11 @@
                     </div>
                     <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
                       <div>
-                        <h4 nz-typography> {{'wCBDC Inflow: ' + (summaryInfo.inflowSum | map:'toThousandthMark') + ' ' + summaryCurrency }} </h4>
+                        <h4 nz-typography> {{'wCBDC Inflow: ' + (summaryInfo.inflowSum | map:'toThousandthMark') + ' ' +
+                          summaryCurrency }} </h4>
                         <ng-container *ngIf="summaryRegion === '1'">
-                          <h5 nz-typography>{{ '(Total Top-ups: ' + (summaryInfo.topUpSum | map:'toThousandthMark') + ' ' +
+                          <h5 nz-typography>{{ '(Total Top-ups: ' + (summaryInfo.topUpSum | map:'toThousandthMark') + '
+                            ' +
                             summaryCurrency
                             + ')' }}</h5>
                         </ng-container>
@@ -82,9 +84,11 @@
                     </div>
                     <div nz-col [nzXXl]="15" [nzXl]="15" [nzLg]="15" [nzMd]="15" [nzSm]="15" [nzXs]="12">
                       <div>
-                        <h4 nz-typography> {{'wCBDC Outflow: ' + (summaryInfo.outflowSum | map:'toThousandthMark') + ' ' + summaryCurrency }} </h4>
+                        <h4 nz-typography> {{'wCBDC Outflow: ' + (summaryInfo.outflowSum | map:'toThousandthMark') + ' '
+                          + summaryCurrency }} </h4>
                         <ng-container *ngIf="summaryRegion === '1'">
-                          <h5 nz-typography>{{ '(Total Withdrawals: ' + (summaryInfo.withdrawSum | map:'toThousandthMark') + ' ' +
+                          <h5 nz-typography>{{ '(Total Withdrawals: ' + (summaryInfo.withdrawSum |
+                            map:'toThousandthMark') + ' ' +
                             summaryCurrency
                             + ')' }}</h5>
                         </ng-container>

@@ -148,14 +148,14 @@ export class ApplicationComponent implements OnInit {
           width: 180
         },
         {
-          title: 'Application Time',
+          title: 'Created On',
           field: 'applicationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 180
         },
         {
-          title: 'Approval Time',
+          title: 'Onboarded On',
           field: 'approvalTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

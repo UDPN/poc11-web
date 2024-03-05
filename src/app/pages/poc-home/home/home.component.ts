@@ -91,11 +91,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   exchangeRate: any = [
     {
-      title: 'Available Currency Pair',
+      title: 'Activated Currency Pair',
       value: ''
     },
     {
-      title: 'Currency Pair Pending Activation',
+      title: 'Currency Pair Pending Approval',
       value: ''
     }
     // {
