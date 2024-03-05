@@ -127,7 +127,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   private handleSuccess(event: any): HttpResponse<any> {
-    const filterCode = [0, '0', 200, 304, 'MSG_00_1028'];
+    const filterCode = [0, '0', 200, 304];
     const otherFilterCode = ['FXSP_20603'];
     if (event instanceof HttpResponse) {
       if (
