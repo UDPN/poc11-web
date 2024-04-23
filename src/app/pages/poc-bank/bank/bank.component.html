@@ -1,0 +1,188 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-04-18 15:13:38
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-04-22 14:48:37
+ * @Description: 
+-->
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Commercial Bank Name</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="commercialBankName"
+                [(ngModel)]="searchParam.commercialBankName"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>BIC</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="bic"
+                [(ngModel)]="searchParam.bic"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Currency</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="currency"
+                [(ngModel)]="searchParam.currency"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of currencyList; index as i"
+                  [nzValue]="item.digitalSymbol"
+                  [nzLabel]="item.digitalSymbol"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="24"
+          [nzXl]="24"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="m-b-8 text-right p-0"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <nz-card class="m-b-10">
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+  </nz-card>
+</div>
+<ng-template
+  #walletAddressTpl
+  let-count="count"
+  let-walletAddress="walletAddress"
+  let-commercialBankName="commercialBankName"
+  let-currency="currency"
+>
+  <a
+    nz-button
+    nzType="link"
+    class="link-button"
+    (click)="open(commercialBankName, currency, walletAddress)"
+    >{{ count }}</a
+  >
+</ng-template>
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="visible"
+  [nzMask]="false"
+  [nzClosable]="true"
+  nzPlacement="right"
+  nzTitle="Wallet Address Informations"
+  (nzOnClose)="close()"
+>
+  <ng-container *nzDrawerContent>
+    <div>
+      <nz-descriptions
+        nzTitle=""
+        [nzColumn]="1"
+        [nzColon]="false"
+        nzBordered="false"
+        class="card-descriptions-orders"
+      >
+        <nz-descriptions-item nzTitle="Commercial Bank Name"
+          ><span class="font-bold">{{
+            this.commercialBankName
+          }}</span></nz-descriptions-item
+        >
+        <nz-descriptions-item nzTitle="Currency"
+          ><span class="font-bold">{{
+            this.currency
+          }}</span></nz-descriptions-item
+        >
+      </nz-descriptions>
+      <ul
+        nz-list
+        [nzDataSource]="this.walletAddressList"
+        nzBordered="false"
+        nzSize="large"
+        class="m-t-25"
+      >
+        @for (item of this.walletAddressList; track item) {
+        <li nz-list-item nzNoFlex class="m-t-10 m-b-10" style="margin-right: -12px;">
+          <p
+            nz-typography
+            nzCopyable
+            [nzCopyTooltips]="['Copy', 'Copy successful']"
+            [nzContent]="item"
+          ></p>
+        </li>
+        }
+      </ul>
+    </div>
+  </ng-container>
+</nz-drawer>

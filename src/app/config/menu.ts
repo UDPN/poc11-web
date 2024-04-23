@@ -107,9 +107,33 @@ const menuNav: Menu[] = [
       }
     ]
   },
+
+  {
+    menuName: 'FX Rate Query',
+    id: 5,
+    fatherId: 0,
+    icon: 'stock',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-fx-rate/fx-rate',
+    code: 'R0'
+  },
+  {
+    menuName: 'Bank Query',
+    id: 6,
+    fatherId: 0,
+    icon: 'fund',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-bank/bank',
+    code: 'R0'
+  },
+
   {
     fatherId: 0,
-    id: 5,
+    id: 7,
     menuType: 'C',
     code: 'R02',
     menuGroup: true,
@@ -118,7 +142,7 @@ const menuNav: Menu[] = [
   },
   {
     menuName: 'Become A FX Service Provider',
-    id: 6,
+    id: 8,
     fatherId: 0,
     icon: 'check-square',
     open: false,
@@ -129,7 +153,7 @@ const menuNav: Menu[] = [
   },
   {
     menuName: 'Capital Pool Management',
-    id: 7,
+    id: 9,
     fatherId: 0,
     icon: 'line-chart',
     open: false,
@@ -140,7 +164,7 @@ const menuNav: Menu[] = [
   },
   {
     menuName: 'FX Pair Management',
-    id: 8,
+    id: 10,
     fatherId: 0,
     icon: 'transaction',
     open: false,
@@ -151,7 +175,7 @@ const menuNav: Menu[] = [
   },
   {
     menuName: 'Settlement Management',
-    id: 9,
+    id: 11,
     fatherId: 0,
     icon: 'pic-left',
     open: false,
@@ -162,7 +186,7 @@ const menuNav: Menu[] = [
     children: [
       {
         id: 1,
-        fatherId: 9,
+        fatherId: 11,
         menuName: 'Settlement Model Management',
         open: false,
         selected: false,
@@ -172,7 +196,7 @@ const menuNav: Menu[] = [
       },
       {
         id: 2,
-        fatherId: 9,
+        fatherId: 11,
         menuName: 'Monthly Income Statement',
         open: false,
         selected: false,
@@ -184,7 +208,7 @@ const menuNav: Menu[] = [
   },
   {
     menuName: 'FX Transactions',
-    id: 10,
+    id: 12,
     fatherId: 0,
     icon: 'schedule',
     open: false,
@@ -195,7 +219,7 @@ const menuNav: Menu[] = [
   },
   {
     menuName: 'Historical FX Rate Query',
-    id: 11,
+    id: 13,
     fatherId: 0,
     icon: 'align-left',
     open: false,
@@ -205,7 +229,7 @@ const menuNav: Menu[] = [
     code: 'R0206'
   },
   {
-    id: 12,
+    id: 14,
     fatherId: 0,
     icon: 'user',
     open: false,
@@ -219,7 +243,7 @@ const menuNav: Menu[] = [
     children: [
       {
         id: 1,
-        fatherId: 12,
+        fatherId: 14,
         menuName: 'User Management',
         open: false,
         selected: false,
@@ -229,7 +253,7 @@ const menuNav: Menu[] = [
       },
       {
         id: 2,
-        fatherId: 12,
+        fatherId: 14,
         menuName: 'Role Management',
         open: false,
         selected: false,
@@ -239,7 +263,7 @@ const menuNav: Menu[] = [
       },
       {
         id: 3,
-        fatherId: 12,
+        fatherId: 14,
         menuName: 'Bank Information',
         open: false,
         selected: false,
@@ -249,7 +273,7 @@ const menuNav: Menu[] = [
       },
       {
         id: 4,
-        fatherId: 12,
+        fatherId: 14,
         menuName: 'API Documentation',
         open: false,
         selected: false,
@@ -260,7 +284,7 @@ const menuNav: Menu[] = [
       },
       {
         id: 5,
-        fatherId: 12,
+        fatherId: 14,
         menuName: 'UI Configuration',
         open: false,
         selected: false,
