@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-04-18 15:13:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-04-24 11:25:41
+ * @LastEditTime: 2024-04-24 17:02:48
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -102,7 +102,9 @@
       let-fromCurrency="fromCurrency"
       let-toCurrency="toCurrency"
     >
-      <span>{{ fromCurrency + '->' + toCurrency }}</span>
+      <span [title]="fromCurrency + '->' + toCurrency">{{
+        fromCurrency + '->' + toCurrency
+      }}</span>
     </ng-template>
     <ng-template
       #commissionTpl
@@ -112,20 +114,40 @@
       let-maxCommission="maxCommission"
       let-percentageCommission="percentageCommission"
     >
-      <span *ngIf="chargingModel === 1">{{
-        (percentageCommission | map: 'toThousandthMark') +
+      <span
+        *ngIf="chargingModel === 1"
+        [title]="
+          (percentageCommission | map: 'toThousandthMark') +
           '%, Max: ' +
           (maxCommission | map: 'toThousandthMark') +
           ' ' +
           fromCurrency +
           ' (Per transaction)'
-      }}</span>
-      <span *ngIf="chargingModel === 2">{{
-        (fixedCommission | map: 'toThousandthMark') +
+        "
+        >{{
+          (percentageCommission | map: 'toThousandthMark') +
+            '%, Max: ' +
+            (maxCommission | map: 'toThousandthMark') +
+            ' ' +
+            fromCurrency +
+            ' (Per transaction)'
+        }}</span
+      >
+      <span
+        *ngIf="chargingModel === 2"
+        [title]="
+          (fixedCommission | map: 'toThousandthMark') +
           ' ' +
           fromCurrency +
           ' (Per transaction)'
-      }}</span>
+        "
+        >{{
+          (fixedCommission | map: 'toThousandthMark') +
+            ' ' +
+            fromCurrency +
+            ' (Per transaction)'
+        }}</span
+      >
     </ng-template>
   </nz-card>
 </div>

@@ -201,7 +201,8 @@ export class FxRateComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Commission',
-          tdTemplate: this.commissionTpl
+          tdTemplate: this.commissionTpl,
+          notNeedEllipsis: true
         },
         {
           title: 'Updated Date',
