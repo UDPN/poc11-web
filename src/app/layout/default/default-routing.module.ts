@@ -39,6 +39,22 @@ const routes: Routes = [
           ).then((m) => m.PocFxRateHistoryModule)
       },
       {
+        path: 'poc-bank',
+        data: { preload: true },
+        loadChildren: () =>
+          import(
+            '../../pages/poc-bank/poc-bank.module'
+          ).then((m) => m.PocBankModule)
+      },
+      {
+        path: 'poc-fx-rate',
+        data: { preload: true },
+        loadChildren: () =>
+          import(
+            '../../pages/poc-fx-rate/poc-fx-rate.module'
+          ).then((m) => m.PocFxRateModule)
+      },
+      {
         path: 'poc-fx-transactions',
         data: { preload: true },
         loadChildren: () =>
