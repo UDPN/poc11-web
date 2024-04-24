@@ -6,9 +6,9 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService } from '@app/core/services/http/common/common.service';
+import { ActivatedRoute } from '@angular/router';
 import { PocFxRateService } from '@app/core/services/http/poc-fx-rate/poc-fx-rate.service';
+import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -16,14 +16,14 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  currency: string;
-  date: any;
+  currency: any;
+  updateTime: any;
 }
 interface ListParam {
-  formRatePlatform: string;
-  formRateCurrency: string;
-  toRatePlatform: string;
-  toRateCurrency: string;
+  fromPlatform: string;
+  fromCurrency: string;
+  toPlatform: string;
+  toCurrency: string;
 }
 
 @Component({
@@ -38,16 +38,17 @@ export class FxRateComponent implements OnInit, AfterViewInit {
   headerExtra!: TemplateRef<NzSafeAny>;
   @ViewChild('currencyTpl', { static: true })
   currencyTpl!: TemplateRef<NzSafeAny>;
-  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('commissionTpl', { static: true })
+  commissionTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
-    date: [],
+    updateTime: [],
     currency: ''
   };
   listParam: Partial<ListParam> = {
-    formRatePlatform: '',
-    formRateCurrency: '',
-    toRatePlatform: '',
-    toRateCurrency: ''
+    fromPlatform: '',
+    fromCurrency: '',
+    toPlatform: '',
+    toCurrency: ''
   };
   currencyList: any = [];
 
@@ -60,10 +61,8 @@ export class FxRateComponent implements OnInit, AfterViewInit {
   compareList: any = [];
   constructor(
     private pocFxRateService: PocFxRateService,
-    private router: Router,
     private cdr: ChangeDetectorRef,
-    public routeInfo: ActivatedRoute,
-    public _commonService: CommonService
+    public routeInfo: ActivatedRoute
   ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
@@ -74,6 +73,20 @@ export class FxRateComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
+  ngAfterViewInit(): void {
+    this.pageHeaderInfo = {
+      title: ``,
+      breadcrumb: ['FX Rate Query'],
+      extra: this.headerExtra,
+      desc: this.headerContent,
+      footer: ''
+    };
+  }
+
+  ngOnInit() {
+    this.initTable();
+    this.initSelect();
+  }
 
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
@@ -88,73 +101,37 @@ export class FxRateComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {};
     this.listParam = {};
-    (this.searchParam.date = ''), (this.searchParam.currency = '');
+    this.searchParam.updateTime = '';
+    this.searchParam.currency = '';
     this.getDataList(this.tableQueryParams);
   }
 
-  ngOnInit() {
-    this.initTable();
-    this.initSelect();
-    this.routeInfo.queryParams.subscribe((params: any) => {
-      if (JSON.stringify(params) !== '{}') {
-        (this.listParam.formRatePlatform = params['sourcePlatform']),
-          (this.listParam.formRateCurrency = params['sourceCurrency']),
-          (this.listParam.toRatePlatform = params['targetPlatform']),
-          (this.listParam.toRateCurrency = params['targetCurrency']);
-      } else {
-        (this.listParam.formRatePlatform = ''),
-          (this.listParam.formRateCurrency = ''),
-          (this.listParam.toRatePlatform = ''),
-          (this.listParam.toRateCurrency = '');
+  initSelect() {
+    this.pocFxRateService.getCurrency().subscribe((res) => {
+      this.currencyList = res;
+      this.currencyList.map((item: any, i: any) => {
+        Object.assign(item, { key: i + 1 });
+      });
+      if (this.currencyList) {
+        this.routeInfo.queryParams.subscribe((params) => {
+          if (JSON.stringify(params) !== '{}') {
+            this.currencyList.map((item: any, index: number) => {
+              const compareList = {
+                fromCurrency: item.fromCurrency,
+                fromPlatform: item.fromPlatform,
+                toCurrency: item.toCurrency,
+                toPlatform: item.toPlatform
+              };
+              if (JSON.stringify(params) === JSON.stringify(compareList)) {
+                this.searchParam.currency = item.key;
+                this.cdr.markForCheck();
+                this.cdr.detectChanges();
+              }
+            });
+          }
+        });
       }
     });
-    if (this.router.url.indexOf('?') !== -1) {
-      history.replaceState(
-        this.router.url,
-        '',
-        this.router.url.substring(0, this.router.url.indexOf('?'))
-      );
-    }
-  }
-
-  initSelect() {
-    this._commonService
-      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
-      .subscribe((res) => {
-        this.currencyList = res.dataInfo;
-        this.currencyList.map((item: any, i: any) => {
-          Object.assign(item, { key: i + 1 });
-        });
-        if (this.currencyList) {
-          this.routeInfo.queryParams.subscribe((params) => {
-            if (JSON.stringify(params) !== '{}') {
-              this.currencyList.map((item: any, index: number) => {
-                const compareList = {
-                  sourceCurrency: item.sourceCurrency,
-                  sourcePlatform: item.sourcePlatform,
-                  targetCurrency: item.targetCurrency,
-                  targetPlatform: item.targetPlatform
-                };
-                if (JSON.stringify(params) === JSON.stringify(compareList)) {
-                  this.searchParam.currency = item.key;
-                  this.cdr.markForCheck();
-                  this.cdr.detectChanges();
-                }
-              });
-            }
-          });
-        }
-      });
-  }
-
-  ngAfterViewInit(): void {
-    this.pageHeaderInfo = {
-      title: ``,
-      breadcrumb: ['FX Rate Management'],
-      extra: this.headerExtra,
-      desc: this.headerContent,
-      footer: ''
-    };
   }
 
   changePageSize(e: number): void {
@@ -162,45 +139,43 @@ export class FxRateComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.currencyList.map((item: any) => {
-    //   if (this.searchParam.currency === item.key) {
-    //     (this.listParam.formRatePlatform = item.sourcePlatform),
-    //       (this.listParam.formRateCurrency = item.sourceCurrency),
-    //       (this.listParam.toRatePlatform = item.targetPlatform),
-    //       (this.listParam.toRateCurrency = item.targetCurrency);
-    //   } else if (this.searchParam.currency === '') {
-    //     (this.listParam.formRatePlatform = ''),
-    //       (this.listParam.formRateCurrency = ''),
-    //       (this.listParam.toRatePlatform = ''),
-    //       (this.listParam.toRateCurrency = '');
-    //   }
-    // });
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: {
-    //     formRatePlatform: this.listParam.formRatePlatform,
-    //     formRateCurrency: this.listParam.formRateCurrency,
-    //     toRatePlatform: this.listParam.toRatePlatform,
-    //     toRateCurrency: this.listParam.toRateCurrency,
-    //     date: this.searchParam.date
-    //   }
-    // };
-    // this.pocFxRateService
-    //   .fetchList(params.pageNum, params.pageSize, params.filters)
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data;
-    //     this.tableConfig.total = _?.resultPageInfo?.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.currencyList.map((item: any) => {
+      if (this.searchParam.currency === item.key) {
+        this.listParam.fromPlatform = item.fromPlatform;
+        this.listParam.fromCurrency = item.fromCurrency;
+        this.listParam.toPlatform = item.toPlatform;
+        this.listParam.toCurrency = item.toCurrency;
+      } else if (this.searchParam.currency === '') {
+        this.listParam.fromPlatform = '';
+        this.listParam.fromCurrency = '';
+        this.listParam.toPlatform = '';
+        this.listParam.toCurrency = '';
+      }
+    });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: {
+        fromCurrency: this.listParam.fromCurrency,
+        toCurrency: this.listParam.toCurrency,
+        updateTime: this.searchParam.updateTime
+      }
+    };
+    this.pocFxRateService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data?.rows;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -208,21 +183,31 @@ export class FxRateComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Currency Pair',
-          tdTemplate: this.currencyTpl,
-          width: 200
+          tdTemplate: this.currencyTpl
         },
         {
           title: 'Exchange Rate',
-          field: 'exchangeRate',
-          pipe: 'toThousandRate',
-          width: 200
+          field: 'rate',
+          pipe: 'toThousandRate'
         },
         {
-          title: 'Date',
-          field: 'rateDate',
+          title: 'FX Service Provider',
+          field: 'provider'
+        },
+        {
+          title: 'Charging Model',
+          field: 'chargingModel',
+          pipe: 'chargingModel'
+        },
+        {
+          title: 'Commission',
+          tdTemplate: this.commissionTpl
+        },
+        {
+          title: 'Updated Date',
+          field: 'updateDate',
           pipe: 'timeStamp',
-          notNeedEllipsis: true,
-          width: 200
+          notNeedEllipsis: true
         }
       ],
       total: 0,

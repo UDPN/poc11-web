@@ -89,6 +89,21 @@ export class BankComponent implements OnInit, AfterViewInit {
     footer: ''
   };
 
+  ngAfterViewInit(): void {
+    this.pageHeaderInfo = {
+      title: ``,
+      breadcrumb: ['Bank Query'],
+      extra: this.headerExtra,
+      desc: this.headerContent,
+      footer: ''
+    };
+  }
+
+  ngOnInit() {
+    this.initTable();
+    this.getCurrency();
+  }
+
   open(
     commercialBankName: string,
     currency: string,
@@ -121,25 +136,10 @@ export class BankComponent implements OnInit, AfterViewInit {
     this.getDataList(this.tableQueryParams);
   }
 
-  ngOnInit() {
-    this.initTable();
-    this.getCurrency();
-  }
-
   getCurrency() {
     this.cbdcWalletService.getCentralBankQuery().subscribe((res) => {
       this.currencyList = res;
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.pageHeaderInfo = {
-      title: ``,
-      breadcrumb: ['Bank Query'],
-      extra: this.headerExtra,
-      desc: this.headerContent,
-      footer: ''
-    };
   }
 
   changePageSize(e: number): void {

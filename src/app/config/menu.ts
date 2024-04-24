@@ -117,7 +117,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-fx-rate/fx-rate',
-    code: 'R0'
+    code: 'R0103'
   },
   {
     menuName: 'Bank Query',
@@ -128,7 +128,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-bank/bank',
-    code: 'R0'
+    code: 'R0104'
   },
 
   {

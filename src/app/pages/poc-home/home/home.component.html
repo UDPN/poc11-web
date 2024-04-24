@@ -47,7 +47,11 @@
                         </div>
                       </div>
                     </nz-form-control>
-                    <nz-form-control class="m-t-20">
+                  </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24">
+                  <nz-form-item>
+                    <nz-form-control>
                       <div style="display: flex;justify-content: right;align-items: flex-end;">
                         <div class="m-r-5">
                           <button nz-button nzType="link" class="link-button" (click)="getTopUp(balance.currency, balance.value)">{{ 'Top up' }}</button>
