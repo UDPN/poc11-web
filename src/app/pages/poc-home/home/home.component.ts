@@ -290,21 +290,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       let walletBalanceList: any = [];
       walletBalanceList = this.walletBalanceList;
       walletBalanceList.map((item: any, i: any) => {
-        let unit: any = '';
         let totalBance: any = '';
-        if (item.currency === 'w-THB') {
-          unit = '฿';
-        } else if (item.currency === 'w-EUR') {
-          unit = '€';
-        } else if (item.currency === 'w-USD') {
-          unit = '$';
-        } else if (item.currency === 'w-AED') {
-          unit = 'د.إ';
-        } else if (item.currency === 'w-CNY') {
-          unit = '¥';
-        } else if (item.currency === 'w-HKD') {
-          unit = 'HK$';
-        }
         const array: any = [];
         item.walletList.map((items: any, i: any) => {
           array.push(items.balance);
@@ -316,7 +302,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             item.walletList[0].balance.toString() +
             '-' +
             item.walletList[0].index.toString(),
-          unit,
+          legalCurrencySymbol: item.walletList[0].legalCurrencySymbol,
           totalBance
         });
       });
@@ -354,8 +340,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getTopUp(currency: string, chainAccountAddress: string) {
-    console.log(currency, chainAccountAddress);
-    console.log(this.walletBalanceList);
     this.currency = currency;
     let list = this.walletBalanceList;
     let count = Number(chainAccountAddress.split('-')[1]) - 1;
@@ -702,8 +686,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getEcharts(param: any) {
-    console.log(param, '111111');
-
     var dom = document.getElementById('chart-container');
     var myChart = echarts.init(dom, null, {
       renderer: 'canvas',
