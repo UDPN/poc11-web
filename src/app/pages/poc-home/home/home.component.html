@@ -17,7 +17,7 @@
                   <span>{{'Total Balance' }}</span>
                 </div>
                 <div class="unit-postion">
-                  <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.unit }} </span>
+                  <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.legalCurrencySymbol }} </span>
                   <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{
                     balance.totalBance | map:
                     'toThousandthMark'}}</span>
@@ -40,7 +40,7 @@
                           <span>{{'Wallet Balance' }}</span>
                         </div>
                         <div class="unit-postion">
-                          <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.unit }} </span>
+                          <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.legalCurrencySymbol }} </span>
                           <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{
                             balance.value.split('-')[0] | map:
                             'toThousandthMark'}}</span>
