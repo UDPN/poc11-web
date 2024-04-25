@@ -53,11 +53,11 @@
                   <nz-form-item>
                     <nz-form-control>
                       <div style="display: flex;justify-content: right;align-items: flex-end;">
-                        <div class="m-r-5" *ngIf="i=== 0">
-                          <button nz-button nzType="link" class="link-button" (click)="getTopUp(balance.currency, balance.value)">{{ 'Top up' }}</button>
+                        <div class="m-r-25" *ngIf="i=== 0">
+                          <a class="link-button" (click)="getTopUp(balance.currency, balance.value)">{{ 'Top up' }}</a>
                         </div>
                         <div *ngIf="i=== 0">
-                          <button nz-button nzType="link" class="link-button" (click)="getWithdraw(balance.currency, balance.value)">{{ 'Withdraw' }}</button>
+                          <a class="link-button" (click)="getWithdraw(balance.currency, balance.value)">{{ 'Withdraw' }}</a>
                         </div>
                       </div>
                     </nz-form-control>
