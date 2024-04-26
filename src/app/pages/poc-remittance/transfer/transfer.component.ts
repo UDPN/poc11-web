@@ -737,6 +737,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
+    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
         if (this.checkedItemComment.length === 0) {
