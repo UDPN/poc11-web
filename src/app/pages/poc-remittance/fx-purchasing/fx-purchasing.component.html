@@ -5,9 +5,31 @@
     <div nz-row style="display: flex; justify-content: space-around" class="m-t-30">
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24"
         style="background: #fff; border-radius: 16px; padding: 4px">
-        <nz-card nzTitle="Originator Information" class="none-bottom" nzBordered="false">
+        <nz-card nzTitle="Sending Information" class="none-bottom" nzBordered="false">
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Currency
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="availableBalanceError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-select formControlName="send_currency" (ngModelChange)="onPurchCurrecy($event)">
+                        <nz-option *ngFor="let item of purchCurrecyList; let i = index" [nzLabel]="item.digitalSymbol"
+                          [nzValue]="i"></nz-option>
+                      </nz-select>
+
+
+                    </div>
+                  </div>
+                  <ng-template #availableBalanceError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please input your Available
+                      Balance</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
                 <nz-form-label nzRequired nzSpan="24">Available Balance
                 </nz-form-label>
@@ -27,12 +49,12 @@
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
-            </div>
+            </div> -->
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Originator Wallet Address
+                <nz-form-label nzRequired nzSpan="24">Sending Wallet Address
                 </nz-form-label>
-                <nz-form-control [nzErrorTip]="transactionWalletAddressError">
+                <nz-form-control [nzErrorTip]="transactionWalletAddressError" [nzExtra]="purchCurrecyModelShow">
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select formControlName="transactionWalletAddressId" (ngModelChange)="onPurchase($event)">
@@ -48,7 +70,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+            <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
                 <nz-form-label nzRequired nzSpan="24">Central Bank
                 </nz-form-label>
@@ -64,34 +86,49 @@
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
+            </div> -->
+            <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Sending Amount
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="sendAmountError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-input-group [nzAddOnBefore]="purchCurrecyModelShowIcon">
+                        <input type="number" (focus)="onFocusSendAmount()" nz-input formControlName="reni_sendAmount" />
+                      </nz-input-group>
+                    </div>
+                  </div>
+                  <ng-template #sendAmountError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please input your Sending Amount</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
-
           </form>
         </nz-card>
       </div>
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24"
         style="background: #fff; border-radius: 16px; padding: 4px">
-        <nz-card nzTitle="Receiver Information" nzBordered="false" class="none-bottom">
+        <nz-card nzTitle="Receiving Information" nzBordered="false" class="none-bottom">
 
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">FX Purchase Amount
+                <nz-form-label nzRequired nzSpan="24">Currency
                 </nz-form-label>
-                <nz-form-control [nzErrorTip]="amountError">
+                <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-input-group [nzAddOnAfter]="
-                          fxReceivingData.length > 0 ? addOnAfterTemplate : ''
-                        ">
-                        <input nz-input formControlName="amount" />
-                      </nz-input-group>
+                      <nz-select formControlName="reci_currency" (ngModelChange)="onReceiving($event)">
+                        <nz-option *ngFor="let item of fxReceivingData; let i = index" [nzLabel]="item.currecy"
+                          [nzValue]="i"></nz-option>
+                      </nz-select>
                     </div>
                   </div>
-                  <ng-template #amountError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your FX Purchase
-                      Amount</ng-container>
-                    <ng-container *ngIf="control.hasError('regular')"></ng-container>
+                  <ng-template #availableBalanceError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please input your Available
+                      Balance</ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -100,7 +137,7 @@
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
                 <nz-form-label nzRequired nzSpan="24">Receiver Wallet Address
                 </nz-form-label>
-                <nz-form-control [nzErrorTip]="receivingWalletAddressError">
+                <nz-form-control [nzErrorTip]="receivingWalletAddressError" [nzExtra]="reveingCurrecyModelShow">
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select formControlName="receivingWalletAddress"
@@ -121,6 +158,27 @@
             </div>
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
+                <nz-form-label nzRequired nzSpan="24">Receiving Amount:
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="amountError">
+                  <div nz-row>
+                    <div nz-col nzSpan="24">
+                      <nz-input-group [nzAddOnBefore]="reveingCurrecyModelShowIcon">
+                        <input type="number" (focus)="onFocusAmount()" nz-input formControlName="amount" />
+                      </nz-input-group>
+                    </div>
+                  </div>
+                  <ng-template #amountError let-control>
+                    <ng-container *ngIf="control.hasError('required')">Please input your FX Purchase
+                      Amount</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')"></ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
                 <nz-form-label nzRequired nzSpan="24">Central Bank
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="receivingBankNameError">
@@ -136,11 +194,33 @@
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
-            </div>
+            </div> -->
           </form>
         </nz-card>
       </div>
-      <ng-container *ngIf="!showStatus">
+      <ng-container *ngIf="showStatus">
+        <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24" class="m-t-15 remit"
+          style="background: #fff; border-radius: 16px;padding: 24px;">
+          <div class="remit-title">Remittance Information</div>
+          <div class="reInfo">
+            <div class="remInfo-sub">
+              <div>FX Rate:</div>
+              <div class="remInfo-sub-value">{{remiInfo.rate}}</div>
+            </div>
+            <div class="remInfo-sub">
+              <div>Commission:</div>
+              <div class="remInfo-sub-value">{{remiInfo.com}}</div>
+            </div>
+            <div class="remInfo-sub">
+              <div>Total Payment Amount:</div>
+              <div class="remInfo-sub-value">{{remiInfo.total}}</div>
+            </div>
+            <div class="remInfo-sub">
+              <div>Received Amount:</div>
+              <div class="remInfo-sub-value">{{remiInfo.reve}}</div>
+            </div>
+          </div>
+        </div>
         <div nz-col nz-col [nzXXl]="23" [nzXl]="23" [nzLg]="23" [nzMd]="23" [nzSm]="24" [nzXs]="24" class="m-t-60"
           style="background: #fff; border-radius: 16px; padding: 4px">
           <div>
