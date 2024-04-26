@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2023-12-20 16:02:48
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-04-23 09:55:30
+ * @Description: 
+-->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 <div class="normal-table-wrap">
   <nz-card>
@@ -33,7 +40,7 @@
               <div nz-col nzSpan="24" class="m-b-10">
                 <div class="onboard-div onboard-postion">
                   <input type="text" hidden formControlName="logoFileHash" nz-input />
-                  <img nz-image width="180px" height="40px" [nzSrc]="fileImg" *ngIf="fileImg" alt="" />
+                  <img nz-image [nzSrc]="fileImg" *ngIf="fileImg" alt="" />
                 </div>
               </div>
               <div nz-col nzSpan="12">

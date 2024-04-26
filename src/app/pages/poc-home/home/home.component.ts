@@ -8,7 +8,12 @@ import {
   HostListener,
   OnDestroy
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocHomeService } from '@app/core/services/http/poc-home/poc-home.service';
@@ -18,6 +23,7 @@ import { DefaultStoreService } from '@app/layout/default/store/default.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import {
+  fnEncrypts,
   thousandthMark,
   timestampToDate,
   timestampToTime
@@ -31,6 +37,9 @@ import { InformationService } from '@app/core/services/http/information/informat
 import { SocketService } from '@app/core/services/common/socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { WindowService } from '@app/core/services/common/window.service';
+import { aesKey, aesVi } from '@app/config/constant';
+import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-home',
@@ -72,9 +81,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   walletForm!: FormGroup;
   nzOption: any[] = [];
   value: string[] = [];
-
   testSeries: any[] = [];
-
+  isOkLoading: boolean = false;
+  topUpForm!: FormGroup;
+  withdrawForm!: FormGroup;
+  passwordForm!: FormGroup;
+  isVisibleTopUp: boolean = false;
   // colorScheme: Color = {
   //   domain: ['#5AA454', '#E44D25', '#7aa3e5', '#a8385d', '#aae3f5'],
   //   name: '',
@@ -119,6 +131,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   walletList: any = [];
   bankType: any = '';
   currencyList: any = [];
+  currency: any;
+  txType: number = 0;
+  balance: any = '';
+  isVisibleWithdraw: boolean = false;
+  isVisibleEnterPassword: boolean = false;
+  isLoading: boolean = false;
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
@@ -128,8 +146,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     public _informationService: InformationService,
     private socketService: SocketService,
     private notification: NzNotificationService,
-    private windowService: WindowService
-  ) { }
+    private windowService: WindowService,
+    private cbdcWalletService: CbdcWalletService,
+    private message: NzMessageService
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -139,7 +159,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     desc: '',
     footer: ''
   };
-  walletAddress: any = [];
+  walletAddress: any = '';
   @HostListener('window:resize', ['$event'])
   ngOnInit() {
     this.isFirstLogin();
@@ -162,6 +182,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currencyForm = this.fb.group({
       currency: ['']
     });
+    this.topUpForm = this.fb.group({
+      chainAccountAddress: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]]
+    });
+    this.withdrawForm = this.fb.group({
+      chainAccountAddress: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]]
+    });
+    this.passwordForm = this.fb.group({
+      pwd: [null, [Validators.required]]
+    });
     const fn = () => {
       const myChart: any = echarts.init(
         document.getElementById('chart-container')
@@ -182,6 +213,29 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.view = [300, 300];
     }
   }
+
+  topUpAmountValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
+  withdrawAmountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
+
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
     if (this.getScreenWidth > 900) {
@@ -236,21 +290,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       let walletBalanceList: any = [];
       walletBalanceList = this.walletBalanceList;
       walletBalanceList.map((item: any, i: any) => {
-        let unit: any = '';
         let totalBance: any = '';
-        if (item.currency === 'w-THB') {
-          unit = '฿';
-        } else if (item.currency === 'w-EUR') {
-          unit = '€';
-        } else if (item.currency === 'w-USD') {
-          unit = '$';
-        } else if (item.currency === 'w-AED') {
-          unit = 'د.إ';
-        } else if (item.currency === 'w-CNY') {
-          unit = '¥';
-        } else if (item.currency === 'w-HKD') {
-          unit = 'HK$';
-        }
         const array: any = [];
         item.walletList.map((items: any, i: any) => {
           array.push(items.balance);
@@ -262,7 +302,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             item.walletList[0].balance.toString() +
             '-' +
             item.walletList[0].index.toString(),
-          unit,
+          legalCurrencySymbol: item.walletList[0].legalCurrencySymbol,
           totalBance
         });
       });
@@ -286,6 +326,123 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   //     }
   //   })
   // }
+
+  changeWalletAddress(value: any, currency: string) {
+    let list = this.walletBalanceList;
+    let count = Number(value.split('-')[1]) - 1;
+    let count1 = Number(value.split('-')[0]);
+    list.map((item: any) => {
+      if (currency === item.currency) {
+        this.walletAddress = item.walletList[count].chainAccountAddress;
+        this.balance = count1;
+      }
+    });
+  }
+
+  getTopUp(currency: string, chainAccountAddress: string) {
+    this.currency = currency;
+    let list = this.walletBalanceList;
+    let count = Number(chainAccountAddress.split('-')[1]) - 1;
+    let count1 = Number(chainAccountAddress.split('-')[0]);
+    list.map((item: any) => {
+      if (currency === item.currency) {
+        this.walletAddress = item.walletList[count].chainAccountAddress;
+        this.balance = count1;
+      }
+    });
+    this.topUpForm.get('chainAccountAddress')?.setValue(this.walletAddress);
+    this.isVisibleTopUp = true;
+  }
+
+  getWithdraw(currency: string, chainAccountAddress: string) {
+    this.currency = currency;
+    let list = this.walletBalanceList;
+    let count = Number(chainAccountAddress.split('-')[1]) - 1;
+    let count1 = Number(chainAccountAddress.split('-')[0]);
+    list.map((item: any) => {
+      if (currency === item.currency) {
+        this.walletAddress = item.walletList[count].chainAccountAddress;
+        this.balance = count1;
+      }
+    });
+    this.withdrawForm.get('chainAccountAddress')?.setValue(this.walletAddress);
+    this.isVisibleWithdraw = true;
+  }
+
+  cancelTopUp() {
+    this.isVisibleTopUp = false;
+    this.topUpForm.reset();
+  }
+
+  cancelWithdraw() {
+    this.isVisibleWithdraw = false;
+    this.withdrawForm.reset();
+  }
+
+  cancelEnterPassword() {
+    this.isVisibleEnterPassword = false;
+    this.passwordForm.reset();
+    this.topUpForm.reset();
+    this.withdrawForm.reset();
+  }
+
+  topUp() {
+    this.isVisibleTopUp = false;
+    this.isVisibleEnterPassword = true;
+    this.txType = 1;
+  }
+
+  withdraw() {
+    this.isVisibleWithdraw = false;
+    this.isVisibleEnterPassword = true;
+    this.txType = 2;
+  }
+
+  confirmEnterPassword() {
+    this.isOkLoading = true;
+    const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
+    const params = {
+      amount:
+        this.txType === 1
+          ? this.topUpForm.get('amount')?.value
+          : this.withdrawForm.get('amount')?.value,
+      password: code,
+      txType: this.txType === 1 ? 1 : 2,
+      walletAddress:
+        this.txType === 1
+          ? this.topUpForm.get('chainAccountAddress')?.value
+          : this.withdrawForm.get('chainAccountAddress')?.value
+    };
+    const amount = thousandthMark(params.amount) + ' ' + this.currency;
+    this.cbdcWalletService
+      .topUpOrWithdraw(params)
+      .pipe(finalize(() => (this.isOkLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.isVisibleEnterPassword = false;
+            this.message.success(
+              this.txType === 1
+                ? `Top-up ${amount} successful`
+                : `withdraw ${amount} successful`,
+              { nzDuration: 1000 }
+            );
+            if (this.txType === 1) {
+              this.topUpForm.reset();
+            } else {
+              this.withdrawForm.reset();
+            }
+          }
+          this.passwordForm.reset();
+          this.isOkLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isOkLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
 
   getMovements(currency?: any) {
     this.pocHomeService.getMovements({ currency }).subscribe((res) => {
@@ -656,6 +813,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   ngOnDestroy(): void {
-    window.addEventListener('resize', () => { });
+    window.addEventListener('resize', () => {});
   }
 }
