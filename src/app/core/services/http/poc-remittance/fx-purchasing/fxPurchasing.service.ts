@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-25 17:30:33
+ * @LastEditTime: 2024-04-26 17:00:30
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -47,6 +47,8 @@ export class FxPurchasingService {
     passWord: string;
     rateId: string;
     transactionWalletId: string;
+    receivingAmount: number;
+    sendingAmount: number;
   }): Observable<any> {
     return this.https.post(`/v1/remittanceManagement/fxPurchasing`, params);
   }

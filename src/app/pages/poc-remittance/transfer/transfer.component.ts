@@ -65,6 +65,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   beneficiaryCurrencyIcon = '';
   availableCurrecy: any[] = [];
   availableCurrecyModel = '';
+  availableCurrecyModelCount = '';
   availableCurrecyModelShow = '';
   availableCurrecyModelShowIcon = '';
   settlementStatus = false;
@@ -148,7 +149,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       remitterBankId: ['', [Validators.required]],
       remittanceInformation: [null, [Validators.required]],
       remi_currency: ['', [Validators.required]], // new_4.24
-      reni_sendAmount: ['', [Validators.required]], // new_4.24
+      reni_sendAmount: ['', [Validators.required, this.sendAmountValidator]], // new_4.24
       bene_currency: ['', [Validators.required]] // new_4.24:
     });
 
@@ -156,6 +157,14 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       pwd: ['', [Validators.required]]
     });
   }
+  sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (control.value === '') {
+      return { error: true, required: true };
+    } else if (control.value > this.availableCurrecyModelCount) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
   beneficialWalletAddressValidator = (
     control: FormControl
   ): { [s: string]: boolean } => {
@@ -281,6 +290,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm
       .get('availableBalance')
       ?.setValue(thousandthMark(val[0]['cbdcCount']));
+    this.availableCurrecyModelCount = val[0]['cbdcCount'];
     this.newRemitterWalletAddress = val[0]['chainAccountAddress'];
     this.setSendAndAmount();
     this.getExchange();
@@ -444,9 +454,17 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         ?.setValue(
           Number(info.total.split(' ')[0] - info.com.split(' ')[0]).toFixed(2),
           {
-            emitEvent: false
+            emitEvent: false,
+            onlySelf: true
           }
         );
+      // this.validateForm.get('reni_sendAmount')?.markAsDirty();
+      // this.validateForm
+      //   .get('reni_sendAmount')
+      //   ?.updateValueAndValidity({ onlySelf: true });
+      // this.validateForm
+      //   .get('reni_sendAmount')
+      //   ?.updateValueAndValidity({ emitEvent: false });
     }
   }
   // Query exchange rate information
@@ -491,7 +509,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
               rate:
                 '1 ' +
                 item.from.replace('-UDPN', '') +
-                ':' +
+                '=' +
                 item.rate +
                 ' ' +
                 item.to.replace('-UDPN', ''),
@@ -538,7 +556,13 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        this.getExchange();
+        if (this.beneficiaryCurrency === this.availableCurrecyModel) {
+          this.validateForm.get('reni_sendAmount')?.setValue(Number(res), {
+            emitEvent: false
+          });
+        } else {
+          this.getExchange();
+        }
       });
   }
   formEventCurrencyInterbankSettlementSendAmount() {
@@ -546,7 +570,13 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('reni_sendAmount')
       ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        this.getExchange();
+        if (this.beneficiaryCurrency === this.availableCurrecyModel) {
+          this.validateForm.get('amount')?.setValue(Number(res), {
+            emitEvent: false
+          });
+        } else {
+          this.getExchange();
+        }
       });
   }
   onAvailableCurrecy(e: any) {
@@ -563,6 +593,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       this.availableCurrecyModelShowIcon +
       ' ' +
       thousandthMark(val[0].remitterInformationExtendInfoList[0].cbdcCount);
+    this.availableCurrecyModelCount =
+      val[0].remitterInformationExtendInfoList[0].cbdcCount;
     this.validateForm
       .get('availableBalance')
       ?.setValue(
@@ -597,6 +629,16 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       this.validateForm.get('amount')?.setValue('', { emitEvent: false });
       this.inputType = 1;
+    }
+  }
+  @HostListener('blur') onBlurSendAmount() {
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+      this.getExchange();
+    }
+  }
+  @HostListener('blur') onBlurAmount() {
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+      this.getExchange();
     }
   }
   @HostListener('focus') onFocusAmount() {
@@ -754,7 +796,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             ? this.checkedItemComment[0].rateId
             : ' ',
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
-        toCommercialBankId: this.newBeneficialBankId
+        toCommercialBankId: this.newBeneficialBankId,
+        sendingAmount: this.validateForm.get('reni_sendAmountr')?.value,
+        receivingAmount: this.validateForm.get('amount')?.value
       })
       .subscribe((res) => {
         if (res.code === 0) {

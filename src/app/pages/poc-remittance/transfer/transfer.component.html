@@ -70,12 +70,16 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group [nzAddOnBefore]="availableCurrecyModelShowIcon">
-                        <input type="number" (focus)="onFocusSendAmount()" nz-input formControlName="reni_sendAmount" />
+                        <input type="number" (focus)="onFocusSendAmount()" (blur)="onBlurSendAmount()" nz-input
+                          formControlName="reni_sendAmount" />
                       </nz-input-group>
                     </div>
                   </div>
                   <ng-template #sendAmountError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your Sending Amount</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">The maximum amount that can be entered must not
+                      exceed{{' '+availableCurrecyModelCount |
+                      map:'toThousandthMark'}}</ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -223,7 +227,8 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group [nzAddOnBefore]="beneficiaryCurrencyIcon">
-                        <input type="number" (focus)="onFocusAmount()" nz-input formControlName="amount" />
+                        <input type="number" (focus)="onFocusAmount()" (blur)="onBlurAmount()" nz-input
+                          formControlName="amount" />
                       </nz-input-group>
                     </div>
                   </div>
