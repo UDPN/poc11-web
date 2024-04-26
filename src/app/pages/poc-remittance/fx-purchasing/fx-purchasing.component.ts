@@ -65,6 +65,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   fxReceivingDataWallets: any[] = [];
   fxPurchaseData: any[] = [];
   purchCurrecy!: string;
+  purchCurrecyCount!: string;
   purchCurrecyList: any[] = [];
   purchCurrecyModelShow = '';
   purchCurrecyModelShowIcon = '';
@@ -145,13 +146,21 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       ],
       transactionBankName: [null, [Validators.required]],
       send_currency: ['', [Validators.required]], // new_4.24
-      reni_sendAmount: ['', [Validators.required]],
+      reni_sendAmount: ['', [Validators.required, this.sendAmountValidator]],
       reci_currency: ['', [Validators.required]]
     });
     this.passwordForm = this.fb.group({
       pwd: ['', [Validators.required]]
     });
   }
+  sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (control.value === '') {
+      return { error: true, required: true };
+    } else if (control.value > this.purchCurrecyCount) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
   amountAvailableBalance = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
@@ -245,7 +254,16 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inputType = 2;
     }
   }
-
+  @HostListener('blur') onBlurSendAmount() {
+    if (this.reveingCurrecy !== this.purchCurrecy) {
+      this.findExchange(1);
+    }
+  }
+  @HostListener('blur') onBlurAmount() {
+    if (this.reveingCurrecy !== this.purchCurrecy) {
+      this.findExchange(1);
+    }
+  }
   onPurchase(e: any) {
     // const val = this.transactionWalletAddressArr.filter(
     //   (item: any) => item.bankAccountId === e
@@ -257,6 +275,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.purchCurrecyModelShowIcon +
       ' ' +
       thousandthMark(this.transactionWalletAddressArr[e]['cbdcCount']);
+    this.purchCurrecyCount = this.transactionWalletAddressArr[e]['cbdcCount'];
     this.validateForm
       .get('bankAccountId')
       ?.setValue(this.transactionWalletAddressArr[e]['bankAccountId']);
@@ -303,7 +322,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           'cbdcCount'
         ]
       );
-
+    this.purchCurrecyCount =
+      this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+        'cbdcCount'
+      ];
     this.transactionWalletAddressArr =
       this.fxPurchaseData[e].remitterInformationExtendInfoList;
 
@@ -615,7 +637,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           ?.value,
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         rateId: this.checkedItemComment[0].rateId,
-        transactionWalletId: this.validateForm.get('bankAccountId')?.value
+        transactionWalletId: this.validateForm.get('bankAccountId')?.value,
+        receivingAmount: this.validateForm.get('amount')?.value,
+        sendingAmount: this.validateForm.get('reni_sendAmount')?.value
       })
       .subscribe((res) => {
         if (res.code === 0 || res.code === '0') {
