@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  Renderer2,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ThemeOptionsKey } from '@app/config/constant';
 import { LoginInOutService } from '@app/core/services/common/login-in-out.service';
 import { WindowService } from '@app/core/services/common/window.service';
@@ -65,7 +73,7 @@ export class SystemStyleComponent implements OnInit {
   tableConfig!: AntTableConfig;
   _isNightTheme = false;
   _themesOptions: SettingInterface = {
-    color: "",
+    color: '',
     colorWeak: false,
     fixedHead: true,
     fixedLeftNav: true,
@@ -75,16 +83,21 @@ export class SystemStyleComponent implements OnInit {
     hasNavArea: true,
     hasNavHeadArea: true,
     hasTopArea: true,
-    mode: "mixi",
+    mode: 'mixi',
     splitNav: false,
-    theme: "dark"
+    theme: 'dark'
   };
   validateForm!: FormGroup;
   fileImg: any = '';
   fileImgWord!: File;
   isLoading: boolean = false;
   originalLogo!: string;
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] }
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
   constructor(
     @Inject(DOCUMENT) private doc: Document,
     private fb: FormBuilder,
@@ -99,7 +112,7 @@ export class SystemStyleComponent implements OnInit {
     private styleService: StyleService,
     private commonService: CommonService,
     private router: Router
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -114,11 +127,9 @@ export class SystemStyleComponent implements OnInit {
     this.validateForm = this.fb.group({
       systemName: [null, [Validators.required]],
       logoFileHash: [null, [Validators.required]],
-      themeColor: ['#3c5686', [Validators.required]],
+      themeColor: ['#3c5686', [Validators.required]]
     });
     this.editTheme();
-
-
   }
 
   editTheme() {
@@ -136,7 +147,8 @@ export class SystemStyleComponent implements OnInit {
             this.cdr.markForCheck();
           });
       } else {
-        const themeOptionsKey: any = this.windowServe.getStorage(ThemeOptionsKey);
+        const themeOptionsKey: any =
+          this.windowServe.getStorage(ThemeOptionsKey);
         const hex = JSON.parse(themeOptionsKey).color;
         this.validateForm.get('themeColor')?.setValue(hex);
       }
@@ -168,62 +180,54 @@ export class SystemStyleComponent implements OnInit {
     };
   }
 
-
   onSubmit() {
     if (this.validateForm.valid) {
       this.isLoading = true;
       this.modal.confirm({
         nzTitle: 'Are you sure you want to modify it ?',
         nzContent: '',
-        nzOnOk: () =>
-          new Promise((resolve, reject) => {
-            if (this.originalLogo === this.validateForm.get('logoFileHash')?.value) {
-              this.styleService.submit(this.validateForm.value).pipe(finalize(() => this.isLoading = false)).subscribe({
-                next: res => {
-                  resolve(true);
-                  if (res) {
-                    this.message.success(`Submit successfully !`).onClose!.subscribe(() => {
-                      // sessionStorage.clear();
-                      // this.loginOutService.loginOut().then((_) => {
-                      //   this.router.navigateByUrl('/login/login-modify');
-                      // });
-                    });
-                  }
-                  this.cdr.markForCheck();
-                },
-                error: err => {
-                  reject(true);
-                  this.cdr.markForCheck();
+        nzOnOk: () => {
+          if (
+            this.originalLogo === this.validateForm.get('logoFileHash')?.value
+          ) {
+            this.styleService.submit(this.validateForm.value).subscribe((res) => {
+              this.isLoading = false;
+              if (res) {
+                this.message
+                  .success(`Submit successfully !`)
+                  .onClose!.subscribe(() => {
+                    // sessionStorage.clear();
+                    // this.loginOutService.loginOut().then((_) => {
+                    //   this.router.navigateByUrl('/login/login-modify');
+                    // });
+                  });
+              }
+              this.cdr.markForCheck();
+            });
+          } else {
+            this.commonService
+              .uploadImg(this.fileImgWord)
+              .subscribe((result) => {
+                if (result) {
+                  this.validateForm.get('logoFileHash')?.setValue(result);
+                  this.styleService.submit(this.validateForm.value).subscribe((res) => {
+                    this.isLoading = false;
+                    if (res) {
+                      this.message
+                        .success(`Submit successfully !`)
+                        .onClose!.subscribe(() => {
+                          // sessionStorage.clear();
+                          // this.loginOutService.loginOut().then((_) => {
+                          //   this.router.navigateByUrl('/login/login-modify');
+                          // });
+                        });
+                    }
+                    this.cdr.markForCheck();
+                  });
                 }
-              })
-            } else {
-              this.commonService
-                .uploadImg(this.fileImgWord)
-                .subscribe((result) => {
-                  if (result) {
-                    this.validateForm.get('logoFileHash')?.setValue(result);
-                    this.styleService.submit(this.validateForm.value).pipe(finalize(() => this.isLoading = false)).subscribe({
-                      next: res => {
-                        resolve(true);
-                        if (res) {
-                          this.message.success(`Submit successfully !`).onClose!.subscribe(() => {
-                            // sessionStorage.clear();
-                            // this.loginOutService.loginOut().then((_) => {
-                            //   this.router.navigateByUrl('/login/login-modify');
-                            // });
-                          });
-                        }
-                        this.cdr.markForCheck();
-                      },
-                      error: err => {
-                        reject(true);
-                        this.cdr.markForCheck();
-                      }
-                    })
-                  }
-                })
-            }
-          }).catch(() => console.log('Oops errors!'))
+              });
+          }
+        }
       });
     }
   }
