@@ -102,6 +102,9 @@
                   </div>
                   <ng-template #sendAmountError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your Sending Amount</ng-container>
+                    <ng-container *ngIf="control.hasError('regular')">The maximum amount that can be entered must not
+                      exceed{{' '+purchCurrecyCount |
+                      map:'toThousandthMark'}}</ng-container>
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -173,9 +176,7 @@
                   <ng-template #amountError let-control>
                     <ng-container *ngIf="control.hasError('required')">Please input your FX Purchase
                       Amount</ng-container>
-                    <ng-container *ngIf="control.hasError('regular')">The maximum amount that can be entered must not
-                      exceed{{' '+purchCurrecyCount |
-                      map:'toThousandthMark'}}</ng-container>
+
                     <ng-container *ngIf="control.hasError('regular')"></ng-container>
                   </ng-template>
                 </nz-form-control>

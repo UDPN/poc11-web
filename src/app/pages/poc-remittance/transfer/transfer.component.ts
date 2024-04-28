@@ -497,7 +497,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             currency:
               '1 ' +
               item.from.replace('-UDPN', '') +
-              '->' +
+              ' = ' +
               item.rate +
               ' ' +
               item.to.replace('-UDPN', ''),
@@ -508,7 +508,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
               rate:
                 '1 ' +
                 item.from.replace('-UDPN', '') +
-                '=' +
+                ' = ' +
                 item.rate +
                 ' ' +
                 item.to.replace('-UDPN', ''),
