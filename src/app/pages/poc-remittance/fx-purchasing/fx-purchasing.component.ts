@@ -637,10 +637,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         rateId: this.checkedItemComment[0].rateId,
         transactionWalletId: this.validateForm.get('bankAccountId')?.value,
         receivingAmount:
-          this.inputType === 1 ? '' : this.validateForm.get('amount')?.value,
+          this.inputType === 1 ? null : this.validateForm.get('amount')?.value,
         sendingAmount:
           this.inputType === 2
-            ? ''
+            ? null
             : this.validateForm.get('reni_sendAmount')?.value,
         sendingWalletId: this.validateForm.get('bankAccountId')?.value
       })
