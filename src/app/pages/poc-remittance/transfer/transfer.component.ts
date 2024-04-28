@@ -799,10 +799,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         toCommercialBankId: this.newBeneficialBankId,
         sendingAmount:
           this.inputType === 1
-            ? ''
+            ? null
             : this.validateForm.get('reni_sendAmount')?.value,
         receivingAmount:
-          this.inputType === 2 ? '' : this.validateForm.get('amount')?.value
+          this.inputType === 2 ? null : this.validateForm.get('amount')?.value
       })
       .subscribe((res) => {
         if (res.code === 0) {
