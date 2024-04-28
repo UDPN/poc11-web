@@ -210,7 +210,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fxReceivingData[e].legalCurrencySymbol === null
         ? ''
         : this.fxReceivingData[e].legalCurrencySymbol;
-    console.log(this.reveingCurrecyModelShowIcon);
     this.reveingCurrecyModelShow =
       this.reveingCurrecy.replace('-UDPN', '') +
       ' Available Balance: ' +
@@ -291,7 +290,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onReceivingWalletAddressChange(e: any) {
-    console.log(e);
     const val = this.fxReceivingDataWallets.filter(
       (item: any) => item.bankAccountId === e
     );
@@ -486,7 +484,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                 currency:
                   '1 ' +
                   item.from.replace('-UDPN', '') +
-                  '->' +
+                  ' = ' +
                   item.to.replace('-UDPN', ''),
                 currencyShow:
                   '1 ' +
@@ -501,7 +499,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                   rate:
                     '1 ' +
                     item.from.replace('-UDPN', '') +
-                    ':' +
+                    ' = ' +
                     item.rate +
                     ' ' +
                     item.to.replace('-UDPN', ''),
