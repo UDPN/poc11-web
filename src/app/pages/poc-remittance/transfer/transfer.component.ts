@@ -798,11 +798,11 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         toCommercialBankId: this.newBeneficialBankId,
         sendingAmount:
-          this.inputType === 1
+          this.inputType === 2
             ? null
             : this.validateForm.get('reni_sendAmount')?.value,
         receivingAmount:
-          this.inputType === 2 ? null : this.validateForm.get('amount')?.value
+          this.inputType === 1 ? null : this.validateForm.get('amount')?.value
       })
       .subscribe((res) => {
         if (res.code === 0) {
