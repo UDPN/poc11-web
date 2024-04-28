@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-04-26 17:00:30
+ * @LastEditTime: 2024-04-28 11:05:33
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -43,12 +43,13 @@ export class FxPurchasingService {
   public transfer(params: {
     fxPurchaseAmount: number;
     fxPurchasingInformation: string;
-    fxReceivingWalletId: number;
+    receivingWalletId: number;
     passWord: string;
     rateId: string;
     transactionWalletId: string;
     receivingAmount: number;
     sendingAmount: number;
+    sendingWalletId: number;
   }): Observable<any> {
     return this.https.post(`/v1/remittanceManagement/fxPurchasing`, params);
   }
