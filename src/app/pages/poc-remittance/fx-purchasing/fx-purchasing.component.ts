@@ -636,8 +636,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         rateId: this.checkedItemComment[0].rateId,
         transactionWalletId: this.validateForm.get('bankAccountId')?.value,
-        receivingAmount: this.validateForm.get('amount')?.value,
-        sendingAmount: this.validateForm.get('reni_sendAmount')?.value,
+        receivingAmount:
+          this.inputType === 1 ? '' : this.validateForm.get('amount')?.value,
+        sendingAmount:
+          this.inputType === 2
+            ? ''
+            : this.validateForm.get('reni_sendAmount')?.value,
         sendingWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {

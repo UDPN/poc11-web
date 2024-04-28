@@ -312,8 +312,10 @@
         <nz-card nzTitle="Sending Information" class="info-none-bottom">
           <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-vertical">
-            <nz-descriptions-item nzTitle="Payment Amount">{{
-              checkedItemComment[0].total
+            <nz-descriptions-item nzTitle="Sending Amount:">{{
+              validateForm.controls['reni_sendAmount'].value +
+              ' ' +
+              purchCurrecy.replace('-UDPN', '')
               }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Sending Wallet Address">{{
               validateForm.controls['transactionWalletAddress'].value

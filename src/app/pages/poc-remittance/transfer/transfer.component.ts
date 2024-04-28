@@ -797,8 +797,12 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             : ' ',
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         toCommercialBankId: this.newBeneficialBankId,
-        sendingAmount: this.validateForm.get('reni_sendAmount')?.value,
-        receivingAmount: this.validateForm.get('amount')?.value
+        sendingAmount:
+          this.inputType === 1
+            ? ''
+            : this.validateForm.get('reni_sendAmount')?.value,
+        receivingAmount:
+          this.inputType === 2 ? '' : this.validateForm.get('amount')?.value
       })
       .subscribe((res) => {
         if (res.code === 0) {
