@@ -454,8 +454,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         ?.setValue(
           Number(info.total.split(' ')[0] - info.com.split(' ')[0]).toFixed(2),
           {
-            emitEvent: false,
-            onlySelf: true
+            emitEvent: false
           }
         );
       // this.validateForm.get('reni_sendAmount')?.markAsDirty();
@@ -798,7 +797,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             : ' ',
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         toCommercialBankId: this.newBeneficialBankId,
-        sendingAmount: this.validateForm.get('reni_sendAmountr')?.value,
+        sendingAmount: this.validateForm.get('reni_sendAmount')?.value,
         receivingAmount: this.validateForm.get('amount')?.value
       })
       .subscribe((res) => {
