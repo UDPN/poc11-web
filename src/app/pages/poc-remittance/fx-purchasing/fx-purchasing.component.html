@@ -309,20 +309,18 @@
   <div *nzModalContent>
     <div nz-row style="display: flex; justify-content: space-around; align-items: center" class="m-t-30">
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
-        <nz-card nzTitle="Originator Information" class="info-none-bottom">
+        <nz-card nzTitle="Sending Information" class="info-none-bottom">
           <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-vertical">
             <nz-descriptions-item nzTitle="Payment Amount">{{
-              checkedItemComment[0].total +
-              ' ' +
-              purchCurrecy.replace('-UDPN', '')
+              checkedItemComment[0].total
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Originator Wallet Address">{{
+            <nz-descriptions-item nzTitle="Sending Wallet Address">{{
               validateForm.controls['transactionWalletAddress'].value
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Central Bank">{{
+            <!-- <nz-descriptions-item nzTitle="Central Bank">{{
               validateForm.controls['transactionBankName'].value
-              }}</nz-descriptions-item>
+              }}</nz-descriptions-item> -->
           </nz-descriptions>
         </nz-card>
       </div>
@@ -330,25 +328,25 @@
         <img src="../../../../assets/imgs//arrow.png" alt="" />
       </div>
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
-        <nz-card nzTitle="Receiver Information" class="info-none-bottom">
+        <nz-card nzTitle="Receiving Information" class="info-none-bottom">
           <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-vertical">
-            <nz-descriptions-item nzTitle="FX Purchase Amount">{{
+            <nz-descriptions-item nzTitle="Receiving Amount">{{
               validateForm.controls['amount'].value +
               ' ' +
               reveingCurrecy.replace('-UDPN', '')
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Receiver Wallet Address">{{
+            <nz-descriptions-item nzTitle="Receiving Wallet Address">{{
               receivingWalletAddressShow
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Central Bank">{{
+            <!-- <nz-descriptions-item nzTitle="Central Bank">{{
               validateForm.controls['receivingBankName'].value
-              }}</nz-descriptions-item>
+              }}</nz-descriptions-item> -->
           </nz-descriptions>
         </nz-card>
       </div>
-      <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
-        <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }"
+      <div nz-col [nzXXl]="24" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24">
+        <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 5, xl: 5, lg: 5, md: 5, sm: 5, xs: 5 }"
           [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical m-t-25">
           <nz-descriptions-item nzTitle="FX Settlement Bank">{{
             checkedItemComment[0].sp
@@ -356,23 +354,16 @@
           <nz-descriptions-item nzTitle="Exchange Rate">{{
             checkedItemComment[0].currencyShow
             }}</nz-descriptions-item>
-        </nz-descriptions>
-      </div>
-      <div nz-col [nzXXl]="1" [nzXl]="1" [nzLg]="1" [nzMd]="1" [nzSm]="0" [nzXs]="0"></div>
-      <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
-        <nz-descriptions nzLayout="vertical" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }"
-          [nzColon]="false" [nzBordered]="false" class="card-descriptions-vertical m-t-25">
           <nz-descriptions-item nzTitle="Commission">{{
-            checkedItemComment[0].com +
-            ' ' +
-            purchCurrecy.replace('-UDPN', '')
+            checkedItemComment[0].com
             }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Total Payment Amount">{{
-            checkedItemComment[0].total +
-            ' ' +
-            purchCurrecy.replace('-UDPN', '')
+            checkedItemComment[0].total
             }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Received Amount">{{checkedItemComment[0].info.reve }}</nz-descriptions-item>
         </nz-descriptions>
+
+
       </div>
     </div>
   </div>

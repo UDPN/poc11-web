@@ -417,14 +417,14 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         item.from.replace('-UDPN', '')
       );
     } else {
+      let reniData = Number(this.validateForm.get('reni_sendAmount')?.value);
       return (
         Number(
-          this.validateForm.get('reni_sendAmount')?.value +
+          reniData +
             (item.smChargeModel === 0
-              ? this.validateForm.get('reni_sendAmount')?.value * item.smValue >
-                item.smMaxFee
+              ? reniData * item.smValue > item.smMaxFee
                 ? item.smMaxFee
-                : this.validateForm.get('reni_sendAmount')?.value * item.smValue
+                : reniData * item.smValue
               : item.smValue)
         ).toFixed(2) +
         ' ' +
