@@ -489,7 +489,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                 currencyShow:
                   '1 ' +
                   item.from.replace('-UDPN', '') +
-                  '->' +
+                  ' = ' +
                   item.rate +
                   item.to.replace('-UDPN', ''),
                 rate: item.rate,
@@ -631,13 +631,14 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       .transfer({
         fxPurchaseAmount: this.validateForm.get('amount')?.value,
         fxPurchasingInformation: '',
-        fxReceivingWalletId: this.validateForm.get('receivingWalletAddress')
+        receivingWalletId: this.validateForm.get('receivingWalletAddress')
           ?.value,
         passWord: fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi),
         rateId: this.checkedItemComment[0].rateId,
         transactionWalletId: this.validateForm.get('bankAccountId')?.value,
         receivingAmount: this.validateForm.get('amount')?.value,
-        sendingAmount: this.validateForm.get('reni_sendAmount')?.value
+        sendingAmount: this.validateForm.get('reni_sendAmount')?.value,
+        sendingWalletId: this.validateForm.get('bankAccountId')?.value
       })
       .subscribe((res) => {
         if (res.code === 0 || res.code === '0') {
