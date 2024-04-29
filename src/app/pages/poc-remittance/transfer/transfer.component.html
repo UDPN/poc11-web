@@ -368,7 +368,7 @@
   </nz-select>
 </ng-template>
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Remittance Information Confirmation" (nzOnCancel)="cancelView()"
-  [nzClosable]="false" [nzWidth]="1000" nzCentered="true">
+  [nzClosable]="false" [nzWidth]="1000" nzCentered="true" [nzBodyStyle]="{ 'max-height': '700px' }">
   <div *nzModalContent>
     <div nz-row style="display: flex; justify-content: space-around; align-items: center" class="m-t-30">
       <div nz-col [nzXXl]="11" [nzXl]="11" [nzLg]="11" [nzMd]="11" [nzSm]="24" [nzXs]="24">
