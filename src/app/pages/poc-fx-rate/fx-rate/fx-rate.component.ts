@@ -171,7 +171,7 @@ export class FxRateComponent implements OnInit, AfterViewInit {
       )
       .subscribe((_: any) => {
         this.dataList = _.data?.rows;
-        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.total = _.data.page.total;
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
         this.cdr.markForCheck();
