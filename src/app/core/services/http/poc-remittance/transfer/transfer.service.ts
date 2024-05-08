@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-23 15:49:01
+ * @LastEditTime: 2024-04-26 16:46:45
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -59,6 +59,8 @@ export class TransferService {
     rateId: string;
     passWord: string;
     toCommercialBankId: number;
+    receivingAmount: number;
+    sendingAmount: number;
   }): Observable<any> {
     return this.https.post(`/v1/remittanceManagement/transfer`, params);
   }
