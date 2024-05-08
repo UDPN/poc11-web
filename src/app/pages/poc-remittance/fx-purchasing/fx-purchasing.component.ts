@@ -485,6 +485,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                   '1 ' +
                   item.from.replace('-UDPN', '') +
                   ' = ' +
+                  item.rate +
+                  ' ' +
                   item.to.replace('-UDPN', ''),
                 currencyShow:
                   '1 ' +
