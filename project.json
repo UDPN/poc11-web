@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:webpack-browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "customWebpackConfig": {
           "path": "./webpack.config.js"
@@ -41,9 +43,13 @@
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["src/styles/themes"]
+          "includePaths": [
+            "src/styles/themes"
+          ]
         },
-        "scripts": ["node_modules/driver.js/dist/driver.min.js"],
+        "scripts": [
+          "node_modules/driver.js/dist/driver.min.js"
+        ],
         "allowedCommonJsDependencies": [
           "@ethereumjs/tx",
           "@ethereumjs/common",
@@ -119,7 +125,7 @@
     "serve": {
       "executor": "@nx/angular:dev-server",
       "options": {
-        "host": "10.0.7.64",
+        "host": "10.0.7.227",
         "port": 4215,
         "proxyConfig": "proxy.conf.json",
         "disableHostCheck": false
@@ -143,12 +149,16 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["{projectRoot}/src"]
+        "lintFilePatterns": [
+          "{projectRoot}/src"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectName}"
+      ],
       "options": {
         "jestConfig": "jest.config.ts"
       }
