@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-04-22 11:32:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-04-22 13:49:45
+ * @LastEditTime: 2024-05-10 09:52:48
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -30,7 +30,8 @@ export class PocBankService {
       data: {
         bic: filters.bic || '',
         commercialBankName: filters.commercialBankName || '',
-        currency: filters.currency || ''
+        currency: filters.currency || '',
+        countryInfoId: filters.countryInfoId || ''
       },
       page: {
         pageSize: pageSize,
