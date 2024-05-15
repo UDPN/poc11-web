@@ -179,31 +179,71 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     return {};
   };
 
-  initData() {
-    this.fxPurchasingService.fetchFXPurchase().subscribe((res) => {
-      this.fxPurchaseData = res;
-      this.purchCurrecyList = this.fxPurchaseData;
-      this.onPurchCurrecy(0);
-      this.validateForm.get('send_currency')?.setValue(0);
-      this.onPurchase(0);
-    });
-    this.fxPurchasingService.fetchFxReceiving().subscribe((res) => {
-      this.fxReceivingData = [];
-      res.forEach((item: any, i: number) => {
-        this.fxReceivingData.push({
-          bankId: item.bankId,
-          bankName: item.bankName,
-          currecy: item.digitalSymbol,
-          currecySymbol: item.digitalCurrencyName,
-          walletAddress: item.wallets,
-          legalCurrencySymbol: item.legalCurrencySymbol
-        });
+  // 刷新sending information信息
+  private refreshSendingInfo(centralBankId: any) {
+    this.fxPurchasingService
+      .fetchFXPurchase({ centralBankId })
+      .subscribe((res) => {
+        this.fxPurchaseData = res;
+        this.purchCurrecyList = this.fxPurchaseData;
+        this.validateForm.get('send_currency')?.setValue(0);
+        this.onPurchCurrecy(0);
+        this.onPurchase(0);
       });
-      this.onReceiving(0);
-      this.validateForm.get('reci_currency')?.setValue(0);
-    });
+  }
+  // 刷新receiving information信息
+  private refreshReceivingInfo(centralBankId: any) {
+    this.fxPurchasingService
+      .fetchFxReceiving({ centralBankId })
+      .subscribe((res) => {
+        this.fxReceivingData = [];
+        res.forEach((item: any, i: number) => {
+          this.fxReceivingData.push({
+            bankId: item.bankId,
+            bankName: item.bankName,
+            currecy: item.digitalSymbol,
+            currecySymbol: item.digitalCurrencyName,
+            walletAddress: item.wallets,
+            legalCurrencySymbol: item.legalCurrencySymbol
+          });
+        });
+        this.onReceiving(0);
+        this.validateForm.get('reci_currency')?.setValue(0);
+      });
+  }
+  initData() {
+    this.refreshSendingInfo('');
+    this.refreshReceivingInfo('');
+    // this.fxPurchasingService
+    //   .fetchFXPurchase({ centralBankId: '' })
+    //   .subscribe((res) => {
+    //     this.fxPurchaseData = res;
+    //     this.purchCurrecyList = this.fxPurchaseData;
+    //     this.onPurchCurrecy(0);
+    //     this.validateForm.get('send_currency')?.setValue(0);
+    //     this.onPurchase(0);
+    //   });
+    // this.fxPurchasingService
+    //   .fetchFxReceiving({ centralBankId: '' })
+    //   .subscribe((res) => {
+    //     this.fxReceivingData = [];
+    //     res.forEach((item: any, i: number) => {
+    //       this.fxReceivingData.push({
+    //         bankId: item.bankId,
+    //         bankName: item.bankName,
+    //         currecy: item.digitalSymbol,
+    //         currecySymbol: item.digitalCurrencyName,
+    //         walletAddress: item.wallets,
+    //         legalCurrencySymbol: item.legalCurrencySymbol
+    //       });
+    //     });
+    //     this.onReceiving(0);
+    //     this.validateForm.get('reci_currency')?.setValue(0);
+    //   });
   }
   onReceiving(e: any) {
+    //
+    // this.refreshSendingInfo(this.validateForm.get('reci_currency')?.value);
     // todo
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.reveingCurrecyModelShowIcon =
@@ -305,6 +345,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onPurchCurrecy(e: number) {
+    // // 加载receiving currency
+    // this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.purchCurrecyModelShowIcon =
       this.fxPurchaseData[e].legalCurrencySymbol === null
