@@ -93,7 +93,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     public message: NzMessageService
-  ) { }
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -134,24 +134,24 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     });
     this.topUpForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.topUpAmountValidator]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]]
     });
     this.withdrawForm = this.fb.group({
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.withdrawAmountValidator]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]]
     });
     this.passwordForm = this.fb.group({
-      pwd: [null, [Validators.required]],
+      pwd: [null, [Validators.required]]
     });
   }
 
-  topUpAmountValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
+  topUpAmountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    } else if (control.value > 1000000) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -279,14 +279,22 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getTopUp(currency: string, chainAccountAddress: string, capitalPoolBalance: string) {
+  getTopUp(
+    currency: string,
+    chainAccountAddress: string,
+    capitalPoolBalance: string
+  ) {
     this.currency = currency;
     this.balance = capitalPoolBalance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.isVisibleTopUp = true;
   }
 
-  getWithdraw(currency: string, chainAccountAddress: string, capitalPoolBalance: string) {
+  getWithdraw(
+    currency: string,
+    chainAccountAddress: string,
+    capitalPoolBalance: string
+  ) {
     this.currency = currency;
     this.balance = capitalPoolBalance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
@@ -327,35 +335,50 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
     const params = {
       currency: this.currency,
-      amount: this.txType === 1 ? this.topUpForm.get('amount')?.value : this.withdrawForm.get('amount')?.value,
+      amount:
+        this.txType === 1
+          ? this.topUpForm.get('amount')?.value
+          : this.withdrawForm.get('amount')?.value,
       password: code,
       txType: this.txType === 1 ? 1 : 2,
-      walletAddress: this.txType === 1 ? this.topUpForm.get('chainAccountAddress')?.value : this.withdrawForm.get('chainAccountAddress')?.value,
-    }
+      walletAddress:
+        this.txType === 1
+          ? this.topUpForm.get('chainAccountAddress')?.value
+          : this.withdrawForm.get('chainAccountAddress')?.value
+    };
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
-    this.pocCapitalPoolService.topUpOrWithdraw(params).pipe(finalize(() => this.isOkLoading = false)).subscribe({
-      next: res => {
-        if (res) {
-          this.isVisibleEnterPassword = false;
-          this.message.success(this.txType === 1 ? `Top-up ${amount} successful` : `withdraw ${amount} successful`, { nzDuration: 1000 }).onClose.subscribe(() => {
-            this.getDataList();
-          });
-          if (this.txType === 1) {
-            this.topUpForm.reset();
-          } else {
-            this.withdrawForm.reset();
+    this.pocCapitalPoolService
+      .topUpOrWithdraw(params)
+      .pipe(finalize(() => (this.isOkLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.isVisibleEnterPassword = false;
+            this.message
+              .success(
+                this.txType === 1
+                  ? `Top-up ${amount} successful`
+                  : `withdraw ${amount} successful`,
+                { nzDuration: 1000 }
+              )
+              .onClose.subscribe(() => {
+                this.getDataList();
+              });
+            if (this.txType === 1) {
+              this.topUpForm.reset();
+            } else {
+              this.withdrawForm.reset();
+            }
           }
+          this.passwordForm.reset();
+          this.isOkLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isOkLoading = false;
+          this.cdr.markForCheck();
         }
-        this.passwordForm.reset();
-        this.isOkLoading = false;
-        this.cdr.markForCheck();
-      },
-      error: err => {
-        this.isOkLoading = false;
-        this.cdr.markForCheck();
-      }
-    })
-
+      });
   }
 
   private initTable(): void {
