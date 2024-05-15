@@ -157,7 +157,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select formControlName="bene_currency" (ngModelChange)="onBeneficiaryCurrency($event)">
-                        <nz-option *ngFor="let item of availableCurrecy" [nzValue]="item.digitalCurrencyName"
+                        <nz-option *ngFor="let item of newAmountArr" [nzValue]="item.digitalCurrencyName"
                           [nzLabel]="item.digitalSymbol"></nz-option>
                       </nz-select>
 
@@ -202,7 +202,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="beneficialWalletAddressError">
                   <div nz-row>
-                    <div nz-col nzSpan=" 24">
+                    <div nz-col nzSpan="24">
                       <nz-select formControlName="beneficialWalletAddress"
                         (ngModelChange)="onBeneficialWalletAddressChange($event)">
                         <nz-option *ngFor="let item of BeneficiaryArr,index as i" [nzValue]="item.bankWalletId"

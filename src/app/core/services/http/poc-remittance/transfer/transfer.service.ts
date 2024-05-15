@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-23 14:09:48
  * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-04-26 16:46:45
+ * @LastEditTime: 2024-05-15 16:01:43
  * @Description:
  */
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
@@ -73,7 +73,10 @@ export class TransferService {
       params
     );
   }
-  public bankRemitter(): Observable<any> {
-    return this.http.post(`/v1/remittanceManagement/remitterInformation`);
+  public bankRemitter(params: { centralBankId: any }): Observable<any> {
+    return this.http.post(
+      `/v1/remittanceManagement/remitterInformation`,
+      params
+    );
   }
 }
