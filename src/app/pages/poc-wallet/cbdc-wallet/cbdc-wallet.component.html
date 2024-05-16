@@ -164,16 +164,12 @@
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
                 <input nz-input formControlName="amount" />
               </nz-input-group>
-              <div>
-                {{'Reserve Account Available Balance: '}} {{ (1000000 | map:'toThousandthMark') + ' ' + this.currency.split('-')[1] }}
-              </div>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
                 <ng-container *ngIf="control.hasError('regular')">You can enter only positive integer numbers with a maximum of 2 decimal places.</ng-container>
-                <ng-container *ngIf="control.hasError('regular1')">The Amount cannot be greater than the Reserve Account Available Balance</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>

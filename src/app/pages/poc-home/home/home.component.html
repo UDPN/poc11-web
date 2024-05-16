@@ -10,7 +10,7 @@
         <h5 nz-typography style="font-weight: 500">{{ 'wCBDC Wallet Balance' }}</h5>
         <div nz-row [nzGutter]="24" style="padding-bottom: 40px;">
           <div nz-col nzXs="24" nzSm="24" nzXl="12" nzXXl="6" *ngFor="let balance of walletBalanceList; index as i">
-            <nz-card class="card base-card" style="height: 360px;" [ngStyle]="{'background-color': i === 0  ? '#C0AB7A' : ''}">
+            <nz-card class="card base-card" [ngStyle]="{'background-color': i === 0  ? '#C0AB7A' : ''}">
               <h3 nz-typography>{{ balance.currency }}</h3>
               <div style="display: flex;justify-content: space-between;align-items: center;">
                 <div>
@@ -62,19 +62,6 @@
                       </div>
                     </nz-form-control>
                   </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24" *ngIf="i=== 0">
-                  <div style="display: flex;justify-content: space-between;align-items: center;">
-                    <div>
-                      <span>{{'Reserve Balance' }}</span>
-                    </div>
-                    <div class="unit-postion">
-                      <span style="text-align: center; font-weight: 500;font-size: 18px;">{{ balance.legalCurrencySymbol }} </span>
-                      <span nz-typography style="text-align: center; font-weight: 500;font-size: 24px;">{{
-                        1000000 | map:
-                        'toThousandthMark'}}</span>
-                    </div>
-                  </div>
                 </div>
                 
               </div>
@@ -414,16 +401,12 @@
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
                 <input nz-input formControlName="amount" />
               </nz-input-group>
-              <div>
-                {{'Reserve Account Available Balance: '}} {{ (1000000 | map:'toThousandthMark') + ' ' + this.currency.split('-')[1] }}
-              </div>
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
                 <ng-container *ngIf="control.hasError('regular')">You can enter only positive integer numbers with a maximum of 2 decimal places.</ng-container>
-                <ng-container *ngIf="control.hasError('regular1')">The Amount cannot be greater than the Reserve Account Available Balance</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
