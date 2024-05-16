@@ -206,6 +206,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           res[0]['beneficiaryCurrencyRespVOs'][0][
             'beneficiaryWalletExtendedRespVOs'
           ];
+
         this.beneficiaryCurrency =
           res[0]['beneficiaryCurrencyRespVOs'][0]['digitalCurrencyName'];
         this.validateForm
@@ -242,39 +243,41 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
     });
-    this.transferService.bankRemitter().subscribe((res: any) => {
-      // 1 Set currency array
-      this.availableCurrecy = [];
-      let remCurrencyArr: {
-        bankName: string;
-        centralBankId: number;
-        digitalCurrencyName: string;
-        digitalSymbol: string;
-        legalCurrencyName: string;
-        legalCurrencySymbol: string;
-        remitterInformationExtendInfoList: any;
-      }[] = [];
-      res.forEach((item: any) => {
-        remCurrencyArr.push({
-          bankName: item.bankName,
-          centralBankId: item.centralBankId,
-          digitalCurrencyName: item.digitalCurrencyName,
-          digitalSymbol: item.digitalSymbol,
-          legalCurrencyName: item.legalCurrencyName,
-          legalCurrencySymbol: item.legalCurrencySymbol,
-          remitterInformationExtendInfoList:
-            item.remitterInformationExtendInfoList
+    this.transferService
+      .bankRemitter({ centralBankId: '' })
+      .subscribe((res: any) => {
+        // 1 Set currency array
+        this.availableCurrecy = [];
+        let remCurrencyArr: {
+          bankName: string;
+          centralBankId: number;
+          digitalCurrencyName: string;
+          digitalSymbol: string;
+          legalCurrencyName: string;
+          legalCurrencySymbol: string;
+          remitterInformationExtendInfoList: any;
+        }[] = [];
+        res.forEach((item: any) => {
+          remCurrencyArr.push({
+            bankName: item.bankName,
+            centralBankId: item.centralBankId,
+            digitalCurrencyName: item.digitalCurrencyName,
+            digitalSymbol: item.digitalSymbol,
+            legalCurrencyName: item.legalCurrencyName,
+            legalCurrencySymbol: item.legalCurrencySymbol,
+            remitterInformationExtendInfoList:
+              item.remitterInformationExtendInfoList
+          });
         });
-      });
-      this.availableCurrecy = remCurrencyArr;
-      // 设置默认选中第一个,自动触发onRemiCurrencyChange事件
-      this.validateForm
-        .get('remi_currency')
-        ?.setValue(remCurrencyArr[0].digitalCurrencyName);
+        this.availableCurrecy = remCurrencyArr;
+        // 设置默认选中第一个,自动触发onRemiCurrencyChange事件
+        this.validateForm
+          .get('remi_currency')
+          ?.setValue(remCurrencyArr[0].digitalCurrencyName);
 
-      this.setRemAddressArr(res[0]['remitterInformationExtendInfoList']);
-      this.setRemDefaultValue(res);
-    });
+        this.setRemAddressArr(res[0]['remitterInformationExtendInfoList']);
+        this.setRemDefaultValue(res);
+      });
   }
 
   onRemitterWalletAddressChange(e: any) {
@@ -679,6 +682,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       ];
     this.newAmountArr =
       this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'];
+
     this.validateForm
       .get('beneficialWalletAddress')
       ?.setValue(
@@ -694,6 +698,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       this.beneficialBankNameListAll[e]['beneficiaryCurrencyRespVOs'][0][
         'digitalCurrencyName'
       ];
+    this.validateForm.get('bene_currency')?.setValue(this.beneficiaryCurrency);
     this.validateForm
       .get('newBeneficialBankName')
       ?.setValue(
