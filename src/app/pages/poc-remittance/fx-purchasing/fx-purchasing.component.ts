@@ -48,6 +48,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     desc: '',
     footer: ''
   };
+  availableBalance = 0;
   validateForm!: FormGroup;
   nzLoading: boolean = false;
   isLoading: boolean = false;
@@ -262,6 +263,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.reveingCurrecyModelShowIcon +
       ' ' +
       thousandthMark(this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']);
+    this.availableBalance =
+      this.fxReceivingData[e]['walletAddress'][0]['cbdcCount'];
+
     this.fxReceivingDataWallets = this.fxReceivingData[e]['walletAddress'];
     this.validateForm
       .get('receivingWalletAddress')
@@ -329,6 +333,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.purchCurrecyModelShowIcon +
       ' ' +
       thousandthMark(this.transactionWalletAddressArr[e]['cbdcCount']);
+    this.availableBalance = this.transactionWalletAddressArr[e]['cbdcCount'];
+
     this.purchCurrecyCount = this.transactionWalletAddressArr[e]['cbdcCount'];
     this.validateForm
       .get('bankAccountId')
@@ -354,6 +360,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.reveingCurrecyModelShowIcon +
       ' ' +
       thousandthMark(val[0]['cbdcCount']);
+    this.availableBalance = val[0]['cbdcCount'];
     if (this.reveingCurrecy === this.purchCurrecy) {
     } else {
       this.findExchange(4);
@@ -377,6 +384,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           'cbdcCount'
         ]
       );
+    this.availableBalance =
+      this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+        'cbdcCount'
+      ];
+
     this.purchCurrecyCount =
       this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
         'cbdcCount'
@@ -649,10 +661,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       .get('availableBalance')
       ?.setValue(this.validateForm.get('reni_sendAmount')?.value);
     if (this.validateForm.valid) {
-      if (
-        Number(this.validateForm.controls['amount'].value.toString()) >
-        Number(this.validateForm.controls['availableBalance'].value.toString())
-      ) {
+      if (Number(this.remiInfo.total) > Number(this.availableBalance)) {
         this.modal.error({
           nzTitle: 'Error',
           nzContent:
