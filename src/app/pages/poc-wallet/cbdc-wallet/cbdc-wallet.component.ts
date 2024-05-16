@@ -130,8 +130,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
-    } else if (control.value > 1000000) {
-      return { regular1: true, error: true };
     }
     return {};
   };

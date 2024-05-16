@@ -245,6 +245,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     //
     // this.refreshSendingInfo(this.validateForm.get('reci_currency')?.value);
     // todo
+    this.remiInfo = {
+      rate: '',
+      com: '',
+      total: '',
+      reve: ''
+    };
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.reveingCurrecyModelShowIcon =
       this.fxReceivingData[e].legalCurrencySymbol === null
@@ -272,11 +278,20 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       (item: any) =>
         item.bankAccountId === this.validateForm.value.receivingWalletAddress
     )[0]['chainAccountAddress'];
-
+    this.setSendAndAmount();
     if (this.reveingCurrecy === this.purchCurrecy) {
     } else {
       this.findExchange(4);
     }
+  }
+
+  private setSendAndAmount(): void {
+    this.validateForm.get('amount')?.setValue('', { emitEvent: false });
+    this.validateForm
+      .get('reni_sendAmount')
+      ?.setValue('', { emitEvent: false });
+    this.validateForm.get('reni_sendAmount')?.markAsDirty();
+    this.validateForm.get('amount')?.markAsDirty();
   }
 
   @HostListener('focus') onFocusSendAmount() {
