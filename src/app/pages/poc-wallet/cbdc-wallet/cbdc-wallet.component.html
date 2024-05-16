@@ -169,7 +169,7 @@
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
-                <ng-container *ngIf="control.hasError('regular')"></ng-container>
+                <ng-container *ngIf="control.hasError('regular')">You can enter only positive integer numbers with a maximum of 2 decimal places.</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -212,7 +212,7 @@
             <nz-form-label nzRequired nzSpan="6" class="text-left">
               Amount
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="amountError" nzSpan="18">
+            <nz-form-control [nzErrorTip]="amount1Error" nzSpan="18">
               <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
                 <input nz-input formControlName="amount" />
               </nz-input-group>
@@ -222,10 +222,10 @@
               <ng-template #addOnAfterTemplate>
                 <label>{{ currency }}</label>
               </ng-template>
-              <ng-template #amountError let-control>
+              <ng-template #amount1Error let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Amount</ng-container>
-                <ng-container *ngIf="control.hasError('regular')"></ng-container>
-                <ng-container *ngIf="control.hasError('regular1')"></ng-container>
+                <ng-container *ngIf="control.hasError('regular')">You can enter only positive integer numbers with a maximum of 2 decimal places.</ng-container>
+                <ng-container *ngIf="control.hasError('regular1')">The Amount cannot be greater than the Available Amount</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>

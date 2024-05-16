@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-04-18 15:13:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-04-25 11:01:25
+ * @LastEditTime: 2024-05-10 09:51:16
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -63,6 +63,34 @@
           [nzXs]="24"
         >
           <nz-form-item>
+            <nz-form-label>Region</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="currency"
+                [(ngModel)]="searchParam.countryInfoId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of regionList; index as i"
+                  [nzValue]="item.countryInfoId"
+                  [nzLabel]="item.countryName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
             <nz-form-label>Currency</nz-form-label>
             <nz-form-control>
               <nz-select
@@ -83,10 +111,10 @@
         </div>
         <div
           nz-col
-          [nzXXl]="24"
-          [nzXl]="24"
-          [nzLg]="12"
-          [nzMd]="12"
+          [nzXXl]="16"
+          [nzXl]="16"
+          [nzLg]="24"
+          [nzMd]="24"
           [nzSm]="24"
           [nzXs]="24"
           class="m-b-8 text-right p-0"

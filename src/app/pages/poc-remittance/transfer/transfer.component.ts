@@ -653,6 +653,12 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onBeneficiaryCurrency(e: any) {
+    this.remiInfo = {
+      rate: '',
+      com: '',
+      total: '',
+      reve: ''
+    };
     const val = this.newAmountArr.filter(
       (item: any) => item.digitalCurrencyName === e
     );

@@ -280,7 +280,7 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R0305',
         newLinkFlag: 1,
-        path: '../../../../assets/api-documentation/PoC11 APIs.pdf'
+        path: '../../../../assets/api-documentation/Project Kissen APIs.pdf'
       },
       {
         id: 5,

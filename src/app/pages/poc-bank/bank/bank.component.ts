@@ -26,6 +26,7 @@ interface SearchParam {
   bic: string;
   createTime: any;
   currency: any;
+  countryInfoId: any;
 }
 interface ListParam {
   formRatePlatform: string;
@@ -59,7 +60,7 @@ export class BankComponent implements OnInit, AfterViewInit {
     toRateCurrency: ''
   };
   currencyList: any = [];
-
+  regionList: any = [];
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -102,6 +103,7 @@ export class BankComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getCurrency();
+    this.getRegion();
   }
 
   open(
@@ -133,12 +135,19 @@ export class BankComponent implements OnInit, AfterViewInit {
     this.searchParam = {};
     this.listParam = {};
     this.searchParam.currency = '';
+    this.searchParam.countryInfoId = '';
     this.getDataList(this.tableQueryParams);
   }
 
   getCurrency() {
     this.cbdcWalletService.getCentralBankQuery().subscribe((res) => {
       this.currencyList = res;
+    });
+  }
+
+  getRegion() {
+    this.cbdcWalletService.getRegion().subscribe((res) => {
+      this.regionList = res;
     });
   }
 
@@ -174,6 +183,11 @@ export class BankComponent implements OnInit, AfterViewInit {
         {
           title: 'Commercial Bank Name',
           field: 'commercialBankName',
+          width: 200
+        },
+        {
+          title: 'Region',
+          field: 'region',
           width: 200
         },
         {

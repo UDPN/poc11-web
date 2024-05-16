@@ -76,6 +76,10 @@ export class CbdcWalletService {
     return this.http.post(`/v1/wallet/centralBank/opened/list`, {});
   }
 
+  public getRegion(): Observable<any> {
+    return this.http.post(`/v1/bankQuery/all/region/searches`, {});
+  }
+
   public getCentralBankAdd(): Observable<any> {
     return this.http.post(`/v1/wallet/centralBank/list`, {});
   }
