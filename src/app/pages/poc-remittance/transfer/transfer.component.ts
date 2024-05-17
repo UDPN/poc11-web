@@ -448,17 +448,12 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.inputType === 1) {
       this.validateForm
         .get('amount')
-        ?.setValue(Number(info.reve.split(' ')[0]).toFixed(2), {
-          emitEvent: false
-        });
+        ?.setValue(Number(info.reve.split(' ')[0]).toFixed(2));
     } else {
       this.validateForm
         .get('reni_sendAmount')
         ?.setValue(
-          Number(info.total.split(' ')[0] - info.com.split(' ')[0]).toFixed(2),
-          {
-            emitEvent: false
-          }
+          Number(info.total.split(' ')[0] - info.com.split(' ')[0]).toFixed(2)
         );
       // this.validateForm.get('reni_sendAmount')?.markAsDirty();
       // this.validateForm
