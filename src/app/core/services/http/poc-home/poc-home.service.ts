@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 10:48:53
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-27 13:31:53
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-05-22 10:47:16
  * @Description:
  */
 import { Injectable } from '@angular/core';
@@ -69,7 +69,6 @@ export class PocHomeService {
     return this.https.post(`/v1/fxsp/sys/home/approve/currency`, {});
   }
 
-  
   public nonactivatedRate(): Observable<any> {
     return this.https.post(`/v1/fxsp/sys/home/nonactivated/rate`, {});
   }
@@ -77,7 +76,7 @@ export class PocHomeService {
   public pendingRate(): Observable<any> {
     return this.https.post(`/v1/fxsp/sys/home/pending/rate`, {});
   }
-  
+
   // public approveCurrency(): Observable<any> {
   //   return this.https.post(`/v1/fxsp/sys/home/approve/currency`, {});
   // }
@@ -86,7 +85,7 @@ export class PocHomeService {
     return this.http.post(`/v1/cockpit/walletInfo`, params);
   }
 
-  public getMovements(params: {currency: any}): Observable<any> {
+  public getMovements(params: { currency: any }): Observable<any> {
     return this.http.post(`/v1/cockpit/transaction/stat`, params);
   }
 
@@ -94,4 +93,7 @@ export class PocHomeService {
     return this.http.post(`/v1/cockpit/getActiveCurrency`, {});
   }
 
+  public getFiatAmount(params: { amount: number }): Observable<any> {
+    return this.http.post(`/v1/wallet/fiat/currency/conversion`, params);
+  }
 }

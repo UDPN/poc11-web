@@ -120,6 +120,24 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.getDataList(this.tableQueryParams);
   }
 
+  ngAfterViewInit(): void {
+    this.topUpForm.get('amount')?.valueChanges.subscribe((item: number) => {
+      this.topUpForm.get('fiatAmount')?.setValue(item);
+      // this.getFiatAmount(item);
+    });
+    this.withdrawForm.get('amount')?.valueChanges.subscribe((item: number) => {
+      this.withdrawForm.get('fiatAmount')?.setValue(item);
+      // this.getFiatAmount(item);
+    });
+    this.pageHeaderInfo = {
+      title: ``,
+      breadcrumb: ['Capital Pool Management'],
+      extra: this.headerExtra,
+      desc: this.headerContent,
+      footer: ''
+    };
+  }
+
   ngOnInit() {
     this.initTable();
     if (sessionStorage.getItem('tabNumber') === '1') {
@@ -133,12 +151,19 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       amount: ['', [Validators.required, this.amountValidator]]
     });
     this.topUpForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.topUpAmountValidator]]
+      transactionReferenceNo: [null, [Validators.required]],
+      reserveAccount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
     });
     this.withdrawForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.withdrawAmountValidator]]
+      reserveAccount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
       pwd: [null, [Validators.required]]
@@ -180,15 +205,19 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     return {};
   };
 
-  ngAfterViewInit(): void {
-    this.pageHeaderInfo = {
-      title: ``,
-      breadcrumb: ['Capital Pool Management'],
-      extra: this.headerExtra,
-      desc: this.headerContent,
-      footer: ''
-    };
-  }
+  // getFiatAmount(amount: any) {
+  //   if (!amount) {
+  //     setTimeout(() => {
+  //       this.topUpForm.get('fiatAmount')?.setValue('');
+  //       this.withdrawForm.get('fiatAmount')?.setValue('');
+  //     }, 100);
+  //   } else {
+  //     this.pocCapitalPoolService.getFiatAmount({ amount }).subscribe((res) => {
+  //       this.topUpForm.get('fiatAmount')?.setValue(res.cbdcAmount);
+  //       this.withdrawForm.get('fiatAmount')?.setValue(res.cbdcAmount);
+  //     });
+  //   }
+  // }
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
@@ -285,6 +314,9 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.currency = currency;
     this.balance = capitalPoolBalance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.topUpForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
     this.isVisibleTopUp = true;
   }
 
@@ -296,6 +328,9 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.currency = currency;
     this.balance = capitalPoolBalance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.withdrawForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
     this.isVisibleWithdraw = true;
   }
 
@@ -331,19 +366,32 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   confirmEnterPassword() {
     this.isOkLoading = true;
     const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
-    const params = {
+    const params: any = {
       currency: this.currency,
       amount:
         this.txType === 1
           ? this.topUpForm.get('amount')?.value
           : this.withdrawForm.get('amount')?.value,
+      fiatAmount:
+        this.txType === 1
+          ? this.topUpForm.get('fiatAmount')?.value
+          : this.withdrawForm.get('fiatAmount')?.value,
       password: code,
       txType: this.txType === 1 ? 1 : 2,
+      reserveAccount:
+        this.txType === 1
+          ? this.topUpForm.get('reserveAccount')?.value
+          : this.withdrawForm.get('reserveAccount')?.value,
       walletAddress:
         this.txType === 1
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
+    if (this.txType === 1) {
+      params['transactionReferenceNo'] = this.topUpForm.get(
+        'transactionReferenceNo'
+      )?.value;
+    }
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.pocCapitalPoolService
       .topUpOrWithdraw(params)

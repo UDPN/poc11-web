@@ -114,8 +114,7 @@ export const MapSet = {
     3: 'Processing',
     5: 'Success',
     6: 'Failed',
-    7: 'Processing',
-    
+    7: 'Processing'
   },
   walletTransactionsRecordStatus: {
     1: 'Pending',
@@ -129,7 +128,7 @@ export const MapSet = {
     3: 'purple',
     5: 'cyan',
     6: 'red',
-    7: 'purple',
+    7: 'purple'
   },
   walletTransactionsType: {
     1: 'Top-up',
@@ -262,7 +261,7 @@ export class MapPipe implements PipeTransform {
       return value;
     }
     if (arg === 'nullValue') {
-      if (!value) {
+      if (!value || value.indexOf('null') !== -1) {
         return (value = '--');
       } else {
         return value;
@@ -275,8 +274,19 @@ export class MapPipe implements PipeTransform {
         return value;
       }
     }
-    if (arg === 'timeStamp') {
+    if (arg === 'failedTime') {
       if (!value) {
+        return (value = '--');
+      } else {
+        value = value.toString();
+        value = Number(value) + 200000;
+        // return value;
+        let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss a zzzz');
+        return res?.replace('GMT', 'UTC');
+      }
+    }
+    if (arg === 'timeStamp') {
+      if (!value || value.length < 10) {
         return (value = '--');
       } else {
         // return timestampToTime(value);
@@ -313,7 +323,7 @@ export class MapPipe implements PipeTransform {
         return (Number(value) + number).toString();
       }
     }
-    
+
     if (arg === 'monthStamp') {
       if (!value) {
         return (value = '--');

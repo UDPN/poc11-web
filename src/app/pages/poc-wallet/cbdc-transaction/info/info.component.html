@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2023-12-13 14:27:01
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-05-22 14:48:35
+ * @Description: 
+-->
 <app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-wallet/cbdc-transaction'"
   [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 <ng-template #backTpl>
@@ -28,21 +35,96 @@
               }}</nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
-        <!-- Transfer & Exchange -->
-        <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25" style="border: none;">
+        <ng-container *ngIf="info.type === 1">
+          <nz-card nzTitle="Payment Information" nzBordered="false" class="m-t-25" style="border: none;"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+            <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+              class="card-descriptions-order">
+              <nz-descriptions-item nzTitle="Transaction Reference No.">{{
+                info?.paymentInformationRespVO?.transactionReferenceNo
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Payment Amount">{{ (info?.paymentInformationRespVO?.paymentAmount |
+                map:'toThousandthMark') + ' ' + info.currency?.split('-')[1]
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Payment Account">{{ info?.paymentInformationRespVO?.paymentAccount + '( ' +
+                info?.paymentInformationRespVO?.bankName + ' )'
+                }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+          <ng-container *ngIf="info.status === 1 || info.status === 3 || info.status === 5">
+            <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25" style="border: none;"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+              <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+                class="card-descriptions-order">
+                <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
+                  }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map:'timeStamp'
+                  }}</nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card>
+          </ng-container>
+          <ng-container *ngIf="info.status === 2 || info.status === 6">
+            <nz-card nzTitle="Refund Information" nzBordered="false" class="m-t-25" style="border: none;"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+              <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+                class="card-descriptions-order">
+                <nz-descriptions-item nzTitle="Transaction Reference No.">{{
+                  info?.refundInformationRespVO?.transactionReferenceNo | map:'nullValue'
+                  }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Refund Amount">{{ ((info?.refundInformationRespVO?.refundAmount |
+                  map:'toThousandthMark') | map:'nullValue') + ' ' + (info?.refundInformationRespVO ?
+                  info.currency?.split('-')[1] : '')
+                  }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Bank Account">{{ (info?.refundInformationRespVO?.refundAccount + '( ' +
+                  info?.refundInformationRespVO?.bankName + ' )') | map:'nullValue'
+                  }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Transaction Time">{{ (info?.refundInformationRespVO?.transactionTime |
+                  map:'timeStamp') | map:'nullValue'
+                  }}</nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="info.type !== 1">
+          <nz-card nzTitle="Transaction Information" nzBordered="false" class="m-t-25" style="border: none;"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+            <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+              class="card-descriptions-order">
+              <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map:'timeStamp'
+                }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+          <nz-card nzTitle="Refund Information" nzBordered="false" class="m-t-25" style="border: none;"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}">
+            <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
+              class="card-descriptions-order">
+              <nz-descriptions-item nzTitle="Transaction Reference No.">{{
+                info?.refundInformationRespVO?.transactionReferenceNo | map:'nullValue'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Refund Amount">{{ ((info?.refundInformationRespVO?.refundAmount |
+                map:'toThousandthMark') | map:'nullValue') + ' ' + (info?.refundInformationRespVO ?
+                info.currency?.split('-')[1] : '')
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Bank Account">{{ (info?.refundInformationRespVO?.refundAccount + '( ' +
+                info?.refundInformationRespVO?.bankName + ' )') | map : 'nullValue'
+                }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Time">{{ (info?.refundInformationRespVO?.transactionTime |
+                map:'timeStamp') | map:'nullValue'
+                }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+        </ng-container>
+        <nz-card nzBordered="false" style="border: none;">
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
-            <nz-descriptions-item nzTitle="Transaction Hash">{{ info.txHash | map:'nullValue'
-              }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Transaction Time">{{ info.txTime | map:'timeStamp'
-              }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Status"><nz-tag
                 [nzColor]="info.status | map:'walletTransactionsStatusColor'">{{
                 info.status | map:'walletTransactionsStatus'
                 }}</nz-tag></nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
-
       </nz-card>
     </div>
     <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="24" [nzMd]="10" [nzSm]="24" [nzXs]="24"

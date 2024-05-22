@@ -161,6 +161,29 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   walletAddress: any = '';
   @HostListener('window:resize', ['$event'])
+  ngAfterViewInit(): void {
+    this.currencyForm
+      .get('currency')
+      ?.valueChanges.subscribe((item: number) => {
+        this.getMovements(item);
+      });
+    this.topUpForm.get('amount')?.valueChanges.subscribe((item: number) => {
+      this.topUpForm.get('fiatAmount')?.setValue(item);
+      // this.getFiatAmount(item);
+    });
+    this.withdrawForm.get('amount')?.valueChanges.subscribe((item: number) => {
+      this.withdrawForm.get('fiatAmount')?.setValue(item);
+      // this.getFiatAmount(item);
+    });
+    this.fetchNumbers();
+    this.pageHeaderInfo = {
+      title: ``,
+      breadcrumb: ['Dashboard'],
+      extra: this.headerExtra,
+      desc: this.headerContent,
+      footer: ''
+    };
+  }
   ngOnInit() {
     this.isFirstLogin();
     // this.fetchNumbers();
@@ -183,12 +206,19 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       currency: ['']
     });
     this.topUpForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.topUpAmountValidator]]
+      transactionReferenceNo: [null, [Validators.required]],
+      reserveAccount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
     });
     this.withdrawForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.withdrawAmountValidator]]
+      reserveAccount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
       pwd: [null, [Validators.required]]
@@ -267,6 +297,20 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this._defaultStoreService.setShowChangePassWordStore(res.data.firstLogin);
     });
   }
+
+  // getFiatAmount(amount: number) {
+  //   if (!amount) {
+  //     setTimeout(() => {
+  //       this.topUpForm.get('fiatAmount')?.setValue('');
+  //       this.withdrawForm.get('fiatAmount')?.setValue('');
+  //     }, 100);
+  //   } else {
+  //     this.pocHomeService.getFiatAmount({ amount }).subscribe((res) => {
+  //       this.topUpForm.get('fiatAmount')?.setValue(res.cbdcAmount);
+  //       this.withdrawForm.get('fiatAmount')?.setValue(res.cbdcAmount);
+  //     });
+  //   }
+  // }
 
   defaultBalance(value?: any) {
     this.pocHomeService.walletBalance({}).subscribe((res) => {
@@ -351,6 +395,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.topUpForm.get('chainAccountAddress')?.setValue(this.walletAddress);
+    this.topUpForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
     this.isVisibleTopUp = true;
   }
 
@@ -366,6 +413,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.withdrawForm.get('chainAccountAddress')?.setValue(this.walletAddress);
+    this.withdrawForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
     this.isVisibleWithdraw = true;
   }
 
@@ -401,18 +451,31 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   confirmEnterPassword() {
     this.isOkLoading = true;
     const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
-    const params = {
+    const params: any = {
       amount:
         this.txType === 1
           ? this.topUpForm.get('amount')?.value
           : this.withdrawForm.get('amount')?.value,
+      fiatAmount:
+        this.txType === 1
+          ? this.topUpForm.get('fiatAmount')?.value
+          : this.withdrawForm.get('fiatAmount')?.value,
       password: code,
       txType: this.txType === 1 ? 1 : 2,
+      reserveAccount:
+        this.txType === 1
+          ? this.topUpForm.get('reserveAccount')?.value
+          : this.withdrawForm.get('reserveAccount')?.value,
       walletAddress:
         this.txType === 1
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
+    if (this.txType === 1) {
+      params['transactionReferenceNo'] = this.topUpForm.get(
+        'transactionReferenceNo'
+      )?.value;
+    }
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.cbdcWalletService
       .topUpOrWithdraw(params)
@@ -465,22 +528,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getEcharts(params);
       }
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.currencyForm
-      .get('currency')
-      ?.valueChanges.subscribe((item: number) => {
-        this.getMovements(item);
-      });
-    this.fetchNumbers();
-    this.pageHeaderInfo = {
-      title: ``,
-      breadcrumb: ['Dashboard'],
-      extra: this.headerExtra,
-      desc: this.headerContent,
-      footer: ''
-    };
   }
 
   initSelect() {
