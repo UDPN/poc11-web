@@ -100,6 +100,14 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     private router: Router
   ) {}
   ngAfterViewInit(): void {
+    this.topUpForm.get('amount')?.valueChanges.subscribe((item: number) => {
+      this.topUpForm.get('fiatAmount')?.setValue(item);
+      // this.getFiatAmount(item);
+    });
+    this.withdrawForm.get('amount')?.valueChanges.subscribe((item: number) => {
+      this.withdrawForm.get('fiatAmount')?.setValue(item);
+      // this.getFiatAmount(item);
+    });
     this.pageHeaderInfo = {
       title: ``,
       breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
@@ -113,12 +121,19 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.initTable();
     this.getCentralBank();
     this.topUpForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.topUpAmountValidator]]
+      transactionReferenceNo: [null, [Validators.required]],
+      reserveAccount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
     });
     this.withdrawForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      amount: [null, [Validators.required, this.withdrawAmountValidator]]
+      reserveAccount: [null, [Validators.required]],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
     });
     this.passwordForm = this.fb.group({
       pwd: [null, [Validators.required]]
@@ -146,6 +161,20 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     }
     return {};
   };
+
+  // getFiatAmount(amount: number) {
+  //   if (!amount) {
+  //     setTimeout(() => {
+  //       this.topUpForm.get('fiatAmount')?.setValue('');
+  //       this.withdrawForm.get('fiatAmount')?.setValue('');
+  //     }, 100);
+  //   } else {
+  //     this.cbdcWalletService.getFiatAmount({ amount }).subscribe((res) => {
+  //       this.topUpForm.get('fiatAmount')?.setValue(res.cbdcAmount);
+  //       this.withdrawForm.get('fiatAmount')?.setValue(res.cbdcAmount);
+  //     });
+  //   }
+  // }
 
   getCentralBank() {
     this.cbdcWalletService.getCentralBankQuery().subscribe((res) => {
@@ -204,6 +233,9 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.currency = currency;
     this.balance = balance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.topUpForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
     this.isVisibleTopUp = true;
   }
 
@@ -211,6 +243,9 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.currency = currency;
     this.balance = balance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.withdrawForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
     this.isVisibleWithdraw = true;
   }
 
@@ -246,18 +281,31 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   confirmEnterPassword() {
     this.isOkLoading = true;
     const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
-    const params = {
+    const params: any = {
       amount:
         this.txType === 1
           ? this.topUpForm.get('amount')?.value
           : this.withdrawForm.get('amount')?.value,
+      fiatAmount:
+        this.txType === 1
+          ? this.topUpForm.get('fiatAmount')?.value
+          : this.withdrawForm.get('fiatAmount')?.value,
       password: code,
       txType: this.txType === 1 ? 1 : 2,
+      reserveAccount:
+        this.txType === 1
+          ? this.topUpForm.get('reserveAccount')?.value
+          : this.withdrawForm.get('reserveAccount')?.value,
       walletAddress:
         this.txType === 1
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
+    if (this.txType === 1) {
+      params['transactionReferenceNo'] = this.topUpForm.get(
+        'transactionReferenceNo'
+      )?.value;
+    }
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.cbdcWalletService
       .topUpOrWithdraw(params)

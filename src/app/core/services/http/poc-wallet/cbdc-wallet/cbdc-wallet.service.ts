@@ -168,4 +168,8 @@ export class CbdcWalletService {
   public getSign(param: { account: string }): Observable<any> {
     return this.http.post(`/v1/remittanceManagement/signTest`, param);
   }
+
+  public getFiatAmount(params: { amount: number }): Observable<any> {
+    return this.http.post(`/v1/wallet/fiat/currency/conversion`, params);
+  }
 }
