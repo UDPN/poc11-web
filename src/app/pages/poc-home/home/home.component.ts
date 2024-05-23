@@ -208,15 +208,24 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.topUpForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      transactionReferenceNo: [null, [Validators.required]],
-      reserveAccount: [null, [Validators.required]],
+      transactionReferenceNo: [
+        null,
+        [Validators.required, this.transactionReferenceNoValidator]
+      ],
+      reserveAccount: [
+        null,
+        [Validators.required, this.reserveAccountValidator]
+      ],
       amount: [null, [Validators.required, this.topUpAmountValidator]],
       fiatAmount: [null, [Validators.required]]
     });
     this.withdrawForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      reserveAccount: [null, [Validators.required]],
+      reserveAccount: [
+        null,
+        [Validators.required, this.reserveAccountValidator]
+      ],
       amount: [null, [Validators.required, this.withdrawAmountValidator]],
       fiatAmount: [null, [Validators.required]]
     });
@@ -261,6 +270,32 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
+
+  transactionReferenceNoValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^([a-zA-Z0-9\s.-_#!@￥%&*?/]{1,100})$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value.length > 50) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
+
+  reserveAccountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]\d*))?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value.length > 30) {
       return { regular1: true, error: true };
     }
     return {};
