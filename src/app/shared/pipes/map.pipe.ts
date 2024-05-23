@@ -201,7 +201,7 @@ export const MapSet = {
     3: 'Processing',
     4: 'Processing',
     7: 'Processing',
-    5: 'Active',
+    5: 'Success',
     6: 'Failed'
   },
   logTreeStatus: {
