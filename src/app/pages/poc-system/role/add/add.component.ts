@@ -126,7 +126,6 @@ export class AddComponent implements OnInit {
 
   treeList() {
     this.roleService.treeList().subscribe((data) => {
-      console.log(data);
       this.dataSource.setData(data);
       // Default Unfold
       this.treeControl.expandAll();
