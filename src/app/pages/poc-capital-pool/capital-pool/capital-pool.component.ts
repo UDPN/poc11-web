@@ -206,7 +206,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!/^([a-zA-Z0-9\s.-_#!@￥%&*?/]{1,100})$/.test(control.value)) {
+    } else if (!/^([a-zA-Z0-9\s-._#!@￥%&*?/]{1,100})$/.test(control.value)) {
       return { regular: true, error: true };
     } else if (control.value.length > 50) {
       return { regular1: true, error: true };
