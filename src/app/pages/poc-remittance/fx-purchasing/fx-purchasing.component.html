@@ -95,7 +95,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group [nzAddOnBefore]="purchCurrecyModelShowIcon">
-                        <input type="number" (focus)="onFocusSendAmount()" (blur)="onBlurSendAmount()" nz-input
+                        <input type="number" value="reniSendAmountValue" (focus)="onFocusSendAmount()" (blur)="onBlurSendAmount()" nz-input
                           formControlName="reni_sendAmount" />
                       </nz-input-group>
                     </div>
@@ -168,7 +168,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group [nzAddOnBefore]="reveingCurrecyModelShowIcon">
-                        <input type="number" (focus)="onFocusAmount()" (blur)="onBlurAmount()" nz-input
+                        <input type="number" value="amountValue" (focus)="onFocusAmount()" (blur)="onBlurAmount()" nz-input
                           formControlName="amount" />
                       </nz-input-group>
                     </div>

@@ -93,6 +93,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     total: '',
     reve: ''
   };
+  amountValue: any;
+  reniSendAmountValue: any;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -518,6 +520,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   findExchange(index: number) {
+    this.amountValue = this.validateForm.get('amount')?.value;
+    this.reniSendAmountValue = this.validateForm.get('reni_sendAmount')?.value;
     if (this.reveingCurrecy !== this.purchCurrecy) {
       if (
         (this.validateForm.get('amount')?.value !== '' &&
@@ -576,7 +580,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
               });
             });
-            console.log(resultData);
             this.nzLoading = false;
             this.dataList = resultData.sort(this.compare('total'));
             this.checkedItemComment = [];
@@ -602,16 +605,20 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
-      .subscribe((_) => {
-        this.findExchange(6);
+      .subscribe((res) => {
+        if (res !== this.amountValue) {
+          this.findExchange(6);
+        }
       });
   }
   fromEventSendAmount() {
     this.validateForm
       .get('reni_sendAmount')
       ?.valueChanges.pipe(debounceTime(1000))
-      .subscribe((_) => {
-        this.findExchange(6);
+      .subscribe((res) => {
+        if (res !== this.reniSendAmountValue) {
+          this.findExchange(6);
+        }
       });
   }
   compare(p: string) {
