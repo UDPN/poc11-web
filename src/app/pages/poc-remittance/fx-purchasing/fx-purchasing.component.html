@@ -129,17 +129,9 @@
                 <nz-form-control [nzErrorTip]="sendAmountError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-input-group
-                        [nzAddOnBefore]="purchCurrecyModelShowIcon"
-                      >
-                        <input
-                          type="number"
-                          value="reniSendAmountValue"
-                          (focus)="onFocusSendAmount()"
-                          (blur)="onBlurSendAmount()"
-                          nz-input
-                          formControlName="reni_sendAmount"
-                        />
+                      <nz-input-group [nzAddOnBefore]="purchCurrecyModelShowIcon">
+                        <input type="number" (focus)="onFocusSendAmount()" (blur)="onBlurSendAmount()" nz-input
+                          formControlName="reni_sendAmount" />
                       </nz-input-group>
                     </div>
                   </div>
@@ -243,6 +235,7 @@
                 <nz-form-control [nzErrorTip]="amountError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
+<<<<<<< HEAD
                       <nz-input-group
                         [nzAddOnBefore]="reveingCurrecyModelShowIcon"
                       >
@@ -254,6 +247,11 @@
                           nz-input
                           formControlName="amount"
                         />
+=======
+                      <nz-input-group [nzAddOnBefore]="reveingCurrecyModelShowIcon">
+                        <input type="number" (focus)="onFocusAmount()" (blur)="onBlurAmount()" nz-input
+                          formControlName="amount" />
+>>>>>>> parent of 28c0b55 (Merge pull request #304 from UDPN/pre-cyt-new)
                       </nz-input-group>
                     </div>
                   </div>
