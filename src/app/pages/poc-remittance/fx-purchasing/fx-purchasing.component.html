@@ -106,7 +106,7 @@
             </div>
             <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Central Bank/Custodian Bank 
+                <nz-form-label nzRequired nzSpan="24">Central Bank 
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="transactionBankNameError">
                   <div nz-row>
@@ -115,7 +115,7 @@
                     </div>
                   </div>
                   <ng-template #transactionBankNameError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Original Central Bank/Custodian Bank 
+                    <ng-container *ngIf="control.hasError('required')">Please input your Original Central Bank 
                       Name</ng-container>
                   </ng-template>
                 </nz-form-control>
@@ -129,17 +129,9 @@
                 <nz-form-control [nzErrorTip]="sendAmountError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-input-group
-                        [nzAddOnBefore]="purchCurrecyModelShowIcon"
-                      >
-                        <input
-                          type="number"
-                          value="reniSendAmountValue"
-                          (focus)="onFocusSendAmount()"
-                          (blur)="onBlurSendAmount()"
-                          nz-input
-                          formControlName="reni_sendAmount"
-                        />
+                      <nz-input-group [nzAddOnBefore]="purchCurrecyModelShowIcon">
+                        <input type="number" (focus)="onFocusSendAmount()" (blur)="onBlurSendAmount()" nz-input
+                          formControlName="reni_sendAmount" />
                       </nz-input-group>
                     </div>
                   </div>
@@ -243,6 +235,7 @@
                 <nz-form-control [nzErrorTip]="amountError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
+<<<<<<< HEAD
                       <nz-input-group
                         [nzAddOnBefore]="reveingCurrecyModelShowIcon"
                       >
@@ -254,6 +247,11 @@
                           nz-input
                           formControlName="amount"
                         />
+=======
+                      <nz-input-group [nzAddOnBefore]="reveingCurrecyModelShowIcon">
+                        <input type="number" (focus)="onFocusAmount()" (blur)="onBlurAmount()" nz-input
+                          formControlName="amount" />
+>>>>>>> parent of 28c0b55 (Merge pull request #304 from UDPN/pre-cyt-new)
                       </nz-input-group>
                     </div>
                   </div>
@@ -272,7 +270,7 @@
 
             <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Central Bank/Custodian Bank 
+                <nz-form-label nzRequired nzSpan="24">Central Bank 
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="receivingBankNameError">
                   <div nz-row>
@@ -282,7 +280,7 @@
                     </div>
                   </div>
                   <ng-template #receivingBankNameError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Receiving Central Bank/Custodian Bank 
+                    <ng-container *ngIf="control.hasError('required')">Please input your Receiving Central Bank 
                       Name</ng-container>
                   </ng-template>
                 </nz-form-control>
@@ -485,7 +483,7 @@
             <nz-descriptions-item nzTitle="Sending Wallet Address">{{
               validateForm.controls['transactionWalletAddress'].value
             }}</nz-descriptions-item>
-            <!-- <nz-descriptions-item nzTitle="Central Bank/Custodian Bank ">{{
+            <!-- <nz-descriptions-item nzTitle="Central Bank ">{{
               validateForm.controls['transactionBankName'].value
               }}</nz-descriptions-item> -->
           </nz-descriptions>
@@ -528,7 +526,7 @@
             <nz-descriptions-item nzTitle="Receiving Wallet Address">{{
               receivingWalletAddressShow
             }}</nz-descriptions-item>
-            <!-- <nz-descriptions-item nzTitle="Central Bank/Custodian Bank ">{{
+            <!-- <nz-descriptions-item nzTitle="Central Bank ">{{
               validateForm.controls['receivingBankName'].value
               }}</nz-descriptions-item> -->
           </nz-descriptions>

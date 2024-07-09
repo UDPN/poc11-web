@@ -94,8 +94,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   inputType = 0;
   bankNames = '';
-  amountValue: any;
-  reniSendAmountValue: any;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -345,8 +343,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // Check field
   getExchange() {
-    this.amountValue = this.validateForm.get('amount')?.value;
-    this.reniSendAmountValue = this.validateForm.get('reni_sendAmount')?.value;
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       if (
         (this.validateForm.get('amount')?.value !== '' &&
@@ -562,9 +558,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             emitEvent: false
           });
         } else {
-          if (res !== this.amountValue) {
-            this.getExchange();
-          }
+          this.getExchange();
         }
       });
   }
@@ -578,9 +572,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             emitEvent: false
           });
         } else {
-          if (res !== this.reniSendAmountValue) {
-            this.getExchange();
-          }
+          this.getExchange();
         }
       });
   }
@@ -750,6 +742,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
+    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
         if (this.checkedItemComment.length === 0) {
