@@ -1,49 +1,90 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'Basic Information'" class="m-b-10">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Basic Information'"
+    class="m-b-10"
+  >
     <form nz-form>
       <div nz-row nzJustify="center" nzAlign="middle">
         <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
           <div class="access-title">Node Information</div>
         </div>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
+      <div
+        nz-row
+        nzJustify="center"
+        nzAlign="middle"
+        class="m-b-10"
+        nzGutter="8"
+      >
         <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-
           <div nz-row nzJustify="space-between" nzGutter="8">
-            <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24">{{ this.bankType === 2 ? 'FX SP Name' : 'Commercial Bank Name' }}
+                <nz-form-label nzRequired nzSpan="24"
+                  >{{
+                    this.bankType === 2 ? 'FX SP Name' : 'Commercial Bank Name'
+                  }}
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="enterpriseError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
-                      <input nz-input formControlName="spName" class="onboard-disabled" readonly />
+                      <input
+                        nz-input
+                        formControlName="spName"
+                        class="onboard-disabled"
+                        readonly
+                      />
                     </div>
                   </div>
                   <ng-template #enterpriseError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your
-                      Commercial Bank Name</ng-container>
-                    <ng-container *ngIf="control.hasError('regular')">Please enter 2~50
-                      characters of numbers and letters. It cannot start with a
-                      number.</ng-container>
+                    <ng-container *ngIf="control.hasError('required')"
+                      >Please input your Commercial Bank Name</ng-container
+                    >
+                    <ng-container *ngIf="control.hasError('regular')"
+                      >Please enter 2~50 characters of numbers and letters. It
+                      cannot start with a number.</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
               <nz-form-item>
                 <nz-form-label nzRequired nzSpan="24">BIC</nz-form-label>
                 <nz-form-control [nzErrorTip]="bicError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24" class="onboard-disabled">
-                      <input nz-input formControlName="bankBic" class="onboard-disabled" readonly />
+                      <input
+                        nz-input
+                        formControlName="bankBic"
+                        class="onboard-disabled"
+                        readonly
+                      />
                     </div>
                   </div>
                   <ng-template #bicError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your
-                      BIC</ng-container>
+                    <ng-container *ngIf="control.hasError('required')"
+                      >Please input your BIC</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -53,70 +94,72 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Central Bank
+          <nz-form-label nzRequired nzSpan="10"
+            >Central Bank/Custodian Bank
           </nz-form-label>
           <nz-form-control [nzErrorTip]="centralBankError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24" class="onboard-disabled">
-                <input nz-input formControlName="centralBankName" class="onboard-disabled" readonly />
+                <input
+                  nz-input
+                  formControlName="centralBankName"
+                  class="onboard-disabled"
+                  readonly
+                />
               </div>
             </div>
             <ng-template #centralBankError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your
-                Central Bank</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Central Bank/Custodian Bank
+              </ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Brief Introduction
+          <nz-form-label nzRequired nzSpan="10"
+            >Brief Introduction
           </nz-form-label>
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="spBriefIntroduction"  class="onboard-disabled onboard-input" readonly maxlength="255" />
+                <input
+                  nz-input
+                  formControlName="spBriefIntroduction"
+                  class="onboard-disabled onboard-input"
+                  readonly
+                  maxlength="255"
+                />
               </div>
             </div>
             <ng-template #nodeNameError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your Brief
-                Introduction</ng-container>
-
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Brief Introduction</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Description
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Description </nz-form-label>
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="spDescription" class="onboard-disabled onboard-input" readonly maxlength="500" />
+                <input
+                  nz-input
+                  formControlName="spDescription"
+                  class="onboard-disabled onboard-input"
+                  readonly
+                  maxlength="500"
+                />
               </div>
             </div>
             <ng-template #nodeNameError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your
-                Description</ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">BN ID
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="nodeNameError">
-            <div nz-row [formGroup]="validateForm">
-              <div nz-col nzSpan="24">
-                <input nz-input formControlName="bnCode" class="onboard-disabled onboard-input" readonly maxlength="255" />
-              </div>
-            </div>
-            <ng-template #nodeNameError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your
-                BN ID</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Description</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -124,20 +167,60 @@
 
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Wallet Address(Besu)<i class="m-l-5" nz-icon nzType="question-circle"
-              nzTooltipPlacement="right" nzTheme="outline" nz-tooltip [nzTooltipTitle]="titleTemplate"
-              nzTooltipColor="#F5F5F5" nzTooltipTrigger="click" nzTooltipOverlayClassName="buils"></i>
+          <nz-form-label nzRequired nzSpan="10">BN ID </nz-form-label>
+          <nz-form-control [nzErrorTip]="nodeNameError">
+            <div nz-row [formGroup]="validateForm">
+              <div nz-col nzSpan="24">
+                <input
+                  nz-input
+                  formControlName="bnCode"
+                  class="onboard-disabled onboard-input"
+                  readonly
+                  maxlength="255"
+                />
+              </div>
+            </div>
+            <ng-template #nodeNameError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your BN ID</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <nz-form-label nzRequired nzSpan="10"
+            >Wallet Address(Besu)<i
+              class="m-l-5"
+              nz-icon
+              nzType="question-circle"
+              nzTooltipPlacement="right"
+              nzTheme="outline"
+              nz-tooltip
+              [nzTooltipTitle]="titleTemplate"
+              nzTooltipColor="#F5F5F5"
+              nzTooltipTrigger="click"
+              nzTooltipOverlayClassName="buils"
+            ></i>
           </nz-form-label>
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="spBesuWalletAddress" class="onboard-disabled" maxlength="255"
-                  readonly />
+                <input
+                  nz-input
+                  formControlName="spBesuWalletAddress"
+                  class="onboard-disabled"
+                  maxlength="255"
+                  readonly
+                />
               </div>
             </div>
             <ng-template #nodeNameError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your
-                Wallet Address</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Wallet Address</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -147,34 +230,69 @@
           <div class="access-title">Contact Information</div>
         </div>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 contactName" nzGutter="8">
+      <div
+        nz-row
+        nzJustify="center"
+        nzAlign="middle"
+        class="m-b-10 contactName"
+        nzGutter="8"
+      >
         <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
           <div nz-row nzJustify="space-between" nzGutter="8">
-            <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24">Contact Name
+                <nz-form-label nzRequired nzSpan="24"
+                  >Contact Name
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="contactNameError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
-                      <input nz-input formControlName="contactName" class="onboard-disabled onboard-input" readonly maxlength="50" />
+                      <input
+                        nz-input
+                        formControlName="contactName"
+                        class="onboard-disabled onboard-input"
+                        readonly
+                        maxlength="50"
+                      />
                     </div>
                   </div>
                   <ng-template #contactNameError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Contact
-                      Name</ng-container>
+                    <ng-container *ngIf="control.hasError('required')"
+                      >Please input your Contact Name</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzXXl]="10" [nzXl]="10" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
               <nz-form-item>
-                <nz-form-label nzSpan="24">Mobile Number
-                </nz-form-label>
+                <nz-form-label nzSpan="24">Mobile Number </nz-form-label>
                 <nz-form-control [nzErrorTip]="">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
-                      <input nz-input formControlName="mobileNumber" class="onboard-disabled onboard-input" readonly maxlength="20" />
+                      <input
+                        nz-input
+                        formControlName="mobileNumber"
+                        class="onboard-disabled onboard-input"
+                        readonly
+                        maxlength="20"
+                      />
                     </div>
                   </div>
                   <!-- <ng-template #phoneError let-control>
@@ -189,45 +307,66 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Email
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Email </nz-form-label>
           <nz-form-control [nzErrorTip]="emailError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="email" class="onboard-disabled onboard-input" readonly maxlength="50" />
+                <input
+                  nz-input
+                  formControlName="email"
+                  class="onboard-disabled onboard-input"
+                  readonly
+                  maxlength="50"
+                />
               </div>
             </div>
             <ng-template #emailError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your
-                Email</ng-container>
-              <ng-container *ngIf="control.hasError('regular')">Node Name format is
-                incorrect</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Email</ng-container
+              >
+              <ng-container *ngIf="control.hasError('regular')"
+                >Node Name format is incorrect</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Detailed Address
+          <nz-form-label nzRequired nzSpan="10"
+            >Detailed Address
           </nz-form-label>
           <nz-form-control [nzErrorTip]="addressError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="detailedAddress" class="onboard-disabled onboard-input" readonly maxlength="50" />
+                <input
+                  nz-input
+                  formControlName="detailedAddress"
+                  class="onboard-disabled onboard-input"
+                  readonly
+                  maxlength="50"
+                />
               </div>
             </div>
             <ng-template #addressError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your
-                Detailed Address</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Detailed Address</ng-container
+              >
               <!-- <ng-container *ngIf="control.hasError('regular')">Node Name format is
                                   incorrect</ng-container> -->
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 businessLicense">
+      <div
+        nz-row
+        nzJustify="center"
+        nzAlign="middle"
+        class="m-b-10 businessLicense"
+      >
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="24">Business License
+          <nz-form-label nzRequired nzSpan="24"
+            >Business License
           </nz-form-label>
           <nz-form-control [nzErrorTip]="businessLicenseError">
             <div nz-row [formGroup]="validateForm">
@@ -237,23 +376,35 @@
               </div> -->
               <div nz-col nzSpan="24" class="m-b-10">
                 <div class="onboard-div onboard-postion">
-                  <input type="text" hidden formControlName="businessLicenseUrl" nz-input />
-                  <img nz-image width="160px" height="160px" [nzSrc]="fileImg" *ngIf="fileImg" alt="" />
+                  <input
+                    type="text"
+                    hidden
+                    formControlName="businessLicenseUrl"
+                    nz-input
+                  />
+                  <img
+                    nz-image
+                    width="160px"
+                    height="160px"
+                    [nzSrc]="fileImg"
+                    *ngIf="fileImg"
+                    alt=""
+                  />
                 </div>
               </div>
               <div nz-col nzSpan="24">
                 <div class="onboard-div-info">
-                  It is recommended to provide pictures with 160 * 160 (PNG / JPG / GIF / BMP /
-                  JPEG)
-                  pixels and size less than 10M, and
-                  It must be a company or product logo and not deformed.
-                  pixels and size less than 10M
+                  It is recommended to provide pictures with 160 * 160 (PNG /
+                  JPG / GIF / BMP / JPEG) pixels and size less than 10M, and It
+                  must be a company or product logo and not deformed. pixels and
+                  size less than 10M
                 </div>
               </div>
             </div>
             <ng-template #businessLicenseError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please upload your Business
-                License</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please upload your Business License</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -267,8 +418,11 @@
         </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-            <app-ant-table (changePageSize)="changePageSize($event)" [tableConfig]="tableConfig"
-              [tableData]="capitalPoolList"></app-ant-table>
+            <app-ant-table
+              (changePageSize)="changePageSize($event)"
+              [tableConfig]="tableConfig"
+              [tableData]="capitalPoolList"
+            ></app-ant-table>
           </div>
         </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
@@ -279,8 +433,15 @@
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
             <label *ngFor="let item of attachmentsList">
-              <button nz-button nzType="text" class="m-t-15 m-r-25" (click)="onLoad(item.fileCode, item.fileUrl)">{{
-                item.fileUrl }}<span nz-icon nzType="download" class="m-l-15"></span></button>
+              <button
+                nz-button
+                nzType="text"
+                class="m-t-15 m-r-25"
+                (click)="onLoad(item.fileCode, item.fileUrl)"
+              >
+                {{ item.fileUrl
+                }}<span nz-icon nzType="download" class="m-l-15"></span>
+              </button>
             </label>
           </div>
         </div>
@@ -288,7 +449,7 @@
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
           <div nz-row>
-            <div nz-col nzSpan="24" style="text-align: end;">
+            <div nz-col nzSpan="24" style="text-align: end">
               <nz-space>
                 <ng-container *appAuth="'R030301'">
                   <!-- <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="onSubmitStatus"
@@ -309,14 +470,20 @@
     </div>
     <div class="mt-1 font-serif" style="color: #3c5686">
       Step 1: Download jar file and use as below
-      <button (click)="onDownload()" nz-button nzType="primary" [nzShape]="'circle'">
+      <button
+        (click)="onDownload()"
+        nz-button
+        nzType="primary"
+        [nzShape]="'circle'"
+      >
         <i nz-icon nzType="download" nzTheme="outline"></i>
       </button>
       <p>(jar file MD5: 68dda8fe4181074b9d281d7936d1dcea)</p>
     </div>
     <div class="mt-1 font-serif" style="color: #3c5686">
-      Step 2: Use JDK 8+ to run below command so as to generate besu account document offline (you need to input
-      location and dest file name during generation):
+      Step 2: Use JDK 8+ to run below command so as to generate besu account
+      document offline (you need to input location and dest file name during
+      generation):
       <p class="mt-4">
         On linux/macOS: java -jar "path-to-downloaded-jar-file"
       </p>
