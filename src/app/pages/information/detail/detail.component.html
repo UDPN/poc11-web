@@ -6,190 +6,224 @@
  * @Description: 
 -->
 <div>
-    <app-logo-title></app-logo-title>
-    <div>
-        <ng-container *ngIf="detailData['spStatus'] === 5">
-            <nz-alert nzShowIcon nzType="info" nzMessage="" [nzDescription]="descriptionTemplate1"
-                class="m-b-10 alertsp"></nz-alert>
-            <ng-template #descriptionTemplate1>
-                <h5 nz-typography>
-                    Commercial bank onboarding application is currently being for approval. We kindly ask for your
-                    patience while we process your application. Thank you.
-                </h5>
-            </ng-template>
-        </ng-container>
-        <ng-container *ngIf="detailData['spStatus'] === 15">
-            <nz-alert nzShowIcon nzType="error" nzMessage="" [nzDescription]="descriptionTemplate1"
-                class="m-b-10 alertsp" [nzAction]="actionTemplate"></nz-alert>
-            <ng-template #descriptionTemplate1>
-                <h5 nz-typography>
-                    Unfortunately, the Commercial bank onboarding application did not pass the approval process.<br />
-                    Failure Reason:{{detailData.remark}}
-                </h5>
-            </ng-template>
-            <ng-template #actionTemplate>
-                <button nz-button nzSize="small" nzType="primary" (click)="doAction()">
-                    Update
-                </button>
-            </ng-template>
-        </ng-container>
-        <div class="bn-onboarding">
-            <form nz-form>
-                <div nz-row nzJustify="center" nzAlign="middle">
-                    <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <div class="onboarding-title">Basic Information</div>
-                    </div>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10" nzGutter="8">
-                    <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <div nz-row nzJustify="space-between" nzGutter="8">
-                            <div nz-col nzSpan="12" class="enterpriseName">
-                                <nz-form-item>
-                                    <nz-form-label nzSpan="24">Commercial Bank Name</nz-form-label>
-                                    <nz-form-control>
-                                        <div style="text-align: left;">
-                                            {{detailData.spName}}
-                                        </div>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col nzSpan="12" class="countryId">
-                                <nz-form-item>
-                                    <nz-form-label nzSpan="24">BIC</nz-form-label>
-                                    <nz-form-control>
-                                        <div style="text-align: left;">
-                                            {{detailData.bankBic}}
-                                        </div>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">Central Bank</nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.centralBankName}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">Brief Introduction
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.spBriefIntroduction}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">Description
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.spDescription}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">BN ID
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.bnCode}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">Wallet Address(Besu)
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.spBesuWalletAddress}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
-                <div nz-row nzJustify="center" nzAlign="middle">
-                    <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <div class="onboarding-title">Contact Information</div>
-                    </div>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 contactName" nzGutter="8">
-                    <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <div nz-row nzJustify="space-between" nzGutter="8">
-                            <div nz-col nzSpan="12">
-                                <nz-form-item>
-                                    <nz-form-label nzSpan="24">Contact Name
-                                    </nz-form-label>
-                                    <nz-form-control>
-                                        <div style="text-align: left;">
-                                            {{detailData.contactName}}
-                                        </div>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <nz-form-item>
-                                    <nz-form-label nzSpan="24">Mobile Number
-                                    </nz-form-label>
-                                    <nz-form-control>
-                                        <div style="text-align: left;">
-                                            {{detailData.mobileNumber}}
-                                        </div>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">Email
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.email}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzSpan="10">Detailed Address
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                {{detailData.detailedAddress}}
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 businessLicense">
-                    <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-                        <nz-form-label nzRequired nzSpan="24">Business License
-                        </nz-form-label>
-                        <nz-form-control>
-                            <div style="text-align: left;">
-                                <img nz-image width="160px" height="160px" *ngIf="srcUrl" [nzSrc]="srcUrl" alt="" />
-                            </div>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </form>
+  <app-logo-title></app-logo-title>
+  <div>
+    <ng-container *ngIf="detailData['spStatus'] === 5">
+      <nz-alert
+        nzShowIcon
+        nzType="info"
+        nzMessage=""
+        [nzDescription]="descriptionTemplate1"
+        class="m-b-10 alertsp"
+      ></nz-alert>
+      <ng-template #descriptionTemplate1>
+        <h5 nz-typography>
+          Commercial bank onboarding application is currently being for
+          approval. We kindly ask for your patience while we process your
+          application. Thank you.
+        </h5>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngIf="detailData['spStatus'] === 15">
+      <nz-alert
+        nzShowIcon
+        nzType="error"
+        nzMessage=""
+        [nzDescription]="descriptionTemplate1"
+        class="m-b-10 alertsp"
+        [nzAction]="actionTemplate"
+      ></nz-alert>
+      <ng-template #descriptionTemplate1>
+        <h5 nz-typography>
+          Unfortunately, the Commercial bank onboarding application did not pass
+          the approval process.<br />
+          Failure Reason:{{ detailData.remark }}
+        </h5>
+      </ng-template>
+      <ng-template #actionTemplate>
+        <button nz-button nzSize="small" nzType="primary" (click)="doAction()">
+          Update
+        </button>
+      </ng-template>
+    </ng-container>
+    <div class="bn-onboarding">
+      <form nz-form>
+        <div nz-row nzJustify="center" nzAlign="middle">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div class="onboarding-title">Basic Information</div>
+          </div>
         </div>
+        <div
+          nz-row
+          nzJustify="center"
+          nzAlign="middle"
+          class="m-b-10"
+          nzGutter="8"
+        >
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div nz-row nzJustify="space-between" nzGutter="8">
+              <div nz-col nzSpan="12" class="enterpriseName">
+                <nz-form-item>
+                  <nz-form-label nzSpan="24"
+                    >Commercial Bank Name</nz-form-label
+                  >
+                  <nz-form-control>
+                    <div style="text-align: left">
+                      {{ detailData.spName }}
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="12" class="countryId">
+                <nz-form-item>
+                  <nz-form-label nzSpan="24">BIC</nz-form-label>
+                  <nz-form-control>
+                    <div style="text-align: left">
+                      {{ detailData.bankBic }}
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10"
+              >Central Bank/Custodian Bank
+            </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.centralBankName }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10">Brief Introduction </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.spBriefIntroduction }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10">Description </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.spDescription }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10">BN ID </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.bnCode }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10">Wallet Address(Besu) </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.spBesuWalletAddress }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-row nzJustify="center" nzAlign="middle">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div class="onboarding-title">Contact Information</div>
+          </div>
+        </div>
+        <div
+          nz-row
+          nzJustify="center"
+          nzAlign="middle"
+          class="m-b-10 contactName"
+          nzGutter="8"
+        >
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div nz-row nzJustify="space-between" nzGutter="8">
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label nzSpan="24">Contact Name </nz-form-label>
+                  <nz-form-control>
+                    <div style="text-align: left">
+                      {{ detailData.contactName }}
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="12">
+                <nz-form-item>
+                  <nz-form-label nzSpan="24">Mobile Number </nz-form-label>
+                  <nz-form-control>
+                    <div style="text-align: left">
+                      {{ detailData.mobileNumber }}
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10">Email </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.email }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10">Detailed Address </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                {{ detailData.detailedAddress }}
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-row
+          nzJustify="center"
+          nzAlign="middle"
+          class="m-b-10 businessLicense"
+        >
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzRequired nzSpan="24"
+              >Business License
+            </nz-form-label>
+            <nz-form-control>
+              <div style="text-align: left">
+                <img
+                  nz-image
+                  width="160px"
+                  height="160px"
+                  *ngIf="srcUrl"
+                  [nzSrc]="srcUrl"
+                  alt=""
+                />
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
