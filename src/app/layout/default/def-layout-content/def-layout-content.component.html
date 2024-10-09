@@ -1,47 +1,112 @@
 <app-top-progress-bar></app-top-progress-bar>
 <nz-layout class="min-screen-full-height">
-  <nz-sider [nzTheme]="(themesOptions$ | async)!.theme" [nzWidth]="290" [nzCollapsedWidth]="48" nzBreakpoint="lg"
+  <nz-sider
+    [nzTheme]="(themesOptions$ | async)!.theme"
+    [nzWidth]="290"
+    [nzCollapsedWidth]="48"
+    nzBreakpoint="lg"
     [nzCollapsed]="isCollapsed$ | async"
-    *ngIf="!isMixiMode && (themesOptions$ | async)!.mode === 'side' && (isOverMode$ | async) === false && (themesOptions$ | async)!.hasNavArea && isFixedLeftNav"></nz-sider>
+    *ngIf="
+      !isMixiMode &&
+      (themesOptions$ | async)!.mode === 'side' &&
+      (isOverMode$ | async) === false &&
+      (themesOptions$ | async)!.hasNavArea &&
+      isFixedLeftNav
+    "
+  ></nz-sider>
 
-  <nz-sider id="menuNav" [class.left-nav-fixed]="isFixedLeftNav"
-    *ngIf="!isMixiMode && (themesOptions$ | async)!.mode === 'side' && (isOverMode$ | async) === false && (themesOptions$ | async)!.hasNavArea"
-    class="menu-sidebar" [nzWidth]="290" [nzCollapsedWidth]="48" [nzTheme]="(themesOptions$ | async)!.theme"
-    nzBreakpoint="lg" [nzCollapsible]="true" [nzCollapsed]="isCollapsed$ | async"
-    (nzCollapsedChange)="changeCollapsed($event)" [nzTrigger]="trigger">
+  <nz-sider
+    id="menuNav"
+    [class.left-nav-fixed]="isFixedLeftNav"
+    *ngIf="
+      !isMixiMode &&
+      (themesOptions$ | async)!.mode === 'side' &&
+      (isOverMode$ | async) === false &&
+      (themesOptions$ | async)!.hasNavArea
+    "
+    class="menu-sidebar"
+    [nzWidth]="290"
+    [nzCollapsedWidth]="48"
+    [nzTheme]="(themesOptions$ | async)!.theme"
+    nzBreakpoint="lg"
+    [nzCollapsible]="true"
+    [nzCollapsed]="isCollapsed$ | async"
+    (nzCollapsedChange)="changeCollapsed($event)"
+    [nzTrigger]="trigger"
+  >
     <ng-content select="ng-container[sider]"></ng-content>
   </nz-sider>
 
-  <nz-header class="animate-02 dark-top-nav-bg top-fixed screen-full-width"
-    *ngIf="isMixiMode && themesOptions.hasTopArea">
+  <nz-header
+    class="animate-02 dark-top-nav-bg top-fixed screen-full-width"
+    *ngIf="isMixiMode && themesOptions.hasTopArea"
+  >
     <ng-content select="ng-container[mixheader]"></ng-content>
   </nz-header>
-  <nz-layout [style]="{ marginTop: isMixiMode && themesOptions.hasTopArea ? '64px' : 0 }">
-    <nz-header style="transition: width 0.2s"
-      *ngIf="!isMixiMode && themesOptions.hasTopArea && themesOptions.mode === 'side'" [ngClass]="{
+  <nz-layout
+    [style]="{ marginTop: isMixiMode && themesOptions.hasTopArea ? '64px' : 0 }"
+  >
+    <nz-header
+      style="transition: width 0.2s"
+      *ngIf="
+        !isMixiMode && themesOptions.hasTopArea && themesOptions.mode === 'side'
+      "
+      [ngClass]="{
         'full-with': !themesOptions.hasNavArea,
         fixed: themesOptions.fixedHead,
         'fixed-collapsed': themesOptions.fixedHead && (isCollapsed$ | async),
         'fixed-over-mode': themesOptions.fixedHead && (isOverMode$ | async)
-      }">
+      }"
+    >
       <ng-content select="ng-container[sider-header]"></ng-content>
     </nz-header>
-    <nz-header *ngIf="!isMixiMode && themesOptions.hasTopArea && themesOptions.mode === 'top'" [ngClass]="{
+    <nz-header
+      *ngIf="
+        !isMixiMode && themesOptions.hasTopArea && themesOptions.mode === 'top'
+      "
+      [ngClass]="{
         'dark-top-nav-bg': (themesOptions$ | async)!.theme === 'dark',
         'top-fixed': themesOptions.fixedHead
-      }">
+      }"
+    >
       <ng-content select="ng-container[top-header]"></ng-content>
     </nz-header>
 
-    <nz-sider nzNoAnimation
-      *ngIf="isFixedLeftNav && isMixiMode && themesOptions.hasNavArea && (isOverMode$ | async) === false && ((mixiModeLeftNav | async)!.length > 0 || !themesOptions.splitNav)"
-      [nzWidth]="290" [nzTheme]="(isNightTheme$ | async) ? 'dark' : 'light'" [nzCollapsedWidth]="48" nzBreakpoint="lg"
-      [nzCollapsed]="isCollapsed$ | async"></nz-sider>
-    <nz-sider class="menu-sidebar" nzNoAnimation [class.mixi-left-nav-fixed]="isFixedLeftNav"
-      [class.t-0]="!themesOptions.hasTopArea" [nzTheme]="(isNightTheme$ | async) ? 'dark' : 'light'" [nzWidth]="290"
-      [nzCollapsedWidth]="48" nzBreakpoint="lg" [nzCollapsible]="true" [nzCollapsed]="isCollapsed$ | async"
-      (nzCollapsedChange)="changeCollapsed($event)" [nzTrigger]="trigger"
-      *ngIf="isMixiMode && themesOptions.hasNavArea && (isOverMode$ | async) === false && ((mixiModeLeftNav | async)!.length > 0 || !themesOptions.splitNav)">
+    <nz-sider
+      nzNoAnimation
+      *ngIf="
+        isFixedLeftNav &&
+        isMixiMode &&
+        themesOptions.hasNavArea &&
+        (isOverMode$ | async) === false &&
+        ((mixiModeLeftNav | async)!.length > 0 || !themesOptions.splitNav)
+      "
+      [nzWidth]="290"
+      [nzTheme]="(isNightTheme$ | async) ? 'dark' : 'light'"
+      [nzCollapsedWidth]="48"
+      nzBreakpoint="lg"
+      [nzCollapsed]="isCollapsed$ | async"
+    ></nz-sider>
+    <nz-sider
+      class="menu-sidebar"
+      nzNoAnimation
+      [class.mixi-left-nav-fixed]="isFixedLeftNav"
+      [class.t-0]="!themesOptions.hasTopArea"
+      [nzTheme]="(isNightTheme$ | async) ? 'dark' : 'light'"
+      [nzWidth]="290"
+      [nzCollapsedWidth]="48"
+      nzBreakpoint="lg"
+      [nzCollapsible]="true"
+      [nzCollapsed]="isCollapsed$ | async"
+      (nzCollapsedChange)="changeCollapsed($event)"
+      [nzTrigger]="trigger"
+      *ngIf="
+        isMixiMode &&
+        themesOptions.hasNavArea &&
+        (isOverMode$ | async) === false &&
+        ((mixiModeLeftNav | async)!.length > 0 || !themesOptions.splitNav)
+      "
+    >
       <ng-content select="ng-container[mixsider]"></ng-content>
     </nz-sider>
 
@@ -49,8 +114,9 @@
       <nz-content [ngStyle]="{ marginTop: contentMarginTop }">
         <ng-content></ng-content>
       </nz-content>
-      <nz-footer *ngIf="themesOptions.hasFooterArea" class="text-center">UDPN &#64; Commercial Bank Management System
-        2024</nz-footer>
+      <nz-footer *ngIf="themesOptions.hasFooterArea" class="text-center"
+        >UDPN &#64; Commercial Bank Management Control Panel 2024</nz-footer
+      >
     </nz-layout>
   </nz-layout>
 </nz-layout>
@@ -60,12 +126,33 @@
 <!-- <app-chat (changeShows)="showChats = false" *ngIf="showChats"></app-chat> -->
 
 <ng-template #trigger>
-  <ul nz-menu [nzTheme]="isMixiMode && (isOverMode$ | async) === false ? 'light' : (themesOptions$ | async)!.theme"
-    nzMode="inline" [nzSelectable]="false">
-    <li class="trigger-top-border m-0" [ngStyle]="{
-        'border-top-color': (!isMixiMode && (themesOptions$ | async)?.theme) === 'dark' || (isNightTheme$ | async) ? 'rgba(0,0,0,0.25)' : 'rgb(240,240,240)'
-      }" [nzPaddingLeft]="16" nz-menu-item>
-      <i class="sp-16" nz-icon [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"></i>
+  <ul
+    nz-menu
+    [nzTheme]="
+      isMixiMode && (isOverMode$ | async) === false
+        ? 'light'
+        : (themesOptions$ | async)!.theme
+    "
+    nzMode="inline"
+    [nzSelectable]="false"
+  >
+    <li
+      class="trigger-top-border m-0"
+      [ngStyle]="{
+        'border-top-color':
+          (!isMixiMode && (themesOptions$ | async)?.theme) === 'dark' ||
+          (isNightTheme$ | async)
+            ? 'rgba(0,0,0,0.25)'
+            : 'rgb(240,240,240)'
+      }"
+      [nzPaddingLeft]="16"
+      nz-menu-item
+    >
+      <i
+        class="sp-16"
+        nz-icon
+        [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"
+      ></i>
     </li>
   </ul>
 </ng-template>
