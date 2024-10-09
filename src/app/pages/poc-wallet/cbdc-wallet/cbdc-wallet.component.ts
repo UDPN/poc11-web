@@ -385,7 +385,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Central Bank ',
+          title: 'Central Bank/Custodian Bank ',
           thTemplate: this.centralBankTpl,
           field: 'centralBankName',
           width: 260
