@@ -3,19 +3,40 @@
     BN Name: {{ instance }}
   </h2> -->
   <p class="m-b-30 title" [class.is-over-model]="isOverModel">
-    wCBDC Commercial Bank System
+    Commercial Bank Management Control Panel
   </p>
-  <p class="m-b-50 title" [class.is-over-model]="isOverModel" *ngIf="systemTitle">
-    {{'( ' + systemTitle + ' )'}}
+  <p
+    class="m-b-50 title"
+    [class.is-over-model]="isOverModel"
+    *ngIf="systemTitle"
+  >
+    {{ '( ' + systemTitle + ' )' }}
   </p>
-  <div class="full-with" style="display: flex; justify-content: center;align-items: center;">
-    <form nz-form nzLayout="vertical" class="login-form-wrap" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <div
+    class="full-with"
+    style="display: flex; justify-content: center; align-items: center"
+  >
+    <form
+      nz-form
+      nzLayout="vertical"
+      class="login-form-wrap"
+      [formGroup]="validateForm"
+      (ngSubmit)="submitForm()"
+    >
       <nz-form-item>
         <nz-form-label nzRequired [nzFor]="">USERNAME</nz-form-label>
         <nz-form-control [nzErrorTip]="userNameError">
-          <input nzSize="large" [placeholder]="" type="text" nz-input formControlName="clientName" />
+          <input
+            nzSize="large"
+            [placeholder]=""
+            type="text"
+            nz-input
+            formControlName="clientName"
+          />
           <ng-template #userNameError let-control>
-            <ng-container *ngIf="control.hasError('required')">Please input your User Name</ng-container>
+            <ng-container *ngIf="control.hasError('required')"
+              >Please input your User Name</ng-container
+            >
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -23,19 +44,29 @@
         <nz-form-control [nzErrorTip]="passwordError">
           <nz-form-label nzRequired [nzFor]="">PASSWORD</nz-form-label>
           <nz-input-group [nzSize]="'large'" [nzSuffix]="suffixTemplate">
-            <input autocomplete="on" [placeholder]="" [type]="passwordVisible ? 'text' : 'password'" nz-input
-              formControlName="pwd" />
+            <input
+              autocomplete="on"
+              [placeholder]=""
+              [type]="passwordVisible ? 'text' : 'password'"
+              nz-input
+              formControlName="pwd"
+            />
           </nz-input-group>
           <ng-template #passwordError let-control>
-            <ng-container *ngIf="control.hasError('required')">Please input your Password</ng-container>
+            <ng-container *ngIf="control.hasError('required')"
+              >Please input your Password</ng-container
+            >
             <ng-container *ngIf="control.hasError('regular')">
               The password is a combination of 8-20 digits of numbers and
               letters with at least one uppercase letter
             </ng-container>
           </ng-template>
           <ng-template #suffixTemplate>
-            <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
-              (click)="passwordVisible = !passwordVisible"></i>
+            <i
+              nz-icon
+              [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+              (click)="passwordVisible = !passwordVisible"
+            ></i>
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -44,14 +75,28 @@
         <nz-form-control [nzErrorTip]="codeError">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="16">
-              <input nz-input nzSize="large" [placeholder]="" type="text" nz-input formControlName="captchaCode" />
+              <input
+                nz-input
+                nzSize="large"
+                [placeholder]=""
+                type="text"
+                nz-input
+                formControlName="captchaCode"
+              />
             </div>
             <div nz-col [nzSpan]="8" class="text-right">
-              <img [src]="this.srcUrl" style="height: 40px;" (click)="onRefresh()" alt="" />
+              <img
+                [src]="this.srcUrl"
+                style="height: 40px"
+                (click)="onRefresh()"
+                alt=""
+              />
             </div>
           </div>
           <ng-template #codeError let-control>
-            <ng-container *ngIf="control.hasError('required')">Please input Captcha Code</ng-container>
+            <ng-container *ngIf="control.hasError('required')"
+              >Please input Captcha Code</ng-container
+            >
           </ng-template>
         </nz-form-control>
       </nz-form-item>
@@ -68,7 +113,12 @@
           Please check it !
         </div>
       </div> -->
-      <button nz-button nzSize="large" class="full-with m-t-15 btn" [nzType]="'primary'">
+      <button
+        nz-button
+        nzSize="large"
+        class="full-with m-t-15 btn"
+        [nzType]="'primary'"
+      >
         LOGIN
       </button>
     </form>

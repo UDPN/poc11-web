@@ -1,48 +1,86 @@
-<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-capital-pool/capital-pool'"
-  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-capital-pool/capital-pool'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
 <ng-template #backTpl>
   <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
 </ng-template>
 <div class="normal-detail-table-wrap">
   <nz-card [nzBordered]="true" [nzTitle]="'Basic Information'" class="m-b-10">
-    <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
-      [nzBordered]="true">
-      <nz-descriptions-item nzTitle="Application No.">{{ info.businessApplicationCode }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="FX SP Name">{{ info.spName }}</nz-descriptions-item>
+    <nz-descriptions
+      nzTitle=""
+      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+      [nzColon]="false"
+      [nzBordered]="true"
+    >
+      <nz-descriptions-item nzTitle="Application No.">{{
+        info.businessApplicationCode
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="FX SP Name">{{
+        info.spName
+      }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="BIC">
         {{ info.bicName }}
       </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Central Bank">
+      <nz-descriptions-item nzTitle="Central Bank ">
         {{ info.centralBankName }}
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">
         {{ info.introduction }}
       </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{ info.description }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Description" [nzSpan]="3">{{
+        info.description
+      }}</nz-descriptions-item>
       <!-- <nz-descriptions-item nzTitle="BN ID">{{ info.bnCode }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Wallet Address(Besu)">{{ info.spBesuWalletAddress }}</nz-descriptions-item> -->
-      <nz-descriptions-item nzTitle="Created On">{{ info.creationTime | map:'timeStamp' }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Created On">{{
+        info.creationTime | map: 'timeStamp'
+      }}</nz-descriptions-item>
       <!-- <nz-descriptions-item nzTitle="Created On">{{ info.applicationTime | map:'timeStamp'
         }}</nz-descriptions-item> -->
-      <nz-descriptions-item nzTitle="Status">{{ info.status | map:'foreignStatus' }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Status">{{
+        info.status | map: 'foreignStatus'
+      }}</nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
-  <nz-card [nzBordered]="true" [nzTitle]="'Capital Pool Information'" class="m-b-10"
-    *ngIf="dataList && dataList.length > 0">
+  <nz-card
+    [nzBordered]="true"
+    [nzTitle]="'Capital Pool Information'"
+    class="m-b-10"
+    *ngIf="dataList && dataList.length > 0"
+  >
     <nz-descriptions [nzColon]="false" class="card-descriptions m-t-15 m-b-20">
       <nz-descriptions-item nzTitle="Currency Business Type">{{
-        info.applicationType | map:'exchangeBusinessType'
-        }}</nz-descriptions-item>
+        info.applicationType | map: 'exchangeBusinessType'
+      }}</nz-descriptions-item>
     </nz-descriptions>
-    <app-ant-table [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+    <app-ant-table
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
   </nz-card>
-  <nz-card [nzBordered]="true" [nzTitle]="'Approval Information'" class="m-b-10" *ngIf="info.approvalResult">
-    <nz-descriptions nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" [nzColon]="false"
-      [nzBordered]="true">
-      <nz-descriptions-item nzTitle="Approval Result">{{ info.approvalResult | map: 'approvalResult'
-        }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Onboarded On">{{ info.approvalTime | map:'timeStamp' }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Comments">{{ info.comments | map:'null' }}</nz-descriptions-item>
+  <nz-card
+    [nzBordered]="true"
+    [nzTitle]="'Approval Information'"
+    class="m-b-10"
+    *ngIf="info.approvalResult"
+  >
+    <nz-descriptions
+      nzTitle=""
+      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+      [nzColon]="false"
+      [nzBordered]="true"
+    >
+      <nz-descriptions-item nzTitle="Approval Result">{{
+        info.approvalResult | map: 'approvalResult'
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Onboarded On">{{
+        info.approvalTime | map: 'timeStamp'
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Comments">{{
+        info.comments | map: 'null'
+      }}</nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
 </div>

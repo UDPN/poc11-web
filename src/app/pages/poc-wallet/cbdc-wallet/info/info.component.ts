@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
@@ -50,7 +56,7 @@ export class InfoComponent implements OnInit {
     private commonService: CommonService,
     private cdr: ChangeDetectorRef,
     private cbdcWalletService: CbdcWalletService
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -60,7 +66,7 @@ export class InfoComponent implements OnInit {
           name: 'Wallet Management'
         },
         {
-          name: 'CBDC Wallet Management',
+          name: 'Wallet Management ',
           url: '/poc/poc-wallet/cbdc-wallet'
         },
         { name: 'Details' }
@@ -88,24 +94,28 @@ export class InfoComponent implements OnInit {
   }
 
   getBasicInfo() {
-    this.routeInfo.queryParams.subscribe(params => {
-      this.cbdcWalletService.getBasicInfo({ bankAccountId: params['bankAccountId'] }).subscribe(res => {
-        this.info = res;
-        this.cdr.markForCheck();
-        this.cdr.detectChanges();
-      });
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.cbdcWalletService
+        .getBasicInfo({ bankAccountId: params['bankAccountId'] })
+        .subscribe((res) => {
+          this.info = res;
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
+        });
     });
   }
 
   getTransactionSummary() {
-    this.routeInfo.queryParams.subscribe(params => {
+    this.routeInfo.queryParams.subscribe((params) => {
       this.summaryCurrency = params['currency'];
       this.summaryRegion = params['region'];
-      this.cbdcWalletService.getTransactionSummary({ bankAccountId: params['bankAccountId'] }).subscribe(res => {
-        this.summaryInfo = res;
-        this.cdr.markForCheck();
-        this.cdr.detectChanges();
-      });
+      this.cbdcWalletService
+        .getTransactionSummary({ bankAccountId: params['bankAccountId'] })
+        .subscribe((res) => {
+          this.summaryInfo = res;
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
+        });
     });
   }
 
@@ -116,7 +126,7 @@ export class InfoComponent implements OnInit {
   recordChangePageSize(e: number): void {
     this.recordTableConfig.pageSize = e;
   }
-  
+
   recordTableChangeDectction(): void {
     this.recordList = [...this.recordList];
     this.cdr.detectChanges();
@@ -139,7 +149,7 @@ export class InfoComponent implements OnInit {
 
   getTransactionList(e?: NzTableQueryParams): void {
     this.transactionTableConfig.loading = true;
-    this.routeInfo.queryParams.subscribe(param => {
+    this.routeInfo.queryParams.subscribe((param) => {
       const params: SearchCommonVO<any> = {
         pageSize: this.transactionTableConfig.pageSize!,
         pageNum: e?.pageIndex || this.transactionTableConfig.pageIndex!,
@@ -156,9 +166,11 @@ export class InfoComponent implements OnInit {
         )
         .subscribe((_: any) => {
           this.transactionList = _.data?.rows;
-          this.transactionList.forEach(item => {
-            Object.assign(item, { chainAccountAddress: param['chainAccountAddress'] });
-          })
+          this.transactionList.forEach((item) => {
+            Object.assign(item, {
+              chainAccountAddress: param['chainAccountAddress']
+            });
+          });
           this.transactionTableConfig.total = _.data.page.total;
           this.transactionTableConfig.pageIndex = params.pageNum;
           this.tableLoading(false);
@@ -169,7 +181,7 @@ export class InfoComponent implements OnInit {
 
   getRecordList(e?: NzTableQueryParams): void {
     this.recordTableConfig.loading = true;
-    this.routeInfo.queryParams.subscribe(param => {
+    this.routeInfo.queryParams.subscribe((param) => {
       const params: SearchCommonVO<any> = {
         pageSize: this.recordTableConfig.pageSize!,
         pageNum: e?.pageIndex || this.recordTableConfig.pageIndex!,
@@ -193,7 +205,6 @@ export class InfoComponent implements OnInit {
         });
     });
   }
-
 
   private initTable(): void {
     this.recordTableConfig = {

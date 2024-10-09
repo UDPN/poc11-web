@@ -1,69 +1,94 @@
-<app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-wallet/cbdc-wallet'"
-  [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-wallet/cbdc-wallet'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
 <ng-template #backTpl>
   <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
 </ng-template>
 <div class="normal-detail-table-wrap">
-  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'Wallet Creations'" class="m-b-10">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Wallet Creations'"
+    class="m-b-10"
+  >
     <form nz-form [formGroup]="validateForm" class="m-t-25 m-b-30">
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10">Creation Method
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Creation Method </nz-form-label>
           <nz-form-control [nzErrorTip]="creationMethodError">
             <div nz-row>
               <div nz-col nzSpan="24">
                 <nz-select formControlName="creationMethod">
-                  <nz-option [nzValue]="0" nzLabel="Default Creation"></nz-option>
-                  <nz-option [nzValue]="1" nzLabel="Custom Creation"></nz-option>
+                  <nz-option
+                    [nzValue]="0"
+                    nzLabel="Default Creation"
+                  ></nz-option>
+                  <nz-option
+                    [nzValue]="1"
+                    nzLabel="Custom Creation"
+                  ></nz-option>
                 </nz-select>
               </div>
             </div>
             <ng-template #creationMethodError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please select your Creation Methode</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please select your Creation Methode</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10">Central Bank
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Central Bank </nz-form-label>
           <nz-form-control [nzErrorTip]="centralBankError">
             <div nz-row>
               <div nz-col nzSpan="24">
                 <nz-select formControlName="centralBankId">
-                  <nz-option *ngFor="let item of centralBankList" [nzValue]="item.centralBankId"
-                    [nzLabel]="item.centralBankName">
+                  <nz-option
+                    *ngFor="let item of centralBankList"
+                    [nzValue]="item.centralBankId"
+                    [nzLabel]="item.centralBankName"
+                  >
                   </nz-option>
                 </nz-select>
               </div>
               <div>Bank for wallet address.</div>
             </div>
             <ng-template #centralBankError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please select your Central Bank</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please select your Central Bank
+              </ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10">
-            Currency
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10"> Currency </nz-form-label>
           <nz-form-control [nzErrorTip]="currencyError">
             <div nz-row>
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="currency" readonly class="onboard-disabled" />
+                <input
+                  nz-input
+                  formControlName="currency"
+                  readonly
+                  class="onboard-disabled"
+                />
               </div>
             </div>
             <ng-template #currencyError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your Currency</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Currency</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
-      <ng-container *ngIf="this.validateForm.get('creationMethod')?.value === 1">
+      <ng-container
+        *ngIf="this.validateForm.get('creationMethod')?.value === 1"
+      >
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
             <nz-form-label nzRequired nzSpan="10">
@@ -72,21 +97,35 @@
             <nz-form-control [nzErrorTip]="walletAddressError">
               <div nz-row>
                 <div nz-col nzSpan="24">
-                  <nz-select formControlName="walletAddress" nzShowSearch [nzDropdownRender]="renderTemplate"
-                    (ngModelChange)="onSelectWalletAddress($event)">
+                  <nz-select
+                    formControlName="walletAddress"
+                    nzShowSearch
+                    [nzDropdownRender]="renderTemplate"
+                    (ngModelChange)="onSelectWalletAddress($event)"
+                  >
                     <nz-option-group nzLabel="MetaMask">
-                      <nz-option *ngFor="let items of metaArr$ | async" [nzValue]="items" [nzLabel]="items">
+                      <nz-option
+                        *ngFor="let items of metaArr$ | async"
+                        [nzValue]="items"
+                        [nzLabel]="items"
+                      >
                       </nz-option>
                     </nz-option-group>
                     <nz-option-group nzLabel="Local">
-                      <nz-option *ngFor="let item of walletAddressList" [nzValue]="item" [nzLabel]="item"> </nz-option>
+                      <nz-option
+                        *ngFor="let item of walletAddressList"
+                        [nzValue]="item"
+                        [nzLabel]="item"
+                      >
+                      </nz-option>
                     </nz-option-group>
-
                   </nz-select>
                 </div>
               </div>
               <ng-template #walletAddressError let-control>
-                <ng-container *ngIf="control.hasError('required')">Please input your Currency</ng-container>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Currency</ng-container
+                >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -94,36 +133,62 @@
       </ng-container>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10"> Business Node ID </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">
+            Business Node ID
+          </nz-form-label>
           <nz-form-control [nzErrorTip]="nodeError">
             <div nz-row>
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="bnCode" readonly class="onboard-disabled" />
+                <input
+                  nz-input
+                  formControlName="bnCode"
+                  readonly
+                  class="onboard-disabled"
+                />
               </div>
               <div>
-                <span nz-icon nzType="info-circle" nzTheme="fill" [nzTheme]="'twotone'" class="m-r-8"></span>A
-                unique
-                ID for service providers to access
-                the
-                wCBDC system. After the BN is deployed, the UDPN will generate this ID.
+                <span
+                  nz-icon
+                  nzType="info-circle"
+                  nzTheme="fill"
+                  [nzTheme]="'twotone'"
+                  class="m-r-8"
+                ></span
+                >A unique ID for service providers to access the wCBDC system.
+                After the BN is deployed, the UDPN will generate this ID.
               </div>
             </div>
             <ng-template #nodeError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your Business Node ID </ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Business Node ID
+              </ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <ng-container
-        *ngIf="this.validateForm.get('creationMethod')?.value === 1 && metaArrStr.includes(this.validateForm.get('walletAddress')?.value)">
+        *ngIf="
+          this.validateForm.get('creationMethod')?.value === 1 &&
+          metaArrStr.includes(this.validateForm.get('walletAddress')?.value)
+        "
+      >
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
             <nz-form-control [nzErrorTip]="nodeError">
               <div nz-row>
                 <div nz-col nzSpan="24">
-                  <button nz-button nzType="primary"
-                    [disabled]="metaArrStrSignPass.includes(this.validateForm.get('walletAddress')?.value)"
-                    (click)="onSign()">Private Signature Test</button>
+                  <button
+                    nz-button
+                    nzType="primary"
+                    [disabled]="
+                      metaArrStrSignPass.includes(
+                        this.validateForm.get('walletAddress')?.value
+                      )
+                    "
+                    (click)="onSign()"
+                  >
+                    Private Signature Test
+                  </button>
                 </div>
               </div>
             </nz-form-control>
@@ -140,21 +205,54 @@
             <nz-form-control [nzErrorTip]="keyStoreFileError">
               <div class="set-postion">
                 <div class="upDiv" (click)="upFileSig.click()">
-                  <span style="font-size: 28px" *ngIf="fileStatus === 1" nz-icon nzType="plus" nzTheme="outline">
+                  <span
+                    style="font-size: 28px"
+                    *ngIf="fileStatus === 1"
+                    nz-icon
+                    nzType="plus"
+                    nzTheme="outline"
+                  >
                   </span>
-                  <span style="font-size: 28px" *ngIf="fileStatus === 2" nz-icon nzType="file-done" nzTheme="outline">
+                  <span
+                    style="font-size: 28px"
+                    *ngIf="fileStatus === 2"
+                    nz-icon
+                    nzType="file-done"
+                    nzTheme="outline"
+                  >
                   </span>
                 </div>
               </div>
               <div *ngIf="fileStatus === 2">
-                <span nz-icon nzType="link" nzTheme="outline" class="m-r-10"></span>{{ fileTextName }}
-                <span class="m-l-10 del" *ngIf="fileStatus === 2" (click)="onDeleteFile()"><button nz-button
-                    nzType="text" style="color: red">delete</button></span>
+                <span
+                  nz-icon
+                  nzType="link"
+                  nzTheme="outline"
+                  class="m-r-10"
+                ></span
+                >{{ fileTextName }}
+                <span
+                  class="m-l-10 del"
+                  *ngIf="fileStatus === 2"
+                  (click)="onDeleteFile()"
+                  ><button nz-button nzType="text" style="color: red">
+                    delete
+                  </button></span
+                >
               </div>
               <input type="text" hidden formControlName="file" />
-              <input type="file" accept=".json" hidden #upFileSig (change)="uploadFileSig($event)" id="files" />
+              <input
+                type="file"
+                accept=".json"
+                hidden
+                #upFileSig
+                (change)="uploadFileSig($event)"
+                id="files"
+              />
               <ng-template #keyStoreFileError let-control>
-                <ng-container *ngIf="control.hasError('required')">Please upload your Keystore File</ng-container>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please upload your Keystore File</ng-container
+                >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -167,11 +265,17 @@
             <nz-form-control [nzErrorTip]="keyStorePasswordError">
               <div nz-row>
                 <div nz-col nzSpan="24">
-                  <input nz-input nzType="password" formControlName="keyStorePassword" />
+                  <input
+                    nz-input
+                    nzType="password"
+                    formControlName="keyStorePassword"
+                  />
                 </div>
               </div>
               <ng-template #keyStorePasswordError let-control>
-                <ng-container *ngIf="control.hasError('required')">Please input your Keystore Password</ng-container>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Keystore Password</ng-container
+                >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -184,13 +288,20 @@
             <nz-form-control [nzErrorTip]="verifyKeyStorePasswordError">
               <div nz-row>
                 <div nz-col nzSpan="24">
-                  <input nz-input nzType="password" formControlName="verifyKeyStorePassword" />
+                  <input
+                    nz-input
+                    nzType="password"
+                    formControlName="verifyKeyStorePassword"
+                  />
                 </div>
               </div>
               <ng-template #verifyKeyStorePasswordError let-control>
-                <ng-container *ngIf="control.hasError('required')">Please input your Verify Keystore
-                  Password</ng-container>
-                <ng-container *ngIf="control.hasError('regular')">Two passwords are inconsistent</ng-container>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Verify Keystore Password</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular')"
+                  >Two passwords are inconsistent</ng-container
+                >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -202,33 +313,78 @@
           <div nz-row>
             <div nz-col nzSpan="24" style="text-align: end">
               <nz-space>
-                <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="default" (click)="onBack()">
+                <button
+                  *nzSpaceItem
+                  nz-button
+                  [nzSize]="'large'"
+                  nzType="default"
+                  (click)="onBack()"
+                >
                   Back
                 </button>
                 <ng-container
-                  *ngIf="this.validateForm.get('creationMethod')?.value === 1 && metaArrStr.includes(this.validateForm.get('walletAddress')?.value)">
-                  <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
-                    [disabled]="(this.validateForm.valid && testStatus)? false : true" (click)="onSubmit()">
+                  *ngIf="
+                    this.validateForm.get('creationMethod')?.value === 1 &&
+                    metaArrStr.includes(
+                      this.validateForm.get('walletAddress')?.value
+                    )
+                  "
+                >
+                  <button
+                    *nzSpaceItem
+                    nz-button
+                    [nzSize]="'large'"
+                    nzType="primary"
+                    [nzLoading]="isLoading"
+                    [disabled]="
+                      this.validateForm.valid && testStatus ? false : true
+                    "
+                    (click)="onSubmit()"
+                  >
                     Submit
-                  </button></ng-container>
-                <ng-container *ngIf=" !metaArrStr.includes(this.validateForm.get('walletAddress')?.value)">
-                  <button *nzSpaceItem nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
-                    [disabled]="!this.validateForm.valid " (click)="onSubmit()">
+                  </button></ng-container
+                >
+                <ng-container
+                  *ngIf="
+                    !metaArrStr.includes(
+                      this.validateForm.get('walletAddress')?.value
+                    )
+                  "
+                >
+                  <button
+                    *nzSpaceItem
+                    nz-button
+                    [nzSize]="'large'"
+                    nzType="primary"
+                    [nzLoading]="isLoading"
+                    [disabled]="!this.validateForm.valid"
+                    (click)="onSubmit()"
+                  >
                     Submit
-                  </button></ng-container>
+                  </button></ng-container
+                >
               </nz-space>
             </div>
           </div>
         </nz-form-item>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 m-t-15"
-        *ngIf="this.validateForm.get('creationMethod')?.value === 0">
+      <div
+        nz-row
+        nzJustify="center"
+        nzAlign="middle"
+        class="m-b-10 m-t-15"
+        *ngIf="this.validateForm.get('creationMethod')?.value === 0"
+      >
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
           <div nz-row>
             <div nz-col nzSpan="24">
-              <nz-alert nzType="info"
-                [nzMessage]="'The system will create and register a wallet in the corresponding wCBDC wallet contract.'"
-                nzShowIcon></nz-alert>
+              <nz-alert
+                nzType="info"
+                [nzMessage]="
+                  'The system will create and register a wallet in the corresponding wCBDC wallet contract.'
+                "
+                nzShowIcon
+              ></nz-alert>
             </div>
           </div>
         </nz-form-item>
@@ -236,10 +392,12 @@
     </form>
   </nz-card>
 </div>
-<ng-template #titleTpl>Wallet Creations
-  <span class="m-l-10" style="color: #91929E;">( Choose the central bank to create
-    a wallet, each central
-    bank can hold up to 2 wallets. )</span>
+<ng-template #titleTpl
+  >Wallet Creations
+  <span class="m-l-10" style="color: #91929e"
+    >( Choose the central bank to create a wallet, each central bank can hold up
+    to 2 wallets. )</span
+  >
 </ng-template>
 <ng-template #renderTemplate>
   <div row class="container">
@@ -254,6 +412,10 @@
         </div>
       </ng-template>
     </nz-input-group>
-    <div> <a nz-button nzType="link" (click)="onMetaMask()">Get a Wallet Address in MetaMask</a></div>
+    <div>
+      <a nz-button nzType="link" (click)="onMetaMask()"
+        >Get a Wallet Address in MetaMask</a
+      >
+    </div>
   </div>
 </ng-template>

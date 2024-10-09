@@ -28,7 +28,7 @@
               <nz-descriptions-item nzTitle="Business Node ID">{{
                 info.bnCode
               }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Central Bank">
+              <nz-descriptions-item nzTitle="Central Bank ">
                 {{ info.centralBankName }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Currency">
@@ -147,7 +147,7 @@
                       <div>
                         <h4 nz-typography>
                           {{
-                            'wCBDC Inflow: ' +
+                            'Token Inflow: ' +
                               (summaryInfo.inflowSum
                                 | map: 'toThousandthMark') +
                               ' ' +
@@ -215,7 +215,7 @@
                       <div>
                         <h4 nz-typography>
                           {{
-                            'wCBDC Outflow: ' +
+                            'Token Outflow: ' +
                               (summaryInfo.outflowSum
                                 | map: 'toThousandthMark') +
                               ' ' +
@@ -271,7 +271,12 @@
     </nz-tabset>
   </nz-card>
 </div>
-<ng-template #transactionNoTpl let-transactionNo="transactionNo" let-type="type" let-transferId="transferId">
+<ng-template
+  #transactionNoTpl
+  let-transactionNo="transactionNo"
+  let-type="type"
+  let-transferId="transferId"
+>
   <ng-container *ngIf="transactionNo">
     <ng-container *ngIf="type === 4 || type === 5">
       <a
