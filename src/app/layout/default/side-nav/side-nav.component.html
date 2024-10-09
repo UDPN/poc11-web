@@ -1,14 +1,41 @@
-<div class="left-nav-wrap" [class.dark-scrollbar]="(themesOptions$ | async)!.theme === 'dark'">
-  <div class="sidebar-logo" *ngIf="(themesOptions$ | async)!.hasNavHeadArea" [class.p-l-8]="isCollapsed$ | async">
+<!--
+ * @Author: zhangxuefeng
+ * @Date: 2024-03-06 18:56:40
+ * @LastEditors: zhangxuefeng
+ * @LastEditTime: 2024-10-09 13:24:00
+ * @Description: 
+-->
+<div
+  class="left-nav-wrap"
+  [class.dark-scrollbar]="(themesOptions$ | async)!.theme === 'dark'"
+>
+  <div
+    class="sidebar-logo"
+    *ngIf="(themesOptions$ | async)!.hasNavHeadArea"
+    [class.p-l-8]="isCollapsed$ | async"
+  >
     <a href="#">
       <!-- <img src="assets/imgs/logo.svg" alt="logo" /> -->
-      <h1 class="animate-02" [class.light]="
+      <h1
+        class="animate-02"
+        [class.light]="
           (themesOptions$ | async)!.theme === 'light' &&
           (isNightTheme$ | async) === false
-        ">
+        "
+      >
         <div>
-          <span class="logo" [title]="this.systemName ? this.systemName : 'Commercial Bank Management System'"> {{
-            this.systemName ? this.systemName : 'wCBDC Settlement Platform'}} </span>
+          <span
+            class="logo"
+            [title]="
+              this.systemName
+                ? this.systemName
+                : 'Commercial Bank Management Control Panel'
+            "
+          >
+            {{
+              this.systemName ? this.systemName : 'wCBDC Settlement Platform'
+            }}
+          </span>
         </div>
       </h1>
     </a>

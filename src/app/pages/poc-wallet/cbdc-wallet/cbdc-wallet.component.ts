@@ -110,7 +110,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     });
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
+      breadcrumb: ['Wallet Management', 'Wallet Management '],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
