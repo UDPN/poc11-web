@@ -119,6 +119,14 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-financial',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-financial/poc-financial.module').then(
+            (m) => m.PocFinancialModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)

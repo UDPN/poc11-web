@@ -107,7 +107,6 @@ const menuNav: Menu[] = [
       }
     ]
   },
-
   {
     menuName: 'FX Rate Query',
     id: 5,
@@ -130,7 +129,39 @@ const menuNav: Menu[] = [
     path: '/poc/poc-bank/bank',
     code: 'R0104'
   },
-
+  {
+    menuName: 'Financial Management',
+    id: 4,
+    fatherId: 0,
+    icon: 'solution',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-financial',
+    code: 'R0102',
+    children: [
+      {
+        id: 1,
+        fatherId: 4,
+        menuName: 'Journal Entries',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R010201',
+        path: '/poc/poc-financial/journal-entries'
+      },
+      {
+        id: 2,
+        fatherId: 4,
+        menuName: 'Statements and Reports',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R010202',
+        path: '/poc/poc-financial/statements'
+      }
+    ]
+  },
   {
     fatherId: 0,
     id: 7,
