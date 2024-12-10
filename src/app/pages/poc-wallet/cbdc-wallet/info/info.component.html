@@ -28,7 +28,7 @@
               <nz-descriptions-item nzTitle="Business Node ID">{{
                 info.bnCode
               }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Central Bank/Custodian Bank ">
+              <nz-descriptions-item nzTitle="Custodian Bank">
                 {{ info.centralBankName }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Currency">
@@ -147,7 +147,7 @@
                       <div>
                         <h4 nz-typography>
                           {{
-                            'Token Inflow: ' +
+                            'CBDC Inflow: ' +
                               (summaryInfo.inflowSum
                                 | map: 'toThousandthMark') +
                               ' ' +
@@ -215,7 +215,7 @@
                       <div>
                         <h4 nz-typography>
                           {{
-                            'Token Outflow: ' +
+                            'CBDC Outflow: ' +
                               (summaryInfo.outflowSum
                                 | map: 'toThousandthMark') +
                               ' ' +

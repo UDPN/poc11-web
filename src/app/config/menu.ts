@@ -45,7 +45,7 @@ const menuNav: Menu[] = [
       {
         id: 1,
         fatherId: 3,
-        menuName: 'Wallet Management ',
+        menuName: 'CBDC Wallet Management',
         open: false,
         selected: false,
         menuType: 'C',
@@ -137,11 +137,11 @@ const menuNav: Menu[] = [
     menuType: 'C',
     code: 'R02',
     menuGroup: true,
-    groupName: 'As an FX Service Provider',
+    groupName: 'As a Liquidity Provider',
     groupCollapseName: 'Commercial'
   },
   {
-    menuName: 'Become A FX Service Provider',
+    menuName: 'Become A Liquidity Provider',
     id: 8,
     fatherId: 0,
     icon: 'check-square',

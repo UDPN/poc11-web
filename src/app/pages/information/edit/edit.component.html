@@ -96,7 +96,7 @@
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
             <nz-form-label nzRequired nzSpan="10"
-              >Central Bank/Custodian Bank
+              >Custodian Bank
             </nz-form-label>
             <nz-form-control [nzErrorTip]="centralBankError">
               <div nz-row [formGroup]="validateForm">
@@ -111,7 +111,7 @@
               </div>
               <ng-template #centralBankError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Central Bank/Custodian Bank</ng-container
+                  >Please input your Custodian Bank</ng-container
                 >
               </ng-template>
             </nz-form-control>

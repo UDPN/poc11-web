@@ -79,6 +79,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   centralBankList: any[] = [];
+  regionList: any[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -110,7 +111,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     });
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Wallet Management', 'Wallet Management '],
+      breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -120,6 +121,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getCentralBank();
+    this.getRegion();
     this.topUpForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
@@ -214,6 +216,12 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   getCentralBank() {
     this.cbdcWalletService.getCentralBankQuery().subscribe((res) => {
       this.centralBankList = res;
+    });
+  }
+
+  getRegion() {
+    this.cbdcWalletService.getRegion().subscribe((res) => {
+      this.regionList = res;
     });
   }
 
@@ -385,15 +393,22 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Central Bank/Custodian Bank ',
+          title: 'Custodian Bank',
           thTemplate: this.centralBankTpl,
           field: 'centralBankName',
           width: 260
         },
+        // {
+        //   title: 'Wallet Type',
+        //   field: 'region',
+        //   pipe: 'region',
+        //   width: 150
+        // },
+        // TODO
         {
-          title: 'Wallet Type',
+          title: 'Region',
           field: 'region',
-          pipe: 'region',
+          // pipe: 'region',
           width: 150
         },
         {

@@ -196,7 +196,7 @@ export class BankComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Central Bank/Custodian Bank ',
+          title: 'Custodian Bank',
           field: 'centralBankName',
           width: 200
         },

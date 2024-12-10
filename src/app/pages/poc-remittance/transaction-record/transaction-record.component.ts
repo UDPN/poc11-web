@@ -171,17 +171,17 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
-          width: 100
+          width: 150
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
-          width: 100
+          width: 150
         },
         {
           title: 'To',
           tdTemplate: this.toTpl,
-          width: 100
+          width: 150
         },
         {
           title: 'Type',
@@ -209,7 +209,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
-          width: 150
+          width: 120
         },
         {
           title: 'Actions',
@@ -217,7 +217,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 150
+          width: 100
         }
       ],
       total: 0,

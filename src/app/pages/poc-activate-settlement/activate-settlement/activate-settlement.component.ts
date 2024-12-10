@@ -83,7 +83,7 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Become A FX Service Provider'],
+      breadcrumb: ['Become A Liquidity Provider'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -120,7 +120,7 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
       if (this.updateStatus === 10) {
         this.modalService.success({
           nzTitle: 'Please log in again',
-          nzContent: 'You have been upgraded to a FX Service Provider !',
+          nzContent: 'You have been upgraded to a Liquidity Provider !',
           nzOnOk: () =>
             new Promise((resolve, reject) => {
               this.loginService.loginOut().subscribe({

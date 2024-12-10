@@ -78,7 +78,8 @@
       [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
     <ng-template #currencyTpl let-currency="currency">
       <span *ngFor="let item of currency; index as i">
-        <span [title]="item">{{ item.split('-')[0] + '-' + item.split('-')[1] + '-' + item.split('-')[3] + '-' +
+        <span [title]="item.split('-')[0] + '-' + item.split('-')[1] + '-' + item.split('-')[3] + '-' +
+          item.split('-')[4]">{{ item.split('-')[0] + '-' + item.split('-')[1] + '-' + item.split('-')[3] + '-' +
           item.split('-')[4] }}</span>
         <br>
       </span>

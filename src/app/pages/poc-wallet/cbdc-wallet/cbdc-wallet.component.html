@@ -39,7 +39,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label>Central Bank/Custodian Bank </nz-form-label>
+            <nz-form-label>Custodian Bank</nz-form-label>
             <nz-form-control>
               <nz-select
                 nzPlaceHolder=""
@@ -57,7 +57,37 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <!-- TODO -->
         <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Region</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="region"
+                [(ngModel)]="searchParam.region"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of regionList"
+                  [nzValue]="item.countryInfoId"
+                  [nzLabel]="item.countryName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- TODO -->
+        <!-- <div
           nz-col
           [nzXXl]="8"
           [nzXl]="8"
@@ -80,7 +110,7 @@
               </nz-select>
             </nz-form-control>
           </nz-form-item>
-        </div>
+        </div> -->
         <div
           nz-col
           [nzXXl]="8"
@@ -191,7 +221,7 @@
       [tableData]="dataList"
     ></app-ant-table>
     <ng-template #centralBankTpl>
-      {{ 'Central Bank/Custodian Bank ' }}
+      {{ 'Custodian Bank' }}
       <i
         nz-tooltip
         nzTooltipTitle="Bank for wallet address"

@@ -191,7 +191,7 @@ export class FxRateComponent implements OnInit, AfterViewInit {
           pipe: 'toThousandRate'
         },
         {
-          title: 'FX Service Provider',
+          title: 'Liquidity Provider',
           field: 'provider'
         },
         {
