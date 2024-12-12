@@ -1,6 +1,16 @@
 import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+interface SearchParam {
+  ledgerName: string;
+  tokenName: string;
+  tokenType: string;
+  peggedCurrency: string;
+  blockchain: string;
+  createdOn: Date[];
+  status: string;
+}
 
 @Component({
   selector: 'app-journal-entries',
@@ -19,7 +29,19 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-
+  searchParam: Partial<SearchParam> = {
+    ledgerName: '',
+    tokenName: '',
+    tokenType: '',
+    peggedCurrency: '',
+    blockchain: '',
+    createdOn: [],
+    status: ''
+  };
+  resetForm() {
+    // this.searchForm.reset();
+  }
+  getDataList(e?: NzTableQueryParams): void {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
