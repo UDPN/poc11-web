@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-17 16:27:46
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-12 11:27:35
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -36,5 +36,12 @@ export class CommonService {
 
   public downImg(params: { hash: string }): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/file/download`, params);
+  }
+
+  public download(busId: any, busType: any): Observable<any> {
+    return this.http.get(
+      `/v1/export/task/download?busId=${busId}&busType=${busType}`,
+      { responseType: 'blob' }
+    );
   }
 }

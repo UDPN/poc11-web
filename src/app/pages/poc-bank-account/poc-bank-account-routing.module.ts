@@ -1,19 +1,19 @@
 /*
  * @Author: chenyuting
- * @Date: 2024-12-09 15:40:45
+ * @Date: 2024-12-11 13:48:47
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-11 10:32:56
+ * @LastEditTime: 2024-12-11 13:49:39
  * @Description: 
  */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'bank', pathMatch: 'full' },
+  { path: '', redirectTo: 'bank-account', pathMatch: 'full' },
   {
-    path: 'bank',
+    path: 'bank-account',
     data: { preload: true },
-    loadChildren: () => import('./bank/bank.module').then(m => m.BankModule)
+    loadChildren: () => import('./bank-account/bank-account.module').then(m => m.BankAccountModule)
   },
 ];
 
@@ -21,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PocBankRoutingModule { }
+export class PocBankAccountRoutingModule { }

@@ -1,0 +1,132 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card nzTitle="Account Overview" class="m-b-10">
+    <div nz-row nzAlign="middle" nzJustify="space-between">
+      <div
+        nz-col
+        [nzXXl]="14"
+        [nzXl]="14"
+        [nzLg]="24"
+        [nzMd]="24"
+        [nzSm]="24"
+        [nzXs]="24"
+      >
+        <nz-card class="m-r-8">
+          <nz-descriptions
+            nzTitle=""
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order"
+          >
+            <nz-descriptions-item [nzTitle]="'Bank Account No.'"
+              ><span nz-typography nzCopyable [nzCopyText]="'1111'">{{ '1111' }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Bank Name'"
+              ><span>{{ '22' }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Account Name'"
+              ><span>{{ '33' }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Currency'"
+              ><span>{{ '444' }}</span></nz-descriptions-item
+            >
+          </nz-descriptions>
+        </nz-card>
+      </div>
+      <div
+        nz-col
+        [nzXXl]="9"
+        [nzXl]="9"
+        [nzLg]="24"
+        [nzMd]="24"
+        [nzSm]="24"
+        [nzXs]="24"
+      >
+        <nz-card class="m-r-8" style="padding-top: 70px; padding-bottom: 70px">
+          <div nz-row nzAlign="top" nzJustify="space-between">
+            <div
+              nz-col
+              [nzXXl]="4"
+              [nzXl]="4"
+              [nzLg]="4"
+              [nzMd]="4"
+              [nzSm]="4"
+              [nzXs]="12"
+            >
+              <img src="../../../../../assets/imgs/reserve-balance.svg" alt="" />
+            </div>
+            <div
+              nz-col
+              [nzXXl]="20"
+              [nzXl]="20"
+              [nzLg]="20"
+              [nzMd]="20"
+              [nzSm]="20"
+              [nzXs]="12"
+            >
+              <div nz-row nzAlign="top">
+                <h5 nz-typography>
+                  {{ 'Account Balance ' }}
+                </h5>
+              </div>
+              <div class="m-t-15">
+                <h3 nz-typography>
+                  {{ '8,000,000,000,000.00 EUR' }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </nz-card>
+  <app-card-table-wrap
+    [tableTitle]="'Fiat Money Account Transactions'"
+    [isNormalTable]="true"
+  >
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #transactionIdTpl let-realName="realName">
+      <p [title]="realName" nz-typography nzCopyable [nzCopyText]="realName">
+        {{
+          realName.length > 10
+            ? realName.substring(0, 6) +
+              '....' +
+              realName.substring(realName.length - 4, realName.length)
+            : realName
+        }}
+      </p>
+    </ng-template>
+    <ng-template
+      #transactionAmountTpl
+      let-type="type"
+      let-amount="amount"
+      let-currency="currency"
+    >
+      <span
+        [title]="amount"
+        [style]="{ color: type === 1 ? '#39A16A' : '#E53E3E' }"
+        >{{ amount | map: 'toThousandthMark' }}{{ currency }}</span
+      >
+    </ng-template>
+    <ng-template
+      #balanceTpl
+      let-type="type"
+      let-amount="amount"
+      let-currency="currency"
+    >
+      <span [title]="amount"
+        >{{ amount | map: 'toThousandthMark' }}{{ currency }}</span
+      >
+    </ng-template>
+  </app-card-table-wrap>
+</div>

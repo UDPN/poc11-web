@@ -66,8 +66,8 @@ export class EditComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.getWalletAddress();
-    this.getCentralBank();
+    // this.getWalletAddress();
+    // this.getCentralBank();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required]],
       bankBic: [null, [Validators.required]],

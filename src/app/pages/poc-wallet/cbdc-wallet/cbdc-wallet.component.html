@@ -57,37 +57,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <!-- TODO -->
         <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
-          <nz-form-item>
-            <nz-form-label>Region</nz-form-label>
-            <nz-form-control>
-              <nz-select
-                nzPlaceHolder=""
-                name="region"
-                [(ngModel)]="searchParam.region"
-              >
-                <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option
-                  *ngFor="let item of regionList"
-                  [nzValue]="item.countryInfoId"
-                  [nzLabel]="item.countryName"
-                >
-                </nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <!-- TODO -->
-        <!-- <div
           nz-col
           [nzXXl]="8"
           [nzXl]="8"
@@ -105,12 +75,12 @@
                 [(ngModel)]="searchParam.region"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option [nzValue]="1" nzLabel="Domestic"></nz-option>
-                <nz-option [nzValue]="2" nzLabel="Foreign"></nz-option>
+                <nz-option [nzValue]="1" nzLabel="Custodian"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Non-custodian"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
-        </div> -->
+        </div>
         <div
           nz-col
           [nzXXl]="8"

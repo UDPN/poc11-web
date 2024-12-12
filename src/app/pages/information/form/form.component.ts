@@ -65,8 +65,8 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.getWalletAddress();
-    this.getCentralBank();
+    // this.getWalletAddress();
+    // this.getCentralBank();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required]],
       bankBic: [null, [Validators.required]],
@@ -81,6 +81,15 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
       detailedAddress: [null, [Validators.required]],
       businessLicenseUrl: [null, [Validators.required]],
       fileName: [null, [Validators.required]],
+    });
+    this._informationService.detail().subscribe((res) => {
+      this.validateForm.get('spName')?.setValue(res.spName);
+      this.validateForm.get('bankBic')?.setValue(res.bankBic);
+      this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
+      this.validateForm.get('bnCode')?.setValue(res.bnCode);
+      this.validateForm
+        .get('spBesuWalletAddress')
+        ?.setValue(res.spBesuWalletAddress);
     });
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {

@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-04 13:50:18
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-10 14:23:16
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -42,7 +42,8 @@ export class InfomationGuard implements CanActivate {
     | Promise<boolean | UrlTree> {
     return this._informationService.detail().pipe(
       map((data) => {
-        if (data === null) {
+        if (data && data.spStatus === 0) {
+          console.log('1111');
           return true;
         }
         if (data !== null && data.spStatus === 5) {
