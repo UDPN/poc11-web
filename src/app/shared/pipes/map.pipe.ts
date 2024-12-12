@@ -219,7 +219,23 @@ export const MapSet = {
     4: 'Processing',
     5: 'Success',
     6: 'Rejected'
-  }
+  },
+  walletType: {
+    1: 'Custodian',
+    2: 'Non-custodian'
+  },
+  downloadCenterStatus: {
+    1: 'Pending',
+    2: 'Processing',
+    3: 'Failed',
+    4: 'Completed'
+  },
+  downloadCenterStatusColor: {
+    1: 'volcano',
+    2: 'blue',
+    3: 'red',
+    4: 'green'
+  },
 };
 
 export interface MapItem {

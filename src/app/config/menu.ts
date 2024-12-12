@@ -130,6 +130,17 @@ const menuNav: Menu[] = [
     code: 'R0104'
   },
   {
+    menuName: 'Fiat Money Account Query',
+    id: 6,
+    fatherId: 0,
+    icon: 'down-square',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-bank-account/bank-account',
+    code: 'R0104'
+  },
+  {
     menuName: 'Financial Management',
     id: 4,
     fatherId: 0,
@@ -161,6 +172,17 @@ const menuNav: Menu[] = [
         path: '/poc/poc-financial/statements'
       }
     ]
+  },
+  {
+    menuName: 'Download Center',
+    id: 6,
+    fatherId: 0,
+    icon: 'download',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-download-center/download-center',
+    code: 'R0104'
   },
   {
     fatherId: 0,

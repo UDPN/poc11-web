@@ -127,6 +127,22 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-download-center', 
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-download-center/poc-download-center.module').then(
+            (m) => m.PocDownloadCenterModule
+          )
+      },
+      {
+        path: 'poc-bank-account', 
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-bank-account/poc-bank-account.module').then(
+            (m) => m.PocBankAccountModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)
