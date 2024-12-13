@@ -225,17 +225,28 @@ export const MapSet = {
     2: 'Non-custodian'
   },
   downloadCenterStatus: {
-    1: 'Pending',
-    2: 'Processing',
-    3: 'Failed',
-    4: 'Completed'
+    0: 'Pending',
+    1: 'Processing',
+    2: 'Completed',
+    3: 'Failed'
   },
   downloadCenterStatusColor: {
-    1: 'volcano',
-    2: 'blue',
-    3: 'red',
-    4: 'green'
+    0: 'volcano',
+    1: 'blue',
+    2: 'green',
+    3: 'red'
   },
+  moduleType: {
+    1: 'Journal Entries',
+    5: 'Statements and Reports',
+    10: 'Audit Trail',
+    15: 'Interest Settlement',
+    20: 'Token Statistics Report'
+  },
+  transactionDirection: {
+    1: 'Transfer in',
+    2: 'Transfer out'
+  }
 };
 
 export interface MapItem {

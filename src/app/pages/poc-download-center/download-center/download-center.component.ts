@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 10:29:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-12 13:50:15
+ * @LastEditTime: 2024-12-13 09:52:59
  * @Description:
  */
 /*
@@ -106,7 +106,6 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
       footer: ''
     };
   }
-
   ngOnInit() {
     this.initTable();
   }
@@ -114,12 +113,10 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
-
   tableLoading(isLoading: boolean): void {
     this.tableConfig.loading = isLoading;
     this.tableChangeDectction();
   }
-
   resetForm() {
     this.searchParam = {};
     this.getDataList(this.tableQueryParams);
@@ -127,7 +124,6 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
-
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
@@ -143,38 +139,34 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((_: any) => {
-        this.dataList = _.data;
+        this.dataList = _.data.rows;
         this.dataList.forEach((item: any, i: any) => {
           Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
         });
-        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.total = _.data.page.total;
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
         this.cdr.markForCheck();
       });
   }
 
-  getDownload(busId: any, busType: any) {
-    this.isLoadingDownlad = true;
+  getDownload(busId: any, busType: any, fileName: any) {
+    this.tableLoading(true);
     this.commonService
       .download(busId, busType)
-      .pipe(finalize(() => (this.isLoadingDownlad = false)))
+      .pipe(finalize(() => (this.tableLoading(false))))
       .subscribe({
         next: (res) => {
           if (res) {
             this.message
-              .success('Add successfully!', { nzDuration: 1000 })
+              .success('Download successfully!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
-                const fileName =
-                  res?.headers['content-disposition']?.split("utf-8''")[1];
                 const blob = new Blob([res.data], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
-
                 if ('download' in document.createElement('a')) {
                   const elink = document.createElement('a');
-                  elink.download = fileName.replaceAll('%20', ' ');
-                  // elink.download = fileName;
+                  elink.download = fileName;
                   elink.style.display = 'none';
                   elink.href = URL.createObjectURL(blob);
                   document.body.appendChild(elink);
@@ -185,11 +177,11 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
                 }
               });
           }
-          this.isLoadingDownlad = false;
+          this.tableLoading(false);
           this.cdr.markForCheck();
         },
         error: (err) => {
-          this.isLoadingDownlad = false;
+          this.tableLoading(false);
           this.cdr.markForCheck();
         }
       });
@@ -205,7 +197,8 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Data Source',
-          field: 'userName',
+          field: 'moduleType',
+          pipe: 'moduleType',
           width: 180
         },
         {
@@ -227,7 +220,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Created by',
-          field: 'lockable',
+          field: 'exportUserName',
           width: 100
         },
         {

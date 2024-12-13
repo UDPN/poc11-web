@@ -2,10 +2,10 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-12 11:27:35
+ * @LastEditTime: 2024-12-13 09:45:37
  * @Description:
  */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../base-http.service';
@@ -39,9 +39,12 @@ export class CommonService {
   }
 
   public download(busId: any, busType: any): Observable<any> {
-    return this.http.get(
+    return this.https.get(
       `/v1/export/task/download?busId=${busId}&busType=${busType}`,
-      { responseType: 'blob' }
+      {
+        responseType: 'blob',
+        observe: 'response',
+      }
     );
   }
 }

@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-11 10:29:23
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-13 09:51:19
+ * @Description: 
+-->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
@@ -11,36 +18,48 @@
     <ng-template #numberTpl let-key="key">
       <span [title]="key">{{ key }}</span>
     </ng-template>
-    <ng-template #fileIdTpl let-realName="realName">
-      <p [title]="realName" nz-typography nzCopyable [nzCopyText]="realName">
+    <ng-template #fileIdTpl let-fileId="fileId">
+      <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
         {{
-          realName.length > 10
-            ? realName.substring(0, 6) +
+          fileId.length > 10
+            ? fileId.substring(0, 6) +
               '....' +
-              realName.substring(realName.length - 4, realName.length)
-            : realName
+              fileId.substring(fileId.length - 4, fileId.length)
+            : fileId
         }}
       </p>
     </ng-template>
-    <ng-template #fileHashTpl let-realName="realName">
-      <p [title]="realName" nz-typography nzCopyable [nzCopyText]="realName">
+    <ng-template #fileHashTpl let-fileHash="fileHash">
+      <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
         {{
-          realName.length > 10
-            ? realName.substring(0, 6) +
+          fileHash.length > 10
+            ? fileHash.substring(0, 6) +
               '....' +
-              realName.substring(realName.length - 4, realName.length)
-            : realName
+              fileHash.substring(fileHash.length - 4, fileHash.length)
+            : fileHash
         }}
       </p>
     </ng-template>
-    <ng-template #statusTpl let-status="status">
-      <nz-tag [nzColor]="status | map: 'downloadCenterStatusColor'">{{
-        status | map: 'downloadCenterStatus'
+    <ng-template #statusTpl let-exportState="exportState">
+      <nz-tag [nzColor]="exportState | map: 'downloadCenterStatusColor'">{{
+        exportState | map: 'downloadCenterStatus'
       }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-busId="busId", let-busType="busType">
+    <ng-template
+      #operationTpl
+      let-busId="busId"
+      let-busType="busType"
+      let-fileName="fileName"
+      let-exportState="exportState"
+    >
       <ng-container *appAuth="'R030102'">
-        <span class="operate-text" (click)="getDownload(busId, busType)"> Download </span>
+        <span
+          class="operate-text"
+          *ngIf="exportState === 2"
+          (click)="getDownload(busId, busType, fileName)"
+        >
+          Download
+        </span>
       </ng-container>
     </ng-template>
   </app-card-table-wrap>
