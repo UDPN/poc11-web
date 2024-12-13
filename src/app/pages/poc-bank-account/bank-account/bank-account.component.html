@@ -82,9 +82,11 @@
               <div class="m-t-15">
                 <h3 nz-typography>
                   {{
-                    (info.accountBalance | map: 'toThousandthMark') +
-                      ' ' +
-                      info.currency
+                    info.accountBalance
+                      ? (info.accountBalance | map: 'toThousandthMark') +
+                        ' ' +
+                        info.currency
+                      : '--'
                   }}
                 </h3>
               </div>

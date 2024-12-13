@@ -246,6 +246,39 @@ export const MapSet = {
   transactionDirection: {
     1: 'Transfer in',
     2: 'Transfer out'
+  },
+  statementStatus: {
+    20: 'Active',
+    30: 'Inactive'
+  },
+  statementStatusColor: {
+    20: 'green',
+    30: 'default'
+  },
+  exportStrategy: {
+    1: 'Daily',
+    7: 'Weekly',
+    30: 'Monthly'
+  },
+  statementsTxnType: {
+    3: 'Top-up',
+    4: 'Transfer out',
+    5: 'Transfer in',
+    6: 'Withdraw'
+  },
+  proofStatusColor: {
+    2: 'volcano',
+    3: 'volcano',
+    4: 'blue',
+    5: 'green',
+    6: 'red'
+  },
+  proofStatus: {
+    2: 'Pending',
+    3: 'Pending',
+    4: 'Processing',
+    5: 'Success',
+    6: 'Failed'
   }
 };
 
@@ -361,6 +394,19 @@ export class MapPipe implements PipeTransform {
           value = Number(value) * 1000;
         }
         let res = this.datePipe.transform(value, 'MMMM y');
+        return res?.replace('GMT', 'UTC');
+      }
+    }
+    if (arg === 'dayStamp') {
+      if (!value) {
+        return (value = '--');
+      } else {
+        // return timestampToMonth(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM d, y');
         return res?.replace('GMT', 'UTC');
       }
     }

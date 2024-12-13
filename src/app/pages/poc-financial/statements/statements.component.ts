@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 11:08:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-12 16:46:17
+ * @LastEditTime: 2024-12-13 15:19:20
  * @Description:
  */
 /*
@@ -21,6 +21,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonService } from '@app/core/services/http/common/common.service';
+import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
@@ -30,12 +32,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 interface SearchParam {
-  tokenName: string;
-  blockchain: string;
-  exportFrequency: string | number;
+  tokenId: string;
+  exportStrategy: string | number;
   status: string | number;
   createTime: any;
-  executedTime: any;
+  lastExecutedTime: any;
 }
 @Component({
   selector: 'app-statements',
@@ -51,19 +52,21 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   numberTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [];  
+  dataList: NzSafeAny[] = [];
   tokenList: any = [];
-  blockchainList: any = [];
   visible = false;
   validateForm!: FormGroup;
+  isNewLoading: boolean = false;
+  frequencyType: string = '';
   searchParam: Partial<SearchParam> = {
-    tokenName: '',
-    blockchain: '',
-    exportFrequency: '',
+    tokenId: '',
+    exportStrategy: '',
     status: '',
     createTime: [],
-    executedTime: []
+    lastExecutedTime: []
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -78,7 +81,14 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-  constructor(private cdr: ChangeDetectorRef,private fb: FormBuilder, private modal: NzModalService, private message: NzMessageService) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder,
+    private modal: NzModalService,
+    private message: NzMessageService,
+    private statementsService: StatementsService,
+    private commonService: CommonService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -91,14 +101,13 @@ export class StatementsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initTable();
+    this.getTokenList();
     this.validateForm = this.fb.group({
       taskName: [null, [Validators.required]],
-      // realName: [null, [Validators.required]],
-      // telephone: [null, [Validators.required]],
-      // email: [null, [Validators.required]],
-      // roleIdList: [null, [Validators.required]],
-      // lockable: [2, [Validators.required]],
-    })
+      tokenId: [null, [Validators.required]],
+      txTypes: [[], [Validators.required]],
+      exportStrategy: [null, [Validators.required]]
+    });
   }
 
   tableChangeDectction(): void {
@@ -113,6 +122,11 @@ export class StatementsComponent implements OnInit, AfterViewInit {
 
   resetForm() {
     this.searchParam = {};
+    this.searchParam.createTime = '';
+    this.searchParam.lastExecutedTime = '';
+    this.searchParam.tokenId = '';
+    this.searchParam.exportStrategy = '';
+    this.searchParam.status = '';
     this.getDataList(this.tableQueryParams);
   }
 
@@ -120,92 +134,130 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-
   open(): void {
     this.visible = true;
   }
 
-  close(): void {
-    this.visible = false;
+  changeFrequency(value: any) {
+    this.frequencyType = value;
   }
-  onDelete(name: string) {
+
+  onBack() {
+    this.visible = false;
+    this.validateForm.reset();
+  }
+
+  getTokenList() {
+    this.commonService.tokenList().subscribe((res) => {
+      this.tokenList = res;
+      this.cdr.markForCheck();
+      return;
+    });
+  }
+  onSubmit() {
+    this.isNewLoading = true;
+    this.statementsService
+      .createTask(this.validateForm.value)
+      .pipe(finalize(() => (this.isNewLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message
+              .success('Add successfully!', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                this.validateForm.reset();
+                this.visible = false;
+                this.getDataList(this.tableQueryParams);
+              });
+          }
+          this.isNewLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isNewLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+  onDelete(exportRuleId: string, taskName: string) {
     this.modal.confirm({
-      nzTitle: `Are you sure you want to delete <b>${name}</b> ?`,
+      nzTitle: `Are you sure you want to delete <b>${taskName}</b> ?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          // this.userService.statusUpdate({ userId, lockable: 3 }).subscribe({
-          //   next: res => {
-          //     resolve(true);
-          //     if (res) {
-          //       this.message.success(`Delete successfully`).onClose!.subscribe(() => {
-          //         this.getDataList();
-          //       });
-          //     }
-          //     this.cdr.markForCheck();
-          //   },
-          //   error: err => {
-          //     reject(true);
-          //     this.cdr.markForCheck();
-          //   },
-          // })
+          this.statementsService.statusUpdate({ exportRuleId, state: 35 }).subscribe({
+            next: res => {
+              resolve(true);
+              if (res) {
+                this.message.success(`Delete successfully`).onClose!.subscribe(() => {
+                  this.getDataList();
+                });
+              }
+              this.cdr.markForCheck();
+            },
+            error: err => {
+              reject(true);
+              this.cdr.markForCheck();
+            },
+          })
         }).catch(() => console.log('Oops errors!'))
     });
   }
-  onStatusUpdate(id: number, lockable: number, name: string) {
-    let status = '';
-    if (lockable === 1) {
-      status = 'deactivate'
+  
+  onStatusUpdate(exportRuleId: any, state: number, taskName: string) {
+    let statusValue = '';
+    if (state === 30) {
+      statusValue = 'deactivate';
     } else {
-      status = 'activate'
+      statusValue = 'activate';
     }
-    const toolStatus = status.charAt(0).toUpperCase() + status.slice(1);
+    const toolStatus = statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
     this.modal.confirm({
-      nzTitle: `Are you sure you want to ${status} <b>${name}</b> ?`,
+      nzTitle: `Are you sure you want to ${statusValue} <b>${taskName}</b> ?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          // this.userService.statusUpdate({ id, lockable }).subscribe({
-          //   next: res => {
-          //     resolve(true);
-          //     this.cdr.markForCheck();
-          //     if (res) {
-          //       this.message.success(`${toolStatus} successfully!`, { nzDuration: 1000 });
-          //     }
-          //     this.getDataList();
-          //   },
-          //   error: err => {
-          //     reject(true);
-          //     this.cdr.markForCheck();
-          //   },
-          // })
+          this.statementsService.statusUpdate({ exportRuleId, state }).subscribe({
+            next: res => {
+              resolve(true);
+              this.cdr.markForCheck();
+              if (res) {
+                this.message.success(`${toolStatus} successfully!`, { nzDuration: 1000 });
+              }
+              this.getDataList();
+            },
+            error: err => {
+              reject(true);
+              this.cdr.markForCheck();
+            },
+          })
         }).catch(() => console.log('Oops errors!'))
     });
   }
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.userService
-    //   .list(params.pageNum, params.pageSize, params.filters)
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _?.resultPageInfo?.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.statementsService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data.rows;
+        this.dataList.forEach((item: any, i: any) => {
+          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+        });
+        this.tableConfig.total = _.data.page.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -228,14 +280,10 @@ export class StatementsComponent implements OnInit, AfterViewInit {
           width: 120
         },
         {
-          title: 'Blockchain',
-          field: 'blockchain',
-          width: 150
-        },
-        {
           title: 'Export Frequency',
-          field: 'exportFrequency',
-          width: 150
+          field: 'exportStrategy',
+          pipe: 'exportStrategy',
+          width: 120
         },
         {
           title: 'Created On',
@@ -246,14 +294,14 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Last Executed On',
-          field: 'executedTime',
+          field: 'lastExecutedTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
           width: 150
         },
         {
           title: 'Status',
-          field: 'status',
+          tdTemplate: this.statusTpl,
           width: 100
         },
         {
@@ -262,7 +310,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 300
+          width: 200
         }
       ],
       total: 0,

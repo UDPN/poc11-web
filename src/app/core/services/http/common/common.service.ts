@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 09:45:37
+ * @LastEditTime: 2024-12-13 14:51:09
  * @Description:
  */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -47,4 +47,9 @@ export class CommonService {
       }
     );
   }
+
+  public tokenList(): Observable<any> {
+    return this.http.post(`/v1/common/centralBankList`, {});
+  }
+
 }

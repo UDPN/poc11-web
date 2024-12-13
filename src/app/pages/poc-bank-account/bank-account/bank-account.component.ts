@@ -33,7 +33,6 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   info: any = [];
-  searchParam = {};
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -75,10 +74,6 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
     this.tableChangeDectction();
   }
 
-  resetForm() {
-    this.searchParam = {};
-    this.getDataList(this.tableQueryParams);
-  }
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -95,10 +90,9 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-      filters: this.searchParam
     };
     this.pocBankAccountService
-      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .fetchList(params.pageNum, params.pageSize)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
