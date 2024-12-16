@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 15:57:21
+ * @LastEditTime: 2024-12-16 10:25:03
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -297,8 +297,11 @@
                       formControlName="txTypes"
                     >
                       <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
-                      <nz-option nzValue="4" nzLabel="Transfer out"></nz-option>
-                      <nz-option nzValue="5" nzLabel="Transfer in"></nz-option>
+                      <nz-option nzValue="4" nzLabel="Transfer"></nz-option>
+                      <nz-option
+                        nzValue="5"
+                        nzLabel="FX Purchasing"
+                      ></nz-option>
                       <nz-option nzValue="6" nzLabel="Withdraw"></nz-option>
                     </nz-select>
                   </div>

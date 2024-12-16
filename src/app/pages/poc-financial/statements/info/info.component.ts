@@ -2,7 +2,14 @@
  * @Author: chenyuting
  * @Date: 2024-12-12 16:33:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 17:16:31
+ * @LastEditTime: 2024-12-16 10:40:33
+ * @Description: 
+ */
+/*
+ * @Author: chenyuting
+ * @Date: 2024-12-12 16:33:30
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-16 09:45:37
  * @Description:
  */
 import {
@@ -208,7 +215,6 @@ export class InfoComponent implements OnInit, AfterViewInit {
 
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
-
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
@@ -267,7 +273,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Status',
+          title: 'Executed Status',
           tdTemplate: this.statusTpl,
           width: 100
         },

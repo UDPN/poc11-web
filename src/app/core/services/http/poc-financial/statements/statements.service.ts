@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 17:35:06
+ * @LastEditTime: 2024-12-16 13:34:27
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -161,10 +161,9 @@ export class StatementsService {
   ): Observable<any> {
     const param: any = {
       data: {
-        exportRuleId: filters.exportRuleId || '',
         exportState: filters.exportState || '',
         fileId: filters.fileId || '',
-        moduleType: filters.moduleType || '',
+        moduleType: filters.moduleType || 5,
         tokenId: filters.tokenId || '',
         createStartTime: filters.createTime[0]
           ? timeToTimestampMillisecond(
