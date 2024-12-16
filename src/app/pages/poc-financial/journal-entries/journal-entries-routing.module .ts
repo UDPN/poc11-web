@@ -8,12 +8,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { JournalEntriesComponent } from './journal-entries.component';
+import { AddComponent } from './add/add.component';
+import { ActionCode } from '@app/config/actionCode';
 
 const routes: Routes = [
   {
     path: '',
     component: JournalEntriesComponent,
     data: { title: 'journalEntries', key: 'journal-entries', shouldDetach: 'no' }
+  },
+  {
+    path: 'add',
+    component: AddComponent,
+    data: { title: 'journalEntries-add', authCode: ActionCode.TabsDetail, key: 'journal-entries-add', shouldDetach: 'no' }
   },
 ];
 

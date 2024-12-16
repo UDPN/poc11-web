@@ -10,11 +10,12 @@ import { CommonModule } from '@angular/common';
 import { JournalEntriesRoutingModule } from './journal-entries-routing.module ';
 import { SharedModule } from '@app/shared/shared.module';
 import { JournalEntriesComponent } from './journal-entries.component';
+import { AddComponent } from './add/add.component';
 
 
 
 @NgModule({
-  declarations: [JournalEntriesComponent],
+  declarations: [JournalEntriesComponent,AddComponent],
   imports: [CommonModule, SharedModule, JournalEntriesRoutingModule]
 })
 export class JournalEntriesModule {}
