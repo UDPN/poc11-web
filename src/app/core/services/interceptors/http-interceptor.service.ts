@@ -65,7 +65,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       };
     } else {
       httpConfig = {
-        url: (environment.production ? '/fxsp' : '') + req.url
+        url: (environment.production ? '/lpcp' : '') + req.url
       };
     }
     req = req.clone({

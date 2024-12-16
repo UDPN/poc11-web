@@ -1,1 +1,456 @@
-<p>export works!</p>
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-financial/statements'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Report Records'"
+    class="m-b-10"
+  >
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Token Name</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="tokenId"
+                [(ngModel)]="exportParam.tokenId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of tokenList"
+                  [nzValue]="item.centralBankId"
+                  [nzLabel]="item.bankName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Transaction Wallet Address</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="walletAddress"
+                [(ngModel)]="exportParam.walletAddress"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">File Export Type</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                nzDisabled
+                [nzShowArrow]="false"
+                name="fileType"
+                [(ngModel)]="exportParam.fileType"
+              >
+                <nz-option [nzValue]="0" nzLabel="Excel"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Transaction Type</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzMode="multiple"
+                [nzShowArrow]="true"
+                name="txTypes"
+                [(ngModel)]="exportParam.txTypes"
+                (ngModelChange)="getTxTypes($event)"
+              >
+                <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
+                <nz-option nzValue="4" nzLabel="Transfer"></nz-option>
+                <nz-option nzValue="5" nzLabel="FX Purchasing"></nz-option>
+                <nz-option nzValue="6" nzLabel="Withdraw"></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <div style="color: red" *ngIf="txTypesError === true">
+              {{ 'Please select your Transaction Type' }}
+            </div>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Transaction Period</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="txnTime"
+                [(ngModel)]="exportParam.txnTime"
+                (ngModelChange)="getTxnTime($event)"
+              ></nz-range-picker>
+            </nz-form-control>
+            <div style="color: red" *ngIf="txnTimeError === true">
+              {{ 'Please select your Transaction Period' }}
+            </div>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="16"
+          [nzMd]="16"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="text-right"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button nz-button [nzType]="'primary'" (click)="getExport()">
+                  Export
+                </button>
+                <a
+                  nz-button
+                  nzType="link"
+                  class="m-l-15"
+                  (click)="resetFormExport()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Report Records'"
+    class="m-b-10"
+  >
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Token Name</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="tokenId"
+                [(ngModel)]="searchParam.tokenId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of tokenList"
+                  [nzValue]="item.centralBankId"
+                  [nzLabel]="item.bankName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Blockchain</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="blockchainId"
+                [(ngModel)]="searchParam.blockchainId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of blockchainList"
+                  [nzValue]="item.centralBankId"
+                  [nzLabel]="item.bankName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>File ID</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="fileId"
+                [(ngModel)]="searchParam.fileId"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Transaction Period</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="txnTime"
+                [(ngModel)]="searchParam.txnTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Executed On</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="createTime"
+                [(ngModel)]="searchParam.createTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Export Status</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="exportState"
+                [(ngModel)]="searchParam.exportState"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="0" nzLabel="Pending"></nz-option>
+                <nz-option nzValue="1" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="2" nzLabel="Completed"></nz-option>
+                <nz-option nzValue="3" nzLabel="Failed"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="16"
+          [nzMd]="16"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="text-right"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap [tableTitle]="" [isNormalTable]="true">
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #fileIdTpl let-fileId="fileId">
+      <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
+        {{
+          fileId.length > 10
+            ? fileId.substring(0, 6) +
+              '....' +
+              fileId.substring(fileId.length - 4, fileId.length)
+            : fileId
+        }}
+      </p>
+    </ng-template>
+    <ng-template #fileHashTpl let-fileHash="fileHash">
+      <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
+        {{
+          fileHash.length > 10
+            ? fileHash.substring(0, 6) +
+              '....' +
+              fileHash.substring(fileHash.length - 4, fileHash.length)
+            : fileHash
+        }}
+      </p>
+    </ng-template>
+    <ng-template #statusTpl let-exportState="exportState">
+      <nz-tag [nzColor]="exportState | map: 'downloadCenterStatusColor'">{{
+        exportState | map: 'downloadCenterStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template #proofHashTpl let-proofHash="proofHash">
+      <p [title]="proofHash" nz-typography nzCopyable [nzCopyText]="proofHash">
+        {{
+          proofHash.length > 10
+            ? proofHash.substring(0, 6) +
+              '....' +
+              proofHash.substring(proofHash.length - 4, proofHash.length)
+            : proofHash
+        }}
+      </p>
+    </ng-template>
+    <ng-template #walletAddressTpl let-walletAddress="walletAddress">
+      <p
+        [title]="walletAddress"
+        nz-typography
+        nzCopyable
+        [nzCopyText]="walletAddress"
+      >
+        {{
+          walletAddress.length > 10
+            ? walletAddress.substring(0, 6) +
+              '....' +
+              walletAddress.substring(
+                walletAddress.length - 4,
+                walletAddress.length
+              )
+            : walletAddress
+        }}
+      </p>
+    </ng-template>
+    <ng-template #proofStatusTpl let-proofState="proofState">
+      <nz-tag [nzColor]="proofState | map: 'proofStatusColor'">{{
+        proofState | map: 'proofStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template
+      #operationTpl
+      let-downloadCenterStatus="downloadCenterStatus"
+      let-exportTaskId="exportTaskId"
+      let-busId="busId"
+      let-busType="busType"
+      let-fileName="fileName"
+    >
+      <ng-container *appAuth="'R030102'">
+        <span
+          class="operate-text"
+          *ngIf="downloadCenterStatus === 2"
+          (click)="onDownload(busId, busType, fileName)"
+        >
+          Download
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R030102'">
+        <span
+          class="operate-text"
+          *ngIf="downloadCenterStatus === 2"
+          (click)="onDelete(exportTaskId)"
+        >
+          Delete
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>
