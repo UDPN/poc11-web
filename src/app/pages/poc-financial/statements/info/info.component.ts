@@ -1,15 +1,8 @@
 /*
  * @Author: chenyuting
- * @Date: 2024-12-10 11:08:21
+ * @Date: 2024-12-12 16:33:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 15:19:20
- * @Description:
- */
-/*
- * @Author: chenyuting
- * @Date: 2024-12-10 11:08:21
- * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-10 11:18:49
+ * @LastEditTime: 2024-12-13 17:16:31
  * @Description:
  */
 import {
@@ -20,7 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 import { SearchCommonVO } from '@app/core/services/types';
@@ -32,18 +25,18 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 interface SearchParam {
-  tokenId: string;
-  exportStrategy: string | number;
-  status: string | number;
+  fileId: string;
+  exportState: string | number;
   createTime: any;
-  lastExecutedTime: any;
+  txnTime: any;
+  exportRuleId: any;
 }
 @Component({
-  selector: 'app-statements',
-  templateUrl: './statements.component.html',
-  styleUrl: './statements.component.less'
+  selector: 'app-info',
+  templateUrl: './info.component.html',
+  styleUrl: './info.component.less'
 })
-export class StatementsComponent implements OnInit, AfterViewInit {
+export class InfoComponent implements OnInit, AfterViewInit {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -54,19 +47,23 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   operationTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('fileIdTpl', { static: true })
+  fileIdTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('fileHashTpl', { static: true })
+  fileHashTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('proofHashTpl', { static: true })
+  proofHashTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('proofStatusTpl', { static: true })
+  proofStatusTpl!: TemplateRef<NzSafeAny>;
+  info: any = {};
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
-  tokenList: any = [];
-  visible = false;
-  validateForm!: FormGroup;
-  isNewLoading: boolean = false;
-  frequencyType: string = '';
   searchParam: Partial<SearchParam> = {
-    tokenId: '',
-    exportStrategy: '',
-    status: '',
+    fileId: '',
+    exportState: '',
     createTime: [],
-    lastExecutedTime: []
+    txnTime: [],
+    exportRuleId: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -82,32 +79,33 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     footer: ''
   };
   constructor(
+    public routeInfo: ActivatedRoute,
+    private statementsService: StatementsService,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder,
     private modal: NzModalService,
     private message: NzMessageService,
-    private statementsService: StatementsService,
     private commonService: CommonService
   ) {}
+
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: ``,
-      breadcrumb: ['Financial Management', 'Statements and Reports'],
-      extra: this.headerExtra,
-      desc: this.headerContent,
+      title: `Details`,
+      breadcrumbs: [
+        { name: 'Financial Management' },
+        {
+          name: 'Statements and Reports',
+          url: '/poc/poc-financial/statements'
+        },
+        { name: 'Details' }
+      ],
+      extra: '',
+      desc: '',
       footer: ''
     };
   }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.initTable();
-    this.getTokenList();
-    this.validateForm = this.fb.group({
-      taskName: [null, [Validators.required]],
-      tokenId: [null, [Validators.required]],
-      txTypes: [[], [Validators.required]],
-      exportStrategy: [null, [Validators.required]]
-    });
+    this.getInfo();
   }
 
   tableChangeDectction(): void {
@@ -123,10 +121,9 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   resetForm() {
     this.searchParam = {};
     this.searchParam.createTime = '';
-    this.searchParam.lastExecutedTime = '';
-    this.searchParam.tokenId = '';
-    this.searchParam.exportStrategy = '';
-    this.searchParam.status = '';
+    this.searchParam.txnTime = '';
+    this.searchParam.fileId = '';
+    this.searchParam.exportState = '';
     this.getDataList(this.tableQueryParams);
   }
 
@@ -134,58 +131,26 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-  open(): void {
-    this.visible = true;
-  }
-
-  changeFrequency(value: any) {
-    this.frequencyType = value;
-  }
-
-  onBack() {
-    this.visible = false;
-    this.validateForm.reset();
-  }
-
-  getTokenList() {
-    this.commonService.tokenList().subscribe((res) => {
-      this.tokenList = res;
-      this.cdr.markForCheck();
-      return;
+  getInfo(): void {
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.searchParam.exportRuleId = params['exportRuleId'];
+      this.statementsService
+        .taskDetail({ exportRuleId: params['exportRuleId'] })
+        .subscribe((res: any) => {
+          this.info = res;
+          this.cdr.markForCheck();
+          return;
+        });
     });
   }
-  onSubmit() {
-    this.isNewLoading = true;
-    this.statementsService
-      .createTask(this.validateForm.value)
-      .pipe(finalize(() => (this.isNewLoading = false)))
-      .subscribe({
-        next: (res) => {
-          if (res) {
-            this.message
-              .success('Add successfully!', { nzDuration: 1000 })
-              .onClose.subscribe(() => {
-                this.validateForm.reset();
-                this.visible = false;
-                this.getDataList(this.tableQueryParams);
-              });
-          }
-          this.isNewLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: (err) => {
-          this.isNewLoading = false;
-          this.cdr.markForCheck();
-        }
-      });
-  }
-  onDelete(exportRuleId: string, taskName: string) {
+
+  onDelete(exportTaskId: any) {
     this.modal.confirm({
-      nzTitle: `Are you sure you want to delete <b>${taskName}</b> ?`,
+      nzTitle: `Are you sure you want to delete ?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          this.statementsService.statusUpdate({ exportRuleId, state: 35 }).subscribe({
+          this.statementsService.taskDelete({ exportTaskId }).subscribe({
             next: res => {
               resolve(true);
               if (res) {
@@ -203,46 +168,54 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         }).catch(() => console.log('Oops errors!'))
     });
   }
-  
-  onStatusUpdate(exportRuleId: any, state: number, taskName: string) {
-    let statusValue = '';
-    if (state === 30) {
-      statusValue = 'deactivate';
-    } else {
-      statusValue = 'activate';
-    }
-    const toolStatus = statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
-    this.modal.confirm({
-      nzTitle: `Are you sure you want to ${statusValue} <b>${taskName}</b> ?`,
-      nzContent: '',
-      nzOnOk: () =>
-        new Promise((resolve, reject) => {
-          this.statementsService.statusUpdate({ exportRuleId, state }).subscribe({
-            next: res => {
-              resolve(true);
-              this.cdr.markForCheck();
-              if (res) {
-                this.message.success(`${toolStatus} successfully!`, { nzDuration: 1000 });
-              }
-              this.getDataList();
-            },
-            error: err => {
-              reject(true);
-              this.cdr.markForCheck();
-            },
-          })
-        }).catch(() => console.log('Oops errors!'))
-    });
+
+  onDownload(busId: any, busType: any, fileName: any) {
+    this.tableLoading(true);
+    this.commonService
+      .download(busId, busType)
+      .pipe(finalize(() => (this.tableLoading(false))))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message
+              .success('Download successfully!', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                const blob = new Blob([res.data], {
+                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                if ('download' in document.createElement('a')) {
+                  const elink = document.createElement('a');
+                  elink.download = fileName;
+                  elink.style.display = 'none';
+                  elink.href = URL.createObjectURL(blob);
+                  document.body.appendChild(elink);
+                  elink.click();
+                  URL.revokeObjectURL(elink.href);
+                  document.body.removeChild(elink);
+                  this.cdr.markForCheck();
+                }
+              });
+          }
+          this.tableLoading(false);
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.tableLoading(false);
+          this.cdr.markForCheck();
+        }
+      });
   }
+
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
+
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
     this.statementsService
-      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .taskDetailRecordsList(params.pageNum, params.pageSize, params.filters)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
@@ -266,35 +239,29 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
-          width: 100,
+          width: 80,
           show: true
         },
         {
-          title: 'Task Name',
-          field: 'taskName',
+          title: 'File ID',
+          tdTemplate: this.fileIdTpl,
           width: 120
         },
         {
-          title: 'Token Name',
-          field: 'tokenName',
+          title: 'File Hash',
+          tdTemplate: this.fileHashTpl,
           width: 120
         },
         {
-          title: 'Export Frequency',
-          field: 'exportStrategy',
-          pipe: 'exportStrategy',
-          width: 120
-        },
-        {
-          title: 'Created On',
-          field: 'createTime',
+          title: 'Transaction Period',
+          field: 'startTime',
           notNeedEllipsis: true,
-          pipe: 'timeStamp',
-          width: 150
+          pipe: 'dayStamp',
+          width: 120
         },
         {
-          title: 'Last Executed On',
-          field: 'lastExecutedTime',
+          title: 'Executed On',
+          field: 'exportTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
           width: 150
@@ -305,12 +272,29 @@ export class StatementsComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
+          title: 'Proof Hash',
+          tdTemplate: this.proofHashTpl,
+          width: 120
+        },
+        {
+          title: 'Proof Time',
+          field: 'proofTime',
+          notNeedEllipsis: true,
+          pipe: 'timeStamp',
+          width: 120
+        },
+        {
+          title: 'Proof Status',
+          tdTemplate: this.proofStatusTpl,
+          width: 100
+        },
+        {
           title: 'Actions',
           tdTemplate: this.operationTpl,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 200
+          width: 120
         }
       ],
       total: 0,

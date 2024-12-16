@@ -225,17 +225,61 @@ export const MapSet = {
     2: 'Non-custodian'
   },
   downloadCenterStatus: {
-    1: 'Pending',
-    2: 'Processing',
-    3: 'Failed',
-    4: 'Completed'
+    0: 'Pending',
+    1: 'Processing',
+    2: 'Completed',
+    3: 'Failed'
   },
   downloadCenterStatusColor: {
-    1: 'volcano',
-    2: 'blue',
-    3: 'red',
-    4: 'green'
+    0: 'volcano',
+    1: 'blue',
+    2: 'green',
+    3: 'red'
   },
+  moduleType: {
+    1: 'Journal Entries',
+    5: 'Statements and Reports',
+    10: 'Audit Trail',
+    15: 'Interest Settlement',
+    20: 'Token Statistics Report'
+  },
+  transactionDirection: {
+    1: 'Transfer in',
+    2: 'Transfer out'
+  },
+  statementStatus: {
+    20: 'Active',
+    30: 'Inactive'
+  },
+  statementStatusColor: {
+    20: 'green',
+    30: 'default'
+  },
+  exportStrategy: {
+    1: 'Daily',
+    7: 'Weekly',
+    30: 'Monthly'
+  },
+  statementsTxnType: {
+    3: 'Top-up',
+    4: 'Transfer out',
+    5: 'Transfer in',
+    6: 'Withdraw'
+  },
+  proofStatusColor: {
+    2: 'volcano',
+    3: 'volcano',
+    4: 'blue',
+    5: 'green',
+    6: 'red'
+  },
+  proofStatus: {
+    2: 'Pending',
+    3: 'Pending',
+    4: 'Processing',
+    5: 'Success',
+    6: 'Failed'
+  }
 };
 
 export interface MapItem {
@@ -350,6 +394,19 @@ export class MapPipe implements PipeTransform {
           value = Number(value) * 1000;
         }
         let res = this.datePipe.transform(value, 'MMMM y');
+        return res?.replace('GMT', 'UTC');
+      }
+    }
+    if (arg === 'dayStamp') {
+      if (!value) {
+        return (value = '--');
+      } else {
+        // return timestampToMonth(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM d, y');
         return res?.replace('GMT', 'UTC');
       }
     }

@@ -1,1 +1,415 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-10 17:23:08
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-13 15:57:21
+ * @Description: 
+-->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<div class="normal-table-wrap">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Query'"
+    class="m-b-10"
+  >
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Token Name</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="tokenId"
+                [(ngModel)]="searchParam.tokenId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of tokenList"
+                  [nzValue]="item.centralBankId"
+                  [nzLabel]="item.bankName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Export Frequency</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="exportStrategy"
+                [(ngModel)]="searchParam.exportStrategy"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="1" nzLabel="Daily"></nz-option>
+                <nz-option nzValue="7" nzLabel="Weekly"></nz-option>
+                <nz-option nzValue="30" nzLabel="Monthly"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Created On</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="createTime"
+                [(ngModel)]="searchParam.createTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Last Executed On</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="lastExecutedTime"
+                [(ngModel)]="searchParam.lastExecutedTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Status</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="status"
+                [(ngModel)]="searchParam.status"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="20" nzLabel="Active"></nz-option>
+                <nz-option nzValue="30" nzLabel="Inactive"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="text-right"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap
+    [tableTitle]="'User List'"
+    [isNormalTable]="true"
+    [btnTpl]="createBtn"
+  >
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="status | map: 'statementStatusColor'">{{
+        status | map: 'statementStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template
+      #operationTpl
+      let-status="status"
+      let-exportRuleId="exportRuleId"
+      let-taskName="taskName"
+    >
+      <ng-container *appAuth="status === 20 ? 'R030103' : 'R030104'">
+        <span
+          class="operate-text"
+          (click)="
+            onStatusUpdate(exportRuleId, status === 20 ? 30 : 20, taskName)
+          "
+        >
+          {{ status === 20 ? 'Deactivate' : 'Activate' }}
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R030102'">
+        <span
+          class="operate-text"
+          (click)="onDelete(exportRuleId, taskName)"
+          *ngIf="status === 30"
+        >
+          Delete
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R030105'">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-financial/statements/info"
+          [queryParams]="{exportRuleId}"
+        >
+          Details
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>
+<ng-template #createBtn>
+  <button
+    nz-button
+    nzType="primary"
+    class="m-r-8"
+    routerLink="/poc/poc-financial/statements/export"
+  >
+    Export
+  </button>
+  <button nz-button nzType="primary" class="m-r-8" (click)="open()">
+    <i nz-icon nzType="plus"></i>New
+  </button>
+</ng-template>
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="visible"
+  [nzMask]="false"
+  [nzClosable]="true"
+  nzPlacement="right"
+  nzTitle="New Export Task"
+  (nzOnClose)="onBack()"
+>
+  <ng-container *nzDrawerContent>
+    <div class="m-t-25">
+      <form nz-form nzLayout="vertical" [formGroup]="validateForm">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Task Name</nz-form-label>
+              <nz-form-control [nzErrorTip]="taskNameError">
+                <div nz-row>
+                  <div nz-col nzSpan="24">
+                    <input nz-input formControlName="taskName" maxlength="50" />
+                  </div>
+                </div>
+                <ng-template #taskNameError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please input your Task Name</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Token Name</nz-form-label>
+              <nz-form-control [nzErrorTip]="tokenNameError">
+                <div nz-row>
+                  <div nz-col nzSpan="24">
+                    <nz-select formControlName="tokenId">
+                      <nz-option
+                        *ngFor="let item of tokenList"
+                        [nzValue]="item.centralBankId"
+                        [nzLabel]="item.bankName"
+                      >
+                      </nz-option>
+                    </nz-select>
+                  </div>
+                </div>
+                <ng-template #tokenNameError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please select your Token Name</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Transaction Type</nz-form-label>
+              <nz-form-control [nzErrorTip]="transactionTypeError">
+                <div nz-row>
+                  <div nz-col nzSpan="24">
+                    <nz-select
+                      nzMode="multiple"
+                      [nzShowArrow]="true"
+                      formControlName="txTypes"
+                    >
+                      <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
+                      <nz-option nzValue="4" nzLabel="Transfer out"></nz-option>
+                      <nz-option nzValue="5" nzLabel="Transfer in"></nz-option>
+                      <nz-option nzValue="6" nzLabel="Withdraw"></nz-option>
+                    </nz-select>
+                  </div>
+                </div>
+                <ng-template #transactionTypeError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please select your Transaction Type</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>File Export Type</nz-form-label>
+              <nz-form-control [nzErrorTip]="taskNameError">
+                <div nz-row>
+                  <div nz-col nzSpan="24">
+                    <input
+                      nz-input
+                      readonly
+                      [value]="'Excel'"
+                      class="onboard-disabled"
+                    />
+                  </div>
+                </div>
+                <ng-template #taskNameError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please input your File Export Type</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Export Frequency</nz-form-label>
+              <nz-form-control [nzErrorTip]="exportFrequencyError">
+                <div nz-row>
+                  <div nz-col [nzSpan]="24">
+                    <nz-radio-group
+                      formControlName="exportStrategy"
+                      (ngModelChange)="changeFrequency($event)"
+                    >
+                      <nz-space
+                        ><label *nzSpaceItem nz-radio nzValue="1">Daily</label>
+                        <label *nzSpaceItem nz-radio nzValue="7">Weekly</label>
+                        <label *nzSpaceItem nz-radio nzValue="30"
+                          >Monthly</label
+                        ></nz-space
+                      >
+                    </nz-radio-group>
+                  </div>
+                </div>
+                <ng-template #exportFrequencyError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please select your Export Frequency</ng-container
+                  >
+                </ng-template>
+                <div
+                  class="default-top-head-color m-t-15"
+                  *ngIf="frequencyType"
+                >
+                  <i
+                    nz-icon
+                    nzType="info-circle"
+                    nzTheme="fill"
+                    [nzTheme]="'twotone'"
+                  ></i
+                  >{{
+                    this.frequencyType === '1'
+                      ? " Starting the next day, export at 01:00:00 UTC+08:00 for the previous day's transactions."
+                      : this.frequencyType === '7'
+                      ? " Starting next week, export every Monday at 01:00:00 UTC+08:00 for the previous week's transactions."
+                      : " Starting next month, export on the 1st at 01:00:00 UTC+08:00 for the previous month's transactions."
+                  }}
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="24" class="text-right m-t-60">
+            <nz-form-item>
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <nz-space>
+                    <button
+                      *nzSpaceItem
+                      nz-button
+                      [nzSize]="'large'"
+                      nzType="default"
+                      (click)="onBack()"
+                    >
+                      Back
+                    </button>
+                    <button
+                      *nzSpaceItem
+                      nz-button
+                      [nzSize]="'large'"
+                      nzType="primary"
+                      [nzLoading]="isNewLoading"
+                      (click)="onSubmit()"
+                    >
+                      Submit
+                    </button>
+                  </nz-space>
+                </div>
+              </div>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+</nz-drawer>

@@ -24,8 +24,6 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
   headerExtra!: TemplateRef<NzSafeAny>;
-  @ViewChild('numberTpl', { static: true })
-  numberTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionIdTpl', { static: true })
   transactionIdTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionAmountTpl', { static: true })
@@ -35,7 +33,6 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   info: any = [];
-  searchParam = {};
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -64,7 +61,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   }
   ngOnInit(): void {
     this.initTable();
-    this.getInfo();
+    this.getOverviewInfo();
   }
 
   tableChangeDectction(): void {
@@ -77,17 +74,15 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
     this.tableChangeDectction();
   }
 
-  resetForm() {
-    this.searchParam = {};
-    this.getDataList(this.tableQueryParams);
-  }
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
 
-  getInfo() {
+  getOverviewInfo() {
     this.pocBankAccountService.getOverview().subscribe((res) => {
       this.info = res;
+      this.cdr.markForCheck();
+      return;
     });
   }
   getDataList(e?: NzTableQueryParams): void {
@@ -95,21 +90,17 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-      filters: this.searchParam
     };
     this.pocBankAccountService
-      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .fetchList(params.pageNum, params.pageSize)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
         })
       )
       .subscribe((_: any) => {
-        this.dataList = _.data;
-        this.dataList.forEach((item: any, i: any) => {
-          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-        });
-        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.dataList = _.data.rows;
+        this.tableConfig.total = _.data.page.total;
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
         this.cdr.markForCheck();
@@ -126,14 +117,15 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Transaction Time',
-          field: 'exportTime',
+          field: 'transactionTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Transaction Direction',
-          field: '',
+          field: 'txType',
+          pipe: 'transactionDirection',
           width: 120
         },
         {

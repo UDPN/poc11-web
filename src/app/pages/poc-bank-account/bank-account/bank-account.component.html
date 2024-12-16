@@ -21,16 +21,21 @@
             class="card-descriptions-order"
           >
             <nz-descriptions-item [nzTitle]="'Bank Account No.'"
-              ><span nz-typography nzCopyable [nzCopyText]="'1111'">{{ '1111' }}</span></nz-descriptions-item
+              ><span
+                nz-typography
+                nzCopyable
+                [nzCopyText]="info.bankAccountNo"
+                >{{ info.bankAccountNo }}</span
+              ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Bank Name'"
-              ><span>{{ '22' }}</span></nz-descriptions-item
+              ><span>{{ info.bankName }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Name'"
-              ><span>{{ '33' }}</span></nz-descriptions-item
+              ><span>{{ info.accountName }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Currency'"
-              ><span>{{ '444' }}</span></nz-descriptions-item
+              ><span>{{ info.currency }}</span></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
@@ -55,7 +60,10 @@
               [nzSm]="4"
               [nzXs]="12"
             >
-              <img src="../../../../../assets/imgs/reserve-balance.svg" alt="" />
+              <img
+                src="../../../../../assets/imgs/reserve-balance.svg"
+                alt=""
+              />
             </div>
             <div
               nz-col
@@ -73,7 +81,13 @@
               </div>
               <div class="m-t-15">
                 <h3 nz-typography>
-                  {{ '8,000,000,000,000.00 EUR' }}
+                  {{
+                    info.accountBalance
+                      ? (info.accountBalance | map: 'toThousandthMark') +
+                        ' ' +
+                        info.currency
+                      : '--'
+                  }}
                 </h3>
               </div>
             </div>
@@ -92,40 +106,47 @@
       [tableConfig]="tableConfig"
       [tableData]="dataList"
     ></app-ant-table>
-    <ng-template #numberTpl let-key="key">
-      <span [title]="key">{{ key }}</span>
-    </ng-template>
-    <ng-template #transactionIdTpl let-realName="realName">
-      <p [title]="realName" nz-typography nzCopyable [nzCopyText]="realName">
+    <ng-template #transactionIdTpl let-transactionId="transactionId">
+      <p
+        [title]="transactionId"
+        nz-typography
+        nzCopyable
+        [nzCopyText]="transactionId"
+      >
         {{
-          realName.length > 10
-            ? realName.substring(0, 6) +
+          transactionId.length > 10
+            ? transactionId.substring(0, 6) +
               '....' +
-              realName.substring(realName.length - 4, realName.length)
-            : realName
+              transactionId.substring(
+                transactionId.length - 4,
+                transactionId.length
+              )
+            : transactionId
         }}
       </p>
     </ng-template>
     <ng-template
       #transactionAmountTpl
       let-type="type"
-      let-amount="amount"
-      let-currency="currency"
+      let-transactionAmount="transactionAmount"
+      let-transactionCurrencyName="transactionCurrencyName"
     >
       <span
-        [title]="amount"
+        [title]="transactionAmount"
         [style]="{ color: type === 1 ? '#39A16A' : '#E53E3E' }"
-        >{{ amount | map: 'toThousandthMark' }}{{ currency }}</span
+        >{{ transactionAmount | map: 'toThousandthMark'
+        }}{{ transactionCurrencyName }}</span
       >
     </ng-template>
     <ng-template
       #balanceTpl
       let-type="type"
-      let-amount="amount"
-      let-currency="currency"
+      let-reserveAmount="reserveAmount"
+      let-legalCurrencyName="legalCurrencyName"
     >
-      <span [title]="amount"
-        >{{ amount | map: 'toThousandthMark' }}{{ currency }}</span
+      <span [title]="reserveAmount"
+        >{{ reserveAmount | map: 'toThousandthMark'
+        }}{{ legalCurrencyName }}</span
       >
     </ng-template>
   </app-card-table-wrap>

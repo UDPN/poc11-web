@@ -1,0 +1,253 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-financial/statements'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card [nzBordered]="true" class="m-b-10" nzTitle="Basic Information">
+    <nz-descriptions
+      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+      [nzColon]="false"
+      [nzBordered]="true"
+    >
+      <nz-descriptions-item nzTitle="Task Name">{{
+        info.taskName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Token Name">{{
+        info.tokenName
+      }}</nz-descriptions-item
+      ><nz-descriptions-item nzTitle="Transaction Type"
+        ><span *ngFor="let type of info.transactionTypes; index as i">{{
+          i === info.transactionTypes.length - 1
+            ? (type | map: 'statementsTxnType')
+            : (type | map: 'statementsTxnType') + '、'
+        }}</span></nz-descriptions-item
+      ><nz-descriptions-item nzTitle="Export Frequency">{{
+        info.exportStrategy | map: 'exportStrategy'
+      }}</nz-descriptions-item
+      ><nz-descriptions-item nzTitle="File Export Type">{{
+        'Excel'
+      }}</nz-descriptions-item
+      ><nz-descriptions-item nzTitle="Created By">{{
+        info.createUserName
+      }}</nz-descriptions-item
+      ><nz-descriptions-item nzTitle="Created On">{{
+        info.createTime | map: 'timeStamp'
+      }}</nz-descriptions-item
+      ><nz-descriptions-item nzTitle="Status">
+        <nz-tag [nzColor]="info.status | map: 'statementStatusColor'">{{
+          info.status | map: 'statementStatus'
+        }}</nz-tag></nz-descriptions-item
+      >
+    </nz-descriptions>
+  </nz-card>
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Report Record'"
+    class="m-b-10"
+  >
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>File ID</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="fileId"
+                [(ngModel)]="searchParam.fileId"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Transaction Period</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="txnTime"
+                [(ngModel)]="searchParam.txnTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Executed On</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="createTime"
+                [(ngModel)]="searchParam.createTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Export Status</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="exportState"
+                [(ngModel)]="searchParam.exportState"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="0" nzLabel="Pending"></nz-option>
+                <nz-option nzValue="1" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="2" nzLabel="Completed"></nz-option>
+                <nz-option nzValue="3" nzLabel="Failed"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="16"
+          [nzXl]="16"
+          [nzLg]="24"
+          [nzMd]="24"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="text-right"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap [tableTitle]="" [isNormalTable]="true">
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #fileIdTpl let-fileId="fileId">
+      <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
+        {{
+          fileId.length > 10
+            ? fileId.substring(0, 6) +
+              '....' +
+              fileId.substring(fileId.length - 4, fileId.length)
+            : fileId
+        }}
+      </p>
+    </ng-template>
+    <ng-template #fileHashTpl let-fileHash="fileHash">
+      <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
+        {{
+          fileHash.length > 10
+            ? fileHash.substring(0, 6) +
+              '....' +
+              fileHash.substring(fileHash.length - 4, fileHash.length)
+            : fileHash
+        }}
+      </p>
+    </ng-template>
+    <ng-template #statusTpl let-exportState="exportState">
+      <nz-tag [nzColor]="exportState | map: 'downloadCenterStatusColor'">{{
+        exportState | map: 'downloadCenterStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template #proofHashTpl let-proofHash="proofHash">
+      <p [title]="proofHash" nz-typography nzCopyable [nzCopyText]="proofHash">
+        {{
+          proofHash.length > 10
+            ? proofHash.substring(0, 6) +
+              '....' +
+              proofHash.substring(proofHash.length - 4, proofHash.length)
+            : proofHash
+        }}
+      </p>
+    </ng-template>
+    <ng-template #proofStatusTpl let-proofState="proofState">
+      <nz-tag [nzColor]="proofState | map: 'proofStatusColor'">{{
+        proofState | map: 'proofStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template
+      #operationTpl
+      let-downloadCenterStatus="downloadCenterStatus"
+      let-exportTaskId="exportTaskId"
+      let-busId="busId"
+      let-busType="busType"
+      let-fileName="fileName"
+    >
+      <ng-container *appAuth="'R030102'">
+        <span
+          class="operate-text"
+          *ngIf="downloadCenterStatus === 2"
+          (click)="onDownload(busId, busType, fileName)"
+        >
+          Download
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R030102'">
+        <span
+          class="operate-text"
+          *ngIf="downloadCenterStatus === 2"
+          (click)="onDelete(exportTaskId)"
+        >
+          Delete
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>

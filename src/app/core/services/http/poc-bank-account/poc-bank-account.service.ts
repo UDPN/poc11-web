@@ -2,15 +2,13 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-12 14:11:05
+ * @LastEditTime: 2024-12-13 14:30:57
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../base-http.service';
-import { timeToTimestamp } from '@app/utils/tools';
-import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +16,11 @@ import { DatePipe } from '@angular/common';
 export class PocBankAccountService {
   constructor(
     public http: BaseHttpService,
-    private https: HttpClient,
-    private date: DatePipe
+    private https: HttpClient
   ) {}
   public fetchList(
     pageIndex: number,
-    pageSize: number,
-    filters: any
+    pageSize: number
   ): Observable<any> {
     const param: any = {
       data: {},

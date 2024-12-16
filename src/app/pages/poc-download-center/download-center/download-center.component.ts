@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 10:29:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-12 13:50:15
+ * @LastEditTime: 2024-12-13 14:24:55
  * @Description:
  */
 /*
@@ -20,29 +20,16 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { SearchCommonVO } from '@app/core/services/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
-import { UserService } from '@app/core/services/http/poc-system/user/user.service';
 import { PocDownloadCenterService } from '@app/core/services/http/poc-download-center/poc-download-center.service';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-interface SearchParam {
-  createTime: any;
-  blockchainCode: string;
-  blockchainId: string;
-  blockchainName: string;
-  exportRuleId: string;
-  exportState: string;
-  fileId: string;
-  moduleType: string;
-  tokenId: string;
-  txTime: any;
-}
+
 @Component({
   selector: 'app-download-center',
   templateUrl: './download-center.component.html',
@@ -66,18 +53,6 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   isLoadingDownlad: boolean = false;
-  searchParam: Partial<SearchParam> = {
-    blockchainCode: '',
-    blockchainId: '',
-    blockchainName: '',
-    exportRuleId: '',
-    createTime: [],
-    exportState: '',
-    fileId: '',
-    moduleType: '',
-    tokenId: '',
-    txTime: []
-  };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -106,7 +81,6 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
       footer: ''
     };
   }
-
   ngOnInit() {
     this.initTable();
   }
@@ -114,67 +88,56 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
-
   tableLoading(isLoading: boolean): void {
     this.tableConfig.loading = isLoading;
     this.tableChangeDectction();
   }
-
-  resetForm() {
-    this.searchParam = {};
-    this.getDataList(this.tableQueryParams);
-  }
+  
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
-
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-      filters: this.searchParam
     };
     this.downloadCenterService
-      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .fetchList(params.pageNum, params.pageSize)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
         })
       )
       .subscribe((_: any) => {
-        this.dataList = _.data;
+        this.dataList = _.data.rows;
         this.dataList.forEach((item: any, i: any) => {
           Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
         });
-        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.total = _.data.page.total;
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
         this.cdr.markForCheck();
       });
   }
 
-  getDownload(busId: any, busType: any) {
-    this.isLoadingDownlad = true;
+  getDownload(busId: any, busType: any, fileName: any) {
+    this.tableLoading(true);
     this.commonService
       .download(busId, busType)
-      .pipe(finalize(() => (this.isLoadingDownlad = false)))
+      .pipe(finalize(() => (this.tableLoading(false))))
       .subscribe({
         next: (res) => {
           if (res) {
             this.message
-              .success('Add successfully!', { nzDuration: 1000 })
+              .success('Download successfully!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
-                const fileName =
-                  res?.headers['content-disposition']?.split("utf-8''")[1];
                 const blob = new Blob([res.data], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
-
                 if ('download' in document.createElement('a')) {
                   const elink = document.createElement('a');
-                  elink.download = fileName.replaceAll('%20', ' ');
-                  // elink.download = fileName;
+                  elink.download = fileName;
                   elink.style.display = 'none';
                   elink.href = URL.createObjectURL(blob);
                   document.body.appendChild(elink);
@@ -185,11 +148,11 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
                 }
               });
           }
-          this.isLoadingDownlad = false;
+          this.tableLoading(false);
           this.cdr.markForCheck();
         },
         error: (err) => {
-          this.isLoadingDownlad = false;
+          this.tableLoading(false);
           this.cdr.markForCheck();
         }
       });
@@ -205,7 +168,8 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Data Source',
-          field: 'userName',
+          field: 'moduleType',
+          pipe: 'moduleType',
           width: 180
         },
         {
@@ -227,7 +191,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Created by',
-          field: 'lockable',
+          field: 'exportUserName',
           width: 100
         },
         {
