@@ -104,7 +104,7 @@ export class AddComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.message.error('获取Token列表失败');
+          // this.message.error('获取Token列表失败');
           console.error('获取Token列表错误:', error);
         }
       });
@@ -160,7 +160,7 @@ export class AddComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.message.error('获取科目列表失败');
+          // this.message.error('获取科目列表失败');
           console.error('获取科目列表错误:', error);
         }
       });
@@ -292,8 +292,6 @@ export class AddComponent implements OnInit {
       });
 
       this.message.success('提交成功');
-    } else {
-      this.message.error('请检查表单是否填写正确');
     }
   }
 
@@ -389,7 +387,7 @@ export class AddComponent implements OnInit {
   // 保存单条记录
   onSaveTransaction(transaction: AbstractControl, groupIndex: number, transactionIndex: number) {
     if (!transaction.valid) {
-      this.message.error('请检查输入是否正确');
+      // this.message.error('请检查输入是否正确');
       return;
     }
 
@@ -420,13 +418,11 @@ export class AddComponent implements OnInit {
 
             this.storageService.updateTransactionGroup(groupIndex, currentData);
             this.message.success('保存成功');
-          } else {
-            this.message.error(response.msg || '保存失败');
           }
         },
         error: (error) => {
           console.error('保存科目错误:', error);
-          this.message.error('保存失败，请稍后重试');
+          // this.message.error('保存失败，请稍后重试');
         }
       });
   }
