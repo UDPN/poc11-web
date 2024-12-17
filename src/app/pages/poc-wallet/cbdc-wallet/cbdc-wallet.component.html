@@ -237,11 +237,14 @@
       let-chainAccountAddress="chainAccountAddress"
       let-state="state"
       let-currency="currency"
+      let-reserveAccount="reserveAccount"
     >
       <ng-container *appAuth="'R01010103'">
         <span
           class="operate-text"
-          (click)="getTopUp(currency, chainAccountAddress, balance)"
+          (click)="
+            getTopUp(currency, chainAccountAddress, balance, reserveAccount)
+          "
           *ngIf="state === 5 && region === 1"
         >
           Top up
@@ -250,7 +253,9 @@
       <ng-container *appAuth="'R01010104'">
         <span
           class="operate-text"
-          (click)="getWithdraw(currency, chainAccountAddress, balance)"
+          (click)="
+            getWithdraw(currency, chainAccountAddress, balance, reserveAccount)
+          "
           *ngIf="state === 5 && region === 1"
         >
           Withdraw
@@ -337,30 +342,6 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Transaction Reference No
-            </nz-form-label>
-            <nz-form-control
-              [nzErrorTip]="transactionReferenceNoError"
-              nzSpan="16"
-              class="m-b-20"
-            >
-              <input nz-input formControlName="transactionReferenceNo" />
-              <ng-template #transactionReferenceNoError let-control>
-                <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Transaction Reference No</ng-container
-                >
-                <ng-container *ngIf="control.hasError('regular1')"
-                  >The maximum limit is 50 characters</ng-container
-                >
-                <ng-container *ngIf="control.hasError('regular')"
-                  >Format error. Please enter numbers, letters, or special
-                  characters.</ng-container
-                >
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label nzRequired nzSpan="8" class="text-left">
               Bank Account
             </nz-form-label>
             <nz-form-control
@@ -368,7 +349,18 @@
               nzSpan="16"
               class="m-b-20"
             >
-              <input nz-input formControlName="reserveAccount" />
+              <input
+                nz-input
+                formControlName="reserveAccount"
+                readonly
+                class="onboard-disabled"
+              />
+              <div>
+                {{ 'Available Amount: ' }}
+                {{
+                  (this.balance | map: 'toThousandthMark') + ' ' + this.currency
+                }}
+              </div>
               <ng-template #bankAccountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
                   >Please input your Bank Account</ng-container
@@ -404,6 +396,10 @@
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular1')"
+                  >The Amount cannot be greater than the Available
+                  Amount</ng-container
                 >
               </ng-template>
             </nz-form-control>
@@ -527,7 +523,12 @@
               nzSpan="16"
               class="m-b-20"
             >
-              <input nz-input formControlName="reserveAccount" />
+              <input
+                nz-input
+                formControlName="reserveAccount"
+                readonly
+                class="onboard-disabled"
+              />
               <ng-template #bankAccountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
                   >Please input your Bank Account</ng-container

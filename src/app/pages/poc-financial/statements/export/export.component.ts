@@ -182,7 +182,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
               resolve(true);
               if (res) {
                 this.message
-                  .success(`Delete successfully`)
+                  .success(`Delete successfully`, { nzDuration: 1000 })
                   .onClose!.subscribe(() => {
                     this.getDataList();
                   });
@@ -286,7 +286,9 @@ export class ExportComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (res) => {
             if (res) {
-              this.message.success('Export successfully!');
+              this.message.success('Export successfully!', {
+                nzDuration: 1000
+              });
             }
             this.getDataList();
             this.exportLoading === false;

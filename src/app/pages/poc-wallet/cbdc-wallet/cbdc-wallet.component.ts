@@ -123,10 +123,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.topUpForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      transactionReferenceNo: [
-        null,
-        [Validators.required, this.transactionReferenceNoValidator]
-      ],
       reserveAccount: [
         null,
         [Validators.required, this.reserveAccountValidator]
@@ -154,6 +150,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -166,19 +164,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     } else if (control.value > Number(this.balance)) {
-      return { regular1: true, error: true };
-    }
-    return {};
-  };
-
-  transactionReferenceNoValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^([a-zA-Z0-9\s-._#!@￥%&*?/]{1,100})$/.test(control.value)) {
-      return { regular: true, error: true };
-    } else if (control.value.length > 50) {
       return { regular1: true, error: true };
     }
     return {};
@@ -264,23 +249,35 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getTopUp(currency: string, chainAccountAddress: string, balance: any) {
+  getTopUp(
+    currency: string,
+    chainAccountAddress: string,
+    balance: any,
+    reserveAccount: any
+  ) {
     this.currency = currency;
     this.balance = balance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.topUpForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
   }
 
-  getWithdraw(currency: string, chainAccountAddress: string, balance: any) {
+  getWithdraw(
+    currency: string,
+    chainAccountAddress: string,
+    balance: any,
+    reserveAccount: any
+  ) {
     this.currency = currency;
     this.balance = balance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.withdrawForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.withdrawForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleWithdraw = true;
   }
 
@@ -327,20 +324,15 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           : this.withdrawForm.get('fiatAmount')?.value,
       password: code,
       txType: this.txType === 1 ? 1 : 2,
-      reserveAccount:
-        this.txType === 1
-          ? this.topUpForm.get('reserveAccount')?.value
-          : this.withdrawForm.get('reserveAccount')?.value,
+      // reserveAccount:
+      //   this.txType === 1
+      //     ? this.topUpForm.get('reserveAccount')?.value
+      //     : this.withdrawForm.get('reserveAccount')?.value,
       walletAddress:
         this.txType === 1
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
-    if (this.txType === 1) {
-      params['transactionReferenceNo'] = this.topUpForm.get(
-        'transactionReferenceNo'
-      )?.value;
-    }
     const amount = thousandthMark(params.amount) + ' ' + this.currency;
     this.cbdcWalletService
       .topUpOrWithdraw(params)

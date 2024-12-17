@@ -161,7 +161,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
             next: res => {
               resolve(true);
               if (res) {
-                this.message.success(`Delete successfully`).onClose!.subscribe(() => {
+                this.message.success(`Delete successfully`, {nzDuration: 1000}).onClose!.subscribe(() => {
                   this.getDataList();
                 });
               }

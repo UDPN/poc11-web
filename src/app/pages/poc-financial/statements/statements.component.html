@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-16 10:25:03
+ * @LastEditTime: 2024-12-16 14:26:30
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -250,13 +250,17 @@
               <nz-form-control [nzErrorTip]="taskNameError">
                 <div nz-row>
                   <div nz-col nzSpan="24">
-                    <input nz-input formControlName="taskName" maxlength="50" />
+                    <input nz-input formControlName="taskName" />
                   </div>
                 </div>
                 <ng-template #taskNameError let-control>
                   <ng-container *ngIf="control.hasError('required')"
                     >Please input your Task Name</ng-container
                   >
+                  <ng-container *ngIf="control.hasError('regular')">
+                    The Task Name is a combination of 1-50 digits of numbers and
+                    letters
+                  </ng-container>
                 </ng-template>
               </nz-form-control>
             </nz-form-item>

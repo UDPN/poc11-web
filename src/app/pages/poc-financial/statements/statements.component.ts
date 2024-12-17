@@ -1,8 +1,15 @@
 /*
  * @Author: chenyuting
+ * @Date: 2024-12-10 17:23:08
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-16 17:27:24
+ * @Description: 
+ */
+/*
+ * @Author: chenyuting
  * @Date: 2024-12-10 11:08:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 15:19:20
+ * @LastEditTime: 2024-12-16 14:23:07
  * @Description:
  */
 /*
@@ -20,7 +27,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 import { SearchCommonVO } from '@app/core/services/types';
@@ -103,13 +110,23 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.initTable();
     this.getTokenList();
     this.validateForm = this.fb.group({
-      taskName: [null, [Validators.required]],
+      taskName: [null, [Validators.required, this.taskNameValidator]],
       tokenId: [null, [Validators.required]],
       txTypes: [[], [Validators.required]],
       exportStrategy: [null, [Validators.required]]
     });
   }
 
+  taskNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (
+      !/^[A-Za-z0-9]{0,50}$/.test(control.value)
+    ) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
@@ -189,7 +206,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
             next: res => {
               resolve(true);
               if (res) {
-                this.message.success(`Delete successfully`).onClose!.subscribe(() => {
+                this.message.success(`Delete successfully`, { nzDuration: 1000 }).onClose!.subscribe(() => {
                   this.getDataList();
                 });
               }
