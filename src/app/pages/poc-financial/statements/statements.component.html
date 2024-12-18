@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-16 14:26:30
+ * @LastEditTime: 2024-12-18 17:15:34
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -34,8 +34,36 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of tokenList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.bankName"
+                  [nzValue]="item.tokenCode"
+                  [nzLabel]="item.tokenName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Blockchain</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="tokenId"
+                [(ngModel)]="searchParam.blockchainId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of blockchainList"
+                  [nzValue]="item.blockchainId"
+                  [nzLabel]="item.blockchainName"
                 >
                 </nz-option>
               </nz-select>
@@ -131,16 +159,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-          class="text-right"
-        >
+        <div nz-col [nzSpan]="24" class="text-right">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>

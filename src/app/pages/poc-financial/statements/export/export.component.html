@@ -199,8 +199,8 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of tokenList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.bankName"
+                  [nzValue]="item.tokenCode"
+                  [nzLabel]="item.tokenName"
                 >
                 </nz-option>
               </nz-select>
@@ -227,8 +227,8 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of blockchainList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.bankName"
+                  [nzValue]="item.blockchainId"
+                  [nzLabel]="item.blockchainName"
                 >
                 </nz-option>
               </nz-select>

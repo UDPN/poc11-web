@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 14:51:09
+ * @LastEditTime: 2024-12-18 17:17:34
  * @Description:
  */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -49,7 +49,10 @@ export class CommonService {
   }
 
   public tokenList(): Observable<any> {
-    return this.http.post(`/v1/common/centralBankList`, {});
+    return this.http.get(`/v1/common/token/list`);
   }
 
+  public blockchainList(): Observable<any> {
+    return this.http.get(`/v1/common/blockchain/list`);
+  }
 }

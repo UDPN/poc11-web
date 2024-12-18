@@ -128,6 +128,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initTable();
     this.getTokenList();
+    this.getBlockchainList();
   }
 
   tableChangeDectction(): void {
@@ -168,6 +169,14 @@ export class ExportComponent implements OnInit, AfterViewInit {
   getTokenList() {
     this.commonService.tokenList().subscribe((res) => {
       this.tokenList = res;
+      this.cdr.markForCheck();
+      return;
+    });
+  }
+
+  getBlockchainList() {
+    this.commonService.blockchainList().subscribe((res) => {
+      this.blockchainList = res;
       this.cdr.markForCheck();
       return;
     });
@@ -345,6 +354,11 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'Token Name',
           field: 'tokenName',
+          width: 120
+        },
+        {
+          title: 'Blockchain',
+          field: 'blockchainName',
           width: 120
         },
         {

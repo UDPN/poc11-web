@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-16 17:27:24
+ * @LastEditTime: 2024-12-18 17:12:58
  * @Description: 
  */
 /*
@@ -40,6 +40,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 interface SearchParam {
   tokenId: string;
+  blockchainId: string;
   exportStrategy: string | number;
   status: string | number;
   createTime: any;
@@ -64,12 +65,14 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   tokenList: any = [];
+  blockchainList: any = [];
   visible = false;
   validateForm!: FormGroup;
   isNewLoading: boolean = false;
   frequencyType: string = '';
   searchParam: Partial<SearchParam> = {
     tokenId: '',
+    blockchainId: '',
     exportStrategy: '',
     status: '',
     createTime: [],
@@ -109,6 +112,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getTokenList();
+    this.getBlockchainList();
     this.validateForm = this.fb.group({
       taskName: [null, [Validators.required, this.taskNameValidator]],
       tokenId: [null, [Validators.required]],
@@ -142,6 +146,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.searchParam.createTime = '';
     this.searchParam.lastExecutedTime = '';
     this.searchParam.tokenId = '';
+    this.searchParam.blockchainId = '';
     this.searchParam.exportStrategy = '';
     this.searchParam.status = '';
     this.getDataList(this.tableQueryParams);
@@ -167,6 +172,14 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   getTokenList() {
     this.commonService.tokenList().subscribe((res) => {
       this.tokenList = res;
+      this.cdr.markForCheck();
+      return;
+    });
+  }
+
+  getBlockchainList() {
+    this.commonService.blockchainList().subscribe((res) => {
+      this.blockchainList = res;
       this.cdr.markForCheck();
       return;
     });
@@ -294,6 +307,11 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         {
           title: 'Token Name',
           field: 'tokenName',
+          width: 120
+        },
+        {
+          title: 'Bloackchain',
+          field: 'bloackchain',
           width: 120
         },
         {

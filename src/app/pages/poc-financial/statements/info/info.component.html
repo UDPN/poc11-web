@@ -18,6 +18,9 @@
       }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Token Name">{{
         info.tokenName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Blockchain">{{
+        info.blockchainName
       }}</nz-descriptions-item
       ><nz-descriptions-item nzTitle="Transaction Type"
         ><span *ngFor="let type of info.transactionTypes; index as i">{{
