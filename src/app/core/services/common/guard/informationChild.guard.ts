@@ -43,7 +43,6 @@ export class DeatilsGuardChild implements CanActivateChild {
     return this._informationService.detail().pipe(
       map((data) => {
         if (data && data.spStatus === 0) {
-          console.log('2222');
           this.router.navigateByUrl('/information/form');
           return false;
         }

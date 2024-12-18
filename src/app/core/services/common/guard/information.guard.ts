@@ -43,7 +43,6 @@ export class InfomationGuard implements CanActivate {
     return this._informationService.detail().pipe(
       map((data) => {
         if (data && data.spStatus === 0) {
-          console.log('1111');
           return true;
         }
         if (data !== null && data.spStatus === 5) {

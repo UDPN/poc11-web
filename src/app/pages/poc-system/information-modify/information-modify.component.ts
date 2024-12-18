@@ -71,6 +71,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
   capitalPoolList: NzSafeAny[] = [];
   attachmentsList: any = [];
   bankType: any = '';
+  info: any = {};
   constructor(
     private fb: FormBuilder,
     private modalService: NzModalService,
@@ -78,8 +79,8 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     private _location: Location,
     public _informationService: InformationService,
     public _commonService: CommonService,
-    private cdr: ChangeDetectorRef,
-  ) { }
+    private cdr: ChangeDetectorRef
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -104,19 +105,23 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     this.getInfo();
     this.getCapital();
     this.validateForm = this.fb.group({
-      spName: [null, [Validators.required, this.spNameValidator]],
+      spName: [null, [Validators.required]],
       bankBic: [null, [Validators.required]],
+      spBriefIntroduction: [
+        null,
+        [Validators.required, this.spBriefIntroductionValidator]
+      ],
+      spDescription: [null, [this.spDescriptionValidator]],
       centralBankName: [null, [Validators.required]],
-      spBriefIntroduction: [null, [Validators.required]],
-      spDescription: [null, [Validators.required]],
-      bnCode: [null, [Validators.required]],
-      spBesuWalletAddress: [null, [Validators.required]],
+      peggedCurrency: [null, [Validators.required]],
+      blockchain: [null, [Validators.required]],
       contactName: [null, [Validators.required]],
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
       detailedAddress: [null, [Validators.required]],
-      businessLicenseUrl: [null, [Validators.required]],
-      fileName: [null, [Validators.required]],
+      interbankSettlementStatus: [1, [Validators.required]],
+      paymentStatus: [null],
+      userNotice: [null, [Validators.required]]
     });
   }
 
@@ -126,36 +131,47 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
 
   getInfo() {
     this._informationService.detail().subscribe((res) => {
-      this.spCode = res.spCode;
+      this.info = res;
       this.validateForm.get('spName')?.setValue(res.spName);
       this.validateForm.get('bankBic')?.setValue(res.bankBic);
       this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
-      this.validateForm.get('countryInfoId')?.setValue(res.countryName);
       this.validateForm
         .get('spBriefIntroduction')
         ?.setValue(res.spBriefIntroduction);
       this.validateForm.get('spDescription')?.setValue(res.spDescription);
-      this.validateForm.get('bnCode')?.setValue(res.bnCode);
-      this.validateForm
-        .get('spBesuWalletAddress')
-        ?.setValue(res.spBesuWalletAddress);
+      this.validateForm.get('detailedAddress')?.setValue(res.detailedAddress);
+      this.validateForm.get('peggedCurrency')?.setValue(res.peggedCurrency);
+      this.validateForm.get('blockchain')?.setValue(res.blockchain);
       this.validateForm.get('contactName')?.setValue(res.contactName);
       this.validateForm.get('mobileNumber')?.setValue(res.mobileNumber);
       this.validateForm.get('email')?.setValue(res.email);
-      this.validateForm.get('detailedAddress')?.setValue(res.detailedAddress);
       this.validateForm
-        .get('businessLicenseUrl')
-        ?.setValue(res.businessLicenseUrl);
-      this.validateForm.get('fileName')?.setValue(res.fileName);
-      this.businessLicenseUrlOld = res.businessLicenseUrl;
-      this._informationService
-        .downImg({ hash: res.businessLicenseUrl })
-        .subscribe((resu) => {
-          this.fileImg = 'data:image/jpg;base64,' + resu;
-          this.cdr.markForCheck();
-        });
+        .get('paymentStatus')
+        ?.setValue(res.paymentStatus === 1 ? true : false);
+      this.validateForm.get('userNotice')?.setValue(true);
     });
   }
+
+  spBriefIntroductionValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value?.length > 100) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
+  spDescriptionValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (control.value?.length > 500) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
@@ -189,7 +205,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       this.attachmentsList = res.fileList;
       this.cdr.markForCheck();
       return;
-    })
+    });
   }
 
   onSubmit() {
@@ -202,57 +218,31 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       nzTitle: `Are you sure you want to modify the information of this ${name} ?`,
       nzOnOk: () => {
         this.onSubmitStatus = true;
-        const editParam = {
-          spBriefIntroduction: this.validateForm.get('spBriefIntroduction')
-            ?.value,
-          spDescription: this.validateForm.get('spDescription')?.value,
-          bnCode: this.validateForm.get('bnCode')?.value,
+        this._informationService.editForm({
+          spName: this.validateForm.get('spName')?.value,
+          bankBic: this.validateForm.get('bankBic')?.value,
           contactName: this.validateForm.get('contactName')?.value,
-          mobileNumber: this.validateForm.get('mobileNumber')?.value,
-          email: this.validateForm.get('email')?.value,
           detailedAddress: this.validateForm.get('detailedAddress')?.value,
-          businessLicenseUrl:
-            this.validateForm.get('businessLicenseUrl')?.value,
-          spCode: this.spCode
-        };
-        if (
-          this.businessLicenseUrlOld ===
-          this.validateForm.get('businessLicenseUrl')?.value
-        ) {
-          this._informationService.editForm(editParam).subscribe((result) => {
-            this.onSubmitStatus = false;
-            this.modalService
-              .success({
-                nzTitle: 'success',
-                nzContent: 'edit success !'
-              })
-              .afterClose.subscribe((_) => {
-                this.getInfo();
-              });
-            this.cdr.markForCheck();
-          });
-        } else {
-          this._informationService
-            .uploadImg(this.fileImgWord)
-            .subscribe((res) => {
-              this.validateForm.get('businessLicenseUrl')?.setValue(res);
-              this._informationService
-                .editForm(editParam)
-                .subscribe((result) => {
-                  this.onSubmitStatus = false;
-                  this.modalService
-                    .success({
-                      nzTitle: 'success',
-                      nzContent: 'edit success !'
-                    })
-                    .afterClose.subscribe((_) => {
-                      this.getInfo();
-                    });
-
-                  this.cdr.markForCheck();
-                });
+          email: this.validateForm.get('email')?.value,
+          interbankSettlementStatus: this.validateForm.get('interbankSettlementStatus')?.value,
+          mobileNumber: this.validateForm.get('mobileNumber')?.value,
+          paymentStatus: this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
+          spBriefIntroduction: this.validateForm.get('spBriefIntroduction')?.value,
+          spDescription: this.validateForm.get('spDescription')?.value,
+          spCode: this.info.spCode
+        }).subscribe((result) => {
+          this.onSubmitStatus = false;
+          this.modalService
+            .success({
+              nzTitle: 'success',
+              nzContent: 'edit success !'
+            })
+            .afterClose.subscribe((_) => {
+              this.getInfo();
             });
-        }
+
+          this.cdr.markForCheck();
+        });
       }
     });
   }
@@ -282,7 +272,6 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
     this.windowSrc.setSessionStorage('sencStepData', JSON.stringify(param));
     this._location.back();
   }
-
 
   private base64ToBlob(urlData: string, type: string) {
     let arr = urlData.split(',');
@@ -326,11 +315,9 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
   }
 
   onLoad(fileCode: string, fileUrl: string) {
-    this._informationService
-      .downImg({ hash: fileCode })
-      .subscribe((res) => {
-        this.downloadFile(res, fileUrl);
-      });
+    this._informationService.downImg({ hash: fileCode }).subscribe((res) => {
+      this.downloadFile(res, fileUrl);
+    });
   }
 
   private initTable(): void {
@@ -350,13 +337,13 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
           title: 'Pre-authorized Debit',
           tdTemplate: this.authorizedTpl,
           width: 120
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

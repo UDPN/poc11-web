@@ -62,6 +62,8 @@ export class ExportComponent implements OnInit, AfterViewInit {
   proofStatusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('txnTypesTpl', { static: true })
+  txnTypesTpl!: TemplateRef<NzSafeAny>;
   tokenList: Array<any> = [];
   blockchainList: Array<any> = [];
   tableConfig!: AntTableConfig;
@@ -347,8 +349,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Transaction Type',
-          field: 'transactionTypes',
-          pipe: 'transactionDirection',
+          tdTemplate: this.txnTypesTpl,
           width: 150
         },
         {

@@ -1,8 +1,8 @@
 <!--
  * @Author: zhangxuefeng
  * @Date: 2023-12-21 10:39:21
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-27 14:08:57
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-18 14:53:00
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -11,7 +11,7 @@
     <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
       <div nz-row nzJustify="center" nzAlign="middle">
         <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
-          <div class="access-title">Node Information</div>
+          <div class="access-title">Basic Information</div>
         </div>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
@@ -20,13 +20,25 @@
             [nzColon]="false" [nzBordered]="false">
             <nz-descriptions-item nzTitle="Commercial Bank Name">{{ info.spName }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="BIC">{{ info.bankBic }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Custodian Bank">{{ info.centralBankName }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Brief Introduction" [nzSpan]="3">
+            <nz-descriptions-item nzTitle="Official Website" [nzSpan]="3">
               {{ info.spBriefIntroduction }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Description" [nzSpan]="3"> {{ info.spDescription }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="BN ID"> {{ info.bnCode }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Wallet Address(Besu)"> {{ info.spBesuWalletAddress }}</nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle">
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+          <div class="access-title">Currency Information</div>
+        </div>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
+          <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+            [nzColon]="false" [nzBordered]="false">
+            <nz-descriptions-item nzTitle="Custodian Bank" [nzSpan]="3">{{ info.centralBankName }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Pegged Currency">{{ info.peggedCurrency }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Blockchain">{{ info.blockchain }}</nz-descriptions-item>
           </nz-descriptions>
         </div>
       </div>
@@ -45,9 +57,58 @@
               {{ info.email }}
             </nz-descriptions-item>
             <nz-descriptions-item nzTitle="Detailed Address"> {{ info.detailedAddress }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Business License">
-              <img nz-image style="width: 160px; height: 160px" [nzSrc]="this.infoMemberLicense"
-                *ngIf="this.infoMemberLicense" alt="" />
+          </nz-descriptions>
+        </div>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle">
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="20">
+          <div class="access-title">Activate Service</div>
+        </div>
+      </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 card">
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="16">
+          <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+            [nzColon]="false" [nzBordered]="false">
+            <nz-descriptions-item nzTitle="">
+              <label nz-checkbox nzDisabled [nzChecked]="true">
+                Interbank Cross-border Settlement<i
+                  class="m-l-5"
+                  style="color: #3c5686"
+                  nz-icon
+                  nzType="question-circle"
+                  nzTooltipPlacement="right"
+                  nzTheme="fill"
+                  nz-tooltip
+                  [nzTooltipTitle]="
+                    'Interbank cross-border settlement refers to the process by whichfinancial institutions, typically banks, exchange currencies and settletransactions on behalf of their clients across national borders.'
+                  "
+                  nzTooltipColor="#3c5686"
+                  nzTooltipTrigger="click"
+                  nzTooltipOverlayClassName="buils"
+                ></i>
+              </label>
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="">
+              <label
+                nz-checkbox
+                nzDisabled
+                [nzChecked]="info.paymentStatus === 1"
+                >Cross-border Payment & Remittance<i
+                  class="m-l-5"
+                  style="color: #3c5686"
+                  nz-icon
+                  nzType="question-circle"
+                  nzTooltipPlacement="right"
+                  nzTheme="fill"
+                  nz-tooltip
+                  [nzTooltipTitle]="
+                    'Cross-border Payment & Remittance refers to the process oftransferring funds between two different countries or currencies'
+                  "
+                  nzTooltipColor="#3c5686"
+                  nzTooltipTrigger="click"
+                  nzTooltipOverlayClassName="buils"
+                ></i>
+              </label>
             </nz-descriptions-item>
           </nz-descriptions>
         </div>

@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:11:45
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-25 18:34:42
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-18 11:25:18
  * @Description:
  */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -15,24 +15,7 @@ import { InformationService } from '@app/core/services/http/information/informat
   styleUrls: ['./detail.component.less']
 })
 export class DetailComponent implements OnInit {
-  detailData = {
-    spCode: '',
-    spName: '',
-    bankBic: '',
-    centralBankName: '',
-    centralBankId: '',
-    spBriefIntroduction: '',
-    spDescription: '',
-    spBesuWalletAddress: '',
-    bnCode: '',
-    contactName: '',
-    mobileNumber: '',
-    email: '',
-    detailedAddress: '',
-    businessLicenseUrl: '',
-    spStatus: 0,
-    remark: ''
-  };
+  detailData: any = {};
   srcUrl: string = '';
   constructor(
     private detailService: InformationService,
@@ -45,16 +28,13 @@ export class DetailComponent implements OnInit {
   private getDetail() {
     this.detailService.detail().subscribe((res) => {
       this.detailData = res;
-      this.detailService
-        .downImg({ hash: res.businessLicenseUrl })
-        .subscribe((resu) => {
-          this.srcUrl = 'data:image/jpg;base64,' + resu;
-          this.cdr.markForCheck();
-        });
       this.cdr.markForCheck();
     });
   }
   doAction() {
     this.router.navigateByUrl('/information/edit');
+  }
+  goToPdf() {
+    window.open('/assets/api-documentation/Project Kissen APIs.pdf');
   }
 }

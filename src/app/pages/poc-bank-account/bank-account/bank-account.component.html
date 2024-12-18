@@ -12,30 +12,48 @@
         [nzSm]="24"
         [nzXs]="24"
       >
-        <nz-card class="m-r-8">
+        <nz-card
+          [nzBordered]="false"
+          class="m-r-8"
+          style="
+            background-image: url('../../../../assets/imgs/fiat-mpney-1.png');
+            background-repeat: no-repeat;
+            background-size: 100%;
+            border-radius: 20px;
+          "
+        >
           <nz-descriptions
             nzTitle=""
-            [nzColumn]="1"
+            [nzColumn]="2"
             [nzColon]="false"
             [nzBordered]="false"
-            class="card-descriptions-order"
+            nzLayout="vertical"
+            class="fiat-money-descriptions-order"
           >
             <nz-descriptions-item [nzTitle]="'Bank Account No.'"
               ><span
                 nz-typography
                 nzCopyable
                 [nzCopyText]="info.bankAccountNo"
-                >{{ info.bankAccountNo }}</span
+                style="color: #fff"
+                [title]="info.bankAccountNo"
+                >{{ info.bankAccountNo | map: 'showPart' }}</span
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Bank Name'"
-              ><span>{{ info.bankName }}</span></nz-descriptions-item
+              ><span>{{
+                info.bankName | map: 'showPart'
+              }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Name'"
-              ><span>{{ info.accountName }}</span></nz-descriptions-item
+              ><span>{{
+                info.accountName | map: 'showPart'
+              }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Currency'"
-              ><span>{{ info.currency }}</span></nz-descriptions-item
+              ><span>{{
+                info.currency | map: 'showPart'
+              }}</span></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
@@ -49,8 +67,12 @@
         [nzSm]="24"
         [nzXs]="24"
       >
-        <nz-card class="m-r-8" style="padding-top: 70px; padding-bottom: 71px">
-          <div nz-row nzAlign="top" nzJustify="space-between">
+        <nz-card
+          class="m-r-8"
+          [nzBordered]="false"
+          style="height: 280px; background-color: #50c2ff; border-radius: 20px"
+        >
+          <div nz-row nzAlign="top" nzJustify="space-between" class="m-t-30">
             <div
               nz-col
               [nzXXl]="4"
@@ -62,7 +84,7 @@
             >
               <img
                 style="width: 40px; height: 40px"
-                src="../../../../../assets/imgs/reserve-balance.svg"
+                src="../../../../../assets/imgs/account-balance.svg"
                 alt=""
               />
             </div>
@@ -76,12 +98,12 @@
               [nzXs]="12"
             >
               <div nz-row nzAlign="top">
-                <h5 nz-typography>
+                <h5 nz-typography style="color: #fff">
                   {{ 'Account Balance ' }}
                 </h5>
               </div>
               <div class="m-t-15">
-                <h3 nz-typography>
+                <h3 nz-typography style="color: #fff">
                   {{
                     info.accountBalance
                       ? (info.accountBalance | map: 'toThousandthMark') +
@@ -104,8 +126,12 @@
         [nzSm]="24"
         [nzXs]="24"
       >
-        <nz-card class="m-r-8" style="padding-top: 70px; padding-bottom: 49px">
-          <div nz-row nzAlign="top" nzJustify="space-between">
+        <nz-card
+          class="m-r-8"
+          [nzBordered]="false"
+          style="height: 280px; background-color: #617cd9; border-radius: 20px"
+        >
+          <div nz-row nzAlign="top" nzJustify="space-between" class="m-t-30">
             <div
               nz-col
               [nzXXl]="4"
@@ -131,12 +157,12 @@
               [nzXs]="12"
             >
               <div nz-row nzAlign="top">
-                <h5 nz-typography>
+                <h5 nz-typography style="color: #fff">
                   {{ 'Wallet Balance ' }}
                 </h5>
               </div>
               <div class="m-t-15">
-                <h3 nz-typography>
+                <h3 nz-typography style="color: #fff">
                   {{
                     info.accountBalance
                       ? (info.accountBalance | map: 'toThousandthMark') +
@@ -145,7 +171,7 @@
                       : '--'
                   }}
                 </h3>
-                <div>{{ '1111' }}</div>
+                <div style="color: #fff">{{ '1111' }}</div>
               </div>
             </div>
           </div>
