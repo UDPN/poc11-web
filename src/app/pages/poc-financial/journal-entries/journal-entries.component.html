@@ -1,14 +1,14 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 <div class="normal-table-wrap">
-    <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10" nzTitle="Query">
+    <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'Query'" class="m-b-10">
         <form nz-form nzLayout="vertical">
           <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
             <div
               nz-col
               [nzXXl]="8"
               [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
+              [nzLg]="8"
+              [nzMd]="8"
               [nzSm]="24"
               [nzXs]="24"
             >
@@ -23,17 +23,18 @@
               nz-col
               [nzXXl]="8"
               [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
+              [nzLg]="8"
+              [nzMd]="8"
               [nzSm]="24"
               [nzXs]="24"
             >
               <nz-form-item>
                 <nz-form-label>Token Name</nz-form-label>
                 <nz-form-control>
-                  <nz-select nzPlaceHolder="All" [(ngModel)]="searchParam.tokenName" name="tokenName">
+                  <nz-select nzPlaceHolder="" name="tokenName" [(ngModel)]="searchParam.tokenName">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <!-- Add options here -->
+                    <nz-option *ngFor="let item of tokenList" [nzValue]="item.centralBankId" [nzLabel]="item.bankName">
+                    </nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -42,36 +43,19 @@
               nz-col
               [nzXXl]="8"
               [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
-              [nzSm]="24"
-              [nzXs]="24"
-            >
-              <nz-form-item>
-                <nz-form-label>Token Type</nz-form-label>
-                <nz-form-control>
-                  <nz-select nzPlaceHolder="All" [(ngModel)]="searchParam.tokenType" name="tokenType">
-                    <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <!-- Add options here -->
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div
-              nz-col
-              [nzXXl]="8"
-              [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
+              [nzLg]="8"
+              [nzMd]="8"
               [nzSm]="24"
               [nzXs]="24"
             >
               <nz-form-item>
                 <nz-form-label>Pegged Currency</nz-form-label>
                 <nz-form-control>
-                  <nz-select nzPlaceHolder="All" [(ngModel)]="searchParam.peggedCurrency" name="peggedCurrency">
+                  <nz-select nzPlaceHolder="" name="peggedCurrency" [(ngModel)]="searchParam.peggedCurrency">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <!-- Add options here -->
+                    <nz-option nzValue="USD" nzLabel="USD"></nz-option>
+                    <nz-option nzValue="EUR" nzLabel="EUR"></nz-option>
+                    <nz-option nzValue="HKD" nzLabel="HKD"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -80,17 +64,18 @@
               nz-col
               [nzXXl]="8"
               [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
+              [nzLg]="8"
+              [nzMd]="8"
               [nzSm]="24"
               [nzXs]="24"
             >
               <nz-form-item>
                 <nz-form-label>Blockchain</nz-form-label>
                 <nz-form-control>
-                  <nz-select nzPlaceHolder="All" [(ngModel)]="searchParam.blockchain" name="blockchain">
+                  <nz-select nzPlaceHolder="" name="blockchain" [(ngModel)]="searchParam.blockchain">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <!-- Add options here -->
+                    <nz-option nzValue="Hyperledger Besu" nzLabel="Hyperledger Besu"></nz-option>
+                    <nz-option nzValue="Ethereum" nzLabel="Ethereum"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -99,15 +84,16 @@
               nz-col
               [nzXXl]="8"
               [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
+              [nzLg]="8"
+              [nzMd]="8"
               [nzSm]="24"
               [nzXs]="24"
             >
               <nz-form-item>
                 <nz-form-label>Created on</nz-form-label>
                 <nz-form-control>
-                  <nz-range-picker style="width: 100%" [(ngModel)]="searchParam.createdOn" name="createdOn"></nz-range-picker>
+                  <nz-range-picker style="width: 100%" name="createdOn" [(ngModel)]="searchParam.createdOn">
+                  </nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -115,25 +101,26 @@
               nz-col
               [nzXXl]="8"
               [nzXl]="8"
-              [nzLg]="12"
-              [nzMd]="12"
+              [nzLg]="8"
+              [nzMd]="8"
               [nzSm]="24"
               [nzXs]="24"
             >
               <nz-form-item>
                 <nz-form-label>Status</nz-form-label>
                 <nz-form-control>
-                  <nz-select nzPlaceHolder="All" [(ngModel)]="searchParam.status" name="status">
+                  <nz-select nzPlaceHolder="" name="status" [(ngModel)]="searchParam.status">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <!-- Add options here -->
+                    <nz-option nzValue="1" nzLabel="Active"></nz-option>
+                    <nz-option nzValue="0" nzLabel="Inactive"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div
               nz-col
-              [nzXXl]="8"
-              [nzXl]="8"
+              [nzXXl]="24"
+              [nzXl]="24"
               [nzLg]="24"
               [nzMd]="24"
               [nzSm]="24"
@@ -147,6 +134,7 @@
                     <button
                       nz-button
                       [nzType]="'primary'"
+                      (click)="onQuery()"
                     >
                       Query
                     </button>
@@ -160,4 +148,51 @@
           </div>
         </form>
       </nz-card>
+
+  <ng-template #tokenPriceTpl let-tokenSymbol="tokenSymbol" let-currencySymbol="currencySymbol">
+    1 {{tokenSymbol}} = 1 {{currencySymbol}}
+  </ng-template>
+
+  <ng-template #journalEntriesTpl let-ruleId="ruleId">
+    <span class="operate-text" [routerLink]="['/poc/poc-financial/journal-entries/journal-list']" [queryParams]="{ruleId: ruleId}">
+      <i nz-icon nzType="file-text" nzTheme="outline"></i>
+    </span>
+  </ng-template>
+
+  <ng-template #statusTpl let-state="state">
+    <nz-tag [nzColor]="state === 1 ? 'success' : 'error'">
+      {{ state === 1 ? 'Active' : 'Inactive' }}
+    </nz-tag>
+  </ng-template>
+
+  <ng-template #operationTpl let-state="state" let-ruleId="ruleId">
+    <span class="operate-text" (click)="onEdit(ruleId)">Edit</span>
+    <span class="operate-text" (click)="onStatusUpdate(ruleId, state === 1 ? 0 : 1)">
+      {{ state === 1 ? 'Deactivate' : 'Activate' }}
+    </span>
+  </ng-template>
+
+  <app-card-table-wrap
+    [tableTitle]="'Journal Entries List'"
+    [isNormalTable]="true"
+    [btnTpl]="createBtn"
+  >
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+  </app-card-table-wrap>
 </div>
+
+<ng-template #createBtn>
+  <button
+    nz-button
+    nzType="primary"
+    class="m-r-8"
+    routerLink="/poc/poc-financial/journal-entries/add"
+  >
+    <i nz-icon nzType="plus"></i>New
+  </button>
+</ng-template>

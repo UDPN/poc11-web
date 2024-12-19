@@ -10,6 +10,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { JournalEntriesComponent } from './journal-entries.component';
 import { AddComponent } from './add/add.component';
 import { ActionCode } from '@app/config/actionCode';
+import { JournallistComponent } from './journal/journallist.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,17 @@ const routes: Routes = [
     path: 'add',
     component: AddComponent,
     data: { title: 'journalEntries-add', authCode: ActionCode.TabsDetail, key: 'journal-entries-add', shouldDetach: 'no' }
+  },
+  
+  {
+    path: 'edit/:id',
+    component: AddComponent,
+    data: { title: 'journalEntries-edit', authCode: ActionCode.TabsDetail, key: 'journal-entries-edit', shouldDetach: 'no' }
+  },
+  {
+    path: 'journal-list',
+    component: JournallistComponent,
+    data: { title: 'journalEntries-list', authCode: ActionCode.TabsDetail, key: 'journal-entries-list', shouldDetach: 'no' }
   },
 ];
 
