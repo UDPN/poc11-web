@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-16 10:25:03
+ * @LastEditTime: 2024-12-18 17:15:34
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -34,8 +34,36 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of tokenList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.bankName"
+                  [nzValue]="item.tokenCode"
+                  [nzLabel]="item.tokenName"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Blockchain</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="tokenId"
+                [(ngModel)]="searchParam.blockchainId"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of blockchainList"
+                  [nzValue]="item.blockchainId"
+                  [nzLabel]="item.blockchainName"
                 >
                 </nz-option>
               </nz-select>
@@ -131,16 +159,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-          class="text-right"
-        >
+        <div nz-col [nzSpan]="24" class="text-right">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>
@@ -250,13 +269,17 @@
               <nz-form-control [nzErrorTip]="taskNameError">
                 <div nz-row>
                   <div nz-col nzSpan="24">
-                    <input nz-input formControlName="taskName" maxlength="50" />
+                    <input nz-input formControlName="taskName" />
                   </div>
                 </div>
                 <ng-template #taskNameError let-control>
                   <ng-container *ngIf="control.hasError('required')"
                     >Please input your Task Name</ng-container
                   >
+                  <ng-container *ngIf="control.hasError('regular')">
+                    The Task Name is a combination of 1-50 digits of numbers and
+                    letters
+                  </ng-container>
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
@@ -298,10 +321,10 @@
                     >
                       <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
                       <nz-option nzValue="4" nzLabel="Transfer"></nz-option>
-                      <nz-option
+                      <!-- <nz-option
                         nzValue="5"
                         nzLabel="FX Purchasing"
-                      ></nz-option>
+                      ></nz-option> -->
                       <nz-option nzValue="6" nzLabel="Withdraw"></nz-option>
                     </nz-select>
                   </div>

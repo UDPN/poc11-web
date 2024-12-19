@@ -105,12 +105,7 @@ export class ActivateSettlementComponent implements OnInit, AfterViewInit {
   getInfo() {
     this._informationService.detail().subscribe((res) => {
       this.info = res;
-      this._informationService
-        .downImg({ hash: res.businessLicenseUrl })
-        .subscribe((resu) => {
-          this.infoMemberLicense = 'data:image/jpg;base64,' + resu;
-          this.cdr.markForCheck();
-        });
+      this.cdr.markForCheck();
     });
   }
 

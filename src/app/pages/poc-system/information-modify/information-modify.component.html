@@ -9,7 +9,7 @@
     <form nz-form>
       <div nz-row nzJustify="center" nzAlign="middle">
         <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
-          <div class="access-title">Node Information</div>
+          <div class="access-title">Basic Information</div>
         </div>
       </div>
       <div
@@ -33,7 +33,9 @@
               <nz-form-item>
                 <nz-form-label nzRequired nzSpan="24"
                   >{{
-                    this.bankType === 2 ? 'Liquidity Provider Name' : 'Commercial Bank Name'
+                    this.bankType === 2
+                      ? 'Liquidity Provider Name'
+                      : 'Commercial Bank Name'
                   }}
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="enterpriseError">
@@ -92,11 +94,9 @@
           </div>
         </div>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
+      <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10"
-            >Custodian Bank
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Custodian Bank </nz-form-label>
           <nz-form-control [nzErrorTip]="centralBankError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24" class="onboard-disabled">
@@ -115,13 +115,13 @@
             </ng-template>
           </nz-form-control>
         </nz-form-item>
-      </div>
+      </div> -->
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
           <nz-form-label nzRequired nzSpan="10"
-            >Brief Introduction
+            >Official Website
           </nz-form-label>
-          <nz-form-control [nzErrorTip]="nodeNameError">
+          <nz-form-control [nzErrorTip]="websiteError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
                 <input
@@ -133,9 +133,12 @@
                 />
               </div>
             </div>
-            <ng-template #nodeNameError let-control>
+            <ng-template #websiteError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please input your Brief Introduction</ng-container
+                >Please input your Official Website</ng-container
+              >
+              <ng-container *ngIf="control.hasError('regular')"
+                >Less than 100 characters</ng-container
               >
             </ng-template>
           </nz-form-control>
@@ -143,7 +146,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">Description </nz-form-label>
+          <nz-form-label nzSpan="10">Description </nz-form-label>
           <nz-form-control [nzErrorTip]="nodeNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
@@ -157,73 +160,111 @@
               </div>
             </div>
             <ng-template #nodeNameError let-control>
-              <ng-container *ngIf="control.hasError('required')"
+              <!-- <ng-container *ngIf="control.hasError('required')"
                 >Please input your Description</ng-container
+              > -->
+              <ng-container *ngIf="control.hasError('regular')"
+                >Less than 500 characters</ng-container
               >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
-
+      <div nz-row nzJustify="center" nzAlign="middle">
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
+          <div class="access-title">Currency Information</div>
+        </div>
+      </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">BN ID </nz-form-label>
-          <nz-form-control [nzErrorTip]="nodeNameError">
+          <nz-form-label nzRequired nzSpan="10">Custodian Bank </nz-form-label>
+          <nz-form-control [nzErrorTip]="centralBankNameError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
                 <input
                   nz-input
-                  formControlName="bnCode"
+                  formControlName="centralBankName"
                   class="onboard-disabled onboard-input"
                   readonly
-                  maxlength="255"
                 />
               </div>
             </div>
-            <ng-template #nodeNameError let-control>
+            <ng-template #centralBankNameError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please input your BN ID</ng-container
+                >Please input your Custodian Bank</ng-container
               >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
-
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10"
-            >Wallet Address(Besu)<i
-              class="m-l-5"
-              nz-icon
-              nzType="question-circle"
-              nzTooltipPlacement="right"
-              nzTheme="outline"
-              nz-tooltip
-              [nzTooltipTitle]="titleTemplate"
-              nzTooltipColor="#F5F5F5"
-              nzTooltipTrigger="click"
-              nzTooltipOverlayClassName="buils"
-            ></i>
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="nodeNameError">
-            <div nz-row [formGroup]="validateForm">
-              <div nz-col nzSpan="24">
-                <input
-                  nz-input
-                  formControlName="spBesuWalletAddress"
-                  class="onboard-disabled"
-                  maxlength="255"
-                  readonly
-                />
-              </div>
+      <div
+        nz-row
+        nzJustify="center"
+        nzAlign="middle"
+        class="m-b-10 contactName"
+        nzGutter="8"
+      >
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <div nz-row nzJustify="space-between" nzGutter="8">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
+              <nz-form-item>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Pegged Currency
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="peggedCurrencyError">
+                  <div nz-row [formGroup]="validateForm">
+                    <div nz-col nzSpan="24">
+                      <input
+                        nz-input
+                        formControlName="peggedCurrency"
+                        class="onboard-disabled onboard-input"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                  <ng-template #peggedCurrencyError let-control>
+                    <ng-container *ngIf="control.hasError('required')"
+                      >Please input your Pegged Currency</ng-container
+                    >
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
             </div>
-            <ng-template #nodeNameError let-control>
-              <ng-container *ngIf="control.hasError('required')"
-                >Please input your Wallet Address</ng-container
-              >
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
+              <nz-form-item>
+                <nz-form-label nzSpan="24">Blockchain</nz-form-label>
+                <nz-form-control [nzErrorTip]="">
+                  <div nz-row [formGroup]="validateForm">
+                    <div nz-col nzSpan="24">
+                      <input
+                        nz-input
+                        formControlName="blockchain"
+                        class="onboard-disabled onboard-input"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle">
         <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
@@ -358,58 +399,104 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">
+          <div class="access-title">Activate Service</div>
+        </div>
+      </div>
       <div
         nz-row
         nzJustify="center"
         nzAlign="middle"
-        class="m-b-10 businessLicense"
+        class="m-b-10 contactName"
+        nzGutter="8"
+        style="margin-top: -40px"
       >
-        <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="24"
-            >Business License
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="businessLicenseError">
-            <div nz-row [formGroup]="validateForm">
-              <!-- <div nz-col nzSpan="24" style="text-align: left;" class="m-b-20">
-                <button nz-button [nzSize]="'large'" nzType="primary" (click)='upFiles.click()'>Upload</button>
-                <input type="file" accept="image/png" hidden #upFiles (change)="uploadFileImg($event)" />
-              </div> -->
-              <div nz-col nzSpan="24" class="m-b-10">
-                <div class="onboard-div onboard-postion">
-                  <input
-                    type="text"
-                    hidden
-                    formControlName="businessLicenseUrl"
-                    nz-input
-                  />
-                  <img
-                    nz-image
-                    width="160px"
-                    height="160px"
-                    [nzSrc]="fileImg"
-                    *ngIf="fileImg"
-                    alt=""
-                  />
-                </div>
-              </div>
-              <div nz-col nzSpan="24">
-                <div class="onboard-div-info">
-                  It is recommended to provide pictures with 160 * 160 (PNG /
-                  JPG / GIF / BMP / JPEG) pixels and size less than 10M, and It
-                  must be a company or product logo and not deformed. pixels and
-                  size less than 10M
-                </div>
-              </div>
+        <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
+          <div nz-row nzJustify="space-between" nzGutter="8">
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
+              <nz-form-item>
+                <nz-form-label nzSpan="24"> </nz-form-label>
+                <nz-form-control>
+                  <div nz-row [formGroup]="validateForm">
+                    <div nz-col nzSpan="24">
+                      <label
+                        nz-checkbox
+                        nzDisabled
+                        nzChecked
+                        formControlName="interbankSettlementStatus"
+                      >
+                        Interbank Cross-border Settlement<i
+                          class="m-l-5"
+                          style="color: #3c5686"
+                          nz-icon
+                          nzType="question-circle"
+                          nzTooltipPlacement="right"
+                          nzTheme="fill"
+                          nz-tooltip
+                          [nzTooltipTitle]="
+                            'Interbank cross-border settlement refers to the process by whichfinancial institutions, typically banks, exchange currencies and settletransactions on behalf of their clients across national borders.'
+                          "
+                          nzTooltipColor="#3c5686"
+                          nzTooltipTrigger="click"
+                          nzTooltipOverlayClassName="buils"
+                        ></i>
+                      </label>
+                    </div>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
             </div>
-            <ng-template #businessLicenseError let-control>
-              <ng-container *ngIf="control.hasError('required')"
-                >Please upload your Business License</ng-container
-              >
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
+            <div
+              nz-col
+              [nzXXl]="10"
+              [nzXl]="10"
+              [nzLg]="12"
+              [nzMd]="12"
+              [nzSm]="24"
+              [nzXs]="24"
+            >
+              <nz-form-item>
+                <nz-form-label nzSpan="24"></nz-form-label>
+                <nz-form-control [nzErrorTip]="">
+                  <div nz-row [formGroup]="validateForm">
+                    <div nz-col nzSpan="24">
+                      <label
+                        nz-checkbox
+                        nzValue="2"
+                        formControlName="paymentStatus"
+                        >Cross-border Payment & Remittance<i
+                          class="m-l-5"
+                          style="color: #3c5686"
+                          nz-icon
+                          nzType="question-circle"
+                          nzTooltipPlacement="right"
+                          nzTheme="fill"
+                          nz-tooltip
+                          [nzTooltipTitle]="
+                            'Cross-border Payment & Remittance refers to the process oftransferring funds between two different countries or currencies'
+                          "
+                          nzTooltipColor="#3c5686"
+                          nzTooltipTrigger="click"
+                          nzTooltipOverlayClassName="buils"
+                        ></i>
+                      </label>
+                    </div>
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
       </div>
-
       <ng-container *ngIf="this.bankType === 2">
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="18">

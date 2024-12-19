@@ -1,8 +1,15 @@
 /*
  * @Author: chenyuting
+ * @Date: 2024-12-10 17:23:08
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-18 17:12:58
+ * @Description: 
+ */
+/*
+ * @Author: chenyuting
  * @Date: 2024-12-10 11:08:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 15:19:20
+ * @LastEditTime: 2024-12-16 14:23:07
  * @Description:
  */
 /*
@@ -20,7 +27,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 import { SearchCommonVO } from '@app/core/services/types';
@@ -33,6 +40,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 interface SearchParam {
   tokenId: string;
+  blockchainId: string;
   exportStrategy: string | number;
   status: string | number;
   createTime: any;
@@ -57,12 +65,14 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   tokenList: any = [];
+  blockchainList: any = [];
   visible = false;
   validateForm!: FormGroup;
   isNewLoading: boolean = false;
   frequencyType: string = '';
   searchParam: Partial<SearchParam> = {
     tokenId: '',
+    blockchainId: '',
     exportStrategy: '',
     status: '',
     createTime: [],
@@ -102,14 +112,25 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getTokenList();
+    this.getBlockchainList();
     this.validateForm = this.fb.group({
-      taskName: [null, [Validators.required]],
+      taskName: [null, [Validators.required, this.taskNameValidator]],
       tokenId: [null, [Validators.required]],
       txTypes: [[], [Validators.required]],
       exportStrategy: [null, [Validators.required]]
     });
   }
 
+  taskNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (
+      !/^[A-Za-z0-9]{0,50}$/.test(control.value)
+    ) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
@@ -125,6 +146,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.searchParam.createTime = '';
     this.searchParam.lastExecutedTime = '';
     this.searchParam.tokenId = '';
+    this.searchParam.blockchainId = '';
     this.searchParam.exportStrategy = '';
     this.searchParam.status = '';
     this.getDataList(this.tableQueryParams);
@@ -150,6 +172,14 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   getTokenList() {
     this.commonService.tokenList().subscribe((res) => {
       this.tokenList = res;
+      this.cdr.markForCheck();
+      return;
+    });
+  }
+
+  getBlockchainList() {
+    this.commonService.blockchainList().subscribe((res) => {
+      this.blockchainList = res;
       this.cdr.markForCheck();
       return;
     });
@@ -189,7 +219,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
             next: res => {
               resolve(true);
               if (res) {
-                this.message.success(`Delete successfully`).onClose!.subscribe(() => {
+                this.message.success(`Delete successfully`, { nzDuration: 1000 }).onClose!.subscribe(() => {
                   this.getDataList();
                 });
               }
@@ -277,6 +307,11 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         {
           title: 'Token Name',
           field: 'tokenName',
+          width: 120
+        },
+        {
+          title: 'Bloackchain',
+          field: 'bloackchain',
           width: 120
         },
         {

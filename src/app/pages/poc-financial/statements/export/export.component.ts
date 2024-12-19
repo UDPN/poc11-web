@@ -62,6 +62,8 @@ export class ExportComponent implements OnInit, AfterViewInit {
   proofStatusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('txnTypesTpl', { static: true })
+  txnTypesTpl!: TemplateRef<NzSafeAny>;
   tokenList: Array<any> = [];
   blockchainList: Array<any> = [];
   tableConfig!: AntTableConfig;
@@ -126,6 +128,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initTable();
     this.getTokenList();
+    this.getBlockchainList();
   }
 
   tableChangeDectction(): void {
@@ -171,6 +174,14 @@ export class ExportComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getBlockchainList() {
+    this.commonService.blockchainList().subscribe((res) => {
+      this.blockchainList = res;
+      this.cdr.markForCheck();
+      return;
+    });
+  }
+
   onDelete(exportTaskId: any) {
     this.modal.confirm({
       nzTitle: `Are you sure you want to delete ?`,
@@ -182,7 +193,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
               resolve(true);
               if (res) {
                 this.message
-                  .success(`Delete successfully`)
+                  .success(`Delete successfully`, { nzDuration: 1000 })
                   .onClose!.subscribe(() => {
                     this.getDataList();
                   });
@@ -286,7 +297,9 @@ export class ExportComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (res) => {
             if (res) {
-              this.message.success('Export successfully!');
+              this.message.success('Export successfully!', {
+                nzDuration: 1000
+              });
             }
             this.getDataList();
             this.exportLoading === false;
@@ -344,9 +357,13 @@ export class ExportComponent implements OnInit, AfterViewInit {
           width: 120
         },
         {
+          title: 'Blockchain',
+          field: 'blockchainName',
+          width: 120
+        },
+        {
           title: 'Transaction Type',
-          field: 'transactionTypes',
-          pipe: 'transactionDirection',
+          tdTemplate: this.txnTypesTpl,
           width: 150
         },
         {

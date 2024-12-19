@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2024-01-11 14:58:13
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-31 19:11:48
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-17 09:41:44
  * @Description:
  */
 const ip = '69.230.239.221';
@@ -13,8 +13,8 @@ export const localUrl = ``;
 export const environment = {
   production: false,
   localUrl: localUrl,
-  clientName: 'admin',
-  password: 'Abcd1234'
+  clientName: 'admintest',
+  password: 'Kissen123'
 };
 
 /*

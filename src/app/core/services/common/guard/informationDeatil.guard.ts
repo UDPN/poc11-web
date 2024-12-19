@@ -42,7 +42,6 @@ export class DeatilsGuard implements CanActivate {
     return this._informationService.detail().pipe(
       map((data) => {
         if (data && data.spStatus === 0) {
-          console.log('333');
           this.router.navigateByUrl('/information/form');
           return false;
         }

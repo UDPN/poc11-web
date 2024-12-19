@@ -6,11 +6,21 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { aesKey, aesVi } from '@app/config/constant';
 import { PocBankAccountService } from '@app/core/services/http/poc-bank-account/poc-bank-account.service';
+import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { fnEncrypts, thousandthMark } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
@@ -32,7 +42,20 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   balanceTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
+  currency: any;
+  topUpForm!: FormGroup;
+  withdrawForm!: FormGroup;
+  passwordForm!: FormGroup;
   info: any = [];
+  walletBalanceList: any = [];
+  walletAddress: any = '';
+  balance: any = '';
+  isVisibleTopUp: boolean = false;
+  isVisibleWithdraw: boolean = false;
+  isOkLoading: boolean = false;
+  txType: number = 0;
+  isLoading: boolean = false;
+  isVisibleEnterPassword: boolean = false;
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -48,7 +71,10 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   };
   constructor(
     private cdr: ChangeDetectorRef,
-    private pocBankAccountService: PocBankAccountService
+    private pocBankAccountService: PocBankAccountService,
+    private fb: FormBuilder,
+    private cbdcWalletService: CbdcWalletService,
+    private message: NzMessageService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -62,7 +88,80 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initTable();
     this.getOverviewInfo();
+    this.topUpForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
+      chainAccountAddress: [null, [Validators.required]],
+      reserveAccount: [
+        null,
+        [Validators.required, this.reserveAccountValidator]
+      ],
+      amount: [null, [Validators.required, this.topUpAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
+    });
+    this.withdrawForm = this.fb.group({
+      commercialBank: [null, [Validators.required]],
+      chainAccountAddress: [null, [Validators.required]],
+      reserveAccount: [
+        null,
+        [Validators.required, this.reserveAccountValidator]
+      ],
+      amount: [null, [Validators.required, this.withdrawAmountValidator]],
+      fiatAmount: [null, [Validators.required]]
+    });
+    this.passwordForm = this.fb.group({
+      pwd: [null, [Validators.required]]
+    });
   }
+
+  topUpAmountValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
+
+  withdrawAmountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value > Number(this.balance)) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
+
+  transactionReferenceNoValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^([a-zA-Z0-9\s-._#!@￥%&*?/]{1,100})$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value.length > 50) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
+
+  reserveAccountValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (!/^(([0-9]\d*))?$/.test(control.value)) {
+      return { regular: true, error: true };
+    } else if (control.value.length > 30) {
+      return { regular1: true, error: true };
+    }
+    return {};
+  };
 
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
@@ -89,7 +188,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
-      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!
     };
     this.pocBankAccountService
       .fetchList(params.pageNum, params.pageSize)
@@ -104,6 +203,122 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
         this.cdr.markForCheck();
+      });
+  }
+
+  getTopUp(
+    currency: string,
+    chainAccountAddress: string,
+    balance: string,
+    reserveAccount: string
+  ) {
+    this.currency = currency;
+    this.balance = balance;
+    this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.topUpForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
+    this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
+    this.isVisibleTopUp = true;
+  }
+
+  getWithdraw(
+    currency: string,
+    chainAccountAddress: string,
+    balance: string,
+    reserveAccount: string
+  ) {
+    this.currency = currency;
+    this.balance = balance;
+    this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
+    this.withdrawForm
+      .get('commercialBank')
+      ?.setValue(sessionStorage.getItem('systemName'));
+
+    this.withdrawForm.get('reserveAccount')?.setValue(reserveAccount);
+    this.isVisibleWithdraw = true;
+  }
+
+  topUp() {
+    this.isVisibleTopUp = false;
+    this.isVisibleEnterPassword = true;
+    this.txType = 1;
+  }
+
+  withdraw() {
+    this.isVisibleWithdraw = false;
+    this.isVisibleEnterPassword = true;
+    this.txType = 2;
+  }
+
+  cancelTopUp() {
+    this.isVisibleTopUp = false;
+    this.topUpForm.reset();
+  }
+
+  cancelWithdraw() {
+    this.isVisibleWithdraw = false;
+    this.withdrawForm.reset();
+  }
+
+  cancelEnterPassword() {
+    this.isVisibleEnterPassword = false;
+    this.passwordForm.reset();
+    this.topUpForm.reset();
+    this.withdrawForm.reset();
+  }
+
+  confirmEnterPassword() {
+    this.isOkLoading = true;
+    const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
+    const params: any = {
+      amount:
+        this.txType === 1
+          ? this.topUpForm.get('amount')?.value
+          : this.withdrawForm.get('amount')?.value,
+      fiatAmount:
+        this.txType === 1
+          ? this.topUpForm.get('fiatAmount')?.value
+          : this.withdrawForm.get('fiatAmount')?.value,
+      password: code,
+      txType: this.txType === 1 ? 1 : 2,
+      // reserveAccount:
+      //   this.txType === 1
+      //     ? this.topUpForm.get('reserveAccount')?.value
+      //     : this.withdrawForm.get('reserveAccount')?.value,
+      walletAddress:
+        this.txType === 1
+          ? this.topUpForm.get('chainAccountAddress')?.value
+          : this.withdrawForm.get('chainAccountAddress')?.value
+    };
+    const amount = thousandthMark(params.amount) + ' ' + this.currency;
+    this.cbdcWalletService
+      .topUpOrWithdraw(params)
+      .pipe(finalize(() => (this.isOkLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.isVisibleEnterPassword = false;
+            this.message.success(
+              this.txType === 1
+                ? `Top-up ${amount} successful`
+                : `withdraw ${amount} successful`,
+              { nzDuration: 1000 }
+            );
+            if (this.txType === 1) {
+              this.topUpForm.reset();
+            } else {
+              this.withdrawForm.reset();
+            }
+          }
+          this.passwordForm.reset();
+          this.isOkLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isOkLoading = false;
+          this.cdr.markForCheck();
+        }
       });
   }
 

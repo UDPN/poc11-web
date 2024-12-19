@@ -108,7 +108,7 @@
               >
                 <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
                 <nz-option nzValue="4" nzLabel="Transfer"></nz-option>
-                <nz-option nzValue="5" nzLabel="FX Purchasing"></nz-option>
+                <!-- <nz-option nzValue="5" nzLabel="FX Purchasing"></nz-option> -->
                 <nz-option nzValue="6" nzLabel="Withdraw"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -199,8 +199,8 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of tokenList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.bankName"
+                  [nzValue]="item.tokenCode"
+                  [nzLabel]="item.tokenName"
                 >
                 </nz-option>
               </nz-select>
@@ -227,8 +227,8 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of blockchainList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.bankName"
+                  [nzValue]="item.blockchainId"
+                  [nzLabel]="item.blockchainName"
                 >
                 </nz-option>
               </nz-select>
@@ -424,6 +424,13 @@
       <nz-tag [nzColor]="proofState | map: 'proofStatusColor'">{{
         proofState | map: 'proofStatus'
       }}</nz-tag>
+    </ng-template>
+    <ng-template #txnTypesTpl let-txnTypes="txnTypes">
+      <span *ngFor="let type of txnTypes; index as i">{{
+        i === txnTypes?.length - 1
+          ? (type | map: 'statementsTxnType')
+          : (type | map: 'statementsTxnType') + '、'
+      }}</span>
     </ng-template>
     <ng-template
       #operationTpl

@@ -263,7 +263,6 @@ export const MapSet = {
   statementsTxnType: {
     3: 'Top-up',
     4: 'Transfer out',
-    5: 'Transfer in',
     6: 'Withdraw'
   },
   proofStatusColor: {
@@ -330,6 +329,18 @@ export class MapPipe implements PipeTransform {
     if (arg === 'null') {
       if (value?.indexOf(undefined) !== -1 || value.indexOf('null') !== -1) {
         return (value = '--');
+      } else {
+        return value;
+      }
+    }
+    if (arg === 'showPart') {
+      if (value?.length > 20) {
+        return value.substring(0, 6) +
+        '....' +
+        value.substring(
+          value.length - 4,
+          value.length
+        );
       } else {
         return value;
       }
