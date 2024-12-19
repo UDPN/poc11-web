@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-10 14:47:00
+ * @LastEditTime: 2024-12-19 10:16:08
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -43,16 +43,16 @@ export class EditGuard implements CanActivate {
     return this._informationService.detail().pipe(
       map((data) => {
         if (data && data.spStatus === 0) {
-          console.log('4444');
           this.router.navigateByUrl('/information/form');
           return false;
         }
         if (data !== null && data.spStatus === 5) {
-          this.router.navigateByUrl('/information/detail');
-          return false;
+          // this.router.navigateByUrl('/information/detail');
+          return true;
         }
         if (data !== null && data.spStatus === 15) {
-          return true;
+          // return true;
+          return false;
         }
         // if (data !== null && data.spStatus === 10) {
         //   this.router.navigateByUrl('/poc/poc-home/home');

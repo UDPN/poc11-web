@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-10 14:46:48
+ * @LastEditTime: 2024-12-19 10:17:21
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -42,13 +42,14 @@ export class DeatilsGuardChild implements CanActivateChild {
     | Promise<boolean | UrlTree> {
     return this._informationService.detail().pipe(
       map((data) => {
-        if (data && data.spStatus === 0) {
+        if (data && data.spStatusdata && data.spStatus === 0) {
           this.router.navigateByUrl('/information/form');
           return false;
         }
         if (data !== null && data.spStatus === 5) {
-          this.router.navigateByUrl('/information/detail');
-          return false;
+          // this.router.navigateByUrl('/information/detail');
+          // return false;
+          return true;
         }
         if (data !== null && data.spStatus === 15) {
           this.router.navigateByUrl('/information/detail');

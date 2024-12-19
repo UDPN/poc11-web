@@ -216,9 +216,7 @@
               [nzXs]="24"
             >
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24"
-                  >Pegged Currency
-                </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
                 <nz-form-control [nzErrorTip]="peggedCurrencyError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
@@ -232,7 +230,7 @@
                   </div>
                   <ng-template #peggedCurrencyError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Pegged Currency</ng-container
+                      >Please input your Currency</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
