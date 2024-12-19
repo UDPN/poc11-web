@@ -244,8 +244,8 @@ export const MapSet = {
     20: 'Token Statistics Report'
   },
   transactionDirection: {
-    1: 'Transfer in',
-    2: 'Transfer out'
+    1: 'Transfer out',
+    2: 'Transfer in'
   },
   statementStatus: {
     20: 'Active',

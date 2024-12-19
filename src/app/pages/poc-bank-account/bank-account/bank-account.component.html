@@ -211,26 +211,25 @@
     </ng-template>
     <ng-template
       #transactionAmountTpl
-      let-type="type"
+      let-txType="txType"
       let-transactionAmount="transactionAmount"
       let-transactionCurrencyName="transactionCurrencyName"
     >
       <span
         [title]="transactionAmount"
-        [style]="{ color: type === 1 ? '#39A16A' : '#E53E3E' }"
+        [style]="{ color: txType === 1 ? '#E53E3E' : '#39A16A' }"
         >{{ transactionAmount | map: 'toThousandthMark'
-        }}{{ transactionCurrencyName }}</span
+        }}{{ ' ' + transactionCurrencyName }}</span
       >
     </ng-template>
     <ng-template
       #balanceTpl
-      let-type="type"
       let-reserveAmount="reserveAmount"
       let-legalCurrencyName="legalCurrencyName"
     >
       <span [title]="reserveAmount"
         >{{ reserveAmount | map: 'toThousandthMark'
-        }}{{ legalCurrencyName }}</span
+        }}{{ ' ' + legalCurrencyName }}</span
       >
     </ng-template>
   </app-card-table-wrap>

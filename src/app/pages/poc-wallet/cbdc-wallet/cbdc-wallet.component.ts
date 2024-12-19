@@ -89,6 +89,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   currency: any;
   txType: number = 0;
   balance: any = '';
+  reserveBalance : any = '';
+  reserveCurrency: any= '';
   constructor(
     private cbdcWalletService: CbdcWalletService,
     private themesService: ThemeService,
@@ -148,7 +150,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
-    } else if (control.value > Number(this.balance)) {
+    } else if (control.value > Number(this.reserveBalance)) {
       return { regular1: true, error: true };
     }
     return {};
@@ -248,27 +250,32 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   }
 
   getTopUp(
-    currency: string,
+    reserveCurrency: string,
     chainAccountAddress: string,
-    balance: any,
-    reserveAccount: any
+    reserveAccount: any,
+    reserveBalance: any,
+    currency: any
   ) {
+    this.reserveCurrency = reserveCurrency;
+    this.reserveBalance = reserveBalance;
     this.currency = currency;
-    this.balance = balance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.topUpForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
     this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
+    
   }
 
   getWithdraw(
     currency: string,
     chainAccountAddress: string,
     balance: any,
-    reserveAccount: any
+    reserveAccount: any,
+    reserveCurrency: any,
   ) {
+    this.reserveCurrency = reserveCurrency;
     this.currency = currency;
     this.balance = balance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
@@ -322,16 +329,16 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           : this.withdrawForm.get('fiatAmount')?.value,
       password: code,
       txType: this.txType === 1 ? 1 : 2,
-      // reserveAccount:
-      //   this.txType === 1
-      //     ? this.topUpForm.get('reserveAccount')?.value
-      //     : this.withdrawForm.get('reserveAccount')?.value,
+      reserveAccount:
+        this.txType === 1
+          ? this.topUpForm.get('reserveAccount')?.value
+          : this.withdrawForm.get('reserveAccount')?.value,
       walletAddress:
         this.txType === 1
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
-    const amount = thousandthMark(params.amount) + ' ' + this.currency;
+    const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.currency : this.reserveCurrency);
     this.cbdcWalletService
       .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))

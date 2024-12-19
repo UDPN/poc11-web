@@ -237,15 +237,24 @@
       let-chainAccountAddress="chainAccountAddress"
       let-state="state"
       let-currency="currency"
+      let-reserveCurrency="reserveCurrency"
       let-reserveAccount="reserveAccount"
+      let-walletType="walletType"
+      let-reserveBalance="reserveBalance"
     >
       <ng-container *appAuth="'R01010103'">
         <span
           class="operate-text"
           (click)="
-            getTopUp(currency, chainAccountAddress, balance, reserveAccount)
+            getTopUp(
+              reserveCurrency,
+              chainAccountAddress,
+              reserveAccount,
+              reserveBalance,
+              currency
+            )
           "
-          *ngIf="state === 5 && region === 1"
+          *ngIf="state === 5 && region === 1 && walletType === 1"
         >
           Top up
         </span>
@@ -254,9 +263,15 @@
         <span
           class="operate-text"
           (click)="
-            getWithdraw(currency, chainAccountAddress, balance, reserveAccount)
+            getWithdraw(
+              currency,
+              chainAccountAddress,
+              balance,
+              reserveAccount,
+              reserveCurrency
+            )
           "
-          *ngIf="state === 5 && region === 1"
+          *ngIf="state === 5 && region === 1 && walletType === 1"
         >
           Withdraw
         </span>
@@ -357,8 +372,8 @@
               />
               <div>
                 {{ 'Available Amount: ' }}
-                {{ this.balance | map: 'toThousandthMark' }}
-                {{ ' ' + this.currency }}
+                {{ this.reserveBalance | map: 'toThousandthMark' }}
+                {{ ' ' + this.reserveCurrency }}
               </div>
               <ng-template #bankAccountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -386,7 +401,7 @@
                 <input nz-input formControlName="amount" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
-                <label>{{ currency.split('-')[1] }}</label>
+                <label>{{ this.reserveCurrency }}</label>
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -421,7 +436,7 @@
                 />
               </nz-input-group>
               <ng-template #addOnAfterTemplate1>
-                <label>{{ currency }}</label>
+                <label>{{ this.currency }}</label>
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -554,7 +569,7 @@
                 <input nz-input formControlName="amount" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
-                <label>{{ currency.split('-')[1] }}</label>
+                <label>{{ this.reserveCurrency }}</label>
               </ng-template>
               <ng-template #amount1Error let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -589,7 +604,7 @@
                 />
               </nz-input-group>
               <ng-template #addOnAfterTemplate1>
-                <label>{{ currency }}</label>
+                <label>{{ this.currency }}</label>
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"

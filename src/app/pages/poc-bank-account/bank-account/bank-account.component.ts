@@ -190,7 +190,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
     this.pocBankAccountService.getOverview().subscribe((res) => {
       if (res?.length > 0) {
         this.info = res[0];
-        this.getWalletInfo(this.info.currency);
+        this.getWalletInfo(this.info?.currency);
         this.cdr.markForCheck();
         return;
       }
@@ -211,7 +211,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: {
-        centralBankId: this.info.centralBankId
+        centralBankId: this.info?.centralBankId
       }
     };
     this.pocBankAccountService
@@ -233,23 +233,23 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   getTopUp() {
     this.currency = this.info.currency;
     this.balance = this.info.accountBalance;
-    this.topUpForm.get('chainAccountAddress')?.setValue(this.walletInfo.walletAddress);
+    this.topUpForm.get('chainAccountAddress')?.setValue(this.walletInfo?.walletAddress);
     this.topUpForm
       .get('commercialBank')
-      ?.setValue(this.info.bankName);
-    this.topUpForm.get('reserveAccount')?.setValue(this.info.bankAccountNo);
+      ?.setValue(this.info?.bankName);
+    this.topUpForm.get('reserveAccount')?.setValue(this.info?.bankAccountNo);
     this.isVisibleTopUp = true;
   }
 
   getWithdraw() {
-    this.walletCurrency = this.walletInfo.currency;
-    this.walletBalance = this.walletInfo.balance;
-    this.withdrawForm.get('chainAccountAddress')?.setValue(this.walletInfo.walletAddress);
+    this.walletCurrency = this.walletInfo?.currency;
+    this.walletBalance = this.walletInfo?.balance;
+    this.withdrawForm.get('chainAccountAddress')?.setValue(this.walletInfo?.walletAddress);
     this.withdrawForm
       .get('commercialBank')
-      ?.setValue(this.info.bankName);
+      ?.setValue(this.info?.bankName);
 
-    this.withdrawForm.get('reserveAccount')?.setValue(this.info.bankAccountNo);
+    this.withdrawForm.get('reserveAccount')?.setValue(this.info?.bankAccountNo);
     this.isVisibleWithdraw = true;
   }
 
@@ -305,7 +305,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
-    const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.walletInfo.currency : this.info.currency);
+    const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.walletInfo?.currency : this.info?.currency);
     this.cbdcWalletService
       .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
@@ -368,11 +368,11 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: ' Created On',
+          title: 'Created On',
           field: 'createTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
-          width: 100
+          width: 150
         }
       ],
       total: 0,
