@@ -102,11 +102,9 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.topUpForm.get('amount')?.valueChanges.subscribe((item: number) => {
       this.topUpForm.get('fiatAmount')?.setValue(item);
-      // this.getFiatAmount(item);
     });
     this.withdrawForm.get('amount')?.valueChanges.subscribe((item: number) => {
       this.withdrawForm.get('fiatAmount')?.setValue(item);
-      // this.getFiatAmount(item);
     });
     this.pageHeaderInfo = {
       title: ``,

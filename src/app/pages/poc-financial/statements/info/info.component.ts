@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-12 16:33:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-16 10:40:33
+ * @LastEditTime: 2024-12-19 10:52:03
  * @Description: 
  */
 /*
@@ -187,7 +187,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
             this.message
               .success('Download successfully!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
-                const blob = new Blob([res.data], {
+                const blob = new Blob([res.body], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
                 if ('download' in document.createElement('a')) {

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2023-12-13 14:27:01
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-05-22 14:48:35
+ * @LastEditTime: 2024-12-19 15:48:47
  * @Description: 
 -->
 <app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-wallet/cbdc-transaction'"
@@ -76,7 +76,7 @@
                   info.currency?.split('-')[1] : '')
                   }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Bank Account">{{ (info?.refundInformationRespVO?.refundAccount + '( ' +
-                  info?.refundInformationRespVO?.bankName + ' )') | map:'nullValue'
+                  info?.refundInformationRespVO?.bankName + ' )')
                   }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Transaction Time">{{ (info?.refundInformationRespVO?.transactionTime |
                   map:'timeStamp') | map:'nullValue'
@@ -107,8 +107,8 @@
                 map:'toThousandthMark') | map:'nullValue') + ' ' + (info?.refundInformationRespVO ?
                 info.currency?.split('-')[1] : '')
                 }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Bank Account">{{ (info?.refundInformationRespVO?.refundAccount + '( ' +
-                info?.refundInformationRespVO?.bankName + ' )') | map : 'nullValue'
+              <nz-descriptions-item nzTitle="Bank Account">{{ info?.refundInformationRespVO?.refundAccount + '( ' +
+                info?.refundInformationRespVO?.bankName + ' )'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Transaction Time">{{ (info?.refundInformationRespVO?.transactionTime |
                 map:'timeStamp') | map:'nullValue'

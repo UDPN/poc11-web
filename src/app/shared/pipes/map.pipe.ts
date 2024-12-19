@@ -334,7 +334,7 @@ export class MapPipe implements PipeTransform {
       }
     }
     if (arg === 'showPart') {
-      if (value?.length > 20) {
+      if (value?.length > 30) {
         return value.substring(0, 6) +
         '....' +
         value.substring(

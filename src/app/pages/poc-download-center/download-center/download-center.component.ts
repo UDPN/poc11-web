@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 10:29:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 14:24:55
+ * @LastEditTime: 2024-12-19 10:50:27
  * @Description:
  */
 /*
@@ -132,7 +132,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
             this.message
               .success('Download successfully!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
-                const blob = new Blob([res.data], {
+                const blob = new Blob([res.body], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
                 if ('download' in document.createElement('a')) {

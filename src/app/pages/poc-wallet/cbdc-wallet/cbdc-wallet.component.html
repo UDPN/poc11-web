@@ -357,9 +357,8 @@
               />
               <div>
                 {{ 'Available Amount: ' }}
-                {{
-                  (this.balance | map: 'toThousandthMark') + ' ' + this.currency
-                }}
+                {{ this.balance | map: 'toThousandthMark' }}
+                {{ ' ' + this.currency }}
               </div>
               <ng-template #bankAccountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
