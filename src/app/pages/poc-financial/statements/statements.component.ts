@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-18 17:12:58
+ * @LastEditTime: 2024-12-19 17:14:34
  * @Description: 
  */
 /*
@@ -172,6 +172,8 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   getTokenList() {
     this.commonService.tokenList().subscribe((res) => {
       this.tokenList = res;
+      console.log(res);
+      
       this.cdr.markForCheck();
       return;
     });
@@ -180,6 +182,8 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   getBlockchainList() {
     this.commonService.blockchainList().subscribe((res) => {
       this.blockchainList = res;
+      console.log(res, 'res1');
+      
       this.cdr.markForCheck();
       return;
     });
@@ -311,7 +315,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Bloackchain',
-          field: 'bloackchain',
+          field: 'blockchainName',
           width: 120
         },
         {

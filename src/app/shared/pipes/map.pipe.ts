@@ -261,9 +261,9 @@ export const MapSet = {
     30: 'Monthly'
   },
   statementsTxnType: {
-    3: 'Top-up',
-    4: 'Transfer out',
-    6: 'Withdraw'
+    1: 'Top-up',
+    2: 'Withdraw',
+    3: 'Transfer'
   },
   proofStatusColor: {
     2: 'volcano',
@@ -333,17 +333,39 @@ export class MapPipe implements PipeTransform {
         return value;
       }
     }
-    if (arg === 'showPart') {
-      if (value?.length > 30) {
-        return value.substring(0, 6) +
-        '....' +
-        value.substring(
-          value.length - 4,
-          value.length
-        );
+    if (arg === 'showPartTen') {
+      if (value) {
+        if (value?.length > 10) {
+          return value.substring(0, 6) +
+          '....' +
+          value.substring(
+            value.length - 4,
+            value.length
+          );
+        } else  {
+          return value;
+        }
       } else {
-        return value;
+        return '--'
       }
+      
+    }
+    if (arg === 'showPart') { 
+      if (value) {
+        if (value?.length > 30) {
+          return value.substring(0, 6) +
+          '....' +
+          value.substring(
+            value.length - 4,
+            value.length
+          );
+        } else {
+          return value;
+        }
+      } else {
+        return '--'
+      }
+     
     }
     if (arg === 'failedTime') {
       if (!value) {
@@ -409,7 +431,7 @@ export class MapPipe implements PipeTransform {
       }
     }
     if (arg === 'dayStamp') {
-      if (!value) {
+      if (!value || value.length < 10) {
         return (value = '--');
       } else {
         // return timestampToMonth(value);
@@ -418,6 +440,8 @@ export class MapPipe implements PipeTransform {
           value = Number(value) * 1000;
         }
         let res = this.datePipe.transform(value, 'MMMM d, y');
+        console.log(res);
+        
         return res?.replace('GMT', 'UTC');
       }
     }

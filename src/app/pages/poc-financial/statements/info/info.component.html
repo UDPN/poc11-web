@@ -49,7 +49,7 @@
   </nz-card>
   <nz-card
     [nzBodyStyle]="{ 'padding-bottom': 0 }"
-    [nzTitle]="'Report Record'"
+    [nzTitle]="'Report Records'"
     class="m-b-10"
   >
     <form nz-form nzLayout="vertical">
@@ -184,24 +184,12 @@
     </ng-template>
     <ng-template #fileIdTpl let-fileId="fileId">
       <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
-        {{
-          fileId.length > 10
-            ? fileId.substring(0, 6) +
-              '....' +
-              fileId.substring(fileId.length - 4, fileId.length)
-            : fileId
-        }}
+        {{ fileId | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template #fileHashTpl let-fileHash="fileHash">
       <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
-        {{
-          fileHash.length > 10
-            ? fileHash.substring(0, 6) +
-              '....' +
-              fileHash.substring(fileHash.length - 4, fileHash.length)
-            : fileHash
-        }}
+        {{ fileHash | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template #statusTpl let-exportState="exportState">
@@ -211,13 +199,7 @@
     </ng-template>
     <ng-template #proofHashTpl let-proofHash="proofHash">
       <p [title]="proofHash" nz-typography nzCopyable [nzCopyText]="proofHash">
-        {{
-          proofHash.length > 10
-            ? proofHash.substring(0, 6) +
-              '....' +
-              proofHash.substring(proofHash.length - 4, proofHash.length)
-            : proofHash
-        }}
+        {{ proofHash | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template #proofStatusTpl let-proofState="proofState">

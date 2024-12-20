@@ -197,16 +197,7 @@
         nzCopyable
         [nzCopyText]="transactionId"
       >
-        {{
-          transactionId.length > 10
-            ? transactionId.substring(0, 6) +
-              '....' +
-              transactionId.substring(
-                transactionId.length - 4,
-                transactionId.length
-              )
-            : transactionId
-        }}
+        {{ transactionId | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template

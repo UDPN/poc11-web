@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-12 16:33:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-19 10:52:03
+ * @LastEditTime: 2024-12-19 17:22:01
  * @Description: 
  */
 /*
@@ -263,19 +263,19 @@ export class InfoComponent implements OnInit, AfterViewInit {
           field: 'startTime',
           notNeedEllipsis: true,
           pipe: 'dayStamp',
-          width: 120
+          width: 150
         },
         {
           title: 'Executed On',
           field: 'exportTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
-          width: 150
+          width: 120
         },
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
-          width: 100
+          width: 150
         },
         {
           title: 'Proof Hash',
@@ -300,7 +300,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 120
+          width: 150
         }
       ],
       total: 0,
