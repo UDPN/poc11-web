@@ -209,7 +209,7 @@
     </ng-template>
     <ng-template
       #operationTpl
-      let-downloadCenterStatus="downloadCenterStatus"
+      let-exportState="exportState"
       let-exportTaskId="exportTaskId"
       let-busId="busId"
       let-busType="busType"
@@ -218,7 +218,7 @@
       <ng-container *appAuth="'R030102'">
         <span
           class="operate-text"
-          *ngIf="downloadCenterStatus === 2"
+          *ngIf="exportState === 2"
           (click)="onDownload(busId, busType, fileName)"
         >
           Download
@@ -227,7 +227,7 @@
       <ng-container *appAuth="'R030102'">
         <span
           class="operate-text"
-          *ngIf="downloadCenterStatus === 2"
+          *ngIf="exportState === 2"
           (click)="onDelete(exportTaskId)"
         >
           Delete
