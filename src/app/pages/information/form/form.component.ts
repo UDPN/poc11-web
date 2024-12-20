@@ -62,6 +62,11 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     //     this.countryListData = res.dataInfo;
     //     this.cdr.markForCheck();
     //   });
+    this.validateForm.get('userNotice')?.valueChanges.subscribe((item: any) => {
+      if (item === false) {
+        this.validateForm.get('userNotice')?.setValue(null)
+      }
+    });
   }
 
   ngOnInit(): void {
