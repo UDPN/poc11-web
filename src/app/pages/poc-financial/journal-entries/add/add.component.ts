@@ -6,7 +6,7 @@ import { TokenInfo, TokenResponse, SubjectInfo, SubjectResponse } from './token.
 import { StorageService, TransactionData } from './storage.service';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add',
@@ -36,7 +36,8 @@ export class AddComponent implements OnInit, AfterViewInit {
     private message: NzMessageService,
     private http: HttpClient,
     private storageService: StorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.transactionForm = this.fb.group({
       ledgerName: ['', [Validators.required]],
@@ -87,26 +88,45 @@ export class AddComponent implements OnInit, AfterViewInit {
           if (response.code === 0 && response.data) {
             const detail = response.data;
             
-            // Set form values
+            // 设置表单值
             this.transactionForm.patchValue({
-              ledgerName: detail.ledgerName,
-              tokenName: detail.stablecoinId
+              ledgerName: detail.ledgerName
             });
 
-            // Find and select the token
+            // 在 token 列表中找到对应的 token 并选中
             const token = this.tokenList.find(t => t.stablecoinId === detail.stablecoinId);
             if (token) {
+              this.transactionForm.patchValue({
+                tokenName: token
+              });
               this.onTokenSelect(token);
+            } else {
+              // 如果没有找到对应的 token，可能是 token 列表还没有加载完成
+              // 保存 stablecoinId，等 token 列表加载完成后再处理
+              const checkTokenList = setInterval(() => {
+                if (this.tokenList.length > 0) {
+                  const matchedToken = this.tokenList.find(t => t.stablecoinId === detail.stablecoinId);
+                  if (matchedToken) {
+                    this.transactionForm.patchValue({
+                      tokenName: matchedToken
+                    });
+                    this.onTokenSelect(matchedToken);
+                    clearInterval(checkTokenList);
+                  }
+                }
+              }, 100);
+
+              // 设置一个超时时间，避免无限等待
+              setTimeout(() => clearInterval(checkTokenList), 5000);
             }
 
-            // Clear existing transaction groups
+            // 清除现有的交易组
             while (this.transactionGroups.length) {
               this.transactionGroups.removeAt(0);
             }
 
-            // Create transaction groups from detail data
+            // 创建交易组
             detail.txBillRuleList.forEach((rule: any) => {
-              // Convert txType back to string type
               let transactionType: string;
               switch (rule.txType) {
                 case 1:
@@ -135,32 +155,17 @@ export class AddComponent implements OnInit, AfterViewInit {
                   accountCode: [loan.subjectCode, Validators.required],
                   accountName: [loan.subjectTitle, Validators.required],
                   amount: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-                  accountCategory: [loan.subjectCategory, Validators.required]
+                  accountCategory: [loan.subjectCategory]
                 });
                 transactionsArray.push(transaction);
               });
 
               this.transactionGroups.push(group);
             });
-
-            // Save to session storage
-            const initialData = this.transactionGroups.controls.map(group => ({
-              transactionType: group.get('transactionType')?.value,
-              transactions: (group.get('transactions') as FormArray).controls.map(t => ({
-                debitCredit: t.get('debitCredit')?.value,
-                accountCode: t.get('accountCode')?.value,
-                accountName: t.get('accountName')?.value,
-                accountCategory: t.get('accountCategory')?.value,
-                amount: t.get('amount')?.value
-              }))
-            }));
-            this.storageService.saveTransactions(initialData);
-          } else {
-            this.message.error(response.message || 'Failed to load detail data');
           }
         },
         error: (error) => {
-          console.error('Error loading detail data:', error);
+          console.error('Error loading detail:', error);
           this.message.error('Failed to load detail data');
         }
       });
@@ -203,6 +208,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           // 合并并去重
           this.allSubjects = this.mergeAndDeduplicateSubjects(storedSubjects, response.data);
         }
+        console.log(this.allSubjects);
         this.loadingSubjects['init'] = false;
       },
       error: (error) => {
@@ -219,22 +225,56 @@ export class AddComponent implements OnInit, AfterViewInit {
         next: (response) => {
           if (response.code === 0 && response.data) {
             this.tokenList = response.data;
-            if (this.tokenList.length > 0) {
-              this.selectedToken = this.tokenList[0];
+            // 只在新增模式下自动选中第一个 token
+            if (!this.isEditMode && this.tokenList.length > 0) {
               this.transactionForm.patchValue({
-                tokenName: this.selectedToken
+                tokenName: this.tokenList[0]
               });
-              // 初始化科目列表
-              this.initSubjectList(this.selectedToken.stablecoinId);
-              this.getSubjectList(this.selectedToken.stablecoinId);
+              this.onTokenSelect(this.tokenList[0]);
             }
           }
         },
         error: (error) => {
-          // this.message.error('获取Token列表失败');
-          console.error('获取Token列表错误:', error);
+          console.error('Error getting token list:', error);
         }
       });
+  }
+
+  onTokenSelect(event: any) {
+    this.selectedToken = event;
+    if (this.selectedToken) {
+      // 清除现有的交易组
+      while (this.transactionGroups.length) {
+        this.transactionGroups.removeAt(0);
+      }
+
+      // 创建默认的交易组
+      this.transactionTypes.forEach(type => {
+        const group = this.fb.group({
+          transactionType: [type, Validators.required],
+          transactions: this.fb.array([])
+        });
+
+        const transactionsArray = group.get('transactions') as FormArray;
+        const defaultRows = 2;
+        
+        for (let i = 0; i < defaultRows; i++) {
+          const transaction = this.fb.group({
+            debitCredit: ['Debit', Validators.required],
+            accountCode: ['', Validators.required],
+            accountName: ['', Validators.required],
+            amount: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+            accountCategory: ['',]
+          });
+          transactionsArray.push(transaction);
+        }
+
+        this.transactionGroups.push(group);
+      });
+
+      // 获取科目列表并填充数据
+      this.getSubjectList(this.selectedToken.stablecoinId);
+    }
   }
 
   private getSubjectList(stablecoinId: number) {
@@ -244,63 +284,36 @@ export class AddComponent implements OnInit, AfterViewInit {
           if (response.code === 0 && response.data && response.data.length > 0) {
             const defaultSubject = response.data[0];
             
-            // Clear existing transaction groups
-            while (this.transactionGroups.length) {
-              this.transactionGroups.removeAt(0);
-            }
-
-            // Create new transaction groups with different default rows
-            this.transactionTypes.forEach(type => {
-              const group = this.fb.group({
-                transactionType: [type, Validators.required],
-                transactions: this.fb.array([])
-              });
-
+            // 更新所有交易组中的字段
+            this.transactionGroups.controls.forEach(group => {
               const transactionsArray = group.get('transactions') as FormArray;
-              // Set different default rows based on transaction type
-              const defaultRows = (type === 'Top-Up' || type === 'Withdraw') ? 2 : 3;
-              
-              for (let i = 0; i < defaultRows; i++) {
-                const transaction = this.fb.group({
-                  debitCredit: ['Debit', Validators.required],
-                  accountCode: [defaultSubject.subjectCode, Validators.required],
-                  accountName: [defaultSubject.subjectTitle, Validators.required],
-                  amount: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-                  accountCategory: [defaultSubject.subjectCategory, Validators.required]
+              transactionsArray.controls.forEach(transaction => {
+                transaction.patchValue({
+                  accountCode: defaultSubject.subjectCode,
+                  accountName: defaultSubject.subjectTitle,
+                  accountCategory: defaultSubject.subjectCategory
                 });
-                transactionsArray.push(transaction);
-              }
-
-              this.transactionGroups.push(group);
+              });
             });
-
-            // Save to session storage
-            const initialData = this.transactionGroups.controls.map(group => ({
-              transactionType: group.get('transactionType')?.value,
-              transactions: (group.get('transactions') as FormArray).controls.map(t => ({
-                debitCredit: t.get('debitCredit')?.value,
-                accountCode: t.get('accountCode')?.value,
-                accountName: t.get('accountName')?.value,
-                accountCategory: t.get('accountCategory')?.value,
-                amount: t.get('amount')?.value
-              }))
-            }));
-            this.storageService.saveTransactions(initialData);
           }
+
+          // 保存到会话存储
+          const initialData = this.transactionGroups.controls.map(group => ({
+            transactionType: group.get('transactionType')?.value,
+            transactions: (group.get('transactions') as FormArray).controls.map(t => ({
+              debitCredit: t.get('debitCredit')?.value,
+              accountCode: t.get('accountCode')?.value,
+              accountName: t.get('accountName')?.value,
+              accountCategory: t.get('accountCategory')?.value,
+              amount: t.get('amount')?.value
+            }))
+          }));
+          this.storageService.saveTransactions(initialData);
         },
         error: (error) => {
           console.error('Error getting subject list:', error);
         }
       });
-  }
-
-  onTokenSelect(tokenInfo: TokenInfo) {
-    this.selectedToken = tokenInfo;
-    if (this.selectedToken) {
-      // 切换 token 时重新初始化科目列表
-      this.initSubjectList(this.selectedToken.stablecoinId);
-      this.getSubjectList(this.selectedToken.stablecoinId);
-    }
   }
 
   getTransactions(group: AbstractControl): FormArray {
@@ -343,7 +356,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       accountCode: [lastTransaction.get('accountCode')?.value || '', Validators.required],
       accountName: [lastTransaction.get('accountName')?.value || '', Validators.required],
       amount: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-      accountCategory: [lastTransaction.get('accountCategory')?.value || '', Validators.required]
+      accountCategory: [lastTransaction.get('accountCategory')?.value || '',]
     });
 
     transactions.push(newTransaction);
@@ -360,7 +373,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   onSubmit() {
     this.isFormSubmitted = true;
     
-    // 触发所有控件的验证
+    // Validate all form controls
     Object.keys(this.transactionForm.controls).forEach(key => {
       const control = this.transactionForm.get(key);
       if (control) {
@@ -370,7 +383,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // 触发所有交易组的验证
+    // Validate all transaction groups
     this.transactionGroups.controls.forEach((group: AbstractControl) => {
       if (group instanceof FormGroup) {
         const transactionsArray = group.get('transactions');
@@ -392,13 +405,13 @@ export class AddComponent implements OnInit, AfterViewInit {
     });
 
     if (this.transactionForm.valid) {
-      // 获取��单数据
+      // Get form data
       const formData = {
         ledgerName: this.transactionForm.get('ledgerName')?.value,
         stablecoinId: this.selectedToken?.stablecoinId || 0,
         txBillRuleList: this.transactionGroups.controls.map(group => {
           const transactionType = group.get('transactionType')?.value;
-          // 转换交易类型
+          // Convert transaction type
           let txType: number;
           switch (transactionType) {
             case 'Top-Up':
@@ -438,13 +451,16 @@ export class AddComponent implements OnInit, AfterViewInit {
         Object.assign(formData, { ruleId: this.ruleId });
       }
 
-      // 调用接口
+      // Call API
       const url = this.isEditMode ? '/v1/financial/bill/rule/edit' : '/v1/financial/bill/rule/add';
       this.http.post(url, formData)
         .subscribe({
           next: (response: any) => {
             if (response.code === 0) {
-              this.message.success(`${this.isEditMode ? 'Updated' : 'Submitted'} successfully`);
+              this.message.success(`${this.isEditMode ? 'Updated' : 'Submitted'} successfully`).onClose.subscribe(() => {
+                this.router.navigate(['/poc/poc-financial/journal-entries']);
+                this.storageService.clearStorage();
+              });
             } else {
               this.message.error(response.message || `${this.isEditMode ? 'Update' : 'Submit'} failed`);
             }
@@ -463,7 +479,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       accountCode: ['', Validators.required],
       accountName: ['', Validators.required],
       amount: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-      accountCategory: ['', Validators.required]
+      accountCategory: ['',]
     });
   }
 
@@ -546,13 +562,12 @@ export class AddComponent implements OnInit, AfterViewInit {
     return Array.from(uniqueSubjects.values());
   }
 
-  // 保存单条记录
+  // Save single transaction
   onSaveTransaction(transaction: AbstractControl, groupIndex: number, transactionIndex: number) {
     if (!transaction.valid) {
       return;
     }
 
-    // 调用保存科目的 API
     const subjectData = {
       stablecoinId: this.selectedToken?.stablecoinId,
       subjectCategory: transaction.get('accountCategory')?.value,
@@ -564,7 +579,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (response: any) => {
           if (response.code === 0) {
-            // 保存到会话存储
+            // Save current state to session storage
             const group = this.transactionGroups.at(groupIndex);
             const currentData: TransactionData = {
               transactionType: group.get('transactionType')?.value,
@@ -579,6 +594,31 @@ export class AddComponent implements OnInit, AfterViewInit {
 
             this.storageService.updateTransactionGroup(groupIndex, currentData);
             this.message.success('Saved successfully');
+
+            // Check and fill empty fields in all transaction groups
+            this.transactionGroups.controls.forEach((g, gIndex) => {
+              const transactions = g.get('transactions') as FormArray;
+              
+              transactions.controls.forEach((t, tIndex) => {
+                // Skip the current transaction if it's in the same group
+                if (gIndex === groupIndex && tIndex === transactionIndex) {
+                  return;
+                }
+
+                const isAccountCodeEmpty = !t.get('accountCode')?.value;
+                const isAccountNameEmpty = !t.get('accountName')?.value;
+                const isAccountCategoryEmpty = !t.get('accountCategory')?.value;
+
+                if (isAccountCodeEmpty && isAccountNameEmpty && isAccountCategoryEmpty) {
+                  // Fill with saved data if all fields are empty
+                  t.patchValue({
+                    accountCode: transaction.get('accountCode')?.value,
+                    accountName: transaction.get('accountName')?.value,
+                    accountCategory: transaction.get('accountCategory')?.value
+                  });
+                }
+              });
+            });
           }
         },
         error: (error) => {
@@ -627,7 +667,7 @@ export class AddComponent implements OnInit, AfterViewInit {
               accountCode: [transaction.accountCode, Validators.required],
               accountName: [transaction.accountName, Validators.required],
               amount: [{ value: transaction.amount, disabled: true }, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-              accountCategory: [transaction.accountCategory, Validators.required]
+              accountCategory: [transaction.accountCategory, ]
             }));
           });
         } else {

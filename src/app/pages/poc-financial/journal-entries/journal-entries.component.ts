@@ -65,6 +65,8 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
     filter: []
   };
   tokenList: any[] = [];
+  blockchainList: any[] = [];
+  currencyList: any[] = [];
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -91,6 +93,7 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getTokenList();
+    this.getBlockchainList();
   }
 
   resetForm(): void {
@@ -218,18 +221,19 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/poc/poc-financial/journal-entries/edit', id]);
   }
 
-  onStatusUpdate(id: string, state: number) {
+  onStatusUpdate(id: string, state: number, ledgerName: string) {
     const statusText = state === 1 ? 'activate' : 'deactivate';
     this.modal.confirm({
-      nzTitle: `Are you sure you want to ${statusText} this rule?`,
+      nzTitle: `Are you sure you want to deactivate the business mapping for  ${ledgerName} ?`,
       nzOnOk: () => {
         this.journalService.updateStatus({ ruleId: id, state }).subscribe({
           next: (res) => {
-            if (res.code === 0) {
+            if (res.code == 0) {
               this.message.success(`${statusText.charAt(0).toUpperCase() + statusText.slice(1)} successfully`);
               this.getDataList(this.tableQueryParams);
+              this.cdr.detectChanges();
             } else {
-              this.message.error(res.message || 'Operation failed');
+              this.message.error(res.message || 'Operation failed111');
             }
           },
           error: (err) => {
@@ -242,9 +246,33 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
   }
 
   getTokenList() {
-    this.commonService.tokenList().subscribe((res) => {
-      this.tokenList = res;
-      this.cdr.markForCheck();
+    this.journalService.getTokenList().subscribe({
+      next: (res) => {
+        if (res.code === 0) {
+          this.tokenList = res.data;
+          this.currencyList = Array.from(new Set(res.data.map((item: any) => item.currencySymbol)))
+            .filter(Boolean)
+            .map(currency => ({ value: currency, label: currency }));
+          this.cdr.markForCheck();
+        }
+      },
+      error: (error) => {
+        console.error('Error getting token list:', error);
+      }
+    });
+  }
+
+  getBlockchainList() {
+    this.journalService.getBlockchainList().subscribe({
+      next: (res) => {
+        if (res.code === 0) {
+          this.blockchainList = res.data.filter((item: any) => item.status === 1);
+          this.cdr.markForCheck();
+        }
+      },
+      error: (error) => {
+        console.error('Error getting blockchain list:', error);
+      }
     });
   }
 

@@ -15,45 +15,52 @@ export class JournalService {
     private date: DatePipe
   ) {}
 
+  public getBlockchainList(): Observable<any> {
+    return this.https.get('/v1/common/blockchain/list');
+  }
+
+  public getTokenList(): Observable<any> {
+    return this.https.get('/v1/common/token/list');
+  }
+
   public fetchList(
     pageIndex: number,
     pageSize: number,
     filters: any
   ): Observable<any> {
-    const param: any = {
+    const param = {
       data: {
-        ledgerName: filters.ledgerName || '',
-        stablecoinId: filters.tokenName || '',
-        currencySymbol: filters.peggedCurrency || '',
-        state: filters.status || '',
-        createStartTime: filters.createdOn[0]
+        blockchainCode: '',
+        blockchainId: '',
+        blockchainName: filters.blockchain || '',
+        createEndTime: filters.createdOn?.[1]
+          ? timeToTimestampMillisecond(
+              this.date.transform(filters.createdOn[1], 'yyyy-MM-dd') +
+                ' 23:59:59'
+            )
+          : '',
+        createStartTime: filters.createdOn?.[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.createdOn[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
-        createEndTime: filters.createdOn[1]
-          ? timeToTimestampMillisecond(
-              this.date.transform(filters.createdOn[1], 'yyyy-MM-dd') +
-                ' 23:59:59'
-            )
-          : ''
+        currencySymbol: filters.peggedCurrency || '',
+        ledgerName: filters.ledgerName || '',
+        stablecoinId: filters.tokenName || '',
+        state: filters.status || ''
       },
       page: {
-        pageSize: pageSize,
-        pageNum: pageIndex
+        pageNum: pageIndex,
+        pageSize: pageSize
       }
     };
 
-    return this.https.post('/v1/financial/bill/rule/listPage', param).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    return this.https.post('/v1/financial/bill/rule/listPage', param);
   }
 
   public updateStatus(params: { ruleId: string, state: number }): Observable<any> {
-    return this.http.post('/v1/financial/bill/rule/operate', params);
+    return this.https.post('/v1/financial/bill/operate', params);
   }
 
   public fetchTxList(
@@ -86,13 +93,13 @@ export class JournalService {
     };
 
     // 实际接口调用（当前注释掉）
-    /*
-    return this.https.post('/v1/financial/bill/tx/listPage', param).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
-    */
+
+    // return this.https.post('/v1/financial/bill/tx/listPage', param).pipe(
+    //   map((response: any) => {
+    //     return response;
+    //   })
+    // );
+
 
     // 模拟数据（用于开发测试）
     const mockData = {

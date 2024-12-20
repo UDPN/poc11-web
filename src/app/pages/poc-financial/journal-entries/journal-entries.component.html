@@ -33,7 +33,7 @@
                 <nz-form-control>
                   <nz-select nzPlaceHolder="" name="tokenName" [(ngModel)]="searchParam.tokenName">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <nz-option *ngFor="let item of tokenList" [nzValue]="item.centralBankId" [nzLabel]="item.bankName">
+                    <nz-option *ngFor="let item of tokenList" [nzValue]="item.stablecoinId" [nzLabel]="item.tokenName">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -53,9 +53,8 @@
                 <nz-form-control>
                   <nz-select nzPlaceHolder="" name="peggedCurrency" [(ngModel)]="searchParam.peggedCurrency">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <nz-option nzValue="USD" nzLabel="USD"></nz-option>
-                    <nz-option nzValue="EUR" nzLabel="EUR"></nz-option>
-                    <nz-option nzValue="HKD" nzLabel="HKD"></nz-option>
+                    <nz-option *ngFor="let item of currencyList" [nzValue]="item.value" [nzLabel]="item.label">
+                    </nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -74,8 +73,8 @@
                 <nz-form-control>
                   <nz-select nzPlaceHolder="" name="blockchain" [(ngModel)]="searchParam.blockchain">
                     <nz-option nzValue="" nzLabel="All"></nz-option>
-                    <nz-option nzValue="Hyperledger Besu" nzLabel="Hyperledger Besu"></nz-option>
-                    <nz-option nzValue="Ethereum" nzLabel="Ethereum"></nz-option>
+                    <nz-option *ngFor="let item of blockchainList" [nzValue]="item.blockchainName" [nzLabel]="item.blockchainName">
+                    </nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -165,9 +164,9 @@
     </nz-tag>
   </ng-template>
 
-  <ng-template #operationTpl let-state="state" let-ruleId="ruleId">
+  <ng-template #operationTpl let-state="state" let-ruleId="ruleId" let-ledgerName="ledgerName">
     <span class="operate-text" (click)="onEdit(ruleId)">Edit</span>
-    <span class="operate-text" (click)="onStatusUpdate(ruleId, state === 1 ? 0 : 1)">
+    <span class="operate-text" (click)="onStatusUpdate(ruleId, state === 1 ? 0 : 1, ledgerName)">
       {{ state === 1 ? 'Deactivate' : 'Activate' }}
     </span>
   </ng-template>
