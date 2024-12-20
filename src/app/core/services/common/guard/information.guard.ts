@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-19 10:16:46
+ * @LastEditTime: 2024-12-20 11:27:03
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -46,9 +46,8 @@ export class InfomationGuard implements CanActivate {
           return true;
         }
         if (data !== null && data.spStatus === 5) {
-          // this.router.navigateByUrl('/information/detail');
-          // return false;
-          return true;
+          this.router.navigateByUrl('/information/detail');
+          return false;
         }
         if (data !== null && data.spStatus === 15) {
           this.router.navigateByUrl('/information/detail');
