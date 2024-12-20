@@ -111,6 +111,48 @@
           ],
           "outputHashing": "all"
         },
+        "liquidity-production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "5mb",
+              "maximumError": "6mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10mb",
+              "maximumError": "5mb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.liquidity-prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "liquidity-development": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "5mb",
+              "maximumError": "6mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10mb",
+              "maximumError": "5mb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.liquidity.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
         "development": {
           "buildOptimizer": false,
           "optimization": false,
