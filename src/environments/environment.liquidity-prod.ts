@@ -18,5 +18,5 @@ export const environment = {
   production: true,
   localUrl: '',
   clientName: 'admin',
-  password: 'Abcd1234'
+  password: 'Kissen123'
 };
