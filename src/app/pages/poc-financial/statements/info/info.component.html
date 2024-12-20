@@ -23,11 +23,15 @@
         info.blockchainName
       }}</nz-descriptions-item
       ><nz-descriptions-item nzTitle="Transaction Type"
-        ><span *ngFor="let type of info.transactionTypes; index as i">{{
-          i === info.transactionTypes?.length - 1
-            ? (type | map: 'statementsTxnType')
-            : (type | map: 'statementsTxnType') + '、'
-        }}</span></nz-descriptions-item
+        ><span
+          *ngFor="let type of info.transactionTypes; index as i"
+          [title]="type | map: 'statementsTxnType'"
+          >{{
+            i === info.transactionTypes?.length - 1
+              ? (type | map: 'statementsTxnType')
+              : (type | map: 'statementsTxnType') + '、'
+          }}</span
+        ></nz-descriptions-item
       ><nz-descriptions-item nzTitle="Export Frequency">{{
         info.exportStrategy | map: 'exportStrategy'
       }}</nz-descriptions-item

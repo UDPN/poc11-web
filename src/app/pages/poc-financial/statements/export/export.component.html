@@ -404,11 +404,15 @@
       }}</nz-tag>
     </ng-template>
     <ng-template #txnTypesTpl let-transactionTypes="transactionTypes">
-      <span *ngFor="let type of transactionTypes; index as i">{{
-        i === transactionTypes?.length - 1
-          ? (type | map: 'statementsTxnType')
-          : (type | map: 'statementsTxnType') + '、'
-      }}</span>
+      <span
+        *ngFor="let type of transactionTypes; index as i"
+        [title]="type | map: 'statementsTxnType'"
+        >{{
+          i === transactionTypes?.length - 1
+            ? (type | map: 'statementsTxnType')
+            : (type | map: 'statementsTxnType') + '、'
+        }}</span
+      >
     </ng-template>
     <ng-template
       #transactionPeriodTpl
