@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 10:29:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 09:51:19
+ * @LastEditTime: 2024-12-19 17:57:59
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -20,24 +20,12 @@
     </ng-template>
     <ng-template #fileIdTpl let-fileId="fileId">
       <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
-        {{
-          fileId.length > 10
-            ? fileId.substring(0, 6) +
-              '....' +
-              fileId.substring(fileId.length - 4, fileId.length)
-            : fileId
-        }}
+        {{ fileId | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template #fileHashTpl let-fileHash="fileHash">
       <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
-        {{
-          fileHash.length > 10
-            ? fileHash.substring(0, 6) +
-              '....' +
-              fileHash.substring(fileHash.length - 4, fileHash.length)
-            : fileHash
-        }}
+        {{ fileHash | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template #statusTpl let-exportState="exportState">

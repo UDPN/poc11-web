@@ -1,8 +1,8 @@
 <!--
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 10:48:53
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-10-09 13:22:15
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-19 15:51:50
  * @Description: 
 -->
 <app-def-layout-content>
@@ -46,13 +46,7 @@
               class="default-top-head-color"
               [ngClass]="{ logo: !(isCollapsed$ | async) }"
             >
-              <img
-                [src]="logoImg"
-                alt=""
-                style="padding-bottom: 5px"
-                class="m-r-20"
-                *ngIf="logoImg"
-              />
+              <img [src]="logoImg" alt="" class="m-r-20" *ngIf="logoImg" />
               <span *ngIf="!isCollapsed">{{
                 this.systemName ? this.systemName : ''
               }}</span>
@@ -94,7 +88,7 @@
             <img
               [src]="logoImg"
               alt=""
-              style="padding-bottom: 5px"
+              style="padding-bottom: 5px; width: 164px; height: 60px"
               class="m-r-20"
               *ngIf="logoImg"
             />

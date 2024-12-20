@@ -34,25 +34,25 @@
               ><span
                 nz-typography
                 nzCopyable
-                [nzCopyText]="info.bankAccountNo"
+                [nzCopyText]="info?.bankAccountNo"
                 style="color: #fff"
-                [title]="info.bankAccountNo"
-                >{{ info.bankAccountNo | map: 'showPart' }}</span
+                [title]="info?.bankAccountNo"
+                >{{ info?.bankAccountNo | map: 'showPart' }}</span
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Bank Name'"
               ><span>{{
-                info.bankName | map: 'showPart'
+                info?.bankName | map: 'showPart'
               }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Name'"
               ><span>{{
-                info.accountName | map: 'showPart'
+                info?.accountName | map: 'showPart'
               }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Currency'"
               ><span>{{
-                info.currency | map: 'showPart'
+                info?.currency | map: 'showPart'
               }}</span></nz-descriptions-item
             >
           </nz-descriptions>
@@ -104,13 +104,8 @@
               </div>
               <div class="m-t-15">
                 <h3 nz-typography style="color: #fff">
-                  {{
-                    info.accountBalance
-                      ? (info.accountBalance | map: 'toThousandthMark') +
-                        ' ' +
-                        info.currency
-                      : '--'
-                  }}
+                  {{ info?.accountBalance | map: 'toThousandthMark'
+                  }}{{ ' ' + info?.currency }}
                 </h3>
               </div>
             </div>
@@ -163,15 +158,20 @@
               </div>
               <div class="m-t-15">
                 <h3 nz-typography style="color: #fff">
-                  {{
-                    info.accountBalance
-                      ? (info.accountBalance | map: 'toThousandthMark') +
-                        ' ' +
-                        info.currency
-                      : '--'
-                  }}
+                  {{ walletInfo?.accountBalance | map: 'toThousandthMark'
+                  }}{{ ' ' + walletInfo?.currency }}
                 </h3>
-                <div style="color: #fff">{{ '1111' }}</div>
+                <div style="color: #fff" class="fiat-money-descriptions-order">
+                  <div>{{ walletInfo?.currency + ' Master Wallet' }}</div>
+                  <p
+                    nz-typography
+                    style="color: #fff"
+                    [nzCopyable]="walletInfo?.walletAddress ? true : false"
+                    [nzCopyText]="walletInfo?.walletAddress"
+                  >
+                    {{ walletInfo?.walletAddress }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -197,73 +197,39 @@
         nzCopyable
         [nzCopyText]="transactionId"
       >
-        {{
-          transactionId.length > 10
-            ? transactionId.substring(0, 6) +
-              '....' +
-              transactionId.substring(
-                transactionId.length - 4,
-                transactionId.length
-              )
-            : transactionId
-        }}
+        {{ transactionId | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template
       #transactionAmountTpl
-      let-type="type"
+      let-txType="txType"
       let-transactionAmount="transactionAmount"
       let-transactionCurrencyName="transactionCurrencyName"
     >
       <span
         [title]="transactionAmount"
-        [style]="{ color: type === 1 ? '#39A16A' : '#E53E3E' }"
+        [style]="{ color: txType === 1 ? '#E53E3E' : '#39A16A' }"
         >{{ transactionAmount | map: 'toThousandthMark'
-        }}{{ transactionCurrencyName }}</span
+        }}{{ ' ' + transactionCurrencyName }}</span
       >
     </ng-template>
     <ng-template
       #balanceTpl
-      let-type="type"
       let-reserveAmount="reserveAmount"
       let-legalCurrencyName="legalCurrencyName"
     >
       <span [title]="reserveAmount"
         >{{ reserveAmount | map: 'toThousandthMark'
-        }}{{ legalCurrencyName }}</span
+        }}{{ ' ' + legalCurrencyName }}</span
       >
     </ng-template>
   </app-card-table-wrap>
 </div>
 <ng-template #createBtn>
-  <button
-    nz-button
-    nzType="primary"
-    class="m-r-8"
-    (click)="
-      getTopUp(
-        info.currency,
-        info.walletAddress,
-        info.accountBalance,
-        info.bankAccountNo
-      )
-    "
-  >
+  <button nz-button nzType="primary" class="m-r-8" (click)="getTopUp()">
     {{ 'Wallet Top-up' }}
   </button>
-  <button
-    nz-button
-    nzType="primary"
-    class="m-r-8"
-    (click)="
-      getWithdraw(
-        info.currency,
-        info.walletAddress,
-        info.accountBalance,
-        info.bankAccountNo
-      )
-    "
-  >
+  <button nz-button nzType="primary" class="m-r-8" (click)="getWithdraw()">
     {{ 'Wallet Withdraw' }}
   </button>
 </ng-template>
@@ -340,9 +306,8 @@
               />
               <div>
                 {{ 'Available Amount: ' }}
-                {{
-                  (this.balance | map: 'toThousandthMark') + ' ' + this.currency
-                }}
+                {{ this.info.accountBalance | map: 'toThousandthMark'
+                }}{{ ' ' + this.info?.currency }}
               </div>
               <ng-template #bankAccountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -364,7 +329,7 @@
                 <input nz-input formControlName="amount" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
-                <label>{{ currency }}</label>
+                <label>{{ this.info?.currency }}</label>
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -399,7 +364,7 @@
                 />
               </nz-input-group>
               <ng-template #addOnAfterTemplate1>
-                <label>{{ currency }}</label>
+                <label>{{ this.walletInfo?.currency }}</label>
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -480,9 +445,8 @@
               />
               <div>
                 {{ 'Available Amount: ' }}
-                {{
-                  (this.balance | map: 'toThousandthMark') + ' ' + this.currency
-                }}
+                {{ this.walletInfo?.accountBalance | map: 'toThousandthMark'
+                }}{{ ' ' + this.walletInfo?.currency }}
               </div>
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -532,7 +496,7 @@
                 <input nz-input formControlName="amount" />
               </nz-input-group>
               <ng-template #addOnAfterTemplate>
-                <label>{{ currency }}</label>
+                <label>{{ this.info?.currency }}</label>
               </ng-template>
               <ng-template #amount1Error let-control>
                 <ng-container *ngIf="control.hasError('required')"
@@ -567,7 +531,7 @@
                 />
               </nz-input-group>
               <ng-template #addOnAfterTemplate1>
-                <label>{{ currency }}</label>
+                <label>{{ this.walletInfo?.currency }}</label>
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"

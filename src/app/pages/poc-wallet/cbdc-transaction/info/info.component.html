@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2023-12-13 14:27:01
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-05-22 14:48:35
+ * @LastEditTime: 2024-12-20 10:21:19
  * @Description: 
 -->
 <app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-wallet/cbdc-transaction'"
@@ -44,10 +44,10 @@
                 info?.paymentInformationRespVO?.transactionReferenceNo
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Payment Amount">{{ (info?.paymentInformationRespVO?.paymentAmount |
-                map:'toThousandthMark') + ' ' + info.currency?.split('-')[1]
-                }}</nz-descriptions-item>
+                map:'toThousandthMark')
+                }}{{' ' + info?.paymentInformationRespVO?.reserveCurrency}}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Payment Account">{{ info?.paymentInformationRespVO?.paymentAccount + '( ' +
-                info?.paymentInformationRespVO?.bankName + ' )'
+                info?.paymentInformationRespVO?.reserveAccount + ' )'
                 }}</nz-descriptions-item>
             </nz-descriptions>
           </nz-card>
@@ -72,11 +72,10 @@
                   info?.refundInformationRespVO?.transactionReferenceNo | map:'nullValue'
                   }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Refund Amount">{{ ((info?.refundInformationRespVO?.refundAmount |
-                  map:'toThousandthMark') | map:'nullValue') + ' ' + (info?.refundInformationRespVO ?
-                  info.currency?.split('-')[1] : '')
-                  }}</nz-descriptions-item>
+                  map:'toThousandthMark') | map:'nullValue')
+                  }}{{' ' + info?.refundInformationRespVO?.reserveCurrency }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Bank Account">{{ (info?.refundInformationRespVO?.refundAccount + '( ' +
-                  info?.refundInformationRespVO?.bankName + ' )') | map:'nullValue'
+                  info?.refundInformationRespVO?.reserveAccount + ' )')
                   }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Transaction Time">{{ (info?.refundInformationRespVO?.transactionTime |
                   map:'timeStamp') | map:'nullValue'
@@ -104,11 +103,10 @@
                 info?.refundInformationRespVO?.transactionReferenceNo | map:'nullValue'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Refund Amount">{{ ((info?.refundInformationRespVO?.refundAmount |
-                map:'toThousandthMark') | map:'nullValue') + ' ' + (info?.refundInformationRespVO ?
-                info.currency?.split('-')[1] : '')
-                }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Bank Account">{{ (info?.refundInformationRespVO?.refundAccount + '( ' +
-                info?.refundInformationRespVO?.bankName + ' )') | map : 'nullValue'
+                map:'toThousandthMark') | map:'nullValue')
+                }}{{' ' + info?.refundInformationRespVO?.reserveCurrency }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Bank Account">{{ info?.refundInformationRespVO?.refundAccount + '( ' +
+                info?.refundInformationRespVO?.reserveAccount + ' )'
                 }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Transaction Time">{{ (info?.refundInformationRespVO?.transactionTime |
                 map:'timeStamp') | map:'nullValue'

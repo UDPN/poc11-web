@@ -1,103 +1,232 @@
 <div class="time-line">
   <!-- Pending Approval -->
-  <ng-container *ngIf="info.status === 1">
-    <!-- Top-up -->
+  <!-- <ng-container *ngIf="info.status === 1">
     <ng-container *ngIf="info.type === 1">
       <nz-steps [nzCurrent]="2" nzDirection="vertical" nzSize="small">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step [nzTitle]="'Checking the deposit of fiat money'" [nzStatus]="'finish'"
-          [nzDescription]="step2Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Checking the deposit of fiat money'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step2Tpl"
+        ></nz-step>
         <nz-step [nzTitle]="'Approval'" [nzDescription]="step3Tpl"></nz-step>
-        <nz-step nzTitle="On-chain execution" [nzStatus]="'wait'" [nzDescription]="step4Tpl"></nz-step>
+        <nz-step
+          nzTitle="On-chain execution"
+          [nzStatus]="'wait'"
+          [nzDescription]="step4Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
-    <!-- Withdrawal -->
     <ng-container *ngIf="info.type !== 1">
       <nz-steps [nzCurrent]="1" nzDirection="vertical" nzSize="small">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
         <nz-step [nzTitle]="'Approved'" [nzDescription]="step3Tpl"></nz-step>
-        <nz-step nzTitle="On-chain execution" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
-        <nz-step [nzTitle]="'Refund of the fiat money'" [nzStatus]="'wait'" [nzDescription]="step5Tpl"></nz-step>
+        <nz-step
+          nzTitle="On-chain execution"
+          [nzStatus]="'wait'"
+          [nzDescription]="step3Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Refund of the fiat money'"
+          [nzStatus]="'wait'"
+          [nzDescription]="step5Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
-  </ng-container>
+  </ng-container> -->
   <!-- Processing -->
   <ng-container *ngIf="info.status === 3">
     <!-- Top-up -->
     <ng-container *ngIf="info.type === 1">
       <nz-steps [nzCurrent]="3" nzDirection="vertical" nzSize="small">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step [nzTitle]="'Checking the deposit of fiat money'" [nzStatus]="'finish'"
-          [nzDescription]="step2Tpl"></nz-step>
-        <nz-step [nzTitle]="'Approved'" [nzDescription]="step6Tpl"></nz-step>
-        <nz-step nzTitle="On-chain execution" [nzStatus]="'wait'" [nzDescription]="step4Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Checking the deposit of fiat money'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step2Tpl"
+        ></nz-step>
+        <!-- <nz-step [nzTitle]="'Approved'" [nzDescription]="step6Tpl"></nz-step> -->
+        <nz-step
+          nzTitle="On-chain execution"
+          [nzStatus]="'wait'"
+          [nzDescription]="step4Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
     <!-- Withdrawal -->
     <ng-container *ngIf="info.type !== 1">
       <nz-steps [nzCurrent]="2" nzDirection="vertical" nzSize="small">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
-        <nz-step nzTitle="On-chain execution" [nzDescription]="step3Tpl"></nz-step>
-        <nz-step [nzTitle]="'Refund of the fiat money'" [nzStatus]="'wait'" [nzDescription]="step5Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <!-- <nz-step
+          [nzTitle]="'Approved'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step6Tpl"
+        ></nz-step> -->
+        <nz-step
+          nzTitle="On-chain execution"
+          [nzDescription]="step3Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Refund of the fiat money'"
+          [nzStatus]="'wait'"
+          [nzDescription]="step5Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
   </ng-container>
   <!-- Failed -->
   <ng-container *ngIf="info.status === 6">
     <nz-steps nzDirection="vertical" nzSize="small">
-      <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
+      <nz-step
+        nzTitle="Created"
+        [nzStatus]="'finish'"
+        [nzDescription]="step1Tpl"
+      ></nz-step>
       <!-- Top-up -->
       <ng-container *ngIf="info.type === 1">
-        <nz-step nzTitle="Checking the deposit of fiat money" [nzStatus]="'finish'"
-          [nzDescription]="step2Tpl"></nz-step>
+        <nz-step
+          nzTitle="Checking the deposit of fiat money"
+          [nzStatus]="'finish'"
+          [nzDescription]="step2Tpl"
+        ></nz-step>
       </ng-container>
-      <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
-      <nz-step [nzTitle]="'On-chain execution'" [nzStatus]="'error'" [nzDescription]="step7Tpl"></nz-step>
-      <nz-step [nzTitle]="'Refund of the fiat money'" [nzStatus]="info?.refundInformationRespVO ? 'finish' : 'process'"
-        [nzDescription]="step5Tpl"></nz-step>
+      <!-- <nz-step
+        [nzTitle]="'Approved'"
+        [nzStatus]="'finish'"
+        [nzDescription]="step6Tpl"
+      ></nz-step> -->
+      <nz-step
+        [nzTitle]="'On-chain execution'"
+        [nzStatus]="'error'"
+        [nzDescription]="step7Tpl"
+      ></nz-step>
+      <nz-step
+        [nzTitle]="'Refund of the fiat money'"
+        [nzStatus]="'finish'"
+        [nzDescription]="step5Tpl"
+      ></nz-step>
     </nz-steps>
   </ng-container>
   <!-- Rejected -->
-  <ng-container *ngIf="info.status === 2">
+  <!-- <ng-container *ngIf="info.status === 2">
     <ng-container *ngIf="info.type === 1">
       <nz-steps nzDirection="vertical" nzSize="small" class="logtree-error1">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step nzTitle="Checking the deposit of fiat money" [nzStatus]="'finish'"
-          [nzDescription]="step2Tpl"></nz-step>
-        <nz-step [nzTitle]="'Rejected'" [nzStatus]="'error'" [nzDescription]="step8Tpl"></nz-step>
-        <nz-step [nzTitle]="'On-chain execution'" [nzStatus]="'error'" [nzDescription]="step9Tpl"></nz-step>
-        <nz-step [nzTitle]="'Refund of the fiat money'"
-          [nzStatus]="info?.refundInformationRespVO ? 'finish' : 'process'" [nzDescription]="step5Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <nz-step
+          nzTitle="Checking the deposit of fiat money"
+          [nzStatus]="'finish'"
+          [nzDescription]="step2Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Rejected'"
+          [nzStatus]="'error'"
+          [nzDescription]="step8Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'On-chain execution'"
+          [nzStatus]="'error'"
+          [nzDescription]="step9Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Refund of the fiat money'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step5Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
     <ng-container *ngIf="info.type !== 1">
       <nz-steps nzDirection="vertical" nzSize="small" class="logtree-error3">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step [nzTitle]="'Rejected'" [nzStatus]="'error'" [nzDescription]="step6Tpl"></nz-step>
-        <nz-step [nzTitle]="'On-chain execution'" [nzStatus]="'wait'" [nzDescription]="step3Tpl"></nz-step>
-        <nz-step [nzTitle]="'Refund of the fiat money'" [nzStatus]="'wait'" [nzDescription]="step5Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Rejected'"
+          [nzStatus]="'error'"
+          [nzDescription]="step6Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'On-chain execution'"
+          [nzStatus]="'wait'"
+          [nzDescription]="step3Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Refund of the fiat money'"
+          [nzStatus]="'wait'"
+          [nzDescription]="step5Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
-  </ng-container>
+  </ng-container> -->
   <!-- Success -->
   <ng-container *ngIf="info.status === 5">
     <ng-container *ngIf="info.type === 1">
       <nz-steps nzDirection="vertical" nzSize="small">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step nzTitle="Checking the deposit of fiat money" [nzStatus]="'finish'"
-          [nzDescription]="step2Tpl"></nz-step>
-        <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
-        <nz-step [nzTitle]="'On-chain execution'" [nzStatus]="'finish'" [nzDescription]="step10Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <nz-step
+          nzTitle="Checking the deposit of fiat money"
+          [nzStatus]="'finish'"
+          [nzDescription]="step2Tpl"
+        ></nz-step>
+        <!-- <nz-step
+          [nzTitle]="'Approved'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step6Tpl"
+        ></nz-step> -->
+        <nz-step
+          [nzTitle]="'On-chain execution'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step10Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
     <ng-container *ngIf="info.type !== 1">
       <nz-steps nzDirection="vertical" nzSize="small">
-        <nz-step nzTitle="Created" [nzStatus]="'finish'" [nzDescription]="step1Tpl"></nz-step>
-        <nz-step [nzTitle]="'Approved'" [nzStatus]="'finish'" [nzDescription]="step6Tpl"></nz-step>
-        <nz-step [nzTitle]="'On-chain execution'" [nzStatus]="'finish'" [nzDescription]="step10Tpl"></nz-step>
-        <nz-step [nzTitle]="'Refund of the fiat money'"
-          [nzStatus]="info?.refundInformationRespVO ? 'finish' : 'process'" [nzDescription]="step5Tpl"></nz-step>
+        <nz-step
+          nzTitle="Created"
+          [nzStatus]="'finish'"
+          [nzDescription]="step1Tpl"
+        ></nz-step>
+        <!-- <nz-step
+          [nzTitle]="'Approved'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step6Tpl"
+        ></nz-step> -->
+        <nz-step
+          [nzTitle]="'On-chain execution'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step10Tpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Refund of the fiat money'"
+          [nzStatus]="'finish'"
+          [nzDescription]="step5Tpl"
+        ></nz-step>
       </nz-steps>
     </ng-container>
   </ng-container>
@@ -105,64 +234,130 @@
 <ng-template #step1Tpl>
   <ul>
     <li>{{ 'Transaction No.: ' + info.transactionNo }}</li>
-    <li>{{ 'on ' + (info.creationTime | map:'timeStamp') + ' by ' + (info.createUser | map: 'nullValue') }}</li>
+    <li>
+      {{
+        'on ' +
+          (info.creationTime | map: 'timeStamp') +
+          ' by ' +
+          (info.createUser | map: 'nullValue')
+      }}
+    </li>
   </ul>
 </ng-template>
 <ng-template #step2Tpl>
   <ul>
-    <li>{{'The fiat money has been successfully deposited' }}</li>
-    <li>{{'Transaction Reference No.: ' }}<b>{{info?.paymentInformationRespVO?.transactionReferenceNo | map: 'nullValue'}}</b></li>
-    <li>{{ 'on ' + (info?.paymentInformationRespVO?.transactionTime | map:'timeStamp') }}</li>
+    <li>{{ 'The fiat money has been successfully deposited' }}</li>
+    <!-- <li>
+      {{ 'Transaction Reference No.: '
+      }}<b>{{
+        info?.paymentInformationRespVO?.transactionReferenceNo
+          | map: 'nullValue'
+      }}</b>
+    </li> -->
+    <li>
+      {{
+        'on ' +
+          (info?.paymentInformationRespVO?.transactionTime | map: 'timeStamp')
+      }}
+    </li>
   </ul>
 </ng-template>
 <ng-template #step3Tpl>
   <ul>
-    <li>{{ 'The' + (info.type === 1 ? ' top-up ' : ' withdrawal ') + 'request is awaiting confirmation' }}</li>
+    <li>
+      {{
+        'The' +
+          (info.type === 1 ? ' top-up ' : ' withdrawal ') +
+          'request is awaiting confirmation'
+      }}
+    </li>
   </ul>
 </ng-template>
 <ng-template #step4Tpl>
   <ul>
-    <li>{{ 'The' + (info.type === 1 ? ' top-up ' : ' withdrawal ') + 'request is waiting to be executed on the chain' }}
+    <li>
+      {{
+        'The' +
+          (info.type === 1 ? ' top-up ' : ' withdrawal ') +
+          'request is waiting to be executed on the chain'
+      }}
     </li>
   </ul>
 </ng-template>
 <ng-template #step5Tpl>
   <ul>
-    <li>{{ 'The fiat money is waiting to be refunded to the commercial bank' }}</li>
+    <li>
+      {{ 'The fiat money is waiting to be refunded to the commercial bank' }}
+    </li>
     <!-- Refund  -->
     <ng-container *ngIf="info?.refundInformationRespVO">
-      <li>{{ 'Transaction Reference No.: ' + (info?.refundInformationRespVO?.transactionReferenceNo | map: 'nullValue')  }}</li>
-      <li>{{ 'on ' + (info?.refundInformationRespVO?.transactionTime | map:'timeStamp') }}</li>
+      <!-- <li>
+        {{
+          'Transaction Reference No.: ' +
+            (info?.refundInformationRespVO?.transactionReferenceNo
+              | map: 'nullValue')
+        }}
+      </li> -->
+      <li>
+        {{
+          'on ' +
+            (info?.refundInformationRespVO?.transactionTime | map: 'timeStamp')
+        }}
+      </li>
     </ng-container>
   </ul>
 </ng-template>
 <ng-template #step6Tpl>
   <ul>
-    <li>{{ 'on ' + (info.reviewerTime | map:'timeStamp') + ' by ' + (info.reviewerUser | map: 'nullValue') }}</li>
+    <li>
+      {{
+        'on ' +
+          (info.reviewerTime | map: 'timeStamp') +
+          ' by ' +
+          (info.reviewerUser | map: 'nullValue')
+      }}
+    </li>
   </ul>
 </ng-template>
 <ng-template #step7Tpl>
   <ul>
     <li>{{ 'Failed' }}</li>
     <li>{{ 'Reason: ' + info.remarks }}</li>
-    <li>{{ 'on ' + (info.reviewerTime  | map:'failedTime') }}</li>
+    <li>{{ 'on ' + (info.reviewerTime | map: 'failedTime') }}</li>
   </ul>
 </ng-template>
 <ng-template #step8Tpl>
   <ul>
-    <li style="background-color: #fed7d74a;padding-top: 15px;padding-bottom: 15px;">{{ info.reviewerRemarks }}</li>
-    <li>{{ 'on ' + (info.reviewerTime | map:'timeStamp') + ' by ' + (info.reviewerUser | map: 'nullValue') }}</li>
+    <li
+      style="
+        background-color: #fed7d74a;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      "
+    >
+      {{ info.reviewerRemarks }}
+    </li>
+    <li>
+      {{
+        'on ' +
+          (info.reviewerTime | map: 'timeStamp') +
+          ' by ' +
+          (info.reviewerUser | map: 'nullValue')
+      }}
+    </li>
   </ul>
 </ng-template>
 <ng-template #step9Tpl>
   <ul>
-    <li>{{ 'Approval rejected, transaction not submitted to the blockchain' }}</li>
+    <li>
+      {{ 'Approval rejected, transaction not submitted to the blockchain' }}
+    </li>
   </ul>
 </ng-template>
 <ng-template #step10Tpl>
   <ul>
     <li>{{ 'Success' }}</li>
-    <li>{{ 'Txn Hash: ' + info.txHash | map:'nullValue' }}</li>
-    <li>{{ 'on ' + (info.txTime | map:'timeStamp')  }}</li>
+    <li>{{ 'Txn Hash: ' + info.txHash | map: 'nullValue' }}</li>
+    <li>{{ 'on ' + (info.txTime | map: 'timeStamp') }}</li>
   </ul>
 </ng-template>

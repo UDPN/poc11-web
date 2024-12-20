@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-13 14:30:57
+ * @LastEditTime: 2024-12-19 13:40:58
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -20,10 +20,13 @@ export class PocBankAccountService {
   ) {}
   public fetchList(
     pageIndex: number,
-    pageSize: number
+    pageSize: number,
+    filters: any
   ): Observable<any> {
     const param: any = {
-      data: {},
+      data: {
+        centralBankId: filters.centralBankId || ''
+      },
       page: {
         pageSize: pageSize,
         pageNum: pageIndex
@@ -42,4 +45,9 @@ export class PocBankAccountService {
   public getOverview(): Observable<any> {
     return this.http.post(`/v1/bank/account/overview/search`, {});
   }
+
+  public getWalletInfo(param: {currency: any}): Observable<any> {
+    return this.http.post(`/v1/bank/account/master/wallet/search`, param);
+  }
+
 }

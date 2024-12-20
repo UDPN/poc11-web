@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-18 17:15:34
+ * @LastEditTime: 2024-12-19 17:08:40
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -34,7 +34,7 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of tokenList"
-                  [nzValue]="item.tokenCode"
+                  [nzValue]="item.stablecoinId"
                   [nzLabel]="item.tokenName"
                 >
                 </nz-option>
@@ -182,7 +182,7 @@
     </form>
   </nz-card>
   <app-card-table-wrap
-    [tableTitle]="'User List'"
+    [tableTitle]="'Export Task List'"
     [isNormalTable]="true"
     [btnTpl]="createBtn"
   >
@@ -293,8 +293,8 @@
                     <nz-select formControlName="tokenId">
                       <nz-option
                         *ngFor="let item of tokenList"
-                        [nzValue]="item.centralBankId"
-                        [nzLabel]="item.bankName"
+                        [nzValue]="item.stablecoinId"
+                        [nzLabel]="item.tokenName"
                       >
                       </nz-option>
                     </nz-select>
@@ -319,13 +319,9 @@
                       [nzShowArrow]="true"
                       formControlName="txTypes"
                     >
-                      <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
-                      <nz-option nzValue="4" nzLabel="Transfer"></nz-option>
-                      <!-- <nz-option
-                        nzValue="5"
-                        nzLabel="FX Purchasing"
-                      ></nz-option> -->
-                      <nz-option nzValue="6" nzLabel="Withdraw"></nz-option>
+                      <nz-option nzValue="1" nzLabel="Top-up"></nz-option>
+                      <nz-option nzValue="2" nzLabel="Withdraw"></nz-option>
+                      <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
                     </nz-select>
                   </div>
                 </div>

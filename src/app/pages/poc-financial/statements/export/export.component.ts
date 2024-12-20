@@ -64,6 +64,8 @@ export class ExportComponent implements OnInit, AfterViewInit {
   walletAddressTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('txnTypesTpl', { static: true })
   txnTypesTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transactionPeriodTpl', { static: true })
+  transactionPeriodTpl!: TemplateRef<NzSafeAny>;
   tokenList: Array<any> = [];
   blockchainList: Array<any> = [];
   tableConfig!: AntTableConfig;
@@ -146,6 +148,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
       createTime: '',
       txnTime: '',
       fileId: '',
+      blockchainId: '',
       exportState: '',
       tokenId: ''
     };
@@ -220,7 +223,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
             this.message
               .success('Download successfully!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
-                const blob = new Blob([res.data], {
+                const blob = new Blob([res.body], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
                 if ('download' in document.createElement('a')) {
@@ -281,10 +284,10 @@ export class ExportComponent implements OnInit, AfterViewInit {
                   ) + ' 00:00:00'
                 )
               : '',
-            txEndime: this.exportParam.txnTime[1]
+            txEndTime: this.exportParam.txnTime[1]
               ? timeToTimestampMillisecond(
                   this.date.transform(
-                    this.exportParam.txnTime[0],
+                    this.exportParam.txnTime[1],
                     'yyyy-MM-dd'
                   ) + ' 23:59:59'
                 )
@@ -359,7 +362,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'Blockchain',
           field: 'blockchainName',
-          width: 120
+          width: 150
         },
         {
           title: 'Transaction Type',
@@ -383,40 +386,39 @@ export class ExportComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Transaction Period',
-          field: 'startTime',
+          tdTemplate: this.transactionPeriodTpl,
           notNeedEllipsis: true,
-          pipe: 'dayStamp',
-          width: 180
+          width: 200
         },
         {
           title: 'Executed On',
           field: 'exportTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
-          width: 150
+          width: 200
         },
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
           width: 150
         },
-        {
-          title: 'Proof Hash',
-          tdTemplate: this.proofHashTpl,
-          width: 120
-        },
-        {
-          title: 'Proof Time',
-          field: 'proofTime',
-          notNeedEllipsis: true,
-          pipe: 'timeStamp',
-          width: 120
-        },
-        {
-          title: 'Proof Status',
-          tdTemplate: this.proofStatusTpl,
-          width: 150
-        },
+        // {
+        //   title: 'Proof Hash',
+        //   tdTemplate: this.proofHashTpl,
+        //   width: 120
+        // },
+        // {
+        //   title: 'Proof Time',
+        //   field: 'proofTime',
+        //   notNeedEllipsis: true,
+        //   pipe: 'timeStamp',
+        //   width: 120
+        // },
+        // {
+        //   title: 'Proof Status',
+        //   tdTemplate: this.proofStatusTpl,
+        //   width: 150
+        // },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,

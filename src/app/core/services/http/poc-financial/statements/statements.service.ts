@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-16 13:34:27
+ * @LastEditTime: 2024-12-20 10:30:02
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -162,6 +162,7 @@ export class StatementsService {
     const param: any = {
       data: {
         exportState: filters.exportState || '',
+        blockchainId: filters.blockchainId || '',
         fileId: filters.fileId || '',
         moduleType: filters.moduleType || 5,
         tokenId: filters.tokenId || '',
