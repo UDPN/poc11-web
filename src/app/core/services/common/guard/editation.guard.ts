@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-20 11:26:48
+ * @LastEditTime: 2024-12-20 14:16:20
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -51,8 +51,7 @@ export class EditGuard implements CanActivate {
           return false;
         }
         if (data !== null && data.spStatus === 15) {
-          // return true;
-          return false;
+          return true;
         }
         // if (data !== null && data.spStatus === 10) {
         //   this.router.navigateByUrl('/poc/poc-home/home');
