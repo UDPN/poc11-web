@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-21 10:18:52
+ * @LastEditTime: 2024-12-21 16:03:54
  * @Description: 
 -->
 <div>
@@ -44,8 +44,8 @@
     <ng-container *ngIf="key <= 1"> --</ng-container>
   </ng-template>
   <ng-template #currencyTpl let-capitalPoolCurrency="capitalPoolCurrency">
-    <span [title]="capitalPoolCurrency?.split('-')[0]">{{
-      capitalPoolCurrency?.split('-')[0]
+    <span [title]="capitalPoolCurrency | map: 'currencyPair'">{{
+      capitalPoolCurrency | map: 'currencyPair'
     }}</span>
   </ng-template>
   <div nz-row nzJustify="center" nzAlign="middle">

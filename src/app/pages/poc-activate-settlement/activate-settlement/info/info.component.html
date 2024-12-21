@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-21 10:39:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-21 10:54:36
+ * @LastEditTime: 2024-12-21 16:02:59
  * @Description: 
 -->
 <!-- <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header> -->
@@ -221,8 +221,8 @@
           <span>{{ 'Yes' }}</span>
         </ng-template>
         <ng-template #currencyTpl let-capitalPoolCurrency="capitalPoolCurrency">
-          <span [title]="capitalPoolCurrency?.split('-')[0]">{{
-            capitalPoolCurrency?.split('-')[0]
+          <span [title]="capitalPoolCurrency | map: 'currencyPair'">{{
+            capitalPoolCurrency | map: 'currencyPair'
           }}</span>
         </ng-template>
       </div>

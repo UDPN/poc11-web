@@ -170,8 +170,8 @@
     ></app-ant-table>
     <ng-template #currencyTpl let-currency="currency">
       <span *ngFor="let item of currency; index as i">
-        <span [title]="item.split('-')[0] + '-' + item.split('-')[2]">{{
-          item.split('-')[0] + '-' + item.split('-')[2]
+        <span [title]="item | map: 'currencyPair'">{{
+          item | map: 'currencyPair'
         }}</span>
         <br />
       </span>

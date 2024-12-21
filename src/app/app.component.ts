@@ -25,6 +25,7 @@ import { ThemeService } from './core/services/store/common-store/theme.service';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { SocketService } from './core/services/common/socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MapPipe } from './shared/pipes/map.pipe';
 
 @Component({
   selector: 'app-root',
@@ -125,7 +126,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
     const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
     this.nzConfigService.set('theme', {
       primaryColor: JSON.parse(themeOptionsKey).color
