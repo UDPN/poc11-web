@@ -327,8 +327,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Currency',
-          // field: 'capitalPoolCurrency',
-          tdTemplate: this.currencyTpl,
+          field: 'capitalPoolCurrency',
           width: 180
         },
         {

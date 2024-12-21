@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-21 10:27:52
+ * @LastEditTime: 2024-12-21 13:53:55
  * @Description:
  */
 import {
@@ -101,10 +101,12 @@ export class AddPoolComponent implements OnInit {
         this.dataList = res.capitalPoolList;
         this.editFileList = res.fileList;
         this.dataList.forEach((item: any, i: any) => {
-          item.capitalPoolCurrency =
-            item.capitalPoolCurrency.split('-')[0] +
-            '-' +
-            item.capitalPoolPlatform;
+          // item.capitalPoolCurrency =
+          //   item.capitalPoolCurrency.split('-')[0] +
+          //   '-' +
+          //   item.capitalPoolPlatform;
+            item.capitalPoolCurrency =
+            item.capitalPoolCurrency.split('-')[0];
           Object.assign(item, { key: i });
         });
         if (res.fileList && res.fileList.length > 0) {
@@ -526,7 +528,8 @@ export class AddPoolComponent implements OnInit {
     if (type === 1) {
       return {
         capitalPoolPlatform: 'UDPN',
-        capitalPoolCurrency: currency.split('-')[0] + '-' + 'UDPN',
+        // capitalPoolCurrency: currency.split('-')[0] + '-' + 'UDPN',
+        capitalPoolCurrency: currency.split('-')[0],
         capitalPoolAddress: targetCurrency
       };
     }
@@ -546,6 +549,9 @@ export class AddPoolComponent implements OnInit {
       array.push({ fileCode: item.fileCode, fileUrl: item.fileUrl });
     });
     this.fileList = array;
+    console.log(arr);
+    
+    // return;
     this.pocActivateSettlementService
       .save({
         capitalPoolList: arr,
