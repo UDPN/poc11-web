@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-05 13:27:59
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-21 09:41:21
  * @Description:
  */
 import {
@@ -83,7 +83,7 @@ export class AddPoolComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) { }
+  ) {}
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
     this.edit();
@@ -99,6 +99,10 @@ export class AddPoolComponent implements OnInit {
         this.dataList = res.capitalPoolList;
         this.editFileList = res.fileList;
         this.dataList.forEach((item: any, i: any) => {
+          item.capitalPoolCurrency =
+            item.capitalPoolCurrency.split('-')[0] +
+            '-' +
+            item.capitalPoolPlatform;
           Object.assign(item, { key: i });
         });
         if (res.fileList && res.fileList.length > 0) {
@@ -398,8 +402,8 @@ export class AddPoolComponent implements OnInit {
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-          ? []
-          : this.listCheckArr[index];
+        ? []
+        : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
@@ -449,7 +453,6 @@ export class AddPoolComponent implements OnInit {
       for (const key in this.dataList) {
         delete this.dataList[key].key;
       }
-
       this.addData(
         this.dataList.length < uniqueArr.length ? uniqueArr : this.dataList,
         []
@@ -521,8 +524,7 @@ export class AddPoolComponent implements OnInit {
     if (type === 1) {
       return {
         capitalPoolPlatform: 'UDPN',
-        capitalPoolCurrency:
-          currency.split('-')[0] + '-' + currency.split('-')[1],
+        capitalPoolCurrency: currency.split('-')[0] + '-' + 'UDPN',
         capitalPoolAddress: targetCurrency
       };
     }

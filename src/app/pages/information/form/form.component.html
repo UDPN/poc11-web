@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 13:39:28
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-18 14:19:15
+ * @LastEditTime: 2024-12-20 14:44:44
  * @Description: 
 -->
 <div>
@@ -436,7 +436,7 @@
             <nz-form-label nzSpan="10" nzRequired style="display: none">
             </nz-form-label>
             <nz-form-control
-              [nzErrorTip]="websiteError"
+              [nzErrorTip]="userNoticeError"
               style="margin-top: -10px"
             >
               <div nz-row [formGroup]="validateForm">
@@ -454,7 +454,7 @@
                   >
                 </div>
               </div>
-              <ng-template #websiteError let-control>
+              <ng-template #userNoticeError let-control>
                 <ng-container *ngIf="control.hasError('required')"
                   >Please check the User Notice</ng-container
                 >

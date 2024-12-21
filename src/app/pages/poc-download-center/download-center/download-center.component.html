@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 10:29:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-19 17:57:59
+ * @LastEditTime: 2024-12-20 16:56:33
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -19,12 +19,22 @@
       <span [title]="key">{{ key }}</span>
     </ng-template>
     <ng-template #fileIdTpl let-fileId="fileId">
-      <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
+      <p
+        [title]="fileId"
+        nz-typography
+        [nzCopyable]="fileId ? true : false"
+        [nzCopyText]="fileId"
+      >
         {{ fileId | map: 'showPartTen' }}
       </p>
     </ng-template>
     <ng-template #fileHashTpl let-fileHash="fileHash">
-      <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
+      <p
+        [title]="fileHash"
+        nz-typography
+        [nzCopyable]="fileHash ? true : false"
+        [nzCopyText]="fileHash"
+      >
         {{ fileHash | map: 'showPartTen' }}
       </p>
     </ng-template>

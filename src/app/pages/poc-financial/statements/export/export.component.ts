@@ -350,11 +350,6 @@ export class ExportComponent implements OnInit, AfterViewInit {
           show: true
         },
         {
-          title: 'Task Name',
-          field: 'taskName',
-          width: 120
-        },
-        {
           title: 'Token Name',
           field: 'tokenName',
           width: 120
