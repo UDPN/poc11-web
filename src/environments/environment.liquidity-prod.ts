@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2024-01-11 14:58:13
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-20 14:19:51
+ * @LastEditTime: 2024-12-21 13:38:48
  * @Description:
  */
 export const http = window.location.protocol;
@@ -18,5 +18,5 @@ export const environment = {
   production: true,
   localUrl: '',
   clientName: 'admin',
-  password: 'Abcd1234'
+  password: 'Kissen123'
 };
