@@ -579,3 +579,8 @@
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>
+<ng-template #currencyTpl let-capitalPoolCurrency="capitalPoolCurrency">
+  <span [title]="capitalPoolCurrency?.split('-')[0]">{{
+    capitalPoolCurrency?.split('-')[0]
+  }}</span>
+</ng-template>

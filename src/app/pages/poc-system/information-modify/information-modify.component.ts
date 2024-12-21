@@ -49,6 +49,8 @@ interface SearchParam {
 export class InformationModifyComponent implements OnInit, AfterViewInit {
   @ViewChild('authorizedTpl', { static: true })
   authorizedTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
+  currencyTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -325,7 +327,8 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Currency',
-          field: 'capitalPoolCurrency',
+          // field: 'capitalPoolCurrency',
+          tdTemplate: this.currencyTpl,
           width: 180
         },
         {
