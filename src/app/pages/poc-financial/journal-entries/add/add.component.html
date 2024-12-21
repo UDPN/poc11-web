@@ -29,18 +29,27 @@
           <nz-form-item>
             <nz-form-label [nzRequired]="true">Token Name</nz-form-label>
             <nz-form-control>
-              <nz-select
-                formControlName="tokenName"
-                (ngModelChange)="onTokenSelect($event)"
-                nzShowSearch
-              >
-                <nz-option
-                  *ngFor="let token of tokenList"
-                  [nzValue]="token"
-                  [nzLabel]="token.tokenName"
+              <ng-container *ngIf="isEditMode; else tokenSelect">
+                <input
+                  nz-input
+                  [value]="selectedToken?.tokenName"
+                  disabled
+                />
+              </ng-container>
+              <ng-template #tokenSelect>
+                <nz-select
+                  formControlName="tokenName"
+                  (ngModelChange)="onTokenSelect($event)"
+                  nzShowSearch
                 >
-                </nz-option>
-              </nz-select>
+                  <nz-option
+                    *ngFor="let token of tokenList"
+                    [nzValue]="token"
+                    [nzLabel]="token.tokenName"
+                  >
+                  </nz-option>
+                </nz-select>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>

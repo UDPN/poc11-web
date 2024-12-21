@@ -78,7 +78,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         this.loadDetailData(id);
       }
     });
-    this.getTokenList();
+    // this.getTokenList();
   }
 
   private loadDetailData(ruleId: string) {
@@ -88,37 +88,26 @@ export class AddComponent implements OnInit, AfterViewInit {
           if (response.code === 0 && response.data) {
             const detail = response.data;
             
-            // 设置表单值
+            // 直接设置 token 信息
+            this.selectedToken = {
+              stablecoinId: detail.stablecoinId,
+              tokenName: detail.tokenName,
+              tokenType: 1,
+              tokenSymbol: detail.tokenSymbol || '',
+              decimalPrecision: 2,
+              currencySymbol: detail.currencySymbol || '',
+              usPrice: detail.usPrice || '1',
+              blockchainCode: '',
+              blockchainName: '',
+              blockchainId: 0,
+              blockchainNameAbbreviation: ''
+            };
+
+            // 设置表单值，在编辑模式下也需要设置 tokenName
             this.transactionForm.patchValue({
-              ledgerName: detail.ledgerName
+              ledgerName: detail.ledgerName,
+              tokenName: this.selectedToken  // 确保在编辑模式下也设置 tokenName
             });
-
-            // 在 token 列表中找到对应的 token 并选中
-            const token = this.tokenList.find(t => t.stablecoinId === detail.stablecoinId);
-            if (token) {
-              this.transactionForm.patchValue({
-                tokenName: token
-              });
-              this.onTokenSelect(token);
-            } else {
-              // 如果没有找到对应的 token，可能是 token 列表还没有加载完成
-              // 保存 stablecoinId，等 token 列表加载完成后再处理
-              const checkTokenList = setInterval(() => {
-                if (this.tokenList.length > 0) {
-                  const matchedToken = this.tokenList.find(t => t.stablecoinId === detail.stablecoinId);
-                  if (matchedToken) {
-                    this.transactionForm.patchValue({
-                      tokenName: matchedToken
-                    });
-                    this.onTokenSelect(matchedToken);
-                    clearInterval(checkTokenList);
-                  }
-                }
-              }, 100);
-
-              // 设置一个超时时间，避免无限等待
-              setTimeout(() => clearInterval(checkTokenList), 5000);
-            }
 
             // 清除现有的交易组
             while (this.transactionGroups.length) {
@@ -373,6 +362,13 @@ export class AddComponent implements OnInit, AfterViewInit {
   onSubmit() {
     this.isFormSubmitted = true;
     
+    // 在编辑模式下，如果表单中的 tokenName 为空但 selectedToken 存在，则设置 tokenName
+    if (this.isEditMode && this.selectedToken && !this.transactionForm.get('tokenName')?.value) {
+      this.transactionForm.patchValue({
+        tokenName: this.selectedToken
+      });
+    }
+
     // Validate all form controls
     Object.keys(this.transactionForm.controls).forEach(key => {
       const control = this.transactionForm.get(key);
@@ -451,6 +447,8 @@ export class AddComponent implements OnInit, AfterViewInit {
         Object.assign(formData, { ruleId: this.ruleId });
       }
 
+      console.log('Submitting form data:', formData);
+
       // Call API
       const url = this.isEditMode ? '/v1/financial/bill/rule/edit' : '/v1/financial/bill/rule/add';
       this.http.post(url, formData)
@@ -470,6 +468,8 @@ export class AddComponent implements OnInit, AfterViewInit {
             this.message.error(`${this.isEditMode ? 'Update' : 'Submit'} failed, please try again later`);
           }
         });
+    } else {
+      console.log('Form is invalid:', this.transactionForm);
     }
   }
 
