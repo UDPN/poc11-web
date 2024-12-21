@@ -161,7 +161,7 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
         {
           title: 'Ledger Name',
           field: 'ledgerName',
-          width: 150
+          width: 100
         },
         {
           title: 'Token Name',
@@ -170,13 +170,13 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Blockchain',
-          field: 'blockchain',
-          width: 120
+          field: 'blockchainName',
+          width: 150
         },
         {
           title: 'Pegged Currency',
           field: 'currencySymbol',
-          width: 120
+          width: 100
         },
         {
           title: 'Token Price',
@@ -187,12 +187,12 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
           title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
-          width: 180
+          width: 220
         },
         {
           title: 'Journal Entries',
           tdTemplate: this.journalEntriesTpl,
-          width: 100
+          width: 80
         },
         {
           title: 'Status',
