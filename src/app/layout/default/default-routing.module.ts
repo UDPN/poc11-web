@@ -143,6 +143,14 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-notifications', 
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-notifications/poc-notifications.module').then(
+            (m) => m.PocNotificationsModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)

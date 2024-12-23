@@ -63,8 +63,8 @@
             class="card-descriptions-order">
             <nz-descriptions-item nzTitle="Settlement Bank">{{ info.settlementBank
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ '1 ' + info.fromCurrency?.split('-')[1]
-              + ' = ' + info.exchangeRate + ' ' + info.toCurrency?.split('-')[1]
+            <nz-descriptions-item nzTitle="HKD/CNY Fx Rate">{{ '1 ' + info.fromCurrency
+              + ' = ' + info.exchangeRate + ' ' + info.toCurrency
               }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Commission">{{ (info.commission | map:'toThousandthMark') + ' ' +
               info.fromCurrency }}</nz-descriptions-item>

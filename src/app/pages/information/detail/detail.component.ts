@@ -35,6 +35,6 @@ export class DetailComponent implements OnInit {
     this.router.navigateByUrl('/information/edit');
   }
   goToPdf() {
-    window.open('/assets/api-documentation/Project Kissen APIs.pdf');
+    window.open('/assets/network-access-agreement/network-access-agreement.pdf');
   }
 }
