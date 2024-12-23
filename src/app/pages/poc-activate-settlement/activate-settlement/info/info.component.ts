@@ -26,6 +26,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 export class InfoComponent implements OnInit {
   @ViewChild('authorizedTpl', { static: true })
   authorizedTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
+  currencyTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
@@ -163,7 +165,7 @@ export class InfoComponent implements OnInit {
       headers: [
         {
           title: 'Currency',
-          field: 'capitalPoolCurrency',
+          tdTemplate: this.currencyTpl,
           width: 180
         },
         {

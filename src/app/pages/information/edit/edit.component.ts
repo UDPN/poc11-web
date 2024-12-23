@@ -122,7 +122,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     return {};
   };
   goToPdf() {
-    window.open('/assets/api-documentation/Project Kissen APIs.pdf');
+    window.open('/assets/network-access-agreement/network-access-agreement.pdf');
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {

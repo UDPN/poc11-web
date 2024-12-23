@@ -362,7 +362,8 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction Type',
           tdTemplate: this.txnTypesTpl,
-          width: 150
+          notNeedEllipsis: true,
+          width: 160
         },
         {
           title: 'Wallet Address',
@@ -372,30 +373,30 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'File ID',
           tdTemplate: this.fileIdTpl,
-          width: 120
+          width: 150
         },
         {
           title: 'File Hash',
           tdTemplate: this.fileHashTpl,
-          width: 120
+          width: 150
         },
         {
           title: 'Transaction Period',
           tdTemplate: this.transactionPeriodTpl,
           notNeedEllipsis: true,
-          width: 200
+          width: 150
         },
         {
           title: 'Executed On',
           field: 'exportTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
-          width: 200
+          width: 150
         },
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
-          width: 150
+          width: 120
         },
         // {
         //   title: 'Proof Hash',
@@ -420,7 +421,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 180
+          width: 160
         }
       ],
       total: 0,

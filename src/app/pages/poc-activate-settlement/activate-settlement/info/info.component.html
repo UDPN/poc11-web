@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-21 10:39:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-18 15:01:41
+ * @LastEditTime: 2024-12-21 16:02:59
  * @Description: 
 -->
 <!-- <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header> -->
@@ -219,6 +219,11 @@
         ></app-ant-table>
         <ng-template #authorizedTpl>
           <span>{{ 'Yes' }}</span>
+        </ng-template>
+        <ng-template #currencyTpl let-capitalPoolCurrency="capitalPoolCurrency">
+          <span [title]="capitalPoolCurrency | map: 'currencyPair'">{{
+            capitalPoolCurrency | map: 'currencyPair'
+          }}</span>
         </ng-template>
       </div>
     </div>

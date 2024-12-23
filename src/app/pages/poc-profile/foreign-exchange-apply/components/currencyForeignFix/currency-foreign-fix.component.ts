@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:26:57
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-05 10:49:11
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-21 14:28:51
  * @Description:
  */
 import {
@@ -500,18 +500,18 @@ export class CurrencyForeignFixComponent implements OnInit, AfterViewInit {
   ): any {
     if (type === 1) {
       return {
-        capitalPoolPlatform: currency.split('-')[2],
+        capitalPoolPlatform: 'UDPN',
         capitalPoolCurrency:
-          currency.split('-')[0] + '-' + currency.split('-')[1],
+          currency.split('-')[0],
         capitalPoolAddress: targetCurrency
       };
     }
     return {
       fromPlatform: 'UDPN',
-      fromCurrency: currency.split('-')[0] + '-' + currency.split('-')[1],
+      fromCurrency: currency.split('-')[0],
       toPlatform: 'UDPN',
       toCurrency:
-        targetCurrency.split('-')[0] + '-' + targetCurrency.split('-')[1]
+        targetCurrency.split('-')[0]
     };
   }
   private addData(arr: any[], arr1: any[]) {

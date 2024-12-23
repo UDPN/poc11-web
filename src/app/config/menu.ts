@@ -23,6 +23,17 @@ const menuNav: Menu[] = [
     code: 'R0'
   },
   {
+    menuName: 'Notifications',
+    id: 1,
+    fatherId: 0,
+    icon: 'notification',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-notifications/notifications',
+    code: 'R0'
+  },
+  {
     fatherId: 0,
     id: 2,
     menuType: 'C',

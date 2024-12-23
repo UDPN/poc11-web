@@ -85,6 +85,8 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   currency: any;
   txType: number = 0;
   balance: any = '';
+  reserveCurrency: any = '';
+  reserveBalance: any = '';
   isOkLoading: boolean = false;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
@@ -153,10 +155,6 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.topUpForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      transactionReferenceNo: [
-        null,
-        [Validators.required, this.transactionReferenceNoValidator]
-      ],
       reserveAccount: [
         null,
         [Validators.required, this.reserveAccountValidator]
@@ -179,11 +177,14 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   topUpAmountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    } else if (control.value > Number(this.reserveBalance)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -342,30 +343,39 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   }
 
   getTopUp(
-    currency: string,
+    reserveCurrency: string,
     chainAccountAddress: string,
-    capitalPoolBalance: string
+    reserveAccount: any,
+    reserveBalance: any,
+    currency: any
   ) {
+    this.reserveCurrency = reserveCurrency;
+    this.reserveBalance = reserveBalance;
     this.currency = currency;
-    this.balance = capitalPoolBalance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.topUpForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
+    
   }
 
   getWithdraw(
     currency: string,
     chainAccountAddress: string,
-    capitalPoolBalance: string
+    balance: any,
+    reserveAccount: any,
+    reserveCurrency: any,
   ) {
+    this.reserveCurrency = reserveCurrency;
     this.currency = currency;
-    this.balance = capitalPoolBalance;
+    this.balance = balance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.withdrawForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.withdrawForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleWithdraw = true;
   }
 
@@ -427,7 +437,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         'transactionReferenceNo'
       )?.value;
     }
-    const amount = thousandthMark(params.amount) + ' ' + this.currency;
+    const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.currency : this.reserveCurrency);
     this.pocCapitalPoolService
       .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
