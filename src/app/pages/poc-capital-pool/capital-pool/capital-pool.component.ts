@@ -16,6 +16,7 @@ import {
 import { aesKey, aesVi } from '@app/config/constant';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -91,6 +92,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
+    private cbdcWalletService: CbdcWalletService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
@@ -412,7 +414,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.isOkLoading = true;
     const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
     const params: any = {
-      currency: this.currency,
+      // currency: this.currency,
       amount:
         this.txType === 1
           ? this.topUpForm.get('amount')?.value
@@ -438,8 +440,8 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       )?.value;
     }
     const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.currency : this.reserveCurrency);
-    this.pocCapitalPoolService
-      .topUpOrWithdraw(params)
+    this.cbdcWalletService
+    .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
       .subscribe({
         next: (res) => {

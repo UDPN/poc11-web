@@ -1,0 +1,26 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-23 14:20:16
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-23 15:36:42
+ * @Description: 
+-->
+<app-card-table-wrap [isNormalTable]="true" tableTitle="Internal Notifications">
+  <app-ant-table
+    (changePageSize)="changePageSize($event)"
+    (changePageNum)="getDataList($event)"
+    [tableConfig]="tableConfig"
+    [tableData]="dataList"
+  ></app-ant-table
+  ><ng-template #numberTpl let-key="key">
+    <span [title]="key">{{ key }}</span>
+  </ng-template>
+  <ng-template #operationTpl>
+    <ng-container *appAuth="''">
+      <span class="operate-text"> Details </span>
+    </ng-container>
+    <ng-container *appAuth="''">
+      <span class="operate-text"> Delete </span>
+    </ng-container></ng-template
+  >
+</app-card-table-wrap>

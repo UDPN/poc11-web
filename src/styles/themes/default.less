@@ -4,15 +4,18 @@
 @layout-header-background: @component-background;
 @menu-dark-bg: #3c5686;
 @layout-sider-background: @menu-dark-bg;
+
 // @primary-color: #3c5686;
 // @primary-color-hover: #60769e;
 .menus-color {
   color: @primary-color !important;
 }
-.app-header{
+
+.app-header {
   background-color: @primary-color !important;
 }
-.base-acount{
+
+.base-acount {
   color: @primary-color !important;
 }
 
@@ -424,7 +427,7 @@ table tr td.ant-table-selection-column {
   .ant-card-head {
     border-bottom: none !important;
   }
-  
+
 }
 
 .info-none-bottom {
@@ -442,6 +445,7 @@ table tr td.ant-table-selection-column {
     font-size: 32px !important;
     font-weight: 600 !important;
   }
+
   .ant-descriptions-item-label {
     display: flex !important;
     justify-content: flex-start !important;
@@ -459,6 +463,7 @@ table tr td.ant-table-selection-column {
     margin-top: 10px !important;
     margin-bottom: 10px !important;
   }
+
   .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-icon {
     background-color: white !important;
     border-color: green !important;
@@ -483,19 +488,19 @@ table tr td.ant-table-selection-column {
   }
 
   .logtree-error1 {
-    .ant-steps-item-error > .ant-steps-item-container > .ant-steps-item-tail::after {
+    .ant-steps-item-error>.ant-steps-item-container>.ant-steps-item-tail::after {
       background-color: green !important;
     }
   }
 
   .logtree-error2 {
-    .ant-steps-item-error > .ant-steps-item-container > .ant-steps-item-tail::after {
+    .ant-steps-item-error>.ant-steps-item-container>.ant-steps-item-tail::after {
       background-color: #ff4d4f !important;
     }
   }
 
   .logtree-error3 {
-    .ant-steps-item-error > .ant-steps-item-container > .ant-steps-item-tail::after {
+    .ant-steps-item-error>.ant-steps-item-container>.ant-steps-item-tail::after {
       background-color: #91929E !important;
     }
   }
@@ -522,18 +527,18 @@ table tr td.ant-table-selection-column {
   .ant-steps-item-error>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description {
     color: #91929E !important;
   }
-  
-  .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description {
+
+  .ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description {
     margin-top: 30px !important;
     margin-bottom: 30px !important;
   }
 
-  .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description,
-  .ant-steps-item-error > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description {
+  .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description,
+  .ant-steps-item-error>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description {
     color: black !important;
   }
 
-  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description {
+  .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-description {
     color: #91929E !important;
   }
 
@@ -587,19 +592,41 @@ table tr td.ant-table-selection-column {
 
 .fiat-money-descriptions-order {
   height: 230px !important;
+
   .ant-typography-copy {
     color: #fff !important;
   }
+
   .ant-descriptions-item-container .ant-descriptions-item-label {
     color: #fff !important;
     margin-top: 30px !important;
   }
+
   .ant-descriptions-item-container .ant-descriptions-item-content {
     color: #fff !important;
     font-weight: 600 !important;
     font-size: 24px !important;
   }
-  .ant-descriptions-row > th, .ant-descriptions-row > td {
+
+  .ant-descriptions-row>th,
+  .ant-descriptions-row>td {
     padding-bottom: 0 !important;
   }
+}
+
+.select-notice {
+  .ant-select-selector {
+    width: 200px !important;
+    border-radius: 16px !important;
+  }
+}
+
+.notice-card {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  background-color: #fff !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }

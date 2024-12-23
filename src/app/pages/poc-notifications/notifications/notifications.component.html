@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 11:23:10
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-23 13:49:16
+ * @LastEditTime: 2024-12-23 15:31:16
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -19,17 +19,13 @@
           <nz-badge nzDot *ngIf="i === 1"> </nz-badge>
         </ng-template>
         <ng-container *ngIf="i === 0">
-          <div>1111</div>
-          <!-- <app-card-table-wrap [isNormalTable]="true" [btnTpl]="tableBtns">
-            <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
-              [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
-          </app-card-table-wrap> -->
+          <app-system-notices />
         </ng-container>
         <ng-container *ngIf="i === 1">
-          <div>2222</div>
+          <app-internal-notifications />
         </ng-container>
         <ng-container *ngIf="i === 2">
-          <div>3333</div>
+          <app-interactive-messages />
         </ng-container>
       </nz-tab>
     </nz-tabset>

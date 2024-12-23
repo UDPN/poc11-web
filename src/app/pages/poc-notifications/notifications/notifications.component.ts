@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 11:23:10
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-23 13:42:53
+ * @LastEditTime: 2024-12-23 14:47:29
  * @Description: 
  */
 /*
@@ -39,7 +39,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Capital Pool Management'],
+      breadcrumb: ['Notifications'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''

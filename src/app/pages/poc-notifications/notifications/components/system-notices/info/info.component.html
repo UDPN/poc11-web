@@ -1,1 +1,19 @@
-<p>info works!</p>
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-notifications/notifications'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <div nz-row class="m-t-10">
+    <div nz-col [nzSpan]="24">
+      <nz-card nzTitle="" class="m-r-8 none-bottom">
+        <h2 nz-typography>{{ 'title' }}</h2>
+        <p nz-typography>{{ 'time' }}</p>
+        <p nz-typography>{{ 'content' }}</p>
+      </nz-card>
+    </div>
+  </div>
+</div>

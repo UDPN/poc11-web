@@ -9,14 +9,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ActionCode } from '@app/config/actionCode';
 import { NotificationsComponent } from './notifications.component';
+import { InfoComponent } from './components/system-notices/info/info.component';
 
 const routes: Routes = [
   {
     path: '', component: NotificationsComponent, data: { title: 'notifications', key: 'notifications', shouldDetach: 'no' }
   },
-//   {
-//     path: 'info', component: InfoComponent, data: { title: 'CapitalPoolInfo', key: 'capital-pool-info', authCode: ActionCode.TabsDetail, shouldDetach: 'no' }
-//   },
+  {
+    path: 'system-notices-info', component: InfoComponent, data: { title: 'SystemNoticesInfo', key: 'system-notices-info', authCode: ActionCode.TabsDetail, shouldDetach: 'no' }
+  },
   // { path: '**', redirectTo: '/poc/poc-activate-settlement/activate-settlement/info' }
 
 ];

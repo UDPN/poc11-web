@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:08:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-23 13:24:59
+ * @LastEditTime: 2024-12-23 14:43:09
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -49,7 +49,7 @@
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>
-<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress"
+<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress" let-reserveBalance="reserveBalance"
   let-currencyPrecision="currencyPrecision" let-capitalPoolRealBalance="capitalPoolRealBalance" let-reserveCurrency="reserveCurrency" let-reserveAccount="reserveAccount">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
@@ -58,7 +58,7 @@
     </span>
   </ng-container>
   <ng-container *appAuth="'R020205'">
-    <span class="operate-text" (click)="getTopUp(reserveCurrency, capitalPoolAddress, reserveAccount, capitalPoolRealBalance, capitalPoolCurrency)">
+    <span class="operate-text" (click)="getTopUp(reserveCurrency, capitalPoolAddress, reserveAccount, reserveBalance, capitalPoolCurrency)">
       Top up
     </span>
   </ng-container>

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ListComponent } from './list.component';
+import { SystemNoticesComponent } from './system-notices.component';
 
-describe('ListComponent', () => {
-  let component: ListComponent;
-  let fixture: ComponentFixture<ListComponent>;
+describe('SystemNoticesComponent', () => {
+  let component: SystemNoticesComponent;
+  let fixture: ComponentFixture<SystemNoticesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ListComponent]
+      imports: [SystemNoticesComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ListComponent);
+    fixture = TestBed.createComponent(SystemNoticesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
