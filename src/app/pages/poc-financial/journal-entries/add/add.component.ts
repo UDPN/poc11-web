@@ -78,7 +78,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         this.loadDetailData(id);
       }
     });
-    // this.getTokenList();
+    this.getTokenList();
   }
 
   private loadDetailData(ruleId: string) {

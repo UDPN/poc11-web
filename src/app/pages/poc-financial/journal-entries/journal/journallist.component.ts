@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JournalService } from '@app/core/services/http/poc-financial/journal/journal.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -27,6 +27,12 @@ export class JournallistComponent implements OnInit, AfterViewInit {
   creditTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('traceIdTpl', { static: true })
   traceIdTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('accountCodeTpl', { static: true })
+  accountCodeTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('accountNameTpl', { static: true })
+  accountNameTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('particularsTpl', { static: true })
+  particularsTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
   dataList: any[] = [];
   searchParam: any = {
@@ -62,7 +68,8 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     private journalService: JournalService,
     private cdr: ChangeDetectorRef,
     private date: DatePipe,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private router: Router
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -107,33 +114,36 @@ export class JournallistComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Blockchain',
-          field: 'blockchain',
+          field: 'blockchainName',
           width: 120
         },
         {
           title: 'Account Code',
-          field: 'subjectCode',
+          field: 'transactions',
+          tdTemplate: this.accountCodeTpl,
           width: 120
         },
         {
           title: 'Account Name',
-          field: 'subjectTitle',
+          field: 'transactions',
+          tdTemplate: this.accountNameTpl,
           width: 180
         },
         {
           title: 'Particulars',
-          field: 'particularsAccount',
+          field: 'transactions',
+          tdTemplate: this.particularsTpl,
           width: 180
         },
         {
           title: 'Debit',
-          field: 'txAmount',
+          field: 'transactions',
           tdTemplate: this.debitTpl,
           width: 120
         },
         {
           title: 'Credit',
-          field: 'txAmount',
+          field: 'transactions',
           tdTemplate: this.creditTpl,
           width: 120
         },
@@ -148,29 +158,70 @@ export class JournallistComponent implements OnInit, AfterViewInit {
       total: 0,
       loading: false,
       pageSize: 10,
-      pageIndex: 1
+      pageIndex: 1,
+      showCheckbox: false
     };
   }
 
-  getDataList(e?: NzTableQueryParams): void {
+  getDataList(e?: NzTableQueryParams | number): void {
     this.tableConfig.loading = true;
     this.tableChangeDectction();
 
     const params = {
       pageSize: this.tableConfig.pageSize!,
-      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      pageNum: typeof e === 'number' ? e : (e?.pageIndex || this.tableConfig.pageIndex!),
       filters: this.searchParam
     };
 
     this.journalService.fetchTxList(params.pageNum, params.pageSize, params.filters)
       .subscribe({
-        next: (_: any) => {
-          if (_.code === 0) {
-            this.dataList = _.data.rows;
-            this.dataList.forEach((item: any, i: any) => {
-              Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+        next: (response: any) => {
+          if (response.code === 0) {
+            // 按 txHash 分组数据
+            const groupedData = new Map<string, any[]>();
+            response.data.rows.forEach((item: any) => {
+              if (!groupedData.has(item.txHash)) {
+                groupedData.set(item.txHash, []);
+              }
+              groupedData.get(item.txHash)?.push(item);
             });
-            this.tableConfig.total = _.data.page.total;
+
+            // 转换为显示所需的格式
+            this.dataList = Array.from(groupedData.values()).map((group, index) => {
+              // 确保每组至少有一条记录
+              const firstRecord = group[0];
+              
+              // 按照 loanType 排序交易记录
+              const sortedTransactions = group.sort((a, b) => {
+                // 首先按照 loanType 排序
+                if (a.loanType !== b.loanType) {
+                  return a.loanType - b.loanType;
+                }
+                // 如果 loanType 相同，按照 subjectCode 排序
+                return a.subjectCode.localeCompare(b.subjectCode);
+              });
+
+              // 创建合并后的记录
+              const mergedRecord = {
+                key: (params.pageNum - 1) * 10 + index + 1,
+                traceId: firstRecord.traceId,
+                dateTime: firstRecord.dateTime,
+                txType: firstRecord.txType,
+                blockchainName: firstRecord.blockchainName,
+                ruleId: firstRecord.ruleId,
+                transactions: sortedTransactions.map(item => ({
+                  subjectCode: item.subjectCode,
+                  subjectTitle: item.subjectTitle,
+                  particularsAccount: item.particularsAccount,
+                  txAmount: item.txAmount,
+                  loanType: item.loanType
+                }))
+              };
+
+              return mergedRecord;
+            });
+
+            this.tableConfig.total = response.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
           }
           this.tableConfig.loading = false;
@@ -188,8 +239,9 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  changePageSize(e: number): void {
-    this.tableConfig.pageSize = e;
+  changePageSize(size: number): void {
+    this.tableConfig.pageSize = size;
+    this.getDataList(1);
   }
 
   resetForm(): void {
@@ -202,8 +254,8 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     this.getDataList(this.tableQueryParams);
   }
 
-  showTxDetails(row: any) {
-    console.log('Show transaction details:', row);
+  showTxDetails(ruleId: string) {
+    this.router.navigate(['/poc/poc-wallet/cbdc-transaction']);
   }
 
   getTransactionTypeName(type: number): string {

@@ -41,42 +41,62 @@
     </form>
   </nz-card>
 
-  <app-card-table-wrap [tableTitle]="'Transaction List'" [isNormalTable]="true">
-    <app-ant-table
-      (changePageSize)="changePageSize($event)"
-      (changePageNum)="getDataList($event)"
-      [tableConfig]="tableConfig"
-      [tableData]="dataList"
-    ></app-ant-table>
-  </app-card-table-wrap>
+  <nz-card [nzTitle]="'Transaction List'">
+    <nz-table
+      #basicTable
+      [nzData]="dataList"
+      [nzTotal]="tableConfig.total"
+      [nzPageSize]="tableConfig.pageSize"
+      [nzPageIndex]="tableConfig.pageIndex"
+      [nzLoading]="tableConfig.loading"
+      [nzBordered]="true"
+      (nzPageIndexChange)="getDataList($event)"
+      (nzPageSizeChange)="changePageSize($event)"
+    >
+      <thead>
+        <tr>
+          <th>Transaction ID</th>
+          <th>Date</th>
+          <th>Transaction Type</th>
+          <th>Blockchain</th>
+          <th>Account Code</th>
+          <th>Account Name</th>
+          <th>Particulars</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of basicTable.data">
+          <tr *ngFor="let transaction of data.transactions; let first = first; let count = count">
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              <div style="display: block; word-break: break-all;">
+                {{ data.traceId }}
+                <i nz-icon 
+                   nzType="copy" 
+                   nzTheme="outline" 
+                   class="m-l-8 cursor-pointer" 
+                   (click)="copyTraceId(data.traceId, $event)"
+                   nz-tooltip 
+                   nzTooltipTitle="Copy">
+                </i>
+              </div>
+            </td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">{{ data.dateTime | date:'MMM dd, yyyy HH:mm:ss' }}</td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">{{ getTransactionTypeName(data.txType) }}</td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">{{ data.blockchainName }}</td>
+            <td>{{ transaction.subjectCode }}</td>
+            <td>{{ transaction.subjectTitle }}</td>
+            <td style="word-break: break-all; text-align: left;">{{ transaction.particularsAccount }}</td>
+            <td>{{ transaction.loanType === 1 ? (transaction.txAmount | number:'1.2-2') : '' }}</td>
+            <td>{{ transaction.loanType === 2 ? (transaction.txAmount | number:'1.2-2') : '' }}</td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              <span class="operate-text" (click)="showTxDetails(data.ruleId)">Txn Details</span>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </nz-card>
 </div>
-
-<ng-template #txTypeTpl let-txType="txType">
-  {{ getTransactionTypeName(txType) }}
-</ng-template>
-
-<ng-template #debitTpl let-txAmount="txAmount" let-loanType="loanType">
-  {{ loanType === 1 ? (txAmount | number:'1.2-2') : '' }}
-</ng-template>
-
-<ng-template #creditTpl let-txAmount="txAmount" let-loanType="loanType">
-  {{ loanType === 2 ? (txAmount | number:'1.2-2') : '' }}
-</ng-template>
-
-<ng-template #actionTpl let-ruleId="ruleId">
-  <span class="operate-text" (click)="showTxDetails(ruleId)">Txn Details</span>
-</ng-template>
-
-<ng-template #traceIdTpl let-traceId="traceId">
-  <div class="d-flex align-items-center">
-    <span>{{ traceId }}</span>
-    <i nz-icon 
-       nzType="copy" 
-       nzTheme="outline" 
-       class="m-l-8 cursor-pointer" 
-       (click)="copyTraceId(traceId, $event)"
-       nz-tooltip 
-       nzTooltipTitle="Copy">
-    </i>
-  </div>
-</ng-template>
