@@ -74,7 +74,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Financial Management', 'Statements and Reports'],
+      breadcrumb: ['Financial Management', 'Journal Entries'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
