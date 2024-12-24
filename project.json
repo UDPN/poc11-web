@@ -51,6 +51,7 @@
           "node_modules/driver.js/dist/driver.min.js"
         ],
         "allowedCommonJsDependencies": [
+          "quill-delta",
           "@ethereumjs/tx",
           "@ethereumjs/common",
           "web3",

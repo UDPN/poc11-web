@@ -53,10 +53,10 @@ export class InfomationGuard implements CanActivate {
           this.router.navigateByUrl('/information/detail');
           return false;
         }
-        // if (data !== null && data.spStatus === 10) {
-        //   this.router.navigateByUrl('/poc/poc-home/home');
-        //   return false;
-        // }
+        if (data !== null && data.spStatus === 10) {
+          this.router.navigateByUrl('/poc/poc-home/home');
+          return false;
+        }
         return true;
       })
     );
