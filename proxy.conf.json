@@ -1,21 +1,21 @@
 {
   "/v1/remittanceManagement": {
-    "target": "http://10.0.48.109:61001/wcbdccommercial",
+    "target": "http://10.0.48.109:60001/wcbdccommercial",
     "secure": false,
     "changeOrigin": true
   },
   "/v1/fxsp": {
-    "target": "http://10.0.48.109:61001/lpcp/",
+    "target": "http://10.0.48.109:60001/lpcp/",
     "secure": false,
     "changeOrigin": true
   },
   "/fxsp": {
-    "target": "http://10.0.48.109:61001/lpcp/",
+    "target": "http://10.0.48.109:60001/lpcp/",
     "secure": false,
     "changeOrigin": true
   },
   "/v1": {
-    "target": "http://10.0.48.109:61001/wcbdccommercial",
+    "target": "http://10.0.48.109:60001/wcbdccommercial",
     "secure": false,
     "changeOrigin": true
   }
