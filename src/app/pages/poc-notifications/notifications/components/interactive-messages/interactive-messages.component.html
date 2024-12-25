@@ -2,29 +2,36 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-24 10:37:34
+ * @LastEditTime: 2024-12-24 15:06:22
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
   <div nz-col [nzSpan]="24">
-    <nz-card nzBordered="false" nzTitle="" class="m-r-8 none-bottom">
-      <div nz-row nzJustify="space-between" nzGutter="24">
-        <div nz-col [nzSpan]="4">
-          <span class="operate-text">
-            <h5 nz-typography (click)="openSend()">
-              {{ 'Send Messages' }}
-            </h5></span
-          >
-        </div>
-        <div nz-col [nzSpan]="20">
-          <nz-select ngModel="" class="m-l-15 select-notice">
-            <nz-option nzValue="" nzLabel="All"></nz-option>
-            <nz-option nzValue="1" nzLabel="Sent Out"></nz-option>
-            <nz-option nzValue="2" nzLabel="Received"></nz-option>
-          </nz-select>
-        </div>
+    <div nz-row nzJustify="space-between" nzGutter="24" class="m-b-10">
+      <div nz-col>
+        <button
+          nz-button
+          [nzSize]="'large'"
+          nzType="primary"
+          style="border-radius: 12px"
+        >
+          <img
+            class="m-r-5"
+            src="../../../../../../assets/imgs/notification-send.svg"
+            alt=""
+          />
+          {{ 'Compose' }}
+        </button>
       </div>
-    </nz-card>
+      <div nz-col>
+        <nz-select ngModel="" class="m-l-15 select-notice" nzSize="large">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option nzValue="1" nzLabel="Sent Out"></nz-option>
+          <nz-option nzValue="2" nzLabel="Received"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+
     <div *ngFor="let item of [1, 2, 3]; index as i">
       <nz-card
         nzBordered="false"

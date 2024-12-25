@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-21 13:53:55
+ * @LastEditTime: 2024-12-24 17:42:17
  * @Description:
  */
 import {
@@ -268,10 +268,12 @@ export class AddPoolComponent implements OnInit {
           arr.push(item.currency);
         });
         if (type === 1) {
+          console.log(arr);
           this.selectOptionPacths$.next(arr);
           this.selectOptionPacthsLenght = arr.length;
         }
         if (type === 0) {
+          console.log(arr);
           this.selectOptionAll$.next(arr);
           this.selectOptionPacthsLenght = arr.length;
         }
@@ -304,6 +306,8 @@ export class AddPoolComponent implements OnInit {
           }
         });
         this.selectOptionPacths$.next(arrs);
+        console.log(this.selectOptionPacths$, '22222');
+        
         this.selectOptionPacthsLenght = arrs.length;
       });
     });
