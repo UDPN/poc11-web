@@ -837,7 +837,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isVisible = false;
         } else {
           this.passwordForm.reset();
-          this.isVisibleEnterPassword = true;
           this.isLoading = false;
         }
         this.cdr.markForCheck();

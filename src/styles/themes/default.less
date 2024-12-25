@@ -630,3 +630,27 @@ table tr td.ant-table-selection-column {
   justify-content: center !important;
   align-items: center !important;
 }
+
+
+.tabs-style {
+  .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab, .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab {
+    border: none !important;
+    background: #fff !important;
+  }
+  .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {
+    border-radius: 20px !important;
+  }
+  .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active, .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab-active {
+    border-bottom-color: @primary-color !important;
+  }
+  .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active, .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab-active {
+    background-color: @primary-color !important;
+  }
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #fff !important;
+  }
+  .ant-tabs-top > .ant-tabs-nav::before {
+    border-bottom: none !important;
+  }
+
+}

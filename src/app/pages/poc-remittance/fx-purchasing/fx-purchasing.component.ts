@@ -732,18 +732,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isLoading = false;
           this.isVisible = false;
         } else {
-          this.modal
-            .error({
-              nzTitle: 'Error',
-              nzContent: this.translate.instant(`${res.message}`)
-            })
-            .afterClose.subscribe((_) => {
-              this.passwordForm.reset();
-              this.isVisibleEnterPassword = true;
-              this.cdr.markForCheck();
-              this.isLoading = false;
-            });
+          this.passwordForm.reset();
+          this.isLoading = false;
         }
+        this.cdr.markForCheck();
       });
   }
 }

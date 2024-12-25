@@ -26,6 +26,8 @@ import { finalize } from 'rxjs';
 export class SystemNoticesComponent implements OnInit, AfterViewInit {
   @ViewChild('numberTpl', { static: true })
   numberTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('titleTpl', { static: true })
+  titleTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
   tableQueryParams: NzTableQueryParams = {
@@ -92,7 +94,7 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Title',
-          field: 'title',
+          tdTemplate: this.titleTpl,
           width: 200
         },
         {
