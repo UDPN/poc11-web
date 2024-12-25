@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 11:23:10
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-25 10:51:54
+ * @LastEditTime: 2024-12-25 17:02:14
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -14,6 +14,7 @@
       nzType="card"
       (nzSelectedIndexChange)="onChangeTab($event)"
       [nzSelectedIndex]="tabIndex"
+      [nzTabBarExtraContent]="extraTemplate"
     >
       <nz-tab *ngFor="let tab of Tabs; index as i" [nzTitle]="titleTemplate">
         <ng-template #titleTemplate>
@@ -33,3 +34,25 @@
     </nz-tabset>
   </nz-card>
 </div>
+<ng-template #extraTemplate>      
+  <i
+    class="m-l-5"
+    style="color: #3c5686; font-size: 20px;"
+    nz-icon
+    nzType="question-circle"
+    nzTooltipPlacement="right"
+    nzTheme="fill"
+    nz-tooltip
+    [nzTooltipTitle]="titleToolTemplate"
+    nzTooltipColor="#3c5686"
+    nzTooltipTrigger="click"
+    nzTooltipOverlayClassName="buils"
+  ></i>
+</ng-template>
+<ng-template #titleToolTemplate>
+  <span><b>{{'System Notices: '}}</b>{{'Notices released by Kissen Management.'}}</span>
+  <br><br>
+  <span><b>{{'Internal Notifications: '}}</b>{{'Notifications regarding the operations of the Commercial Bank Control Panel.'}}</span>
+  <br><br>
+  <span><b>{{'Interactive Messages: '}}</b>{{'Interactive messages between your bank and other participating banks in the Kissen network.'}}</span>
+</ng-template>    

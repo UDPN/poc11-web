@@ -1,3 +1,10 @@
+/*
+ * @Author: chenyuting
+ * @Date: 2024-07-02 14:33:55
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-25 13:53:55
+ * @Description:
+ */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '@app/core/services/http/poc-system/user/user.service';
@@ -18,7 +25,11 @@ export class InfoComponent implements OnInit {
   };
   info: any = {};
   roleList: any[] = [];
-  constructor(public routeInfo: ActivatedRoute, private userService: UserService, private cdr: ChangeDetectorRef) { }
+  constructor(
+    public routeInfo: ActivatedRoute,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Details`,
@@ -37,20 +48,22 @@ export class InfoComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.routeInfo.queryParams.subscribe(params => {
-      this.userService.info({ userId: params['userId'] }).subscribe((res: any) => {
-        this.info = res;
-        this.roleList = res.roleList;
-        const array: any = [];
-        if (res.roleList) {
-          this.roleList.map((item) => {
-            array.push(item.roleName)
-          })
-          this.roleList = array;
-        }
-        this.cdr.markForCheck();
-        return;
-      })
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.userService
+        .info({ userId: params['userId'] })
+        .subscribe((res: any) => {
+          this.info = res;
+          this.roleList = res.roleList;
+          const array: any = [];
+          if (res.roleList) {
+            this.roleList.map((item) => {
+              array.push(item.roleName);
+            });
+            this.roleList = array;
+          }
+          this.cdr.markForCheck();
+          return;
+        });
     });
   }
 }

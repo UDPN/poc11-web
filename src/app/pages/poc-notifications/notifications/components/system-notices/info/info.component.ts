@@ -1,6 +1,13 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationsService } from '@app/core/services/http/poc-notifications/poc-notifications.service';
 
 @Component({
   selector: 'app-info',
@@ -8,6 +15,7 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
   styleUrl: './info.component.less'
 })
 export class InfoComponent implements OnInit, AfterViewInit {
+  info: any = {};
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -16,6 +24,11 @@ export class InfoComponent implements OnInit, AfterViewInit {
     footer: ''
   };
 
+  constructor(
+    public routeInfo: ActivatedRoute,
+    private notificationsService: NotificationsService,
+    private cdr: ChangeDetectorRef
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Details`,
@@ -35,6 +48,18 @@ export class InfoComponent implements OnInit, AfterViewInit {
     };
   }
   ngOnInit(): void {
-      
+    this.getInfo();
+  }
+
+  getInfo(): void {
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.notificationsService
+        .getInfo({ chatMsgId: params['chatMsgId'], msgType: 1 })
+        .subscribe((res: any) => {
+          this.info = res;
+          this.cdr.markForCheck();
+          return;
+        });
+    });
   }
 }

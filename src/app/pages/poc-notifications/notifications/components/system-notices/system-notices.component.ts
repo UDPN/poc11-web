@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-23 15:06:24
+ * @LastEditTime: 2024-12-25 15:11:58
  * @Description:
  */
 import {
@@ -13,6 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { NotificationsService } from '@app/core/services/http/poc-notifications/poc-notifications.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -37,8 +38,14 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
     filter: []
   };
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [{}];
-  constructor(private cdr: ChangeDetectorRef) {}
+  dataList: NzSafeAny[] = [
+    { top: 1, readState: 1, title: '222222' },
+    { top: 0, readState: 0, title: '222222' }
+  ];
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private notificationsService: NotificationsService
+  ) {}
   ngAfterViewInit(): void {}
   ngOnInit(): void {
     this.initTable();
@@ -63,9 +70,9 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
     // const params: SearchCommonVO<any> = {
     //   pageSize: this.tableConfig.pageSize!,
     //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: {}
+    //   filters: { msgType: 1 }
     // };
-    // this.transactionRecordService
+    // this.notificationsService
     //   .getList(params.pageNum, params.pageSize, params.filters)
     //   .pipe(
     //     finalize(() => {
@@ -75,8 +82,8 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
     //   .subscribe((_: any) => {
     //     this.dataList = _.data?.rows;
     //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 })
-    //     })
+    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+    //     });
     //     this.tableConfig.total = _.data.page.total;
     //     this.tableConfig.pageIndex = params.pageNum;
     //     this.tableLoading(false);

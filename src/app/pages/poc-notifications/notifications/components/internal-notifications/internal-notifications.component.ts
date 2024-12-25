@@ -6,9 +6,12 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { NotificationsService } from '@app/core/services/http/poc-notifications/poc-notifications.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
@@ -30,7 +33,14 @@ export class InternalNotificationsComponent {
   };
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [{}];
-  constructor(private cdr: ChangeDetectorRef) {}
+  modalInfo: any = {};
+  isVisible: boolean = false;
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private notificationsService: NotificationsService,
+    private modal: NzModalService,
+    private message: NzMessageService
+  ) {}
   ngAfterViewInit(): void {}
   ngOnInit(): void {
     this.initTable();
@@ -55,9 +65,9 @@ export class InternalNotificationsComponent {
     // const params: SearchCommonVO<any> = {
     //   pageSize: this.tableConfig.pageSize!,
     //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: {}
+    //   filters: { msgType: 3 }
     // };
-    // this.transactionRecordService
+    // this.notificationsService
     //   .getList(params.pageNum, params.pageSize, params.filters)
     //   .pipe(
     //     finalize(() => {
@@ -67,13 +77,56 @@ export class InternalNotificationsComponent {
     //   .subscribe((_: any) => {
     //     this.dataList = _.data?.rows;
     //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 })
-    //     })
+    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+    //     });
     //     this.tableConfig.total = _.data.page.total;
     //     this.tableConfig.pageIndex = params.pageNum;
     //     this.tableLoading(false);
     //     this.cdr.markForCheck();
     //   });
+  }
+
+  cancel() {
+    this.isVisible = false;
+  }
+  getModal(chatMsgId: any): void {
+    this.isVisible = true;
+    this.notificationsService
+      .getInfo({ chatMsgId, msgType: 3 })
+      .subscribe((res: any) => {
+        this.modalInfo = res;
+        this.cdr.markForCheck();
+        return;
+      });
+  }
+
+  onDelete(chatMsgId: any, msgType: number) {
+    this.modal.confirm({
+      nzTitle: `Are you sure you want to delete this internal notification ?`,
+      nzContent: '',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.notificationsService
+            .getNoticeDelete({ chatMsgId, msgType: 3 })
+            .subscribe({
+              next: (res) => {
+                resolve(true);
+                if (res) {
+                  this.message
+                    .success(`Delete successfully`, { nzDuration: 1000 })
+                    .onClose!.subscribe(() => {
+                      this.getDataList();
+                    });
+                }
+                this.cdr.markForCheck();
+              },
+              error: (err) => {
+                reject(true);
+                this.cdr.markForCheck();
+              }
+            });
+        }).catch(() => console.log('Oops errors!'))
+    });
   }
 
   private initTable(): void {

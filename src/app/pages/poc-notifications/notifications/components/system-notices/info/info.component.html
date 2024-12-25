@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-23 14:03:55
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-25 13:57:51
+ * @Description: 
+-->
 <app-page-header
   [backTpl]="backTpl"
   [backUrl]="'/poc/poc-notifications/notifications'"
@@ -10,9 +17,9 @@
   <div nz-row class="m-t-10">
     <div nz-col [nzSpan]="24">
       <nz-card nzTitle="" class="m-r-8 none-bottom">
-        <h2 nz-typography>{{ 'title' }}</h2>
-        <p nz-typography>{{ 'time' }}</p>
-        <p nz-typography>{{ 'content' }}</p>
+        <h2 nz-typography>{{ info.title }}</h2>
+        <p nz-typography>{{ info.sendTime }}</p>
+        <p nz-typography>{{ info.content }}</p>
       </nz-card>
     </div>
   </div>

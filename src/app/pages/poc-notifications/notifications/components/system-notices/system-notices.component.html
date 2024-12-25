@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-25 13:21:45
+ * @LastEditTime: 2024-12-25 16:22:04
  * @Description: 
 -->
 <app-card-table-wrap [isNormalTable]="true" tableTitle="System Notices">
@@ -15,22 +15,40 @@
   <ng-template #numberTpl let-key="key">
     <span [title]="key">{{ key }}</span>
   </ng-template>
-  <ng-template #titleTpl let-key="key">
-    <span [title]="key"
-      ><img
-        nz-col
-        class="m-l-10 m-r-10"
-        src="../../../../../../assets/imgs/notification-pin.svg"
-        alt=""
-      />{{ '11111' }}</span
-    >
+  <ng-template
+    #titleTpl
+    let-readState="readState"
+    let-top="top"
+    let-title="title"
+  >
+    <span [title]="title">
+      <div *ngIf="top === 1">
+        <img
+          nz-col
+          class="m-l-10 m-r-10"
+          src="../../../../../../assets/imgs/notification-pin.svg"
+          alt=""
+        />{{ title }}
+      </div>
+      <div
+        *ngIf="top === 0"
+        style="display: flex; justify-content: left; align-items: center"
+      >
+        <div style="width: 33px"></div>
+        {{ title }}
+      </div>
+    </span>
   </ng-template>
-  <ng-template #operationTpl>
+  <ng-template
+    #operationTpl
+    let-chatMsgId="chatMsgId"
+    let-readState="readState"
+  >
     <ng-container *appAuth="''">
       <span
         class="operate-text"
         routerLink="/poc/poc-notifications/notifications/system-notices-info"
-        [queryParams]="{}"
+        [queryParams]="{chatMsgId, readState}"
       >
         Details
       </span>
