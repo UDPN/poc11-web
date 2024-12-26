@@ -95,6 +95,7 @@ export class InternalNotificationsComponent {
 
   cancel() {
     this.isVisible = false;
+    this.modalInfo = {};
   }
   getModal(chatMsgId: any): void {
     this.isVisible = true;
