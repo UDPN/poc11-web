@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-25 15:11:58
+ * @LastEditTime: 2024-12-26 14:38:40
  * @Description:
  */
 import {
@@ -38,10 +38,7 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
     filter: []
   };
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [
-    { top: 1, readState: 1, title: '222222' },
-    { top: 0, readState: 0, title: '222222' }
-  ];
+  dataList: NzSafeAny[] = [];
   constructor(
     private cdr: ChangeDetectorRef,
     private notificationsService: NotificationsService
@@ -66,29 +63,29 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: { msgType: 1 }
-    // };
-    // this.notificationsService
-    //   .getList(params.pageNum, params.pageSize, params.filters)
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data?.rows;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _.data.page.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: { msgType: 1 }
+    };
+    this.notificationsService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data?.rows;
+        this.dataList.forEach((item: any, i: any) => {
+          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+        });
+        this.tableConfig.total = _.data.page.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {

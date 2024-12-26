@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-25 15:09:33
+ * @LastEditTime: 2024-12-26 14:44:59
  * @Description: 
 -->
 <app-card-table-wrap [isNormalTable]="true" tableTitle="Internal Notifications">
@@ -15,14 +15,20 @@
   ><ng-template #numberTpl let-key="key">
     <span [title]="key">{{ key }}</span>
   </ng-template>
+  <ng-template #contentTpl let-content="content" let-readState="readState">
+    <span
+      [title]="content"
+      [innerHTML]="content"
+      [style]="readState === 0 ? 'font-weight: 600' : ''"
+    >
+    </span>
+  </ng-template>
   <ng-template #operationTpl let-chatMsgId="chatMsgId" let-msgType="msgType">
     <ng-container *appAuth="''">
       <span class="operate-text" (click)="getModal(chatMsgId)"> Details </span>
     </ng-container>
     <ng-container *appAuth="''">
-      <span class="operate-text" (click)="onDelete(chatMsgId, msgType)">
-        Delete
-      </span>
+      <span class="operate-text" (click)="onDelete(chatMsgId)"> Delete </span>
     </ng-container></ng-template
   >
 </app-card-table-wrap>
@@ -35,12 +41,12 @@
   nzCentered="true"
 >
   <div *nzModalContent>
-    <div class="m-l-15 m-r-15">111111</div>
+    <div class="m-l-15 m-r-15" [innerHTML]="this.modalInfo.content"></div>
     <div
       style="display: flex; justify-content: right; align-items: center"
       class="m-t-20 operate-text"
     >
-      {{ 'time' }}
+      {{ this.modalInfo.createTime | map: 'timeStamp' }}
     </div>
   </div>
   <div *nzModalFooter>

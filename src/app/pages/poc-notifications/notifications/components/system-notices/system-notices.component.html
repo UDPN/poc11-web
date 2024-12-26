@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-25 16:22:04
+ * @LastEditTime: 2024-12-26 14:48:28
  * @Description: 
 -->
 <app-card-table-wrap [isNormalTable]="true" tableTitle="System Notices">
@@ -22,7 +22,10 @@
     let-title="title"
   >
     <span [title]="title">
-      <div *ngIf="top === 1">
+      <div
+        *ngIf="top === 1"
+        [style]="readState === 0 ? 'font-weight: 600' : ''"
+      >
         <img
           nz-col
           class="m-l-10 m-r-10"
@@ -32,6 +35,7 @@
       </div>
       <div
         *ngIf="top === 0"
+        [style]="readState === 0 ? 'font-weight: 600' : ''"
         style="display: flex; justify-content: left; align-items: center"
       >
         <div style="width: 33px"></div>

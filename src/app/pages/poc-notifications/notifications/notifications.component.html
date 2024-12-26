@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 11:23:10
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-25 17:02:14
+ * @LastEditTime: 2024-12-26 10:11:40
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -18,8 +18,8 @@
     >
       <nz-tab *ngFor="let tab of Tabs; index as i" [nzTitle]="titleTemplate">
         <ng-template #titleTemplate>
-          <nz-badge nzStatus="success" *ngIf="i !== 1"> </nz-badge>
-          {{ tab }}
+          <nz-badge nzStatus="success" *ngIf="tab.count !== 0"> </nz-badge>
+          {{ tab.name }}
         </ng-template>
         <ng-container *ngIf="i === 0">
           <app-system-notices />

@@ -186,7 +186,7 @@
   >
     <app-ant-table
       (changePageSize)="changePageSize($event)"
-      (changePageNum)="getDataList($event)"
+      (changePageNum)="this.info.centralBankId ? getDataList($event) : ''"
       [tableConfig]="tableConfig"
       [tableData]="dataList"
     ></app-ant-table>

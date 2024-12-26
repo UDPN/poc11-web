@@ -336,36 +336,32 @@ export class MapPipe implements PipeTransform {
     if (arg === 'showPartTen') {
       if (value) {
         if (value?.length > 10) {
-          return value.substring(0, 6) +
-          '....' +
-          value.substring(
-            value.length - 4,
-            value.length
-          );
-        } else  {
-          return value;
-        }
-      } else {
-        return '--'
-      }
-      
-    }
-    if (arg === 'showPart') { 
-      if (value) {
-        if (value?.length > 30) {
-          return value.substring(0, 6) +
-          '....' +
-          value.substring(
-            value.length - 4,
-            value.length
+          return (
+            value.substring(0, 6) +
+            '....' +
+            value.substring(value.length - 4, value.length)
           );
         } else {
           return value;
         }
       } else {
-        return '--'
+        return '--';
       }
-     
+    }
+    if (arg === 'showPart') {
+      if (value) {
+        if (value?.length > 30) {
+          return (
+            value.substring(0, 6) +
+            '....' +
+            value.substring(value.length - 4, value.length)
+          );
+        } else {
+          return value;
+        }
+      } else {
+        return '--';
+      }
     }
     if (arg === 'failedTime') {
       if (!value) {
@@ -441,14 +437,14 @@ export class MapPipe implements PipeTransform {
         }
         let res = this.datePipe.transform(value, 'MMMM d, y');
         console.log(res);
-        
+
         return res?.replace('GMT', 'UTC');
       }
     }
-    if(arg === 'currencyPair') {
+    if (arg === 'currencyPair') {
       if (!value) {
-        return value = '--';
-      } else if(value.indexOf('-UDPN') !== 1) {
+        return (value = '--');
+      } else if (value.indexOf('-UDPN') !== 1) {
         return value.replaceAll('-UDPN', '');
       } else {
         return value;
