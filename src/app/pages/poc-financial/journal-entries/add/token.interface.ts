@@ -1,8 +1,16 @@
+/*
+ * @Author: chenyuting
+ * @Date: 2024-12-20 14:03:55
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-26 17:55:27
+ * @Description:
+ */
 export interface TokenInfo {
   stablecoinId: number;
   tokenName: string;
   tokenType: number;
   tokenSymbol: string;
+  tokenPrice: number | string;
   decimalPrecision: number;
   currencySymbol: string;
   usPrice: string;
@@ -43,4 +51,4 @@ export interface SaveSubjectResponse {
   code: number;
   message: string;
   data: any;
-} 
+}

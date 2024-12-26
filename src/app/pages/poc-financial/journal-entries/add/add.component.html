@@ -30,11 +30,7 @@
             <nz-form-label [nzRequired]="true">Token Name</nz-form-label>
             <nz-form-control>
               <ng-container *ngIf="isEditMode; else tokenSelect">
-                <input
-                  nz-input
-                  [value]="selectedToken?.tokenName"
-                  disabled
-                />
+                <input nz-input [value]="selectedToken?.tokenName" disabled />
               </ng-container>
               <ng-template #tokenSelect>
                 <nz-select
@@ -74,12 +70,14 @@
               <input
                 nz-input
                 [value]="
-                  '1 ' +
-                  selectedToken?.tokenSymbol +
-                  ' = ' +
-                  selectedToken?.usPrice +
-                  ' ' +
-                  selectedToken?.currencySymbol
+                  tokenList && tokenList.length
+                    ? '1 ' +
+                      selectedToken?.tokenSymbol +
+                      ' = ' +
+                      selectedToken?.tokenPrice +
+                      ' ' +
+                      selectedToken?.currencySymbol
+                    : ''
                 "
                 disabled
               />
@@ -91,7 +89,11 @@
   </nz-card>
 </div>
 <div class="m-t-10 m-r-10 m-l-10">
-  <nz-card nzTitle="Transaction Details" class="mt-4">
+  <nz-card
+    nzTitle="Transaction Details"
+    class="mt-4"
+    *nzIf="tokenList && tokenList.length"
+  >
     <div class="transaction-form">
       <form nz-form [formGroup]="transactionForm">
         <div formArrayName="transactionGroups">
@@ -155,12 +157,25 @@
                           <nz-form-control>
                             <nz-select
                               formControlName="debitCredit"
-                       
-                              (ngModelChange)="onDebitCreditChange(transaction, groupIndex)"
-                              [class.ant-form-item-has-error]="isFieldInvalid(transaction, 'debitCredit', groupIndex)"
+                              (ngModelChange)="
+                                onDebitCreditChange(transaction, groupIndex)
+                              "
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'debitCredit',
+                                  groupIndex
+                                )
+                              "
                             >
-                              <nz-option nzValue="Debit" nzLabel="Debit"></nz-option>
-                              <nz-option nzValue="Credit" nzLabel="Credit"></nz-option>
+                              <nz-option
+                                nzValue="Debit"
+                                nzLabel="Debit"
+                              ></nz-option>
+                              <nz-option
+                                nzValue="Credit"
+                                nzLabel="Credit"
+                              ></nz-option>
                             </nz-select>
                             <div
                               *ngIf="
@@ -279,8 +294,16 @@
                             <input
                               nz-input
                               formControlName="amount"
-                              [placeholder]="getAmountPlaceholder(groupIndex, transaction)"
-                              [class.ant-form-item-has-error]="isFieldInvalid(transaction, 'amount', groupIndex)"
+                              [placeholder]="
+                                getAmountPlaceholder(groupIndex, transaction)
+                              "
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'amount',
+                                  groupIndex
+                                )
+                              "
                               [disabled]="true"
                             />
                             <div
@@ -332,7 +355,9 @@
                               "
                               class="ant-form-item-explain ant-form-item-explain-error"
                             >
-                              <div role="alert">Please enter account category</div>
+                              <div role="alert">
+                                Please enter account category
+                              </div>
                             </div>
                           </nz-form-control>
                         </nz-form-item>
