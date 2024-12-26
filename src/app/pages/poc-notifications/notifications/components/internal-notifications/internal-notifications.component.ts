@@ -149,7 +149,7 @@ export class InternalNotificationsComponent {
         },
         {
           title: 'Type',
-          field: 'type',
+          field: 'title',
           width: 200
         },
         {

@@ -55,6 +55,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   centralBankTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletAdressTitleTpl', { static: true })
+  walletAdressTitleTpl!: TemplateRef<NzSafeAny>;
   isVisibleTopUp: boolean = false;
   isVisibleWithdraw: boolean = false;
   isVisibleEnterPassword: boolean = false;
@@ -89,8 +91,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   currency: any;
   txType: number = 0;
   balance: any = '';
-  reserveBalance : any = '';
-  reserveCurrency: any= '';
+  reserveBalance: any = '';
+  reserveCurrency: any = '';
   constructor(
     private cbdcWalletService: CbdcWalletService,
     private themesService: ThemeService,
@@ -265,7 +267,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       ?.setValue(sessionStorage.getItem('systemName'));
     this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
-    
   }
 
   getWithdraw(
@@ -273,7 +274,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     chainAccountAddress: string,
     balance: any,
     reserveAccount: any,
-    reserveCurrency: any,
+    reserveCurrency: any
   ) {
     this.reserveCurrency = reserveCurrency;
     this.currency = currency;
@@ -338,7 +339,10 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
-    const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.currency : this.reserveCurrency);
+    const amount =
+      thousandthMark(params.amount) +
+      ' ' +
+      (this.txType === 1 ? this.currency : this.reserveCurrency);
     this.cbdcWalletService
       .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
@@ -378,6 +382,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Wallet Address',
+          thTemplate: this.walletAdressTitleTpl,
           tdTemplate: this.walletAddressTpl,
           width: 200
         },

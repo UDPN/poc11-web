@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 13:39:28
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-23 13:58:28
+ * @LastEditTime: 2024-12-26 15:37:11
  * @Description: 
 -->
 <div>
@@ -18,7 +18,9 @@
       ></nz-alert>
       <ng-template #descriptionTemplate1>
         <h5 nz-typography>
-          Commercial bank onboarding,please input the following information.
+          To complete your onboarding as a commercial bank, please submit the
+          following information. The Custodian Bank will process your online
+          application within 3 to 5 business days.
         </h5>
       </ng-template>
     </ng-container>
@@ -41,8 +43,23 @@
               <div nz-col nzSpan="12" class="enterpriseName">
                 <nz-form-item>
                   <nz-form-label nzRequired nzSpan="24"
-                    >Commercial Bank Name</nz-form-label
-                  >
+                    >Commercial Bank Name
+                    <i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The name of the commercial bank you provided when submitting the onboarding application to the custodian bank.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
                   <nz-form-control [nzErrorTip]="enterpriseError">
                     <div nz-row [formGroup]="validateForm">
                       <div nz-col nzSpan="24">
@@ -65,7 +82,24 @@
               </div>
               <div nz-col nzSpan="12">
                 <nz-form-item>
-                  <nz-form-label nzRequired nzSpan="24">BIC </nz-form-label>
+                  <nz-form-label nzRequired nzSpan="24"
+                    >BIC
+                    <i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The BIC you provided when submitting your onboarding application to the custodian bank.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
                   <nz-form-control [nzErrorTip]="bicError">
                     <div nz-row [formGroup]="validateForm">
                       <div nz-col nzSpan="24">
@@ -144,13 +178,43 @@
         </div>
         <div nz-row nzJustify="center" nzAlign="middle">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <div class="onboarding-title">Currency Information</div>
+            <div class="onboarding-title">
+              Currency Information
+              <i
+                class="m-l-5"
+                style="color: #3c5686; font-size: 20px"
+                nz-icon
+                nzType="question-circle"
+                nzTooltipPlacement="right"
+                nzTheme="fill"
+                nz-tooltip
+                nzTooltipTitle="The system will automatically create wallet information to enable your access to the currency system. The wallet's private key will be securely stored in your local system."
+                nzTooltipColor="#3c5686"
+                nzTooltipTrigger="click"
+                nzTooltipOverlayClassName="buils"
+              ></i>
+            </div>
           </div>
         </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
             <nz-form-label nzRequired nzSpan="10"
               >Custodian Bank
+              <i
+                class="m-l-5"
+                style="color: #3c5686; font-size: 20px"
+                nz-icon
+                nzType="question-circle"
+                nzTooltipPlacement="right"
+                nzTheme="fill"
+                nz-tooltip
+                [nzTooltipTitle]="
+                  'Your default custodian bank information associated with your account.'
+                "
+                nzTooltipColor="#3c5686"
+                nzTooltipTrigger="click"
+                nzTooltipOverlayClassName="buils"
+              ></i>
             </nz-form-label>
             <nz-form-control [nzErrorTip]="centralBankError">
               <div nz-row [formGroup]="validateForm">
@@ -182,7 +246,24 @@
             <div nz-row nzJustify="space-between" nzGutter="8">
               <div nz-col nzSpan="12" class="enterpriseName">
                 <nz-form-item>
-                  <nz-form-label nzRequired nzSpan="24">Currency</nz-form-label>
+                  <nz-form-label nzRequired nzSpan="24"
+                    >Currency
+                    <i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The digital currency information of the custodian bank you have accessed.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
                   <nz-form-control [nzErrorTip]="currencyError">
                     <div nz-row [formGroup]="validateForm">
                       <div nz-col nzSpan="24">
@@ -207,6 +288,21 @@
                 <nz-form-item>
                   <nz-form-label nzRequired nzSpan="24"
                     >Blockchain
+                    <i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The name of the blockchain network on which the digital currency smart contract of your connected custodian bank is deployed.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i>
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="blockchainError">
                     <div nz-row [formGroup]="validateForm">
@@ -373,14 +469,14 @@
                         >
                           Interbank Cross-border Settlement<i
                             class="m-l-5"
-                            style="color: #3c5686"
+                            style="color: #3c5686; font-size: 20px"
                             nz-icon
                             nzType="question-circle"
                             nzTooltipPlacement="right"
                             nzTheme="fill"
                             nz-tooltip
                             [nzTooltipTitle]="
-                              'Interbank cross-border settlement refers to the process by whichfinancial institutions, typically banks, exchange currencies and settletransactions on behalf of their clients across national borders.'
+                              'Cross-border settlements between commercial banks'
                             "
                             nzTooltipColor="#3c5686"
                             nzTooltipTrigger="click"
@@ -404,14 +500,14 @@
                           formControlName="paymentStatus"
                           >Cross-border Payment & Remittance<i
                             class="m-l-5"
-                            style="color: #3c5686"
+                            style="color: #3c5686; font-size: 20px"
                             nz-icon
                             nzType="question-circle"
                             nzTooltipPlacement="right"
                             nzTheme="fill"
                             nz-tooltip
                             [nzTooltipTitle]="
-                              'Cross-border Payment & Remittance refers to the process oftransferring funds between two different countries or currencies'
+                              'Cross-border payment and remittance services for commercial bank customers.'
                             "
                             nzTooltipColor="#3c5686"
                             nzTooltipTrigger="click"

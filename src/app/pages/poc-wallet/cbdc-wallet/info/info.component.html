@@ -83,7 +83,7 @@
               [nzColon]="false"
               [nzBordered]="true"
             >
-              <nz-descriptions-item nzTitle="Transaction Hash">{{
+              <nz-descriptions-item [nzTitle]="hashTitleTpl">{{
                 info.txHash | map: 'nullValue'
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Transaction Time">{{
@@ -379,4 +379,20 @@
     >{{ chainAccountAddress === fromAccountAddress ? '-' : '+'
     }}{{ cbdcCount | map: 'toThousandthMark' }}</span
   >
+</ng-template>
+<ng-template #hashTitleTpl>
+  {{ 'Transaction Hash' }}
+  <i
+    class="m-l-5"
+    style="color: #3c5686; font-size: 20px"
+    nz-icon
+    nzType="question-circle"
+    nzTooltipPlacement="right"
+    nzTheme="fill"
+    nz-tooltip
+    [nzTooltipTitle]="'Transaction hash for successful wallet activation.'"
+    nzTooltipColor="#3c5686"
+    nzTooltipTrigger="click"
+    nzTooltipOverlayClassName="buils"
+  ></i>
 </ng-template>

@@ -33,15 +33,15 @@ const menuNav: Menu[] = [
     path: '/poc/poc-notifications/notifications',
     code: 'R0'
   },
-  {
-    fatherId: 0,
-    id: 2,
-    menuType: 'C',
-    code: 'R01',
-    menuGroup: true,
-    groupName: 'As a Commercial Bank',
-    groupCollapseName: 'Commercial'
-  },
+  // {
+  //   fatherId: 0,
+  //   id: 2,
+  //   menuType: 'C',
+  //   code: 'R01',
+  //   menuGroup: true,
+  //   groupName: 'As a Commercial Bank',
+  //   groupCollapseName: 'Commercial'
+  // },
   {
     menuName: 'Wallet Management',
     id: 3,
@@ -56,7 +56,7 @@ const menuNav: Menu[] = [
       {
         id: 1,
         fatherId: 3,
-        menuName: 'CBDC Wallet Management',
+        menuName: 'Wallet Management',
         open: false,
         selected: false,
         menuType: 'C',
@@ -195,26 +195,26 @@ const menuNav: Menu[] = [
     path: '/poc/poc-download-center/download-center',
     code: 'R0104'
   },
-  {
-    fatherId: 0,
-    id: 10,
-    menuType: 'C',
-    code: 'R02',
-    menuGroup: true,
-    groupName: 'As a Liquidity Provider',
-    groupCollapseName: 'Commercial'
-  },
-  {
-    menuName: 'Become A Liquidity Provider',
-    id: 11,
-    fatherId: 0,
-    icon: 'check-square',
-    open: false,
-    selected: false,
-    menuType: 'C',
-    path: '/poc/poc-activate-settlement/activate-settlement',
-    code: 'R0201'
-  },
+  // {
+  //   fatherId: 0,
+  //   id: 10,
+  //   menuType: 'C',
+  //   code: 'R02',
+  //   menuGroup: true,
+  //   groupName: 'As a Liquidity Provider',
+  //   groupCollapseName: 'Commercial'
+  // },
+  // {
+  //   menuName: 'Become A Liquidity Provider',
+  //   id: 11,
+  //   fatherId: 0,
+  //   icon: 'check-square',
+  //   open: false,
+  //   selected: false,
+  //   menuType: 'C',
+  //   path: '/poc/poc-activate-settlement/activate-settlement',
+  //   code: 'R0201'
+  // },
   {
     menuName: 'Capital Pool Management',
     id: 12,
@@ -293,15 +293,13 @@ const menuNav: Menu[] = [
     code: 'R0206'
   },
   {
+    menuName: 'System Management',
     id: 17,
     fatherId: 0,
     icon: 'user',
     open: false,
     selected: false,
     menuType: 'C',
-    menuGroup: true,
-    groupName: 'System Management',
-    groupCollapseName: 'System',
     path: '/poc/poc-system',
     code: 'R03',
     children: [

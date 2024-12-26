@@ -18,7 +18,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label>Wallet Address</nz-form-label>
+            <nz-form-label>Wallet Address </nz-form-label>
             <nz-form-control>
               <input
                 nz-input
@@ -190,16 +190,38 @@
       [tableConfig]="tableConfig"
       [tableData]="dataList"
     ></app-ant-table>
+    <ng-template #walletAdressTitleTpl>
+      {{ 'Wallet Address' }}
+      <i
+        class="m-l-5"
+        style="color: #3c5686; font-size: 20px"
+        nz-icon
+        nzType="question-circle"
+        nzTooltipPlacement="right"
+        nzTheme="fill"
+        nz-tooltip
+        [nzTooltipTitle]="
+          'The wallet address for the digital currency you have applied for within the Kissen network.'
+        "
+        nzTooltipColor="#3c5686"
+        nzTooltipTrigger="click"
+        nzTooltipOverlayClassName="buils"
+      ></i>
+    </ng-template>
     <ng-template #centralBankTpl>
       {{ 'Custodian Bank' }}
       <i
-        nz-tooltip
-        nzTooltipTitle="Bank for wallet address"
-        nzTooltipColor="#3C5686"
+        class="m-l-5"
+        style="color: #3c5686; font-size: 20px"
         nz-icon
-        nzType="info-circle"
+        nzType="question-circle"
+        nzTooltipPlacement="right"
         nzTheme="fill"
-        [nzTheme]="'twotone'"
+        nz-tooltip
+        [nzTooltipTitle]="'The custodian bank to which this wallet belongs.'"
+        nzTooltipColor="#3c5686"
+        nzTooltipTrigger="click"
+        nzTooltipOverlayClassName="buils"
       ></i>
     </ng-template>
     <ng-template #statusTpl let-state="state">
