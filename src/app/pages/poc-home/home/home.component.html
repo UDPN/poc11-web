@@ -2,7 +2,7 @@
 
 <div class="normal-table-wrap">
   <ng-container>
-    <nz-card>
+    <!-- <nz-card>
       <h4
         nz-typography
         class="menus-color"
@@ -10,7 +10,7 @@
       >
         {{ 'As a Commercial Bank' }}
       </h4>
-    </nz-card>
+    </nz-card> -->
     <nz-card nzTitle="" class="m-b-10">
       <div>
         <h5 nz-typography style="font-weight: 500">{{ 'Wallet Balance' }}</h5>
@@ -223,7 +223,7 @@
     </nz-card>
   </ng-container>
   <ng-container *ngIf="bankType === 2">
-    <nz-card>
+    <!-- <nz-card>
       <h4
         nz-typography
         class="menus-color"
@@ -231,7 +231,7 @@
       >
         {{ 'As a Liquidity Provider' }}
       </h4>
-    </nz-card>
+    </nz-card> -->
     <nz-card [nzTitle]="" class="m-b-10">
       <div *ngIf="approveCurrencyCount > 0">
         <h5 nz-typography style="font-weight: 500">

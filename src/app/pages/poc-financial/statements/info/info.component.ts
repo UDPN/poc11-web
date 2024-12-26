@@ -2,8 +2,8 @@
  * @Author: chenyuting
  * @Date: 2024-12-12 16:33:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-19 17:22:01
- * @Description: 
+ * @LastEditTime: 2024-12-26 16:02:15
+ * @Description:
  */
 /*
  * @Author: chenyuting
@@ -65,6 +65,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
   info: any = {};
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
+  exportRuleId: any = '';
   searchParam: Partial<SearchParam> = {
     fileId: '',
     exportState: '',
@@ -131,6 +132,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
     this.searchParam.txnTime = '';
     this.searchParam.fileId = '';
     this.searchParam.exportState = '';
+    this.searchParam.exportRuleId = this.exportRuleId;
     this.getDataList(this.tableQueryParams);
   }
 
@@ -140,6 +142,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
 
   getInfo(): void {
     this.routeInfo.queryParams.subscribe((params) => {
+      this.exportRuleId = params['exportRuleId'];
       this.searchParam.exportRuleId = params['exportRuleId'];
       this.statementsService
         .taskDetail({ exportRuleId: params['exportRuleId'] })
@@ -158,20 +161,22 @@ export class InfoComponent implements OnInit, AfterViewInit {
       nzOnOk: () =>
         new Promise((resolve, reject) => {
           this.statementsService.taskDelete({ exportTaskId }).subscribe({
-            next: res => {
+            next: (res) => {
               resolve(true);
               if (res) {
-                this.message.success(`Delete successfully`, {nzDuration: 1000}).onClose!.subscribe(() => {
-                  this.getDataList();
-                });
+                this.message
+                  .success(`Delete successfully`, { nzDuration: 1000 })
+                  .onClose!.subscribe(() => {
+                    this.getDataList();
+                  });
               }
               this.cdr.markForCheck();
             },
-            error: err => {
+            error: (err) => {
               reject(true);
               this.cdr.markForCheck();
-            },
-          })
+            }
+          });
         }).catch(() => console.log('Oops errors!'))
     });
   }
@@ -180,7 +185,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
     this.tableLoading(true);
     this.commonService
       .download(busId, busType)
-      .pipe(finalize(() => (this.tableLoading(false))))
+      .pipe(finalize(() => this.tableLoading(false)))
       .subscribe({
         next: (res) => {
           if (res) {
