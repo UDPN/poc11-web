@@ -154,7 +154,6 @@ export class AddComponent implements OnInit, AfterViewInit {
             });
 
             const transactionsArray = group.get('transactions') as FormArray;
-
             rule.loanRuleList.forEach((loan: any) => {
               const transaction = this.fb.group({
                 debitCredit: [
@@ -280,7 +279,7 @@ export class AddComponent implements OnInit, AfterViewInit {
 
         for (let i = 0; i < defaultRows; i++) {
           const transaction = this.fb.group({
-            debitCredit: ['Debit', Validators.required],
+            debitCredit: [i === 0 ? 'Debit' : 'Credit', Validators.required],
             accountCode: ['', Validators.required],
             accountName: ['', Validators.required],
             amount: [
