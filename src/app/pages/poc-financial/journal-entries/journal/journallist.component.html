@@ -91,7 +91,7 @@
     </form>
   </nz-card>
 
-  <nz-card [nzTitle]="'Transaction List'">
+  <nz-card [nzTitle]="'Transaction List'" [nzExtra]="ExtraTemplate">
     <nz-table
       #basicTable
       [nzData]="dataList"
@@ -180,3 +180,13 @@
     </nz-table>
   </nz-card>
 </div>
+<ng-template #ExtraTemplate>
+  <button
+    nz-button
+    [nzType]="'primary'"
+    (click)="getExport()"
+    [nzLoading]="exportLoading"
+  >
+    Export
+  </button>
+</ng-template>

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-20 10:30:02
+ * @LastEditTime: 2024-12-27 09:57:54
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -27,7 +27,8 @@ export interface Sdata {
 export interface Cdata {
   exportType: string | number;
   moduleType: string | number;
-  transactionRecordsListReqVO: any;
+  transactionRecordsListReqVO?: any;
+  billTxListReqVO?: any;
 }
 
 @Injectable({
@@ -104,7 +105,7 @@ export class StatementsService {
     return this.http.post(`/v1/export/task/delete`, params);
   }
 
-  public createExport(params: Cdata ): Observable<any> {
+  public createExport(params: Cdata): Observable<any> {
     return this.http.post(`/v1/export/task/create`, params);
   }
   public taskDetailRecordsList(

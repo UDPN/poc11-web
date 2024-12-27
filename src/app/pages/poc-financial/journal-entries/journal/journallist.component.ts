@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JournalService } from '@app/core/services/http/poc-financial/journal/journal.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -7,6 +14,9 @@ import { DatePipe } from '@angular/common';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { timeToTimestamp } from '@app/utils/tools';
+import { finalize } from 'rxjs';
+import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 
 @Component({
   selector: 'app-journallist',
@@ -35,6 +45,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
   particularsTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
   dataList: any[] = [];
+  exportLoading: boolean = false;
   searchParam: any = {
     ruleId: '',
     dateTime: [],
@@ -69,7 +80,8 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private date: DatePipe,
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private statementsService: StatementsService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -83,7 +95,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initTable();
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['ruleId']) {
         this.searchParam.ruleId = params['ruleId'];
         this.getDataList(this.tableQueryParams);
@@ -169,11 +181,13 @@ export class JournallistComponent implements OnInit, AfterViewInit {
 
     const params = {
       pageSize: this.tableConfig.pageSize!,
-      pageNum: typeof e === 'number' ? e : (e?.pageIndex || this.tableConfig.pageIndex!),
+      pageNum:
+        typeof e === 'number' ? e : e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
 
-    this.journalService.fetchTxList(params.pageNum, params.pageSize, params.filters)
+    this.journalService
+      .fetchTxList(params.pageNum, params.pageSize, params.filters)
       .subscribe({
         next: (response: any) => {
           if (response.code === 0) {
@@ -187,39 +201,41 @@ export class JournallistComponent implements OnInit, AfterViewInit {
             });
 
             // 转换为显示所需的格式
-            this.dataList = Array.from(groupedData.values()).map((group, index) => {
-              // 确保每组至少有一条记录
-              const firstRecord = group[0];
-              
-              // 按照 loanType 排序交易记录
-              const sortedTransactions = group.sort((a, b) => {
-                // 首先按照 loanType 排序
-                if (a.loanType !== b.loanType) {
-                  return a.loanType - b.loanType;
-                }
-                // 如果 loanType 相同，按照 subjectCode 排序
-                return a.subjectCode.localeCompare(b.subjectCode);
-              });
+            this.dataList = Array.from(groupedData.values()).map(
+              (group, index) => {
+                // 确保每组至少有一条记录
+                const firstRecord = group[0];
 
-              // 创建合并后的记录
-              const mergedRecord = {
-                key: (params.pageNum - 1) * 10 + index + 1,
-                traceId: firstRecord.traceId,
-                dateTime: firstRecord.dateTime,
-                txType: firstRecord.txType,
-                blockchainName: firstRecord.blockchainName,
-                ruleId: firstRecord.ruleId,
-                transactions: sortedTransactions.map(item => ({
-                  subjectCode: item.subjectCode,
-                  subjectTitle: item.subjectTitle,
-                  particularsAccount: item.particularsAccount,
-                  txAmount: item.txAmount,
-                  loanType: item.loanType
-                }))
-              };
+                // 按照 loanType 排序交易记录
+                const sortedTransactions = group.sort((a, b) => {
+                  // 首先按照 loanType 排序
+                  if (a.loanType !== b.loanType) {
+                    return a.loanType - b.loanType;
+                  }
+                  // 如果 loanType 相同，按照 subjectCode 排序
+                  return a.subjectCode.localeCompare(b.subjectCode);
+                });
 
-              return mergedRecord;
-            });
+                // 创建合并后的记录
+                const mergedRecord = {
+                  key: (params.pageNum - 1) * 10 + index + 1,
+                  traceId: firstRecord.traceId,
+                  dateTime: firstRecord.dateTime,
+                  txType: firstRecord.txType,
+                  blockchainName: firstRecord.blockchainName,
+                  ruleId: firstRecord.ruleId,
+                  transactions: sortedTransactions.map((item) => ({
+                    subjectCode: item.subjectCode,
+                    subjectTitle: item.subjectTitle,
+                    particularsAccount: item.particularsAccount,
+                    txAmount: item.txAmount,
+                    loanType: item.loanType
+                  }))
+                };
+
+                return mergedRecord;
+              }
+            );
 
             this.tableConfig.total = response.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
@@ -270,11 +286,11 @@ export class JournallistComponent implements OnInit, AfterViewInit {
 
   copyTraceId(traceId: string, event: MouseEvent): void {
     event.stopPropagation();
-    
+
     const tempInput = document.createElement('input');
     tempInput.value = traceId;
     document.body.appendChild(tempInput);
-    
+
     tempInput.select();
     try {
       document.execCommand('copy');
@@ -283,7 +299,54 @@ export class JournallistComponent implements OnInit, AfterViewInit {
       this.message.error('Copy failed');
       console.error('Copy failed:', err);
     }
-    
+
     document.body.removeChild(tempInput);
+  }
+
+  getExport() {
+    this.exportLoading = true;
+    this.statementsService
+      .createExport({
+        exportType: 0,
+        moduleType: 1,
+        billTxListReqVO: {
+          ruleId: this.searchParam.ruleId || '',
+          traceId: this.searchParam.traceId || '',
+          txTpye: this.searchParam.txTpye || '',
+          startTime: this.searchParam.dateTime[0]
+            ? timeToTimestamp(
+                this.date.transform(
+                  this.searchParam.dateTime[0],
+                  'yyyy-MM-dd'
+                ) + ' 00:00:00'
+              )
+            : '',
+          endTime: this.searchParam.dateTime[1]
+            ? timeToTimestamp(
+                this.date.transform(
+                  this.searchParam.dateTime[1],
+                  'yyyy-MM-dd'
+                ) + ' 23:59:59'
+              )
+            : ''
+        }
+      })
+      .pipe(finalize(() => this.exportLoading === false))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message.success('Export successfully!', {
+              nzDuration: 1000
+            });
+          }
+          this.getDataList();
+          this.exportLoading === false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.exportLoading === false;
+          this.cdr.markForCheck();
+        }
+      });
   }
 }

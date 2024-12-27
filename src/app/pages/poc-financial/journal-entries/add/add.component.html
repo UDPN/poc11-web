@@ -92,7 +92,7 @@
   <nz-card
     nzTitle="Transaction Details"
     class="mt-4"
-    *nzIf="tokenList && tokenList.length"
+    *ngIf="tokenList && tokenList.length"
   >
     <div class="transaction-form">
       <form nz-form [formGroup]="transactionForm">
