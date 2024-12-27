@@ -236,6 +236,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
                 return mergedRecord;
               }
             );
+            console.log(response.data.page, 'aaaa');
 
             this.tableConfig.total = response.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
@@ -340,11 +341,11 @@ export class JournallistComponent implements OnInit, AfterViewInit {
             });
           }
           this.getDataList();
-          this.exportLoading === false;
+          this.exportLoading = false;
           this.cdr.markForCheck();
         },
         error: (err) => {
-          this.exportLoading === false;
+          this.exportLoading = false;
           this.cdr.markForCheck();
         }
       });

@@ -193,7 +193,9 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
         this.info = res[0];
         this.getWalletInfo(this.info?.currency);
         this.centralBankId = this.info?.centralBankId;
-        this.getChange(this.tableQueryParams, this.info?.centralBankId);
+        if (this.info?.centralBankId) {
+          this.getChange(this.tableQueryParams, this.info?.centralBankId);
+        }
         this.cdr.markForCheck();
         return;
       }

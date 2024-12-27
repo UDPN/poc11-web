@@ -153,7 +153,8 @@
             <td>{{ transaction.subjectCode }}</td>
             <td>{{ transaction.subjectTitle }}</td>
             <td style="word-break: break-all; text-align: left">
-              {{ transaction.particularsAccount }}
+              {{ getTransactionTypeName(data.txType) }}{{ ' ABCoin ( '
+              }}{{ transaction.particularsAccount | map: 'showPart' }}{{ ' )' }}
             </td>
             <td>
               {{

@@ -42,17 +42,17 @@ const routes: Routes = [
         path: 'poc-bank',
         data: { preload: true },
         loadChildren: () =>
-          import(
-            '../../pages/poc-bank/poc-bank.module'
-          ).then((m) => m.PocBankModule)
+          import('../../pages/poc-bank/poc-bank.module').then(
+            (m) => m.PocBankModule
+          )
       },
       {
         path: 'poc-fx-rate',
         data: { preload: true },
         loadChildren: () =>
-          import(
-            '../../pages/poc-fx-rate/poc-fx-rate.module'
-          ).then((m) => m.PocFxRateModule)
+          import('../../pages/poc-fx-rate/poc-fx-rate.module').then(
+            (m) => m.PocFxRateModule
+          )
       },
       {
         path: 'poc-fx-transactions',
@@ -127,15 +127,15 @@ const routes: Routes = [
           )
       },
       {
-        path: 'poc-download-center', 
+        path: 'poc-download-center',
         data: { preload: true },
         loadChildren: () =>
-          import('../../pages/poc-download-center/poc-download-center.module').then(
-            (m) => m.PocDownloadCenterModule
-          )
+          import(
+            '../../pages/poc-download-center/poc-download-center.module'
+          ).then((m) => m.PocDownloadCenterModule)
       },
       {
-        path: 'poc-bank-account', 
+        path: 'poc-bank-account',
         data: { preload: true },
         loadChildren: () =>
           import('../../pages/poc-bank-account/poc-bank-account.module').then(
@@ -143,11 +143,19 @@ const routes: Routes = [
           )
       },
       {
-        path: 'poc-notifications', 
+        path: 'poc-notifications',
         data: { preload: true },
         loadChildren: () =>
           import('../../pages/poc-notifications/poc-notifications.module').then(
             (m) => m.PocNotificationsModule
+          )
+      },
+      {
+        path: 'poc-access-key',
+        // data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-access-key/poc-access-key.module').then(
+            (m) => m.PocAccessKeyModule
           )
       },
       {

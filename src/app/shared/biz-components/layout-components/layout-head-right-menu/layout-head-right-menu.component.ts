@@ -93,7 +93,9 @@ export class LayoutHeadRightMenuComponent implements OnInit, OnDestroy {
         });
       });
   }
-
+  openApiAccessKey() {
+    this.router.navigateByUrl('/poc/poc-access-key/access-key');
+  }
   showSearchModal(): void {
     const modalOptions: ModalOptions = {
       nzClosable: false,

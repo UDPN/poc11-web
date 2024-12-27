@@ -37,12 +37,23 @@
         <i nz-icon nzType="bell" nzTheme="outline"></i>
       </nz-badge>
     </span> -->
-    <span class="bst-header-icon" nz-dropdown [nzDropdownMenu]="userSettingMenu">
+    <span
+      class="bst-header-icon"
+      nz-dropdown
+      [nzDropdownMenu]="userSettingMenu"
+    >
       <!-- <img class="avatar" src="assets/imgs/default_face.png" alt="" /> -->
-      <nz-avatar [nzText]="this.clientName.slice(0, 1)" class="avatar avatar-color"></nz-avatar>
-      <span class="base-font-size" [style]="{
-        color: '#fff'
-      }">{{ this.clientName }}</span>
+      <nz-avatar
+        [nzText]="this.clientName.slice(0, 1)"
+        class="avatar avatar-color"
+      ></nz-avatar>
+      <span
+        class="base-font-size"
+        [style]="{
+          color: '#fff'
+        }"
+        >{{ this.clientName }}</span
+      >
     </span>
     <nz-dropdown-menu #userSettingMenu>
       <ul nz-menu>
@@ -62,6 +73,12 @@
           <a>
             <i nz-icon nzType="lock" nzTheme="outline" class="m-r-8"></i>
             <span>Change Password</span>
+          </a>
+        </li>
+        <li nz-menu-item (click)="openApiAccessKey()">
+          <a>
+            <i nz-icon nzType="key" nzTheme="outline" class="m-r-8"></i>
+            <span>OpenAPI Access Key</span>
           </a>
         </li>
         <!-- <li nz-menu-divider></li>
