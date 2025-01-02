@@ -52,7 +52,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private updateStoreService: UpdateStoreService,
     private destroy$: DestroyService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     // this._commonService
     //   .commonApi({
@@ -80,7 +80,7 @@ export class EditComponent implements OnInit, AfterViewInit {
       contactName: [null, [Validators.required]],
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
-      detailedAddress: [null, [Validators.required]],
+      detailedAddress: [null],
       interbankSettlementStatus: [1, [Validators.required]],
       paymentStatus: [null],
       userNotice: [null, [Validators.required]]
@@ -89,7 +89,9 @@ export class EditComponent implements OnInit, AfterViewInit {
       this.validateForm.get('spName')?.setValue(res.spName);
       this.validateForm.get('bankBic')?.setValue(res.bankBic);
       this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
-      this.validateForm.get('spBriefIntroduction')?.setValue(res.spBriefIntroduction);
+      this.validateForm
+        .get('spBriefIntroduction')
+        ?.setValue(res.spBriefIntroduction);
       this.validateForm.get('spDescription')?.setValue(res.spDescription);
       this.validateForm.get('detailedAddress')?.setValue(res.detailedAddress);
       this.validateForm.get('peggedCurrency')?.setValue(res.peggedCurrency);
@@ -97,7 +99,9 @@ export class EditComponent implements OnInit, AfterViewInit {
       this.validateForm.get('contactName')?.setValue(res.contactName);
       this.validateForm.get('mobileNumber')?.setValue(res.mobileNumber);
       this.validateForm.get('email')?.setValue(res.email);
-      this.validateForm.get('paymentStatus')?.setValue(res.paymentStatus === 1 ? true : false);
+      this.validateForm
+        .get('paymentStatus')
+        ?.setValue(res.paymentStatus === 1 ? true : false);
       this.validateForm.get('userNotice')?.setValue(true);
     });
   }
@@ -122,7 +126,9 @@ export class EditComponent implements OnInit, AfterViewInit {
     return {};
   };
   goToPdf() {
-    window.open('/assets/network-access-agreement/network-access-agreement.pdf');
+    window.open(
+      '/assets/network-access-agreement/network-access-agreement.pdf'
+    );
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -164,10 +170,14 @@ export class EditComponent implements OnInit, AfterViewInit {
             contactName: this.validateForm.get('contactName')?.value,
             detailedAddress: this.validateForm.get('detailedAddress')?.value,
             email: this.validateForm.get('email')?.value,
-            interbankSettlementStatus: this.validateForm.get('interbankSettlementStatus')?.value,
+            interbankSettlementStatus: this.validateForm.get(
+              'interbankSettlementStatus'
+            )?.value,
             mobileNumber: this.validateForm.get('mobileNumber')?.value,
-            paymentStatus: this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
-            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')?.value,
+            paymentStatus:
+              this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
+            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')
+              ?.value,
             spDescription: this.validateForm.get('spDescription')?.value
           })
           .subscribe((result) => {
@@ -195,12 +205,9 @@ export class EditComponent implements OnInit, AfterViewInit {
       this.fileImg = reader.result;
       this.fileImgWord = $event.target.files[0];
       this.cdr.markForCheck();
-      this.validateForm
-        .get('fileName')
-        ?.setValue(this.fileImgWord['name']);
+      this.validateForm.get('fileName')?.setValue(this.fileImgWord['name']);
       this.validateForm.get('businessLicenseUrl')?.setValue(this.fileImg);
       this.validateForm.get('fileName')?.setValue(this.fileImgWord['name']);
-
     };
   }
 

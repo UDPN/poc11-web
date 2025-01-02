@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 13:39:28
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 15:29:36
+ * @LastEditTime: 2025-01-02 11:04:45
  * @Description: 
 -->
 <div>
@@ -186,7 +186,7 @@
                 nzTooltipPlacement="right"
                 nzTheme="fill"
                 nz-tooltip
-                nzTooltipTitle="The system will automatically create wallet information to enable your access to the currency system. The wallet's private key will be securely stored in your local system."
+                nzTooltipTitle="The system will automatically create the master wallet to enable you to access the token-based currency systems and the sandbox."
                 nzTooltipColor="#3c5686"
                 nzTooltipTrigger="click"
                 nzTooltipOverlayClassName="buils"
@@ -244,7 +244,7 @@
               <div nz-col nzSpan="12" class="enterpriseName">
                 <nz-form-item>
                   <nz-form-label nzRequired nzSpan="24"
-                    >Currency<i
+                    >Home Currency<i
                       class="m-l-5"
                       style="color: #3c5686; font-size: 20px"
                       nz-icon
@@ -274,7 +274,7 @@
                     </div>
                     <ng-template #currencyError let-control>
                       <ng-container *ngIf="control.hasError('required')"
-                        >Please input your Currency</ng-container
+                        >Please input your Home Currency</ng-container
                       >
                     </ng-template>
                   </nz-form-control>
@@ -413,9 +413,7 @@
         </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <nz-form-label nzRequired nzSpan="10"
-              >Detailed Address
-            </nz-form-label>
+            <nz-form-label nzSpan="10">Detailed Address </nz-form-label>
             <nz-form-control [nzErrorTip]="addressError">
               <div nz-row [formGroup]="validateForm">
                 <div nz-col nzSpan="24">
@@ -437,7 +435,7 @@
         </div>
         <div nz-row nzJustify="center" nzAlign="middle">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <div class="onboarding-title">Activate Service</div>
+            <div class="onboarding-title">Activate Services</div>
           </div>
         </div>
         <div
@@ -501,9 +499,7 @@
                             nzTooltipPlacement="right"
                             nzTheme="fill"
                             nz-tooltip
-                            [nzTooltipTitle]="
-                              'Cross-border payment and remittance services for commercial bank customers.'
-                            "
+                            [nzTooltipTitle]="'enterprise customers.'"
                             nzTooltipColor="#3c5686"
                             nzTooltipTrigger="click"
                             nzTooltipOverlayClassName="buils"
@@ -519,7 +515,7 @@
         </div>
         <div nz-row nzJustify="center" nzAlign="middle">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <div class="onboarding-title">User Notice</div>
+            <div class="onboarding-title">Terms of Use</div>
           </div>
         </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
@@ -536,7 +532,7 @@
                     '*'
                   }}</span>
                   <label nz-checkbox formControlName="userNotice">
-                    I have read and agree the
+                    I have read and agree to
                     <a (click)="goToPdf()">
                       <span>{{
                         '"' +
@@ -549,7 +545,7 @@
               </div>
               <ng-template #userNoticeError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please check the User Notice</ng-container
+                  >Please check the Terms of Use</ng-container
                 >
               </ng-template>
             </nz-form-control>

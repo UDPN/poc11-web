@@ -347,6 +347,17 @@ const menuNav: Menu[] = [
       {
         id: 5,
         fatherId: 17,
+        menuName: 'User Manual',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R0305',
+        newLinkFlag: 1,
+        path: ''
+      },
+      {
+        id: 6,
+        fatherId: 17,
         menuName: 'UI Configuration',
         open: false,
         selected: false,
@@ -355,7 +366,7 @@ const menuNav: Menu[] = [
         path: '/poc/poc-system/system-style'
       }
     ]
-  },
+  }
   // {
   //   menuName: 'Access Key',
   //   id: 5,

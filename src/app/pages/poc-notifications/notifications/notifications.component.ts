@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 11:23:10
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 10:20:26
+ * @LastEditTime: 2025-01-02 11:08:29
  * @Description:
  */
 /*
@@ -36,9 +36,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   headerExtra!: TemplateRef<NzSafeAny>;
   tabIndex: number = 0;
   Tabs = [
-    { name: 'System Notices', count: 0 },
-    { name: 'Internal Notifications', count: 0 },
-    { name: 'Interactive Messages', count: 0 }
+    { name: 'Network Notifications', count: 0 },
+    { name: 'Transaction Messages', count: 0 },
+    { name: 'Interbank Messages', count: 0 }
   ];
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',

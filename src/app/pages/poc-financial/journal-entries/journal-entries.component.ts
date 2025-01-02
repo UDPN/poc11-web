@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -126,7 +133,7 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-    
+
     this.journalService
       .fetchList(params.pageNum, params.pageSize, params.filters)
       .subscribe({
@@ -168,11 +175,11 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
           field: 'tokenName',
           width: 120
         },
-        {
-          title: 'Blockchain',
-          field: 'blockchainName',
-          width: 150
-        },
+        // {
+        //   title: 'Blockchain',
+        //   field: 'blockchainName',
+        //   width: 150
+        // },
         {
           title: 'Pegged Currency',
           field: 'currencySymbol',
@@ -229,7 +236,11 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
         this.journalService.updateStatus({ ruleId: id, state }).subscribe({
           next: (res) => {
             if (res.code == 0) {
-              this.message.success(`${statusText.charAt(0).toUpperCase() + statusText.slice(1)} successfully`);
+              this.message.success(
+                `${
+                  statusText.charAt(0).toUpperCase() + statusText.slice(1)
+                } successfully`
+              );
               this.getDataList(this.tableQueryParams);
               this.cdr.detectChanges();
             } else {
@@ -250,9 +261,11 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
       next: (res) => {
         if (res.code === 0) {
           this.tokenList = res.data;
-          this.currencyList = Array.from(new Set(res.data.map((item: any) => item.currencySymbol)))
+          this.currencyList = Array.from(
+            new Set(res.data.map((item: any) => item.currencySymbol))
+          )
             .filter(Boolean)
-            .map(currency => ({ value: currency, label: currency }));
+            .map((currency) => ({ value: currency, label: currency }));
           this.cdr.markForCheck();
         }
       },
@@ -266,7 +279,9 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
     this.journalService.getBlockchainList().subscribe({
       next: (res) => {
         if (res.code === 0) {
-          this.blockchainList = res.data.filter((item: any) => item.status === 1);
+          this.blockchainList = res.data.filter(
+            (item: any) => item.status === 1
+          );
           this.cdr.markForCheck();
         }
       },

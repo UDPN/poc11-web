@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2023-12-20 16:02:48
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-04-23 09:55:30
+ * @LastEditTime: 2025-01-02 15:27:26
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -11,66 +11,94 @@
     <form nz-form [formGroup]="validateForm">
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-30 m-t-50">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">
-            System Name
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10"> System Name </nz-form-label>
           <nz-form-control [nzErrorTip]="systemNameError">
             <div nz-row>
               <div nz-col nzSpan="12">
-                <input nz-input formControlName="systemName" maxlength="100" />
+                <input
+                  nz-input
+                  class="onboard-disabled onboard-input"
+                  formControlName="systemName"
+                  maxlength="100"
+                />
               </div>
             </div>
             <ng-template #systemNameError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please input your System Name</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your System Name</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-30">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">
-            Logo
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10"> Logo </nz-form-label>
           <nz-form-control [nzErrorTip]="logoError">
             <div nz-row [formGroup]="validateForm">
-              <div nz-col nzSpan="24" style="text-align: left;" class="m-b-20">
-                <button nz-button [nzSize]="'large'" nzType="primary" (click)='upFiles.click()'>Upload</button>
-                <input type="file" accept="image/png" hidden #upFiles (change)="uploadFileImg($event)" />
+              <div nz-col nzSpan="24" style="text-align: left">
+                <!-- <button
+                  nz-button
+                  [nzSize]="'large'"
+                  nzType="primary"
+                  (click)="upFiles.click()"
+                >
+                  Upload
+                </button> -->
+                <input
+                  type="file"
+                  accept="image/png"
+                  hidden
+                  #upFiles
+                  (change)="uploadFileImg($event)"
+                />
               </div>
               <div nz-col nzSpan="24" class="m-b-10">
                 <div class="onboard-div onboard-postion">
-                  <input type="text" hidden formControlName="logoFileHash" nz-input />
+                  <input
+                    type="text"
+                    hidden
+                    formControlName="logoFileHash"
+                    nz-input
+                  />
                   <img nz-image [nzSrc]="fileImg" *ngIf="fileImg" alt="" />
                 </div>
               </div>
               <div nz-col nzSpan="12">
                 <div class="onboard-div-info">
-                  It is recommended to provide pictures with 180 * 40 (PNG / JPG / GIF / BMP /
-                  JPEG)
-                  pixels and size less than 10M.
+                  It is recommended to provide pictures with 180 * 40 (PNG / JPG
+                  / GIF / BMP / JPEG) pixels and size less than 10M.
                 </div>
               </div>
             </div>
             <ng-template #logoError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please upload your Logo</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please upload your Logo</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-30">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">
-            Theme Color
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10"> Theme Color </nz-form-label>
           <nz-form-control [nzErrorTip]="themeColorError">
             <div nz-row>
               <div nz-col nzSpan="24">
-                <nz-color-picker nzShowText nzFormat="hex" formControlName="themeColor"
-                  (nzOnChange)="changeColor(this.validateForm.get('themeColor')?.value)"></nz-color-picker>
+                <nz-color-picker
+                  nzShowText
+                  nzFormat="hex"
+                  formControlName="themeColor"
+                  (nzOnChange)="
+                    changeColor(this.validateForm.get('themeColor')?.value)
+                  "
+                ></nz-color-picker>
               </div>
             </div>
             <ng-template #themeColorError let-control>
-              <ng-container *ngIf="control.hasError('required')">Please select your Theme Color</ng-container>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please select your Theme Color</ng-container
+              >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -79,8 +107,15 @@
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
           <div nz-row>
             <div nz-col nzSpan="24" style="text-align: end">
-              <button nz-button *appAuth="'R030401'" [nzSize]="'large'" nzType="primary" [nzLoading]="isLoading"
-                [disabled]="!this.validateForm.valid" (click)="onSubmit()">
+              <button
+                nz-button
+                *appAuth="'R030401'"
+                [nzSize]="'large'"
+                nzType="primary"
+                [nzLoading]="isLoading"
+                [disabled]="!this.validateForm.valid"
+                (click)="onSubmit()"
+              >
                 Submit
               </button>
             </div>

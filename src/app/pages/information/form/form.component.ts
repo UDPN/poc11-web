@@ -64,7 +64,7 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     //   });
     this.validateForm.get('userNotice')?.valueChanges.subscribe((item: any) => {
       if (item === false) {
-        this.validateForm.get('userNotice')?.setValue(null)
+        this.validateForm.get('userNotice')?.setValue(null);
       }
     });
   }
@@ -84,7 +84,7 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
       contactName: [null, [Validators.required]],
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
-      detailedAddress: [null, [Validators.required]],
+      detailedAddress: [null],
       interbankSettlementStatus: [1, [Validators.required]],
       paymentStatus: [null],
       userNotice: [null, [Validators.required]]
@@ -102,7 +102,9 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
   }
 
   goToPdf() {
-    window.open('/assets/network-access-agreement/network-access-agreement.pdf');
+    window.open(
+      '/assets/network-access-agreement/network-access-agreement.pdf'
+    );
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -164,10 +166,14 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
             contactName: this.validateForm.get('contactName')?.value,
             detailedAddress: this.validateForm.get('detailedAddress')?.value,
             email: this.validateForm.get('email')?.value,
-            interbankSettlementStatus: this.validateForm.get('interbankSettlementStatus')?.value,
+            interbankSettlementStatus: this.validateForm.get(
+              'interbankSettlementStatus'
+            )?.value,
             mobileNumber: this.validateForm.get('mobileNumber')?.value,
-            paymentStatus: this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
-            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')?.value,
+            paymentStatus:
+              this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
+            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')
+              ?.value,
             spDescription: this.validateForm.get('spDescription')?.value
           })
           .subscribe((result) => {

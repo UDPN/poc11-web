@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 15:58:25
+ * @LastEditTime: 2025-01-02 11:11:29
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
@@ -173,7 +173,7 @@
           <div nz-col nzSpan="24">
             <nz-form-item>
               <nz-form-label nzRequired nzSpan="24" class="text-left">
-                Recipient
+                {{'Recipient'}}{{ visibleTitle === 'Compose' ? '(Admin to Admin only)' : ''}} 
               </nz-form-label>
               <div nz-row [nzGutter]="24" nzJustify="space-between" nzAlign="middle">
                   <nz-form-control

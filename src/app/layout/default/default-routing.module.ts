@@ -152,7 +152,7 @@ const routes: Routes = [
       },
       {
         path: 'poc-access-key',
-        // data: { preload: true },
+        data: { preload: true },
         loadChildren: () =>
           import('../../pages/poc-access-key/poc-access-key.module').then(
             (m) => m.PocAccessKeyModule
