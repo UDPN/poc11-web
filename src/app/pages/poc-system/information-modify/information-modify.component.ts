@@ -220,31 +220,37 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       nzTitle: `Are you sure you want to modify the information of this ${name} ?`,
       nzOnOk: () => {
         this.onSubmitStatus = true;
-        this._informationService.editForm({
-          spName: this.validateForm.get('spName')?.value,
-          bankBic: this.validateForm.get('bankBic')?.value,
-          contactName: this.validateForm.get('contactName')?.value,
-          detailedAddress: this.validateForm.get('detailedAddress')?.value,
-          email: this.validateForm.get('email')?.value,
-          interbankSettlementStatus: this.validateForm.get('interbankSettlementStatus')?.value,
-          mobileNumber: this.validateForm.get('mobileNumber')?.value,
-          paymentStatus: this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
-          spBriefIntroduction: this.validateForm.get('spBriefIntroduction')?.value,
-          spDescription: this.validateForm.get('spDescription')?.value,
-          spCode: this.info.spCode
-        }).subscribe((result) => {
-          this.onSubmitStatus = false;
-          this.modalService
-            .success({
-              nzTitle: 'success',
-              nzContent: 'edit success !'
-            })
-            .afterClose.subscribe((_) => {
-              this.getInfo();
-            });
+        this._informationService
+          .editForm({
+            spName: this.validateForm.get('spName')?.value,
+            bankBic: this.validateForm.get('bankBic')?.value,
+            contactName: this.validateForm.get('contactName')?.value,
+            detailedAddress: this.validateForm.get('detailedAddress')?.value,
+            email: this.validateForm.get('email')?.value,
+            interbankSettlementStatus: this.validateForm.get(
+              'interbankSettlementStatus'
+            )?.value,
+            mobileNumber: this.validateForm.get('mobileNumber')?.value,
+            paymentStatus:
+              this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
+            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')
+              ?.value,
+            spDescription: this.validateForm.get('spDescription')?.value,
+            spCode: this.info.spCode
+          })
+          .subscribe((result) => {
+            this.onSubmitStatus = false;
+            this.modalService
+              .success({
+                nzTitle: 'success',
+                nzContent: 'edit success !'
+              })
+              .afterClose.subscribe((_) => {
+                this.getInfo();
+              });
 
-          this.cdr.markForCheck();
-        });
+            this.cdr.markForCheck();
+          });
       }
     });
   }
@@ -328,16 +334,19 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
         {
           title: 'Currency',
           field: 'capitalPoolCurrency',
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Account/Wallet (Capital Pool Address)',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Pre-authorized Debit',
           tdTemplate: this.authorizedTpl,
+          notNeedEllipsis: true,
           width: 120
         }
       ],

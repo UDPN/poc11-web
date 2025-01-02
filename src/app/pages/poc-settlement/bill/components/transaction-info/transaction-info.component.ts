@@ -171,9 +171,7 @@ export class TransactionInfoComponent implements OnInit {
       this.listOfControl[index - 1].controlInstance,
       this.fb.control('', [Validators.required, this.emailValidator])
     );
-    if (!this.validateForm
-      .get(this.listOfControl[0].controlInstance)
-      ?.value) {
+    if (!this.validateForm.get(this.listOfControl[0].controlInstance)?.value) {
       this.validateForm
         .get(this.listOfControl[0].controlInstance)
         ?.setValue(sessionStorage.getItem('email'));
@@ -247,31 +245,37 @@ export class TransactionInfoComponent implements OnInit {
         {
           title: 'Transaction No.',
           field: 'transactionNo',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'BN ID',
           field: 'fromBnId',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'To',
           field: 'toAccount',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
           width: 250
         },
         {
           title: 'Commission Fee',
           tdTemplate: this.commissionFeeTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
@@ -284,6 +288,7 @@ export class TransactionInfoComponent implements OnInit {
         {
           title: 'Settle Model Code',
           field: 'settlementModelCode',
+          notNeedEllipsis: true,
           width: 160
         }
       ],

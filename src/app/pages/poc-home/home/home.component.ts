@@ -514,18 +514,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           title: 'Transaction Currency',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Currency Pair ID',
           field: 'chainRateId',
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 320
         },
         {
           title: 'Exchange Rate',
           field: 'exchangeRate',
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 120
         },
         {

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-12 16:42:53
+ * @LastEditTime: 2025-01-02 16:11:28
  * @Description:
  */
 import {
@@ -190,32 +190,38 @@ export class BankComponent implements OnInit, AfterViewInit {
         {
           title: 'Commercial Bank Name',
           field: 'commercialBankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Region',
           field: 'region',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'BIC',
           field: 'commercialBic',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Custodian Bank',
           field: 'centralBankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Currency',
           field: 'currency',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Wallet Address',
           field: 'walletAddressNumber',
           tdTemplate: this.walletAddressTpl,
+          notNeedEllipsis: true,
           width: 100
         }
       ],

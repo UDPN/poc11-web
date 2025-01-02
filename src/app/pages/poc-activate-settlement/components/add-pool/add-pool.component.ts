@@ -105,8 +105,7 @@ export class AddPoolComponent implements OnInit {
           //   item.capitalPoolCurrency.split('-')[0] +
           //   '-' +
           //   item.capitalPoolPlatform;
-            item.capitalPoolCurrency =
-            item.capitalPoolCurrency.split('-')[0];
+          item.capitalPoolCurrency = item.capitalPoolCurrency.split('-')[0];
           Object.assign(item, { key: i });
         });
         if (res.fileList && res.fileList.length > 0) {
@@ -307,7 +306,7 @@ export class AddPoolComponent implements OnInit {
         });
         this.selectOptionPacths$.next(arrs);
         console.log(this.selectOptionPacths$, '22222');
-        
+
         this.selectOptionPacthsLenght = arrs.length;
       });
     });
@@ -554,7 +553,7 @@ export class AddPoolComponent implements OnInit {
     });
     this.fileList = array;
     console.log(arr);
-    
+
     // return;
     this.pocActivateSettlementService
       .save({
@@ -588,16 +587,19 @@ export class AddPoolComponent implements OnInit {
         {
           title: 'Currency',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Account/Wallet (Capital Pool Address)',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Actions',
           tdTemplate: this.authorizedTpl,
+          notNeedEllipsis: true,
           width: 120
         }
       ],

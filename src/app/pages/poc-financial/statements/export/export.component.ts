@@ -346,17 +346,20 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
+          notNeedEllipsis: true,
           width: 80,
           show: true
         },
         {
           title: 'Token Name',
           field: 'tokenName',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Blockchain',
           field: 'blockchainName',
+          notNeedEllipsis: true,
           width: 150
         },
         {
@@ -368,16 +371,19 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'Wallet Address',
           tdTemplate: this.walletAddressTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'File ID',
           tdTemplate: this.fileIdTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'File Hash',
           tdTemplate: this.fileHashTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
@@ -396,6 +402,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         // {

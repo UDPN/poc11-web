@@ -3,7 +3,7 @@
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
  * @LastEditTime: 2024-12-19 17:14:34
- * @Description: 
+ * @Description:
  */
 /*
  * @Author: chenyuting
@@ -27,7 +27,12 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  UntypedFormControl,
+  Validators
+} from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 import { SearchCommonVO } from '@app/core/services/types';
@@ -121,12 +126,12 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  taskNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
+  taskNameValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (
-      !/^[A-Za-z0-9]{0,50}$/.test(control.value)
-    ) {
+    } else if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -173,7 +178,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.commonService.tokenList().subscribe((res) => {
       this.tokenList = res;
       console.log(res);
-      
+
       this.cdr.markForCheck();
       return;
     });
@@ -183,7 +188,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     this.commonService.blockchainList().subscribe((res) => {
       this.blockchainList = res;
       console.log(res, 'res1');
-      
+
       this.cdr.markForCheck();
       return;
     });
@@ -219,25 +224,29 @@ export class StatementsComponent implements OnInit, AfterViewInit {
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          this.statementsService.statusUpdate({ exportRuleId, state: 35 }).subscribe({
-            next: res => {
-              resolve(true);
-              if (res) {
-                this.message.success(`Delete successfully`, { nzDuration: 1000 }).onClose!.subscribe(() => {
-                  this.getDataList();
-                });
+          this.statementsService
+            .statusUpdate({ exportRuleId, state: 35 })
+            .subscribe({
+              next: (res) => {
+                resolve(true);
+                if (res) {
+                  this.message
+                    .success(`Delete successfully`, { nzDuration: 1000 })
+                    .onClose!.subscribe(() => {
+                      this.getDataList();
+                    });
+                }
+                this.cdr.markForCheck();
+              },
+              error: (err) => {
+                reject(true);
+                this.cdr.markForCheck();
               }
-              this.cdr.markForCheck();
-            },
-            error: err => {
-              reject(true);
-              this.cdr.markForCheck();
-            },
-          })
+            });
         }).catch(() => console.log('Oops errors!'))
     });
   }
-  
+
   onStatusUpdate(exportRuleId: any, state: number, taskName: string) {
     let statusValue = '';
     if (state === 30) {
@@ -245,26 +254,31 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     } else {
       statusValue = 'activate';
     }
-    const toolStatus = statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+    const toolStatus =
+      statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
     this.modal.confirm({
       nzTitle: `Are you sure you want to ${statusValue} <b>${taskName}</b> ?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          this.statementsService.statusUpdate({ exportRuleId, state }).subscribe({
-            next: res => {
-              resolve(true);
-              this.cdr.markForCheck();
-              if (res) {
-                this.message.success(`${toolStatus} successfully!`, { nzDuration: 1000 });
+          this.statementsService
+            .statusUpdate({ exportRuleId, state })
+            .subscribe({
+              next: (res) => {
+                resolve(true);
+                this.cdr.markForCheck();
+                if (res) {
+                  this.message.success(`${toolStatus} successfully!`, {
+                    nzDuration: 1000
+                  });
+                }
+                this.getDataList();
+              },
+              error: (err) => {
+                reject(true);
+                this.cdr.markForCheck();
               }
-              this.getDataList();
-            },
-            error: err => {
-              reject(true);
-              this.cdr.markForCheck();
-            },
-          })
+            });
         }).catch(() => console.log('Oops errors!'))
     });
   }
@@ -300,28 +314,33 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
+          notNeedEllipsis: true,
           width: 100,
           show: true
         },
         {
           title: 'Task Name',
           field: 'taskName',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Token Name',
           field: 'tokenName',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Bloackchain',
           field: 'blockchainName',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Export Frequency',
           field: 'exportStrategy',
           pipe: 'exportStrategy',
+          notNeedEllipsis: true,
           width: 120
         },
         {
@@ -341,6 +360,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {

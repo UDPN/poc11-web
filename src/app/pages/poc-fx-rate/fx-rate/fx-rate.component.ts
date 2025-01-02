@@ -183,20 +183,24 @@ export class FxRateComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Currency Pair',
-          tdTemplate: this.currencyTpl
+          tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true
         },
         {
           title: 'Exchange Rate',
           field: 'rate',
-          pipe: 'toThousandRate'
+          pipe: 'toThousandRate',
+          notNeedEllipsis: true
         },
         {
           title: 'Liquidity Provider',
-          field: 'provider'
+          field: 'provider',
+          notNeedEllipsis: true
         },
         {
           title: 'Charging Model',
           field: 'chargingModel',
+          notNeedEllipsis: true,
           pipe: 'chargingModel'
         },
         {

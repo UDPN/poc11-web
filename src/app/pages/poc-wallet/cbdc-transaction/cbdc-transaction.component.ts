@@ -83,7 +83,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -149,32 +149,38 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'To',
           tdTemplate: this.toTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Type',
           field: 'type',
           pipe: 'walletTransactionsType',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Currency',
           field: 'currency',
+          notNeedEllipsis: true,
           width: 80
         },
         {
@@ -187,6 +193,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {

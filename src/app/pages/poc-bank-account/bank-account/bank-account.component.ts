@@ -354,6 +354,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction ID',
           tdTemplate: this.transactionIdTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
@@ -367,16 +368,19 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
           title: 'Transaction Direction',
           field: 'txType',
           pipe: 'transactionDirection',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Transaction Amount',
           tdTemplate: this.transactionAmountTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Bank Account Balance',
           tdTemplate: this.balanceTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {

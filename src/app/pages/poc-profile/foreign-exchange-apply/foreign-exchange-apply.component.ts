@@ -66,7 +66,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
     private foreignExchangeApplyService: ForeignExchangeApplyService,
     private cdr: ChangeDetectorRef,
     public _commonService: CommonService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -154,17 +154,20 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
         {
           title: 'Application No.',
           field: 'applicationNo',
+          notNeedEllipsis: true,
           width: 350
         },
         {
           title: 'FX Pair',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Application Type',
           field: 'applicationType',
           pipe: 'exchangeBusinessType',
+          notNeedEllipsis: true,
           width: 220
         },
         {
@@ -185,6 +188,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           title: 'Status',
           field: 'status',
           pipe: 'foreignStatus',
+          notNeedEllipsis: true,
           width: 160
         },
         {

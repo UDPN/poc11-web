@@ -28,7 +28,7 @@ export class InfoComponent implements OnInit {
     private pocCapitalPoolService: PocCapitalPoolService,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -71,11 +71,13 @@ export class InfoComponent implements OnInit {
         {
           title: 'Currency',
           field: 'platformCurrency',
+          notNeedEllipsis: true,
           width: 250
         },
         {
           title: 'Account/Wallet',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 220
         }
       ],
@@ -83,7 +85,7 @@ export class InfoComponent implements OnInit {
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

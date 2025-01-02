@@ -146,18 +146,20 @@ export class InternalNotificationsComponent {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
-          width: 150
+          notNeedEllipsis: true,
+          width: 50
         },
         {
           title: 'Type',
           field: 'title',
-          width: 200
+          notNeedEllipsis: true,
+          width: 150
         },
         {
           title: 'Content',
           tdTemplate: this.contentTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 450
         },
         {
           title: 'Created On',

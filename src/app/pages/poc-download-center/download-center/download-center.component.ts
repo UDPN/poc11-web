@@ -1,17 +1,3 @@
-/*
- * @Author: chenyuting
- * @Date: 2024-12-11 10:29:23
- * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-19 10:50:27
- * @Description:
- */
-/*
- * @Author: chenyuting
- * @Date: 2024-12-11 10:29:23
- * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-11 17:50:42
- * @Description:
- */
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -92,7 +78,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
     this.tableConfig.loading = isLoading;
     this.tableChangeDectction();
   }
-  
+
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -100,7 +86,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
-      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!
     };
     this.downloadCenterService
       .fetchList(params.pageNum, params.pageSize)
@@ -125,7 +111,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
     this.tableLoading(true);
     this.commonService
       .download(busId, busType)
-      .pipe(finalize(() => (this.tableLoading(false))))
+      .pipe(finalize(() => this.tableLoading(false)))
       .subscribe({
         next: (res) => {
           if (res) {
@@ -163,6 +149,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
+          notNeedEllipsis: true,
           width: 100,
           show: true
         },
@@ -170,15 +157,18 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
           title: 'Data Source',
           field: 'moduleType',
           pipe: 'moduleType',
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'File ID',
           tdTemplate: this.fileIdTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'File Hash',
+          notNeedEllipsis: true,
           tdTemplate: this.fileHashTpl,
           width: 180
         },
@@ -192,11 +182,13 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         {
           title: 'Created by',
           field: 'exportUserName',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {

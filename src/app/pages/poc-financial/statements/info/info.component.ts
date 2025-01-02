@@ -251,16 +251,19 @@ export class InfoComponent implements OnInit, AfterViewInit {
           title: 'No.',
           tdTemplate: this.numberTpl,
           width: 80,
+          notNeedEllipsis: true,
           show: true
         },
         {
           title: 'File ID',
           tdTemplate: this.fileIdTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'File Hash',
           tdTemplate: this.fileHashTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
@@ -280,11 +283,13 @@ export class InfoComponent implements OnInit, AfterViewInit {
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Proof Hash',
           tdTemplate: this.proofHashTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
@@ -297,6 +302,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
         {
           title: 'Proof Status',
           tdTemplate: this.proofStatusTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {

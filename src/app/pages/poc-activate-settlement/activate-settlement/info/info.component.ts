@@ -166,16 +166,19 @@ export class InfoComponent implements OnInit {
         {
           title: 'Currency',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Account/Wallet (Capital Pool Address)',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Pre-authorized Debit',
           tdTemplate: this.authorizedTpl,
+          notNeedEllipsis: true,
           width: 120
         }
       ],

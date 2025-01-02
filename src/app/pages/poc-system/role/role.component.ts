@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { RoleService } from '@app/core/services/http/poc-system/role/role.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -33,8 +39,18 @@ export class RoleComponent implements OnInit {
   numberTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] }
-  constructor(private roleService: RoleService, private message: NzMessageService, private cdr: ChangeDetectorRef, private modal: NzModalService) { }
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
+  constructor(
+    private roleService: RoleService,
+    private message: NzMessageService,
+    private cdr: ChangeDetectorRef,
+    private modal: NzModalService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Role Management`,
@@ -75,26 +91,31 @@ export class RoleComponent implements OnInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-    this.roleService.list(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.dataList.forEach((item: any, i: any) => {
-        Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 })
-      })
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.roleService
+      .list(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.dataList.forEach((item: any, i: any) => {
+          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+        });
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   onStatusUpdate(roleCode: string, lockable: any, roleName: string): void {
     let status = '';
     if (lockable === 1) {
-      status = 'disable'
+      status = 'disable';
     } else if (lockable === 2) {
-      status = 'enable'
+      status = 'enable';
     }
     const toolStatus = status.charAt(0).toUpperCase() + status.slice(1);
     this.modal.confirm({
@@ -103,7 +124,7 @@ export class RoleComponent implements OnInit {
       nzOnOk: () =>
         new Promise((resolve, reject) => {
           this.roleService.statusUpdate({ roleCode, lockable }).subscribe({
-            next: res => {
+            next: (res) => {
               resolve(true);
               this.cdr.markForCheck();
               if (res) {
@@ -111,11 +132,11 @@ export class RoleComponent implements OnInit {
               }
               this.getDataList();
             },
-            error: err => {
+            error: (err) => {
               reject(true);
               this.cdr.markForCheck();
-            },
-          })
+            }
+          });
         }).catch(() => console.log('Oops errors!'))
     });
   }
@@ -127,20 +148,22 @@ export class RoleComponent implements OnInit {
       nzOnOk: () =>
         new Promise((resolve, reject) => {
           this.roleService.statusUpdate({ roleCode, lockable: 3 }).subscribe({
-            next: res => {
+            next: (res) => {
               resolve(true);
               if (res) {
-                this.message.success(`Delete successfully`).onClose!.subscribe(() => {
-                  this.getDataList();
-                });
+                this.message
+                  .success(`Delete successfully`)
+                  .onClose!.subscribe(() => {
+                    this.getDataList();
+                  });
               }
               this.cdr.markForCheck();
             },
-            error: err => {
+            error: (err) => {
               reject(true);
               this.cdr.markForCheck();
-            },
-          })
+            }
+          });
         }).catch(() => console.log('Oops errors!'))
     });
   }
@@ -151,23 +174,27 @@ export class RoleComponent implements OnInit {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
+          notNeedEllipsis: true,
           width: 150,
           show: true
         },
         {
           title: 'Role Name',
           field: 'roleName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Description',
           field: 'description',
+          notNeedEllipsis: true,
           width: 320
         },
         {
           title: 'Status',
           field: 'lockable',
           pipe: 'lockable',
+          notNeedEllipsis: true,
           width: 200
         },
         {
@@ -177,15 +204,13 @@ export class RoleComponent implements OnInit {
           fixedDir: 'right',
           showAction: false,
           width: 250
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
-
 }

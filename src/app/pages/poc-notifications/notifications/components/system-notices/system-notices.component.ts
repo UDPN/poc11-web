@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 14:38:40
+ * @LastEditTime: 2025-01-02 16:10:10
  * @Description:
  */
 import {
@@ -94,19 +94,21 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
         {
           title: 'No.',
           tdTemplate: this.numberTpl,
-          width: 150
+          notNeedEllipsis: true,
+          width: 80
         },
         {
           title: 'Title',
           tdTemplate: this.titleTpl,
-          width: 200
+          notNeedEllipsis: true,
+          width: 500
         },
         {
           title: 'Published On',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 150
+          width: 200
         },
         {
           title: 'Actions',

@@ -384,29 +384,34 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           title: 'Wallet Address',
           thTemplate: this.walletAdressTitleTpl,
           tdTemplate: this.walletAddressTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Custodian Bank',
           thTemplate: this.centralBankTpl,
           field: 'centralBankName',
+          notNeedEllipsis: true,
           width: 260
         },
         {
           title: 'Wallet Type',
           field: 'region',
           pipe: 'walletType',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Currency',
           field: 'currency',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Balance',
           field: 'balance',
           pipe: 'toThousandthMark',
+          notNeedEllipsis: true,
           width: 150
         },
         {
@@ -419,6 +424,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {

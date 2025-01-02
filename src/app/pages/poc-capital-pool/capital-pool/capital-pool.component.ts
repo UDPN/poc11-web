@@ -179,7 +179,6 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   topUpAmountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
@@ -360,7 +359,6 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       ?.setValue(sessionStorage.getItem('systemName'));
     this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
-    
   }
 
   getWithdraw(
@@ -368,7 +366,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     chainAccountAddress: string,
     balance: any,
     reserveAccount: any,
-    reserveCurrency: any,
+    reserveCurrency: any
   ) {
     this.reserveCurrency = reserveCurrency;
     this.currency = currency;
@@ -439,9 +437,12 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         'transactionReferenceNo'
       )?.value;
     }
-    const amount = thousandthMark(params.amount) + ' ' + (this.txType === 1 ? this.currency : this.reserveCurrency);
+    const amount =
+      thousandthMark(params.amount) +
+      ' ' +
+      (this.txType === 1 ? this.currency : this.reserveCurrency);
     this.cbdcWalletService
-    .topUpOrWithdraw(params)
+      .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
       .subscribe({
         next: (res) => {
@@ -485,21 +486,25 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Capital Pool',
           tdTemplate: this.capitalTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Account/Wallet',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Balance',
           tdTemplate: this.balanceTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Authorized',
           tdTemplate: this.authorTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
@@ -512,6 +517,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Pre-authorized Debit',
           tdTemplate: this.authorizedTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {

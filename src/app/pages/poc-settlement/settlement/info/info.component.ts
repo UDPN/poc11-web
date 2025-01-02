@@ -37,7 +37,7 @@ export class InfoComponent implements OnInit {
     private settlementService: SettlementService,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Details`,
@@ -94,17 +94,20 @@ export class InfoComponent implements OnInit {
           title: 'Charging Model',
           field: 'chargingModel',
           pipe: 'chargingModel',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Commission Rate',
           tdTemplate: this.commissionTpl,
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Max Commission Amount',
           tdTemplate: this.maxCommissionTpl,
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 300
         },
         {
@@ -117,6 +120,7 @@ export class InfoComponent implements OnInit {
         {
           title: 'Modified By',
           field: 'modifyUser',
+          notNeedEllipsis: true,
           width: 220
         }
       ],

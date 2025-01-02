@@ -3,7 +3,7 @@
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
  * @LastEditTime: 2024-12-10 11:04:54
- * @Description: 
+ * @Description:
  */
 import {
   Component,
@@ -108,7 +108,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private transactionRecordService: TransactionRecordService,
     private transferService: TransferService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -178,32 +178,38 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'To',
           tdTemplate: this.toTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Type',
           field: 'type',
           pipe: 'transactionsRecordType',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Currency',
           field: 'currency',
+          notNeedEllipsis: true,
           width: 100
         },
         {
@@ -216,6 +222,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {

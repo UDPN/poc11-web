@@ -163,16 +163,19 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
         {
           title: 'No.',
           field: 'key',
+          notNeedEllipsis: true,
           width: 80
         },
         {
           title: 'Ledger Name',
           field: 'ledgerName',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Token Name',
           field: 'tokenName',
+          notNeedEllipsis: true,
           width: 120
         },
         // {
@@ -183,28 +186,33 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
         {
           title: 'Pegged Currency',
           field: 'currencySymbol',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Token Price',
           tdTemplate: this.tokenPriceTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Journal Entries',
           tdTemplate: this.journalEntriesTpl,
+          notNeedEllipsis: true,
           width: 80
         },
         {
           title: 'Status',
           field: 'state',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {
