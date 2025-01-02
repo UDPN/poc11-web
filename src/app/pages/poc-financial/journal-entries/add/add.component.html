@@ -89,11 +89,7 @@
   </nz-card>
 </div>
 <div class="m-t-10 m-r-10 m-l-10">
-  <nz-card
-    nzTitle="Transaction Details"
-    class="mt-4"
-    *ngIf="tokenList && tokenList.length"
-  >
+  <nz-card nzTitle="Configuring Business Mapping" class="mt-4">
     <div class="transaction-form">
       <form nz-form [formGroup]="transactionForm">
         <div formArrayName="transactionGroups">

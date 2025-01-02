@@ -181,13 +181,11 @@ export class JournallistComponent implements OnInit, AfterViewInit {
 
     const params = {
       pageSize: this.tableConfig.pageSize!,
-      pageNum:
-        typeof e === 'number' ? e : e?.pageIndex || this.tableConfig.pageIndex!,
+      pageNum: typeof e === 'number' ? e : (e?.pageIndex || this.tableConfig.pageIndex!),
       filters: this.searchParam
     };
 
-    this.journalService
-      .fetchTxList(params.pageNum, params.pageSize, params.filters)
+    this.journalService.fetchTxList(params.pageNum, params.pageSize, params.filters)
       .subscribe({
         next: (response: any) => {
           if (response.code === 0) {
@@ -201,45 +199,44 @@ export class JournallistComponent implements OnInit, AfterViewInit {
             });
 
             // 转换为显示所需的格式
-            this.dataList = Array.from(groupedData.values()).map(
-              (group, index) => {
-                // 确保每组至少有一条记录
-                const firstRecord = group[0];
+            this.dataList = Array.from(groupedData.values()).map((group, index) => {
+              // 确保每组至少有一条记录
+              const firstRecord = group[0];
 
-                // 按照 loanType 排序交易记录
-                const sortedTransactions = group.sort((a, b) => {
-                  // 首先按照 loanType 排序
-                  if (a.loanType !== b.loanType) {
-                    return a.loanType - b.loanType;
-                  }
-                  // 如果 loanType 相同，按照 subjectCode 排序
-                  return a.subjectCode.localeCompare(b.subjectCode);
-                });
+              // 按照 loanType 排序交易记录
+              const sortedTransactions = group.sort((a, b) => {
+                // 首先按照 loanType 排序
+                if (a.loanType !== b.loanType) {
+                  return a.loanType - b.loanType;
+                }
+                // 如果 loanType 相同，按照 subjectCode 排序
+                return a.subjectCode.localeCompare(b.subjectCode);
+              });
 
-                // 创建合并后的记录
-                const mergedRecord = {
-                  key: (params.pageNum - 1) * 10 + index + 1,
-                  traceId: firstRecord.traceId,
-                  dateTime: firstRecord.dateTime,
-                  txType: firstRecord.txType,
-                  blockchainName: firstRecord.blockchainName,
-                  ruleId: firstRecord.ruleId,
-                  transactions: sortedTransactions.map((item) => ({
-                    subjectCode: item.subjectCode,
-                    subjectTitle: item.subjectTitle,
-                    particularsAccount: item.particularsAccount,
-                    txAmount: item.txAmount,
-                    loanType: item.loanType
-                  }))
-                };
+              // 创建合并后的记录
+              const mergedRecord = {
+                key: (params.pageNum - 1) * params.pageSize + index + 1,
+                traceId: firstRecord.traceId,
+                dateTime: firstRecord.dateTime,
+                txType: firstRecord.txType,
+                blockchainName: firstRecord.blockchainName,
+                ruleId: firstRecord.ruleId,
+                transactions: sortedTransactions.map(item => ({
+                  subjectCode: item.subjectCode,
+                  subjectTitle: item.subjectTitle,
+                  particularsAccount: item.particularsAccount,
+                  txAmount: item.txAmount,
+                  loanType: item.loanType
+                }))
+              };
 
-                return mergedRecord;
-              }
-            );
-            console.log(response.data.page, 'aaaa');
+              return mergedRecord;
+            });
 
-            this.tableConfig.total = response.data.page.total;
+            // 使用服务端返回的总数，但使用客户端的分页参数
+            this.tableConfig.total = response.data.page.total || 0;
             this.tableConfig.pageIndex = params.pageNum;
+            this.tableConfig.pageSize = params.pageSize;
           }
           this.tableConfig.loading = false;
           this.tableChangeDectction();

@@ -356,15 +356,15 @@ const menuNav: Menu[] = [
       }
     ]
   },
-  {
-    menuName: 'Access Key',
-    id: 5,
-    fatherId: 0,
-    icon: 'key',
-    open: false,
-    selected: false,
-    menuType: 'C',
-    path: '/poc/poc-access-key/access-key',
-    code: 'R0304'
-  }
+  // {
+  //   menuName: 'Access Key',
+  //   id: 5,
+  //   fatherId: 0,
+  //   icon: 'key',
+  //   open: false,
+  //   selected: false,
+  //   menuType: 'C',
+  //   path: '/poc/poc-access-key/access-key',
+  //   code: 'R0304'
+  // }
 ];

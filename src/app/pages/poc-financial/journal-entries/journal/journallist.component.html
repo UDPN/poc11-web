@@ -100,6 +100,9 @@
       [nzPageIndex]="tableConfig.pageIndex"
       [nzLoading]="tableConfig.loading"
       [nzBordered]="true"
+      [nzShowSizeChanger]="true"
+      [nzShowQuickJumper]="true"
+      [nzFrontPagination]="false"
       (nzPageIndexChange)="getDataList($event)"
       (nzPageSizeChange)="changePageSize($event)"
     >
