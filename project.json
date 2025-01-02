@@ -168,7 +168,7 @@
     "serve": {
       "executor": "@nx/angular:dev-server",
       "options": {
-        "host": "10.0.7.64",
+        "host": "10.0.6.61",
         "port": 4215,
         "proxyConfig": "proxy.conf.json",
         "disableHostCheck": false

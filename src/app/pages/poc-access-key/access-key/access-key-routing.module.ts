@@ -8,12 +8,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccessKeyComponent } from './access-key.component';
+import { ActionCode } from '@app/config/actionCode';
 
 const routes: Routes = [
   {
     path: '',
     component: AccessKeyComponent,
-    data: { title: 'AccessKey', key: 'accessKey', shouldDetach: 'no' }
+    data: { title: 'AccessKey', key: 'accessKey',authCode: ActionCode.TabsDetail, shouldDetach: 'no' }
   }
 ];
 
