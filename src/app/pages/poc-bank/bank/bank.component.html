@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-04-18 15:13:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-09 17:08:01
+ * @LastEditTime: 2025-01-03 13:39:21
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -164,9 +164,14 @@
     nz-button
     nzType="link"
     class="link-button"
-    style="text-decoration: underline;"
+    style="text-decoration: underline"
     (click)="open(commercialBankName, currency, walletAddress)"
-    >{{ count }}</a
+    >{{ count }}
+    <span
+      class="m-l-10"
+      style="font-size: 10px; font-weight: 600; font-style: oblique"
+      >{{ 'Check All' }}</span
+    ></a
   >
 </ng-template>
 <nz-drawer

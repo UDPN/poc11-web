@@ -75,7 +75,14 @@
                             '-' +
                             item.index.toString()
                           "
-                          [nzLabel]="item.chainAccountAddress"
+                          [nzLabel]="
+                            item.chainAccountAddress +
+                            '(' +
+                            (item.walletType === 1
+                              ? 'Master Wallet'
+                              : 'Main Wallet') +
+                            ')'
+                          "
                         >
                         </nz-option>
                       </nz-select>

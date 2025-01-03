@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 11:23:10
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-02 11:07:46
+ * @LastEditTime: 2025-01-03 11:19:19
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -21,14 +21,20 @@
           <nz-badge nzStatus="success" *ngIf="tab.count !== 0"> </nz-badge>
           {{ tab.name }}
         </ng-template>
-        <ng-container *ngIf="i === 0">
-          <app-system-notices />
+        <ng-container *appAuth="'R010501'">
+          <div *ngIf="i === 0">
+            <app-system-notices />
+          </div>
         </ng-container>
-        <ng-container *ngIf="i === 1">
-          <app-internal-notifications />
+        <ng-container *appAuth="'R010502'">
+          <div *ngIf="i === 1">
+            <app-internal-notifications />
+          </div>
         </ng-container>
-        <ng-container *ngIf="i === 2">
-          <app-interactive-messages />
+        <ng-container *appAuth="'R010503'">
+          <div *ngIf="i === 2" >
+            <app-interactive-messages />
+          </div>
         </ng-container>
       </nz-tab>
     </nz-tabset>

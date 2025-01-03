@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 14:44:59
+ * @LastEditTime: 2025-01-03 11:20:07
  * @Description: 
 -->
 <app-card-table-wrap [isNormalTable]="true" tableTitle="Internal Notifications">
@@ -24,10 +24,10 @@
     </span>
   </ng-template>
   <ng-template #operationTpl let-chatMsgId="chatMsgId" let-msgType="msgType">
-    <ng-container *appAuth="''">
+    <ng-container *appAuth="'R01050201'">
       <span class="operate-text" (click)="getModal(chatMsgId)"> Details </span>
     </ng-container>
-    <ng-container *appAuth="''">
+    <ng-container *appAuth="'R01050202'">
       <span class="operate-text" (click)="onDelete(chatMsgId)"> Delete </span>
     </ng-container></ng-template
   >

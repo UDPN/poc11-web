@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-02 11:11:29
+ * @LastEditTime: 2025-01-03 14:46:42
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
@@ -13,6 +13,7 @@
           nz-button
           [nzSize]="'large'"
           nzType="primary"
+          *appAuth="'R01050301'"
           style="border-radius: 12px"
           (click)="toCompose('Compose')"
         >
@@ -90,7 +91,8 @@
               <button 
                 *nzSpaceItem 
                 nz-button 
-                [nzSize]="'large'" 
+                [nzSize]="'large'"
+                [appAuth]="'R01050302'" 
                 nzType="text" 
                 (click)="toCompose('View', item.chatMsgId, item.msgCode)"
               >
@@ -105,6 +107,7 @@
                 *nzSpaceItem 
                 nz-button 
                 [nzSize]="'large'" 
+                [appAuth]="'R01050303'" 
                 nzType="text" 
                 (click)="toCompose('Reply', item.chatMsgId, item.msgCode)"
                 >
@@ -227,6 +230,8 @@
               >
                 <input
                   nz-input
+                  [readonly]="visibleTitle === 'Reply' ? true : false"
+                  [ngClass]="visibleTitle === 'Reply' ? 'onboard-disabled': ''"
                   formControlName="title"
                 />
                 <ng-template #subjectError let-control>

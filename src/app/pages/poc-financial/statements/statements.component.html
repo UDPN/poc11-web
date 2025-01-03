@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-02 15:55:50
+ * @LastEditTime: 2025-01-03 14:01:34
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -206,7 +206,7 @@
       let-exportRuleId="exportRuleId"
       let-taskName="taskName"
     >
-      <ng-container *appAuth="status === 20 ? 'R030103' : 'R030104'">
+      <ng-container *appAuth="status === 20 ? 'R01070205' : 'R01070204'">
         <span
           class="operate-text"
           (click)="
@@ -216,7 +216,7 @@
           {{ status === 20 ? 'Deactivate' : 'Activate' }}
         </span>
       </ng-container>
-      <ng-container *appAuth="'R030102'">
+      <ng-container *appAuth="'R01070206'">
         <span
           class="operate-text"
           (click)="onDelete(exportRuleId, taskName)"
@@ -225,7 +225,7 @@
           Delete
         </span>
       </ng-container>
-      <ng-container *appAuth="'R030105'">
+      <ng-container *appAuth="'R01070203'">
         <span
           class="operate-text"
           routerLink="/poc/poc-financial/statements/info"
@@ -242,11 +242,18 @@
     nz-button
     nzType="primary"
     class="m-r-8"
+    *appAuth="'R01070202'"
     routerLink="/poc/poc-financial/statements/export"
   >
     Export
   </button>
-  <button nz-button nzType="primary" class="m-r-8" (click)="open()">
+  <button
+    nz-button
+    nzType="primary"
+    *appAuth="'R01070201'"
+    class="m-r-8"
+    (click)="open()"
+  >
     <i nz-icon nzType="plus"></i>New
   </button>
 </ng-template>
