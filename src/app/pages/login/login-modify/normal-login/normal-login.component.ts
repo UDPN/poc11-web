@@ -41,6 +41,8 @@ import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
 import { SocketService } from '@app/core/services/common/socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CommonService } from '@app/core/services/http/common/common.service';
+
 
 export interface SettingInterface {
   theme: 'dark' | 'light';
@@ -60,12 +62,14 @@ export interface SettingInterface {
 
 @Component({
   selector: 'app-normal-login',
-  templateUrl: './normal-login.component.html',
+  templateUrl: './kissen-login.component.html',
+
   styleUrls: ['./normal-login.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService]
 })
 export class NormalLoginComponent implements OnInit {
+  logoImg: string = '';
   validateForm!: FormGroup;
   passwordVisible = false;
   password?: string;
@@ -110,7 +114,7 @@ export class NormalLoginComponent implements OnInit {
     private themesService: ThemeService,
     private nzConfigService: NzConfigService,
     private styleService: StyleService,
-
+    private commonService: CommonService,
     private notification: NzNotificationService
   ) {}
 
@@ -174,6 +178,18 @@ export class NormalLoginComponent implements OnInit {
 
   getThemeOptions() {
     this.styleService.search().subscribe((res: any) => {
+      if (res.logoFileHash) {
+        this.commonService
+        .downImg({ hash: res.logoFileHash })
+        .subscribe((resu) => {
+          this.logoImg = 'data:image/jpg;base64,' + resu;
+          sessionStorage.setItem('logoImg', this.logoImg);
+          this.cdr.markForCheck();
+        });
+        // this.isDefaultLogo = false;
+      } else {
+        // this.isDefaultLogo = true;
+      }
       if (res.themeColor) {
         this.systemTitle = res.systemName;
         sessionStorage.setItem('systemName', res.systemName);
