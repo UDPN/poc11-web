@@ -31,7 +31,7 @@
           >
             <nz-descriptions-item [nzTitle]="'Custodian Bank'"
               ><span>{{
-                info?.bankName | map: 'showPart'
+                info?.centralBankName | map: 'showPart'
               }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Number'"
@@ -46,13 +46,59 @@
             >
             <nz-descriptions-item [nzTitle]="'Mock Money Balance'"
               ><span>{{
-                info?.accountName | map: 'showPart'
+                info?.accountBalance | map: 'toThousandthMark'
               }}</span></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
       </div>
       <div
+        nz-col
+        [nzXXl]="12"
+        [nzXl]="12"
+        [nzLg]="24"
+        [nzMd]="24"
+        [nzSm]="24"
+        [nzXs]="24"
+      >
+        <nz-card
+          [nzBordered]="false"
+          class="m-r-8"
+          style="
+            background-color: #617cd9;
+            background-size: 100%;
+            border-radius: 20px;
+          "
+        >
+          <nz-descriptions
+            nzTitle=""
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="fiat-money-descriptions-order card-descriptions-order"
+          >
+            <nz-descriptions-item [nzTitle]="'Home Token Currency'"
+              ><span>{{ 'tEUR' }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Master Wallet Address'"
+              ><span
+                nz-typography
+                nzCopyable
+                [nzCopyText]="walletInfo?.walletAddress"
+                style="color: #fff"
+                [title]="walletInfo?.walletAddress"
+                >{{ walletInfo?.walletAddress | map: 'showPart' }}</span
+              ></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Current Balance'"
+              ><span>{{
+                walletInfo?.accountBalance | map: 'toThousandthMark'
+              }}</span></nz-descriptions-item
+            >
+          </nz-descriptions>
+        </nz-card>
+      </div>
+      <!-- <div
         nz-col
         [nzXXl]="12"
         [nzXl]="12"
@@ -116,7 +162,7 @@
             </div>
           </div>
         </nz-card>
-      </div>
+      </div> -->
       <!-- <div
         nz-col
         [nzXXl]="6"

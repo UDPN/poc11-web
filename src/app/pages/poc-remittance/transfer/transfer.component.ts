@@ -145,7 +145,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         [Validators.required, this.beneficialWalletAddressValidator]
       ],
       amount: ['', [Validators.required, this.amountValidator]],
-      remitterWalletAddress: [null, [Validators.required]],
+      remitterWalletAddress: [
+        null,
+        [Validators.required, this.remitterWalletAddressValidator]
+      ],
       availableBalance: [null, [Validators.required]],
       remitterBankName: [null, [Validators.required]],
       remitterBankId: ['', [Validators.required]],
@@ -172,6 +175,53 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   ): { [s: string]: boolean } => {
     if (control.value === '') {
       return { error: true, required: true };
+    } else if (control.value) {
+      let value: string = '';
+      let value1: string = '';
+      this.remitterWalletAddressList.map((item) => {
+        if (
+          item.bankAccountId ===
+          this.validateForm.get('remitterWalletAddress')?.value
+        ) {
+          value = item.chainAccountAddress;
+        }
+      });
+      this.BeneficiaryArr.map((item) => {
+        if (item.bankWalletId === control.value) {
+          value1 = item.chainAccountAddress;
+        }
+      });
+      if (value === value1) {
+        return { error: true, regular: true };
+      }
+    }
+    return {};
+  };
+
+  remitterWalletAddressValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (control.value === '') {
+      return { error: true, required: true };
+    } else if (control.value) {
+      let value: string = '';
+      let value1: string = '';
+      this.remitterWalletAddressList.map((item) => {
+        if (item.bankAccountId === control.value) {
+          value = item.chainAccountAddress;
+        }
+      });
+      this.BeneficiaryArr.map((item) => {
+        if (
+          item.bankWalletId ===
+          this.validateForm.get('beneficialWalletAddress')?.value
+        ) {
+          value1 = item.chainAccountAddress;
+        }
+      });
+      if (value === value1) {
+        return { error: true, regular: true };
+      }
     }
     return {};
   };

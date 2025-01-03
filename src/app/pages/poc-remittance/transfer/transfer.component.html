@@ -94,6 +94,10 @@
                       >Please select your Remitter's Wallet
                       Address</ng-container
                     >
+                    <ng-container *ngIf="control.hasError('regular')"
+                      >The wallet addresses of the Remitter and Beneficiary
+                      cannot be identical.</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -303,10 +307,14 @@
                       >Please input your Beneficiary's Wallet
                       Address</ng-container
                     >
-                    <ng-container *ngIf="control.hasError('regular')">
+                    <ng-container *ngIf="control.hasError('regular')"
+                      >The wallet addresses of the Remitter and Beneficiary
+                      cannot be identical.</ng-container
+                    >
+                    <!-- <ng-container *ngIf="control.hasError('regular')">
                       Please enter a 42 digit hexadecimal starting with
                       '0x'</ng-container
-                    >
+                    > -->
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>

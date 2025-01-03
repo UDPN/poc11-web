@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-03 14:46:42
+ * @LastEditTime: 2025-01-03 16:17:18
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
@@ -15,21 +15,21 @@
           nzType="primary"
           *appAuth="'R01050301'"
           style="border-radius: 12px"
-          (click)="toCompose('Compose')"
+          (click)="toCompose('New Message')"
         >
           <img
             class="m-r-10"
             src="../../../../../../assets/imgs/notification-send.svg"
             alt=""
           />
-          {{ 'Compose' }}
+          {{ 'New' }}
         </button>
       </div>
       <div nz-col>
         <nz-select (ngModelChange)="getSendType($event)" ngModel="" class="m-l-15 select-notice" nzSize="large">
           <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option [nzValue]="1" nzLabel="Sent"></nz-option>
-          <nz-option [nzValue]="2" nzLabel="Received"></nz-option>
+          <nz-option [nzValue]="1" nzLabel="Inbox"></nz-option>
+          <nz-option [nzValue]="2" nzLabel="Outbox"></nz-option>
         </nz-select>
       </div>
     </div>
@@ -88,11 +88,11 @@
           </div>
           <div nz-col>
             <nz-space>
-              <button 
+              <span *appAuth="'R01050302'">
+                <button 
                 *nzSpaceItem 
                 nz-button 
                 [nzSize]="'large'"
-                [appAuth]="'R01050302'" 
                 nzType="text" 
                 (click)="toCompose('View', item.chatMsgId, item.msgCode)"
               >
@@ -103,23 +103,26 @@
                   alt=""
                 />
                 View >></button
-              ><button 
-                *nzSpaceItem 
-                nz-button 
-                [nzSize]="'large'" 
-                [appAuth]="'R01050303'" 
-                nzType="text" 
-                (click)="toCompose('Reply', item.chatMsgId, item.msgCode)"
-                >
-                  <img
-                    class="m-r-10"
-                    style="width: 20px; height: 20px"
-                    [src]="'../../../../../../assets/imgs/' + (item.sendType === 2 ? 'notification-reply.svg' : 'notification-reply-green.svg')"
-                    alt=""
-                  />
-                  Reply
-                </button></nz-space
               >
+              </span>
+              <span *appAuth="'R01050303'">
+                <button 
+                  *nzSpaceItem 
+                  nz-button 
+                  [nzSize]="'large'" 
+                  nzType="text" 
+                  (click)="toCompose('Reply', item.chatMsgId, item.msgCode)"
+                  >
+                    <img
+                      class="m-r-10"
+                      style="width: 20px; height: 20px"
+                      [src]="'../../../../../../assets/imgs/' + (item.sendType === 2 ? 'notification-reply.svg' : 'notification-reply-green.svg')"
+                      alt=""
+                    />
+                    Reply
+                </button>
+              </span>
+             </nz-space>
           </div>
         </div>
       </nz-card>
@@ -176,7 +179,7 @@
           <div nz-col nzSpan="24">
             <nz-form-item>
               <nz-form-label nzRequired nzSpan="24" class="text-left">
-                {{'Recipient'}}{{ visibleTitle === 'Compose' ? '(Admin to Admin only)' : ''}} 
+                {{'Recipient'}}{{ visibleTitle === 'New Message' ? '(Admin to Admin only)' : ''}} 
               </nz-form-label>
               <div nz-row [nzGutter]="24" nzJustify="space-between" nzAlign="middle">
                   <nz-form-control
@@ -243,7 +246,7 @@
             </nz-form-item>
             <nz-form-item>
               <nz-form-label nzRequired nzSpan="24" class="text-left">
-                Content
+                Message
               </nz-form-label>
               <nz-form-control
                 [nzErrorTip]="contentError"
@@ -256,7 +259,7 @@
                 </div>
                 <ng-template #contentError let-control>
                   <ng-container *ngIf="control.hasError('required')"
-                    >Please input your Content</ng-container
+                    >Please input your Message</ng-container
                   >
                 </ng-template>
               </div>
@@ -293,7 +296,7 @@
         </div>
       </form>
     </div>
-    <div *ngIf="visibleTitle !== 'Compose'">
+    <div *ngIf="visibleTitle !== 'New Message'">
       <div *ngFor="let item of chatInfo; index as i">
         <nz-card
           nzBordered="false"

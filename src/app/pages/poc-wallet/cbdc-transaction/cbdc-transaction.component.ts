@@ -24,7 +24,7 @@ interface SearchParam {
   currency: string;
   createTime: any;
   status: string;
-  walletAddress: string;
+  to: string;
 }
 
 @Component({
@@ -55,7 +55,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     createTime: [],
     status: '',
     type: '',
-    walletAddress: ''
+    to: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,

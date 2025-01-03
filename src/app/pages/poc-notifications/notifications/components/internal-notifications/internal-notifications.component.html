@@ -5,7 +5,7 @@
  * @LastEditTime: 2025-01-03 11:20:07
  * @Description: 
 -->
-<app-card-table-wrap [isNormalTable]="true" tableTitle="Internal Notifications">
+<app-card-table-wrap [isNormalTable]="true" tableTitle="Transaction Messages">
   <app-ant-table
     (changePageSize)="changePageSize($event)"
     (changePageNum)="getDataList($event)"
@@ -34,7 +34,7 @@
 </app-card-table-wrap>
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="Internal notifications"
+  nzTitle="Transaction Messages"
   (nzOnCancel)="cancel()"
   [nzClosable]="false"
   [nzWidth]="600"

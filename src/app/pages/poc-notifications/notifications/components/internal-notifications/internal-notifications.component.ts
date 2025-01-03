@@ -156,7 +156,7 @@ export class InternalNotificationsComponent {
           width: 150
         },
         {
-          title: 'Content',
+          title: 'Details',
           tdTemplate: this.contentTpl,
           notNeedEllipsis: true,
           width: 450
