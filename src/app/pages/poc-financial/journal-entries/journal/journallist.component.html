@@ -174,7 +174,10 @@
               }}
             </td>
             <td *ngIf="first" [attr.rowspan]="data.transactions.length">
-              <span class="operate-text" (click)="showTxDetails(data.ruleId)"
+              <span
+                class="operate-text"
+                *appAuth="'R01070103'"
+                (click)="showTxDetails(data.ruleId)"
                 >Txn Details</span
               >
             </td>

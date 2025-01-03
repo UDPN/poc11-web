@@ -215,9 +215,12 @@
     let-ruleId="ruleId"
     let-ledgerName="ledgerName"
   >
-    <span class="operate-text" (click)="onEdit(ruleId)">Edit</span>
+    <span class="operate-text" *appAuth="'R01070102'" (click)="onEdit(ruleId)"
+      >Edit</span
+    >
     <span
       class="operate-text"
+      *appAuth="state === 1 ? 'R01070105' : 'R01070104'"
       (click)="onStatusUpdate(ruleId, state === 1 ? 0 : 1, ledgerName)"
     >
       {{ state === 1 ? 'Deactivate' : 'Activate' }}
@@ -243,6 +246,7 @@
     nz-button
     nzType="primary"
     class="m-r-8"
+    *appAuth="'R01070101'"
     routerLink="/poc/poc-financial/journal-entries/add"
   >
     <i nz-icon nzType="plus"></i>New

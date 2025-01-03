@@ -53,6 +53,8 @@ export class AddComponent implements OnInit {
   metaArrStrSignPass: string[] = [];
   addAddressArr: string[] = [];
   testStatus = false;
+  creationMethodTip: string =
+    'You can create the wallet and manage the private key via the MetaMask plugin in the browser. If you have not installed the plugin, please do so first.';
   public metaArr$ = this.metaMaskService.MetaArray$;
 
   constructor(
@@ -100,9 +102,13 @@ export class AddComponent implements OnInit {
             'walletAddress',
             this.fb.control('', [Validators.required])
           );
+          this.creationMethodTip =
+            'The system will create and register a wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
           this.getWalletAddress();
         } else {
           this.validateForm.removeControl('walletAddress');
+          this.creationMethodTip =
+            'You can create the wallet and manage the private key via the MetaMask plugin in the browser. If you have not installed the plugin, please do so first.';
         }
       });
   }

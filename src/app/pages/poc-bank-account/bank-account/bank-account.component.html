@@ -24,13 +24,17 @@
         >
           <nz-descriptions
             nzTitle=""
-            [nzColumn]="2"
+            [nzColumn]="1"
             [nzColon]="false"
             [nzBordered]="false"
-            nzLayout="vertical"
-            class="fiat-money-descriptions-order"
+            class="fiat-money-descriptions-order card-descriptions-order"
           >
-            <nz-descriptions-item [nzTitle]="'Bank Account No.'"
+            <nz-descriptions-item [nzTitle]="'Custodian Bank'"
+              ><span>{{
+                info?.bankName | map: 'showPart'
+              }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Account Number'"
               ><span
                 nz-typography
                 nzCopyable
@@ -40,25 +44,80 @@
                 >{{ info?.bankAccountNo | map: 'showPart' }}</span
               ></nz-descriptions-item
             >
-            <nz-descriptions-item [nzTitle]="'Bank Name'"
-              ><span>{{
-                info?.bankName | map: 'showPart'
-              }}</span></nz-descriptions-item
-            >
-            <nz-descriptions-item [nzTitle]="'Account Name'"
+            <nz-descriptions-item [nzTitle]="'Mock Money Balance'"
               ><span>{{
                 info?.accountName | map: 'showPart'
-              }}</span></nz-descriptions-item
-            >
-            <nz-descriptions-item [nzTitle]="'Currency'"
-              ><span>{{
-                info?.currency | map: 'showPart'
               }}</span></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
       </div>
       <div
+        nz-col
+        [nzXXl]="12"
+        [nzXl]="12"
+        [nzLg]="24"
+        [nzMd]="24"
+        [nzSm]="24"
+        [nzXs]="24"
+      >
+        <nz-card
+          class="m-r-8"
+          [nzBordered]="false"
+          style="height: 280px; background-color: #617cd9; border-radius: 20px"
+        >
+          <div nz-row nzAlign="top" nzJustify="space-between" class="m-t-30">
+            <div
+              nz-col
+              [nzXXl]="4"
+              [nzXl]="4"
+              [nzLg]="4"
+              [nzMd]="4"
+              [nzSm]="4"
+              [nzXs]="12"
+            >
+              <img
+                src="../../../../../assets/imgs/wallet-balance.svg"
+                alt=""
+                style="width: 40px; height: 40px"
+              />
+            </div>
+            <div
+              nz-col
+              [nzXXl]="20"
+              [nzXl]="20"
+              [nzLg]="20"
+              [nzMd]="20"
+              [nzSm]="20"
+              [nzXs]="12"
+            >
+              <div nz-row nzAlign="top">
+                <h5 nz-typography style="color: #fff">
+                  {{ 'Wallet Balance ' }}
+                </h5>
+              </div>
+              <div class="m-t-15">
+                <h3 nz-typography style="color: #fff">
+                  {{ walletInfo?.accountBalance | map: 'toThousandthMark'
+                  }}{{ ' ' + walletInfo?.currency }}
+                </h3>
+                <div style="color: #fff" class="fiat-money-descriptions-order">
+                  <div>{{ walletInfo?.currency + ' Master Wallet' }}</div>
+                  <p
+                    nz-typography
+                    style="color: #fff"
+                    [nzCopyable]="walletInfo?.walletAddress ? true : false"
+                    [nzCopyText]="walletInfo?.walletAddress"
+                  >
+                    {{ walletInfo?.walletAddress }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+      <!-- <div
         nz-col
         [nzXXl]="6"
         [nzXl]="6"
@@ -176,7 +235,7 @@
             </div>
           </div>
         </nz-card>
-      </div>
+      </div> -->
     </div>
   </nz-card>
   <app-card-table-wrap
@@ -226,10 +285,22 @@
   </app-card-table-wrap>
 </div>
 <ng-template #createBtn>
-  <button nz-button nzType="primary" class="m-r-8" (click)="getTopUp()">
+  <button
+    nz-button
+    nzType="primary"
+    *appAuth="'R010601'"
+    class="m-r-8"
+    (click)="getTopUp()"
+  >
     {{ 'Wallet Top-up' }}
   </button>
-  <button nz-button nzType="primary" class="m-r-8" (click)="getWithdraw()">
+  <button
+    nz-button
+    nzType="primary"
+    *appAuth="'R010602'"
+    class="m-r-8"
+    (click)="getWithdraw()"
+  >
     {{ 'Wallet Withdraw' }}
   </button>
 </ng-template>

@@ -31,7 +31,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-notifications/notifications',
-    code: 'R0'
+    code: 'R0105'
   },
   // {
   //   fatherId: 0,
@@ -115,6 +115,17 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R010203',
         path: '/poc/poc-remittance/transaction-record'
+      },
+      {
+        id: 3,
+        fatherId: 4,
+        menuName: 'Enterprise Management',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R0109',
+        path: '',
+        disabled: true
       }
     ]
   },
@@ -141,7 +152,7 @@ const menuNav: Menu[] = [
     code: 'R0104'
   },
   {
-    menuName: 'Fiat Money Account Query',
+    menuName: 'Fiat Money Management',
     id: 7,
     fatherId: 0,
     icon: 'down-square',
@@ -149,7 +160,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-bank-account/bank-account',
-    code: 'R0104'
+    code: 'R0106'
   },
   {
     menuName: 'Financial Management',
@@ -160,7 +171,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-financial',
-    code: 'R0102',
+    code: 'R0107',
     children: [
       {
         id: 1,
@@ -169,7 +180,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010201',
+        code: 'R010701',
         path: '/poc/poc-financial/journal-entries'
       },
       {
@@ -179,7 +190,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010202',
+        code: 'R010702',
         path: '/poc/poc-financial/statements'
       }
     ]
@@ -193,7 +204,7 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     path: '/poc/poc-download-center/download-center',
-    code: 'R0104'
+    code: 'R0108'
   },
   // {
   //   fatherId: 0,
@@ -351,7 +362,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R0305',
+        code: 'R0306',
         newLinkFlag: 1,
         path: ''
       },

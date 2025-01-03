@@ -20,12 +20,11 @@ import { finalize } from 'rxjs';
 
 interface SearchParam {
   transactionNo: string;
-  from: string;
-  to: string;
   type: string;
   currency: string;
   createTime: any;
   status: string;
+  walletAddress: string;
 }
 
 @Component({
@@ -40,10 +39,10 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   headerExtra!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionNoTpl', { static: true })
   transactionNoTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('fromTpl', { static: true })
-  fromTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('toTpl', { static: true })
-  toTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletAddressTpl', { static: true })
+  walletAddressTpl!: TemplateRef<NzSafeAny>;
+  // @ViewChild('toTpl', { static: true })
+  // toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionHashTpl', { static: true })
   transactionHashTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
@@ -55,7 +54,8 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   searchParam: Partial<SearchParam> = {
     createTime: [],
     status: '',
-    type: ''
+    type: '',
+    walletAddress: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -153,14 +153,8 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'From',
-          tdTemplate: this.fromTpl,
-          notNeedEllipsis: true,
-          width: 150
-        },
-        {
-          title: 'To',
-          tdTemplate: this.toTpl,
+          title: 'Master Wallet Address',
+          tdTemplate: this.walletAddressTpl,
           notNeedEllipsis: true,
           width: 150
         },
