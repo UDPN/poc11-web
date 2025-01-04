@@ -55,10 +55,15 @@
 </div> -->
 <div
   class="min-screen-full-height container relative"
+  style="background-color: #E6F7FF;"
   [class.is-night]="isNightTheme$ | async"
   [class.over-modal]="isOverModel"
 >
-  <div nz-row>
+<div class="title-container">
+  <img src="../../../../assets/imgs/login1/logo.svg" alt="">
+  <img src="../../../../assets/imgs/login1/group1.svg" alt="">
+</div>
+  <!-- <div nz-row>
     <div
       nz-col
       [nzXXl]="24"
@@ -70,7 +75,6 @@
       class="relative min-screen-full-height-title"
     >
       <div style="padding: 15px 0" class="title-color">
-        <!-- <nz-card [nzBordered]="isOverModel" [class.is-night]="isNightTheme$ | async" > -->
         <span class="m-l-20 title w-full">
           <img
             [src]="logoImg"
@@ -85,10 +89,9 @@
           </span>
         </span>
 
-        <!-- </nz-card> -->
       </div>
     </div>
-  </div>
+  </div> -->
   <div nz-row class="min-screen-full-height" style="padding: 0 5%">
     <div
       nz-col
@@ -100,24 +103,8 @@
       [nzXs]="0"
       class="relative min-screen-full-height"
     >
-      <div class="absolute logo center">
-        <!-- <img style="width: 48px" src="./assets/imgs/logo-color.svg" alt="ant" /> -->
-        <!-- <span>u<i>dp</i>n</span> -->
-      </div>
-      <div
-        class="full-half flex-coloum center"
-        style="align-items: flex-start"
-        *ngIf="this.hasUser === false"
-      >
-        <span class="sub-desc"
-          >BN has been installed and connected successfully. Please set the user
-          name/password for logging in to BN management system first. After
-          logging in successfully, you can modify it at any time.</span
-        >
-      </div>
-      <!-- <div class="full-height flex-coloum center m-t-50" style="align-items: flex-start">
-        <div><img style="width: 50%" src="./assets/imgs/login1/login-computer.svg" alt="ant" /></div>
-      </div> -->
+
+
     </div>
     <div
       nz-col
@@ -127,10 +114,11 @@
       [nzMd]="24"
       [nzSm]="24"
       [nzXs]="24"
-      class="relative min-screen-full-height center"
+      class="relative min-screen-full-height center container-left"
     >
       <div class="full-height flex-coloum center">
         <nz-card
+           class="ssst"
           [nzBordered]="isOverModel"
           [class.is-night]="isNightTheme$ | async"
         >
