@@ -385,6 +385,17 @@ const isJSON = function isJSON(str: string): boolean {
   return false;
 }
 
+const getCurrentTimeZone = function getCurrentTimeZone(): string {
+  try {
+    // 使用 Intl.DateTimeFormat 获取 IANA 时区
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch (error) {
+    // 如果获取失败，返回默认时区
+    console.warn('Failed to get IANA timezone:', error);
+    return 'Asia/Shanghai';
+  }
+};
+
 export {
   fnFormatToHump,
   fnGetReuseStrategyKeyFn,
@@ -417,5 +428,6 @@ export {
   timeToTimestampMillisecond,
   thousandRate,
   isJSON,
-  timeZoneIANA
+  timeZoneIANA,
+  getCurrentTimeZone
 };
