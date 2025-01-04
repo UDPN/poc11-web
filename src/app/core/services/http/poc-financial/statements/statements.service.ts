@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-27 09:57:54
+ * @LastEditTime: 2025-01-04 16:14:19
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { BaseHttpService } from '../../base-http.service';
 export interface Adata {
   exportStrategy: string;
   taskName: string;
+  timeZone: string;
   tokenId: string | number;
   txTypes: Array<any>;
 }
@@ -27,6 +28,7 @@ export interface Sdata {
 export interface Cdata {
   exportType: string | number;
   moduleType: string | number;
+  timeZone: string;
   transactionRecordsListReqVO?: any;
   billTxListReqVO?: any;
 }
