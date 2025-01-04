@@ -68,6 +68,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   availableCurrecyModelCount = '';
   availableCurrecyModelShow = '';
   availableCurrecyModelShowIcon = '';
+  sendName = '';
+  beneficiaryName = '';
   settlementStatus = false;
   beneficiaryCurrencyName: any = '';
   transferTitle: string = '';
@@ -88,11 +90,15 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     com: any;
     total: any;
     reve: any;
+    fromCapitalPoolAddress: any;
+    toCapitalPoolAddress: any;
   } = {
     rate: '',
     com: '',
     total: '',
-    reve: ''
+    reve: '',
+    fromCapitalPoolAddress: '',
+    toCapitalPoolAddress: ''
   };
   inputType = 0;
   bankNames = '';
@@ -687,6 +693,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.availableCurrecy.filter(
       (item: any) => item.digitalCurrencyName === e
     );
+    this.sendName = val[0].digitalSymbol;
     this.availableCurrecyModelShowIcon =
       val[0].legalCurrencySymbol === null ? '' : val[0].legalCurrencySymbol;
     this.availableCurrecyModelShow =
@@ -757,11 +764,14 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       rate: '',
       com: '',
       total: '',
-      reve: ''
+      reve: '',
+      fromCapitalPoolAddress: '',
+      toCapitalPoolAddress: ''
     };
     const val = this.newAmountArr.filter(
       (item: any) => item.digitalCurrencyName === e
     );
+    this.beneficiaryName = val[0]['digitalSymbol'];
     this.beneficiaryCurrencyIcon = val[0]['legalCurrencySymbol'];
     // centralBankId
     this.newToCommercialBankId = val[0]['centralBankId'];
