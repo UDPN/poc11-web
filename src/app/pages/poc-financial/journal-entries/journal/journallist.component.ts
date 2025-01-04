@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { timeToTimestamp } from '@app/utils/tools';
+import { getCurrentTimeZone, timeToTimestamp } from '@app/utils/tools';
 import { finalize } from 'rxjs';
 import { StatementsService } from '@app/core/services/http/poc-financial/statements/statements.service';
 
@@ -320,6 +320,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
       .createExport({
         exportType: 0,
         moduleType: 1,
+        timeZone: getCurrentTimeZone(),
         billTxListReqVO: {
           ruleId: this.searchParam.ruleId || '',
           traceId: this.searchParam.traceId || '',

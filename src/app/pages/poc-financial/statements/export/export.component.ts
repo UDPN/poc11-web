@@ -18,7 +18,10 @@ import { CommonService } from '@app/core/services/http/common/common.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { SearchCommonVO } from '@app/core/services/types';
 import { finalize } from 'rxjs';
-import { timeToTimestampMillisecond } from '@app/utils/tools';
+import {
+  getCurrentTimeZone,
+  timeToTimestampMillisecond
+} from '@app/utils/tools';
 interface SearchParam {
   tokenId: string | number;
   blockchainId: string | number;
@@ -274,6 +277,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
         .createExport({
           exportType: 0,
           moduleType: 5,
+          timeZone: getCurrentTimeZone(),
           transactionRecordsListReqVO: {
             tokenId: this.exportParam.tokenId,
             txStartTime: this.exportParam.txnTime[0]

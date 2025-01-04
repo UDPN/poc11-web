@@ -38,6 +38,7 @@ import { StatementsService } from '@app/core/services/http/poc-financial/stateme
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { getCurrentTimeZone } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -195,8 +196,10 @@ export class StatementsComponent implements OnInit, AfterViewInit {
   }
   onSubmit() {
     this.isNewLoading = true;
+    const params = this.validateForm.value;
+    params.timeZone = getCurrentTimeZone();
     this.statementsService
-      .createTask(this.validateForm.value)
+      .createTask(params)
       .pipe(finalize(() => (this.isNewLoading = false)))
       .subscribe({
         next: (res) => {
