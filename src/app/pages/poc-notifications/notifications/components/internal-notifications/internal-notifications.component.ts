@@ -113,7 +113,7 @@ export class InternalNotificationsComponent {
 
   onDelete(chatMsgId: any) {
     this.modal.confirm({
-      nzTitle: `Are you sure you want to delete this internal notification?`,
+      nzTitle: `Are you sure you want to delete this message?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
@@ -124,7 +124,7 @@ export class InternalNotificationsComponent {
                 resolve(true);
                 if (res) {
                   this.message
-                    .success(`Delete successfully`, { nzDuration: 1000 })
+                    .success(`Deleted`, { nzDuration: 1000 })
                     .onClose!.subscribe(() => {
                       this.getDataList();
                     });

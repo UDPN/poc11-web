@@ -154,7 +154,7 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     }
     this.modalService.confirm({
       nzClassName: 'n-modal',
-      nzTitle: 'Are you sure to submit?',
+      nzTitle: 'Are you sure you want to submit this application?',
       nzContent:
         '<b>After the information is submitted, it will enter the review stage, please wait patiently</b>',
       nzOnOk: () => {

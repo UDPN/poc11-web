@@ -1,5 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  UntypedFormControl,
+  Validators
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { Location } from '@angular/common';
@@ -38,7 +44,15 @@ export class AddComponent implements OnInit {
     targetCurrency: '',
     targetPlatform: ''
   };
-  constructor(private fb: FormBuilder, public routeInfo: ActivatedRoute, private commonService: CommonService, private message: NzMessageService, private settlementService: SettlementService, private cdr: ChangeDetectorRef, private location: Location) { }
+  constructor(
+    private fb: FormBuilder,
+    public routeInfo: ActivatedRoute,
+    private commonService: CommonService,
+    private message: NzMessageService,
+    private settlementService: SettlementService,
+    private cdr: ChangeDetectorRef,
+    private location: Location
+  ) {}
   ngAfterViewInit(): void {
     this.fromCommission();
     this.fromMaxCommission();
@@ -46,7 +60,10 @@ export class AddComponent implements OnInit {
       title: this.tempStatus === true ? 'Create' : 'Edit',
       breadcrumbs: [
         { name: 'Settlement Management' },
-        { name: 'Settlement Model Management', url: '/poc/poc-settlement/settlement' },
+        {
+          name: 'Settlement Model Management',
+          url: '/poc/poc-settlement/settlement'
+        },
         { name: this.tempStatus === true ? 'Create' : 'Edit' }
       ],
       extra: '',
@@ -62,103 +79,122 @@ export class AddComponent implements OnInit {
       chargingModel: ['1', [Validators.required]],
       commission: [null, [Validators.required]],
       maxCommission: [null, [Validators.required]]
-    })
+    });
     this.initSelect();
     this.routeInfo.queryParams.subscribe((params: any) => {
       if (JSON.stringify(params) !== '{}') {
         this.tempStatus = false;
-        this.getInfo(params['formRateCurrency'], params['formRatePlatform'], params['toRateCurrency'], params['toRatePlatform']);
+        this.getInfo(
+          params['formRateCurrency'],
+          params['formRatePlatform'],
+          params['toRateCurrency'],
+          params['toRatePlatform']
+        );
       } else {
         this.onChangeRate(1);
         this.onChangeModel('1');
       }
-    })
+    });
   }
 
   initSelect() {
-    this.commonService.commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' }).subscribe((res) => {
-      this.pairedList = res.dataInfo;
-      this.pairedList.map((item: any, i: any) => {
-        Object.assign(item, { key: i + 1 })
+    this.commonService
+      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
+      .subscribe((res) => {
+        this.pairedList = res.dataInfo;
+        this.pairedList.map((item: any, i: any) => {
+          Object.assign(item, { key: i + 1 });
+        });
+        this.maxCommissionAfter =
+          this.pairedList[0].sourceCurrency + ' (Per Transaction)';
+      });
+    this.commonService
+      .commonApi({
+        dropDownTypeCode: 'drop_down_business_status_info',
+        csePCode: 'FXSP_CHARGING_MODEL'
       })
-      this.maxCommissionAfter = this.pairedList[0].sourceCurrency + ' (Per Transaction)';
-    })
-    this.commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_CHARGING_MODEL' }).subscribe((res) => {
-      this.chargingModelList = res.dataInfo;
-    })
+      .subscribe((res) => {
+        this.chargingModelList = res.dataInfo;
+      });
   }
 
   fromCommission() {
     const el: any = document.getElementById('inputCommission');
     const inputValue = fromEvent(el, 'keyup');
-    inputValue.pipe(
-      debounceTime(200),
-      map((e: any) => {
-        let data = e.target.value;
-        let sender = this.validateForm.get("commission");
-        let chargingModel = this.validateForm.get("chargingModel");
-        sender?.setValue(sender?.value.replace(/[^\-?\d.]/g, ''));
-        let posDots = data.lastIndexOf(".");
-        let posDotss = data.indexOf(".");
-        if (posDots === 0) {
-          sender?.setValue('');
-          return;
-        }
-        if (posDots > posDotss) {
-          sender?.setValue(sender?.value.substring(0, posDotss + 1));
-          return;
-        }
-        let rf = sender?.value.split(".");
-        if (chargingModel?.value === '1') {
-          if (rf.length > 1 && rf[1].length > 0 && rf[1].length > 6) {
-            rf[1] = rf[1].substring(0, 6);
-            sender?.setValue(rf[0] + '.' + rf[1]);
+    inputValue
+      .pipe(
+        debounceTime(200),
+        map((e: any) => {
+          let data = e.target.value;
+          let sender = this.validateForm.get('commission');
+          let chargingModel = this.validateForm.get('chargingModel');
+          sender?.setValue(sender?.value.replace(/[^\-?\d.]/g, ''));
+          let posDots = data.lastIndexOf('.');
+          let posDotss = data.indexOf('.');
+          if (posDots === 0) {
+            sender?.setValue('');
             return;
           }
-        } else {
-          if (rf.length > 1 && rf[1].length > 0 && rf[1].length > 8) {
-            rf[1] = rf[1].substring(0, 8);
-            sender?.setValue(rf[0] + '.' + rf[1]);
+          if (posDots > posDotss) {
+            sender?.setValue(sender?.value.substring(0, posDotss + 1));
             return;
           }
-        }
-      }),
-    ).subscribe()
+          let rf = sender?.value.split('.');
+          if (chargingModel?.value === '1') {
+            if (rf.length > 1 && rf[1].length > 0 && rf[1].length > 6) {
+              rf[1] = rf[1].substring(0, 6);
+              sender?.setValue(rf[0] + '.' + rf[1]);
+              return;
+            }
+          } else {
+            if (rf.length > 1 && rf[1].length > 0 && rf[1].length > 8) {
+              rf[1] = rf[1].substring(0, 8);
+              sender?.setValue(rf[0] + '.' + rf[1]);
+              return;
+            }
+          }
+        })
+      )
+      .subscribe();
   }
 
   fromMaxCommission() {
     const el: any = document.getElementById('inputMaxCommission');
     const inputValue = fromEvent(el, 'keyup');
-    inputValue.pipe(
-      debounceTime(200),
-      map((e: any) => {
-        let data = e.target.value;
-        let sender = this.validateForm.get("maxCommission");
-        sender?.setValue(sender?.value.replace(/[^\-?\d.]/g, ''));
-        let posDots = data.lastIndexOf(".");
-        let posDotss = data.indexOf(".");
-        if (posDots === 0) {
-          sender?.setValue('');
-          return;
-        }
-        if (posDots > posDotss) {
-          sender?.setValue(sender?.value.substring(0, posDotss + 1));
-          return;
-        }
-        let rf = sender?.value.split(".");
-        if (rf.length > 1 && rf[1].length > 0 && rf[1].length > 8) {
-          rf[1] = rf[1].substring(0, 8);
-          sender?.setValue(rf[0] + '.' + rf[1]);
-          return;
-        }
-      }),
-    ).subscribe()
+    inputValue
+      .pipe(
+        debounceTime(200),
+        map((e: any) => {
+          let data = e.target.value;
+          let sender = this.validateForm.get('maxCommission');
+          sender?.setValue(sender?.value.replace(/[^\-?\d.]/g, ''));
+          let posDots = data.lastIndexOf('.');
+          let posDotss = data.indexOf('.');
+          if (posDots === 0) {
+            sender?.setValue('');
+            return;
+          }
+          if (posDots > posDotss) {
+            sender?.setValue(sender?.value.substring(0, posDotss + 1));
+            return;
+          }
+          let rf = sender?.value.split('.');
+          if (rf.length > 1 && rf[1].length > 0 && rf[1].length > 8) {
+            rf[1] = rf[1].substring(0, 8);
+            sender?.setValue(rf[0] + '.' + rf[1]);
+            return;
+          }
+        })
+      )
+      .subscribe();
   }
 
-  bankNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
+  bankNameValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!(/^[^a-zA-Z][\s\S]{1,49}$/).test(control.value)) {
+    } else if (!/^[^a-zA-Z][\s\S]{1,49}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -172,11 +208,13 @@ export class AddComponent implements OnInit {
         this.rateList.targetCurrency = item.targetCurrency;
         this.rateList.targetPlatform = item.targetPlatform;
       }
-    })
+    });
     if (this.validateForm.get('chargingModel')?.value === '1') {
-      this.maxCommissionAfter = this.rateList.sourceCurrency + ' (Per Transaction)';
+      this.maxCommissionAfter =
+        this.rateList.sourceCurrency + ' (Per Transaction)';
     } else {
-      this.commissionAfter = this.rateList.sourceCurrency + ' (Per Transaction)';
+      this.commissionAfter =
+        this.rateList.sourceCurrency + ' (Per Transaction)';
     }
   }
 
@@ -187,33 +225,63 @@ export class AddComponent implements OnInit {
         if (event === '1') {
           this.commissionAfter = '%';
           this.maxCommissionAfter = item.sourceCurrency + ' (Per Transaction)';
-          this.validateForm?.addControl('maxCommission', new FormControl('', [Validators.required]));
+          this.validateForm?.addControl(
+            'maxCommission',
+            new FormControl('', [Validators.required])
+          );
         } else {
           this.commissionAfter = item.sourceCurrency + ' (Per Transaction)';
           this.validateForm?.removeControl('maxCommission');
         }
       }
-    })
+    });
   }
 
-  getInfo(formRateCurrency: string, formRatePlatform: string, toRateCurrency: string, toRatePlatform: string): void {
-    this.settlementService.getInfo({ formRateCurrency, formRatePlatform, toRateCurrency, toRatePlatform }).subscribe((res: any) => {
-      this.info = res;
-      this.validateForm.get('settlementModelName')?.setValue(res.settlementModelName);
-      this.validateForm.get('chargingModel')?.setValue(res.chargingModel === 1 ? '1' : '2');
-      const chargingModel = this.validateForm.get('chargingModel')?.value;
-      this.onChangeModel(chargingModel);
-      this.validateForm.get('commission')?.setValue(res.chargingModel === 1 ? res.ratioCommission : res.regularCommission);
-      this.validateForm.get('maxCommission')?.setValue(res.maxCommission);
-      this.pairedList.map((item: any) => {
-        if (item.sourceCurrency === res.formRateCurrency && item.sourcePlatform === res.formRatePlatform && item.targetCurrency === res.toRateCurrency && item.targetPlatform === res.toRatePlatform) {
-          this.validateForm.get('pairedExchangeRate')?.setValue(item.key);
-          this.cdr.markForCheck();
-        }
+  getInfo(
+    formRateCurrency: string,
+    formRatePlatform: string,
+    toRateCurrency: string,
+    toRatePlatform: string
+  ): void {
+    this.settlementService
+      .getInfo({
+        formRateCurrency,
+        formRatePlatform,
+        toRateCurrency,
+        toRatePlatform
       })
-      this.cdr.markForCheck();
-      return;
-    })
+      .subscribe((res: any) => {
+        this.info = res;
+        this.validateForm
+          .get('settlementModelName')
+          ?.setValue(res.settlementModelName);
+        this.validateForm
+          .get('chargingModel')
+          ?.setValue(res.chargingModel === 1 ? '1' : '2');
+        const chargingModel = this.validateForm.get('chargingModel')?.value;
+        this.onChangeModel(chargingModel);
+        this.validateForm
+          .get('commission')
+          ?.setValue(
+            res.chargingModel === 1
+              ? res.ratioCommission
+              : res.regularCommission
+          );
+        this.validateForm.get('maxCommission')?.setValue(res.maxCommission);
+        this.pairedList.map((item: any) => {
+          if (
+            item.sourceCurrency === res.formRateCurrency &&
+            item.sourcePlatform === res.formRatePlatform &&
+            item.targetCurrency === res.toRateCurrency &&
+            item.targetPlatform === res.toRatePlatform
+          ) {
+            this.validateForm.get('pairedExchangeRate')?.setValue(item.key);
+            this.cdr.markForCheck();
+          }
+        });
+        this.cdr.markForCheck();
+        return;
+      });
   }
 
   onSubmit() {
@@ -222,55 +290,75 @@ export class AddComponent implements OnInit {
     }
     this.isLoading = true;
     const params = {
-      formRatePlatform: this.rateList.sourcePlatform || this.pairedList[0].sourcePlatform,
-      formRateCurrency: this.rateList.sourceCurrency || this.pairedList[0].sourceCurrency,
-      toRatePlatform: this.rateList.targetPlatform || this.pairedList[0].targetPlatform,
-      toRateCurrency: this.rateList.targetCurrency || this.pairedList[0].targetCurrency,
+      formRatePlatform:
+        this.rateList.sourcePlatform || this.pairedList[0].sourcePlatform,
+      formRateCurrency:
+        this.rateList.sourceCurrency || this.pairedList[0].sourceCurrency,
+      toRatePlatform:
+        this.rateList.targetPlatform || this.pairedList[0].targetPlatform,
+      toRateCurrency:
+        this.rateList.targetCurrency || this.pairedList[0].targetCurrency,
       settlementModelName: this.validateForm.get('settlementModelName')?.value,
-      chargingModel: this.validateForm.get('chargingModel')?.value === '2' ? 2 : 1,
-      regularCommission: this.validateForm.get('chargingModel')?.value === '2' ? this.validateForm.get('commission')?.value : '',
-      ratioCommission: this.validateForm.get('chargingModel')?.value === '1' ? this.validateForm.get('commission')?.value : '',
+      chargingModel:
+        this.validateForm.get('chargingModel')?.value === '2' ? 2 : 1,
+      regularCommission:
+        this.validateForm.get('chargingModel')?.value === '2'
+          ? this.validateForm.get('commission')?.value
+          : '',
+      ratioCommission:
+        this.validateForm.get('chargingModel')?.value === '1'
+          ? this.validateForm.get('commission')?.value
+          : '',
       maxCommission: this.validateForm.get('maxCommission')?.value
-    }
+    };
     if (this.tempStatus === true) {
-      this.settlementService.add(params).pipe(finalize(() => this.isLoading = false)).subscribe({
-        next: res => {
-          if (res) {
-            this.message.success('Add successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
-              this.validateForm.reset();
-              this.location.back();
-            });
+      this.settlementService
+        .add(params)
+        .pipe(finalize(() => (this.isLoading = false)))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.message
+                .success('Added', { nzDuration: 1000 })
+                .onClose.subscribe(() => {
+                  this.validateForm.reset();
+                  this.location.back();
+                });
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
           }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: err => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
-      })
+        });
     } else {
-      this.settlementService.edit(params).pipe(finalize(() => this.isLoading = false)).subscribe({
-        next: res => {
-          if (res) {
-            this.message.success('Edit successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
-              this.validateForm.reset();
-              this.location.back();
-            });
+      this.settlementService
+        .edit(params)
+        .pipe(finalize(() => (this.isLoading = false)))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.message
+                .success('Edit completed', { nzDuration: 1000 })
+                .onClose.subscribe(() => {
+                  this.validateForm.reset();
+                  this.location.back();
+                });
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
           }
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: err => {
-          this.isLoading = false;
-          this.cdr.markForCheck();
-        }
-      })
+        });
     }
   }
 
   onBack() {
     this.location.back();
   }
-
 }

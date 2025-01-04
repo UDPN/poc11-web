@@ -328,7 +328,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
           this.editValidateForm.get('amount')?.reset();
           if (res) {
             this.message
-              .success('Edit successfully!', { nzDuration: 1000 })
+              .success('Edit completed', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 this.getDataList();
               });

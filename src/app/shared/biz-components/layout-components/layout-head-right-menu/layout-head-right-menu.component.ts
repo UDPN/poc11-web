@@ -84,7 +84,7 @@ export class LayoutHeadRightMenuComponent implements OnInit, OnDestroy {
         this.resetPasswordService.resetPassword(modalValue).subscribe((_) => {
           if (_.code === '0') {
             this.message
-              .success('Password changed successfully !')
+              .success('Password changed')
               .onClose!.pipe()
               .subscribe(() => {
                 this.loginOutService.loginOut().then();

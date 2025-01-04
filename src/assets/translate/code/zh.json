@@ -78,7 +78,7 @@
   "MSG_FXSP_ELEVEN_20435": "Failed to update user role association information",
   "MSG_FXSP_ELEVEN_20436": "clientName not null",
   "MSG_FXSP_ELEVEN_20437": "password not null",
-  "MSG_FXSP_ELEVEN_20438": "Please enter the login account correctly",
+  "MSG_FXSP_ELEVEN_20438": "Please enter correct User Name",
   "MSG_FXSP_ELEVEN_20439": "Your passwords do not match",
   "MSG_FXSP_ELEVEN_20440": "The verification code is wrong",
   "MSG_FXSP_ELEVEN_20441": "keySuffix not null",

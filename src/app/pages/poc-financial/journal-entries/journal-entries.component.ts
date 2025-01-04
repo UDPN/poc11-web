@@ -239,15 +239,15 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
   onStatusUpdate(id: string, state: number, ledgerName: string) {
     const statusText = state === 1 ? 'activate' : 'deactivate';
     this.modal.confirm({
-      nzTitle: `Are you sure you want to deactivate the business mapping for  ${ledgerName} ?`,
+      nzTitle: `Are you sure you want to ${statusText} the business mapping for  ${ledgerName} ?`,
       nzOnOk: () => {
         this.journalService.updateStatus({ ruleId: id, state }).subscribe({
           next: (res) => {
             if (res.code == 0) {
               this.message.success(
                 `${
-                  statusText.charAt(0).toUpperCase() + statusText.slice(1)
-                } successfully`
+                  statusText.charAt(0).toUpperCase() + statusText.slice(1) + 'd'
+                }`
               );
               this.getDataList(this.tableQueryParams);
               this.cdr.detectChanges();

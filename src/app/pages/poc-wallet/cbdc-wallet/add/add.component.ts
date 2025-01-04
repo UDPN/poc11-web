@@ -300,7 +300,7 @@ export class AddComponent implements OnInit {
         next: (res) => {
           if (res) {
             this.message
-              .success('Add successfully!', { nzDuration: 1000 })
+              .success('Wallet added!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 this.validateForm.reset();
                 this.location.back();

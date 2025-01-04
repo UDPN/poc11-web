@@ -133,7 +133,7 @@
           </nz-form-item>
         </div>
       </ng-container>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
           <nz-form-label nzRequired nzSpan="10">
             Business Node ID
@@ -167,7 +167,7 @@
             </ng-template>
           </nz-form-control>
         </nz-form-item>
-      </div>
+      </div> -->
       <ng-container
         *ngIf="
           this.validateForm.get('creationMethod')?.value === 1 &&
@@ -176,7 +176,7 @@
       >
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-            <nz-form-control [nzErrorTip]="nodeError">
+            <nz-form-control>
               <div nz-row>
                 <div nz-col nzSpan="24">
                   <button
@@ -383,7 +383,7 @@
               <nz-alert
                 nzType="info"
                 [nzMessage]="
-                  'The system will create and register a wallet in the corresponding Token wallet contract.'
+                  'The system will create and register a wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.'
                 "
                 nzShowIcon
               ></nz-alert>

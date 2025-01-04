@@ -1,3 +1,10 @@
+/*
+ * @Author: chenyuting
+ * @Date: 2024-07-02 14:33:55
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-04 17:29:29
+ * @Description:
+ */
 import {
   ChangeDetectorRef,
   Component,
@@ -184,46 +191,48 @@ export class SystemStyleComponent implements OnInit {
     if (this.validateForm.valid) {
       this.isLoading = true;
       this.modal.confirm({
-        nzTitle: 'Are you sure you want to modify it ?',
+        nzTitle: 'Are you sure you want to modify the configuration?',
         nzContent: '',
         nzOnOk: () => {
           if (
             this.originalLogo === this.validateForm.get('logoFileHash')?.value
           ) {
-            this.styleService.submit(this.validateForm.value).subscribe((res) => {
-              this.isLoading = false;
-              if (res) {
-                this.message
-                  .success(`Submit successfully !`)
-                  .onClose!.subscribe(() => {
+            this.styleService
+              .submit(this.validateForm.value)
+              .subscribe((res) => {
+                this.isLoading = false;
+                if (res) {
+                  this.message.success(`Submitted`).onClose!.subscribe(() => {
                     // sessionStorage.clear();
                     // this.loginOutService.loginOut().then((_) => {
                     //   this.router.navigateByUrl('/login/login-modify');
                     // });
                   });
-              }
-              this.cdr.markForCheck();
-            });
+                }
+                this.cdr.markForCheck();
+              });
           } else {
             this.commonService
               .uploadImg(this.fileImgWord)
               .subscribe((result) => {
                 if (result) {
                   this.validateForm.get('logoFileHash')?.setValue(result);
-                  this.styleService.submit(this.validateForm.value).subscribe((res) => {
-                    this.isLoading = false;
-                    if (res) {
-                      this.message
-                        .success(`Submit successfully !`)
-                        .onClose!.subscribe(() => {
-                          // sessionStorage.clear();
-                          // this.loginOutService.loginOut().then((_) => {
-                          //   this.router.navigateByUrl('/login/login-modify');
-                          // });
-                        });
-                    }
-                    this.cdr.markForCheck();
-                  });
+                  this.styleService
+                    .submit(this.validateForm.value)
+                    .subscribe((res) => {
+                      this.isLoading = false;
+                      if (res) {
+                        this.message
+                          .success(`Submitted`)
+                          .onClose!.subscribe(() => {
+                            // sessionStorage.clear();
+                            // this.loginOutService.loginOut().then((_) => {
+                            //   this.router.navigateByUrl('/login/login-modify');
+                            // });
+                          });
+                      }
+                      this.cdr.markForCheck();
+                    });
                 }
               });
           }

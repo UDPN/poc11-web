@@ -40,7 +40,17 @@ export class AddComponent implements OnInit, AfterViewInit {
   touchedGroups: Set<number> = new Set();
   tokenList: TokenInfo[] = [];
   selectedToken: TokenInfo | null = null;
-  transactionTypes = ['Top-Up', 'Withdraw', 'Internal Transfer','External Transfer out','External Transfer in','External  FX Transfer out','External  FX Transfer in','FX Purchasing -Transfer out','FX Purchasing -Transfer in'];
+  transactionTypes = [
+    'Top-Up',
+    'Withdraw',
+    'Internal Transfer',
+    'External Transfer out',
+    'External Transfer in',
+    'External  FX Transfer out',
+    'External  FX Transfer in',
+    'FX Purchasing -Transfer out',
+    'FX Purchasing -Transfer in'
+  ];
   subjectList: SubjectInfo[] = [];
   currentFilteredSubjects: { [key: string]: any[] } = {};
   loadingSubjects: { [key: string]: boolean } = {};
@@ -315,7 +325,10 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   // 修改方法名以更好地反映其功能
   private getDefaultRowCount(type: string): number {
-    if (type === 'External  FX Transfer out' || type === 'FX Purchasing -Transfer out') {
+    if (
+      type === 'External  FX Transfer out' ||
+      type === 'FX Purchasing -Transfer out'
+    ) {
       return 3;
     } else if (type === 'Top-Up' || type === 'Withdraw') {
       return 4;
@@ -573,9 +586,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         next: (response: any) => {
           if (response.code === 0) {
             this.message
-              .success(
-                `${this.isEditMode ? 'Updated' : 'Submitted'} successfully`
-              )
+              .success(`${this.isEditMode ? 'Updated' : 'Submitted'}`)
               .onClose.subscribe(() => {
                 this.router.navigate(['/poc/poc-financial/journal-entries']);
                 this.storageService.clearStorage();
@@ -819,7 +830,11 @@ export class AddComponent implements OnInit, AfterViewInit {
             transactionsArray.push(
               this.fb.group({
                 debitCredit: [
-                  transaction.debitCredit || this.getDefaultDebitCredit(groupData.transactionType, index),
+                  transaction.debitCredit ||
+                    this.getDefaultDebitCredit(
+                      groupData.transactionType,
+                      index
+                    ),
                   Validators.required
                 ],
                 accountCode: [transaction.accountCode, Validators.required],
@@ -834,11 +849,16 @@ export class AddComponent implements OnInit, AfterViewInit {
           });
         } else {
           // 如果没有交易记录，添加默认行数的空记录
-          const defaultRows = this.getDefaultRowCount(groupData.transactionType);
+          const defaultRows = this.getDefaultRowCount(
+            groupData.transactionType
+          );
           for (let i = 0; i < defaultRows; i++) {
             transactionsArray.push(
               this.fb.group({
-                debitCredit: [this.getDefaultDebitCredit(groupData.transactionType, i), Validators.required],
+                debitCredit: [
+                  this.getDefaultDebitCredit(groupData.transactionType, i),
+                  Validators.required
+                ],
                 accountCode: ['', Validators.required],
                 accountName: ['', Validators.required],
                 amount: [
@@ -866,7 +886,10 @@ export class AddComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < defaultRows; i++) {
           transactionsArray.push(
             this.fb.group({
-              debitCredit: [this.getDefaultDebitCredit(type, i), Validators.required],
+              debitCredit: [
+                this.getDefaultDebitCredit(type, i),
+                Validators.required
+              ],
               accountCode: ['', Validators.required],
               accountName: ['', Validators.required],
               amount: [
@@ -905,7 +928,10 @@ export class AddComponent implements OnInit, AfterViewInit {
     const isDebit = [1, 3, 5].includes(debitCreditValue);
     const isFee = [5, 6].includes(debitCreditValue);
 
-    if (transactionType === 'External  FX Transfer out' || transactionType === 'FX Purchasing -Transfer out') {
+    if (
+      transactionType === 'External  FX Transfer out' ||
+      transactionType === 'FX Purchasing -Transfer out'
+    ) {
       if (isFee) {
         return `${transactionType} Fee Amount`;
       }
