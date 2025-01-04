@@ -94,7 +94,7 @@
                       >Please select your Remitter's Wallet
                       Address</ng-container
                     >
-                    <ng-container *ngIf="control.hasError('regular')"
+                    <ng-container *ngIf="control.hasError('regular') && isError"
                       >The wallet addresses of the Remitter and Beneficiary
                       cannot be identical.</ng-container
                     >
@@ -305,7 +305,7 @@
                       >Please input your Beneficiary's Wallet
                       Address</ng-container
                     >
-                    <ng-container *ngIf="control.hasError('regular')"
+                    <ng-container *ngIf="control.hasError('regular') && isError"
                       >The wallet addresses of the Remitter and Beneficiary
                       cannot be identical.</ng-container
                     >

@@ -80,6 +80,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   timeString: any = '';
   timeSubscription!: Subscription;
   newRemitterWalletAddress: string = '';
+  valueValidator: string = '';
+  valueValidator1: string = '';
   oldAmount: any = '';
   remiInfo: {
     rate: any;
@@ -96,6 +98,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   bankNames = '';
   amountValue: any;
   reniSendAmountValue: any;
+  isError: boolean = true;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -111,6 +114,50 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     // this.fromEventBeneficialWalletAddress();
+    this.validateForm
+      .get('beneficialWalletAddress')
+      ?.valueChanges.subscribe((res) => {
+        this.remitterWalletAddressList.map((item) => {
+          if (
+            item.bankAccountId ===
+            this.validateForm.get('remitterWalletAddress')?.value
+          ) {
+            this.valueValidator = item.chainAccountAddress;
+          }
+        });
+        this.BeneficiaryArr.map((item) => {
+          if (item.bankWalletId === res) {
+            this.valueValidator1 = item.chainAccountAddress;
+          }
+        });
+        if (this.valueValidator === this.valueValidator1) {
+          this.isError = true;
+        } else {
+          this.isError = false;
+        }
+      });
+    this.validateForm
+      .get('remitterWalletAddress')
+      ?.valueChanges.subscribe((res) => {
+        this.remitterWalletAddressList.map((item) => {
+          if (item.bankAccountId === res) {
+            this.valueValidator = item.chainAccountAddress;
+          }
+        });
+        this.BeneficiaryArr.map((item) => {
+          if (
+            item.bankWalletId ===
+            this.validateForm.get('beneficialWalletAddress')?.value
+          ) {
+            this.valueValidator1 = item.chainAccountAddress;
+          }
+        });
+        if (this.valueValidator === this.valueValidator1) {
+          this.isError = true;
+        } else {
+          this.isError = false;
+        }
+      });
     this.formEventCurrencyInterbankSettlementAmount();
     this.formEventCurrencyInterbankSettlementSendAmount();
     this.pageHeaderInfo = {
@@ -176,23 +223,23 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     if (control.value === '') {
       return { error: true, required: true };
     } else if (control.value) {
-      let value: string = '';
-      let value1: string = '';
       this.remitterWalletAddressList.map((item) => {
         if (
           item.bankAccountId ===
           this.validateForm.get('remitterWalletAddress')?.value
         ) {
-          value = item.chainAccountAddress;
+          this.valueValidator = item.chainAccountAddress;
         }
       });
       this.BeneficiaryArr.map((item) => {
         if (item.bankWalletId === control.value) {
-          value1 = item.chainAccountAddress;
+          this.valueValidator1 = item.chainAccountAddress;
         }
       });
-      if (value === value1) {
+      if (this.valueValidator === this.valueValidator1) {
         return { error: true, regular: true };
+      } else {
+        return {};
       }
     }
     return {};
@@ -204,11 +251,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     if (control.value === '') {
       return { error: true, required: true };
     } else if (control.value) {
-      let value: string = '';
-      let value1: string = '';
       this.remitterWalletAddressList.map((item) => {
         if (item.bankAccountId === control.value) {
-          value = item.chainAccountAddress;
+          this.valueValidator = item.chainAccountAddress;
         }
       });
       this.BeneficiaryArr.map((item) => {
@@ -216,11 +261,13 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           item.bankWalletId ===
           this.validateForm.get('beneficialWalletAddress')?.value
         ) {
-          value1 = item.chainAccountAddress;
+          this.valueValidator1 = item.chainAccountAddress;
         }
       });
-      if (value === value1) {
+      if (this.valueValidator === this.valueValidator1) {
         return { error: true, regular: true };
+      } else {
+        return {};
       }
     }
     return {};

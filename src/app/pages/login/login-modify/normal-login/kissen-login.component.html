@@ -3,15 +3,16 @@
     BN Name: {{ instance }}
   </h2> -->
   <div class="logo-container">
-    <img [src]="logoImg" alt="" class="m-r-20" *ngIf="logoImg" />
+    <img
+      [src]="logoImg"
+      alt=""
+      style="height: 4rem; text-align: center"
+      *ngIf="logoImg"
+    />
   </div>
 
-  <p
-    class="m-b-30 title"
-    [class.is-over-model]="isOverModel"
-    *ngIf="systemTitle"
-  >
-    {{ systemTitle }}
+  <p class="m-b-30 title" [class.is-over-model]="isOverModel">
+    {{ 'Commercial Bank Control Panel' }}
   </p>
   <div
     class="full-with"
