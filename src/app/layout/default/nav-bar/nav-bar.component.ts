@@ -325,14 +325,16 @@ export class NavBarComponent implements OnInit {
     this.styleService.search().subscribe((res: any) => {
       if (res) {
         // this.systemName = res.systemName;
-        if (res.logoFileHash) {
-          this.commonService
-            .downImg({ hash: res.logoFileHash })
-            .subscribe((resu) => {
-              this.logoImg = 'data:image/jpg;base64,' + resu;
-              this.cdr.markForCheck();
-            });
-        }
+        this.logoImg = res.logoFileHash;
+        this.cdr.markForCheck();
+        // if (res.logoFileHash) {
+        //   this.commonService
+        //     .downImg({ hash: res.logoFileHash })
+        //     .subscribe((resu) => {
+        //       this.logoImg = 'data:image/jpg;base64,' + resu;
+        //       this.cdr.markForCheck();
+        //     });
+        // }
       }
     });
     this.clientName = sessionStorage.getItem('clientName');

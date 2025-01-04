@@ -82,16 +82,22 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   timeSubscription!: Subscription;
   transactionWalletAddressArr: any[] = [];
   inputType = 0;
+  sendName = '';
+  beneficiaryName = '';
   remiInfo: {
     rate: any;
     com: any;
     total: any;
     reve: any;
+    fromCapitalPoolAddress: any;
+    toCapitalPoolAddress: any;
   } = {
     rate: '',
     com: '',
     total: '',
-    reve: ''
+    reve: '',
+    fromCapitalPoolAddress: '',
+    toCapitalPoolAddress: ''
   };
   amountValue: any;
   reniSendAmountValue: any;
@@ -252,8 +258,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       rate: '',
       com: '',
       total: '',
-      reve: ''
+      reve: '',
+      fromCapitalPoolAddress: '',
+      toCapitalPoolAddress: ''
     };
+    this.beneficiaryName = this.fxReceivingData[e]?.currecy;
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.reveingCurrecyModelShowIcon =
       this.fxReceivingData[e].legalCurrencySymbol === null
@@ -371,6 +380,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   onPurchCurrecy(e: number) {
     // // 加载receiving currency
     // this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
+    this.sendName = this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.purchCurrecyModelShowIcon =
       this.fxPurchaseData[e].legalCurrencySymbol === null

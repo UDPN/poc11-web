@@ -321,6 +321,20 @@
               <div>Receiving Amount:</div>
               <div class="remInfo-sub-value">{{ remiInfo.reve }}</div>
             </div>
+            <div class="remInfo-sub">
+              <div>{{ this.sendName + ' Llquldity Wallet Address:' }}</div>
+              <div class="remInfo-sub-value">
+                {{ remiInfo.fromCapitalPoolAddress }}
+              </div>
+            </div>
+            <div class="remInfo-sub">
+              <div>
+                {{ this.beneficiaryName + ' Llquldity Wallet Address:' }}
+              </div>
+              <div class="remInfo-sub-value">
+                {{ remiInfo.toCapitalPoolAddress }}
+              </div>
+            </div>
           </div>
         </div>
         <div
@@ -333,7 +347,12 @@
           [nzSm]="24"
           [nzXs]="24"
           class="m-t-60"
-          style="background: #fff; border-radius: 16px; padding: 4px"
+          style="
+            background: #fff;
+            border-radius: 16px;
+            padding: 4px;
+            display: none;
+          "
         >
           <div>
             <nz-card

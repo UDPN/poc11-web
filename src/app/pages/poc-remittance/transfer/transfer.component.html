@@ -94,7 +94,7 @@
                       >Please select your Remitter's Wallet
                       Address</ng-container
                     >
-                    <ng-container *ngIf="control.hasError('regular')"
+                    <ng-container *ngIf="control.hasError('regular') && isError"
                       >The wallet addresses of the Remitter and Beneficiary
                       cannot be identical.</ng-container
                     >
@@ -305,7 +305,7 @@
                       >Please input your Beneficiary's Wallet
                       Address</ng-container
                     >
-                    <ng-container *ngIf="control.hasError('regular')"
+                    <ng-container *ngIf="control.hasError('regular') && isError"
                       >The wallet addresses of the Remitter and Beneficiary
                       cannot be identical.</ng-container
                     >
@@ -414,6 +414,24 @@
             <div class="remInfo-sub">
               <div>Receiving Amount:</div>
               <div class="remInfo-sub-value">{{ remiInfo.reve }}</div>
+            </div>
+            <div class="remInfo-sub">
+              <div>Receiving Amount:</div>
+              <div class="remInfo-sub-value">{{ remiInfo.reve }}</div>
+            </div>
+            <div class="remInfo-sub">
+              <div>{{ this.sendName + ' Llquldity Wallet Address:' }}</div>
+              <div class="remInfo-sub-value">
+                {{ remiInfo.fromCapitalPoolAddress }}
+              </div>
+            </div>
+            <div class="remInfo-sub">
+              <div>
+                {{ this.beneficiaryName + ' Llquldity Wallet Address:' }}
+              </div>
+              <div class="remInfo-sub-value">
+                {{ remiInfo.toCapitalPoolAddress }}
+              </div>
             </div>
           </div>
         </div>

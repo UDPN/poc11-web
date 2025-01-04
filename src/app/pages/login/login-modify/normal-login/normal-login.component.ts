@@ -43,7 +43,6 @@ import { SocketService } from '@app/core/services/common/socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CommonService } from '@app/core/services/http/common/common.service';
 
-
 export interface SettingInterface {
   theme: 'dark' | 'light';
   color: string;
@@ -178,21 +177,22 @@ export class NormalLoginComponent implements OnInit {
 
   getThemeOptions() {
     this.styleService.search().subscribe((res: any) => {
-      if (res.logoFileHash) {
-        this.commonService
-        .downImg({ hash: res.logoFileHash })
-        .subscribe((resu) => {
-          this.logoImg = 'data:image/jpg;base64,' + resu;
-          sessionStorage.setItem('logoImg', this.logoImg);
-          this.cdr.markForCheck();
-        });
-        // this.isDefaultLogo = false;
-      } else {
-        // this.isDefaultLogo = true;
-      }
+      // if (res.logoFileHash) {
+      //   this.commonService
+      //   .downImg({ hash: res.logoFileHash })
+      //   .subscribe((resu) => {
+      //     this.logoImg = 'data:image/jpg;base64,' + resu;
+      //     sessionStorage.setItem('logoImg', this.logoImg);
+      //     this.cdr.markForCheck();
+      //   });
+      //   // this.isDefaultLogo = false;
+      // } else {
+      //   this.isDefaultLogo = true;
+      // }
       if (res.themeColor) {
         this.systemTitle = res.systemName;
-        sessionStorage.setItem('systemName', res.systemName);
+        this.logoImg = res.logoFileHash;
+        res.sessionStorage.setItem('systemName', res.systemName);
         this.nzConfigService.set('theme', {
           primaryColor: res.themeColor
         });

@@ -45,9 +45,10 @@
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Mock Money Balance'"
-              ><span>{{
-                info?.accountBalance | map: 'toThousandthMark'
-              }}</span></nz-descriptions-item
+              ><span
+                >{{ info?.accountBalance | map: 'toThousandthMark'
+                }}{{ ' ' + info?.currency }}</span
+              ></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
@@ -78,7 +79,7 @@
             class="fiat-money-descriptions-order"
           >
             <nz-descriptions-item [nzTitle]="'Home Token Currency'"
-              ><span>{{ 'tEUR' }}</span></nz-descriptions-item
+              ><span>{{ walletInfo?.currency }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Master Wallet Address'"
               ><span
@@ -91,9 +92,10 @@
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Current Balance'"
-              ><span>{{
-                walletInfo?.accountBalance | map: 'toThousandthMark'
-              }}</span></nz-descriptions-item
+              ><span
+                >{{ walletInfo?.accountBalance | map: 'toThousandthMark'
+                }}{{ ' ' + walletInfo?.currency }}</span
+              ></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
@@ -309,13 +311,13 @@
       #transactionAmountTpl
       let-txType="txType"
       let-transactionAmount="transactionAmount"
-      let-transactionCurrencyName="transactionCurrencyName"
+      let-legalCurrencyName="legalCurrencyName"
     >
       <span
         [title]="transactionAmount"
         [style]="{ color: txType === 1 ? '#E53E3E' : '#39A16A' }"
         >{{ transactionAmount | map: 'toThousandthMark'
-        }}{{ ' ' + transactionCurrencyName }}</span
+        }}{{ ' ' + legalCurrencyName }}</span
       >
     </ng-template>
     <ng-template
