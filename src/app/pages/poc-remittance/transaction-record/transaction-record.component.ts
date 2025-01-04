@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-10 11:04:54
+ * @LastEditTime: 2025-01-04 10:11:26
  * @Description:
  */
 import {
@@ -201,19 +201,19 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Amount',
-          tdTemplate: this.amountTpl,
-          notNeedEllipsis: true,
-          width: 100
-        },
-        {
           title: 'Currency',
           field: 'currency',
           notNeedEllipsis: true,
           width: 100
         },
         {
-          title: 'Created On',
+          title: 'Amount',
+          tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

@@ -221,8 +221,8 @@ export const MapSet = {
     6: 'Rejected'
   },
   walletType: {
-    1: 'Custodian',
-    2: 'Non-custodian'
+    1: 'Custodial',
+    2: 'Non-Custodial'
   },
   downloadCenterStatus: {
     0: 'Pending',

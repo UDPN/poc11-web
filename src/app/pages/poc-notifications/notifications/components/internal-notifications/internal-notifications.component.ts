@@ -113,7 +113,7 @@ export class InternalNotificationsComponent {
 
   onDelete(chatMsgId: any) {
     this.modal.confirm({
-      nzTitle: `Are you sure you want to delete this internal notification ?`,
+      nzTitle: `Are you sure you want to delete this internal notification?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
@@ -162,7 +162,7 @@ export class InternalNotificationsComponent {
           width: 450
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

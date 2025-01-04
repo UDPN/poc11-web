@@ -83,7 +83,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Fiat Money Management'],
+      breadcrumb: ['Fiat Account Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -365,7 +365,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Transaction Type',
+          title: 'Type',
           field: 'txType',
           pipe: 'transactionDirection',
           notNeedEllipsis: true,
@@ -384,7 +384,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',

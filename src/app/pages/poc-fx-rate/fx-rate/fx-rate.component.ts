@@ -204,12 +204,12 @@ export class FxRateComponent implements OnInit, AfterViewInit {
           pipe: 'chargingModel'
         },
         {
-          title: 'Commission',
+          title: 'Commission Fee',
           tdTemplate: this.commissionTpl,
           notNeedEllipsis: true
         },
         {
-          title: 'Updated Date',
+          title: 'Updated on',
           field: 'updateDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true

@@ -152,7 +152,7 @@ const menuNav: Menu[] = [
     code: 'R0104'
   },
   {
-    menuName: 'Fiat Money Management',
+    menuName: 'Fiat Account Management',
     id: 7,
     fatherId: 0,
     icon: 'down-square',

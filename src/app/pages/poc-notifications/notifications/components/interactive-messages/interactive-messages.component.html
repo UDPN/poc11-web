@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-03 16:17:18
+ * @LastEditTime: 2025-01-04 11:06:16
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
@@ -44,9 +44,12 @@
         <div nz-row nzJustify="space-between" nzAlign="middle" nzGutter="24">
           <div nz-col>
             <div nz-row nzJustify="space-between" nzAlign="middle">
+              <b [style.color]="item.sendType === 1 ? '#08D434' : '#0841D4'">
+                {{ item.sendType === 1 ? item.toBankName : item.fromBankName }}
+              </b>
               <!-- <div nz-col class="notice-card">
-                  <img nz-col class="m-l-10 m-r-10" src="" alt="" />
-                </div> -->
+                <img nz-col class="m-l-10 m-r-10" src="" alt="" />
+              </div>
               <span>{{ item.fromBankName }}</span>
               <img
                 nz-col
@@ -54,10 +57,10 @@
                 [src]="'../../../../../../assets/imgs/' + (item.sendType === 1 ? 'notification-arrow-green.svg': 'notification-arrow.svg')"
                 alt=""
               />
-              <!-- <div nz-col class="notice-card">
-                  <img nz-col class="m-l-10 m-r-10" src="" alt="" />
-                </div> -->
-              <span>{{ item.toBankName }}</span>
+              <div nz-col class="notice-card">
+                <img nz-col class="m-l-10 m-r-10" src="" alt="" />
+              </div>
+              <span>{{ item.toBankName }}</span> -->
             </div>
           </div>
           <div nz-col>
@@ -88,26 +91,26 @@
           </div>
           <div nz-col>
             <nz-space>
-              <span *appAuth="'R01050302'">
+              <span *nzSpaceItem>
                 <button 
-                *nzSpaceItem 
-                nz-button 
-                [nzSize]="'large'"
-                nzType="text" 
-                (click)="toCompose('View', item.chatMsgId, item.msgCode)"
-              >
-                <img
-                  class="m-r-10"
-                  style="width: 20px; height: 20px"
-                  [src]="'../../../../../../assets/imgs/' + (item.sendType === 2 ? 'notification-view.svg' : 'notification-view-green.svg')"
-                  alt=""
-                />
-                View >></button
-              >
+                  nz-button 
+                  [nzSize]="'large'"
+                  *appAuth="'R01050302'"
+                  nzType="text" 
+                  (click)="toCompose('View', item.chatMsgId, item.msgCode)"
+                >
+                  <img
+                    class="m-r-10"
+                    style="width: 20px; height: 20px"
+                    [src]="'../../../../../../assets/imgs/' + (item.sendType === 2 ? 'notification-view.svg' : 'notification-view-green.svg')"
+                    alt=""
+                  />
+                  View >></button
+                >
               </span>
-              <span *appAuth="'R01050303'">
+              <span *nzSpaceItem>
                 <button 
-                  *nzSpaceItem 
+                  *appAuth="'R01050303'"
                   nz-button 
                   [nzSize]="'large'" 
                   nzType="text" 
@@ -308,33 +311,25 @@
           <div nz-row nzJustify="space-between" nzAlign="middle" nzGutter="24">
             <div nz-col>
               <div nz-row nzJustify="space-between" nzAlign="middle">
-                <!-- <div nz-col class="notice-card">
-                    <img nz-col class="m-l-10 m-r-10" src="" alt="" />
-                  </div> -->
-                <span>{{ item.fromBankName }}</span>
-                <img
-                  nz-col
-                  class="m-l-50 m-r-50"
-                  [src]="'../../../../../../assets/imgs/' + (item.sendType === 1 ? 'notification-arrow-green.svg': 'notification-arrow.svg')"
-                  alt=""
-                />
-                <!-- <div nz-col class="notice-card">
-                    <img nz-col class="m-l-10 m-r-10" src="" alt="" />
-                  </div> -->
-                <span>{{ item.toBankName }}</span>
+                <b [style.color]="item.sendType === 1 ? '#08D434' : '#0841D4'">
+                  {{ item.sendType === 1 ? item.toBankName : item.fromBankName }}
+                </b>
               </div>
             </div>
             <div nz-col>
-              <span [style]="item.sendType === 1 ? 'color: #67B496' : 'color: #60a3ce'">{{ 'Send by ' + item.fromName }}</span>
+              <span [style.color]="item.sendType === 1 ? '#67B496' : '#60a3ce'">{{ 'Send by ' + item.fromName }}</span>
             </div>
           </div>
           <div class="m-t-20 m-b-20">
             <p nz-typography>
-              <span *ngIf="item.readState === 0" [style]="item.readState === 0 ? 'font-weight: 600' : ''">
-                <div class="m-b-20"><span class="m-r-5">{{'Subject:'}}</span>{{ item.title }}</div>
-                <div style="display: flex;justify-content: flex-start;">
-                  <div class="m-r-5">{{'Content:'}}</div><div [innerHTML]="item.content">
-                  </div>
+              <span [style]="item.readState === 0 ? 'font-weight: 600' : ''">
+                <div class="m-b-20"><b class="m-r-5">{{'Subject:'}}</b>{{ item.title }}</div>
+                <div 
+                  [style.border]="item.sendType === 1 ? '1px solid rgba(77, 154, 56, 0.27)' : '1px solid rgba(60, 148, 203, 0.27)'" 
+                  style="display: flex;justify-content: flex-start;padding: 10px;"
+                >
+                  <div><b>{{'Content:'}}</b></div>
+                  <div [innerHTML]="item.content"></div>
                 </div>
               </span>
             </p>
@@ -342,8 +337,6 @@
       
           <div
             nz-row
-            nzJustify="end"
-            nzAlign="middle"
             nzGutter="24"
             class="m-b-10"
           >

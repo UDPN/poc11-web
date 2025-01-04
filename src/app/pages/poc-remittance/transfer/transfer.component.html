@@ -158,7 +158,7 @@
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
                 <nz-form-label nzRequired nzSpan="24"
-                  >Remittance Information
+                  >Remittance Note
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="remittanceInformationError">
                   <div nz-row>
@@ -172,7 +172,7 @@
                   </div>
                   <ng-template #remittanceInformationError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Remittance Information</ng-container
+                      >Please input your Remittance Note</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -399,22 +399,22 @@
           class="m-t-15 remit"
           style="background: #fff; border-radius: 16px; padding: 24px"
         >
-          <div class="remit-title">Remittance Information</div>
+          <div class="remit-title">FX Order Details</div>
           <div class="reInfo">
             <div class="remInfo-sub">
               <div>FX Rate:</div>
               <div class="remInfo-sub-value">{{ remiInfo.rate }}</div>
             </div>
             <div class="remInfo-sub">
-              <div>Commission:</div>
+              <div>Commission Fee Fee:</div>
               <div class="remInfo-sub-value">{{ remiInfo.com }}</div>
             </div>
             <div class="remInfo-sub">
-              <div>Total Payment Amount:</div>
+              <div>Total Debit Amount:</div>
               <div class="remInfo-sub-value">{{ remiInfo.total }}</div>
             </div>
             <div class="remInfo-sub">
-              <div>Received Amount:</div>
+              <div>Receiving Amount:</div>
               <div class="remInfo-sub-value">{{ remiInfo.reve }}</div>
             </div>
           </div>
@@ -429,21 +429,16 @@
           [nzSm]="24"
           [nzXs]="24"
           class="m-t-60"
-          style="
-            background: #fff;
-            border-radius: 16px;
-            padding: 4px;
-            display: none;
-          "
+          style="background: #fff; border-radius: 16px; padding: 4px"
         >
           <div>
             <nz-card
-              nzTitle="FX Settlement Information"
+              nzTitle="FX Liquidity Providers List"
               nzBordered="false"
               class="none-bottom"
             >
-              <span style="color: rgb(174, 6, 6)"
-                >Expiration Time: {{ timeString }}</span
+              <span style="color: rgb(174, 6, 6)">
+                {{ 'Indicative rate expires as at ' + timeString }}</span
               >
               <nz-table
                 #rowSelectionTable
@@ -455,11 +450,11 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th>FX SP</th>
+                    <th>FX Liquidity Provider</th>
                     <!-- <th>Currency Pair</th> -->
                     <th>FX Rate</th>
-                    <th>Commission</th>
-                    <th>Total Payment Amount</th>
+                    <th>Commission Fee</th>
+                    <th>Total Debit Amount</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -491,7 +486,7 @@
                       <span
                         style="color: blue; font-weight: 600; margin-left: 30px"
                         *ngIf="i === 0"
-                        >{{ ' Recommendation!' }}</span
+                        >{{ ' Recommended!' }}</span
                       >
                     </td>
                   </tr>
@@ -590,7 +585,7 @@
             <nz-descriptions-item nzTitle="Remitter's Wallet Address:">{{
               newRemitterWalletAddress
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Remittance Information:">{{
+            <nz-descriptions-item nzTitle="Remittance Note:">{{
               validateForm.controls['remittanceInformation'].value
             }}</nz-descriptions-item>
             <!-- <nz-descriptions-item nzTitle="Enduser Information:">88888</nz-descriptions-item> -->
@@ -664,10 +659,10 @@
           <nz-descriptions-item nzTitle="Exchange Rate">{{
             checkedItemComment[0].currency
           }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Commission">{{
+          <nz-descriptions-item nzTitle="Commission Fee">{{
             checkedItemComment[0].com
           }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Total Payment Amount">{{
+          <nz-descriptions-item nzTitle="Total Debit Amount">{{
             checkedItemComment[0].total
           }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Received Amount">{{
