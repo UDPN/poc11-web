@@ -48,6 +48,16 @@ export class AddComponent implements OnInit, AfterViewInit {
   isEditMode = false;
   ruleId: string | null = null;
 
+  // 添加 Debit/Credit 选项
+  debitCreditOptions = [
+    { label: 'Debit (fiat)', value: 1 },
+    { label: 'Credit (fiat)', value: 2 },
+    { label: 'Debit (token)', value: 3 },
+    { label: 'Credit (token)', value: 4 },
+    { label: 'Debit (fee)', value: 5 },
+    { label: 'Credit (fee)', value: 6 }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private message: NzMessageService,
@@ -314,21 +324,9 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   // 修改方法来决定默认的 Debit/Credit 值
-  private getDefaultDebitCredit(type: string, index: number): string {
-    if (type === 'External  FX Transfer out' || type === 'FX Purchasing -Transfer out') {
-      // 对于 External FX Transfer out 和 FX Purchasing -Transfer out
-      // 前两行是 Debit，最后一行是 Credit
-      return index < 2 ? 'Debit' : 'Credit';
-    } else if (type === 'Top-Up' || type === 'Withdraw') {
-      // 对于 Top-Up 和 Withdraw
-      // 第一行是 Debit，第二行是 Credit，第三行是 Debit，第四行是 Credit
-      if (index === 0) return 'Debit';
-      if (index === 1) return 'Credit';
-      if (index === 2) return 'Debit';
-      return 'Credit';
-    }
-    // 其他类型保持原来的逻辑
-    return index === 0 ? 'Debit' : 'Credit';
+  private getDefaultDebitCredit(type: string, index: number): number {
+    // 奇数行 (index = 0,2,4...) 为 Debit (fiat)，偶数行 (index = 1,3,5...) 为 Credit (fiat)
+    return index % 2 === 0 ? 1 : 2; // 1 = Debit (fiat), 2 = Credit (fiat)
   }
 
   private getSubjectList(stablecoinId: number) {
@@ -550,8 +548,7 @@ export class AddComponent implements OnInit, AfterViewInit {
                   this.transactionGroups.controls.indexOf(group),
                   transaction
                 ),
-                loanType:
-                  transaction.get('debitCredit')?.value === 'Debit' ? 1 : 2,
+                loanType: transaction.get('debitCredit')?.value,
                 subjectCategory: transaction.get('accountCategory')?.value,
                 subjectCode: transaction.get('accountCode')?.value,
                 subjectTitle: transaction.get('accountName')?.value
@@ -901,20 +898,23 @@ export class AddComponent implements OnInit, AfterViewInit {
   ): string {
     const group = this.transactionGroups.at(groupIndex);
     const transactionType = group.get('transactionType')?.value;
-    const debitCredit = transaction.get('debitCredit')?.value;
+    const debitCreditValue = transaction.get('debitCredit')?.value;
     const transactions = group.get('transactions') as FormArray;
     const index = transactions.controls.indexOf(transaction);
 
+    const isDebit = [1, 3, 5].includes(debitCreditValue);
+    const isFee = [5, 6].includes(debitCreditValue);
+
     if (transactionType === 'External  FX Transfer out' || transactionType === 'FX Purchasing -Transfer out') {
-      if (index === 2) {
+      if (isFee) {
         return `${transactionType} Fee Amount`;
       }
-      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
+      return `${transactionType} Amount - ${isDebit ? 'From' : 'To'}`;
     } else if (transactionType === 'Top-Up' || transactionType === 'Withdraw') {
-      if (index === 3) {
+      if (isFee) {
         return `${transactionType} Fee Amount`;
       }
-      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
+      return `${transactionType} Amount - ${isDebit ? 'From' : 'To'}`;
     }
 
     return `${transactionType} Amount`;
