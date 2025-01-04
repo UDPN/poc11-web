@@ -44,8 +44,8 @@
               <input
                 nz-input
                 placeholder=""
-                name="walletAddress"
-                [(ngModel)]="searchParam.walletAddress"
+                name="to"
+                [(ngModel)]="searchParam.to"
               />
             </nz-form-control>
           </nz-form-item>
@@ -84,7 +84,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Created On</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
             <nz-form-control>
               <nz-range-picker
                 style="width: 100%"

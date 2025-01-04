@@ -344,7 +344,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
           width: 120
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',

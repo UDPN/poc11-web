@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-03 13:34:09
+ * @LastEditTime: 2025-01-04 10:13:29
  * @Description:
  */
 import {
@@ -218,7 +218,7 @@ export class BankComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Wallets',
+          title: 'Number of Wallets',
           field: 'walletAddressNumber',
           tdTemplate: this.walletAddressTpl,
           notNeedEllipsis: true,

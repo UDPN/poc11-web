@@ -39,7 +39,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
           name: 'Notifications'
         },
         {
-          name: 'System Notices',
+          name: 'Network Notifications',
           url: '/poc/poc-notifications/notifications'
         },
         { name: 'Details' }

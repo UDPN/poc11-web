@@ -1,5 +1,6 @@
 <app-nav-top>
-  <div class="account base-acount"
+  <img [src]="logoImg" alt="" *ngIf="logoImg" />
+  <!-- <div class="account base-acount"
     [ngStyle]="{ color: (isOverMode$ | async) ? '#a59999' : '#3c5686','border-top': (isOverMode$ | async) ? '' : '1px solid rgb(240, 240, 240)' }">
     {{
     (isCollapsed$ | async)
@@ -8,33 +9,46 @@
     : this.clientName
     : 'Welcome, ' + this.clientName
     }}
-  </div>
+  </div> -->
 </app-nav-top>
-<ul *ngIf="!isMixiHead; else mixiHeadTpl" nz-menu [nzNoAnimation]="(themesOptions$ | async)!.mode === 'top'"
-  [nzInlineCollapsed]="isCollapsed$ | async" [nzTheme]="
+<ul
+  *ngIf="!isMixiHead; else mixiHeadTpl"
+  nz-menu
+  [nzNoAnimation]="(themesOptions$ | async)!.mode === 'top'"
+  [nzInlineCollapsed]="isCollapsed$ | async"
+  [nzTheme]="
     isMixiMode && !(isOverMode$ | async) && !(isNightTheme$ | async)
       ? 'light'
       : isMixiMode && (isNightTheme$ | async)
       ? 'dark'
       : (themesOptions$ | async)!.theme
-  " [nzMode]="
+  "
+  [nzMode]="
     (themesOptions$ | async)!.mode === 'side' ||
     (themesOptions$ | async)!.mode === 'mixi' ||
     (isOverMode$ | async)
       ? 'inline'
       : 'horizontal'
-  ">
-  <ng-container *ngTemplateOutlet="
+  "
+>
+  <ng-container
+    *ngTemplateOutlet="
       menuTpl;
       context: { $implicit: isMixiLeft ? leftMenuArray : menus }
-    "></ng-container>
+    "
+  ></ng-container>
   <ng-template #menuTpl let-menus>
     <ng-container *ngFor="let menu of menus; trackByProperty: 'id'">
       <ng-container *appAuth="menu.code">
         <ng-container *ngIf="!menu.menuGroup">
-          <li [nzPaddingLeft]="
+          <li
+            [nzPaddingLeft]="
               (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
-            " nz-menu-item *ngIf="!menu.children || menu.children.length === 0" [nzSelected]="menu.selected">
+            "
+            nz-menu-item
+            *ngIf="!menu.children || menu.children.length === 0"
+            [nzSelected]="menu.selected"
+          >
             <a (click)="changeRoute($event, menu)">
               <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
               <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
@@ -43,100 +57,183 @@
           </li>
           <ng-container *ngIf="menu.children && menu.children.length > 0">
             <!--*appAuth="menu.code"-->
-            <li [nzPaddingLeft]="
+            <li
+              [nzPaddingLeft]="
                 (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
-              " nz-submenu (nzOpenChange)="changeOpen(menu, menus)" [(nzOpen)]="menu.open" [nzTitle]="titleTpl"
-              [ngClass]="{ disabled: menu.disabled }">
+              "
+              nz-submenu
+              (nzOpenChange)="changeOpen(menu, menus)"
+              [(nzOpen)]="menu.open"
+              [nzTitle]="titleTpl"
+              [ngClass]="{ disabled: menu.disabled }"
+            >
               <ng-template #titleTpl>
                 <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
                 <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
                 <span>{{ menu.menuName }}</span>
               </ng-template>
               <ul>
-                <ng-container *ngFor="
+                <ng-container
+                  *ngFor="
                     let menuSecond of menu.children;
                     trackByProperty: 'id'
-                  ">
+                  "
+                >
                   <!--Permission to 2-->
                   <ng-container>
-                    <li [nzPaddingLeft]="
+                    <li
+                      [nzPaddingLeft]="
                         (themesMode !== 'top' || isOverMode) && !isCollapsed
                           ? 32
                           : 0
-                      " nz-menu-item [nzSelected]="menuSecond.selected" *ngIf="
+                      "
+                      nz-menu-item
+                      [nzSelected]="menuSecond.selected"
+                      *ngIf="
                         !menuSecond.children || menuSecond.children.length === 0
-                      " [ngClass]="{ disabled: menuSecond.disabled }">
+                      "
+                      [ngClass]="{ disabled: menuSecond.disabled }"
+                    >
                       <a (click)="changeRoute($event, menuSecond)">
-                        <i *ngIf="menuSecond.icon" nz-icon [nzType]="menuSecond.icon"></i>
-                        <i *ngIf="menuSecond.alIcon" nz-icon [nzIconfont]="menuSecond.alIcon"></i>
+                        <i
+                          *ngIf="menuSecond.icon"
+                          nz-icon
+                          [nzType]="menuSecond.icon"
+                        ></i>
+                        <i
+                          *ngIf="menuSecond.alIcon"
+                          nz-icon
+                          [nzIconfont]="menuSecond.alIcon"
+                        ></i>
                         <span>{{ menuSecond.menuName }}</span>
                       </a>
                     </li>
                     <!--Level 3 menu-->
-                    <li [nzPaddingLeft]="
+                    <li
+                      [nzPaddingLeft]="
                         (themesMode !== 'top' || isOverMode) && !isCollapsed
                           ? 32
                           : 0
-                      " *ngIf="
+                      "
+                      *ngIf="
                         menuSecond.children && menuSecond.children.length > 0
-                      " nz-submenu (nzOpenChange)="changeOpen(menuSecond, menu.children)" [(nzOpen)]="menuSecond.open"
-                      [nzTitle]="titleTpl">
+                      "
+                      nz-submenu
+                      (nzOpenChange)="changeOpen(menuSecond, menu.children)"
+                      [(nzOpen)]="menuSecond.open"
+                      [nzTitle]="titleTpl"
+                    >
                       <ng-template #titleTpl>
-                        <i *ngIf="menuSecond.icon" nz-icon [nzType]="menuSecond.icon"></i>
-                        <i *ngIf="menuSecond.alIcon" nz-icon [nzIconfont]="menuSecond.alIcon"></i>
-                        <span>{{ menuSecond.menuName }}</span></ng-template>
+                        <i
+                          *ngIf="menuSecond.icon"
+                          nz-icon
+                          [nzType]="menuSecond.icon"
+                        ></i>
+                        <i
+                          *ngIf="menuSecond.alIcon"
+                          nz-icon
+                          [nzIconfont]="menuSecond.alIcon"
+                        ></i>
+                        <span>{{ menuSecond.menuName }}</span></ng-template
+                      >
                       <ul>
-                        <ng-container *ngFor="
+                        <ng-container
+                          *ngFor="
                             let menuThird of menuSecond.children;
                             trackByProperty: 'id'
-                          ">
+                          "
+                        >
                           <ng-container *appAuth="menuThird.code">
-                            <li [nzPaddingLeft]="
+                            <li
+                              [nzPaddingLeft]="
                                 (themesMode !== 'top' || isOverMode) &&
                                 !isCollapsed
                                   ? 48
                                   : 0
-                              " nz-menu-item [nzSelected]="menuThird.selected" *ngIf="
+                              "
+                              nz-menu-item
+                              [nzSelected]="menuThird.selected"
+                              *ngIf="
                                 !menuThird.children ||
                                 menuThird.children.length === 0
-                              ">
+                              "
+                            >
                               <a (click)="changeRoute($event, menuThird)">
-                                <i *ngIf="menuThird.icon" nz-icon [nzType]="menuThird.icon"></i>
-                                <i *ngIf="menuThird.alIcon" nz-icon [nzIconfont]="menuThird.alIcon"></i>
+                                <i
+                                  *ngIf="menuThird.icon"
+                                  nz-icon
+                                  [nzType]="menuThird.icon"
+                                ></i>
+                                <i
+                                  *ngIf="menuThird.alIcon"
+                                  nz-icon
+                                  [nzIconfont]="menuThird.alIcon"
+                                ></i>
                                 <span>{{ menuThird.menuName }}</span>
                               </a>
                             </li>
                             <!--Level 4 menu-->
-                            <li [nzPaddingLeft]="
+                            <li
+                              [nzPaddingLeft]="
                                 (themesMode !== 'top' || isOverMode) &&
                                 !isCollapsed
                                   ? 48
                                   : 0
-                              " *ngIf="
+                              "
+                              *ngIf="
                                 menuThird.children &&
                                 menuThird.children.length > 0
-                              " nz-submenu (nzOpenChange)="
+                              "
+                              nz-submenu
+                              (nzOpenChange)="
                                 changeOpen(menuThird, menuSecond.children)
-                              " [(nzOpen)]="menuThird.open" [nzTitle]="menuThird.menuName">
-                              <i *ngIf="menuThird.icon" nz-icon [nzType]="menuThird.icon"></i>
-                              <i *ngIf="menuThird.alIcon" nz-icon [nzIconfont]="menuThird.alIcon"></i>
+                              "
+                              [(nzOpen)]="menuThird.open"
+                              [nzTitle]="menuThird.menuName"
+                            >
+                              <i
+                                *ngIf="menuThird.icon"
+                                nz-icon
+                                [nzType]="menuThird.icon"
+                              ></i>
+                              <i
+                                *ngIf="menuThird.alIcon"
+                                nz-icon
+                                [nzIconfont]="menuThird.alIcon"
+                              ></i>
                               <ul>
-                                <ng-container *ngFor="
+                                <ng-container
+                                  *ngFor="
                                     let forthThird of menuThird.children;
                                     trackByProperty: 'id'
-                                  ">
+                                  "
+                                >
                                   <ng-container *appAuth="forthThird.code">
-                                    <li [nzPaddingLeft]="
+                                    <li
+                                      [nzPaddingLeft]="
                                         (themesMode !== 'top' || isOverMode) &&
                                         !isCollapsed
                                           ? 64
                                           : 0
-                                      " nz-menu-item [nzSelected]="forthThird.selected">
-                                      <a (click)="
+                                      "
+                                      nz-menu-item
+                                      [nzSelected]="forthThird.selected"
+                                    >
+                                      <a
+                                        (click)="
                                           changeRoute($event, forthThird)
-                                        ">
-                                        <i *ngIf="forthThird.icon" nz-icon [nzType]="forthThird.icon"></i>
-                                        <i *ngIf="forthThird.alIcon" nz-icon [nzIconfont]="forthThird.alIcon"></i>
+                                        "
+                                      >
+                                        <i
+                                          *ngIf="forthThird.icon"
+                                          nz-icon
+                                          [nzType]="forthThird.icon"
+                                        ></i>
+                                        <i
+                                          *ngIf="forthThird.alIcon"
+                                          nz-icon
+                                          [nzIconfont]="forthThird.alIcon"
+                                        ></i>
                                         <span>{{ forthThird.menuName }}</span>
                                       </a>
                                     </li>
@@ -157,107 +254,201 @@
         </ng-container>
         <ng-container *ngIf="menu.menuGroup">
           <ng-container *ngIf="!menu.children">
-            <li [ngClass]="{ group: (isOverMode$ | async) }" nz-menu-group [ngStyle]="{
-            'text-align':
-              (isCollapsed$ | async) && !(isOverMode$ | async) ? 'center' : ''
-          }" [nzTitle]="
-            (isCollapsed$ | async) && !(isOverMode$ | async)
-              ? menu.groupCollapseName
-              : menu.groupName
-          "></li>
+            <li
+              [ngClass]="{ group: (isOverMode$ | async) }"
+              nz-menu-group
+              [ngStyle]="{
+                'text-align':
+                  (isCollapsed$ | async) && !(isOverMode$ | async)
+                    ? 'center'
+                    : ''
+              }"
+              [nzTitle]="
+                (isCollapsed$ | async) && !(isOverMode$ | async)
+                  ? menu.groupCollapseName
+                  : menu.groupName
+              "
+            ></li>
           </ng-container>
           <ng-container *ngIf="menu.children && menu.children.length > 0">
             <!--*appAuth="menu.code"-->
-            <li [nzPaddingLeft]="
+            <li
+              [nzPaddingLeft]="
                 (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
-              " nz-submenu (nzOpenChange)="changeOpen(menu, menus)" [(nzOpen)]="menu.open" [nzTitle]="(isCollapsed$ | async) && !(isOverMode$ | async)
-                ? menu.groupCollapseName
-                : menu.groupName" [ngClass]="{ disabled: menu.disabled }" class="menus-color">
+              "
+              nz-submenu
+              (nzOpenChange)="changeOpen(menu, menus)"
+              [(nzOpen)]="menu.open"
+              [nzTitle]="
+                (isCollapsed$ | async) && !(isOverMode$ | async)
+                  ? menu.groupCollapseName
+                  : menu.groupName
+              "
+              [ngClass]="{ disabled: menu.disabled }"
+              class="menus-color"
+            >
               <ul>
-                <ng-container *ngFor="
+                <ng-container
+                  *ngFor="
                     let menuSecond of menu.children;
                     trackByProperty: 'id'
-                  ">
+                  "
+                >
                   <!--Permission to 2-->
-                  <ng-container  *appAuth="menuSecond.code">
-                    <li [nzPaddingLeft]="
+                  <ng-container *appAuth="menuSecond.code">
+                    <li
+                      [nzPaddingLeft]="
                         (themesMode !== 'top' || isOverMode) && !isCollapsed
                           ? 32
                           : 0
-                      " nz-menu-item [nzSelected]="menuSecond.selected" *ngIf="
+                      "
+                      nz-menu-item
+                      [nzSelected]="menuSecond.selected"
+                      *ngIf="
                         !menuSecond.children || menuSecond.children.length === 0
-                      " [ngClass]="{ disabled: menuSecond.disabled }">
+                      "
+                      [ngClass]="{ disabled: menuSecond.disabled }"
+                    >
                       <a (click)="changeRoute($event, menuSecond)">
-                        <i *ngIf="menuSecond.icon" nz-icon [nzType]="menuSecond.icon"></i>
-                        <i *ngIf="menuSecond.alIcon" nz-icon [nzIconfont]="menuSecond.alIcon"></i>
+                        <i
+                          *ngIf="menuSecond.icon"
+                          nz-icon
+                          [nzType]="menuSecond.icon"
+                        ></i>
+                        <i
+                          *ngIf="menuSecond.alIcon"
+                          nz-icon
+                          [nzIconfont]="menuSecond.alIcon"
+                        ></i>
                         <span>{{ menuSecond.menuName }}</span>
                       </a>
                     </li>
                     <!--Level 3 menu-->
-                    <li [nzPaddingLeft]="
+                    <li
+                      [nzPaddingLeft]="
                         (themesMode !== 'top' || isOverMode) && !isCollapsed
                           ? 32
                           : 0
-                      " *ngIf="
+                      "
+                      *ngIf="
                         menuSecond.children && menuSecond.children.length > 0
-                      " nz-submenu (nzOpenChange)="changeOpen(menuSecond, menu.children)" [(nzOpen)]="menuSecond.open"
-                      [nzTitle]="titleTpl">
+                      "
+                      nz-submenu
+                      (nzOpenChange)="changeOpen(menuSecond, menu.children)"
+                      [(nzOpen)]="menuSecond.open"
+                      [nzTitle]="titleTpl"
+                    >
                       <ng-template #titleTpl>
-                        <i *ngIf="menuSecond.icon" nz-icon [nzType]="menuSecond.icon"></i>
-                        <i *ngIf="menuSecond.alIcon" nz-icon [nzIconfont]="menuSecond.alIcon"></i>
-                        <span>{{ menuSecond.menuName }}</span></ng-template>
+                        <i
+                          *ngIf="menuSecond.icon"
+                          nz-icon
+                          [nzType]="menuSecond.icon"
+                        ></i>
+                        <i
+                          *ngIf="menuSecond.alIcon"
+                          nz-icon
+                          [nzIconfont]="menuSecond.alIcon"
+                        ></i>
+                        <span>{{ menuSecond.menuName }}</span></ng-template
+                      >
                       <ul>
-                        <ng-container *ngFor="
+                        <ng-container
+                          *ngFor="
                             let menuThird of menuSecond.children;
                             trackByProperty: 'id'
-                          ">
+                          "
+                        >
                           <ng-container *appAuth="menuThird.code">
-                            <li [nzPaddingLeft]="
+                            <li
+                              [nzPaddingLeft]="
                                 (themesMode !== 'top' || isOverMode) &&
                                 !isCollapsed
                                   ? 48
                                   : 0
-                              " nz-menu-item [nzSelected]="menuThird.selected" *ngIf="
+                              "
+                              nz-menu-item
+                              [nzSelected]="menuThird.selected"
+                              *ngIf="
                                 !menuThird.children ||
                                 menuThird.children.length === 0
-                              ">
+                              "
+                            >
                               <a (click)="changeRoute($event, menuThird)">
-                                <i *ngIf="menuThird.icon" nz-icon [nzType]="menuThird.icon"></i>
-                                <i *ngIf="menuThird.alIcon" nz-icon [nzIconfont]="menuThird.alIcon"></i>
+                                <i
+                                  *ngIf="menuThird.icon"
+                                  nz-icon
+                                  [nzType]="menuThird.icon"
+                                ></i>
+                                <i
+                                  *ngIf="menuThird.alIcon"
+                                  nz-icon
+                                  [nzIconfont]="menuThird.alIcon"
+                                ></i>
                                 <span>{{ menuThird.menuName }}</span>
                               </a>
                             </li>
                             <!--Level 4 menu-->
-                            <li [nzPaddingLeft]="
+                            <li
+                              [nzPaddingLeft]="
                                 (themesMode !== 'top' || isOverMode) &&
                                 !isCollapsed
                                   ? 48
                                   : 0
-                              " *ngIf="
+                              "
+                              *ngIf="
                                 menuThird.children &&
                                 menuThird.children.length > 0
-                              " nz-submenu (nzOpenChange)="
+                              "
+                              nz-submenu
+                              (nzOpenChange)="
                                 changeOpen(menuThird, menuSecond.children)
-                              " [(nzOpen)]="menuThird.open" [nzTitle]="menuThird.menuName">
-                              <i *ngIf="menuThird.icon" nz-icon [nzType]="menuThird.icon"></i>
-                              <i *ngIf="menuThird.alIcon" nz-icon [nzIconfont]="menuThird.alIcon"></i>
+                              "
+                              [(nzOpen)]="menuThird.open"
+                              [nzTitle]="menuThird.menuName"
+                            >
+                              <i
+                                *ngIf="menuThird.icon"
+                                nz-icon
+                                [nzType]="menuThird.icon"
+                              ></i>
+                              <i
+                                *ngIf="menuThird.alIcon"
+                                nz-icon
+                                [nzIconfont]="menuThird.alIcon"
+                              ></i>
                               <ul>
-                                <ng-container *ngFor="
+                                <ng-container
+                                  *ngFor="
                                     let forthThird of menuThird.children;
                                     trackByProperty: 'id'
-                                  ">
+                                  "
+                                >
                                   <ng-container *appAuth="forthThird.code">
-                                    <li [nzPaddingLeft]="
+                                    <li
+                                      [nzPaddingLeft]="
                                         (themesMode !== 'top' || isOverMode) &&
                                         !isCollapsed
                                           ? 64
                                           : 0
-                                      " nz-menu-item [nzSelected]="forthThird.selected">
-                                      <a (click)="
+                                      "
+                                      nz-menu-item
+                                      [nzSelected]="forthThird.selected"
+                                    >
+                                      <a
+                                        (click)="
                                           changeRoute($event, forthThird)
-                                        ">
-                                        <i *ngIf="forthThird.icon" nz-icon [nzType]="forthThird.icon"></i>
-                                        <i *ngIf="forthThird.alIcon" nz-icon [nzIconfont]="forthThird.alIcon"></i>
+                                        "
+                                      >
+                                        <i
+                                          *ngIf="forthThird.icon"
+                                          nz-icon
+                                          [nzType]="forthThird.icon"
+                                        ></i>
+                                        <i
+                                          *ngIf="forthThird.alIcon"
+                                          nz-icon
+                                          [nzIconfont]="forthThird.alIcon"
+                                        ></i>
                                         <span>{{ forthThird.menuName }}</span>
                                       </a>
                                     </li>
@@ -276,9 +467,14 @@
             </li>
           </ng-container>
           <ng-container *ngIf="menu.menuName">
-            <li [nzPaddingLeft]="
-              (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
-            " nz-menu-item *ngIf="!menu.children || menu.children.length === 0" [nzSelected]="menu.selected">
+            <li
+              [nzPaddingLeft]="
+                (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
+              "
+              nz-menu-item
+              *ngIf="!menu.children || menu.children.length === 0"
+              [nzSelected]="menu.selected"
+            >
               <a (click)="changeRoute($event, menu)">
                 <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
                 <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
@@ -287,100 +483,185 @@
             </li>
             <ng-container *ngIf="menu.children && menu.children.length > 0">
               <!--*appAuth="menu.code"-->
-              <li [nzPaddingLeft]="
-                (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
-              " nz-submenu (nzOpenChange)="changeOpen(menu, menus)" [(nzOpen)]="menu.open" [nzTitle]="titleTpl"
-                [ngClass]="{ disabled: menu.disabled }">
+              <li
+                [nzPaddingLeft]="
+                  (themesMode !== 'top' || isOverMode) && !isCollapsed ? 16 : 0
+                "
+                nz-submenu
+                (nzOpenChange)="changeOpen(menu, menus)"
+                [(nzOpen)]="menu.open"
+                [nzTitle]="titleTpl"
+                [ngClass]="{ disabled: menu.disabled }"
+              >
                 <ng-template #titleTpl>
                   <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
                   <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
                   <span>{{ menu.menuName }}</span>
                 </ng-template>
                 <ul>
-                  <ng-container *ngFor="
-                    let menuSecond of menu.children;
-                    trackByProperty: 'id'
-                  ">
+                  <ng-container
+                    *ngFor="
+                      let menuSecond of menu.children;
+                      trackByProperty: 'id'
+                    "
+                  >
                     <!--Permission to 2-->
                     <ng-container>
-                      <li [nzPaddingLeft]="
-                        (themesMode !== 'top' || isOverMode) && !isCollapsed
-                          ? 32
-                          : 0
-                      " nz-menu-item [nzSelected]="menuSecond.selected" *ngIf="
-                        !menuSecond.children || menuSecond.children.length === 0
-                      " [ngClass]="{ disabled: menuSecond.disabled }">
+                      <li
+                        [nzPaddingLeft]="
+                          (themesMode !== 'top' || isOverMode) && !isCollapsed
+                            ? 32
+                            : 0
+                        "
+                        nz-menu-item
+                        [nzSelected]="menuSecond.selected"
+                        *ngIf="
+                          !menuSecond.children ||
+                          menuSecond.children.length === 0
+                        "
+                        [ngClass]="{ disabled: menuSecond.disabled }"
+                      >
                         <a (click)="changeRoute($event, menuSecond)">
-                          <i *ngIf="menuSecond.icon" nz-icon [nzType]="menuSecond.icon"></i>
-                          <i *ngIf="menuSecond.alIcon" nz-icon [nzIconfont]="menuSecond.alIcon"></i>
+                          <i
+                            *ngIf="menuSecond.icon"
+                            nz-icon
+                            [nzType]="menuSecond.icon"
+                          ></i>
+                          <i
+                            *ngIf="menuSecond.alIcon"
+                            nz-icon
+                            [nzIconfont]="menuSecond.alIcon"
+                          ></i>
                           <span>{{ menuSecond.menuName }}</span>
                         </a>
                       </li>
                       <!--Level 3 menu-->
-                      <li [nzPaddingLeft]="
-                        (themesMode !== 'top' || isOverMode) && !isCollapsed
-                          ? 32
-                          : 0
-                      " *ngIf="
-                        menuSecond.children && menuSecond.children.length > 0
-                      " nz-submenu (nzOpenChange)="changeOpen(menuSecond, menu.children)" [(nzOpen)]="menuSecond.open"
-                        [nzTitle]="titleTpl">
+                      <li
+                        [nzPaddingLeft]="
+                          (themesMode !== 'top' || isOverMode) && !isCollapsed
+                            ? 32
+                            : 0
+                        "
+                        *ngIf="
+                          menuSecond.children && menuSecond.children.length > 0
+                        "
+                        nz-submenu
+                        (nzOpenChange)="changeOpen(menuSecond, menu.children)"
+                        [(nzOpen)]="menuSecond.open"
+                        [nzTitle]="titleTpl"
+                      >
                         <ng-template #titleTpl>
-                          <i *ngIf="menuSecond.icon" nz-icon [nzType]="menuSecond.icon"></i>
-                          <i *ngIf="menuSecond.alIcon" nz-icon [nzIconfont]="menuSecond.alIcon"></i>
-                          <span>{{ menuSecond.menuName }}</span></ng-template>
+                          <i
+                            *ngIf="menuSecond.icon"
+                            nz-icon
+                            [nzType]="menuSecond.icon"
+                          ></i>
+                          <i
+                            *ngIf="menuSecond.alIcon"
+                            nz-icon
+                            [nzIconfont]="menuSecond.alIcon"
+                          ></i>
+                          <span>{{ menuSecond.menuName }}</span></ng-template
+                        >
                         <ul>
-                          <ng-container *ngFor="
-                            let menuThird of menuSecond.children;
-                            trackByProperty: 'id'
-                          ">
+                          <ng-container
+                            *ngFor="
+                              let menuThird of menuSecond.children;
+                              trackByProperty: 'id'
+                            "
+                          >
                             <ng-container *appAuth="menuThird.code">
-                              <li [nzPaddingLeft]="
-                                (themesMode !== 'top' || isOverMode) &&
-                                !isCollapsed
-                                  ? 48
-                                  : 0
-                              " nz-menu-item [nzSelected]="menuThird.selected" *ngIf="
-                                !menuThird.children ||
-                                menuThird.children.length === 0
-                              ">
+                              <li
+                                [nzPaddingLeft]="
+                                  (themesMode !== 'top' || isOverMode) &&
+                                  !isCollapsed
+                                    ? 48
+                                    : 0
+                                "
+                                nz-menu-item
+                                [nzSelected]="menuThird.selected"
+                                *ngIf="
+                                  !menuThird.children ||
+                                  menuThird.children.length === 0
+                                "
+                              >
                                 <a (click)="changeRoute($event, menuThird)">
-                                  <i *ngIf="menuThird.icon" nz-icon [nzType]="menuThird.icon"></i>
-                                  <i *ngIf="menuThird.alIcon" nz-icon [nzIconfont]="menuThird.alIcon"></i>
+                                  <i
+                                    *ngIf="menuThird.icon"
+                                    nz-icon
+                                    [nzType]="menuThird.icon"
+                                  ></i>
+                                  <i
+                                    *ngIf="menuThird.alIcon"
+                                    nz-icon
+                                    [nzIconfont]="menuThird.alIcon"
+                                  ></i>
                                   <span>{{ menuThird.menuName }}</span>
                                 </a>
                               </li>
                               <!--Level 4 menu-->
-                              <li [nzPaddingLeft]="
-                                (themesMode !== 'top' || isOverMode) &&
-                                !isCollapsed
-                                  ? 48
-                                  : 0
-                              " *ngIf="
-                                menuThird.children &&
-                                menuThird.children.length > 0
-                              " nz-submenu (nzOpenChange)="
-                                changeOpen(menuThird, menuSecond.children)
-                              " [(nzOpen)]="menuThird.open" [nzTitle]="menuThird.menuName">
-                                <i *ngIf="menuThird.icon" nz-icon [nzType]="menuThird.icon"></i>
-                                <i *ngIf="menuThird.alIcon" nz-icon [nzIconfont]="menuThird.alIcon"></i>
+                              <li
+                                [nzPaddingLeft]="
+                                  (themesMode !== 'top' || isOverMode) &&
+                                  !isCollapsed
+                                    ? 48
+                                    : 0
+                                "
+                                *ngIf="
+                                  menuThird.children &&
+                                  menuThird.children.length > 0
+                                "
+                                nz-submenu
+                                (nzOpenChange)="
+                                  changeOpen(menuThird, menuSecond.children)
+                                "
+                                [(nzOpen)]="menuThird.open"
+                                [nzTitle]="menuThird.menuName"
+                              >
+                                <i
+                                  *ngIf="menuThird.icon"
+                                  nz-icon
+                                  [nzType]="menuThird.icon"
+                                ></i>
+                                <i
+                                  *ngIf="menuThird.alIcon"
+                                  nz-icon
+                                  [nzIconfont]="menuThird.alIcon"
+                                ></i>
                                 <ul>
-                                  <ng-container *ngFor="
-                                    let forthThird of menuThird.children;
-                                    trackByProperty: 'id'
-                                  ">
+                                  <ng-container
+                                    *ngFor="
+                                      let forthThird of menuThird.children;
+                                      trackByProperty: 'id'
+                                    "
+                                  >
                                     <ng-container *appAuth="forthThird.code">
-                                      <li [nzPaddingLeft]="
-                                        (themesMode !== 'top' || isOverMode) &&
-                                        !isCollapsed
-                                          ? 64
-                                          : 0
-                                      " nz-menu-item [nzSelected]="forthThird.selected">
-                                        <a (click)="
-                                          changeRoute($event, forthThird)
-                                        ">
-                                          <i *ngIf="forthThird.icon" nz-icon [nzType]="forthThird.icon"></i>
-                                          <i *ngIf="forthThird.alIcon" nz-icon [nzIconfont]="forthThird.alIcon"></i>
+                                      <li
+                                        [nzPaddingLeft]="
+                                          (themesMode !== 'top' ||
+                                            isOverMode) &&
+                                          !isCollapsed
+                                            ? 64
+                                            : 0
+                                        "
+                                        nz-menu-item
+                                        [nzSelected]="forthThird.selected"
+                                      >
+                                        <a
+                                          (click)="
+                                            changeRoute($event, forthThird)
+                                          "
+                                        >
+                                          <i
+                                            *ngIf="forthThird.icon"
+                                            nz-icon
+                                            [nzType]="forthThird.icon"
+                                          ></i>
+                                          <i
+                                            *ngIf="forthThird.alIcon"
+                                            nz-icon
+                                            [nzIconfont]="forthThird.alIcon"
+                                          ></i>
                                           <span>{{ forthThird.menuName }}</span>
                                         </a>
                                       </li>
@@ -407,9 +688,15 @@
 
 <ng-template #mixiHeadTpl>
   <ul nz-menu nzTheme="dark" nzMode="horizontal">
-    <ng-container *ngFor="let menu of menus; trackByProperty: 'id'; let i = index">
+    <ng-container
+      *ngFor="let menu of menus; trackByProperty: 'id'; let i = index"
+    >
       <ng-container *appAuth="menu.code">
-        <li nz-menu-item *ngIf="!menu.children || menu.children.length === 0" [nzSelected]="menu.selected">
+        <li
+          nz-menu-item
+          *ngIf="!menu.children || menu.children.length === 0"
+          [nzSelected]="menu.selected"
+        >
           <a [routerLink]="[menu.path]">
             <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
             <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
@@ -417,8 +704,12 @@
           </a>
         </li>
 
-        <li nz-menu-item (click)="changTopNav(i)" *ngIf="menu.children && menu.children.length > 0"
-          [nzSelected]="menu.selected">
+        <li
+          nz-menu-item
+          (click)="changTopNav(i)"
+          *ngIf="menu.children && menu.children.length > 0"
+          [nzSelected]="menu.selected"
+        >
           <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
           <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
           <span>{{ menu.menuName }}</span>

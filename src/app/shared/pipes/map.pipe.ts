@@ -146,7 +146,7 @@ export const MapSet = {
     6: 'red'
   },
   region: {
-    1: 'Domestic',
+    1: 'Home',
     2: 'Foreign'
   },
   walletStatus: {
@@ -221,8 +221,9 @@ export const MapSet = {
     6: 'Rejected'
   },
   walletType: {
-    1: 'Custodian',
-    2: 'Non-custodian'
+    1: 'Master Wallet',
+    2: 'Main Wallet',
+    3: 'Sub Wallet'
   },
   downloadCenterStatus: {
     0: 'Pending',

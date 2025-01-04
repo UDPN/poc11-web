@@ -24,7 +24,7 @@ interface SearchParam {
   currency: string;
   createTime: any;
   status: string;
-  walletAddress: string;
+  to: string;
 }
 
 @Component({
@@ -55,7 +55,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     createTime: [],
     status: '',
     type: '',
-    walletAddress: ''
+    to: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -166,19 +166,19 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Amount',
-          tdTemplate: this.amountTpl,
-          notNeedEllipsis: true,
-          width: 120
-        },
-        {
           title: 'Currency',
           field: 'currency',
           notNeedEllipsis: true,
           width: 80
         },
         {
-          title: 'Created On',
+          title: 'Amount',
+          tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
+          width: 120
+        },
+        {
+          title: 'Created on',
           field: 'creationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

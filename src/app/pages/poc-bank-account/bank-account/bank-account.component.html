@@ -27,11 +27,11 @@
             [nzColumn]="1"
             [nzColon]="false"
             [nzBordered]="false"
-            class="fiat-money-descriptions-order card-descriptions-order"
+            class="fiat-money-descriptions-order"
           >
             <nz-descriptions-item [nzTitle]="'Custodian Bank'"
               ><span>{{
-                info?.bankName | map: 'showPart'
+                info?.centralBankName | map: 'showPart'
               }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Number'"
@@ -46,13 +46,59 @@
             >
             <nz-descriptions-item [nzTitle]="'Mock Money Balance'"
               ><span>{{
-                info?.accountName | map: 'showPart'
+                info?.accountBalance | map: 'toThousandthMark'
               }}</span></nz-descriptions-item
             >
           </nz-descriptions>
         </nz-card>
       </div>
       <div
+        nz-col
+        [nzXXl]="12"
+        [nzXl]="12"
+        [nzLg]="24"
+        [nzMd]="24"
+        [nzSm]="24"
+        [nzXs]="24"
+      >
+        <nz-card
+          [nzBordered]="false"
+          class="m-r-8"
+          style="
+            background-color: #617cd9;
+            background-size: 100%;
+            border-radius: 20px;
+          "
+        >
+          <nz-descriptions
+            nzTitle=""
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="fiat-money-descriptions-order"
+          >
+            <nz-descriptions-item [nzTitle]="'Home Token Currency'"
+              ><span>{{ 'tEUR' }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Master Wallet Address'"
+              ><span
+                nz-typography
+                nzCopyable
+                [nzCopyText]="walletInfo?.walletAddress"
+                style="color: #fff"
+                [title]="walletInfo?.walletAddress"
+                >{{ walletInfo?.walletAddress | map: 'showPart' }}</span
+              ></nz-descriptions-item
+            >
+            <nz-descriptions-item [nzTitle]="'Current Balance'"
+              ><span>{{
+                walletInfo?.accountBalance | map: 'toThousandthMark'
+              }}</span></nz-descriptions-item
+            >
+          </nz-descriptions>
+        </nz-card>
+      </div>
+      <!-- <div
         nz-col
         [nzXXl]="12"
         [nzXl]="12"
@@ -116,7 +162,7 @@
             </div>
           </div>
         </nz-card>
-      </div>
+      </div> -->
       <!-- <div
         nz-col
         [nzXXl]="6"
@@ -239,7 +285,7 @@
     </div>
   </nz-card>
   <app-card-table-wrap
-    [tableTitle]="'Fiat Money Account Transactions'"
+    [tableTitle]="'Fiat Account Transaction Records'"
     [isNormalTable]="true"
     [btnTpl]="createBtn"
   >
@@ -292,7 +338,7 @@
     class="m-r-8"
     (click)="getTopUp()"
   >
-    {{ 'Wallet Top-up' }}
+    {{ 'Top-up' }}
   </button>
   <button
     nz-button
@@ -301,7 +347,7 @@
     class="m-r-8"
     (click)="getWithdraw()"
   >
-    {{ 'Wallet Withdraw' }}
+    {{ 'Withdraw' }}
   </button>
 </ng-template>
 <nz-modal
@@ -340,7 +386,34 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Wallet Address
+              From Bank Account
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="bankAccountError"
+              nzSpan="16"
+              class="m-b-5"
+            >
+              <input
+                nz-input
+                formControlName="reserveAccount"
+                readonly
+                class="onboard-disabled"
+              />
+              <div>
+                {{ 'Available Balance: ' }}
+                {{ this.info.accountBalance | map: 'toThousandthMark'
+                }}{{ ' ' + this.info?.currency }}
+              </div>
+              <ng-template #bankAccountError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your From Bank Account
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              To Wallet Address
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="walletAddressError"
@@ -355,41 +428,14 @@
               />
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Wallet Address</ng-container
+                  >Please input your To Wallet Address</ng-container
                 >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Bank Account
-            </nz-form-label>
-            <nz-form-control
-              [nzErrorTip]="bankAccountError"
-              nzSpan="16"
-              class="m-b-5"
-            >
-              <input
-                nz-input
-                formControlName="reserveAccount"
-                readonly
-                class="onboard-disabled"
-              />
-              <div>
-                {{ 'Available Amount: ' }}
-                {{ this.info.accountBalance | map: 'toThousandthMark'
-                }}{{ ' ' + this.info?.currency }}
-              </div>
-              <ng-template #bankAccountError let-control>
-                <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Bank Account</ng-container
-                >
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Amount
+              Payment Currency
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="amountError"
@@ -404,22 +450,22 @@
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Amount</ng-container
+                  >Please input your Payment Currency</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular1')"
-                  >The Amount cannot be greater than the Available
-                  Amount</ng-container
+                  >The Payment Currency cannot be greater than the Available
+                  Balance</ng-container
                 >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Token Received
+              Top-up Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="receivedError"
@@ -439,8 +485,8 @@
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Token Received</ng-container
-                >
+                  >Please input your Top-up Amount
+                </ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -505,7 +551,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Wallet Address
+              From Wallet Address
             </nz-form-label>
             <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="16">
               <input
@@ -515,20 +561,20 @@
                 class="onboard-disabled"
               />
               <div>
-                {{ 'Available Amount: ' }}
+                {{ 'Available Balance: ' }}
                 {{ this.walletInfo?.accountBalance | map: 'toThousandthMark'
                 }}{{ ' ' + this.walletInfo?.currency }}
               </div>
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Wallet Address</ng-container
+                  >Please input your From Wallet Address</ng-container
                 >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Bank Account
+              To Bank Account
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="bankAccountError"
@@ -543,7 +589,7 @@
               />
               <ng-template #bankAccountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Bank Account</ng-container
+                  >Please input your To Bank Account</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >Format error. Please use numbers.</ng-container
@@ -556,7 +602,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Amount
+              Amount of Currency
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="amount1Error"
@@ -571,22 +617,22 @@
               </ng-template>
               <ng-template #amount1Error let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Amount</ng-container
+                  >Please input your Amount of Currency</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular1')"
-                  >The Amount cannot be greater than the Available
-                  Amount</ng-container
+                  >The Amount of Currency cannot be greater than the Available
+                  Balance</ng-container
                 >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Token Received
+              Withdrawal Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="receivedError"
@@ -606,8 +652,8 @@
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Token Received</ng-container
-                >
+                  >Please input your Withdrawal Amount
+                </ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>

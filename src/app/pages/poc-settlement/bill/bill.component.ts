@@ -373,7 +373,7 @@ export class BillComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
