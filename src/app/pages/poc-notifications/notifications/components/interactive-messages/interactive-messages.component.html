@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 11:06:16
+ * @LastEditTime: 2025-01-04 13:34:43
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
@@ -28,8 +28,8 @@
       <div nz-col>
         <nz-select (ngModelChange)="getSendType($event)" ngModel="" class="m-l-15 select-notice" nzSize="large">
           <nz-option nzValue="" nzLabel="All"></nz-option>
-          <nz-option [nzValue]="1" nzLabel="Inbox"></nz-option>
-          <nz-option [nzValue]="2" nzLabel="Outbox"></nz-option>
+          <nz-option [nzValue]="1" nzLabel="Outbox"></nz-option>
+          <nz-option [nzValue]="2" nzLabel="Inbox"></nz-option>
         </nz-select>
       </div>
     </div>

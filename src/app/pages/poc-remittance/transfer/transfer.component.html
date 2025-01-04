@@ -129,10 +129,8 @@
                       >Please input your Sending Amount</ng-container
                     >
                     <ng-container *ngIf="control.hasError('regular')"
-                      >The maximum amount that can be entered must not exceed{{
-                        ' ' + availableCurrecyModelCount
-                          | map: 'toThousandthMark'
-                      }}</ng-container
+                      >The selected wallet doesn’t have sufficient
+                      funds</ng-container
                     >
                   </ng-template>
                 </nz-form-control>

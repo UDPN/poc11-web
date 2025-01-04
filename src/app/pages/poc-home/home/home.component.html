@@ -78,9 +78,7 @@
                           [nzLabel]="
                             item.chainAccountAddress +
                             '(' +
-                            (item.walletType === 1
-                              ? 'Master Wallet'
-                              : 'Main Wallet') +
+                            (item.walletType | map: 'walletType') +
                             ')'
                           "
                         >

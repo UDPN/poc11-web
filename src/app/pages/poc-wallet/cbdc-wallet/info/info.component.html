@@ -73,7 +73,7 @@
             </nz-descriptions>
           </nz-card>
           <nz-card
-            nzTitle="Transaction Information"
+            nzTitle="Wallet Creation Transaction Information"
             nzBordered="false"
             class="none-bottom"
           >
@@ -316,9 +316,19 @@
 <ng-template #fromTpl let-fromAccountAddress="fromAccountAddress">
   <ng-container *ngIf="fromAccountAddress">
     <p
+      *ngIf="
+        fromAccountAddress === '0x0000000000000000000000000000000000000000'
+      "
+    >
+      {{ 'N/A' }}
+    </p>
+    <p
       [title]="fromAccountAddress"
       nz-typography
       nzCopyable
+      *ngIf="
+        fromAccountAddress !== '0x0000000000000000000000000000000000000000'
+      "
       [nzCopyText]="fromAccountAddress"
     >
       {{
@@ -335,9 +345,15 @@
 <ng-template #toTpl let-toAccountAddress="toAccountAddress">
   <ng-container *ngIf="toAccountAddress">
     <p
+      *ngIf="toAccountAddress === '0x0000000000000000000000000000000000000000'"
+    >
+      {{ 'N/A' }}
+    </p>
+    <p
       [title]="toAccountAddress"
       nz-typography
       nzCopyable
+      *ngIf="toAccountAddress !== '0x0000000000000000000000000000000000000000'"
       [nzCopyText]="toAccountAddress"
     >
       {{
