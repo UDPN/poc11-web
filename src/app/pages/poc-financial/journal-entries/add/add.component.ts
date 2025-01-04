@@ -40,7 +40,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   touchedGroups: Set<number> = new Set();
   tokenList: TokenInfo[] = [];
   selectedToken: TokenInfo | null = null;
-  transactionTypes = ['Top-Up', 'Withdraw', 'Transfer'];
+  transactionTypes = ['Top-Up', 'Withdraw', 'Internal Transfer','External Transfer out','External Transfer in','External  FX Transfer out','External  FX Transfer in','FX Purchasing -Transfer out','FX Purchasing -Transfer in'];
   subjectList: SubjectInfo[] = [];
   currentFilteredSubjects: { [key: string]: any[] } = {};
   loadingSubjects: { [key: string]: boolean } = {};
@@ -275,11 +275,15 @@ export class AddComponent implements OnInit, AfterViewInit {
         });
 
         const transactionsArray = group.get('transactions') as FormArray;
-        const defaultRows = 2;
+        // 根据交易类型决定默认行数
+        const defaultRows = this.shouldShowThreeRows(type) ? 3 : 2;
 
         for (let i = 0; i < defaultRows; i++) {
           const transaction = this.fb.group({
-            debitCredit: [i === 0 ? 'Debit' : 'Credit', Validators.required],
+            debitCredit: [
+              this.getDefaultDebitCredit(type, i),
+              Validators.required
+            ],
             accountCode: ['', Validators.required],
             accountName: ['', Validators.required],
             amount: [
@@ -297,6 +301,22 @@ export class AddComponent implements OnInit, AfterViewInit {
       // 获取科目列表并填充数据
       this.getSubjectList(this.selectedToken.stablecoinId);
     }
+  }
+
+  // 添加一个辅助方法来判断是否需要显示三行
+  private shouldShowThreeRows(type: string): boolean {
+    return type === 'External  FX Transfer out' || type === 'FX Purchasing -Transfer out';
+  }
+
+  // 添加一个辅助方法来决定默认的 Debit/Credit 值
+  private getDefaultDebitCredit(type: string, index: number): string {
+    if (this.shouldShowThreeRows(type)) {
+      // 对于 External FX Transfer out 和 FX Purchasing -Transfer out
+      // 前两行是 Debit，最后一行是 Credit
+      return index < 2 ? 'Debit' : 'Credit';
+    }
+    // 其他类型保持原来的逻辑
+    return index === 0 ? 'Debit' : 'Credit';
   }
 
   private getSubjectList(stablecoinId: number) {
@@ -777,11 +797,11 @@ export class AddComponent implements OnInit, AfterViewInit {
 
         const transactionsArray = group.get('transactions') as FormArray;
         if (groupData.transactions && groupData.transactions.length > 0) {
-          groupData.transactions.forEach((transaction) => {
+          groupData.transactions.forEach((transaction, index) => {
             transactionsArray.push(
               this.fb.group({
                 debitCredit: [
-                  transaction.debitCredit || 'Debit',
+                  transaction.debitCredit || this.getDefaultDebitCredit(groupData.transactionType, index),
                   Validators.required
                 ],
                 accountCode: [transaction.accountCode, Validators.required],
@@ -795,9 +815,21 @@ export class AddComponent implements OnInit, AfterViewInit {
             );
           });
         } else {
-          // 如果没有交易记录，添加两个空的交易记录
-          for (let i = 0; i < 2; i++) {
-            transactionsArray.push(this.createTransaction());
+          // 如果没有交易记录，添加默认行数的空记录
+          const defaultRows = this.shouldShowThreeRows(groupData.transactionType) ? 3 : 2;
+          for (let i = 0; i < defaultRows; i++) {
+            transactionsArray.push(
+              this.fb.group({
+                debitCredit: [this.getDefaultDebitCredit(groupData.transactionType, i), Validators.required],
+                accountCode: ['', Validators.required],
+                accountName: ['', Validators.required],
+                amount: [
+                  { value: '', disabled: true },
+                  [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]
+                ],
+                accountCategory: ['']
+              })
+            );
           }
         }
 
@@ -812,8 +844,20 @@ export class AddComponent implements OnInit, AfterViewInit {
         });
 
         const transactionsArray = group.get('transactions') as FormArray;
-        for (let i = 0; i < 2; i++) {
-          transactionsArray.push(this.createTransaction());
+        const defaultRows = this.shouldShowThreeRows(type) ? 3 : 2;
+        for (let i = 0; i < defaultRows; i++) {
+          transactionsArray.push(
+            this.fb.group({
+              debitCredit: [this.getDefaultDebitCredit(type, i), Validators.required],
+              accountCode: ['', Validators.required],
+              accountName: ['', Validators.required],
+              amount: [
+                { value: '', disabled: true },
+                [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]
+              ],
+              accountCategory: ['']
+            })
+          );
         }
 
         this.transactionGroups.push(group);
@@ -821,16 +865,11 @@ export class AddComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // 添加一个新的方法来判断是否显示删除按钮
+  // 修改判断是否显示删除按钮的方法
   canShowDeleteButton(groupIndex: number, transactionIndex: number): boolean {
     const group = this.transactionGroups.at(groupIndex);
     const transactionType = group.get('transactionType')?.value;
-
-    if (transactionType === 'Transfer' || transactionType === 'FX Purchasing') {
-      return transactionIndex >= 3; // 从第四行开始显示（索引从0开始）
-    } else {
-      return transactionIndex >= 2; // 其他类型保持从第三行开始显示
-    }
+    return this.shouldShowThreeRows(transactionType) ? transactionIndex >= 3 : transactionIndex >= 2;
   }
 
   // 修改 getAmountPlaceholder 方法
@@ -842,17 +881,18 @@ export class AddComponent implements OnInit, AfterViewInit {
     const transactionType = group.get('transactionType')?.value;
     const debitCredit = transaction.get('debitCredit')?.value;
 
-    if (transactionType === 'Transfer') {
-      return debitCredit === 'Debit'
-        ? 'Transfer Amount - From'
-        : 'Transfer Amount - To';
-    } else if (transactionType === 'FX Purchasing') {
-      return debitCredit === 'Debit'
-        ? 'Authorized Transfer Amount - From'
-        : 'Authorized Transfer Amount - To';
+    if (this.shouldShowThreeRows(transactionType)) {
+      const transactions = group.get('transactions') as FormArray;
+      const index = transactions.controls.indexOf(transaction);
+      
+      if (index === 2) {
+        return `${transactionType} Fee Amount`;
+      }
+      
+      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
     }
 
-    return 'Top-up Amount'; // 默认显示文本
+    return `${transactionType} Amount`; // 默认显示文本
   }
 
   // 添加监听 debit/credit 变化的方法
