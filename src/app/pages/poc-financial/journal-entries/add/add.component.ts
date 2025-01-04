@@ -20,10 +20,26 @@ import {
   SubjectInfo,
   SubjectResponse
 } from './token.interface';
-import { StorageService, TransactionData } from './storage.service';
+import { StorageService } from './storage.service';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { ActivatedRoute, Router } from '@angular/router';
+
+// Add TransactionData interface definition
+interface Transaction {
+  debitCredit: string;
+  financialCategory: string;
+  sstv: string;
+  accountCode: string;
+  accountName: string;
+  accountCategory: string;
+  amount: string;
+}
+
+export interface TransactionData {
+  transactionType: string;
+  transactions: Transaction[];
+}
 
 @Component({
   selector: 'app-add',
@@ -47,16 +63,6 @@ export class AddComponent implements OnInit, AfterViewInit {
   private allSubjects: SubjectInfo[] = [];
   isEditMode = false;
   ruleId: string | null = null;
-
-  // 添加 Debit/Credit 选项
-  debitCreditOptions = [
-    { label: 'Debit (fiat)', value: 1 },
-    { label: 'Credit (fiat)', value: 2 },
-    { label: 'Debit (token)', value: 3 },
-    { label: 'Credit (token)', value: 4 },
-    { label: 'Debit (fee)', value: 5 },
-    { label: 'Credit (fee)', value: 6 }
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -170,6 +176,8 @@ export class AddComponent implements OnInit, AfterViewInit {
                   loan.loanType === 1 ? 'Debit' : 'Credit',
                   Validators.required
                 ],
+                financialCategory: [loan.financialCategory || '1', Validators.required],
+                sstv: [loan.sstv || '1', Validators.required],
                 accountCode: [loan.subjectCode, Validators.required],
                 accountName: [loan.subjectTitle, Validators.required],
                 amount: [
@@ -294,6 +302,8 @@ export class AddComponent implements OnInit, AfterViewInit {
               this.getDefaultDebitCredit(type, i),
               Validators.required
             ],
+            financialCategory: ['1', Validators.required],
+            sstv: ['1', Validators.required],
             accountCode: ['', Validators.required],
             accountName: ['', Validators.required],
             amount: [
@@ -324,9 +334,9 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   // 修改方法来决定默认的 Debit/Credit 值
-  private getDefaultDebitCredit(type: string, index: number): number {
-    // 奇数行 (index = 0,2,4...) 为 Debit (fiat)，偶数行 (index = 1,3,5...) 为 Credit (fiat)
-    return index % 2 === 0 ? 1 : 2; // 1 = Debit (fiat), 2 = Credit (fiat)
+  private getDefaultDebitCredit(type: string, index: number): string {
+    // 奇数行(0,2,4...)显示 Debit，偶数行(1,3,5...)显示 Credit
+    return index % 2 === 0 ? 'Debit' : 'Credit';
   }
 
   private getSubjectList(stablecoinId: number) {
@@ -362,6 +372,8 @@ export class AddComponent implements OnInit, AfterViewInit {
             transactions: (group.get('transactions') as FormArray).controls.map(
               (t) => ({
                 debitCredit: t.get('debitCredit')?.value,
+                financialCategory: t.get('financialCategory')?.value || '1',
+                sstv: t.get('sstv')?.value,
                 accountCode: t.get('accountCode')?.value,
                 accountName: t.get('accountName')?.value,
                 accountCategory: t.get('accountCategory')?.value,
@@ -428,6 +440,8 @@ export class AddComponent implements OnInit, AfterViewInit {
         lastTransaction.get('debitCredit')?.value || 'Debit',
         Validators.required
       ],
+      financialCategory: ['1', Validators.required],
+      sstv: [lastTransaction.get('sstv')?.value || '1', Validators.required],
       accountCode: [
         lastTransaction.get('accountCode')?.value || '',
         Validators.required
@@ -533,7 +547,7 @@ export class AddComponent implements OnInit, AfterViewInit {
             case 'FX Purchasing Transfer Out':
               txType = 8;
               break;
-            case 'FX Purchasing Transfer In':
+            case 'External Transfer Out':
               txType = 9;
               break;
             default:
@@ -548,7 +562,10 @@ export class AddComponent implements OnInit, AfterViewInit {
                   this.transactionGroups.controls.indexOf(group),
                   transaction
                 ),
-                loanType: transaction.get('debitCredit')?.value,
+                loanType:
+                  transaction.get('debitCredit')?.value === 'Debit' ? 1 : 2,
+                financialCategory: transaction.get('financialCategory')?.value,
+                sstv: transaction.get('sstv')?.value,
                 subjectCategory: transaction.get('accountCategory')?.value,
                 subjectCode: transaction.get('accountCode')?.value,
                 subjectTitle: transaction.get('accountName')?.value
@@ -607,6 +624,8 @@ export class AddComponent implements OnInit, AfterViewInit {
   private createTransaction() {
     return this.fb.group({
       debitCredit: ['Debit', Validators.required],
+      financialCategory: ['1', Validators.required],
+      sstv: ['1', Validators.required],
       accountCode: ['', Validators.required],
       accountName: ['', Validators.required],
       amount: [
@@ -738,6 +757,8 @@ export class AddComponent implements OnInit, AfterViewInit {
                 group.get('transactions') as FormArray
               ).controls.map((t) => ({
                 debitCredit: t.get('debitCredit')?.value,
+                financialCategory: t.get('financialCategory')?.value || '1',
+                sstv: t.get('sstv')?.value,
                 accountCode: t.get('accountCode')?.value,
                 accountName: t.get('accountName')?.value,
                 accountCategory: t.get('accountCategory')?.value,
@@ -807,7 +828,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   private loadStoredData() {
     const storedData = this.storageService.getTransactions();
     if (storedData && storedData.length > 0) {
-      storedData.forEach((groupData) => {
+      storedData.forEach((groupData: TransactionData) => {
         const group = this.fb.group({
           transactionType: [groupData.transactionType, Validators.required],
           transactions: this.fb.array([])
@@ -815,13 +836,15 @@ export class AddComponent implements OnInit, AfterViewInit {
 
         const transactionsArray = group.get('transactions') as FormArray;
         if (groupData.transactions && groupData.transactions.length > 0) {
-          groupData.transactions.forEach((transaction, index) => {
+          groupData.transactions.forEach((transaction: Transaction, index) => {
             transactionsArray.push(
               this.fb.group({
                 debitCredit: [
                   transaction.debitCredit || this.getDefaultDebitCredit(groupData.transactionType, index),
                   Validators.required
                 ],
+                financialCategory: [transaction.financialCategory || '1', Validators.required],
+                sstv: [transaction.sstv || '1', Validators.required],
                 accountCode: [transaction.accountCode, Validators.required],
                 accountName: [transaction.accountName, Validators.required],
                 amount: [
@@ -839,6 +862,8 @@ export class AddComponent implements OnInit, AfterViewInit {
             transactionsArray.push(
               this.fb.group({
                 debitCredit: [this.getDefaultDebitCredit(groupData.transactionType, i), Validators.required],
+                financialCategory: ['1', Validators.required],
+                sstv: ['1', Validators.required],
                 accountCode: ['', Validators.required],
                 accountName: ['', Validators.required],
                 amount: [
@@ -867,6 +892,8 @@ export class AddComponent implements OnInit, AfterViewInit {
           transactionsArray.push(
             this.fb.group({
               debitCredit: [this.getDefaultDebitCredit(type, i), Validators.required],
+              financialCategory: ['1', Validators.required],
+              sstv: ['1', Validators.required],
               accountCode: ['', Validators.required],
               accountName: ['', Validators.required],
               amount: [
@@ -898,23 +925,20 @@ export class AddComponent implements OnInit, AfterViewInit {
   ): string {
     const group = this.transactionGroups.at(groupIndex);
     const transactionType = group.get('transactionType')?.value;
-    const debitCreditValue = transaction.get('debitCredit')?.value;
+    const debitCredit = transaction.get('debitCredit')?.value;
     const transactions = group.get('transactions') as FormArray;
     const index = transactions.controls.indexOf(transaction);
 
-    const isDebit = [1, 3, 5].includes(debitCreditValue);
-    const isFee = [5, 6].includes(debitCreditValue);
-
     if (transactionType === 'External  FX Transfer out' || transactionType === 'FX Purchasing -Transfer out') {
-      if (isFee) {
+      if (index === 2) {
         return `${transactionType} Fee Amount`;
       }
-      return `${transactionType} Amount - ${isDebit ? 'From' : 'To'}`;
+      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
     } else if (transactionType === 'Top-Up' || transactionType === 'Withdraw') {
-      if (isFee) {
+      if (index === 3) {
         return `${transactionType} Fee Amount`;
       }
-      return `${transactionType} Amount - ${isDebit ? 'From' : 'To'}`;
+      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
     }
 
     return `${transactionType} Amount`;
