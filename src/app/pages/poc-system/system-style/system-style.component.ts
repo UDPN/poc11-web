@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-07-02 14:33:55
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 17:29:29
+ * @LastEditTime: 2025-01-04 17:52:56
  * @Description:
  */
 import {
@@ -144,15 +144,17 @@ export class SystemStyleComponent implements OnInit {
       if (res.logoFileHash) {
         this.validateForm.get('systemName')?.setValue(res.systemName);
         this.validateForm.get('themeColor')?.setValue(res.themeColor);
-        this.validateForm.get('logoFileHash')?.setValue(res.logoFileHash);
-        this.originalLogo = res.logoFileHash;
+        const logoFileHash = sessionStorage.getItem('logoFileHash');
+        this.validateForm.get('logoFileHash')?.setValue(logoFileHash);
+        this.fileImg = logoFileHash;
+        // this.originalLogo = res.logoFileHash;
         this.changeColor(res.themeColor);
-        this.commonService
-          .downImg({ hash: res.logoFileHash })
-          .subscribe((resu) => {
-            this.fileImg = 'data:image/jpg;base64,' + resu;
-            this.cdr.markForCheck();
-          });
+        // this.commonService
+        //   .downImg({ hash: res.logoFileHash })
+        //   .subscribe((resu) => {
+        //     this.fileImg = 'data:image/jpg;base64,' + resu;
+        //     this.cdr.markForCheck();
+        //   });
       } else {
         const themeOptionsKey: any =
           this.windowServe.getStorage(ThemeOptionsKey);

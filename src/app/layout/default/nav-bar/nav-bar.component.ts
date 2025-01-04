@@ -326,6 +326,7 @@ export class NavBarComponent implements OnInit {
       if (res) {
         // this.systemName = res.systemName;
         this.logoImg = res.logoFileHash;
+        sessionStorage.setItem('logoFileHash', res.logoFileHash);
         this.cdr.markForCheck();
         // if (res.logoFileHash) {
         //   this.commonService
