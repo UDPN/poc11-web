@@ -154,6 +154,8 @@
                           <nz-form-control>
                             <nz-select
                               formControlName="debitCredit"
+                              [nzOptions]="debitCreditOptions"
+                              nzPlaceHolder="Select Debit/Credit"
                               (ngModelChange)="
                                 onDebitCreditChange(transaction, groupIndex)
                               "
@@ -164,16 +166,7 @@
                                   groupIndex
                                 )
                               "
-                            >
-                              <nz-option
-                                nzValue="Debit"
-                                nzLabel="Debit"
-                              ></nz-option>
-                              <nz-option
-                                nzValue="Credit"
-                                nzLabel="Credit"
-                              ></nz-option>
-                            </nz-select>
+                            ></nz-select>
                             <div
                               *ngIf="
                                 isFieldInvalid(
