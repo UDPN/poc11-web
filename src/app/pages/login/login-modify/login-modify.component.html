@@ -54,15 +54,15 @@
   </div>
 </div> -->
 <div
-  class="min-screen-full-height container relative"
-  style="background-color: #E6F7FF;"
+  class="min-screen-full-height-login container relative"
+  style="background-color: #e6f7ff; margin: 32px; border-radius: 12px"
   [class.is-night]="isNightTheme$ | async"
   [class.over-modal]="isOverModel"
 >
-<div class="title-container">
-  <img src="../../../../assets/imgs/login1/logo.svg" alt="">
-  <img src="../../../../assets/imgs/login1/group1.svg" alt="">
-</div>
+  <div class="title-container">
+    <img src="../../../../assets/imgs/login1/logo.svg" alt="" />
+    <img src="../../../../assets/imgs/login1/group1.svg" alt="" />
+  </div>
   <!-- <div nz-row>
     <div
       nz-col
@@ -102,10 +102,7 @@
       [nzSm]="0"
       [nzXs]="0"
       class="relative min-screen-full-height"
-    >
-
-
-    </div>
+    ></div>
     <div
       nz-col
       [nzXXl]="14"
@@ -118,7 +115,7 @@
     >
       <div class="full-height flex-coloum center">
         <nz-card
-           class="ssst"
+          class="ssst"
           [nzBordered]="isOverModel"
           [class.is-night]="isNightTheme$ | async"
         >

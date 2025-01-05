@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-21 10:39:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-21 16:02:59
+ * @LastEditTime: 2025-01-05 15:01:50
  * @Description: 
 -->
 <!-- <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header> -->
@@ -112,7 +112,7 @@
           <nz-descriptions-item nzTitle="Custodian Bank" [nzSpan]="3">{{
             info.centralBankName
           }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Currency">{{
+          <nz-descriptions-item nzTitle="Home Currency">{{
             info.peggedCurrency
           }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Blockchain">{{
@@ -168,7 +168,7 @@
             <label nz-checkbox nzDisabled [nzChecked]="true">
               Interbank Cross-border Settlement<i
                 class="m-l-5"
-                style="color: #3c5686"
+                style="color: #3c5686; font-size: 20px"
                 nz-icon
                 nzType="question-circle"
                 nzTooltipPlacement="right"
@@ -187,15 +187,13 @@
             <label nz-checkbox nzDisabled [nzChecked]="info.paymentStatus === 1"
               >Cross-border Payment & Remittance<i
                 class="m-l-5"
-                style="color: #3c5686"
+                style="color: #3c5686; font-size: 20px"
                 nz-icon
                 nzType="question-circle"
                 nzTooltipPlacement="right"
                 nzTheme="fill"
                 nz-tooltip
-                [nzTooltipTitle]="
-                  'Cross-border Payment & Remittance refers to the process oftransferring funds between two different countries or currencies'
-                "
+                [nzTooltipTitle]="'enterprise customers.'"
                 nzTooltipColor="#3c5686"
                 nzTooltipTrigger="click"
                 nzTooltipOverlayClassName="buils"

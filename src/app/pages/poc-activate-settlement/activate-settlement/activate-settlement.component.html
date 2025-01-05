@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-12-21 10:39:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-18 14:53:00
+ * @LastEditTime: 2025-01-05 15:02:02
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -37,7 +37,7 @@
           <nz-descriptions nzLayout="vertical" nzTitle="" [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
             [nzColon]="false" [nzBordered]="false">
             <nz-descriptions-item nzTitle="Custodian Bank" [nzSpan]="3">{{ info.centralBankName }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Currency">{{ info.peggedCurrency }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Home Currency">{{ info.peggedCurrency }}</nz-descriptions-item>
             <nz-descriptions-item nzTitle="Blockchain">{{ info.blockchain }}</nz-descriptions-item>
           </nz-descriptions>
         </div>
@@ -73,7 +73,7 @@
               <label nz-checkbox nzDisabled [nzChecked]="true">
                 Interbank Cross-border Settlement<i
                   class="m-l-5"
-                  style="color: #3c5686"
+                  style="color: #3c5686;font-size: 20px;"
                   nz-icon
                   nzType="question-circle"
                   nzTooltipPlacement="right"
@@ -95,14 +95,14 @@
                 [nzChecked]="info.paymentStatus === 1"
                 >Cross-border Payment & Remittance<i
                   class="m-l-5"
-                  style="color: #3c5686"
+                  style="color: #3c5686; font-size: 20px"
                   nz-icon
                   nzType="question-circle"
                   nzTooltipPlacement="right"
                   nzTheme="fill"
                   nz-tooltip
                   [nzTooltipTitle]="
-                    'Cross-border Payment & Remittance refers to the process oftransferring funds between two different countries or currencies'
+                    'enterprise customers.'
                   "
                   nzTooltipColor="#3c5686"
                   nzTooltipTrigger="click"

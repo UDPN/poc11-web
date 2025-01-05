@@ -364,7 +364,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
           title: 'Blockchain',
           field: 'blockchainName',
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'Transaction Type',
@@ -394,20 +394,20 @@ export class ExportComponent implements OnInit, AfterViewInit {
           title: 'Transaction Period',
           tdTemplate: this.transactionPeriodTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 180
         },
         {
           title: 'Executed On',
           field: 'exportTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
-          width: 150
+          width: 120
         },
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
-          width: 120
+          width: 150
         },
         // {
         //   title: 'Proof Hash',

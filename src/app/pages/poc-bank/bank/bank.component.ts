@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 10:13:29
+ * @LastEditTime: 2025-01-05 14:47:23
  * @Description:
  */
 import {
@@ -215,14 +215,14 @@ export class BankComponent implements OnInit, AfterViewInit {
           title: 'Currency',
           field: 'currency',
           notNeedEllipsis: true,
-          width: 200
+          width: 120
         },
         {
           title: 'Number of Wallets',
           field: 'walletAddressNumber',
           tdTemplate: this.walletAddressTpl,
           notNeedEllipsis: true,
-          width: 100
+          width: 120
         }
       ],
       total: 0,
