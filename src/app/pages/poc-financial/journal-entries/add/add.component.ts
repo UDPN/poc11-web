@@ -558,22 +558,22 @@ export class AddComponent implements OnInit, AfterViewInit {
             case 'Internal Transfer':
               txType = 3;
               break;
-            case 'External Transfer Out':
+            case 'External Transfer out':
               txType = 4;
               break;
-            case 'External Transfer In':
+            case 'External Transfer in':
               txType = 5;
               break;
-            case 'External FX Transfer Out':
+            case 'External  FX Transfer out':
               txType = 6;
               break;
-            case 'External FX Transfer In':
+            case 'External  FX Transfer in':
               txType = 7;
               break;
-            case 'FX Purchasing Transfer Out':
+            case 'FX Purchasing -Transfer out':
               txType = 8;
               break;
-            case 'External Transfer Out':
+            case 'FX Purchasing -Transfer in':
               txType = 9;
               break;
             default:
