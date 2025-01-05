@@ -142,6 +142,7 @@
                       <!-- 只在第一个交易显示标签行 -->
                       <div class="label-row" *ngIf="i === 0">
                         <span class="required-label">Debit/Credit</span>
+                        <span class="required-label">Financial Category</span>
                         <span class="required-label">Account Code</span>
                         <span class="required-label">Account Name</span>
                         <span class="required-label">Amount</span>
@@ -154,8 +155,6 @@
                           <nz-form-control>
                             <nz-select
                               formControlName="debitCredit"
-                              [nzOptions]="debitCreditOptions"
-                              nzPlaceHolder="Select Debit/Credit"
                               (ngModelChange)="
                                 onDebitCreditChange(transaction, groupIndex)
                               "
@@ -166,7 +165,16 @@
                                   groupIndex
                                 )
                               "
-                            ></nz-select>
+                            >
+                              <nz-option
+                                nzValue="Debit"
+                                nzLabel="Debit"
+                              ></nz-option>
+                              <nz-option
+                                nzValue="Credit"
+                                nzLabel="Credit"
+                              ></nz-option>
+                            </nz-select>
                             <div
                               *ngIf="
                                 isFieldInvalid(
@@ -178,6 +186,42 @@
                               class="ant-form-item-explain ant-form-item-explain-error"
                             >
                               <div role="alert">Please select debit/credit</div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                          <nz-form-control>
+                            <nz-select
+                              formControlName="financialType"
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'financialType',
+                                  groupIndex
+                                )
+                              "
+                            >
+                              <nz-option nzValue="1" nzLabel="Fiat"></nz-option>
+                              <nz-option
+                                nzValue="2"
+                                nzLabel="Token"
+                              ></nz-option>
+                              <nz-option nzValue="3" nzLabel="Fee"></nz-option>
+                            </nz-select>
+                            <div
+                              *ngIf="
+                                isFieldInvalid(
+                                  transaction,
+                                  'financialType',
+                                  groupIndex
+                                )
+                              "
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div role="alert">
+                                Please select financial type
+                              </div>
                             </div>
                           </nz-form-control>
                         </nz-form-item>
