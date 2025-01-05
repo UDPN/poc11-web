@@ -193,11 +193,11 @@
                         <nz-form-item>
                           <nz-form-control>
                             <nz-select
-                              formControlName="financialCategory"
+                              formControlName="financialType"
                               [class.ant-form-item-has-error]="
                                 isFieldInvalid(
                                   transaction,
-                                  'financialCategory',
+                                  'financialType',
                                   groupIndex
                                 )
                               "
@@ -213,14 +213,14 @@
                               *ngIf="
                                 isFieldInvalid(
                                   transaction,
-                                  'financialCategory',
+                                  'financialType',
                                   groupIndex
                                 )
                               "
                               class="ant-form-item-explain ant-form-item-explain-error"
                             >
                               <div role="alert">
-                                Please select financial category
+                                Please select financial type
                               </div>
                             </div>
                           </nz-form-control>

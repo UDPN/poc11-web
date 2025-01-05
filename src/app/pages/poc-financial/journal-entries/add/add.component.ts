@@ -28,8 +28,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 // Add TransactionData interface definition
 interface Transaction {
   debitCredit: string;
-  financialCategory: string;
-  sstv: string;
+  financialType: string;
   accountCode: string;
   accountName: string;
   accountCategory: string;
@@ -158,7 +157,25 @@ export class AddComponent implements OnInit, AfterViewInit {
                 transactionType = 'Withdraw';
                 break;
               case 3:
-                transactionType = 'Transfer';
+                transactionType = 'Internal Transfer';
+                break;
+              case 4:
+                transactionType = 'External Transfer Out';
+                break;
+              case 5:
+                transactionType = 'External Transfer In';
+                break;
+              case 6:
+                transactionType = 'External FX Transfer Out';
+                break;
+              case 7:
+                transactionType = 'External FX Transfer In';
+                break;
+              case 8:
+                transactionType = 'FX Purchasing Transfer Out';
+                break;
+              case 9:
+                transactionType = 'External Transfer Out';
                 break;
               default:
                 transactionType = 'Top-Up';
@@ -176,8 +193,7 @@ export class AddComponent implements OnInit, AfterViewInit {
                   loan.loanType === 1 ? 'Debit' : 'Credit',
                   Validators.required
                 ],
-                financialCategory: [loan.financialCategory || '1', Validators.required],
-                sstv: [loan.sstv || '1', Validators.required],
+                financialType: [loan.financialType?.toString() || '1', Validators.required],
                 accountCode: [loan.subjectCode, Validators.required],
                 accountName: [loan.subjectTitle, Validators.required],
                 amount: [
@@ -302,8 +318,7 @@ export class AddComponent implements OnInit, AfterViewInit {
               this.getDefaultDebitCredit(type, i),
               Validators.required
             ],
-            financialCategory: ['1', Validators.required],
-            sstv: ['1', Validators.required],
+            financialType: ['1', Validators.required],
             accountCode: ['', Validators.required],
             accountName: ['', Validators.required],
             amount: [
@@ -372,8 +387,7 @@ export class AddComponent implements OnInit, AfterViewInit {
             transactions: (group.get('transactions') as FormArray).controls.map(
               (t) => ({
                 debitCredit: t.get('debitCredit')?.value,
-                financialCategory: t.get('financialCategory')?.value || '1',
-                sstv: t.get('sstv')?.value,
+                financialType: t.get('financialType')?.value || '1',
                 accountCode: t.get('accountCode')?.value,
                 accountName: t.get('accountName')?.value,
                 accountCategory: t.get('accountCategory')?.value,
@@ -440,8 +454,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         lastTransaction.get('debitCredit')?.value || 'Debit',
         Validators.required
       ],
-      financialCategory: ['1', Validators.required],
-      sstv: [lastTransaction.get('sstv')?.value || '1', Validators.required],
+      financialType: ['1', Validators.required],
       accountCode: [
         lastTransaction.get('accountCode')?.value || '',
         Validators.required
@@ -564,8 +577,7 @@ export class AddComponent implements OnInit, AfterViewInit {
                 ),
                 loanType:
                   transaction.get('debitCredit')?.value === 'Debit' ? 1 : 2,
-                financialCategory: transaction.get('financialCategory')?.value,
-                sstv: transaction.get('sstv')?.value,
+                financialType: transaction.get('financialType')?.value,
                 subjectCategory: transaction.get('accountCategory')?.value,
                 subjectCode: transaction.get('accountCode')?.value,
                 subjectTitle: transaction.get('accountName')?.value
@@ -624,8 +636,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   private createTransaction() {
     return this.fb.group({
       debitCredit: ['Debit', Validators.required],
-      financialCategory: ['1', Validators.required],
-      sstv: ['1', Validators.required],
+      financialType: ['1', Validators.required],
       accountCode: ['', Validators.required],
       accountName: ['', Validators.required],
       amount: [
@@ -757,8 +768,7 @@ export class AddComponent implements OnInit, AfterViewInit {
                 group.get('transactions') as FormArray
               ).controls.map((t) => ({
                 debitCredit: t.get('debitCredit')?.value,
-                financialCategory: t.get('financialCategory')?.value || '1',
-                sstv: t.get('sstv')?.value,
+                financialType: t.get('financialType')?.value || '1',
                 accountCode: t.get('accountCode')?.value,
                 accountName: t.get('accountName')?.value,
                 accountCategory: t.get('accountCategory')?.value,
@@ -843,8 +853,7 @@ export class AddComponent implements OnInit, AfterViewInit {
                   transaction.debitCredit || this.getDefaultDebitCredit(groupData.transactionType, index),
                   Validators.required
                 ],
-                financialCategory: [transaction.financialCategory || '1', Validators.required],
-                sstv: [transaction.sstv || '1', Validators.required],
+                financialType: [transaction.financialType || '1', Validators.required],
                 accountCode: [transaction.accountCode, Validators.required],
                 accountName: [transaction.accountName, Validators.required],
                 amount: [
@@ -862,8 +871,7 @@ export class AddComponent implements OnInit, AfterViewInit {
             transactionsArray.push(
               this.fb.group({
                 debitCredit: [this.getDefaultDebitCredit(groupData.transactionType, i), Validators.required],
-                financialCategory: ['1', Validators.required],
-                sstv: ['1', Validators.required],
+                financialType: ['1', Validators.required],
                 accountCode: ['', Validators.required],
                 accountName: ['', Validators.required],
                 amount: [
@@ -892,8 +900,7 @@ export class AddComponent implements OnInit, AfterViewInit {
           transactionsArray.push(
             this.fb.group({
               debitCredit: [this.getDefaultDebitCredit(type, i), Validators.required],
-              financialCategory: ['1', Validators.required],
-              sstv: ['1', Validators.required],
+              financialType: ['1', Validators.required],
               accountCode: ['', Validators.required],
               accountName: ['', Validators.required],
               amount: [

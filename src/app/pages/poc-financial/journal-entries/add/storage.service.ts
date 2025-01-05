@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 
 interface Transaction {
   debitCredit: string;
-  financialCategory: string;
-  sstv: string;
+  financialType: string;
   accountCode: string;
   accountName: string;
   accountCategory: string;
