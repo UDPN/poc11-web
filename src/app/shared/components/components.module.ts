@@ -10,8 +10,20 @@ import { PageHeaderModule } from './page-header/page-header.module';
 import { TopProgressBarModule } from './top-progress-bar/top-progress-bar.module';
 import { UModalModule } from './u-modal/u-modal.module';
 import { WaterMarkModule } from './water-mark/water-mark.module';
+import { CollapsiblePdfModule } from './collapsible-pdf/collapsible-pdf.module';
 
-const MODULES = [LockScreenModule, TreeTableModule, FooterSubmitModule, ChatModule, PageHeaderModule, AntTableModule, TopProgressBarModule, WaterMarkModule,UModalModule];
+const MODULES = [
+  LockScreenModule,
+  TreeTableModule,
+  FooterSubmitModule,
+  ChatModule,
+  PageHeaderModule,
+  AntTableModule,
+  TopProgressBarModule,
+  WaterMarkModule,
+  UModalModule,
+  CollapsiblePdfModule
+];
 
 @NgModule({
   declarations: [],

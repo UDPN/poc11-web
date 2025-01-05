@@ -1,0 +1,22 @@
+<div
+  class="pdf-container"
+  [class.expanded]="isExpanded"
+  [class.collapsed]="!isExpanded"
+  [@collapseAnimation]="isExpanded ? 'expanded' : 'collapsed'"
+>
+  <div class="content" [class.hidden]="!isExpanded">
+    <button class="close-button" (click)="toggleExpand()">
+      <i nz-icon nzType="close" nzTheme="outline"></i>
+    </button>
+    <div class="custom-toolbar">
+      <div class="toolbar-content">
+        <span>Must Read Notice</span>
+      </div>
+    </div>
+    <iframe [src]="_pdfUrl" class="pdf-frame" type="application/pdf"></iframe>
+  </div>
+  <div class="collapsed-content" [class.hidden]="isExpanded" (click)="toggleExpand()">
+    <!-- <i nz-icon nzType="question-circle" nzTheme="outline"></i> -->
+    Must
+  </div>
+</div>
