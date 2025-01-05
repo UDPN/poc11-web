@@ -328,7 +328,10 @@ export class AddComponent implements OnInit, AfterViewInit {
               this.getDefaultDebitCredit(type, i),
               Validators.required
             ],
-            financialType: ['1', Validators.required],
+            financialType: [
+              this.getDefaultFinancialType(type, i),
+              Validators.required
+            ],
             accountCode: ['', Validators.required],
             accountName: ['', Validators.required],
             amount: [
@@ -457,6 +460,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   addSingleTransaction(groupIndex: number) {
     const transactionGroup = this.transactionGroups.at(groupIndex);
     const transactions = transactionGroup.get('transactions') as FormArray;
+    const transactionType = transactionGroup.get('transactionType')?.value;
 
     // Get the last transaction in the group
     const lastTransaction = transactions.at(transactions.length - 1);
@@ -467,7 +471,10 @@ export class AddComponent implements OnInit, AfterViewInit {
         lastTransaction.get('debitCredit')?.value || 'Debit',
         Validators.required
       ],
-      financialType: ['1', Validators.required],
+      financialType: [
+        this.getDefaultFinancialType(transactionType, transactions.length),
+        Validators.required
+      ],
       accountCode: [
         lastTransaction.get('accountCode')?.value || '',
         Validators.required
@@ -868,7 +875,11 @@ export class AddComponent implements OnInit, AfterViewInit {
                     ),
                   Validators.required
                 ],
-                financialType: [transaction.financialType || '1', Validators.required],
+                financialType: [
+                  transaction.financialType || 
+                  this.getDefaultFinancialType(groupData.transactionType, index),
+                  Validators.required
+                ],
                 accountCode: [transaction.accountCode, Validators.required],
                 accountName: [transaction.accountName, Validators.required],
                 amount: [
@@ -887,8 +898,14 @@ export class AddComponent implements OnInit, AfterViewInit {
           for (let i = 0; i < defaultRows; i++) {
             transactionsArray.push(
               this.fb.group({
-                debitCredit: [this.getDefaultDebitCredit(groupData.transactionType, i), Validators.required],
-                financialType: ['1', Validators.required],
+                debitCredit: [
+                  this.getDefaultDebitCredit(groupData.transactionType, i),
+                  Validators.required
+                ],
+                financialType: [
+                  this.getDefaultFinancialType(groupData.transactionType, i),
+                  Validators.required
+                ],
                 accountCode: ['', Validators.required],
                 accountName: ['', Validators.required],
                 amount: [
@@ -916,8 +933,14 @@ export class AddComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < defaultRows; i++) {
           transactionsArray.push(
             this.fb.group({
-              debitCredit: [this.getDefaultDebitCredit(type, i), Validators.required],
-              financialType: ['1', Validators.required],
+              debitCredit: [
+                this.getDefaultDebitCredit(type, i),
+                Validators.required
+              ],
+              financialType: [
+                this.getDefaultFinancialType(type, i),
+                Validators.required
+              ],
               accountCode: ['', Validators.required],
               accountName: ['', Validators.required],
               amount: [
@@ -972,6 +995,30 @@ export class AddComponent implements OnInit, AfterViewInit {
   onDebitCreditChange(transaction: AbstractControl, groupIndex: number) {
     // 触发重新渲染 amount placeholder
     transaction.get('amount')?.updateValueAndValidity();
+  }
+
+  private getDefaultFinancialType(transactionType: string, index: number): string {
+    if (transactionType === 'Top-Up' || transactionType === 'Withdraw') {
+      // For Top-Up and Withdraw, first two rows are Fiat (1), last two rows are Token (2)
+      return index < 2 ? '1' : '2';
+    } else if (
+      transactionType === 'Internal Transfer' ||
+      transactionType === 'External Transfer out' ||
+      transactionType === 'External Transfer in' ||
+      transactionType === 'External  FX Transfer in' ||
+      transactionType === 'FX Purchasing -Transfer in'
+    ) {
+      // For these types, all rows are Token (2)
+      return '2';
+    } else if (
+      transactionType === 'External  FX Transfer out' ||
+      transactionType === 'FX Purchasing -Transfer out'
+    ) {
+      // For these types, first two rows are Token (2), last row is Fee (3)
+      return index < 2 ? '2' : '3';
+    }
+    // Default to Fiat (1) for other types
+    return '1';
   }
 
   // ... 其他已有的方法 ...
