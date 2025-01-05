@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-19 17:14:34
+ * @LastEditTime: 2025-01-04 17:11:54
  * @Description:
  */
 /*
@@ -205,7 +205,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
         next: (res) => {
           if (res) {
             this.message
-              .success('Add successfully!', { nzDuration: 1000 })
+              .success('Added', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 this.validateForm.reset();
                 this.visible = false;
@@ -234,7 +234,7 @@ export class StatementsComponent implements OnInit, AfterViewInit {
                 resolve(true);
                 if (res) {
                   this.message
-                    .success(`Delete successfully`, { nzDuration: 1000 })
+                    .success(`Deleted`, { nzDuration: 1000 })
                     .onClose!.subscribe(() => {
                       this.getDataList();
                     });

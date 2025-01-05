@@ -121,7 +121,7 @@ export class UserComponent implements OnInit {
     } else {
       status = 'enable';
     }
-    const toolStatus = status.charAt(0).toUpperCase() + status.slice(1);
+    const toolStatus = status.charAt(0).toUpperCase() + status.slice(1) + 'd';
     this.modal.confirm({
       nzTitle: `Are you sure you want to ${status} the information of '${userName}' user ?`,
       nzContent: '',
@@ -132,7 +132,7 @@ export class UserComponent implements OnInit {
               resolve(true);
               this.cdr.markForCheck();
               if (res) {
-                this.message.success(`${toolStatus} the user successfully!`, {
+                this.message.success(`${toolStatus}`, {
                   nzDuration: 1000
                 });
               }
@@ -189,11 +189,9 @@ export class UserComponent implements OnInit {
             next: (res) => {
               resolve(true);
               if (res) {
-                this.message
-                  .success(`Delete successfully`)
-                  .onClose!.subscribe(() => {
-                    this.getDataList();
-                  });
+                this.message.success(`Deleted`).onClose!.subscribe(() => {
+                  this.getDataList();
+                });
               }
               this.cdr.markForCheck();
             },

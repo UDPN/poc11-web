@@ -160,7 +160,7 @@ export class NormalLoginComponent implements OnInit {
           console.log(tokens);
           this.loginInOutService.loginIn(tokens).then(() => {
             this.message
-              .success('Login successfully!', { nzDuration: 1000 })
+              .success('Login successful!', { nzDuration: 1000 })
               .onClose!.subscribe((res) => {
                 this.router.navigateByUrl('/poc/poc-home/home');
               });

@@ -728,8 +728,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (res.code === 0 || res.code === '0') {
           this.modal
             .success({
-              nzTitle: 'Success',
-              nzContent: 'Transfer successful!'
+              nzTitle: 'FX purchase completed',
+              nzContent: ''
             })
             .afterClose.subscribe((_) => {
               // this.initData();

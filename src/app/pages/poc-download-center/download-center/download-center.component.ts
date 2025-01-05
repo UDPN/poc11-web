@@ -116,7 +116,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
         next: (res) => {
           if (res) {
             this.message
-              .success('Download successfully!', { nzDuration: 1000 })
+              .success('Downloaded!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 const blob = new Blob([res.body], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

@@ -165,7 +165,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
               resolve(true);
               if (res) {
                 this.message
-                  .success(`Delete successfully`, { nzDuration: 1000 })
+                  .success(`Deleted`, { nzDuration: 1000 })
                   .onClose!.subscribe(() => {
                     this.getDataList();
                   });
@@ -190,7 +190,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
         next: (res) => {
           if (res) {
             this.message
-              .success('Download successfully!', { nzDuration: 1000 })
+              .success('Downloaded!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 const blob = new Blob([res.body], {
                   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

@@ -14,7 +14,6 @@ import { Location } from '@angular/common';
 import { finalize } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
-
 @Component({
   selector: 'app-reduce',
   templateUrl: './reduce.component.html',
@@ -49,7 +48,7 @@ export class ReduceComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private location: Location,
     private message: NzMessageService
-  ) { }
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -92,24 +91,30 @@ export class ReduceComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    const listOfEnabledData = this.listOfCurrentPageData.filter(({ disabled }) => !disabled);
+    const listOfEnabledData = this.listOfCurrentPageData.filter(
+      ({ disabled }) => !disabled
+    );
     if (listOfEnabledData && listOfEnabledData.length > 0) {
-      this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
-    };
-    this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
+      this.checked = listOfEnabledData.every(({ id }) =>
+        this.setOfCheckedId.has(id)
+      );
+    }
+    this.indeterminate =
+      listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      !this.checked;
     let array: any = [];
     this.setOfCheckedId.forEach((id) => {
-      this.listOfCurrentPageData.forEach(item => {
+      this.listOfCurrentPageData.forEach((item) => {
         if (item['id'] === id) {
           array.push({
             fromCurrency: item['sourceCurrency'],
             fromPlatform: item['sourcePlatform'],
             toCurrency: item['targetCurrency'],
-            toPlatform: item['targetPlatform'],
+            toPlatform: item['targetPlatform']
           });
         }
-      })
-    })
+      });
+    });
     this.submitCurrencyPair = array;
   }
 
@@ -135,21 +140,26 @@ export class ReduceComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
-    this.foreignExchangeApplyService.reduce({ exchangeInformations: this.submitCurrencyPair }).pipe(finalize(() => this.isLoading = false)).subscribe({
-      next: res => {
-        if (res) {
-          this.message.success('Deactivate successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
-            this.location.back();
-          });
+    this.foreignExchangeApplyService
+      .reduce({ exchangeInformations: this.submitCurrencyPair })
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message
+              .success('Deactivated', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                this.location.back();
+              });
+          }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
         }
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      },
-      error: err => {
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      }
-    })
+      });
   }
 
   onBack() {
@@ -157,11 +167,13 @@ export class ReduceComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.foreignExchangeApplyService.getSpApprovedInfo().subscribe((res: any) => {
-      this.info = res;
-      this.cdr.markForCheck();
-      return;
-    });
+    this.foreignExchangeApplyService
+      .getSpApprovedInfo()
+      .subscribe((res: any) => {
+        this.info = res;
+        this.cdr.markForCheck();
+        return;
+      });
   }
 
   getReduceList() {
@@ -169,7 +181,7 @@ export class ReduceComponent implements OnInit {
       this.dataList = res.outLatestExchangeRateInfoList;
       this.dataList.forEach((item: any, index: number) => {
         item.id = index;
-      })
+      });
       this.cdr.markForCheck();
       return;
     });

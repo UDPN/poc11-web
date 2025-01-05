@@ -15,16 +15,14 @@
     <form nz-form [formGroup]="validateForm">
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired  nzSpan="10"
-            >User Name
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">User Name </nz-form-label>
           <nz-form-control [nzErrorTip]="userNameError">
             <div nz-row>
               <div nz-col nzSpan="24">
                 <input
                   nz-input
                   formControlName="userName"
-                  [ngClass]="{'onboard-disabled': !tempStatus}"
+                  [ngClass]="{ 'onboard-disabled': !tempStatus }"
                   [readonly]="!tempStatus"
                   maxlength="20"
                 />
@@ -32,7 +30,7 @@
             </div>
             <ng-template #userNameError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please input your User Name</ng-container
+                >Please input User Name</ng-container
               >
               <ng-container *ngIf="control.hasError('regular')"
                 >Numbers, letters or a combination of both,2-30
@@ -44,9 +42,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired  nzSpan="10"
-            >Real Name
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Real Name </nz-form-label>
           <nz-form-control [nzErrorTip]="realNameError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -66,7 +62,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired  nzSpan="10">
+          <nz-form-label nzRequired nzSpan="10">
             Telephone Number
           </nz-form-label>
           <nz-form-control [nzErrorTip]="phoneError">
@@ -85,7 +81,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired  nzSpan="10"> Email </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10"> Email </nz-form-label>
           <nz-form-control [nzErrorTip]="emailError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -105,7 +101,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired  nzSpan="24">Role</nz-form-label>
+          <nz-form-label nzRequired nzSpan="24">Role</nz-form-label>
           <nz-form-control [nzErrorTip]="roleError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -128,7 +124,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired  nzSpan="24">Status </nz-form-label>
+          <nz-form-label nzRequired nzSpan="24">Status </nz-form-label>
           <nz-form-control [nzErrorTip]="statusError">
             <div nz-row>
               <div nz-col nzSpan="24">

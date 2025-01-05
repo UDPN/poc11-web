@@ -641,7 +641,7 @@
             <nz-form-control [nzErrorTip]="passwordError" nzSpan="18">
               <input [type]="'password'" nz-input formControlName="pwd" />
               <ng-template #passwordError let-control>
-                <ng-container *ngIf="control.hasError('required')">Please input your Password</ng-container>
+                <ng-container *ngIf="control.hasError('required')">Please input Password</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>

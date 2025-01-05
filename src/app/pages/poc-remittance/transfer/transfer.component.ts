@@ -928,8 +928,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         if (res.code === 0) {
           this.modal
             .success({
-              nzTitle: 'Success',
-              nzContent: 'Transfer successful!'
+              nzTitle: 'Transfer completed',
+              nzContent: ''
             })
             .afterClose.subscribe((_) => {
               // this.initData();

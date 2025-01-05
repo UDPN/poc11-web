@@ -114,7 +114,7 @@ export class InteractiveMessagesComponent implements OnInit, AfterViewInit {
         next: (res) => {
           if (res) {
             this.message
-              .success('Add successfully!', { nzDuration: 1000 })
+              .success('Added', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 this.sendForm.reset();
               });

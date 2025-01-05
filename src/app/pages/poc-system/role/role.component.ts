@@ -119,7 +119,10 @@ export class RoleComponent implements OnInit {
     }
     const toolStatus = status.charAt(0).toUpperCase() + status.slice(1);
     this.modal.confirm({
-      nzTitle: `Are you sure you want to ${status} the information of '${roleName}' role ?`,
+      nzTitle:
+        lockable === 1
+          ? `Disabling this role will affect user access and functionality. Are you sure you want to continue?`
+          : `Once enabled, users can use this function. Are you sure you want to continue?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
@@ -128,7 +131,9 @@ export class RoleComponent implements OnInit {
               resolve(true);
               this.cdr.markForCheck();
               if (res) {
-                this.message.success(`${toolStatus} the role successfully!`);
+                this.message.success(
+                  lockable === 1 ? `Deactivated` : 'Activated'
+                );
               }
               this.getDataList();
             },
@@ -143,7 +148,8 @@ export class RoleComponent implements OnInit {
 
   onDelete(roleCode: string) {
     this.modal.confirm({
-      nzTitle: 'Are you sure you want to delete this role ?',
+      nzTitle:
+        'Deleting this role will affect user access and functionality. Are you sure you want to continue?',
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
@@ -151,11 +157,9 @@ export class RoleComponent implements OnInit {
             next: (res) => {
               resolve(true);
               if (res) {
-                this.message
-                  .success(`Delete successfully`)
-                  .onClose!.subscribe(() => {
-                    this.getDataList();
-                  });
+                this.message.success(`Deleted`).onClose!.subscribe(() => {
+                  this.getDataList();
+                });
               }
               this.cdr.markForCheck();
             },
