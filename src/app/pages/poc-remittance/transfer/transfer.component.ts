@@ -609,6 +609,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             rate: item.rate,
             com: this.getValCom(item),
             total: this.getValTotal(item),
+            fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+            toCapitalPoolAddress: item.toCapitalPoolAddress,
             info: {
               rate:
                 '1 ' +
