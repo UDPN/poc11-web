@@ -120,7 +120,7 @@ export class InformationModifyComponent implements OnInit, AfterViewInit {
       contactName: [null, [Validators.required]],
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
-      detailedAddress: [null, [Validators.required]],
+      detailedAddress: [null],
       interbankSettlementStatus: [1, [Validators.required]],
       paymentStatus: [null],
       userNotice: [null, [Validators.required]]

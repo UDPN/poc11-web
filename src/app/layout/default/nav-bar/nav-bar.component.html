@@ -11,7 +11,18 @@
     }}
   </div> -->
 </app-nav-top>
-
+<div
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+  "
+>
+  <a href="/" style="font-weight: 600; text-decoration: underline">{{
+    'Quick Get'
+  }}</a>
+</div>
 <ul
   *ngIf="!isMixiHead; else mixiHeadTpl"
   nz-menu

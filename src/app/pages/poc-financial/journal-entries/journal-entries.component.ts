@@ -187,7 +187,7 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
           title: 'Pegged Currency',
           field: 'currencySymbol',
           notNeedEllipsis: true,
-          width: 100
+          width: 120
         },
         {
           title: 'Token Price',
@@ -200,13 +200,13 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 220
+          width: 150
         },
         {
           title: 'Journal Entries',
           tdTemplate: this.journalEntriesTpl,
           notNeedEllipsis: true,
-          width: 80
+          width: 100
         },
         {
           title: 'Status',
@@ -221,7 +221,7 @@ export class JournalEntriesComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 180
+          width: 150
         }
       ],
       total: 0,

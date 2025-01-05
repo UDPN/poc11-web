@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-07-02 14:33:55
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 17:52:56
+ * @LastEditTime: 2025-01-05 17:04:49
  * @Description:
  */
 import {
@@ -141,7 +141,7 @@ export class SystemStyleComponent implements OnInit {
 
   editTheme() {
     this.styleService.search().subscribe((res: any) => {
-      if (res.logoFileHash) {
+      if (res) {
         this.validateForm.get('systemName')?.setValue(res.systemName);
         this.validateForm.get('themeColor')?.setValue(res.themeColor);
         const logoFileHash = sessionStorage.getItem('logoFileHash');

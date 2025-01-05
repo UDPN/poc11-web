@@ -150,7 +150,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
           title: 'No.',
           tdTemplate: this.numberTpl,
           notNeedEllipsis: true,
-          width: 100,
+          width: 60,
           show: true
         },
         {
@@ -177,7 +177,7 @@ export class DownloadCenterComponent implements OnInit, AfterViewInit {
           field: 'exportTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 180
+          width: 200
         },
         {
           title: 'Created by',

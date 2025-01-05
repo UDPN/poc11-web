@@ -216,7 +216,9 @@
               [nzXs]="24"
             >
               <nz-form-item>
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Home Currency
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="peggedCurrencyError">
                   <div nz-row [formGroup]="validateForm">
                     <div nz-col nzSpan="24">
@@ -230,7 +232,7 @@
                   </div>
                   <ng-template #peggedCurrencyError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Currency</ng-container
+                      >Please input your Home Currency</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -372,9 +374,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10"
-            >Detailed Address
-          </nz-form-label>
+          <nz-form-label nzSpan="10">Detailed Address </nz-form-label>
           <nz-form-control [nzErrorTip]="addressError">
             <div nz-row [formGroup]="validateForm">
               <div nz-col nzSpan="24">
@@ -434,7 +434,7 @@
                       >
                         Interbank Cross-border Settlement<i
                           class="m-l-5"
-                          style="color: #3c5686"
+                          style="color: #3c5686; font-size: 20px"
                           nz-icon
                           nzType="question-circle"
                           nzTooltipPlacement="right"
@@ -473,15 +473,13 @@
                         formControlName="paymentStatus"
                         >Cross-border Payment & Remittance<i
                           class="m-l-5"
-                          style="color: #3c5686"
+                          style="color: #3c5686; font-size: 20px"
                           nz-icon
                           nzType="question-circle"
                           nzTooltipPlacement="right"
                           nzTheme="fill"
                           nz-tooltip
-                          [nzTooltipTitle]="
-                            'Cross-border Payment & Remittance refers to the process oftransferring funds between two different countries or currencies'
-                          "
+                          [nzTooltipTitle]="'enterprise customers.'"
                           nzTooltipColor="#3c5686"
                           nzTooltipTrigger="click"
                           nzTooltipOverlayClassName="buils"
