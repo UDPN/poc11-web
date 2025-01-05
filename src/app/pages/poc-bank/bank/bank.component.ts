@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-05 14:47:23
+ * @LastEditTime: 2025-01-05 16:47:00
  * @Description:
  */
 import {
@@ -162,7 +162,7 @@ export class BankComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
   getDataList(e?: NzTableQueryParams): void {
-    this.tableConfig.loading = true;
+    this.tableLoading(true);
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,

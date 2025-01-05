@@ -206,26 +206,26 @@ const menuNav: Menu[] = [
     path: '/poc/poc-download-center/download-center',
     code: 'R0108'
   },
-  // {
-  //   fatherId: 0,
-  //   id: 10,
-  //   menuType: 'C',
-  //   code: 'R02',
-  //   menuGroup: true,
-  //   groupName: 'As a Liquidity Provider',
-  //   groupCollapseName: 'Commercial'
-  // },
-  // {
-  //   menuName: 'Become A Liquidity Provider',
-  //   id: 11,
-  //   fatherId: 0,
-  //   icon: 'check-square',
-  //   open: false,
-  //   selected: false,
-  //   menuType: 'C',
-  //   path: '/poc/poc-activate-settlement/activate-settlement',
-  //   code: 'R0201'
-  // },
+  {
+    fatherId: 0,
+    id: 10,
+    menuType: 'C',
+    code: 'R02',
+    menuGroup: true,
+    groupName: 'As a Liquidity Provider',
+    groupCollapseName: 'Commercial'
+  },
+  {
+    menuName: 'Become A Liquidity Provider',
+    id: 11,
+    fatherId: 0,
+    icon: 'check-square',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-activate-settlement/activate-settlement',
+    code: 'R0201'
+  },
   {
     menuName: 'Capital Pool Management',
     id: 12,

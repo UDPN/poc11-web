@@ -177,6 +177,7 @@ export class NormalLoginComponent implements OnInit {
 
   getThemeOptions() {
     this.styleService.search().subscribe((res: any) => {
+      this.logoImg = res.logoFileHash;
       // if (res.logoFileHash) {
       //   this.commonService
       //   .downImg({ hash: res.logoFileHash })
@@ -191,7 +192,6 @@ export class NormalLoginComponent implements OnInit {
       // }
       if (res.themeColor) {
         this.systemTitle = res.systemName;
-        this.logoImg = res.logoFileHash;
         res.sessionStorage.setItem('systemName', res.systemName);
         this.nzConfigService.set('theme', {
           primaryColor: res.themeColor
