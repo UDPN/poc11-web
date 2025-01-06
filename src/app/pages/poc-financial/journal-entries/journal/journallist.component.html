@@ -156,8 +156,15 @@
             <td>{{ transaction.subjectCode }}</td>
             <td>{{ transaction.subjectTitle }}</td>
             <td style="word-break: break-all; text-align: left">
-              {{ getTransactionTypeName(data.txType) }}{{ " " +transaction.stablecoinName}}{{ ' ( '
-              }}{{ transaction.particularsAccount | map: 'showPart' }}{{ ' )' }}
+              <span
+                *ngIf="transaction.particularsAccount"
+                >{{ getTransactionTypeName(data.txType) }}{{ " " +transaction.stablecoinName}}{{ ' ( '
+              }}{{ transaction.particularsAccount | map: 'showPart' }}{{ ' )' }}</span
+              >
+              <span
+              *ngIf="!transaction.particularsAccount "
+              >{{ getTransactionTypeName(data.txType) }}{{ " " +transaction.stablecoinName}}</span
+            >
             </td>
             <td>
               {{
