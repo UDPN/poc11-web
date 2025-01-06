@@ -65,13 +65,19 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
+  // Transaction Type:1:Top-up 2:Withdraw 3:IntemnalTransfer 4:External Transfer Out 5:Extemal Transfer In6:Extemal FX Transfer Out 7:External FX Transfer In8:FX Purchasing Transfer Out 9:FX PurchasingTransfer In
 
   transactionTypes = [
     { value: '', label: 'All' },
     { value: '1', label: 'Top-Up' },
     { value: '2', label: 'Withdraw' },
-    { value: '3', label: 'Transfer' },
-    { value: '4', label: 'FX Purchasing' }
+    { value: '3', label: 'Intemnal Transfer' },
+    { value: '4', label: 'External Transfer Out' },
+    { value: '5', label: 'Extemal Transfer In' },
+    { value: '6', label: 'Extemal FX Transfer Out' },
+    { value: '7', label: 'External FX Transfer In' },
+    { value: '8', label: 'FX Purchasing Transfer Out' },
+    { value: '9', label: 'FX PurchasingTransfer In' }
   ];
 
   constructor(
@@ -145,14 +151,14 @@ export class JournallistComponent implements OnInit, AfterViewInit {
           field: 'transactions',
           tdTemplate: this.accountNameTpl,
           notNeedEllipsis: true,
-          width: 180
+          width: 160
         },
         {
           title: 'Particulars',
           field: 'transactions',
           tdTemplate: this.particularsTpl,
           notNeedEllipsis: true,
-          width: 180
+          width: 300
         },
         {
           title: 'Debit',
@@ -238,7 +244,8 @@ export class JournallistComponent implements OnInit, AfterViewInit {
                     subjectTitle: item.subjectTitle,
                     particularsAccount: item.particularsAccount,
                     txAmount: item.txAmount,
-                    loanType: item.loanType
+                    loanType: item.loanType,
+                    stablecoinName: item.stablecoinName
                   }))
                 };
 
@@ -281,8 +288,12 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     this.getDataList(this.tableQueryParams);
   }
 
-  showTxDetails(ruleId: string) {
-    this.router.navigate(['/poc/poc-wallet/cbdc-transaction']);
+  showTxDetails(txType: number) {
+    if (txType === 1 || txType === 2) {
+      this.router.navigate(['/poc/poc-wallet/cbdc-transaction']);
+      return;
+    }
+    this.router.navigate(['/poc/poc-remittance/transaction-record']);
   }
 
   getTransactionTypeName(type: number): string {
