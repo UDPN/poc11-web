@@ -43,9 +43,14 @@ export class CollapsiblePdfComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
+    // Get expanded state from session storage
+    const storedState = sessionStorage.getItem('pdfViewerExpanded');
+    this.isExpanded = storedState === null ? true : storedState === 'true';
   }
 
   toggleExpand(): void {
     this.isExpanded = !this.isExpanded;
+    // Save state to session storage
+    sessionStorage.setItem('pdfViewerExpanded', this.isExpanded.toString());
   }
 } 
