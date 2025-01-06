@@ -245,7 +245,8 @@ export class JournallistComponent implements OnInit, AfterViewInit {
                     particularsAccount: item.particularsAccount,
                     txAmount: item.txAmount,
                     loanType: item.loanType,
-                    stablecoinName: item.stablecoinName
+                    stablecoinName: item.stablecoinName,
+                    currencyName: item.currencyName
                   }))
                 };
 
