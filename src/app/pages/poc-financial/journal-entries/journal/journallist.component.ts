@@ -206,13 +206,13 @@ export class JournallistComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (response: any) => {
           if (response.code === 0) {
-            // 按 txHash 分组数据
+            // 按 traceId 分组数据
             const groupedData = new Map<string, any[]>();
             response.data.rows.forEach((item: any) => {
-              if (!groupedData.has(item.txHash)) {
-                groupedData.set(item.txHash, []);
+              if (!groupedData.has(item.traceId)) {
+                groupedData.set(item.traceId, []);
               }
-              groupedData.get(item.txHash)?.push(item);
+              groupedData.get(item.traceId)?.push(item);
             });
 
             // 转换为显示所需的格式
@@ -300,8 +300,13 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     const typeMap: { [key: number]: string } = {
       1: 'Top-up',
       2: 'Withdraw',
-      3: 'Transfer In',
-      4: 'Transfer Out'
+      3: 'Internal Transfer',
+      4: 'External Transfer out',
+      5: 'External Transfer in',
+      6: 'External  FX Transfer out',
+      7: 'External  FX Transfer in',
+      8: 'FX Purchasing Transfer out',
+      9: 'FX Purchasing Transfer in'
     };
     return typeMap[type] || String(type);
   }
