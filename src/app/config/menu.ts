@@ -353,7 +353,7 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R0305',
         newLinkFlag: 1,
-        path: '../../../../assets/api-documentation/Project Kissen APIs.pdf'
+        path: '../../../../assets/api-documentation/Commercial Bank Control Panel OpenAPI Documentation.v1.0.0.pdf'
       },
       {
         id: 5,
