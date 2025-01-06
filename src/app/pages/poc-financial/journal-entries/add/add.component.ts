@@ -170,22 +170,22 @@ export class AddComponent implements OnInit, AfterViewInit {
                 transactionType = 'Internal Transfer';
                 break;
               case 4:
-                transactionType = 'External Transfer Out';
+                transactionType = 'External Transfer out';
                 break;
               case 5:
-                transactionType = 'External Transfer In';
+                transactionType = 'External Transfer in';
                 break;
               case 6:
-                transactionType = 'External FX Transfer Out';
+                transactionType = 'External  FX Transfer out';
                 break;
               case 7:
-                transactionType = 'External FX Transfer In';
+                transactionType = 'External  FX Transfer in';
                 break;
               case 8:
-                transactionType = 'FX Purchasing Transfer Out';
+                transactionType = 'FX Purchasing -Transfer out';
                 break;
               case 9:
-                transactionType = 'External Transfer Out';
+                transactionType = 'FX Purchasing -Transfer in';
                 break;
               default:
                 transactionType = 'Top-Up';
