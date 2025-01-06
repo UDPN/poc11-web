@@ -140,6 +140,7 @@ export class NormalLoginComponent implements OnInit {
           sessionStorage.setItem('clientName', result.realName);
           sessionStorage.setItem('email', result.email);
           sessionStorage.setItem('token', result.token);
+          sessionStorage.setItem('pdfViewerExpanded', 'true');
 
           let dataFromat: any = {
             aud: [],
