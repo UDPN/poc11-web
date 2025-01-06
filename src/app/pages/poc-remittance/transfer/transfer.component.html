@@ -398,42 +398,34 @@
           style="background: #fff; border-radius: 16px; padding: 24px"
         >
           <div class="remit-title">FX Order Details</div>
-          <div class="reInfo">
-            <div class="remInfo-sub">
-              <div>FX Rate:</div>
-              <div class="remInfo-sub-value">{{ remiInfo.rate }}</div>
-            </div>
-            <div class="remInfo-sub">
-              <div>Commission Fee Fee:</div>
-              <div class="remInfo-sub-value">{{ remiInfo.com }}</div>
-            </div>
-            <div class="remInfo-sub">
-              <div>Total Debit Amount:</div>
-              <div class="remInfo-sub-value">{{ remiInfo.total }}</div>
-            </div>
-            <div class="remInfo-sub">
-              <div>Receiving Amount:</div>
-              <div class="remInfo-sub-value">{{ remiInfo.reve }}</div>
-            </div>
-            <div class="remInfo-sub">
-              <div>Receiving Amount:</div>
-              <div class="remInfo-sub-value">{{ remiInfo.reve }}</div>
-            </div>
-            <div class="remInfo-sub">
-              <div>{{ this.sendName + ' Llquldity Wallet Address:' }}</div>
-              <div class="remInfo-sub-value">
-                {{ remiInfo.fromCapitalPoolAddress }}
-              </div>
-            </div>
-            <div class="remInfo-sub">
-              <div>
-                {{ this.beneficiaryName + ' Llquldity Wallet Address:' }}
-              </div>
-              <div class="remInfo-sub-value">
-                {{ remiInfo.toCapitalPoolAddress }}
-              </div>
-            </div>
-          </div>
+          <nz-descriptions
+            nzLayout="vertical"
+            nzTitle=""
+            [nzColumn]="{ xxl: 4, xl: 4, lg: 2, md: 2, sm: 1, xs: 1 }"
+            class="m-t-20 m-l-20 m-r-20"
+            [nzColon]="true"
+            [nzBordered]="false"
+          >
+            <nz-descriptions-item nzTitle="FX Rate">{{
+              remiInfo.rate
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Commission Fee">{{
+              remiInfo.com
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Total Debit Amount">{{
+              remiInfo.total
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Receiving Amount">{{
+              remiInfo.reve
+            }}</nz-descriptions-item
+            ><nz-descriptions-item
+              [nzTitle]="this.sendName + ' Liquldity Wallet Address'"
+              >{{ remiInfo.fromCapitalPoolAddress }}</nz-descriptions-item
+            ><nz-descriptions-item
+              [nzTitle]="this.beneficiaryName + ' Liquldity Wallet Address'"
+              >{{ remiInfo.toCapitalPoolAddress }}</nz-descriptions-item
+            ></nz-descriptions
+          >
         </div>
         <div
           nz-col
