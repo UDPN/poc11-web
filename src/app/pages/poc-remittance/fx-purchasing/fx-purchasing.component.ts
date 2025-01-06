@@ -575,8 +575,6 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                 rate: item.rate,
                 com: this.getValCom(item),
                 total: this.getValTotal(item),
-                fromCapitalPoolAddress: item.fromCapitalPoolAddress,
-                toCapitalPoolAddress: item.toCapitalPoolAddress,
                 info: {
                   rate:
                     '1 ' +
@@ -586,6 +584,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                     ' ' +
                     item.to.replace('-UDPN', ''),
                   com: this.getValCom(item),
+                  fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+                  toCapitalPoolAddress: item.toCapitalPoolAddress,
                   total: this.getValTotal(item),
                   reve:
                     this.getValReve(item) + ' ' + item.to.replace('-UDPN', '')
