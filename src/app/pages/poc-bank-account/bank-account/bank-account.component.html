@@ -302,10 +302,12 @@
         [title]="transactionId"
         nz-typography
         nzCopyable
+        *ngIf="transactionId"
         [nzCopyText]="transactionId"
       >
         {{ transactionId | map: 'showPartTen' }}
       </p>
+      <p *ngIf="!transactionId">{{ '--' }}</p>
     </ng-template>
     <ng-template
       #transactionAmountTpl
@@ -328,7 +330,7 @@
     >
       <span [title]="reserveAmount"
         >{{ reserveAmount | map: 'toThousandthMark'
-        }}{{ ' ' + legalCurrencyName }}</span
+        }}{{ ' ' + (reserveAmount ? legalCurrencyName : '') }}</span
       >
     </ng-template>
   </app-card-table-wrap>
