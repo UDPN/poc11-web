@@ -379,7 +379,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   onPurchCurrecy(e: number) {
     // // 加载receiving currency
-    // this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
+    this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
     this.sendName = this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.purchCurrecyModelShowIcon =
