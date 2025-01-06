@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 10:11:26
+ * @LastEditTime: 2025-01-06 14:35:27
  * @Description:
  */
 import {
@@ -14,6 +14,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransactionRecordService } from '@app/core/services/http/poc-remittance/transaction/transaction.service';
@@ -107,7 +108,9 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private transactionRecordService: TransactionRecordService,
-    private transferService: TransferService
+    private transferService: TransferService,
+    private router: Router,
+    public routeInfo: ActivatedRoute
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -120,7 +123,19 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.routeInfo.queryParams.subscribe((params) => {
+      if (JSON.stringify(params) !== '{}') {
+        this.searchParam.serialNumber = params['traceId'];
+      }
+    });
     this.initTable();
+    if (this.router.url.indexOf('?') !== -1) {
+      history.replaceState(
+        this.router.url,
+        '',
+        this.router.url.substring(0, this.router.url.indexOf('?'))
+      );
+    }
     this.transferService.fetchBankList().subscribe((res: any) => {
       this.currencyList = res;
     });

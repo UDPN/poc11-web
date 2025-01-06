@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 10:48:53
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-30 14:43:50
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-06 14:48:55
  * @Description:
  */
 import { NgModule } from '@angular/core';
@@ -15,12 +15,22 @@ const routes: Routes = [
   {
     path: '',
     component: TransactionRecordComponent,
-    data: { title: 'transactionRecord', key: 'transaction-record', shouldDetach: 'no' }
+    data: {
+      title: 'transactionRecord',
+      key: 'transaction-record',
+      authCode: ActionCode.TabsDetail,
+      shouldDetach: 'no'
+    }
   },
   {
     path: 'info',
     component: InfoComponent,
-    data: { title: 'transactionRecord', key: 'transaction-record-info', authCode: ActionCode.TabsDetail, shouldDetach: 'no' }
+    data: {
+      title: 'transactionRecord',
+      key: 'transaction-record-info',
+      authCode: ActionCode.TabsDetail,
+      shouldDetach: 'no'
+    }
   }
 ];
 
@@ -28,4 +38,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TransactionRecordRoutingModule { }
+export class TransactionRecordRoutingModule {}

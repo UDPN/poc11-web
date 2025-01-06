@@ -156,15 +156,16 @@
             <td>{{ transaction.subjectCode }}</td>
             <td>{{ transaction.subjectTitle }}</td>
             <td style="word-break: break-all; text-align: left">
-              <span
-                *ngIf="transaction.particularsAccount"
-                >{{ getTransactionTypeName(data.txType) }}{{ " " +transaction.stablecoinName}}{{ ' ( '
-              }}{{ transaction.particularsAccount | map: 'showPart' }}{{ ' )' }}</span
+              <span *ngIf="transaction.particularsAccount"
+                >{{ getTransactionTypeName(data.txType)
+                }}{{ ' ' + transaction.stablecoinName }}{{ ' ( '
+                }}{{ transaction.particularsAccount | map: 'showPart'
+                }}{{ ' )' }}</span
               >
-              <span
-              *ngIf="!transaction.particularsAccount "
-              >{{ getTransactionTypeName(data.txType) }}{{ " " +transaction.stablecoinName}}</span
-            >
+              <span *ngIf="!transaction.particularsAccount"
+                >{{ getTransactionTypeName(data.txType)
+                }}{{ ' ' + transaction.stablecoinName }}</span
+              >
             </td>
             <td>
               {{
@@ -184,7 +185,12 @@
               <span
                 class="operate-text"
                 *appAuth="'R01070103'"
-                (click)="showTxDetails(data.txType)"
+                [routerLink]="
+                  data.txType === 1 || data.txType === 2
+                    ? '/poc/poc-wallet/cbdc-transaction'
+                    : '/poc/poc-remittance/transaction-record'
+                "
+                [queryParams]="{ traceId: data.traceId }"
                 >Txn Details</span
               >
             </td>

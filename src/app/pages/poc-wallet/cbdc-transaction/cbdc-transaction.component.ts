@@ -100,7 +100,7 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.routeInfo.queryParams.subscribe((params) => {
       if (JSON.stringify(params) !== '{}') {
-        // this.searchParam.transactionNo = params['txType'];
+        this.searchParam.transactionNo = params['traceId'];
       }
     });
     this.initTable();
