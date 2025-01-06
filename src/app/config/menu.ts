@@ -364,7 +364,7 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R0306',
         newLinkFlag: 1,
-        path: ''
+        path: '../../../../assets/user-manual/Project Kissen User Manual for Commercial Bank Control Panel_V1.0.0.pdf'
       },
       {
         id: 6,
