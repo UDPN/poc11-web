@@ -429,6 +429,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         ]
       );
     this.validateForm.get('transactionWalletAddressId')?.setValue(0);
+    this.setSendAndAmount();
+    this.setShowStatus(false);
     if (this.reveingCurrecy === this.purchCurrecy) {
     } else {
       this.findExchange(4);
