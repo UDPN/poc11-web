@@ -366,7 +366,14 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   // 修改方法来决定默认的 Debit/Credit 值
   private getDefaultDebitCredit(type: string, index: number): string {
-    // 奇数行(0,2,4...)显示 Debit，偶数行(1,3,5...)显示 Credit
+    if (type === 'External  FX Transfer out' || type === 'FX Purchasing -Transfer out') {
+      // For External FX Transfer out and FX Purchasing -Transfer out:
+      // First row: Debit (Token)
+      // Second row: Debit (Fee)
+      // Third row: Credit (Token)
+      return index === 2 ? 'Credit' : 'Debit';
+    }
+    // For other types, alternate between Debit and Credit
     return index % 2 === 0 ? 'Debit' : 'Credit';
   }
 
@@ -998,9 +1005,11 @@ export class AddComponent implements OnInit, AfterViewInit {
   }
 
   private getDefaultFinancialType(transactionType: string, index: number): string {
-    if (transactionType === 'Top-Up' || transactionType === 'Withdraw') {
-      // For Top-Up and Withdraw, first two rows are Fiat (1), last two rows are Token (2)
-      return index < 2 ? '1' : '2';
+    if (transactionType === 'Top-Up' ) {
+      // For Top-Up, first two rows are Fiat (1), last two rows are Token (2)
+      return index < 2 ? '1' : index === 3 ? '1' : '2';
+    } else if(transactionType === 'Withdraw'){
+      return index < 1 ? '1' : index === 1 ? '2' : '1';
     } else if (
       transactionType === 'Internal Transfer' ||
       transactionType === 'External Transfer out' ||
@@ -1010,12 +1019,12 @@ export class AddComponent implements OnInit, AfterViewInit {
     ) {
       // For these types, all rows are Token (2)
       return '2';
-    } else if (
-      transactionType === 'External  FX Transfer out' ||
-      transactionType === 'FX Purchasing -Transfer out'
-    ) {
-      // For these types, first two rows are Token (2), last row is Fee (3)
-      return index < 2 ? '2' : '3';
+    } else if (transactionType === 'External  FX Transfer out' || transactionType === 'FX Purchasing -Transfer out') {
+      // For External FX Transfer out and FX Purchasing -Transfer out:
+      // First row: Token (2) - Debit
+      // Second row: Fee (3) - Debit
+      // Third row: Token (2) - Credit
+      return index === 1 ? '3' : '2';
     }
     // Default to Fiat (1) for other types
     return '1';
