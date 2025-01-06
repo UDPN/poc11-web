@@ -316,7 +316,8 @@
       <span
         [title]="transactionAmount"
         [style]="{ color: txType === 1 ? '#E53E3E' : '#39A16A' }"
-        >{{ transactionAmount | map: 'toThousandthMark'
+        >{{ txType === 1 ? '-' : '+'
+        }}{{ transactionAmount | map: 'toThousandthMark'
         }}{{ ' ' + legalCurrencyName }}</span
       >
     </ng-template>
