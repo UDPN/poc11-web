@@ -7,6 +7,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { CbdcTransactionService } from '@app/core/services/http/poc-wallet/cbdc-transaction/cbdc-transaction.service';
@@ -82,7 +83,9 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
+    public routeInfo: ActivatedRoute
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -95,7 +98,19 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.routeInfo.queryParams.subscribe((params) => {
+      if (JSON.stringify(params) !== '{}') {
+        // this.searchParam.transactionNo = params['txType'];
+      }
+    });
     this.initTable();
+    if (this.router.url.indexOf('?') !== -1) {
+      history.replaceState(
+        this.router.url,
+        '',
+        this.router.url.substring(0, this.router.url.indexOf('?'))
+      );
+    }
   }
 
   tableChangeDectction(): void {
