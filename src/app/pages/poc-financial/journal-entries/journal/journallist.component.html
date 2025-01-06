@@ -114,7 +114,7 @@
           <th>Blockchain</th>
           <th>Account Code</th>
           <th>Account Name</th>
-          <th>Particulars</th>
+          <th style="width: 300px">Particulars</th>
           <th>Debit</th>
           <th>Credit</th>
           <th>Actions</th>
@@ -156,7 +156,7 @@
             <td>{{ transaction.subjectCode }}</td>
             <td>{{ transaction.subjectTitle }}</td>
             <td style="word-break: break-all; text-align: left">
-              {{ getTransactionTypeName(data.txType) }}{{ ' ABCoin ( '
+              {{ getTransactionTypeName(data.txType) }}{{ " " +transaction.stablecoinName}}{{ ' ( '
               }}{{ transaction.particularsAccount | map: 'showPart' }}{{ ' )' }}
             </td>
             <td>
@@ -177,7 +177,7 @@
               <span
                 class="operate-text"
                 *appAuth="'R01070103'"
-                (click)="showTxDetails(data.ruleId)"
+                (click)="showTxDetails(data.txType)"
                 >Txn Details</span
               >
             </td>

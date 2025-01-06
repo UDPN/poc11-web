@@ -261,16 +261,14 @@ export const MapSet = {
     7: 'Weekly',
     30: 'Monthly'
   },
+  // <!-- 1: Top-up 2: Withdraw 3: Transfer4Swap 5:Exchange -->
+
   statementsTxnType: {
     1: 'Top-up',
     2: 'Withdraw',
-    3: 'Internal Transfer',
-    4: 'External Transfer Out',
-    5: 'External Transfer In',
-    6: 'External FX Transfer Out',
-    7: 'External FX Transfer In',
-    8: 'FX Purchasing Transfer Out',
-    9: 'FX Purchasing Transfer In'
+    3: 'Transfer',
+    4: 'Swap',
+    5: 'Exchange',
   },
   proofStatusColor: {
     2: 'volcano',
