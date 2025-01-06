@@ -170,14 +170,14 @@
             <td>
               {{
                 transaction.loanType === 1
-                  ? (transaction.txAmount | number: '1.2-2')
+                  ? (transaction.txAmount | number: '1.2-2') + ' ' + transaction.currencyName
                   : ''
               }}
             </td>
             <td>
               {{
                 transaction.loanType === 2
-                  ? (transaction.txAmount | number: '1.2-2')
+                  ? (transaction.txAmount | number: '1.2-2') + ' ' + transaction.currencyName
                   : ''
               }}
             </td>

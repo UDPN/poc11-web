@@ -75,7 +75,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   reveingCurrecyModelShowIcon = '';
   showStatus = false;
   receivingWalletAddressList: any[] = [];
-  purIndex: number = 0;
+  purIndex = 0;
   transferTitle: string = '';
   receivingWalletAddressShow: string = '';
   timeString: any = '';
@@ -101,6 +101,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   amountValue: any;
   reniSendAmountValue: any;
+  recIndex = 0;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -221,49 +222,39 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
   initData() {
-    this.refreshSendingInfo('');
-    this.refreshReceivingInfo('');
-    // this.fxPurchasingService
-    //   .fetchFXPurchase({ centralBankId: '' })
-    //   .subscribe((res) => {
-    //     this.fxPurchaseData = res;
-    //     this.purchCurrecyList = this.fxPurchaseData;
-    //     this.onPurchCurrecy(0);
-    //     this.validateForm.get('send_currency')?.setValue(0);
-    //     this.onPurchase(0);
-    //   });
-    // this.fxPurchasingService
-    //   .fetchFxReceiving({ centralBankId: '' })
-    //   .subscribe((res) => {
-    //     this.fxReceivingData = [];
-    //     res.forEach((item: any, i: number) => {
-    //       this.fxReceivingData.push({
-    //         bankId: item.bankId,
-    //         bankName: item.bankName,
-    //         currecy: item.digitalSymbol,
-    //         currecySymbol: item.digitalCurrencyName,
-    //         walletAddress: item.wallets,
-    //         legalCurrencySymbol: item.legalCurrencySymbol
-    //       });
-    //     });
-    //     this.onReceiving(0);
-    //     this.validateForm.get('reci_currency')?.setValue(0);
-    //   });
+    this.fxPurchasingService
+      .fetchFXPurchase({ centralBankId: '' })
+      .subscribe((res) => {
+        this.fxPurchaseData = res;
+        this.purchCurrecyList = this.fxPurchaseData;
+        this.fxReceivingData = this.fxPurchaseData.map(item => ({
+          bankId: item.bankId,
+          bankName: item.bankName,
+          currecy: item.digitalSymbol,
+          currecySymbol: item.digitalCurrencyName,
+          walletAddress: item.remitterInformationExtendInfoList,
+          legalCurrencySymbol: item.legalCurrencySymbol
+        }));
+        
+        this.validateForm.get('send_currency')?.setValue(0);
+        this.validateForm.get('reci_currency')?.setValue(1);
+        this.onPurchCurrecy(0);
+        this.onReceiving(1);
+      });
   }
   onReceiving(e: any) {
-    //
-    // this.refreshSendingInfo(this.validateForm.get('reci_currency')?.value);
-    // todo
-    this.remiInfo = {
-      rate: '',
-      com: '',
-      total: '',
-      reve: '',
-      fromCapitalPoolAddress: '',
-      toCapitalPoolAddress: ''
-    };
+    const currentSendingIndex = this.validateForm.get('send_currency')?.value;
+    this.recIndex = e;
     this.beneficiaryName = this.fxReceivingData[e]?.currecy;
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
+
+    // If same currency is selected, switch sending currency to a different one
+    if (currentSendingIndex === e) {
+      const newIndex = (e + 1) % this.fxPurchaseData.length;
+      this.validateForm.get('send_currency')?.setValue(newIndex);
+      this.onPurchCurrecy(newIndex);
+    }
+
     this.reveingCurrecyModelShowIcon =
       this.fxReceivingData[e].legalCurrencySymbol === null
         ? ''
@@ -378,10 +369,18 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   onPurchCurrecy(e: number) {
-    // // 加载receiving currency
-    // this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
+    const currentReceivingIndex = this.validateForm.get('reci_currency')?.value;
+    this.purIndex = e;
     this.sendName = this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
+    
+    // If same currency is selected, switch receiving currency to a different one
+    if (currentReceivingIndex === e) {
+      const newIndex = (e + 1) % this.fxReceivingData.length;
+      this.validateForm.get('reci_currency')?.setValue(newIndex);
+      this.onReceiving(newIndex);
+    }
+
     this.purchCurrecyModelShowIcon =
       this.fxPurchaseData[e].legalCurrencySymbol === null
         ? ''
