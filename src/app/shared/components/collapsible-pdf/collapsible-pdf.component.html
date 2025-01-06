@@ -15,8 +15,12 @@
     </div>
     <iframe [src]="_pdfUrl" class="pdf-frame" type="application/pdf"></iframe>
   </div>
-  <div class="collapsed-content" [class.hidden]="isExpanded" (click)="toggleExpand()">
+  <div
+    class="collapsed-content"
+    [class.hidden]="isExpanded"
+    (click)="toggleExpand()"
+  >
     <!-- <i nz-icon nzType="question-circle" nzTheme="outline"></i> -->
-    Must
+    Notice
   </div>
 </div>

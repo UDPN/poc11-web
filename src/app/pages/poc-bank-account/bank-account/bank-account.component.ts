@@ -338,6 +338,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
             }
           }
           this.passwordForm.reset();
+          this.getDataList(this.tableQueryParams, this.centralBankId);
           this.isOkLoading = false;
           this.cdr.markForCheck();
         },

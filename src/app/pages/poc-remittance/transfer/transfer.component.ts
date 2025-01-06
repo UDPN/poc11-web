@@ -618,6 +618,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
                 ' ' +
                 item.to.replace('-UDPN', ''),
               com: this.getValCom(item),
+              fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+              toCapitalPoolAddress: item.toCapitalPoolAddress,
               total: this.getValTotal(item),
               reve: this.getValReve(item) + ' ' + item.to.replace('-UDPN', '')
             }
