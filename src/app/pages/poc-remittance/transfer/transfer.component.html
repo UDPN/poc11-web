@@ -71,10 +71,7 @@
                 <nz-form-label nzRequired nzSpan="24"
                   >Remitter's Wallet Address
                 </nz-form-label>
-                <nz-form-control
-                  [nzErrorTip]="remitterWalletAddressError"
-                  [nzExtra]="availableCurrecyModelShow"
-                >
+                <nz-form-control [nzErrorTip]="remitterWalletAddressError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select
@@ -87,6 +84,16 @@
                           [nzLabel]="item.chainAccountAddress"
                         ></nz-option>
                       </nz-select>
+                    </div>
+                    <div
+                      class="unit-postion"
+                      style="color: rgba(0, 0, 0, 0.45)"
+                    >
+                      <span> {{ this.availableCurrecyModelShow }}</span>
+                      <span class="m-l-5 m-r-5">{{
+                        this.availableCurrecyModelShowIcon
+                      }}</span>
+                      <span>{{ this.availableCount }}</span>
                     </div>
                   </div>
                   <ng-template #remitterWalletAddressError let-control>

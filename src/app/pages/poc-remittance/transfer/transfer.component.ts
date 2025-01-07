@@ -67,6 +67,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   availableCurrecyModel = '';
   availableCurrecyModelCount = '';
   availableCurrecyModelShow = '';
+  availableCount = '';
   availableCurrecyModelShowIcon = '';
   sendName = '';
   beneficiaryName = '';
@@ -390,11 +391,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       (item: any) => item.bankAccountId === e
     );
     this.availableCurrecyModelShow =
-      this.availableCurrecyModel.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.availableCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(val[0].cbdcCount);
+      this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
+    this.availableCount = thousandthMark(val[0].cbdcCount);
     this.validateForm
       .get('availableBalance')
       ?.setValue(thousandthMark(val[0]['cbdcCount']));
@@ -699,11 +697,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     this.availableCurrecyModelShowIcon =
       val[0].legalCurrencySymbol === null ? '' : val[0].legalCurrencySymbol;
     this.availableCurrecyModelShow =
-      this.availableCurrecyModel.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.availableCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(val[0].remitterInformationExtendInfoList[0].cbdcCount);
+      this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
+    this.availableCount = thousandthMark(
+      val[0].remitterInformationExtendInfoList[0].cbdcCount
+    );
     this.availableCurrecyModelCount =
       val[0].remitterInformationExtendInfoList[0].cbdcCount;
     this.validateForm

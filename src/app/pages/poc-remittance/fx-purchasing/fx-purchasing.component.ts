@@ -69,9 +69,11 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   purchCurrecyCount!: string;
   purchCurrecyList: any[] = [];
   purchCurrecyModelShow = '';
+  purchCurrecyModelCount = '';
   purchCurrecyModelShowIcon = '';
   reveingCurrecy!: string;
   reveingCurrecyModelShow = '';
+  reveingCurrecyModelCount = '';
   reveingCurrecyModelShowIcon = '';
   showStatus = false;
   receivingWalletAddressList: any[] = [];
@@ -269,11 +271,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         ? ''
         : this.fxReceivingData[e].legalCurrencySymbol;
     this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.reveingCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']);
+      this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.reveingCurrecyModelCount = thousandthMark(
+      this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']
+    );
     this.availableBalance =
       this.fxReceivingData[e]['walletAddress'][0]['cbdcCount'];
 
@@ -339,11 +340,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     // );
     // this.validateForm.get('transactionWalletAddressId')?.setValue(e);
     this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.purchCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(this.transactionWalletAddressArr[e]['cbdcCount']);
+      this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.purchCurrecyModelCount = thousandthMark(
+      this.transactionWalletAddressArr[e]['cbdcCount']
+    );
     this.availableBalance = this.transactionWalletAddressArr[e]['cbdcCount'];
 
     this.purchCurrecyCount = this.transactionWalletAddressArr[e]['cbdcCount'];
@@ -366,11 +366,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       (item: any) => item.bankAccountId === e
     );
     this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.reveingCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(val[0]['cbdcCount']);
+      this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.reveingCurrecyModelCount = thousandthMark(val[0]['cbdcCount']);
     this.availableBalance = val[0]['cbdcCount'];
     if (this.reveingCurrecy === this.purchCurrecy) {
     } else {
@@ -387,15 +384,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         ? ''
         : this.fxPurchaseData[e].legalCurrencySymbol;
     this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.purchCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(
-        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
-          'cbdcCount'
-        ]
-      );
+      this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.purchCurrecyModelCount = thousandthMark(
+      this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+        'cbdcCount'
+      ]
+    );
     this.availableBalance =
       this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
         'cbdcCount'

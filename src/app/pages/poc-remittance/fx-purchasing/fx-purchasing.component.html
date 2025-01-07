@@ -75,10 +75,7 @@
                 <nz-form-label nzRequired nzSpan="24"
                   >Sender Wallet Address
                 </nz-form-label>
-                <nz-form-control
-                  [nzErrorTip]="transactionWalletAddressError"
-                  [nzExtra]="purchCurrecyModelShow"
-                >
+                <nz-form-control [nzErrorTip]="transactionWalletAddressError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select
@@ -94,6 +91,16 @@
                           [nzLabel]="item.chainAccountAddress"
                         ></nz-option>
                       </nz-select>
+                    </div>
+                    <div
+                      class="unit-postion"
+                      style="color: rgba(0, 0, 0, 0.45)"
+                    >
+                      <span> {{ this.purchCurrecyModelShow }}</span>
+                      <span class="m-l-5 m-r-5">{{
+                        this.purchCurrecyModelShowIcon
+                      }}</span>
+                      <span>{{ this.purchCurrecyModelCount }}</span>
                     </div>
                   </div>
                   <ng-template #transactionWalletAddressError let-control>
@@ -205,10 +212,7 @@
                 <nz-form-label nzRequired nzSpan="24"
                   >Receiver Wallet Address
                 </nz-form-label>
-                <nz-form-control
-                  [nzErrorTip]="receivingWalletAddressError"
-                  [nzExtra]="reveingCurrecyModelShow"
-                >
+                <nz-form-control [nzErrorTip]="receivingWalletAddressError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-select
@@ -224,6 +228,16 @@
                           [nzLabel]="item.chainAccountAddress"
                         ></nz-option>
                       </nz-select>
+                    </div>
+                    <div
+                      class="unit-postion"
+                      style="color: rgba(0, 0, 0, 0.45)"
+                    >
+                      <span> {{ this.reveingCurrecyModelShow }}</span>
+                      <span class="m-l-5 m-r-5">{{
+                        this.reveingCurrecyModelShowIcon
+                      }}</span>
+                      <span>{{ this.reveingCurrecyModelCount }}</span>
                     </div>
                   </div>
                   <ng-template #receivingWalletAddressError let-control>
