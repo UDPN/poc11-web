@@ -43,6 +43,17 @@ const menuNav: Menu[] = [
   //   groupCollapseName: 'Commercial'
   // },
   {
+    menuName: 'Fiat Account Management',
+    id: 7,
+    fatherId: 0,
+    icon: 'down-square',
+    open: false,
+    selected: false,
+    menuType: 'C',
+    path: '/poc/poc-bank-account/bank-account',
+    code: 'R0106'
+  },
+  {
     menuName: 'Wallet Management',
     id: 3,
     fatherId: 0,
@@ -150,17 +161,6 @@ const menuNav: Menu[] = [
     menuType: 'C',
     path: '/poc/poc-bank/bank',
     code: 'R0104'
-  },
-  {
-    menuName: 'Fiat Account Management',
-    id: 7,
-    fatherId: 0,
-    icon: 'down-square',
-    open: false,
-    selected: false,
-    menuType: 'C',
-    path: '/poc/poc-bank-account/bank-account',
-    code: 'R0106'
   },
   {
     menuName: 'Financial Management',
