@@ -21,7 +21,7 @@
         <p nz-typography>
           {{ 'Published On: ' }}{{ info.sendTime | map: 'timeStamp' }}
         </p>
-        <p nz-typography [innerHTML]="info.content" class="m-t-20"></p>
+        <p [innerHTML]="info.content" class="m-t-20"></p>
       </nz-card>
     </div>
   </div>
