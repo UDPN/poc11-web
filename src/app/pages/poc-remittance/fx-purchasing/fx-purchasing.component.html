@@ -620,18 +620,18 @@
   nzCentered="true"
 >
   <div *nzModalContent>
-    <form nz-form [formGroup]="passwordForm">
+    <form nz-form [formGroup]="passwordForm" nzLayout="vertical">
       <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
         <div nz-col nzSpan="20">
           <nz-form-item class="m-t-15">
-            <nz-form-label nzRequired nzSpan="6" class="text-left">
-              Password
+            <nz-form-label nzRequired nzSpan="24" class="text-left">
+              {{ 'Password (Please input login password)' }}
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="passwordError" nzSpan="18">
+            <nz-form-control [nzErrorTip]="passwordError" nzSpan="24">
               <input [type]="'password'" nz-input formControlName="pwd" />
               <ng-template #passwordError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input Password</ng-container
+                  >Please input login password</ng-container
                 >
               </ng-template>
             </nz-form-control>
