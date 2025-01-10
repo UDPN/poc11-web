@@ -1,54 +1,56 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-27 13:38:17
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-10 09:39:04
+ * @Description: 
+-->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 <div class="normal-table-wrap">
   <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10" nzTitle=""
     ><form nz-form nzLayout="vertical">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
+        <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label>Access Address </nz-form-label>
-            <nz-form-control>
-              <input
-                nz-input
-                placeholder=""
-                name="gatewayUrl"
-                disabled
-                [title]="searchParam.gatewayUrl"
-                [(ngModel)]="searchParam.gatewayUrl"
-              />
+            <nz-form-control [nzSpan]="12">
+              <nz-input-group [nzAddOnAfter]="gatewayUrlTpl">
+                <input
+                  nz-input
+                  placeholder=""
+                  name="gatewayUrl"
+                  disabled
+                  [title]="searchParam.gatewayUrl"
+                  [(ngModel)]="searchParam.gatewayUrl"
+                />
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
+        <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label>Access Key </nz-form-label>
-            <nz-form-control>
-              <input
-                nz-input
-                placeholder=""
-                name="accessKey"
-                disabled
-                [title]="searchParam.accessKey"
-                [(ngModel)]="searchParam.accessKey"
-              />
+            <nz-form-control [nzSpan]="12">
+              <nz-input-group [nzAddOnAfter]="accessKeyTpl">
+                <textarea
+                  nz-input
+                  rows="4"
+                  placeholder=""
+                  name="accessKey"
+                  disabled
+                  [title]="searchParam.accessKey"
+                  [(ngModel)]="searchParam.accessKey"
+                ></textarea>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div></form
   ></nz-card>
 </div>
+<ng-template #gatewayUrlTpl>
+  <p nz-typography nzCopyable [nzCopyText]="searchParam.gatewayUrl"></p>
+</ng-template>
+<ng-template #accessKeyTpl>
+  <p nz-typography nzCopyable [nzCopyText]="searchParam.accessKey"></p>
+</ng-template>

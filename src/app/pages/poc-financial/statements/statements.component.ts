@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 17:11:54
+ * @LastEditTime: 2025-01-09 17:53:48
  * @Description:
  */
 /*
@@ -43,6 +43,7 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { fnCheckForm } from '@utils/tools';
 import { finalize } from 'rxjs';
 interface SearchParam {
   tokenId: string;
@@ -195,6 +196,9 @@ export class StatementsComponent implements OnInit, AfterViewInit {
     });
   }
   onSubmit() {
+    if (!fnCheckForm(this.validateForm)) {
+      return;
+    }
     this.isNewLoading = true;
     const params = this.validateForm.value;
     params.timeZone = getCurrentTimeZone();
