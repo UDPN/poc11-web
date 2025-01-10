@@ -63,11 +63,9 @@
             nz-menu-item
             *ngIf="!menu.children || menu.children.length === 0"
             [nzSelected]="menu.selected"
+            [ngClass]="{ disabled: menu.disabled }"
           >
-            <a
-              (click)="changeRoute($event, menu)"
-              [ngClass]="{ disabled: menu.disabled }"
-            >
+            <a (click)="changeRoute($event, menu)">
               <i *ngIf="menu.icon" nz-icon [nzType]="menu.icon"></i>
               <i *ngIf="menu.alIcon" nz-icon [nzIconfont]="menu.alIcon"></i>
               <span>{{ menu.menuName }}</span>
