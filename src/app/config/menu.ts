@@ -138,8 +138,49 @@ const menuNav: Menu[] = [
     selected: false,
     menuType: 'C',
     code: 'R0103',
-    path: '',
-    disabled: true
+    path: '/poc/poc-enterprise',
+    children: [
+      {
+        id: 1,
+        fatherId: 6,
+        menuName: 'Enterprise Onboarding',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R010201',
+        path: '/poc/poc-enterprise/enterprise-onboarding'
+      },
+      {
+        id: 2,
+        fatherId: 6,
+        menuName: 'Wallet Management',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R010202',
+        path: '/poc/poc-enterprise/wallet'
+      },
+      {
+        id: 3,
+        fatherId: 6,
+        menuName: 'Top-up & Withdraw Management',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R010203',
+        path: '/poc/poc-enterprise/top-up-withdraw'
+      },
+      {
+        id: 4,
+        fatherId: 6,
+        menuName: 'Transactions',
+        open: false,
+        selected: false,
+        menuType: 'C',
+        code: 'R010203',
+        path: '/poc/poc-enterprise/transactions'
+      }
+    ]
   },
   {
     menuName: 'FX Rate Query',

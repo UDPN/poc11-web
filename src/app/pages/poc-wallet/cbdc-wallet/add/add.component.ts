@@ -54,7 +54,7 @@ export class AddComponent implements OnInit {
   addAddressArr: string[] = [];
   testStatus = false;
   creationMethodTip: string =
-    'The system will create and register a wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
+    'The system will create and register a main or sub-wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
   public metaArr$ = this.metaMaskService.MetaArray$;
 
   constructor(
@@ -108,7 +108,7 @@ export class AddComponent implements OnInit {
         } else {
           this.validateForm.removeControl('walletAddress');
           this.creationMethodTip =
-            'The system will create and register a wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
+            'The system will create and register a main or sub-wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
         }
       });
   }

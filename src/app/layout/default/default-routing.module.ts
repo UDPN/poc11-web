@@ -159,6 +159,14 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-enterprise',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-enterprise/poc-enterprise.module').then(
+            (m) => m.PocEnterpriseModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)
