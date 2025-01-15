@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-12 16:33:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 16:02:15
+ * @LastEditTime: 2025-01-15 09:50:22
  * @Description:
  */
 /*
@@ -278,33 +278,33 @@ export class InfoComponent implements OnInit, AfterViewInit {
           field: 'exportTime',
           notNeedEllipsis: true,
           pipe: 'timeStamp',
-          width: 120
+          width: 150
         },
         {
           title: 'Executed Status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
-          width: 150
-        },
-        {
-          title: 'Proof Hash',
-          tdTemplate: this.proofHashTpl,
-          notNeedEllipsis: true,
           width: 120
         },
-        {
-          title: 'Proof Time',
-          field: 'proofTime',
-          notNeedEllipsis: true,
-          pipe: 'timeStamp',
-          width: 120
-        },
-        {
-          title: 'Proof Status',
-          tdTemplate: this.proofStatusTpl,
-          notNeedEllipsis: true,
-          width: 100
-        },
+        // {
+        //   title: 'Proof Hash',
+        //   tdTemplate: this.proofHashTpl,
+        //   notNeedEllipsis: true,
+        //   width: 120
+        // },
+        // {
+        //   title: 'Proof Time',
+        //   field: 'proofTime',
+        //   notNeedEllipsis: true,
+        //   pipe: 'timeStamp',
+        //   width: 120
+        // },
+        // {
+        //   title: 'Proof Status',
+        //   tdTemplate: this.proofStatusTpl,
+        //   notNeedEllipsis: true,
+        //   width: 100
+        // },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
