@@ -10,9 +10,10 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@app/shared/shared.module';
 import { WalletComponent } from './wallet.component';
 import { WalletRoutingModule } from './wallet-routing.module';
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
-  declarations: [WalletComponent],
+  declarations: [WalletComponent, InfoComponent],
   imports: [CommonModule, SharedModule, WalletRoutingModule]
 })
 export class WalletModule {}

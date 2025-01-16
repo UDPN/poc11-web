@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 13:34:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-15 15:49:06
+ * @LastEditTime: 2025-01-15 16:45:18
  * @Description:
  */
 import {
@@ -38,6 +38,12 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
   headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('numberTpl', { static: true })
+  numberTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -73,7 +79,9 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
       footer: ''
     };
   }
-  ngOnInit() {}
+  ngOnInit() {
+    this.initTable();
+  }
 
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
@@ -117,10 +125,76 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
     //   )
     //   .subscribe((_: any) => {
     //     this.dataList = _.data?.rows;
+    //     this.dataList.forEach((item: any, i: any) => {
+    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+    //     });
     //     this.tableConfig.total = _.data.page.total;
     //     this.tableConfig.pageIndex = params.pageNum;
     //     this.tableLoading(false);
     //     this.cdr.markForCheck();
     //   });
+  }
+
+  private initTable(): void {
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'No.',
+          tdTemplate: this.numberTpl,
+          notNeedEllipsis: true,
+          width: 60
+        },
+        {
+          title: 'Enterprise Name',
+          field: 'enterpriseName',
+          notNeedEllipsis: true,
+          width: 150
+        },
+        {
+          title: 'Enterprise ID',
+          field: 'enterpriseId',
+          notNeedEllipsis: true,
+          width: 150
+        },
+        {
+          title: 'Contact Name',
+          field: 'contactName',
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Email',
+          field: 'email',
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Created on',
+          field: 'createTime',
+          pipe: 'timeStamp',
+          notNeedEllipsis: true,
+          width: 150
+        },
+        {
+          title: 'Status',
+          tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
+          width: 120
+        },
+        {
+          title: 'Actions',
+          tdTemplate: this.operationTpl,
+          fixed: true,
+          fixedDir: 'right',
+          showAction: false,
+          width: 100
+        }
+      ],
+      total: 0,
+      showCheckbox: false,
+      loading: false,
+      pageSize: 10,
+      pageIndex: 1
+    };
   }
 }

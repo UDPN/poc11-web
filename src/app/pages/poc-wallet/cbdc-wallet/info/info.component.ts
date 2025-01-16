@@ -240,58 +240,5 @@ export class InfoComponent implements OnInit {
       pageSize: 10,
       pageIndex: 1
     };
-
-    this.transactionTableConfig = {
-      headers: [
-        {
-          title: 'Transaction No.',
-          tdTemplate: this.transactionNoTpl,
-          width: 100
-        },
-        {
-          title: 'From',
-          tdTemplate: this.fromTpl,
-          width: 100
-        },
-        {
-          title: 'To',
-          tdTemplate: this.toTpl,
-          width: 100
-        },
-        {
-          title: 'Type',
-          field: 'type',
-          pipe: 'walletInfoType',
-          width: 100
-        },
-        {
-          title: 'Amount',
-          tdTemplate: this.amountTpl,
-          width: 100
-        },
-        {
-          title: 'Transaction Hash',
-          tdTemplate: this.transactionHashTpl,
-          width: 100
-        },
-        {
-          title: 'Transaction Time',
-          field: 'txTime',
-          pipe: 'timeStamp',
-          notNeedEllipsis: true,
-          width: 100
-        },
-        {
-          title: 'Status',
-          tdTemplate: this.statusTpl,
-          width: 100
-        }
-      ],
-      total: 0,
-      showCheckbox: false,
-      loading: false,
-      pageSize: 10,
-      pageIndex: 1
-    };
   }
 }

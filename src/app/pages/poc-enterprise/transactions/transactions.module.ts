@@ -10,9 +10,10 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@app/shared/shared.module';
 import { TransactionsComponent } from './transactions.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
-  declarations: [TransactionsComponent],
+  declarations: [TransactionsComponent, InfoComponent],
   imports: [CommonModule, SharedModule, TransactionsRoutingModule]
 })
 export class TransactionsModule {}

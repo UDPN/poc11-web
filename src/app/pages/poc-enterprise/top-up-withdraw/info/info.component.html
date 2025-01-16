@@ -1,1 +1,8 @@
-<p>info works!</p>
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-enterprise/top-up-withdraw'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>

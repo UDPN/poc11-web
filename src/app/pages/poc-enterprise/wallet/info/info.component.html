@@ -1,1 +1,47 @@
-<p>info works!</p>
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-enterprise/wallet'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
+      <nz-tab *ngFor="let tab of detailsTabs; index as i" [nzTitle]="tab">
+        <ng-container *ngIf="i === 0">
+          <!-- <nz-card
+            nzTitle=""
+            nzBordered="false"
+            class="none-bottom"
+          >
+          </nz-card> -->
+        </ng-container>
+        <ng-container *ngIf="i === 1">
+          <nz-card nzTitle="" nzBordered="false">
+            <nz-tabset
+              (nzSelectedIndexChange)="transactionsIndexChange($event)"
+            >
+              <nz-tab
+                *ngFor="let tabs of transactionsTabs; index as i"
+                [nzTitle]="tabs"
+              >
+                <app-card-table-wrap
+                  [isNormalTable]="true"
+                  tableTitle="Transaction List"
+                >
+                  <app-ant-table
+                    (changePageSize)="changePageSize($event)"
+                    (changePageNum)="getDtataList($event)"
+                    [tableConfig]="tableConfig"
+                    [tableData]="dataList"
+                  ></app-ant-table>
+                </app-card-table-wrap> </nz-tab
+            ></nz-tabset>
+          </nz-card>
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>
