@@ -212,12 +212,21 @@
         state | map: 'walletTransactionsRecordStatus'
       }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-transferId="transferId">
+    <ng-template #operationTpl>
       <ng-container *appAuth="''">
         <span
           class="operate-text"
           routerLink="/poc/poc-enterprise/wallet/info"
-          [queryParams]="{transferId}"
+          [queryParams]="{}"
+        >
+          Approval
+        </span>
+      </ng-container>
+      <ng-container *appAuth="''">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-enterprise/wallet/info"
+          [queryParams]="{}"
         >
           Details
         </span>

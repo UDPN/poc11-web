@@ -179,14 +179,43 @@
         state | map: 'walletTransactionsRecordStatus'
       }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-transferId="transferId">
+    <ng-template
+      #operationTpl
+      let-status="status"
+      let-enterpriseName="enterpriseName"
+    >
       <ng-container *appAuth="''">
         <span
           class="operate-text"
-          routerLink="/poc/poc-remittance/transaction-record/info"
-          [queryParams]="{transferId}"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
+          [queryParams]="{}"
+        >
+          Approval
+        </span>
+      </ng-container>
+      <ng-container *appAuth="''">
+        <span
+          class="operate-text"
+          (click)="updateStatus(status, enterpriseName)"
+        >
+          {{ status ? 'Deactivate' : 'Activate' }}
+        </span>
+      </ng-container>
+      <ng-container *appAuth="''">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
+          [queryParams]="{}"
         >
           Details
+        </span> </ng-container
+      ><ng-container *appAuth="''">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/edit"
+          [queryParams]="{}"
+        >
+          Edit
         </span>
       </ng-container>
     </ng-template>

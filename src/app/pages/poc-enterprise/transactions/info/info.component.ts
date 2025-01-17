@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-16 09:54:34
+ * @LastEditTime: 2025-01-17 10:24:23
  * @Description:
  */
 import { AfterViewInit, Component, OnInit } from '@angular/core';
@@ -14,6 +14,7 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
   styleUrl: './info.component.less'
 })
 export class InfoComponent implements OnInit, AfterViewInit {
+  info: any = {};
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],

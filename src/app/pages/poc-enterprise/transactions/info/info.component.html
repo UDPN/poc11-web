@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2025-01-15 14:14:02
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-17 10:45:18
+ * @Description: 
+-->
 <app-page-header
   [backTpl]="backTpl"
   [backUrl]="'/poc/poc-enterprise/transactions'"
@@ -5,4 +12,71 @@
 ></app-page-header>
 <ng-template #backTpl>
   <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card [nzBordered]="true" class="m-b-10" nzTitle="Application Information">
+    <nz-descriptions
+      [nzColon]="false"
+      [nzBordered]="true"
+      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+    >
+      <nz-descriptions-item nzTitle="Enterprise Name">{{
+        info.enterpriseName
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Enterprise ID">{{
+        info.enterpriseId
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="From">{{
+        info.from
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Sending Amount">{{
+        info.sendingAmount
+      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="To">{{ info.to }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Receiving Amount">{{
+        info.receivingAmount
+      }}</nz-descriptions-item
+      ><nz-descriptions-item nzTitle="Type" nzSpan="3">{{
+        info.type
+      }}</nz-descriptions-item></nz-descriptions
+    >
+  </nz-card>
+  <nz-card [nzBordered]="true" class="m-b-10" [nzTitle]="titleTpl">
+    <nz-descriptions
+      [nzColon]="false"
+      [nzBordered]="false"
+      nzLayout="vertical"
+      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+    >
+      <nz-descriptions-item nzTitle="Transaction Hash"
+        ><p
+          [title]="info.transactionHash"
+          nz-typography
+          [nzCopyable]="info.transactionHash ? true : false"
+          [nzCopyText]="info.transactionHash"
+        >
+          {{ info.transactionHash }}
+        </p></nz-descriptions-item
+      >
+      <nz-descriptions-item nzTitle="Transaction Time">{{
+        info.transactionTime | map: 'timeStamp'
+      }}</nz-descriptions-item></nz-descriptions
+    >
+  </nz-card>
+</div>
+<ng-template #titleTpl>
+  <span>{{ 'Transfer Transaction Hash' }}</span>
+  <i
+    class="m-l-5"
+    style="color: #3c5686; font-size: 20px"
+    nz-icon
+    nzType="question-circle"
+    nzTooltipPlacement="right"
+    nzTheme="fill"
+    nz-tooltip
+    [nzTooltipTitle]="'Transaction hash for successful Transfer.'"
+    nzTooltipColor="#3c5686"
+    nzTooltipTrigger="click"
+    nzTooltipOverlayClassName="buils"
+  ></i>
 </ng-template>

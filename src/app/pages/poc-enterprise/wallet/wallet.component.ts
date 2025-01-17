@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-16 14:19:53
+ * @LastEditTime: 2025-01-17 11:03:39
  * @Description:
  */
 import {
@@ -16,6 +16,8 @@ import {
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 interface SearchParam {
   walletAddress: any;
@@ -55,7 +57,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-  dataList: NzSafeAny[] = [];
+  dataList: NzSafeAny[] = [{}];
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -64,7 +66,11 @@ export class WalletComponent implements OnInit, AfterViewInit {
   };
   tableConfig!: AntTableConfig;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private modal: NzModalService,
+    private message: NzMessageService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -101,6 +107,42 @@ export class WalletComponent implements OnInit, AfterViewInit {
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
+  }
+
+  updateStatus(state: number) {
+    let statusValue = '';
+    // if (state === 30) {
+    //   statusValue = 'deactivate';
+    // } else {
+    //   statusValue = 'activate';
+    // }
+    const toolStatus =
+      statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+    this.modal.confirm({
+      nzTitle: `Are you sure you want to ${statusValue} ?`,
+      nzContent: '',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          // this.statementsService
+          //   .statusUpdate({ exportRuleId, state })
+          //   .subscribe({
+          //     next: (res) => {
+          //       resolve(true);
+          //       this.cdr.markForCheck();
+          //       if (res) {
+          //         this.message.success(`${toolStatus} successfully!`, {
+          //           nzDuration: 1000
+          //         });
+          //       }
+          //       this.getDataList();
+          //     },
+          //     error: (err) => {
+          //       reject(true);
+          //       this.cdr.markForCheck();
+          //     }
+          //   });
+        }).catch(() => console.log('Oops errors!'))
+    });
   }
 
   getDataList(e?: NzTableQueryParams): void {
@@ -175,7 +217,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 100
+          width: 150
         }
       ],
       total: 0,

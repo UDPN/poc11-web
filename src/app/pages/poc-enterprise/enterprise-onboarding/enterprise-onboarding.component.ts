@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 13:34:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-15 16:45:18
+ * @LastEditTime: 2025-01-17 11:02:45
  * @Description:
  */
 import {
@@ -17,6 +17,8 @@ import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 interface SearchParam {
@@ -44,7 +46,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
-  dataList: NzSafeAny[] = [];
+  dataList: NzSafeAny[] = [{}];
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -68,7 +70,11 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   };
   tableConfig!: AntTableConfig;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private modal: NzModalService,
+    private message: NzMessageService
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -109,6 +115,42 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
+  updateStatus(state: number, enterpriseName: string) {
+    let statusValue = '';
+    // if (state === 30) {
+    //   statusValue = 'deactivate';
+    // } else {
+    //   statusValue = 'activate';
+    // }
+    const toolStatus =
+      statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+    this.modal.confirm({
+      nzTitle: `Are you sure you want to ${statusValue} <b>${enterpriseName}</b> ?`,
+      nzContent: '',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          // this.statementsService
+          //   .statusUpdate({ exportRuleId, state })
+          //   .subscribe({
+          //     next: (res) => {
+          //       resolve(true);
+          //       this.cdr.markForCheck();
+          //       if (res) {
+          //         this.message.success(`${toolStatus} successfully!`, {
+          //           nzDuration: 1000
+          //         });
+          //       }
+          //       this.getDataList();
+          //     },
+          //     error: (err) => {
+          //       reject(true);
+          //       this.cdr.markForCheck();
+          //     }
+          //   });
+        }).catch(() => console.log('Oops errors!'))
+    });
+  }
+
   getDataList(e?: NzTableQueryParams): void {
     // this.tableConfig.loading = true;
     // const params: SearchCommonVO<any> = {
@@ -142,7 +184,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
           title: 'No.',
           tdTemplate: this.numberTpl,
           notNeedEllipsis: true,
-          width: 60
+          width: 50
         },
         {
           title: 'Enterprise Name',
@@ -166,7 +208,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
           title: 'Email',
           field: 'email',
           notNeedEllipsis: true,
-          width: 100
+          width: 120
         },
         {
           title: 'Created on',
@@ -187,7 +229,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 100
+          width: 180
         }
       ],
       total: 0,
