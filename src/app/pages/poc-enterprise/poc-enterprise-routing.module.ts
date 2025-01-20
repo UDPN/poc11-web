@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 13:30:30
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-15 14:17:09
+ * @LastEditTime: 2025-01-20 13:39:28
  * @Description:
  */
 import { NgModule } from '@angular/core';
@@ -25,7 +25,7 @@ const routes: Routes = [
       import('./wallet/wallet.module').then((m) => m.WalletModule)
   },
   {
-    path: 'top-up-withdraw',
+    path: 'transaction-approval',
     data: { preload: true },
     loadChildren: () =>
       import('./top-up-withdraw/top-up-withdraw.module').then(

@@ -163,12 +163,12 @@ const menuNav: Menu[] = [
       {
         id: 3,
         fatherId: 6,
-        menuName: 'Top-up & Withdraw Management',
+        menuName: 'Transaction Approval',
         open: false,
         selected: false,
         menuType: 'C',
         code: 'R010203',
-        path: '/poc/poc-enterprise/top-up-withdraw'
+        path: '/poc/poc-enterprise/transaction-approval'
       },
       {
         id: 4,

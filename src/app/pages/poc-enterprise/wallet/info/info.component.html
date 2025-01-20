@@ -8,40 +8,40 @@
 </ng-template>
 <div class="normal-detail-table-wrap">
   <nz-card>
-    <nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
-      <nz-tab *ngFor="let tab of detailsTabs; index as i" [nzTitle]="tab">
-        <ng-container *ngIf="i === 0">
-          <!-- <nz-card
-            nzTitle=""
-            nzBordered="false"
-            class="none-bottom"
-          >
-          </nz-card> -->
-        </ng-container>
-        <ng-container *ngIf="i === 1">
-          <nz-card nzTitle="" nzBordered="false">
-            <nz-tabset
-              (nzSelectedIndexChange)="transactionsIndexChange($event)"
-            >
-              <nz-tab
-                *ngFor="let tabs of transactionsTabs; index as i"
-                [nzTitle]="tabs"
+    <ng-container *ngIf="type === 'info'">
+      <nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
+        <nz-tab *ngFor="let tab of detailsTabs; index as i" [nzTitle]="tab">
+          <ng-container *ngIf="i === 0">
+            <app-basic-info [info]="info"></app-basic-info>
+          </ng-container>
+          <ng-container *ngIf="i === 1">
+            <nz-card nzTitle="" nzBordered="false">
+              <nz-tabset
+                (nzSelectedIndexChange)="transactionsIndexChange($event)"
               >
-                <app-card-table-wrap
-                  [isNormalTable]="true"
-                  tableTitle="Transaction List"
+                <nz-tab
+                  *ngFor="let tabs of transactionsTabs; index as i"
+                  [nzTitle]="tabs"
                 >
-                  <app-ant-table
-                    (changePageSize)="changePageSize($event)"
-                    (changePageNum)="getDtataList($event)"
-                    [tableConfig]="tableConfig"
-                    [tableData]="dataList"
-                  ></app-ant-table>
-                </app-card-table-wrap> </nz-tab
-            ></nz-tabset>
-          </nz-card>
-        </ng-container>
-      </nz-tab>
-    </nz-tabset>
+                  <app-card-table-wrap
+                    [isNormalTable]="true"
+                    tableTitle="Transaction List"
+                  >
+                    <app-ant-table
+                      (changePageSize)="changePageSize($event)"
+                      (changePageNum)="getDtataList($event)"
+                      [tableConfig]="tableConfig"
+                      [tableData]="dataList"
+                    ></app-ant-table>
+                  </app-card-table-wrap> </nz-tab
+              ></nz-tabset>
+            </nz-card>
+          </ng-container>
+        </nz-tab>
+      </nz-tabset>
+    </ng-container>
+    <ng-container *ngIf="type === 'approval'">
+      <app-basic-info [info]="info"></app-basic-info>
+    </ng-container>
   </nz-card>
 </div>

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-16 15:10:55
+ * @LastEditTime: 2025-01-20 17:07:57
  * @Description:
  */
 import {
@@ -13,6 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -40,11 +41,13 @@ export class InfoComponent implements OnInit, AfterViewInit {
   receivingAmountTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  info: any = {};
   detailsTabs = ['Basic Information', 'Transactions'];
   transactionsTabs = ['Top-up / Withdraw', 'Transfer'];
   transactionsIndex: number = 0;
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
+  type: string = '';
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -59,18 +62,21 @@ export class InfoComponent implements OnInit, AfterViewInit {
     footer: ''
   };
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private routeInfo: ActivatedRoute
+  ) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Details`,
+      title: this.type === 'info' ? 'Details' : 'Approval',
       breadcrumbs: [
         { name: 'Enterprise Management' },
         {
           name: 'Wallet Management',
           url: '/poc/poc-enterprise/wallet'
         },
-        { name: 'Details' }
+        { name: this.type === 'info' ? 'Details' : 'Approval' }
       ],
       extra: '',
       desc: '',
@@ -78,6 +84,13 @@ export class InfoComponent implements OnInit, AfterViewInit {
     };
   }
   ngOnInit() {
+    this.routeInfo.queryParams.subscribe((params) => {
+      if (params['type'] === 'approval') {
+        this.type = 'approval';
+      } else {
+        this.type = 'info';
+      }
+    });
     this.initTable(0);
   }
 

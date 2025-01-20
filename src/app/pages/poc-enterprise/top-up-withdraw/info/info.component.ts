@@ -1,5 +1,12 @@
 /*
  * @Author: chenyuting
+ * @Date: 2025-01-20 10:36:23
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-20 13:40:56
+ * @Description:
+ */
+/*
+ * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
  * @LastEditTime: 2025-01-16 09:54:34
@@ -29,7 +36,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
         { name: 'Enterprise Management' },
         {
           name: 'Top-up & Withdraw Management',
-          url: '/poc/poc-enterprise/top-up-withdraw'
+          url: '/poc/poc-enterprise/transaction-approval'
         },
         { name: 'Details' }
       ],
