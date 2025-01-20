@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 13:34:21
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-17 11:02:45
+ * @LastEditTime: 2025-01-20 10:40:24
  * @Description:
  */
 import {
@@ -23,7 +23,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 interface SearchParam {
   enterpriseName: any;
-  enterpriseId: string;
+  enterpriseCode: string;
   contactName: string | number;
   email: string;
   creationTime: any;
@@ -56,7 +56,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   };
   searchParam: Partial<SearchParam> = {
     enterpriseName: '',
-    enterpriseId: '',
+    enterpriseCode: '',
     contactName: '',
     email: '',
     status: '',
@@ -102,7 +102,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {
       enterpriseName: '',
-      enterpriseId: '',
+      enterpriseCode: '',
       contactName: '',
       email: '',
       status: '',
@@ -187,14 +187,14 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
           width: 50
         },
         {
-          title: 'Enterprise Name',
-          field: 'enterpriseName',
+          title: 'Enterprise Code',
+          field: 'enterpriseCode',
           notNeedEllipsis: true,
           width: 150
         },
         {
-          title: 'Enterprise ID',
-          field: 'enterpriseId',
+          title: 'Enterprise Name',
+          field: 'enterpriseName',
           notNeedEllipsis: true,
           width: 150
         },

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 16:49:19
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-16 10:37:14
+ * @LastEditTime: 2025-01-20 11:29:06
  * @Description:
  */
 import { AfterViewInit, Component, OnInit } from '@angular/core';
@@ -61,12 +61,14 @@ export class AddComponent implements OnInit, AfterViewInit {
       }
     });
     this.validateForm = this.fb.group({
-      enterpriseName: [
-        null,
-        [Validators.required, this.enterpriseNameValidator]
-      ],
-      contactName: [null, [Validators.required, this.contactNameValidator]],
+      enterpriseCode: [null],
+      enterpriseName: [null, [this.enterpriseNameValidator]],
+      contactName: [null, [this.contactNameValidator]],
       email: [null, [Validators.required]],
+      enterpriseBank: [null, [this.enterpriseBankValidator]],
+      enterpriseAccount: [null],
+      generateWallet: [null, [Validators.required]],
+      approvalValue: [null, [Validators.required]],
       description: [null]
     });
   }
@@ -74,9 +76,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   enterpriseNameValidator = (
     control: UntypedFormControl
   ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
+    if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -85,9 +85,16 @@ export class AddComponent implements OnInit, AfterViewInit {
   contactNameValidator = (
     control: UntypedFormControl
   ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
+    if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+
+  enterpriseBankValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -96,5 +103,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   onBack() {
     this.location.back();
   }
-  onSubmit() {}
+  onSubmit() {
+    console.log(this.validateForm.value, 'value');
+  }
 }

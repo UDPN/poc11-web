@@ -15,7 +15,23 @@
     <form nz-form [formGroup]="validateForm" class="m-t-25 m-b-30">
       <div nz-row nzJustify="space-between" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
-          <nz-form-label nzRequired nzSpan="24">Enterprise Name</nz-form-label>
+          <nz-form-label nzSpan="24">Enterprise Code</nz-form-label>
+          <nz-form-control>
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input
+                  placeholder="Up to 50 alphanumeric characters"
+                  nz-input
+                  readonly
+                  class="onboard-disabled"
+                  formControlName="enterpriseCode"
+                />
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
+          <nz-form-label nzSpan="24">Enterprise Name</nz-form-label>
           <nz-form-control [nzErrorTip]="enterpriseNameError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -27,9 +43,6 @@
               </div>
             </div>
             <ng-template #enterpriseNameError let-control>
-              <ng-container *ngIf="control.hasError('required')"
-                >Please select your Enterprise Name</ng-container
-              >
               <ng-container *ngIf="control.hasError('regular')"
                 >Up to 50 alphanumeric characters</ng-container
               >
@@ -37,8 +50,8 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
-          <nz-form-label nzRequired nzSpan="24">Contact Name</nz-form-label>
-          <nz-form-control [nzErrorTip]="enterpriseNameError">
+          <nz-form-label nzSpan="24">Contact Name</nz-form-label>
+          <nz-form-control [nzErrorTip]="contactNameError">
             <div nz-row>
               <div nz-col nzSpan="24">
                 <input
@@ -48,10 +61,7 @@
                 />
               </div>
             </div>
-            <ng-template #enterpriseNameError let-control>
-              <ng-container *ngIf="control.hasError('required')"
-                >Please select your Contact Name</ng-container
-              >
+            <ng-template #contactNameError let-control>
               <ng-container *ngIf="control.hasError('regular')"
                 >Up to 50 alphanumeric characters</ng-container
               >
@@ -60,23 +70,101 @@
         </nz-form-item>
         <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
           <nz-form-label nzRequired nzSpan="24">Email</nz-form-label>
-          <nz-form-control [nzErrorTip]="enterpriseNameError">
+          <nz-form-control [nzErrorTip]="emailError">
             <div nz-row>
               <div nz-col nzSpan="24">
                 <input nz-input formControlName="email" />
               </div>
             </div>
-            <ng-template #enterpriseNameError let-control>
+            <ng-template #emailError let-control>
               <ng-container *ngIf="control.hasError('required')"
                 >Please select your Email</ng-container
               >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
+        <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
+          <nz-form-label nzSpan="24">Enterprise Bank</nz-form-label>
+          <nz-form-control [nzErrorTip]="enterpriseBankError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input
+                  nz-input
+                  placeholder="Up to 50 alphanumeric characters"
+                  formControlName="enterpriseBank"
+                />
+              </div>
+            </div>
+            <ng-template #enterpriseBankError let-control>
+              <ng-container *ngIf="control.hasError('regular')"
+                >Up to 50 alphanumeric characters</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
+          <nz-form-label nzSpan="24">Enterprise Account</nz-form-label>
+          <nz-form-control [nzErrorTip]="enterpriseNameError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input nz-input formControlName="enterpriseAccount" />
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-row nzJustify="space-between" nzAlign="middle" class="m-b-10">
+        <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
+          <nz-form-label nzRequired nzSpan="24">Generate Wallet</nz-form-label>
+          <nz-form-control [nzErrorTip]="generateWalletError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <nz-radio-group
+                  formControlName="generateWallet"
+                  nzName="radiogroup"
+                >
+                  <label nz-radio nzValue="1">Approval Required </label>
+                  <label nz-radio nzValue="2">No Approval Required </label>
+                </nz-radio-group>
+              </div>
+            </div>
+            <ng-template #generateWalletError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please select your Generate Wallet</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
+          <nz-form-label nzRequired nzSpan="24"
+            >Minimum value for Transfer/FX Purchasing without approval
+            (Excluding self FX Purchasing)</nz-form-label
+          >
+          <nz-form-control [nzErrorTip]="approvalError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <input nz-input formControlName="approvalValue" />
+              </div>
+            </div>
+            <ng-template #approvalError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Minimum value for Transfer/FX Purchasing
+                without approval (Excluding self FX Purchasing)</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item
+          nz-col
+          nzXs="24"
+          nzSm="24"
+          nzXl="7"
+          nzXXl="7"
+        ></nz-form-item>
       </div>
       <div nz-row nzJustify="space-between" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzSpan="24">
-          <nz-form-label nzRequired nzSpan="24">Description</nz-form-label>
+          <nz-form-label nzSpan="24">Description</nz-form-label>
           <nz-form-control [nzErrorTip]="enterpriseNameError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -90,7 +178,7 @@
             </div>
             <ng-template #enterpriseNameError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please select your Description</ng-container
+                >Please input your Description</ng-container
               >
             </ng-template>
           </nz-form-control>
@@ -107,7 +195,7 @@
       <span
         nz-col
         nzSpan="8"
-        *ngFor="let item of ['tEUR', 'tUSD', 'tSAR', 4, 5, 6]"
+        *ngFor="let item of ['tEUR', 'tUSD', 'tSAR']"
         class="m-b-30"
         nzJustify="space-between"
         nzAlign="bottom"

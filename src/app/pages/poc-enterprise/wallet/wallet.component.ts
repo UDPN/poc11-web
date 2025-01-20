@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-17 11:03:39
+ * @LastEditTime: 2025-01-20 13:32:13
  * @Description:
  */
 import {
@@ -21,7 +21,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 interface SearchParam {
   walletAddress: any;
-  enterpriseName: string;
+  enterpriseCode: string;
   currency: string | number;
   creationTime: any;
   status: string;
@@ -45,7 +45,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
   balanceTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     walletAddress: '',
-    enterpriseName: '',
+    enterpriseCode: '',
     currency: '',
     status: '',
     creationTime: []
@@ -96,7 +96,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
 
   resetForm(): void {
     this.searchParam = {
-      enterpriseName: '',
+      enterpriseCode: '',
       walletAddress: '',
       currency: '',
       status: '',
@@ -181,8 +181,8 @@ export class WalletComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Enterprise Name',
-          field: 'enterpriseName',
+          title: 'Enterprise Code',
+          field: 'enterpriseCode',
           notNeedEllipsis: true,
           width: 150
         },

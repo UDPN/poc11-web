@@ -17,55 +17,13 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label>Enterprise Name</nz-form-label>
+            <nz-form-label>Enterprise Code</nz-form-label>
             <nz-form-control>
               <input
                 nz-input
                 placeholder=""
-                name="enterpriseName"
-                [(ngModel)]="searchParam.enterpriseName"
-              />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
-          <nz-form-item>
-            <nz-form-label>Enterprise ID</nz-form-label>
-            <nz-form-control>
-              <input
-                nz-input
-                placeholder=""
-                name="enterpriseId"
-                [(ngModel)]="searchParam.enterpriseId"
-              />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
-          <nz-form-item>
-            <nz-form-label>Contact Name</nz-form-label>
-            <nz-form-control>
-              <input
-                nz-input
-                placeholder=""
-                name="contactName"
-                [(ngModel)]="searchParam.contactName"
+                name="enterpriseCode"
+                [(ngModel)]="searchParam.enterpriseCode"
               />
             </nz-form-control>
           </nz-form-item>
@@ -138,7 +96,16 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" class="m-b-8 text-right p-0">
+        <div
+          nz-col
+          [nzXXl]="16"
+          [nzXl]="16"
+          [nzLg]="24"
+          [nzMd]="24"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="m-b-8 text-right p-0"
+        >
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>
