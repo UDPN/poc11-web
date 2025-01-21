@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2025-01-20 14:59:21
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-21 17:02:30
+ * @Description: 
+-->
 <app-page-header
   [backTpl]="backTpl"
   [backUrl]="'/poc/poc-enterprise/wallet'"
@@ -29,12 +36,104 @@
                   >
                     <app-ant-table
                       (changePageSize)="changePageSize($event)"
-                      (changePageNum)="getDtataList($event)"
+                      (changePageNum)="getDataList($event, transactionsIndex)"
                       [tableConfig]="tableConfig"
                       [tableData]="dataList"
                     ></app-ant-table>
-                  </app-card-table-wrap> </nz-tab
-              ></nz-tabset>
+                    <ng-template
+                      #transactionNoTpl
+                      let-transactionNo="transactionNo"
+                      let-bankAccountId="bankAccountId"
+                    >
+                      <a
+                        [title]="transactionNo"
+                        nz-typography
+                        nzCopyable
+                        [nzCopyText]="transactionNo"
+                        routerLink="/poc/poc-enterprise/transactions/info"
+                        [queryParams]="{transactionNo, type:transactionsIndex}"
+                      >
+                        {{ transactionNo | map: 'showPartBefore' }}
+                      </a>
+                    </ng-template>
+                    <ng-template
+                      #walletAddressTpl
+                      let-type="type"
+                      let-fromAddress="fromAddress"
+                      let-toAddress="toAddress"
+                    >
+                      <p
+                        [title]="type === 3 ? toAddress : fromAddress"
+                        nz-typography
+                        nzCopyable
+                        [nzCopyText]="type === 3 ? toAddress : fromAddress"
+                      >
+                        {{
+                          (type === 3 ? toAddress : fromAddress)
+                            | map: 'showPartBefore'
+                        }}
+                      </p>
+                    </ng-template>
+                    <ng-template #fromTpl let-fromAddress="fromAddress">
+                      <p
+                        [title]="fromAddress"
+                        nz-typography
+                        nzCopyable
+                        [nzCopyText]="fromAddress"
+                      >
+                        {{ fromAddress | map: 'showPartBefore' }}
+                      </p>
+                    </ng-template>
+                    <ng-template #toTpl let-to="to">
+                      <p
+                        [title]="to"
+                        nz-typography
+                        nzCopyable
+                        [nzCopyText]="to"
+                      >
+                        {{ to | map: 'showPartBefore' }}
+                      </p>
+                    </ng-template>
+                    <ng-template #amountTpl let-type="type" let-amount="amount">
+                      <span [title]="amount"
+                        >{{ type === 3 ? ' + ' : ' - ' }}{{ amount }}</span
+                      >
+                    </ng-template>
+                    <ng-template
+                      #sendingAmountTpl
+                      let-sendingAmount="sendingAmount"
+                      let-sendingCurrency="sendingCurrency"
+                    >
+                      <span [title]="sendingAmount + ' ' + sendingCurrency">{{
+                        sendingAmount + ' ' + sendingCurrency
+                      }}</span>
+                    </ng-template>
+                    <ng-template
+                      #receivingAmountTpl
+                      let-receivingAmount="receivingAmount"
+                      let-receivingCurrency="receivingCurrency"
+                    >
+                      <span
+                        [title]="receivingAmount + ' ' + receivingCurrency"
+                        >{{ receivingAmount + ' ' + receivingCurrency }}</span
+                      >
+                    </ng-template>
+                    <ng-template #transactionHashTpl let-txHash="txHash">
+                      <p
+                        [title]="txHash"
+                        nz-typography
+                        nzCopyable
+                        [nzCopyText]="txHash"
+                      >
+                        {{ txHash }}
+                      </p>
+                    </ng-template>
+                    <ng-template #statusTpl>
+                      <span [title]="'Success'">{{ 'Success' }}</span>
+                    </ng-template>
+                  </app-card-table-wrap>
+                </nz-tab></nz-tabset
+              >
             </nz-card>
           </ng-container>
         </nz-tab>
