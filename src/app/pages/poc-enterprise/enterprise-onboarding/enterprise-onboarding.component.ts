@@ -20,6 +20,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
+import { EnterpriseOnboardingService } from '@app/core/services/http/poc-enterprise/enterprise-onboarding/enterprise-onboarding.service';
 
 interface SearchParam {
   enterpriseName: any;
@@ -73,7 +75,8 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private enterpriseOnboardingService: EnterpriseOnboardingService
   ) {}
 
   ngAfterViewInit(): void {
@@ -152,29 +155,43 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.transactionRecordService
-    //   .getList(params.pageNum, params.pageSize, params.filters)
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data?.rows;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _.data.page.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: {
+        enterpriseCode: this.searchParam.enterpriseCode,
+        enterpriseName: this.searchParam.enterpriseName,
+        contactName: this.searchParam.contactName,
+        contactEmail: this.searchParam.email,
+        status: this.searchParam.status,
+        createdOn: this.searchParam.creationTime
+      }
+    };
+
+    this.enterpriseOnboardingService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.dataList = res.data?.rows || [];
+          this.dataList.forEach((item: any, i: number) => {
+            Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+          });
+          this.tableConfig.total = res.data?.page?.total || 0;
+          this.tableConfig.pageIndex = params.pageNum;
+          this.tableLoading(false);
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.message.error('Failed to fetch enterprise list');
+          this.tableLoading(false);
+        }
+      });
   }
 
   private initTable(): void {

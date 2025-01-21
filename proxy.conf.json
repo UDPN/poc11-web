@@ -14,6 +14,11 @@
     "secure": false,
     "changeOrigin": true
   },
+  "/v1/enterprise": {
+    "target": "http://10.0.48.127:20001/api/manage",
+    "secure": false,
+    "changeOrigin": true
+  },
   "/v1": {
     "target": "http://10.0.48.109:60001/wcbdccommercial",
     "secure": false,

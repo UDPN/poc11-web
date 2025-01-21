@@ -12,9 +12,11 @@ import {
   UntypedFormControl,
   Validators
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { Location } from '@angular/common';
+import { EnterpriseOnboardingService } from '@app/core/services/http/poc-enterprise/enterprise-onboarding/enterprise-onboarding.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-add',
@@ -35,7 +37,10 @@ export class AddComponent implements OnInit, AfterViewInit {
   constructor(
     private routeInfo: ActivatedRoute,
     private location: Location,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private enterpriseService: EnterpriseOnboardingService,
+    private message: NzMessageService,
+    private router: Router
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -64,10 +69,10 @@ export class AddComponent implements OnInit, AfterViewInit {
       enterpriseCode: [null],
       enterpriseName: [null, [this.enterpriseNameValidator]],
       contactName: [null, [this.contactNameValidator]],
-      email: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
       enterpriseBank: [null, [this.enterpriseBankValidator]],
       enterpriseAccount: [null],
-      generateWallet: [null, [Validators.required]],
+      generateWallet: ['1', [Validators.required]],
       approvalValue: [null, [Validators.required]],
       description: [null]
     });
@@ -104,6 +109,43 @@ export class AddComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
   onSubmit() {
-    console.log(this.validateForm.value, 'value');
+    if (this.validateForm.valid) {
+      this.isLoading = true;
+      const formValue = this.validateForm.value;
+      
+      const submitData = {
+        contactEmail: formValue.email,
+        contactName: formValue.contactName,
+        description: formValue.description || '',
+        enterpriseFlatAccount: formValue.enterpriseAccount || '',
+        enterpriseFlatBank: formValue.enterpriseBank || '',
+        enterpriseName: formValue.enterpriseName,
+        txApprovalThreshold: Number(formValue.approvalValue),
+        walletApproval: Number(formValue.generateWallet)
+      };
+
+      this.enterpriseService.saveEnterprise(submitData).subscribe({
+        next: (res) => {
+          this.isLoading = false;
+          if (res.code === 0) {
+            this.message.success('Enterprise saved successfully');
+            this.router.navigate(['/poc/poc-enterprise/enterprise-onboarding']);
+          } else {
+            this.message.error(res.message || 'Save failed');
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.message.error(err.message || 'Save failed');
+        }
+      });
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsTouched();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
   }
 }
