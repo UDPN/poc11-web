@@ -59,9 +59,15 @@ export class HttpInterceptorService implements HttpInterceptor {
       this.pocHomeService.isFirstLogin().subscribe((res: any) => {
         return res;
       });
+      let prefixUrl: string = '';
+      if (req.url.indexOf('enterprise') !== -1) {
+        prefixUrl = '/api/manage';
+      } else {
+        prefixUrl = '/wcbdccommercial';
+      }
       httpConfig = {
         headers: req.headers.set('token', token),
-        url: (environment.production ? '/wcbdccommercial' : '') + req.url
+        url: (environment.production ? prefixUrl : '') + req.url
       };
     } else {
       httpConfig = {

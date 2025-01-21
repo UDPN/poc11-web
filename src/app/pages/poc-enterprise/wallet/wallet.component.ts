@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-20 13:32:13
+ * @LastEditTime: 2025-01-21 16:09:11
  * @Description:
  */
 import {
@@ -13,17 +13,20 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { WalletService } from '@app/core/services/http/poc-enterprise/wallet/wallet.service';
+import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
 interface SearchParam {
-  walletAddress: any;
+  accountAddress: any;
   enterpriseCode: string;
   currency: string | number;
-  creationTime: any;
+  createTime: any;
   status: string;
 }
 
@@ -43,12 +46,14 @@ export class WalletComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('balanceTpl', { static: true })
   balanceTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('accountAddressTpl', { static: true })
+  accountAddressTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
-    walletAddress: '',
+    accountAddress: '',
     enterpriseCode: '',
     currency: '',
     status: '',
-    creationTime: []
+    createTime: []
   };
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -57,7 +62,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -69,7 +74,8 @@ export class WalletComponent implements OnInit, AfterViewInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private walletService: WalletService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -97,10 +103,10 @@ export class WalletComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {
       enterpriseCode: '',
-      walletAddress: '',
+      accountAddress: '',
       currency: '',
       status: '',
-      creationTime: []
+      createTime: []
     };
     this.getDataList(this.tableQueryParams);
   }
@@ -109,13 +115,13 @@ export class WalletComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-  updateStatus(state: number) {
+  updateStatus(bankAccountId: any, walletState: number) {
     let statusValue = '';
-    // if (state === 30) {
-    //   statusValue = 'deactivate';
-    // } else {
-    //   statusValue = 'activate';
-    // }
+    if (walletState === 30) {
+      statusValue = 'deactivate';
+    } else {
+      statusValue = 'activate';
+    }
     const toolStatus =
       statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
     this.modal.confirm({
@@ -123,52 +129,49 @@ export class WalletComponent implements OnInit, AfterViewInit {
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          // this.statementsService
-          //   .statusUpdate({ exportRuleId, state })
-          //   .subscribe({
-          //     next: (res) => {
-          //       resolve(true);
-          //       this.cdr.markForCheck();
-          //       if (res) {
-          //         this.message.success(`${toolStatus} successfully!`, {
-          //           nzDuration: 1000
-          //         });
-          //       }
-          //       this.getDataList();
-          //     },
-          //     error: (err) => {
-          //       reject(true);
-          //       this.cdr.markForCheck();
-          //     }
-          //   });
+          this.walletService
+            .getStatusUpdate({ bankAccountId, walletState })
+            .subscribe({
+              next: (res) => {
+                resolve(true);
+                this.cdr.markForCheck();
+                if (res) {
+                  this.message.success(`${toolStatus} successfully!`, {
+                    nzDuration: 1000
+                  });
+                }
+                this.getDataList();
+              },
+              error: (err) => {
+                reject(true);
+                this.cdr.markForCheck();
+              }
+            });
         }).catch(() => console.log('Oops errors!'))
     });
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.transactionRecordService
-    //   .getList(params.pageNum, params.pageSize, params.filters)
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data?.rows;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _.data.page.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.walletService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data?.rows;
+        this.tableConfig.total = _.data.page.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -176,7 +179,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Wallet Address',
-          field: 'walletAddress',
+          tdTemplate: this.accountAddressTpl,
           notNeedEllipsis: true,
           width: 150
         },

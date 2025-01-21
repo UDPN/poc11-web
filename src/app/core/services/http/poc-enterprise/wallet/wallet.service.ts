@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-20 17:35:31
+ * @LastEditTime: 2025-01-21 17:09:06
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -13,24 +13,14 @@ import { DatePipe } from '@angular/common';
 import { BaseHttpService } from '../../base-http.service';
 
 export interface Adata {
-  exportStrategy: string;
-  taskName: string;
-  timeZone: string;
-  tokenId: string | number;
-  txTypes: Array<any>;
+  bankAccountId: string | number;
+  remarks: string;
+  result: number;
 }
 
-export interface Sdata {
-  exportRuleId: string | number;
-  state: number;
-}
-
-export interface Cdata {
-  exportType: string | number;
-  moduleType: string | number;
-  timeZone: string;
-  transactionRecordsListReqVO?: any;
-  billTxListReqVO?: any;
+export interface Gdata {
+  bankAccountId: string | number;
+  walletState: number;
 }
 
 @Injectable({
@@ -54,13 +44,13 @@ export class WalletService {
         enterpriseCode: filters.enterpriseCode || '',
         status: filters.status || '',
         startCreateTime: filters.createTime[0]
-          ? timeToTimestampMillisecond(
+          ? timeToTimestamp(
               this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
         endCreateTime: filters.createTime[1]
-          ? timeToTimestampMillisecond(
+          ? timeToTimestamp(
               this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )
@@ -71,8 +61,33 @@ export class WalletService {
         pageNum: pageIndex
       }
     };
+    return this.https.post('/v1/enterprise/wallet/listPage', param).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+
+  public getBasicInfo(params: { bankAccountId: any }): Observable<any> {
+    return this.http.post(`/v1/enterprise/wallet/detail`, params);
+  }
+
+  public getTopUpAndWithdrawInfo(
+    pageIndex: number,
+    pageSize: number,
+    filters: any
+  ): Observable<any> {
+    const param: any = {
+      data: {
+        bankAccountId: filters.bankAccountId || ''
+      },
+      page: {
+        pageSize: pageSize,
+        pageNum: pageIndex
+      }
+    };
     return this.https
-      .post('/api/manage/v1/Enterprise/wallet/listPage', param)
+      .post('/v1/enterprise/wallet/detail/topUpAndWithdraw', param)
       .pipe(
         map((response: any) => {
           return response;
@@ -80,7 +95,34 @@ export class WalletService {
       );
   }
 
-  public detail(params: { bankAccountId: any }): Observable<any> {
-    return this.http.post(`/api/manage/v1/Enterprise/wallet/detail`, params);
+  public getTransferInfo(
+    pageIndex: number,
+    pageSize: number,
+    filters: any
+  ): Observable<any> {
+    const param: any = {
+      data: {
+        bankAccountId: filters.bankAccountId || ''
+      },
+      page: {
+        pageSize: pageSize,
+        pageNum: pageIndex
+      }
+    };
+    return this.https
+      .post('/v1/enterprise/wallet/detail/transferAndFxpurchasing', param)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  public approve(params: Adata): Observable<any> {
+    return this.http.post(`/v1/enterprise/wallet/process`, params);
+  }
+
+  public getStatusUpdate(params: Gdata): Observable<any> {
+    return this.http.post(`/v1/enterprise/wallet/update/status`, params);
   }
 }

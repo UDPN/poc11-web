@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-20 17:07:57
+ * @LastEditTime: 2025-01-21 17:07:35
  * @Description:
  */
 import {
@@ -14,10 +14,13 @@ import {
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { WalletService } from '@app/core/services/http/poc-enterprise/wallet/wallet.service';
+import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-info',
@@ -41,10 +44,12 @@ export class InfoComponent implements OnInit, AfterViewInit {
   receivingAmountTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletAddressTpl', { static: true })
+  walletAddressTpl!: TemplateRef<NzSafeAny>;
   info: any = {};
   detailsTabs = ['Basic Information', 'Transactions'];
-  transactionsTabs = ['Top-up / Withdraw', 'Transfer'];
-  transactionsIndex: number = 0;
+  transactionsTabs = ['Top-up / Withdraw', 'Transfer / FX Purchasing'];
+  transactionsIndex: any = 0;
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   type: string = '';
@@ -64,7 +69,8 @@ export class InfoComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private routeInfo: ActivatedRoute
+    private routeInfo: ActivatedRoute,
+    private walletService: WalletService
   ) {}
 
   ngAfterViewInit(): void {
@@ -89,18 +95,36 @@ export class InfoComponent implements OnInit, AfterViewInit {
         this.type = 'approval';
       } else {
         this.type = 'info';
+        this.getBasicDetail();
       }
     });
     this.initTable(0);
   }
 
-  tabIndexChange(value: any) {
-    console.log(value);
+  getBasicDetail() {
+    this.routeInfo.queryParams.subscribe((params) => {
+      this.walletService
+        .getBasicInfo({ bankAccountId: params['bankAccountId'] })
+        .subscribe((res: any) => {
+          this.info = res;
+          this.cdr.markForCheck();
+          return;
+        });
+    });
   }
 
+  tabIndexChange(value: any) {
+    if (value === 0) {
+      this.getBasicDetail();
+    } else {
+      console.log(1111111);
+
+      this.transactionsIndexChange(0);
+    }
+  }
   transactionsIndexChange(value: any) {
     this.initTable(value);
-    this.getDtataList(this.tableQueryParams, value);
+    this.getDataList(this.tableQueryParams, value);
   }
 
   changePageSize(e: number): void {
@@ -116,36 +140,55 @@ export class InfoComponent implements OnInit, AfterViewInit {
     this.tableConfig.loading = isLoading;
     this.tableChangeDectction();
   }
-  getDtataList(e?: NzTableQueryParams, tabIndex?: number): void {
-    // this.tableConfig.loading = true;
-    // this.routeInfo.queryParams.subscribe((param) => {
-    //   const params: SearchCommonVO<any> = {
-    //     pageSize: this.transactionTableConfig.pageSize!,
-    //     pageNum: e?.pageIndex || this.transactionTableConfig.pageIndex!,
-    //     filters: {
-    //       bankAccountId: param['bankAccountId']
-    //     }
-    //   };
-    //   this.cbdcWalletService
-    //     .getTransactionList(params.pageNum, params.pageSize, params.filters)
-    //     .pipe(
-    //       finalize(() => {
-    //         this.tableLoading(false);
-    //       })
-    //     )
-    //     .subscribe((_: any) => {
-    //       this.transactionList = _.data?.rows;
-    //       this.transactionList.forEach((item) => {
-    //         Object.assign(item, {
-    //           chainAccountAddress: param['chainAccountAddress']
-    //         });
-    //       });
-    //       this.transactionTableConfig.total = _.data.page.total;
-    //       this.transactionTableConfig.pageIndex = params.pageNum;
-    //       this.tableLoading(false);
-    //       this.cdr.markForCheck();
-    //     });
-    // });
+  getDataList(e?: NzTableQueryParams, tabIndex?: number): void {
+    this.transactionsIndex = tabIndex;
+    this.tableConfig.loading = true;
+    this.routeInfo.queryParams.subscribe((param) => {
+      const params: SearchCommonVO<any> = {
+        pageSize: this.tableConfig.pageSize!,
+        pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+        filters: {
+          bankAccountId: param['bankAccountId']
+        }
+      };
+      if (tabIndex === 0) {
+        // Top-up / Withdraw
+        this.walletService
+          .getTopUpAndWithdrawInfo(
+            params.pageNum,
+            params.pageSize,
+            params.filters
+          )
+          .pipe(
+            finalize(() => {
+              this.tableLoading(false);
+            })
+          )
+          .subscribe((_: any) => {
+            this.dataList = _.data?.rows;
+            this.tableConfig.total = _.data.page.total;
+            this.tableConfig.pageIndex = params.pageNum;
+            this.tableLoading(false);
+            this.cdr.markForCheck();
+          });
+      } else {
+        // Transfer / FX-purchasing
+        this.walletService
+          .getTransferInfo(params.pageNum, params.pageSize, params.filters)
+          .pipe(
+            finalize(() => {
+              this.tableLoading(false);
+            })
+          )
+          .subscribe((_: any) => {
+            this.dataList = _.data?.rows;
+            this.tableConfig.total = _.data.page.total;
+            this.tableConfig.pageIndex = params.pageNum;
+            this.tableLoading(false);
+            this.cdr.markForCheck();
+          });
+      }
+    });
   }
 
   private initTable(value: number): void {
@@ -181,7 +224,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
               {
                 title: 'Type',
                 field: 'type',
-                pipe: 'walletInfoType',
+                pipe: 'walletTransferInfoType',
                 width: 100
               },
               {
@@ -213,32 +256,38 @@ export class InfoComponent implements OnInit, AfterViewInit {
               {
                 title: 'Transaction No.',
                 tdTemplate: this.transactionNoTpl,
+                notNeedEllipsis: true,
                 width: 100
               },
               {
-                title: 'From',
-                tdTemplate: this.fromTpl,
+                title: 'Wallet Address',
+                tdTemplate: this.walletAddressTpl,
+                notNeedEllipsis: true,
                 width: 100
               },
               {
-                title: 'To',
-                tdTemplate: this.toTpl,
+                title: 'Currency',
+                field: 'currency',
+                notNeedEllipsis: true,
                 width: 100
               },
               {
                 title: 'Type',
                 field: 'type',
-                pipe: 'walletInfoType',
+                pipe: 'walletTopUpWithdrawInfoType',
+                notNeedEllipsis: true,
                 width: 100
               },
               {
                 title: 'Amount',
                 tdTemplate: this.amountTpl,
+                notNeedEllipsis: true,
                 width: 100
               },
               {
                 title: 'Transaction Hash',
                 tdTemplate: this.transactionHashTpl,
+                notNeedEllipsis: true,
                 width: 100
               },
               {
@@ -251,6 +300,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
               {
                 title: 'Status',
                 tdTemplate: this.statusTpl,
+                notNeedEllipsis: true,
                 width: 100
               }
             ],

@@ -268,7 +268,7 @@ export const MapSet = {
     2: 'Withdraw',
     3: 'Transfer',
     4: 'Swap',
-    5: 'Exchange',
+    5: 'Exchange'
   },
   proofStatusColor: {
     2: 'volcano',
@@ -283,6 +283,47 @@ export const MapSet = {
     4: 'Processing',
     5: 'Success',
     6: 'Failed'
+  },
+  enterpriseWalletStatus: {
+    1: 'Pending Approval',
+    20: 'Processing',
+    35: 'Active',
+    15: 'Rejected',
+    40: 'Failed',
+    50: 'Inactive'
+  },
+  enterpriseWalletStatusColor: {
+    1: 'volcano',
+    20: 'blue',
+    35: 'green',
+    15: 'red',
+    40: 'red',
+    50: 'default'
+  },
+  walletTopUpWithdrawInfoType: {
+    3: 'Top-up',
+    4: 'Withdrawal'
+  },
+  walletTransferInfoType: {
+    1: 'Transfer',
+    2: 'FX Purchasing',
+    3: 'Transfer'
+  },
+  enterpriseApprovalSecondStatus: {
+    1: 'process',
+    15: 'error',
+    20: 'finish',
+    35: 'finish',
+    40: 'finish',
+    50: 'finish'
+  },
+  enterpriseApprovalThirdStatus: {
+    1: 'wait',
+    15: 'wait',
+    20: 'process',
+    35: 'finish',
+    40: 'error',
+    50: 'finish'
   }
 };
 
@@ -336,6 +377,17 @@ export class MapPipe implements PipeTransform {
         return (value = '--');
       } else {
         return value;
+      }
+    }
+    if (arg === 'showPartBefore') {
+      if (value) {
+        if (value?.length > 12) {
+          return value.substring(0, 12) + '....';
+        } else {
+          return value;
+        }
+      } else {
+        return '--';
       }
     }
     if (arg === 'showPartTen') {
