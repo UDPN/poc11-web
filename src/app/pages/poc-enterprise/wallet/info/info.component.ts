@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-21 17:07:35
+ * @LastEditTime: 2025-01-22 11:10:46
  * @Description:
  */
 import {
@@ -51,7 +51,9 @@ export class InfoComponent implements OnInit, AfterViewInit {
   transactionsTabs = ['Top-up / Withdraw', 'Transfer / FX Purchasing'];
   transactionsIndex: any = 0;
   tableConfig!: AntTableConfig;
+  transferTableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
+  transferDataList: NzSafeAny[] = [];
   type: string = '';
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -91,14 +93,12 @@ export class InfoComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.routeInfo.queryParams.subscribe((params) => {
-      if (params['type'] === 'approval') {
-        this.type = 'approval';
-      } else {
-        this.type = 'info';
-        this.getBasicDetail();
+      this.getBasicDetail();
+      this.type = params['type'];
+      if (this.type === 'info') {
+        this.transactionsIndexChange(0);
       }
     });
-    this.initTable(0);
   }
 
   getBasicDetail() {
@@ -112,36 +112,46 @@ export class InfoComponent implements OnInit, AfterViewInit {
         });
     });
   }
-
   tabIndexChange(value: any) {
     if (value === 0) {
       this.getBasicDetail();
     } else {
-      console.log(1111111);
-
       this.transactionsIndexChange(0);
     }
   }
   transactionsIndexChange(value: any) {
-    this.initTable(value);
-    this.getDataList(this.tableQueryParams, value);
+    this.transactionsIndex = value;
+    this.initTable();
+    if (value === 0) {
+      this.getTopUpWithdrawDataList(this.tableQueryParams);
+    } else {
+      this.getTransferDataList(this.tableQueryParams);
+    }
   }
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
-
+  changePageSize1(e: number): void {
+    this.transferTableConfig.pageSize = e;
+  }
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
-
+  transferTableChangeDectction(): void {
+    this.transferDataList = [...this.transferDataList];
+    this.cdr.detectChanges();
+  }
   tableLoading(isLoading: boolean): void {
     this.tableConfig.loading = isLoading;
     this.tableChangeDectction();
   }
-  getDataList(e?: NzTableQueryParams, tabIndex?: number): void {
-    this.transactionsIndex = tabIndex;
+  transferTableLoading(isLoading: boolean): void {
+    this.transferTableConfig.loading = isLoading;
+    this.transferTableChangeDectction();
+  }
+  getTopUpWithdrawDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
     this.routeInfo.queryParams.subscribe((param) => {
       const params: SearchCommonVO<any> = {
@@ -151,164 +161,173 @@ export class InfoComponent implements OnInit, AfterViewInit {
           bankAccountId: param['bankAccountId']
         }
       };
-      if (tabIndex === 0) {
-        // Top-up / Withdraw
-        this.walletService
-          .getTopUpAndWithdrawInfo(
-            params.pageNum,
-            params.pageSize,
-            params.filters
-          )
-          .pipe(
-            finalize(() => {
-              this.tableLoading(false);
-            })
-          )
-          .subscribe((_: any) => {
-            this.dataList = _.data?.rows;
-            this.tableConfig.total = _.data.page.total;
-            this.tableConfig.pageIndex = params.pageNum;
+      this.walletService
+        .getTopUpAndWithdrawInfo(
+          params.pageNum,
+          params.pageSize,
+          params.filters
+        )
+        .pipe(
+          finalize(() => {
             this.tableLoading(false);
-            this.cdr.markForCheck();
-          });
-      } else {
-        // Transfer / FX-purchasing
-        this.walletService
-          .getTransferInfo(params.pageNum, params.pageSize, params.filters)
-          .pipe(
-            finalize(() => {
-              this.tableLoading(false);
-            })
-          )
-          .subscribe((_: any) => {
-            this.dataList = _.data?.rows;
-            this.tableConfig.total = _.data.page.total;
-            this.tableConfig.pageIndex = params.pageNum;
-            this.tableLoading(false);
-            this.cdr.markForCheck();
-          });
-      }
+          })
+        )
+        .subscribe((_: any) => {
+          this.dataList = _.data?.rows;
+          this.tableConfig.total = _.data.page.total;
+          this.tableConfig.pageIndex = params.pageNum;
+          this.tableLoading(false);
+          this.cdr.markForCheck();
+        });
     });
   }
 
-  private initTable(value: number): void {
-    this.tableConfig =
-      value === 1
-        ? {
-            headers: [
-              {
-                title: 'Transaction No.',
-                tdTemplate: this.transactionNoTpl,
-                width: 100
-              },
-              {
-                title: 'From',
-                tdTemplate: this.fromTpl,
-                width: 100
-              },
-              {
-                title: 'Sending Amount',
-                tdTemplate: this.sendingAmountTpl,
-                width: 100
-              },
-              {
-                title: 'To',
-                tdTemplate: this.toTpl,
-                width: 100
-              },
-              {
-                title: 'Receiving Amount',
-                tdTemplate: this.receivingAmountTpl,
-                width: 100
-              },
-              {
-                title: 'Type',
-                field: 'type',
-                pipe: 'walletTransferInfoType',
-                width: 100
-              },
-              {
-                title: 'Transaction Hash',
-                tdTemplate: this.transactionHashTpl,
-                width: 100
-              },
-              {
-                title: 'Transaction Time',
-                field: 'txTime',
-                pipe: 'timeStamp',
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Status',
-                tdTemplate: this.statusTpl,
-                width: 100
-              }
-            ],
-            total: 0,
-            showCheckbox: false,
-            loading: false,
-            pageSize: 10,
-            pageIndex: 1
-          }
-        : {
-            headers: [
-              {
-                title: 'Transaction No.',
-                tdTemplate: this.transactionNoTpl,
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Wallet Address',
-                tdTemplate: this.walletAddressTpl,
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Currency',
-                field: 'currency',
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Type',
-                field: 'type',
-                pipe: 'walletTopUpWithdrawInfoType',
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Amount',
-                tdTemplate: this.amountTpl,
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Transaction Hash',
-                tdTemplate: this.transactionHashTpl,
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Transaction Time',
-                field: 'txTime',
-                pipe: 'timeStamp',
-                notNeedEllipsis: true,
-                width: 100
-              },
-              {
-                title: 'Status',
-                tdTemplate: this.statusTpl,
-                notNeedEllipsis: true,
-                width: 100
-              }
-            ],
-            total: 0,
-            showCheckbox: false,
-            loading: false,
-            pageSize: 10,
-            pageIndex: 1
-          };
+  getTransferDataList(e?: NzTableQueryParams): void {
+    this.transferTableConfig.loading = true;
+    this.routeInfo.queryParams.subscribe((param) => {
+      const params: SearchCommonVO<any> = {
+        pageSize: this.transferTableConfig.pageSize!,
+        pageNum: e?.pageIndex || this.transferTableConfig.pageIndex!,
+        filters: {
+          bankAccountId: param['bankAccountId']
+        }
+      };
+      this.walletService
+        .getTransferInfo(params.pageNum, params.pageSize, params.filters)
+        .pipe(
+          finalize(() => {
+            this.transferTableLoading(false);
+          })
+        )
+        .subscribe((_: any) => {
+          this.transferDataList = _.data?.rows;
+          console.log(this.transferDataList, 'transferDataList');
+
+          this.transferTableConfig.total = _.data.page.total;
+          this.transferTableConfig.pageIndex = params.pageNum;
+          this.transferTableLoading(false);
+          this.cdr.markForCheck();
+        });
+    });
+  }
+
+  private initTable(): void {
+    this.transferTableConfig = {
+      headers: [
+        {
+          title: 'Transaction No.',
+          tdTemplate: this.transactionNoTpl,
+          width: 100
+        },
+        {
+          title: 'From',
+          tdTemplate: this.fromTpl,
+          width: 110
+        },
+        {
+          title: 'Sending Amount',
+          tdTemplate: this.sendingAmountTpl,
+          width: 100
+        },
+        {
+          title: 'To',
+          tdTemplate: this.toTpl,
+          width: 110
+        },
+        {
+          title: 'Receiving Amount',
+          tdTemplate: this.receivingAmountTpl,
+          width: 100
+        },
+        {
+          title: 'Type',
+          field: 'type',
+          pipe: 'walletTransferInfoType',
+          width: 100
+        },
+        {
+          title: 'Transaction Hash',
+          tdTemplate: this.transactionHashTpl,
+          width: 100
+        },
+        {
+          title: 'Transaction Time',
+          field: 'txTime',
+          pipe: 'timeStamp',
+          notNeedEllipsis: true,
+          width: 150
+        },
+        {
+          title: 'Status',
+          tdTemplate: this.statusTpl,
+          width: 80
+        }
+      ],
+      total: 0,
+      showCheckbox: false,
+      loading: false,
+      pageSize: 10,
+      pageIndex: 1
+    };
+
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'Transaction No.',
+          tdTemplate: this.transactionNoTpl,
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Wallet Address',
+          tdTemplate: this.walletAddressTpl,
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Currency',
+          field: 'currency',
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Type',
+          field: 'type',
+          pipe: 'walletTopUpWithdrawInfoType',
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Amount',
+          tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Transaction Hash',
+          tdTemplate: this.transactionHashTpl,
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Transaction Time',
+          field: 'txTime',
+          pipe: 'timeStamp',
+          notNeedEllipsis: true,
+          width: 100
+        },
+        {
+          title: 'Status',
+          tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
+          width: 100
+        }
+      ],
+      total: 0,
+      showCheckbox: false,
+      loading: false,
+      pageSize: 10,
+      pageIndex: 1
+    };
   }
 }

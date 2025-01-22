@@ -204,6 +204,15 @@ export const MapSet = {
     5: 'Success',
     6: 'Failed'
   },
+  walletInfoTopUpStatusColor: {
+    1: 'volcano',
+    2: 'red',
+    3: 'blue',
+    4: 'blue',
+    7: 'blue',
+    5: 'green',
+    6: 'red'
+  },
   logTreeStatus: {
     1: 'process',
     2: 'finish',
@@ -285,7 +294,7 @@ export const MapSet = {
     6: 'Failed'
   },
   enterpriseWalletStatus: {
-    1: 'Pending Approval',
+    5: 'Pending Approval',
     20: 'Processing',
     35: 'Active',
     15: 'Rejected',
@@ -293,7 +302,7 @@ export const MapSet = {
     50: 'Inactive'
   },
   enterpriseWalletStatusColor: {
-    1: 'volcano',
+    5: 'volcano',
     20: 'blue',
     35: 'green',
     15: 'red',
@@ -310,7 +319,7 @@ export const MapSet = {
     3: 'Transfer'
   },
   enterpriseApprovalSecondStatus: {
-    1: 'process',
+    5: 'process',
     15: 'error',
     20: 'finish',
     35: 'finish',
@@ -318,7 +327,7 @@ export const MapSet = {
     50: 'finish'
   },
   enterpriseApprovalThirdStatus: {
-    1: 'wait',
+    5: 'wait',
     15: 'wait',
     20: 'process',
     35: 'finish',

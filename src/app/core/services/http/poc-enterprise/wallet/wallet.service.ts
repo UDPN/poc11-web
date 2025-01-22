@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-21 17:09:06
+ * @LastEditTime: 2025-01-22 15:52:22
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -44,13 +44,13 @@ export class WalletService {
         enterpriseCode: filters.enterpriseCode || '',
         status: filters.status || '',
         startCreateTime: filters.createTime[0]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
               this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
         endCreateTime: filters.createTime[1]
-          ? timeToTimestamp(
+          ? timeToTimestampMillisecond(
               this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )

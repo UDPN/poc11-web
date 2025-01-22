@@ -16,7 +16,13 @@
         "
       ></nz-step>
       <nz-step
-        [nzTitle]="'Approval'"
+        [nzTitle]="
+          info.status === 5
+            ? 'Approval'
+            : info.status === 15
+            ? 'Rejected'
+            : 'Approved'
+        "
         [nzStatus]="info.status | map: 'enterpriseApprovalSecondStatus'"
         [nzDescription]="approvalTpl"
       ></nz-step>
@@ -24,8 +30,7 @@
         [nzTitle]="'On-chain execution'"
         [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"
         [nzDescription]="
-          'The ' +
-          type +
+          'The wallet' +
           (info.status === 35 || info.status === 50
             ? ' creation is executed successfully on the chain'
             : ' is waiting to be executed on the chain')
@@ -37,7 +42,7 @@
 
 <ng-template #approvalTpl>
   <!-- other status -->
-  <ng-container *ngIf="info?.status !== 1">
+  <ng-container *ngIf="info?.status !== 5">
     <span>{{
       'on ' +
         (info?.reviewerTime | map: 'timeStamp') +
@@ -45,7 +50,7 @@
         info?.reviewerUserName
     }}</span>
     <div
-      *ngIf="info?.status === 15"
+      *ngIf="info?.status === 15 && info?.reviewerRemarks"
       style="background-color: rgba(254, 215, 215, 0.3)"
       class="m-t-10 p-8"
     >
@@ -53,10 +58,10 @@
     </div>
   </ng-container>
   <!-- Pending Approval -->
-  <ng-container *ngIf="info?.status === 1">
-    <span
-      >{{ 'The ' + type + ' creation request is awaiting confirmation' }}
-    </span>
+  <ng-container *ngIf="info?.status === 5">
+    <div>
+      {{ 'The wallet creation request is awaiting confirmation' }}
+    </div>
     <ng-container *ngIf="!rejectStatus">
       <nz-space class="m-t-10 m-b-10">
         <button
@@ -65,7 +70,7 @@
           [nzSize]="'large'"
           nzType="primary"
           nzDanger
-          (click)="getStatus(1)"
+          (click)="getStatus(2)"
         >
           Reject</button
         ><button
@@ -74,7 +79,7 @@
           [nzSize]="'large'"
           nzType="primary"
           [nzLoading]="isLoading"
-          (click)="getStatus(2, true)"
+          (click)="getStatus(3, true)"
         >
           Approve
         </button></nz-space
@@ -103,7 +108,7 @@
           *nzSpaceItem
           nz-button
           [nzSize]="'large'"
-          (click)="getStatus(2)"
+          (click)="getStatus(3)"
         >
           Cancel</button
         ><button

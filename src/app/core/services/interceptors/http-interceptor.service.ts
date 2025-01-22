@@ -60,10 +60,10 @@ export class HttpInterceptorService implements HttpInterceptor {
         return res;
       });
       let prefixUrl: string = '';
-      if (req.url.indexOf('enterprise') !== -1) {
-        prefixUrl = '/api/manage';
-      } else {
+      if (req.url.indexOf('wcbdccommercial') !== -1) {
         prefixUrl = '/wcbdccommercial';
+      } else {
+        prefixUrl = '/api/manage';
       }
       httpConfig = {
         headers: req.headers.set('token', token),
