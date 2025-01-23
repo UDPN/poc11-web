@@ -103,7 +103,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
       this.errorCode = this.modal.error({
         nzTitle:
-          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contract support.',
+          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contact support.',
         nzContent: ''
       });
     }
