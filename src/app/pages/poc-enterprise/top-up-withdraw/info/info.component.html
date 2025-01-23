@@ -42,9 +42,17 @@
                       ? '#39A16A'
                       : '#E53E3E'
                 }"
-                >{{ info.transactionType === 3 || info.type === 2 ? '+' : '-'
-                }}{{ info.amount | map: 'toThousandthMark'
-                }}{{ ' ' + info.currency }}</span
+                >{{
+                  info.transactionType === 3 || info.type === 2 ? ' + ' : ' - '
+                }}{{
+                  info.transactionType
+                    ? (info.amount | map: 'toThousandthMark') +
+                      ' ' +
+                      info.currency
+                    : (info.sendingAmount | map: 'toThousandthMark') +
+                      ' ' +
+                      info.sendingCurrency
+                }}</span
               ></nz-descriptions-item
             >
           </nz-descriptions>
@@ -202,6 +210,7 @@
                   info.sendingCurrency +
                   ' = ' +
                   info.fxRate +
+                  ' ' +
                   info.receivingCurrency
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Enterprise Code">{{
@@ -284,7 +293,7 @@
           <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" />
         </ng-container>
         <ng-container *ngIf="info.type">
-          <app-timeline [info]="info" [status]="info.state" [type]="info.type === 3 ? 'transfer' : 'FX purchasing'" />
+          <app-timeline [info]="info" [status]="info.state" [type]="info.type === 3 ? 'transfer' : 'fx purchasing'" />
         </ng-container>
       </nz-card>
     </div>
