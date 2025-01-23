@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 10:36:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-22 17:26:39
+ * @LastEditTime: 2025-01-23 10:57:51
  * @Description:
  */
 /*
@@ -48,7 +48,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
       breadcrumbs: [
         { name: 'Enterprise Management' },
         {
-          name: 'Top-up & Withdraw Management',
+          name: 'Transaction Approval',
           url: '/poc/poc-enterprise/transaction-approval'
         },
         { name: 'Details' }

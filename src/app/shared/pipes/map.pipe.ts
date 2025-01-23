@@ -333,6 +333,20 @@ export const MapSet = {
     35: 'finish',
     40: 'error',
     50: 'finish'
+  },
+  transferApprovalSecondStatus: {
+    1: 'process',
+    2: 'error',
+    3: 'finish',
+    5: 'finish',
+    6: 'finish'
+  },
+  transferApprovalThirdStatus: {
+    1: 'wait',
+    2: 'wait',
+    3: 'process',
+    5: 'finish',
+    6: 'error'
   }
 };
 

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-22 17:28:05
+ * @LastEditTime: 2025-01-23 10:24:09
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,12 @@ import { DatePipe } from '@angular/common';
 import { BaseHttpService } from '../../base-http.service';
 import { Observable, map } from 'rxjs';
 import { timeToTimestampMillisecond } from '@app/utils/tools';
+
+export interface Gdata {
+  accountCbdcId: string | number;
+  approvalStatus: number;
+  approvedComments: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -107,5 +113,9 @@ export class TopUpWithdrawService {
 
   public getTransferInfo(params: { transferId: any }): Observable<any> {
     return this.http.post(`/v1/tx/approval/transfer/detail`, params);
+  }
+
+  public getTopUpWithdrawApprove(params: Gdata): Observable<any> {
+    return this.http.post(`/v1/tx/approval/order/audit`, params);
   }
 }

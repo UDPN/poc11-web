@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-22 11:10:46
+ * @LastEditTime: 2025-01-23 09:45:05
  * @Description:
  */
 import {
@@ -248,7 +248,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction Hash',
           tdTemplate: this.transactionHashTpl,
-          width: 100
+          width: 110
         },
         {
           title: 'Transaction Time',

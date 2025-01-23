@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-22 17:14:14
+ * @LastEditTime: 2025-01-23 11:00:39
  * @Description:
  */
 import {
@@ -122,7 +122,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Enterprise Management', 'Top-up & Withdraw Management'],
+      breadcrumb: ['Enterprise Management', 'Transaction Approval'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -232,7 +232,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Appllication No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
-            width: 150
+            width: 130
           },
           {
             title: 'Enterprise Code',
@@ -244,7 +244,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Wallet Address',
             tdTemplate: this.walletAddressTpl,
             notNeedEllipsis: true,
-            width: 150
+            width: 130
           },
           {
             title: 'Currency',
@@ -284,7 +284,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             fixed: true,
             fixedDir: 'right',
             showAction: false,
-            width: 100
+            width: 150
           }
         ],
         total: 0,
@@ -300,7 +300,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Appllication No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 130
           },
           {
             title: 'Enterprise Code',
@@ -312,39 +312,39 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'From',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 130
           },
           {
             title: 'Sending Amount',
             tdTemplate: this.sendingAmountTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 140
           },
           {
             title: 'To',
             tdTemplate: this.toTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 130
           },
           {
             title: 'Receiving Amount',
             tdTemplate: this.receivingAmountTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 140
           },
           {
             title: 'Transaction Type',
             field: 'type',
             pipe: 'walletTransferInfoType',
             notNeedEllipsis: true,
-            width: 130
+            width: 140
           },
           {
             title: 'Applied On',
             field: 'startTxTime',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
-            width: 150
+            width: 130
           },
           {
             title: 'Status',
@@ -358,7 +358,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             fixed: true,
             fixedDir: 'right',
             showAction: false,
-            width: 100
+            width: 150
           }
         ],
         total: 0,

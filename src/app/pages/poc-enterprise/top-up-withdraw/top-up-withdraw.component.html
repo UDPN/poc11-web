@@ -122,8 +122,8 @@
                       [(ngModel)]="searchParam.transactionType"
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
-                      <nz-option nzValue="1" nzLabel="Top-up"></nz-option>
-                      <nz-option nzValue="5" nzLabel="withdrawal"></nz-option>
+                      <nz-option [nzValue]="3" nzLabel="Top-up"></nz-option>
+                      <nz-option [nzValue]="4" nzLabel="withdrawal"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -501,9 +501,26 @@
     {{ walletAddress | map: 'showPartTen' }}
   </p>
 </ng-template>
-<ng-template #amountTpl let-amount="amount" let-currency="currency">
-  <p [title]="(amount | map: 'toThousandthMark') + ' ' + currency">
-    {{ (amount | map: 'toThousandthMark') + ' ' + currency }}
+<ng-template
+  #amountTpl
+  let-transactionType="transactionType"
+  let-amount="amount"
+  let-currency="currency"
+>
+  <p
+    [title]="
+      (transactionType === 3 ? ' + ' : ' - ') +
+      (amount | map: 'toThousandthMark') +
+      ' ' +
+      currency
+    "
+  >
+    {{
+      (transactionType === 3 ? ' + ' : ' - ') +
+        (amount | map: 'toThousandthMark') +
+        ' ' +
+        currency
+    }}
   </p>
 </ng-template>
 <ng-template #statusTpl let-status="status">
