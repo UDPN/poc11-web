@@ -17,22 +17,18 @@
       ></nz-step>
       <nz-step
         [nzTitle]="
-          info.status === 1
-            ? 'Approval'
-            : info.status === 2
-            ? 'Rejected'
-            : 'Approved'
+          status === 1 ? 'Approval' : status === 2 ? 'Rejected' : 'Approved'
         "
-        [nzStatus]="info.status | map: 'transferApprovalSecondStatus'"
+        [nzStatus]="status | map: 'transferApprovalSecondStatus'"
         [nzDescription]="approvalTpl"
       ></nz-step>
       <nz-step
         [nzTitle]="'On-chain execution'"
-        [nzStatus]="info.status | map: 'transferApprovalThirdStatus'"
+        [nzStatus]="status | map: 'transferApprovalThirdStatus'"
         [nzDescription]="
           'The ' +
           type +
-          (info.status === 5
+          (status === 5
             ? ' creation is executed successfully on the chain'
             : ' is waiting to be executed on the chain')
         "
@@ -43,12 +39,12 @@
 
 <ng-template #approvalTpl>
   <!-- other status -->
-  <ng-container *ngIf="info?.status !== 1">
+  <ng-container *ngIf="status !== 1">
     <span>{{
       'on ' + (info?.approvedOn | map: 'timeStamp') + ' by ' + info?.approvedBy
     }}</span>
     <div
-      *ngIf="info?.status === 2 && info?.approvedComments"
+      *ngIf="status === 2 && info?.approvedComments"
       style="background-color: rgba(254, 215, 215, 0.3)"
       class="m-t-10 p-8"
     >
@@ -56,7 +52,7 @@
     </div>
   </ng-container>
   <!-- Pending Approval -->
-  <ng-container *ngIf="info?.status === 1">
+  <ng-container *ngIf="status === 1">
     <div>
       {{ 'The ' + type + ' creation request is awaiting confirmation' }}
     </div>

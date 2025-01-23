@@ -22,6 +22,7 @@ import { finalize } from 'rxjs';
 export class TimelineComponent implements OnInit {
   @Input() info: any;
   @Input() type: string = '';
+  @Input() status: any;
   rejectStatus: boolean = false;
   isLoading: boolean = false;
   validateForm!: FormGroup;

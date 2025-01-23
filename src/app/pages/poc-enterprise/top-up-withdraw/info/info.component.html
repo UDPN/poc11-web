@@ -281,10 +281,10 @@
     >
       <nz-card nzTitle="" class="m-r-8 m-t-5" style="border: none">
         <ng-container *ngIf="info.transactionType">
-          <app-timeline [info]="info" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" />
+          <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" />
         </ng-container>
         <ng-container *ngIf="info.type">
-          <app-timeline [info]="info" [type]="info.type === 3 ? 'transfer' : 'FX purchasing'" />
+          <app-timeline [info]="info" [status]="info.state" [type]="info.type === 3 ? 'transfer' : 'FX purchasing'" />
         </ng-container>
       </nz-card>
     </div>
