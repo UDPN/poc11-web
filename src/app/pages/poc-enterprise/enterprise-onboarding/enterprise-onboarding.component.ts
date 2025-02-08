@@ -118,39 +118,37 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-  updateStatus(state: number, enterpriseName: string) {
-    let statusValue = '';
-    // if (state === 30) {
-    //   statusValue = 'deactivate';
-    // } else {
-    //   statusValue = 'activate';
-    // }
-    const toolStatus =
-      statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+  updateStatus(currentStatus: number, enterpriseId: number, enterpriseName: string) {
+    const newStatus = currentStatus === 1 ? 2 : 1; // 如果当前是启用状态，则切换到禁用，反之亦然
+    const statusText = newStatus === 1 ? 'enable' : 'disable';
+    
     this.modal.confirm({
-      nzTitle: `Are you sure you want to ${statusValue} <b>${enterpriseName}</b> ?`,
+      nzTitle: `Are you sure you want to ${statusText} <b>${enterpriseName}</b>?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          // this.statementsService
-          //   .statusUpdate({ exportRuleId, state })
-          //   .subscribe({
-          //     next: (res) => {
-          //       resolve(true);
-          //       this.cdr.markForCheck();
-          //       if (res) {
-          //         this.message.success(`${toolStatus} successfully!`, {
-          //           nzDuration: 1000
-          //         });
-          //       }
-          //       this.getDataList();
-          //     },
-          //     error: (err) => {
-          //       reject(true);
-          //       this.cdr.markForCheck();
-          //     }
-          //   });
-        }).catch(() => console.log('Oops errors!'))
+          this.enterpriseOnboardingService
+            .updateEnterpriseState({
+              enterpriseId: enterpriseId,
+              status: newStatus
+            })
+            .subscribe({
+              next: (res) => {
+                if (res.code === 0) {
+                  this.message.success(`${statusText.charAt(0).toUpperCase() + statusText.slice(1)} successfully!`);
+                  this.getDataList(this.tableQueryParams);
+                  resolve(true);
+                } else {
+                  this.message.error(res.message || `Failed to ${statusText}`);
+                  reject(false);
+                }
+              },
+              error: (err) => {
+                this.message.error(err.message || `Failed to ${statusText}`);
+                reject(false);
+              }
+            });
+        })
     });
   }
 
@@ -223,7 +221,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Email',
-          field: 'email',
+          field: 'contactEmail',
           notNeedEllipsis: true,
           width: 120
         },
@@ -236,6 +234,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Status',
+          field: 'status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
           width: 120

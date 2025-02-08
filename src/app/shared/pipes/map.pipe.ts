@@ -122,6 +122,18 @@ export const MapSet = {
     5: 'Success',
     6: 'Failed'
   },
+  EnterpriseStatus: {
+    0: 'Opening',
+    1: 'Enable',
+    2: 'Deactivate',
+    3: 'Rejected'
+  },
+  EnterpriseStatusColor: {
+    0: 'blue',
+    1: 'green',
+    2: 'red',
+    3: 'red'
+  },
   walletTransactionsStatusColor: {
     1: 'volcano',
     2: 'red',

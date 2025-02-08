@@ -6,6 +6,7 @@
  * @Description:
  */
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 
 @Component({
@@ -14,6 +15,8 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
   styleUrl: './info.component.less'
 })
 export class InfoComponent implements OnInit, AfterViewInit {
+  enterpriseId: number = 0;
+  status: number = 0;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -21,6 +24,8 @@ export class InfoComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
+
+  constructor(private route: ActivatedRoute) {}
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -38,5 +43,15 @@ export class InfoComponent implements OnInit, AfterViewInit {
       footer: ''
     };
   }
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['enterpriseId']) {
+        this.enterpriseId = Number(params['enterpriseId']);
+      }
+      if (params['status']) {
+        this.status = Number(params['status']);
+      }
+    });
+  }
 }

@@ -15,7 +15,7 @@
     "changeOrigin": true
   },
   "/v1/enterprise": {
-    "target": "http://10.0.48.127:20001/api/manage",
+    "target": "http://10.0.48.127:20004",
     "secure": false,
     "changeOrigin": true
   },

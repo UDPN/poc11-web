@@ -137,8 +137,8 @@
         </nz-form-item>
         <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
           <nz-form-label nzRequired nzSpan="24"
-            >Minimum value for Transfer/FX Purchasing without approval
-            (Excluding self FX Purchasing)</nz-form-label
+            ><div>Maximum transfer/FX purchasing amount allowed without requiring
+            approval <span class="smFont">(excluding transactions within a single account)</span></div> </nz-form-label
           >
           <nz-form-control [nzErrorTip]="approvalError">
             <div nz-row>
@@ -195,7 +195,7 @@
       <span
         nz-col
         nzSpan="8"
-        *ngFor="let item of ['tEUR', 'tUSD', 'tSAR']"
+        *ngFor="let item of tokenList"
         class="m-b-30"
         nzJustify="space-between"
         nzAlign="bottom"
@@ -208,7 +208,7 @@
             width="20px"
             height="20px"
             class="m-r-8"
-          /><b nz-col style="font-size: 16px">{{ item }}</b>
+          /><b nz-col style="font-size: 16px">{{ item.digitalSymbol }}</b>
         </div>
       </span>
     </div>

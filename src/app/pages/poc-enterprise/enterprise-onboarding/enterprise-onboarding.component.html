@@ -87,11 +87,10 @@
                 [(ngModel)]="searchParam.status"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="1" nzLabel="Pending Approval"></nz-option>
-                <nz-option nzValue="2" nzLabel="Processing"></nz-option>
-                <nz-option nzValue="3" nzLabel="Active"></nz-option>
-                <nz-option nzValue="4" nzLabel="Rejected"></nz-option>
-                <nz-option nzValue="5" nzLabel="Inactive"></nz-option>
+                <nz-option nzValue="0" nzLabel="Opening"></nz-option>
+                <nz-option nzValue="1" nzLabel="Enable"></nz-option>
+                <nz-option nzValue="2" nzLabel="Deactivate"></nz-option>
+                <nz-option nzValue="3" nzLabel="Rejected"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -141,14 +140,15 @@
     <ng-template #numberTpl let-key="key">
       <span [title]="key">{{ key }}</span>
     </ng-template>
-    <ng-template #statusTpl let-state="state">
-      <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{
-        state | map: 'walletTransactionsRecordStatus'
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="status | map: 'EnterpriseStatusColor'">{{
+        status | map: 'EnterpriseStatus'
       }}</nz-tag>
     </ng-template>
     <ng-template
       #operationTpl
       let-status="status"
+      let-enterpriseId="enterpriseId"
       let-enterpriseName="enterpriseName"
     >
       <ng-container *appAuth="''">
@@ -163,24 +163,25 @@
       <ng-container *appAuth="''">
         <span
           class="operate-text"
-          (click)="updateStatus(status, enterpriseName)"
+          (click)="updateStatus(status, enterpriseId, enterpriseName)"
+          *ngIf="status === 1 || status === 2"
         >
-          {{ status ? 'Deactivate' : 'Activate' }}
+          {{ status  === 1 ? 'Deactivate' : 'Activate' }}
         </span>
       </ng-container>
       <ng-container *appAuth="''">
         <span
           class="operate-text"
           routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
-          [queryParams]="{}"
+          [queryParams]="{enterpriseId: enterpriseId, status: status}"
         >
           Details
         </span> </ng-container
       ><ng-container *appAuth="''">
         <span
           class="operate-text"
-          routerLink="/poc/poc-enterprise/enterprise-onboarding/edit"
-          [queryParams]="{}"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/add"
+          [queryParams]="{enterpriseId: enterpriseId, status: status}"
         >
           Edit
         </span>
