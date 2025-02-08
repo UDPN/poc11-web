@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-21 16:09:11
+ * @LastEditTime: 2025-01-22 14:49:39
  * @Description:
  */
 import {
@@ -13,6 +13,7 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { CommonService } from '@app/core/services/http/common/common.service';
 import { WalletService } from '@app/core/services/http/poc-enterprise/wallet/wallet.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -63,6 +64,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
     footer: ''
   };
   dataList: NzSafeAny[] = [];
+  currencyList: any[] = [];
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
     pageSize: 10,
@@ -75,7 +77,8 @@ export class WalletComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
     private message: NzMessageService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private commonService: CommonService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -88,6 +91,9 @@ export class WalletComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.initTable();
+    this.commonService.currencyList().subscribe((res: any) => {
+      this.currencyList = res;
+    });
   }
 
   tableChangeDectction(): void {
@@ -117,7 +123,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
 
   updateStatus(bankAccountId: any, walletState: number) {
     let statusValue = '';
-    if (walletState === 30) {
+    if (walletState === 1) {
       statusValue = 'deactivate';
     } else {
       statusValue = 'activate';

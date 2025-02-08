@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:03:37
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-21 17:36:53
+ * @LastEditTime: 2025-01-22 17:59:15
  * @Description:
  */
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
@@ -20,7 +20,6 @@ import { finalize } from 'rxjs';
 })
 export class TimelineComponent implements OnInit {
   @Input() info: any;
-  @Input() type: any;
   rejectStatus: boolean = false;
   isLoading: boolean = false;
   validateForm!: FormGroup;
@@ -28,17 +27,17 @@ export class TimelineComponent implements OnInit {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private walletService: WalletService,
-    private message: NzMessageService,
-    private router: Router
+    private message: NzMessageService
   ) {}
+
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       reason: [null, [Validators.required]]
     });
   }
   getStatus(value: number, approval?: boolean) {
-    // 1: reject  2:approve
-    if (value === 1) {
+    // 2: reject  3:approve
+    if (value === 2) {
       this.rejectStatus = true;
     } else {
       this.rejectStatus = false;
@@ -59,31 +58,27 @@ export class TimelineComponent implements OnInit {
     const params = {
       bankAccountId: this.info.bankAccountId,
       remarks: value === 'reject' ? this.validateForm.get('reason')?.value : '',
-      result: value === 'reject' ? 2 : 1
+      result: value === 'reject' ? 3 : 2
     };
     const messageValue = value === 'reject' ? 'Reject' : 'Approve';
-    if (this.type === 'type') {
-      this.walletService
-        .approve(params)
-        .pipe(finalize(() => this.isLoading === false))
-        .subscribe({
-          next: (res) => {
-            if (res) {
-              this.message.success(`${messageValue} successfully!`, {
-                nzDuration: 1000
-              });
-            }
-            this.isLoading === false;
-            this.router.navigate(['/poc/poc-enterprise/wallet/info'], {
-              queryParams: { bankAccountId: this.info.bankAccountId }
+    this.walletService
+      .approve(params)
+      .pipe(finalize(() => this.isLoading === false))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message.success(`${messageValue} successfully!`, {
+              nzDuration: 1000
             });
-            this.cdr.markForCheck();
-          },
-          error: (err) => {
-            this.isLoading === false;
-            this.cdr.markForCheck();
+            window.location.reload();
           }
-        });
-    }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
   }
 }

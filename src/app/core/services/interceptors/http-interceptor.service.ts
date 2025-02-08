@@ -60,10 +60,10 @@ export class HttpInterceptorService implements HttpInterceptor {
         return res;
       });
       let prefixUrl: string = '';
-      if (req.url.indexOf('enterprise') !== -1) {
-        prefixUrl = '/api/manage';
-      } else {
+      if (req.url.indexOf('wcbdccommercial') !== -1) {
         prefixUrl = '/wcbdccommercial';
+      } else {
+        prefixUrl = '/api/manage';
       }
       httpConfig = {
         headers: req.headers.set('token', token),
@@ -103,7 +103,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
       this.errorCode = this.modal.error({
         nzTitle:
-          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contract support.',
+          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contact support.',
         nzContent: ''
       });
     }
