@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 10:36:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-23 10:57:51
+ * @LastEditTime: 2025-02-10 13:16:58
  * @Description:
  */
 /*
@@ -68,12 +68,13 @@ export class InfoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getInfo(id: string, value: number) {
+  getInfo(id: number, value: number) {
     if (value === 1) {
       this.topUpWithdrawService
         .getInfo({ accountCbdcId: id })
         .subscribe((res: any) => {
           this.info = res;
+          this.info.id = id;
           this.cdr.markForCheck();
           return;
         });
@@ -82,6 +83,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
         .getTransferInfo({ transferId: id })
         .subscribe((res: any) => {
           this.info = res;
+          this.info.id = id;
           this.cdr.markForCheck();
           return;
         });

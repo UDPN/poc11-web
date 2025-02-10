@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:03:37
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-22 17:59:15
+ * @LastEditTime: 2025-02-10 13:22:53
  * @Description:
  */
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
@@ -58,7 +58,7 @@ export class TimelineComponent implements OnInit {
     const params = {
       bankAccountId: this.info.bankAccountId,
       remarks: value === 'reject' ? this.validateForm.get('reason')?.value : '',
-      result: value === 'reject' ? 3 : 2
+      result: value === 'reject' ? 2 : 3
     };
     const messageValue = value === 'reject' ? 'Reject' : 'Approve';
     this.walletService

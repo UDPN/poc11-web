@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-23 10:24:09
+ * @LastEditTime: 2025-02-10 15:21:03
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,12 @@ import { timeToTimestampMillisecond } from '@app/utils/tools';
 
 export interface Gdata {
   accountCbdcId: string | number;
+  approvalStatus: number;
+  approvedComments: string;
+}
+
+export interface Tdata {
+  transferId: string | number;
   approvalStatus: number;
   approvedComments: string;
 }
@@ -82,13 +88,13 @@ export class TopUpWithdrawService {
         state: filters.state || '',
         toAccountAddress: filters.toAccountAddress || '',
         type: filters.type || '',
-        startTxTime: filters.createTime[0]
+        appliedOnBegin: filters.createTime[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
-        endTxTime: filters.createTime[1]
+        appliedOnEnd: filters.createTime[1]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
@@ -117,5 +123,9 @@ export class TopUpWithdrawService {
 
   public getTopUpWithdrawApprove(params: Gdata): Observable<any> {
     return this.http.post(`/v1/tx/approval/order/audit`, params);
+  }
+
+  public getTransferApprove(params: Tdata): Observable<any> {
+    return this.http.post(`/v1/tx/approval/transfer/audit`, params);
   }
 }

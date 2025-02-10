@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:03:37
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-23 16:06:06
+ * @LastEditTime: 2025-02-10 13:19:29
  * @Description:
  */
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
@@ -58,10 +58,10 @@ export class TimelineComponent implements OnInit {
     if (this.type === 'top-up' || this.type === 'withdraw') {
       this.isLoading = true;
       const params = {
-        accountCbdcId: this.info.accountCbdcId,
+        accountCbdcId: Number(this.info.id),
         approvedComments:
           value === 'reject' ? this.validateForm.get('reason')?.value : '',
-        approvalStatus: value === 'reject' ? 3 : 2
+        approvalStatus: value === 'reject' ? 2 : 3
       };
       const messageValue = value === 'reject' ? 'Reject' : 'Approve';
       this.topUpWithdrawService
@@ -84,7 +84,33 @@ export class TimelineComponent implements OnInit {
           }
         });
     } else {
-      // transfer / fx purchasing approval
+      this.isLoading = true;
+      const params = {
+        transferId: Number(this.info.id),
+        approvedComments:
+          value === 'reject' ? this.validateForm.get('reason')?.value : '',
+        approvalStatus: value === 'reject' ? 2 : 3
+      };
+      const messageValue = value === 'reject' ? 'Reject' : 'Approve';
+      this.topUpWithdrawService
+        .getTransferApprove(params)
+        .pipe(finalize(() => this.isLoading === false))
+        .subscribe({
+          next: (res) => {
+            if (res) {
+              this.message.success(`${messageValue} successfully!`, {
+                nzDuration: 1000
+              });
+              window.location.reload();
+            }
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.cdr.markForCheck();
+          }
+        });
     }
   }
 }

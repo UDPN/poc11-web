@@ -12,7 +12,7 @@ export const environment = {
   production: false,
   localUrl: localUrl,
   clientName: 'admin',
-  password: 'Kissen123'
+  password: 'Abcd1234'
 };
 
 /*

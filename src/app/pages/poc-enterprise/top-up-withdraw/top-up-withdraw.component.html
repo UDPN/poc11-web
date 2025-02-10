@@ -9,6 +9,7 @@
           nzBordered="false"
           class="m-b-10"
         >
+          <!-- Top-up / Withdraw -->
           <form nz-form nzLayout="vertical" *ngIf="i === 0">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
               <div
@@ -167,13 +168,13 @@
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
                       <nz-option
-                        nzValue="1"
+                        nzValue="5"
                         nzLabel="Pending Approval"
                       ></nz-option>
-                      <nz-option nzValue="2" nzLabel="Processing"></nz-option>
-                      <nz-option nzValue="3" nzLabel="Failed"></nz-option>
-                      <nz-option nzValue="4" nzLabel="Rejected"></nz-option>
-                      <nz-option nzValue="5" nzLabel="Success"></nz-option>
+                      <nz-option nzValue="20" nzLabel="Processing"></nz-option>
+                      <nz-option nzValue="40" nzLabel="Failed"></nz-option>
+                      <nz-option nzValue="15" nzLabel="Rejected"></nz-option>
+                      <nz-option nzValue="35" nzLabel="Success"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -212,6 +213,8 @@
               </div>
             </div>
           </form>
+          <!-- Top-up / Withdraw -->
+          <!-- Transfer / FX Purchasing -->
           <form nz-form nzLayout="vertical" *ngIf="i === 1">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
               <div
@@ -374,8 +377,11 @@
                       [(ngModel)]="transferSearchParam.type"
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
-                      <nz-option nzValue="3" nzLabel="Top-up"></nz-option>
-                      <nz-option nzValue="4" nzLabel="withdrawal"></nz-option>
+                      <nz-option
+                        nzValue="2"
+                        nzLabel="FX Purchasing"
+                      ></nz-option>
+                      <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -419,13 +425,13 @@
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
                       <nz-option
-                        nzValue="1"
+                        nzValue="5"
                         nzLabel="Pending Approval"
                       ></nz-option>
-                      <nz-option nzValue="3" nzLabel="Processing"></nz-option>
-                      <nz-option nzValue="6" nzLabel="Failed"></nz-option>
-                      <nz-option nzValue="2" nzLabel="Rejected"></nz-option>
-                      <nz-option nzValue="5" nzLabel="Success"></nz-option>
+                      <nz-option nzValue="20" nzLabel="Processing"></nz-option>
+                      <nz-option nzValue="40" nzLabel="Failed"></nz-option>
+                      <nz-option nzValue="15" nzLabel="Rejected"></nz-option>
+                      <nz-option nzValue="35" nzLabel="Success"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -464,6 +470,7 @@
               </div>
             </div>
           </form>
+          <!-- Transfer / FX Purchasing -->
         </nz-card>
         <app-card-table-wrap
           [isNormalTable]="true"
@@ -486,7 +493,7 @@
     [nzCopyable]="applicationId ? true : false"
     [nzCopyText]="applicationId"
   >
-    {{ applicationId | map: 'showPartTen' }}
+    {{ applicationId | map: 'showPartBefore' }}
   </p>
 </ng-template>
 
@@ -498,7 +505,7 @@
     [nzCopyable]="walletAddress ? true : false"
     [nzCopyText]="walletAddress"
   >
-    {{ walletAddress | map: 'showPartTen' }}
+    {{ walletAddress | map: 'showPartBefore' }}
   </p>
 </ng-template>
 <ng-template
@@ -524,8 +531,8 @@
   </p>
 </ng-template>
 <ng-template #statusTpl let-status="status">
-  <nz-tag [nzColor]="status | map: 'walletInfoTopUpStatusColor'">{{
-    status | map: 'walletInfoTopUpStatus'
+  <nz-tag [nzColor]="status | map: 'enterpriseTransactionStatusColor'">{{
+    status | map: 'enterpriseTransactionStatus'
   }}</nz-tag>
 </ng-template>
 <ng-template
@@ -536,7 +543,7 @@
   <ng-container *appAuth="''">
     <span
       class="operate-text"
-      *ngIf="status === 1"
+      *ngIf="status === 5"
       routerLink="/poc/poc-enterprise/transaction-approval/info"
       [queryParams]="{accountCbdcId}"
     >
@@ -563,7 +570,7 @@
     [nzCopyable]="fromAccountAddress ? true : false"
     [nzCopyText]="fromAccountAddress"
   >
-    {{ fromAccountAddress | map: 'showPartTen' }}
+    {{ fromAccountAddress | map: 'showPartBefore' }}
   </p>
 </ng-template>
 <ng-template #toTpl let-toAccountAddress="toAccountAddress">
@@ -573,7 +580,7 @@
     [nzCopyable]="toAccountAddress ? true : false"
     [nzCopyText]="toAccountAddress"
   >
-    {{ toAccountAddress | map: 'showPartTen' }}
+    {{ toAccountAddress | map: 'showPartBefore' }}
   </p>
 </ng-template>
 <ng-template
@@ -601,8 +608,8 @@
   </p>
 </ng-template>
 <ng-template #transferStatusTpl let-state="state">
-  <nz-tag [nzColor]="state | map: 'walletInfoTopUpStatusColor'">{{
-    state | map: 'walletInfoTopUpStatus'
+  <nz-tag [nzColor]="state | map: 'enterpriseTransactionStatusColor'">{{
+    state | map: 'enterpriseTransactionStatus'
   }}</nz-tag>
 </ng-template>
 <ng-template
@@ -613,7 +620,7 @@
   <ng-container *appAuth="''">
     <span
       class="operate-text"
-      *ngIf="state === 1"
+      *ngIf="state === 5"
       routerLink="/poc/poc-enterprise/transaction-approval/info"
       [queryParams]="{transferId}"
     >
