@@ -85,7 +85,7 @@
                 info.enterpriseCode
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Wallet Address">
-                <p nz-typography nzCopyable [nzCopyText]="">
+                <p nz-typography nzCopyable [nzCopyText]="info.walletAddress">
                   {{ info.walletAddress }}
                 </p></nz-descriptions-item
               >
@@ -127,12 +127,12 @@
                 <nz-descriptions-item nzTitle="Enterprise Account">{{
                   info?.bankAccount
                 }}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Received Amount">{{
+                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Amount' : 'Received Amount'">{{
                   (info?.paymentAmount | map: 'toThousandthMark') +
                     ' ' +
                     info.currency
                 }}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Received Time">{{
+                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Time' : 'Received Time'">{{
                   info?.paymentAmount | map: 'timeStamp'
                 }}</nz-descriptions-item>
               </nz-descriptions>
@@ -167,7 +167,7 @@
                 info.enterpriseCode
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="From">
-                <p nz-typography nzCopyable [nzCopyText]="">
+                <p nz-typography nzCopyable [nzCopyText]="info.fromAccountAddress">
                   {{ info.fromAccountAddress }}
                 </p></nz-descriptions-item
               >
@@ -177,7 +177,7 @@
                   info.sendingCurrency
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="To">
-                <p nz-typography nzCopyable [nzCopyText]="">
+                <p nz-typography nzCopyable [nzCopyText]="info.toAccountAddress">
                   {{ info.toAccountAddress }}
                 </p></nz-descriptions-item
               >
@@ -221,13 +221,13 @@
               </nz-descriptions-item>
               <nz-descriptions-item
                 nzTitle="Base Currency Liquidity Wallet Address"
-                ><p nz-typography nzCopyable [nzCopyText]="">
+                ><p nz-typography nzCopyable [nzCopyText]="info.baseCurrencyLiquidityWalletAddress">
                   {{ info.baseCurrencyLiquidityWalletAddress }}
                 </p></nz-descriptions-item
               >
               <nz-descriptions-item
                 nzTitle="Quote Currency Liquidity Wallet Address"
-                ><p nz-typography nzCopyable [nzCopyText]="">
+                ><p nz-typography nzCopyable [nzCopyText]="info.quoteCurrencyLiquidityWalletAddress">
                   {{ info.quoteCurrencyLiquidityWalletAddress }}
                 </p></nz-descriptions-item
               >
@@ -267,10 +267,10 @@
             <nz-descriptions-item nzTitle="Status"
               ><nz-tag
                 [nzColor]="
-                  info.status || info.state | map: 'walletInfoTopUpStatusColor'
+                  info.status || info.state | map: 'enterpriseTransactionStatusColor'
                 "
                 >{{
-                  info.status || info.state | map: 'walletInfoTopUpStatus'
+                  info.status || info.state | map: 'enterpriseTransactionStatus'
                 }}</nz-tag
               ></nz-descriptions-item
             >
@@ -290,7 +290,7 @@
     >
       <nz-card nzTitle="" class="m-r-8 m-t-5" style="border: none">
         <ng-container *ngIf="info.transactionType">
-          <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" />
+          <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" id="" />
         </ng-container>
         <ng-container *ngIf="info.type">
           <app-timeline [info]="info" [status]="info.state" [type]="info.type === 3 ? 'transfer' : 'fx purchasing'" />

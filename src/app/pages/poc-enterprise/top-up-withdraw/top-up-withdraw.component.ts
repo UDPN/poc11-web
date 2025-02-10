@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-23 11:00:39
+ * @LastEditTime: 2025-02-10 13:47:28
  * @Description:
  */
 import {
@@ -13,7 +13,6 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -232,7 +231,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Appllication No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 140
           },
           {
             title: 'Enterprise Code',
@@ -244,7 +243,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Wallet Address',
             tdTemplate: this.walletAddressTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 140
           },
           {
             title: 'Currency',
@@ -270,13 +269,13 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
-            width: 150
+            width: 140
           },
           {
             title: 'Status',
             tdTemplate: this.statusTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 130
           },
           {
             title: 'Actions',
@@ -300,19 +299,19 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Appllication No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 120
           },
           {
             title: 'Enterprise Code',
             field: 'enterpriseCode',
             notNeedEllipsis: true,
-            width: 150
+            width: 130
           },
           {
             title: 'From',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 120
           },
           {
             title: 'Sending Amount',
@@ -324,7 +323,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'To',
             tdTemplate: this.toTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 120
           },
           {
             title: 'Receiving Amount',
@@ -341,7 +340,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
           },
           {
             title: 'Applied On',
-            field: 'startTxTime',
+            field: 'txTime',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
             width: 130
@@ -350,7 +349,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Status',
             tdTemplate: this.transferStatusTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 150
           },
           {
             title: 'Actions',

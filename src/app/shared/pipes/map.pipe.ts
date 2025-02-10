@@ -216,14 +216,19 @@ export const MapSet = {
     5: 'Success',
     6: 'Failed'
   },
-  walletInfoTopUpStatusColor: {
-    1: 'volcano',
-    2: 'red',
-    3: 'blue',
-    4: 'blue',
-    7: 'blue',
-    5: 'green',
-    6: 'red'
+  enterpriseTransactionStatus: {
+    5: 'Pending Approval',
+    15: 'Rejected',
+    20: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  enterpriseTransactionStatusColor: {
+    5: 'volcano',
+    15: 'red',
+    20: 'blue',
+    35: 'green',
+    40: 'red'
   },
   logTreeStatus: {
     1: 'process',
@@ -347,18 +352,18 @@ export const MapSet = {
     50: 'finish'
   },
   transferApprovalSecondStatus: {
-    1: 'process',
-    2: 'error',
-    3: 'finish',
-    5: 'finish',
-    6: 'finish'
+    5: 'process',
+    15: 'error',
+    20: 'finish',
+    35: 'finish',
+    40: 'finish'
   },
   transferApprovalThirdStatus: {
-    1: 'wait',
-    2: 'wait',
-    3: 'process',
-    5: 'finish',
-    6: 'error'
+    5: 'wait',
+    15: 'wait',
+    20: 'process',
+    35: 'finish',
+    40: 'error'
   }
 };
 

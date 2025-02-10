@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-23 09:45:05
+ * @LastEditTime: 2025-02-10 13:35:38
  * @Description:
  */
 import {
@@ -30,6 +30,8 @@ import { finalize } from 'rxjs';
 export class InfoComponent implements OnInit, AfterViewInit {
   @ViewChild('transactionNoTpl', { static: true })
   transactionNoTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transfertransactionNoTpl', { static: true })
+  transfertransactionNoTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('fromTpl', { static: true })
   fromTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('toTpl', { static: true })
@@ -216,7 +218,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Transaction No.',
-          tdTemplate: this.transactionNoTpl,
+          tdTemplate: this.transfertransactionNoTpl,
           width: 100
         },
         {

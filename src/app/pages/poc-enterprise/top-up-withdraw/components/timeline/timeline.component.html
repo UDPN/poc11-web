@@ -10,14 +10,14 @@
         [nzStatus]="'finish'"
         [nzDescription]="
           'on ' +
-          (info?.createTime | map: 'timeStamp') +
+          (info?.appliedOn | map: 'timeStamp') +
           ' by ' +
-          info?.createUser
+          info?.appliedBy
         "
       ></nz-step>
       <nz-step
         [nzTitle]="
-          status === 1 ? 'Approval' : status === 2 ? 'Rejected' : 'Approved'
+          status === 5 ? 'Approval' : status === 15 ? 'Rejected' : 'Approved'
         "
         [nzStatus]="status | map: 'transferApprovalSecondStatus'"
         [nzDescription]="approvalTpl"
@@ -28,7 +28,7 @@
         [nzDescription]="
           'The ' +
           type +
-          (status === 5
+          (status === 35
             ? ' creation is executed successfully on the chain'
             : ' is waiting to be executed on the chain')
         "
@@ -39,12 +39,12 @@
 
 <ng-template #approvalTpl>
   <!-- other status -->
-  <ng-container *ngIf="status !== 1">
+  <ng-container *ngIf="status !== 5">
     <span>{{
       'on ' + (info?.approvedOn | map: 'timeStamp') + ' by ' + info?.approvedBy
     }}</span>
     <div
-      *ngIf="status === 2 && info?.approvedComments"
+      *ngIf="status === 15 && info?.approvedComments"
       style="background-color: rgba(254, 215, 215, 0.3)"
       class="m-t-10 p-8"
     >
@@ -52,7 +52,7 @@
     </div>
   </ng-container>
   <!-- Pending Approval -->
-  <ng-container *ngIf="status === 1">
+  <ng-container *ngIf="status === 5">
     <div>
       {{ 'The ' + type + ' creation request is awaiting confirmation' }}
     </div>
@@ -120,11 +120,3 @@
     </ng-container>
   </ng-container>
 </ng-template>
-<!-- <div>
-  <i
-    nz-icon
-    nzType="check-circle"
-    nzTheme="twotone"
-    style="font-size: 24px"
-  ></i>
-</div> -->

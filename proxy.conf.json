@@ -1,16 +1,26 @@
 {
+  "/v1/enterprise": {
+    "target": "http://10.0.48.127:20001/api/manage",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/v1/tx": {
+    "target": "http://10.0.48.127:20001/api/manage",
+    "secure": false,
+    "changeOrigin": true
+  },
   "/v1/remittanceManagement": {
-    "target": "http://10.0.48.109:60001/wcbdccommercial",
+    "target": "http://10.0.48.109:20001/wcbdccommercial",
     "secure": false,
     "changeOrigin": true
   },
   "/v1/fxsp": {
-    "target": "http://10.0.48.109:60001/lpcp/",
+    "target": "http://10.0.48.109:20001/lpcp",
     "secure": false,
     "changeOrigin": true
   },
   "/fxsp": {
-    "target": "http://10.0.48.109:60001/lpcp/",
+    "target": "http://10.0.48.109:20001/lpcp",
     "secure": false,
     "changeOrigin": true
   },
@@ -20,7 +30,7 @@
     "changeOrigin": true
   },
   "/v1": {
-    "target": "http://10.0.48.109:60001/wcbdccommercial",
+    "target": "http://10.0.48.109:20001/wcbdccommercial",
     "secure": false,
     "changeOrigin": true
   }
