@@ -20,6 +20,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
+import { EnterpriseOnboardingService } from '@app/core/services/http/poc-enterprise/enterprise-onboarding/enterprise-onboarding.service';
 
 interface SearchParam {
   enterpriseName: any;
@@ -73,7 +75,8 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private enterpriseOnboardingService: EnterpriseOnboardingService
   ) {}
 
   ngAfterViewInit(): void {
@@ -115,66 +118,78 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-  updateStatus(state: number, enterpriseName: string) {
-    let statusValue = '';
-    // if (state === 30) {
-    //   statusValue = 'deactivate';
-    // } else {
-    //   statusValue = 'activate';
-    // }
-    const toolStatus =
-      statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
+  updateStatus(currentStatus: number, enterpriseId: number, enterpriseName: string) {
+    const newStatus = currentStatus === 1 ? 2 : 1; // 如果当前是启用状态，则切换到禁用，反之亦然
+    const statusText = newStatus === 1 ? 'enable' : 'disable';
+    
     this.modal.confirm({
-      nzTitle: `Are you sure you want to ${statusValue} <b>${enterpriseName}</b> ?`,
+      nzTitle: `Are you sure you want to ${statusText} <b>${enterpriseName}</b>?`,
       nzContent: '',
       nzOnOk: () =>
         new Promise((resolve, reject) => {
-          // this.statementsService
-          //   .statusUpdate({ exportRuleId, state })
-          //   .subscribe({
-          //     next: (res) => {
-          //       resolve(true);
-          //       this.cdr.markForCheck();
-          //       if (res) {
-          //         this.message.success(`${toolStatus} successfully!`, {
-          //           nzDuration: 1000
-          //         });
-          //       }
-          //       this.getDataList();
-          //     },
-          //     error: (err) => {
-          //       reject(true);
-          //       this.cdr.markForCheck();
-          //     }
-          //   });
-        }).catch(() => console.log('Oops errors!'))
+          this.enterpriseOnboardingService
+            .updateEnterpriseState({
+              enterpriseId: enterpriseId,
+              status: newStatus
+            })
+            .subscribe({
+              next: (res) => {
+                if (res.code === 0) {
+                  this.message.success(`${statusText.charAt(0).toUpperCase() + statusText.slice(1)} successfully!`);
+                  this.getDataList(this.tableQueryParams);
+                  resolve(true);
+                } else {
+                  this.message.error(res.message || `Failed to ${statusText}`);
+                  reject(false);
+                }
+              },
+              error: (err) => {
+                this.message.error(err.message || `Failed to ${statusText}`);
+                reject(false);
+              }
+            });
+        })
     });
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    // this.tableConfig.loading = true;
-    // const params: SearchCommonVO<any> = {
-    //   pageSize: this.tableConfig.pageSize!,
-    //   pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-    //   filters: this.searchParam
-    // };
-    // this.transactionRecordService
-    //   .getList(params.pageNum, params.pageSize, params.filters)
-    //   .pipe(
-    //     finalize(() => {
-    //       this.tableLoading(false);
-    //     })
-    //   )
-    //   .subscribe((_: any) => {
-    //     this.dataList = _.data?.rows;
-    //     this.dataList.forEach((item: any, i: any) => {
-    //       Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
-    //     });
-    //     this.tableConfig.total = _.data.page.total;
-    //     this.tableConfig.pageIndex = params.pageNum;
-    //     this.tableLoading(false);
-    //     this.cdr.markForCheck();
-    //   });
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: {
+        enterpriseCode: this.searchParam.enterpriseCode,
+        enterpriseName: this.searchParam.enterpriseName,
+        contactName: this.searchParam.contactName,
+        contactEmail: this.searchParam.email,
+        status: this.searchParam.status,
+        createdOn: this.searchParam.creationTime
+      }
+    };
+
+    this.enterpriseOnboardingService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.dataList = res.data?.rows || [];
+          this.dataList.forEach((item: any, i: number) => {
+            Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+          });
+          this.tableConfig.total = res.data?.page?.total || 0;
+          this.tableConfig.pageIndex = params.pageNum;
+          this.tableLoading(false);
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.message.error('Failed to fetch enterprise list');
+          this.tableLoading(false);
+        }
+      });
   }
 
   private initTable(): void {
@@ -206,7 +221,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Email',
-          field: 'email',
+          field: 'contactEmail',
           notNeedEllipsis: true,
           width: 120
         },
@@ -219,6 +234,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Status',
+          field: 'status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
           width: 120

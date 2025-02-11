@@ -1,0 +1,14 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-enterprise/enterprise-onboarding'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <app-basic-info [enterpriseId]="enterpriseId" [status]="status"></app-basic-info>
+  </nz-card>
+</div>

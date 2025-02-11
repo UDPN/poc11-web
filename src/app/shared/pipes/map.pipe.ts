@@ -122,6 +122,18 @@ export const MapSet = {
     5: 'Success',
     6: 'Failed'
   },
+  EnterpriseStatus: {
+    0: 'Opening',
+    1: 'Enable',
+    2: 'Deactivate',
+    3: 'Rejected'
+  },
+  EnterpriseStatusColor: {
+    0: 'blue',
+    1: 'green',
+    2: 'red',
+    3: 'red'
+  },
   walletTransactionsStatusColor: {
     1: 'volcano',
     2: 'red',
@@ -330,6 +342,19 @@ export const MapSet = {
     35: 'finish',
     40: 'finish',
     50: 'finish'
+  },
+  
+  enterpriseOnboardApprovalSecondStatus: {
+    0: 'process',
+    1: 'finish',
+    2: 'finish',
+    3: 'error'
+  },
+  enterpriseOnboardApprovalThirdStatus: {
+    0: 'wait',
+    1: 'finish',
+    2: 'finish',
+    3: 'wait'
   },
   enterpriseApprovalThirdStatus: {
     5: 'wait',

@@ -1,0 +1,149 @@
+<nz-card>
+  <div nz-row>
+    <div nz-col [nzSpan]="24">
+      <!-- <nz-descriptions nzTitle="Operation Type" [nzBordered]="false">
+          <nz-descriptions-item>Onboard</nz-descriptions-item>
+        </nz-descriptions> -->
+
+      <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="12">
+          <nz-card
+            class="m-b-15"
+            [nzTitle]="'Enterprise Basic Information'"
+            [nzBordered]="false"
+          >
+            <nz-descriptions
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+              [nzBordered]="false"
+            >
+              <nz-descriptions-item nzTitle="Enterprise Code">
+                {{ enterpriseDetail.enterpriseCode }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Enterprise Name">
+                {{ enterpriseDetail.enterpriseName }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Contact Name">
+                {{ enterpriseDetail.contactName }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Email">
+                {{ enterpriseDetail.contactEmail }}
+              </nz-descriptions-item>
+
+              <nz-descriptions-item
+                nzTitle="Maximum transfer/FX purchasing amount allowed without requiring approval (excluding transactions within a single account)"
+              >
+                {{ enterpriseDetail.txApprovalThreshold }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Description">
+                {{ enterpriseDetail.remarks }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Created On">
+                {{ enterpriseDetail.createTime | map: 'timeStamp' }}
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+
+          <nz-card
+            class="m-b-15"
+            [nzTitle]="'Enterprise Account Information'"
+            [nzBordered]="false"
+          >
+            <nz-descriptions
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+              [nzBordered]="false"
+            >
+              <nz-descriptions-item nzTitle="Enterprise Bank">
+                {{ enterpriseDetail.enterpriseFlatBank }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Enterprise Account">
+                {{ enterpriseDetail.enterpriseFlatAccount }}
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+
+          <nz-card [nzTitle]="'Token Permission'" [nzBordered]="false">
+            <nz-descriptions
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+              [nzBordered]="false"
+            >
+              <nz-descriptions-item
+                *ngFor="let token of enterpriseDetail.tokenList"
+              >
+                <div nz-row nzAlign="middle">
+                  <img
+                    nz-col
+                    src="../../../../../assets/imgs/check.svg"
+                    alt=""
+                    width="20px"
+                    height="20px"
+                    class="m-r-8"
+                  />
+                  <span nz-col>{{ token.tokenName }}</span>
+                </div>
+              </nz-descriptions-item>
+            </nz-descriptions>
+            <nz-descriptions
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+            >
+              <nz-descriptions-item nzTitle="Status">
+                <nz-tag [nzColor]="status | map: 'EnterpriseStatusColor'">{{
+                  status | map: 'EnterpriseStatus'
+                }}</nz-tag>
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+        </nz-col>
+
+        <nz-col [nzSpan]="12">
+   
+          <nz-card
+            class="m-b-15"
+            [nzTitle]="'Access Information'"
+            [nzBordered]="false"
+          >
+            <nz-descriptions 
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order">
+              <nz-descriptions-item nzTitle="OpenAPI Access">
+                Please download the access key pair for OpenAPI
+                authentication.
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Access Address">
+                {{enterpriseDetail.accessAddress}}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Access Key">
+                {{enterpriseDetail.accessKey}}
+              </nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+
+          <nz-card [nzTitle]="'Transaction Status'" [nzBordered]="false">
+            <app-timeline [info]="enterpriseDetail"></app-timeline>
+          </nz-card>
+        </nz-col>
+      </nz-row>
+    </div>
+  </div>
+</nz-card>
+
+<style>
+  .small-text {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-bottom: 4px;
+  }
+</style>

@@ -10,11 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrl: './info.component.less'
+  selector: 'app-approval',
+  templateUrl: './approval.component.html',
+  styleUrl: './approval.component.less'
 })
-export class InfoComponent implements OnInit, AfterViewInit {
+export class ApprovalComponent implements OnInit, AfterViewInit {
   enterpriseId: number = 0;
   status: number = 0;
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -36,7 +36,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
           name: 'Enterprise Onboarding',
           url: '/poc/poc-enterprise/enterprise-onboarding'
         },
-        { name: 'Details' }
+        { name: 'Approval' }
       ],
       extra: '',
       desc: '',

@@ -11,6 +11,7 @@ import { EnterpriseOnboardingComponent } from './enterprise-onboarding.component
 import { ActionCode } from '@app/config/actionCode';
 import { InfoComponent } from './info/info.component';
 import { AddComponent } from './add/add.component';
+import { ApprovalComponent } from './approval/approval.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,16 @@ const routes: Routes = [
     data: {
       title: 'enterpriseOnboardingInfo',
       key: 'enterprise-onboarding-info',
+      authCode: ActionCode.TabsDetail,
+      shouldDetach: 'no'
+    }
+  },
+  {
+    path: 'apprval',
+    component: ApprovalComponent,
+    data: {
+      title: 'enterpriseOnboardingApproval',
+      key: 'enterprise-onboarding-Approval',
       authCode: ActionCode.TabsDetail,
       shouldDetach: 'no'
     }
