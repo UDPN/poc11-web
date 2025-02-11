@@ -25,6 +25,7 @@ interface EnterpriseDetail {
   txHash: string;
   txTime: number;
   walletApproval: number;
+  enterpriseId:number
 }
 
 @Component({
@@ -63,7 +64,8 @@ export class BasicInfoComponent implements OnInit {
     txApprovalThreshold: 0,
     txHash: '',
     txTime: 0,
-    walletApproval: 0
+    walletApproval: 0,
+    enterpriseId:0
   };
 
   constructor(
@@ -103,6 +105,7 @@ export class BasicInfoComponent implements OnInit {
           this.loading = false;
           if (res.code === 0) {
             this.enterpriseDetail = res.data;
+            this.enterpriseDetail.enterpriseId = this.enterpriseId;
           } else {
             this.message.error(res.message || 'Failed to get enterprise detail');
           }

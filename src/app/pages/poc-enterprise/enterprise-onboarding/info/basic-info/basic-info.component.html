@@ -31,16 +31,11 @@
               <nz-descriptions-item nzTitle="Email">
                 {{ enterpriseDetail.contactEmail }}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Generate Wallet">
-                {{ 11111 }}
-              </nz-descriptions-item>
+
               <nz-descriptions-item
-                nzTitle="Maximum transfer/FX purchasing amount allowed without requiring approval"
+                nzTitle="Maximum transfer/FX purchasing amount allowed without requiring approval (excluding transactions within a single account)"
               >
-                <div class="small-text">
-                  (excluding transactions within a single account)
-                </div>
-                {{ 2222 }}
+                {{ enterpriseDetail.txApprovalThreshold }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Description">
                 {{ enterpriseDetail.remarks }}
@@ -103,65 +98,41 @@
               class="card-descriptions-order"
             >
               <nz-descriptions-item nzTitle="Status">
-                <nz-tag nzColor="success">Active</nz-tag>
+                <nz-tag [nzColor]="status | map: 'EnterpriseStatusColor'">{{
+                  status | map: 'EnterpriseStatus'
+                }}</nz-tag>
               </nz-descriptions-item>
             </nz-descriptions>
           </nz-card>
         </nz-col>
 
         <nz-col [nzSpan]="12">
-          <nz-card
-            class="m-b-15"
-            [nzTitle]="'Transaction Information'"
-            [nzBordered]="false"
-          >
-            <nz-descriptions [nzColumn]="1" [nzBordered]="true">
-              <nz-descriptions-item nzTitle="Transaction Hash">
-                --
-              </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Transaction Time">
-                --
-              </nz-descriptions-item>
-            </nz-descriptions>
-          </nz-card>
-
+   
           <nz-card
             class="m-b-15"
             [nzTitle]="'Access Information'"
             [nzBordered]="false"
           >
-            <nz-descriptions [nzColumn]="1" [nzBordered]="true">
+            <nz-descriptions 
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order">
               <nz-descriptions-item nzTitle="OpenAPI Access">
-                Please <a>download</a> the access key pair for OpenAPI
+                Please download the access key pair for OpenAPI
                 authentication.
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Access Address">
-                https://xxx.xxxxx.io
+                {{enterpriseDetail.accessAddress}}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Access Key">
-                ko8l7ju6h7g54f3k8oi7ju6h5ygrtf
+                {{enterpriseDetail.accessKey}}
               </nz-descriptions-item>
             </nz-descriptions>
           </nz-card>
 
           <nz-card [nzTitle]="'Transaction Status'" [nzBordered]="false">
-            <nz-timeline>
-              <nz-timeline-item nzColor="green">
-                <h4>Created</h4>
-                <p>on Apr 14, 2024, 12:14:41 UTC+08:00 by admin</p>
-              </nz-timeline-item>
-              <nz-timeline-item nzColor="green">
-                <h4>Approved</h4>
-                <p>on Apr 14, 2024, 12:14:44 UTC+08:00 by user 01</p>
-              </nz-timeline-item>
-              <nz-timeline-item nzColor="green">
-                <h4>On-chain execution</h4>
-                <p>
-                  The enterprise onboarding is executed successfully on the
-                  chain
-                </p>
-              </nz-timeline-item>
-            </nz-timeline>
+            <app-timeline [info]="enterpriseDetail"></app-timeline>
           </nz-card>
         </nz-col>
       </nz-row>

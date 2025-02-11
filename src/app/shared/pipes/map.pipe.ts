@@ -343,6 +343,19 @@ export const MapSet = {
     40: 'finish',
     50: 'finish'
   },
+  
+  enterpriseOnboardApprovalSecondStatus: {
+    0: 'process',
+    1: 'finish',
+    2: 'finish',
+    3: 'error'
+  },
+  enterpriseOnboardApprovalThirdStatus: {
+    0: 'wait',
+    1: 'finish',
+    2: 'finish',
+    3: 'wait'
+  },
   enterpriseApprovalThirdStatus: {
     5: 'wait',
     15: 'wait',

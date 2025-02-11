@@ -191,4 +191,7 @@ export class EnterpriseOnboardingService {
   public getOperationRecords(params: OperationRecordsParams): Observable<any> {
     return this.https.post('/v1/enterprise/detail/operationRecords', params);
   }
+  public setAudit(params: any): Observable<any> {
+    return this.https.post('/v1/enterprise/audit', params);
+  }
 }

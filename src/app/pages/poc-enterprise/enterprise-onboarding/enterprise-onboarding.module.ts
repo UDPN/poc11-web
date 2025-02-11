@@ -7,15 +7,19 @@ import { InfoComponent } from './info/info.component';
 import { BasicInfoComponent } from './info/basic-info/basic-info.component';
 import { OperationRecordsComponent } from './info/operation-records/operation-records.component';
 import { WalletsComponent } from './info/wallets/wallets.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
+import { ApprovalComponent } from './approval/approval.component';
 
 @NgModule({
   declarations: [
     EnterpriseOnboardingComponent,
     AddComponent,
+    ApprovalComponent,
     InfoComponent,
     BasicInfoComponent,
     OperationRecordsComponent,
-    WalletsComponent
+    WalletsComponent,
+    TimelineComponent
   ],
   imports: [SharedModule, EnterpriseOnboardingRoutingModule]
 })

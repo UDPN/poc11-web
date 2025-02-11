@@ -154,8 +154,9 @@
       <ng-container *appAuth="''">
         <span
           class="operate-text"
-          routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
-          [queryParams]="{}"
+          *ngIf="status === 0"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/apprval"
+          [queryParams]="{enterpriseId: enterpriseId, status: status}"
         >
           Approval
         </span>
@@ -180,8 +181,10 @@
       ><ng-container *appAuth="''">
         <span
           class="operate-text"
+          *ngIf="status === 1 || status === 2 || status === 3"
           routerLink="/poc/poc-enterprise/enterprise-onboarding/add"
           [queryParams]="{enterpriseId: enterpriseId, status: status}"
+      
         >
           Edit
         </span>

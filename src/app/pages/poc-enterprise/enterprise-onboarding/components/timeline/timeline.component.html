@@ -1,0 +1,136 @@
+<nz-card
+  class="none-bottom m-t-25"
+  nzBordered="false"
+  nzTitle="Transaction Status"
+>
+  <div class="time-line">
+    <nz-steps nzDirection="vertical" nzSize="small">
+      <nz-step
+        [nzTitle]="'Created'"
+        [nzStatus]="'finish'"
+        [nzDescription]="
+          'on ' +
+          (info?.createTime | map: 'timeStamp') +
+          ' by ' +
+          info?.createUser
+        "
+      ></nz-step>
+      <nz-step
+        [nzTitle]="
+          info.status === 0
+            ? 'Approval'
+            : info.status === 3
+            ? 'Rejected'
+            : 'Approved'
+        "
+        [nzStatus]="info.status | map: 'enterpriseOnboardApprovalSecondStatus'"
+        [nzDescription]="approvalTpl"
+      ></nz-step>
+      <nz-step
+        [nzTitle]="'On-chain execution'"
+        [nzStatus]="info.status | map: 'enterpriseOnboardApprovalThirdStatus'"
+        [nzDescription]="
+          'The enterprise onboarding' +
+          (info.status === 1 || info.status === 2
+            ? ' creation is executed successfully on the chain'
+            : ' is waiting to be executed on the chain')
+        "
+      ></nz-step>
+    </nz-steps>
+  </div>
+</nz-card>
+
+<ng-template #approvalTpl>
+  <!-- other status -->
+  <ng-container *ngIf="info?.status !== 0">
+    <span>{{
+      'on ' +
+        (info?.approvalTime | map: 'timeStamp') +
+        ' by ' +
+        info?.approvalUser
+    }}</span>
+    <div
+      *ngIf="info?.status === 3 && info?.remarks"
+      style="background-color: rgba(254, 215, 215, 0.3)"
+      class="m-t-10 p-8"
+    >
+      {{ info?.remarks }}
+    </div>
+  </ng-container>
+  <!-- Pending Approval -->
+  <ng-container *ngIf="info?.status === 0">
+    <div>
+      {{ 'The enterprise onboarding creation request is awaiting confirmation' }}
+    </div>
+    <ng-container *ngIf="!rejectStatus">
+      <nz-space class="m-t-10 m-b-10">
+        <button
+          *nzSpaceItem
+          nz-button
+          [nzSize]="'large'"
+          nzType="primary"
+          nzDanger
+          (click)="getStatus(2)"
+        >
+          Reject</button
+        ><button
+          *nzSpaceItem
+          nz-button
+          [nzSize]="'large'"
+          nzType="primary"
+          [nzLoading]="isLoading"
+          (click)="getStatus(3, true)"
+        >
+          Approve
+        </button></nz-space
+      >
+    </ng-container>
+    <ng-container *ngIf="rejectStatus">
+      <form nz-form [formGroup]="validateForm" class="m-t-25 m-b-30">
+        <nz-form-item nz-col nzSpan="20">
+          <nz-form-label nzRequired nzSpan="24">Reason</nz-form-label>
+          <nz-form-control [nzErrorTip]="reasonError">
+            <div nz-row>
+              <div nz-col nzSpan="24">
+                <textarea rows="5" nz-input formControlName="reason"></textarea>
+              </div>
+            </div>
+            <ng-template #reasonError let-control>
+              <ng-container *ngIf="control.hasError('required')"
+                >Please input your Reason</ng-container
+              >
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+      <nz-space>
+        <button
+          *nzSpaceItem
+          nz-button
+          [nzSize]="'large'"
+          (click)="getStatus(3)"
+        >
+          Cancel</button
+        ><button
+          *nzSpaceItem
+          nz-button
+          [nzSize]="'large'"
+          nzType="primary"
+          nzDanger
+          [nzLoading]="isLoading"
+          (click)="getApproval('reject')"
+        >
+          Reject
+        </button></nz-space
+      >
+    </ng-container>
+  </ng-container>
+</ng-template>
+<!-- <div>
+  <i
+    nz-icon
+    nzType="check-circle"
+    nzTheme="twotone"
+    style="font-size: 24px"
+  ></i>
+</div> -->
