@@ -38,21 +38,26 @@
               ><span
                 [style]="{
                   color:
-                    info.transactionType === 3 || info.type === 2
+                    info.transactionType === 3 || info.transferType === 2
                       ? '#39A16A'
                       : '#E53E3E'
                 }"
                 >{{
-                  info.transactionType === 3 || info.type === 2 ? ' + ' : ' - '
-                }}{{
-                  info.transactionType
-                    ? (info.amount | map: 'toThousandthMark') +
+                  info.transactionType === 3 || info.transferType === 2
+                    ? ' + '
+                    : ' - '
+                }}<span *ngIf="info.transactionType">{{
+                  (info.amount | map: 'toThousandthMark') + ' ' + info.currency
+                }}</span
+                ><span *ngIf="!info.transactionType">{{
+                  info.transferType === 2
+                    ? (info.receivingAmount | map: 'toThousandthMark') +
                       ' ' +
-                      info.currency
+                      info.receivingCurrency
                     : (info.sendingAmount | map: 'toThousandthMark') +
                       ' ' +
                       info.sendingCurrency
-                }}</span
+                }}</span></span
               ></nz-descriptions-item
             >
           </nz-descriptions>
@@ -127,14 +132,28 @@
                 <nz-descriptions-item nzTitle="Enterprise Account">{{
                   info?.bankAccount
                 }}</nz-descriptions-item>
-                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Amount' : 'Receiving Amount'">{{
-                  (info?.paymentAmount | map: 'toThousandthMark') +
-                    ' ' +
-                    info.currency
-                }}</nz-descriptions-item>
-                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Time' : 'Receiving Time'">{{
-                  info?.paymentAmount | map: 'timeStamp'
-                }}</nz-descriptions-item>
+                <nz-descriptions-item
+                  [nzTitle]="
+                    info.transactionType === 3
+                      ? 'Payment Amount'
+                      : 'Receiving Amount'
+                  "
+                  >{{
+                    (info?.paymentAmount | map: 'toThousandthMark') +
+                      ' ' +
+                      info.currency
+                  }}</nz-descriptions-item
+                >
+                <nz-descriptions-item
+                  [nzTitle]="
+                    info.transactionType === 3
+                      ? 'Payment Time'
+                      : 'Receiving Time'
+                  "
+                  >{{
+                    info?.paymentAmount | map: 'timeStamp'
+                  }}</nz-descriptions-item
+                >
               </nz-descriptions>
             </nz-card>
           </ng-container>
@@ -167,7 +186,11 @@
                 info.enterpriseCode
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="From">
-                <p nz-typography nzCopyable [nzCopyText]="info.fromAccountAddress">
+                <p
+                  nz-typography
+                  nzCopyable
+                  [nzCopyText]="info.fromAccountAddress"
+                >
                   {{ info.fromAccountAddress }}
                 </p></nz-descriptions-item
               >
@@ -177,7 +200,11 @@
                   info.sendingCurrency
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="To">
-                <p nz-typography nzCopyable [nzCopyText]="info.toAccountAddress">
+                <p
+                  nz-typography
+                  nzCopyable
+                  [nzCopyText]="info.toAccountAddress"
+                >
                   {{ info.toAccountAddress }}
                 </p></nz-descriptions-item
               >
@@ -219,13 +246,21 @@
               </nz-descriptions-item>
               <nz-descriptions-item
                 nzTitle="Base Currency Liquidity Wallet Address"
-                ><p nz-typography nzCopyable [nzCopyText]="info.baseCurrencyLiquidityWalletAddress">
+                ><p
+                  nz-typography
+                  nzCopyable
+                  [nzCopyText]="info.baseCurrencyLiquidityWalletAddress"
+                >
                   {{ info.baseCurrencyLiquidityWalletAddress }}
                 </p></nz-descriptions-item
               >
               <nz-descriptions-item
                 nzTitle="Quote Currency Liquidity Wallet Address"
-                ><p nz-typography nzCopyable [nzCopyText]="info.quoteCurrencyLiquidityWalletAddress">
+                ><p
+                  nz-typography
+                  nzCopyable
+                  [nzCopyText]="info.quoteCurrencyLiquidityWalletAddress"
+                >
                   {{ info.quoteCurrencyLiquidityWalletAddress }}
                 </p></nz-descriptions-item
               >
@@ -265,7 +300,8 @@
             <nz-descriptions-item nzTitle="Status"
               ><nz-tag
                 [nzColor]="
-                  info.status || info.state | map: 'enterpriseTransactionStatusColor'
+                  info.status || info.state
+                    | map: 'enterpriseTransactionStatusColor'
                 "
                 >{{
                   info.status || info.state | map: 'enterpriseTransactionStatus'
@@ -286,14 +322,14 @@
       [nzXs]="24"
       style="background-color: #fff"
     >
-      <nz-card nzTitle="" class="m-r-8 m-t-5" style="border: none">
+      <!-- <nz-card nzTitle="" class="m-r-8 m-t-5" style="border: none">
         <ng-container *ngIf="info.transactionType">
           <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" id="" />
         </ng-container>
         <ng-container *ngIf="info.type">
           <app-timeline [info]="info" [status]="info.state" [type]="info.type === 2 ? 'fx purchasing' : 'transfer'" />
         </ng-container>
-      </nz-card>
+      </nz-card> -->
     </div>
   </div>
 </div>
