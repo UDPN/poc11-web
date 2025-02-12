@@ -160,7 +160,7 @@
         'on ' +
           (info.createTime | map: 'timeStamp') +
           ' by ' +
-          (info.createUser | map: 'null')
+          (info.fromBankName | map: 'null')
       }}
     </li>
   </ul>
@@ -169,7 +169,7 @@
   <ul>
     <li>
       {{
-        (info.fromCbdcCount | map: 'toThousandthMark') +
+        (info.timeLineCbdcCount | map: 'toThousandthMark') +
           ' ' +
           info.fromCurrency +
           ' = ' +

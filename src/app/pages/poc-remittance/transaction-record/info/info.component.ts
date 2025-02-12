@@ -2,8 +2,8 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-23 15:07:27
- * @Description: 
+ * @LastEditTime: 2025-02-12 11:17:20
+ * @Description:
  */
 import {
   ChangeDetectorRef,
@@ -79,6 +79,8 @@ export class InfoComponent implements OnInit {
         .getInfo({ transferId: params['transferId'] })
         .subscribe((res) => {
           this.info = res;
+          this.info.timeLineCbdcCount =
+            Number(res.fromCbdcCount) - Number(res.commission);
           this.cdr.markForCheck();
           this.cdr.detectChanges();
         });

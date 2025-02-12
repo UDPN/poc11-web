@@ -58,7 +58,7 @@
           </nz-descriptions>
         </nz-card>
 
-        <!-- title: (Top-up / Withdrawal) Information -->
+        <!-- title: (transactionType = 3：Top-up / 4：Withdrawal) Information -->
         <ng-container *ngIf="info.transactionType">
           <nz-card
             [nzTitle]="
@@ -140,13 +140,13 @@
           </ng-container>
         </ng-container>
 
-        <!-- title: (FX Purchasing / Transfer) Information -->
+        <!-- title: (type= 2: FX Purchasing / 3: Transfer) Information -->
         <ng-container *ngIf="info.type">
           <nz-card
             [nzTitle]="
-              info.type === 3
-                ? 'Transfer Information'
-                : 'FX Purchasing Information'
+              info.type === 2
+                ? 'FX Purchasing Information'
+                : 'Transfer Information'
             "
             nzBordered="false"
             class="m-t-25"
@@ -192,6 +192,7 @@
             </nz-descriptions>
           </nz-card>
           <nz-card
+            *ngIf="info.type === 2"
             [nzTitle]="'Exchange Rate Information'"
             nzBordered="false"
             class="m-t-25"
@@ -212,9 +213,6 @@
                   info.fxRate +
                   ' ' +
                   info.receivingCurrency
-              }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Enterprise Code">{{
-                info.enterpriseCode
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Commission">
                 {{ info.commission + ' ' + info.sendingCurrency }}
@@ -293,7 +291,7 @@
           <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" id="" />
         </ng-container>
         <ng-container *ngIf="info.type">
-          <app-timeline [info]="info" [status]="info.state" [type]="info.type === 3 ? 'transfer' : 'fx purchasing'" />
+          <app-timeline [info]="info" [status]="info.state" [type]="info.type === 2 ? 'fx purchasing' : 'transfer'" />
         </ng-container>
       </nz-card>
     </div>
