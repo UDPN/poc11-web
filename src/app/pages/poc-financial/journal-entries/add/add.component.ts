@@ -57,7 +57,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   selectedToken: TokenInfo | null = null;
   transactionTypes = [
     'Top-Up',
-    'Withdraw',
+    'Withdrawal',
     'Internal Transfer',
     'External Transfer out',
     'External Transfer in',
@@ -164,7 +164,7 @@ export class AddComponent implements OnInit, AfterViewInit {
                 transactionType = 'Top-Up';
                 break;
               case 2:
-                transactionType = 'Withdraw';
+                transactionType = 'Withdrawal';
                 break;
               case 3:
                 transactionType = 'Internal Transfer';
@@ -203,7 +203,10 @@ export class AddComponent implements OnInit, AfterViewInit {
                   loan.loanType === 1 ? 'Debit' : 'Credit',
                   Validators.required
                 ],
-                financialType: [loan.financialType?.toString() || '1', Validators.required],
+                financialType: [
+                  loan.financialType?.toString() || '1',
+                  Validators.required
+                ],
                 accountCode: [loan.subjectCode, Validators.required],
                 accountName: [loan.subjectTitle, Validators.required],
                 amount: [
@@ -358,7 +361,7 @@ export class AddComponent implements OnInit, AfterViewInit {
       type === 'FX Purchasing -Transfer out'
     ) {
       return 3;
-    } else if (type === 'Top-Up' || type === 'Withdraw') {
+    } else if (type === 'Top-Up' || type === 'Withdrawal') {
       return 4;
     }
     return 2;
@@ -366,7 +369,10 @@ export class AddComponent implements OnInit, AfterViewInit {
 
   // 修改方法来决定默认的 Debit/Credit 值
   private getDefaultDebitCredit(type: string, index: number): string {
-    if (type === 'External  FX Transfer out' || type === 'FX Purchasing -Transfer out') {
+    if (
+      type === 'External  FX Transfer out' ||
+      type === 'FX Purchasing -Transfer out'
+    ) {
       // For External FX Transfer out and FX Purchasing -Transfer out:
       // First row: Debit (Token)
       // Second row: Debit (Fee)
@@ -566,7 +572,7 @@ export class AddComponent implements OnInit, AfterViewInit {
             case 'Top-Up':
               txType = 1;
               break;
-            case 'Withdraw':
+            case 'Withdrawal':
               txType = 2;
               break;
             case 'Internal Transfer':
@@ -883,8 +889,11 @@ export class AddComponent implements OnInit, AfterViewInit {
                   Validators.required
                 ],
                 financialType: [
-                  transaction.financialType || 
-                  this.getDefaultFinancialType(groupData.transactionType, index),
+                  transaction.financialType ||
+                    this.getDefaultFinancialType(
+                      groupData.transactionType,
+                      index
+                    ),
                   Validators.required
                 ],
                 accountCode: [transaction.accountCode, Validators.required],
@@ -983,16 +992,26 @@ export class AddComponent implements OnInit, AfterViewInit {
     const transactions = group.get('transactions') as FormArray;
     const index = transactions.controls.indexOf(transaction);
 
-    if (transactionType === 'External  FX Transfer out' || transactionType === 'FX Purchasing -Transfer out') {
+    if (
+      transactionType === 'External  FX Transfer out' ||
+      transactionType === 'FX Purchasing -Transfer out'
+    ) {
       if (index === 2) {
         return `${transactionType} Fee Amount`;
       }
-      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
-    } else if (transactionType === 'Top-Up' || transactionType === 'Withdraw') {
+      return `${transactionType} Amount - ${
+        debitCredit === 'Debit' ? 'From' : 'To'
+      }`;
+    } else if (
+      transactionType === 'Top-Up' ||
+      transactionType === 'Withdrawal'
+    ) {
       if (index === 3) {
         return `${transactionType} Fee Amount`;
       }
-      return `${transactionType} Amount - ${debitCredit === 'Debit' ? 'From' : 'To'}`;
+      return `${transactionType} Amount - ${
+        debitCredit === 'Debit' ? 'From' : 'To'
+      }`;
     }
 
     return `${transactionType} Amount`;
@@ -1004,11 +1023,14 @@ export class AddComponent implements OnInit, AfterViewInit {
     transaction.get('amount')?.updateValueAndValidity();
   }
 
-  private getDefaultFinancialType(transactionType: string, index: number): string {
-    if (transactionType === 'Top-Up' ) {
+  private getDefaultFinancialType(
+    transactionType: string,
+    index: number
+  ): string {
+    if (transactionType === 'Top-Up') {
       // For Top-Up, first two rows are Fiat (1), last two rows are Token (2)
       return index < 2 ? '1' : index === 3 ? '1' : '2';
-    } else if(transactionType === 'Withdraw'){
+    } else if (transactionType === 'Withdrawal') {
       return index < 1 ? '1' : index === 1 ? '2' : '1';
     } else if (
       transactionType === 'Internal Transfer' ||
@@ -1019,7 +1041,10 @@ export class AddComponent implements OnInit, AfterViewInit {
     ) {
       // For these types, all rows are Token (2)
       return '2';
-    } else if (transactionType === 'External  FX Transfer out' || transactionType === 'FX Purchasing -Transfer out') {
+    } else if (
+      transactionType === 'External  FX Transfer out' ||
+      transactionType === 'FX Purchasing -Transfer out'
+    ) {
       // For External FX Transfer out and FX Purchasing -Transfer out:
       // First row: Token (2) - Debit
       // Second row: Fee (3) - Debit

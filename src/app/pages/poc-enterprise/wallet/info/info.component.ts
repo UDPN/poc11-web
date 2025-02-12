@@ -50,7 +50,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
   walletAddressTpl!: TemplateRef<NzSafeAny>;
   info: any = {};
   detailsTabs = ['Basic Information', 'Transactions'];
-  transactionsTabs = ['Top-up / Withdraw', 'Transfer / FX Purchasing'];
+  transactionsTabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
   transactionsIndex: any = 0;
   tableConfig!: AntTableConfig;
   transferTableConfig!: AntTableConfig;

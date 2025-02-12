@@ -59,7 +59,10 @@ export class JournalService {
     return this.https.post('/v1/financial/bill/rule/listPage', param);
   }
 
-  public updateStatus(params: { ruleId: string, state: number }): Observable<any> {
+  public updateStatus(params: {
+    ruleId: string;
+    state: number;
+  }): Observable<any> {
     return this.https.post('/v1/financial/bill/operate', params);
   }
 
@@ -100,7 +103,6 @@ export class JournalService {
       })
     );
 
-
     // 模拟数据（用于开发测试）
     const mockData = {
       code: 0,
@@ -115,88 +117,88 @@ export class JournalService {
         },
         rows: [
           {
-            currencyName: "THB",
+            currencyName: 'THB',
             dateTime: 1734339764017,
             groupNumber: 1,
             loanType: 1,
-            particularsAccount: "Transfer",
+            particularsAccount: 'Transfer',
             ruleId: filters.ruleId,
             stablecoinId: 1,
-            stablecoinName: "w-THB-UDPN",
-            subjectCode: "1001",
-            subjectTitle: "Cash Account",
-            traceId: "TX001",
+            stablecoinName: 'w-THB-UDPN',
+            subjectCode: '1001',
+            subjectTitle: 'Cash Account',
+            traceId: 'TX001',
             txAmount: 1000,
-            txHash: "0x123...abc1",
+            txHash: '0x123...abc1',
             txType: 3
           },
           {
-            currencyName: "THB",
+            currencyName: 'THB',
             dateTime: 1734339764018,
             groupNumber: 1,
             loanType: 2,
-            particularsAccount: "Transfer",
+            particularsAccount: 'Transfer',
             ruleId: filters.ruleId,
             stablecoinId: 1,
-            stablecoinName: "w-THB-UDPN",
-            subjectCode: "2001",
-            subjectTitle: "Savings Account",
-            traceId: "TX002",
+            stablecoinName: 'w-THB-UDPN',
+            subjectCode: '2001',
+            subjectTitle: 'Savings Account',
+            traceId: 'TX002',
             txAmount: 1000,
-            txHash: "0x123...abc2",
+            txHash: '0x123...abc2',
             txType: 3
           },
           {
-            currencyName: "THB",
+            currencyName: 'THB',
             dateTime: 1734339764019,
             groupNumber: 2,
             loanType: 1,
-            particularsAccount: "Top-up",
+            particularsAccount: 'Top-up',
             ruleId: filters.ruleId,
             stablecoinId: 1,
-            stablecoinName: "w-THB-UDPN",
-            subjectCode: "1002",
-            subjectTitle: "Deposit Account",
-            traceId: "TX003",
+            stablecoinName: 'w-THB-UDPN',
+            subjectCode: '1002',
+            subjectTitle: 'Deposit Account',
+            traceId: 'TX003',
             txAmount: 500,
-            txHash: "0x123...abc3",
+            txHash: '0x123...abc3',
             txType: 1
           },
           {
-            currencyName: "THB",
+            currencyName: 'THB',
             dateTime: 1734339764020,
             groupNumber: 3,
             loanType: 2,
-            particularsAccount: "Withdraw",
+            particularsAccount: 'Withdrawal',
             ruleId: filters.ruleId,
             stablecoinId: 1,
-            stablecoinName: "w-THB-UDPN",
-            subjectCode: "3001",
-            subjectTitle: "Withdrawal Account",
-            traceId: "TX004",
+            stablecoinName: 'w-THB-UDPN',
+            subjectCode: '3001',
+            subjectTitle: 'Withdrawal Account',
+            traceId: 'TX004',
             txAmount: 300,
-            txHash: "0x123...abc4",
+            txHash: '0x123...abc4',
             txType: 2
           },
           {
-            currencyName: "THB",
+            currencyName: 'THB',
             dateTime: 1734339764021,
             groupNumber: 4,
             loanType: 1,
-            particularsAccount: "FX Purchase",
+            particularsAccount: 'FX Purchase',
             ruleId: filters.ruleId,
             stablecoinId: 1,
-            stablecoinName: "w-THB-UDPN",
-            subjectCode: "4001",
-            subjectTitle: "FX Account",
-            traceId: "TX005",
+            stablecoinName: 'w-THB-UDPN',
+            subjectCode: '4001',
+            subjectTitle: 'FX Account',
+            traceId: 'TX005',
             txAmount: 2000,
-            txHash: "0x123...abc5",
+            txHash: '0x123...abc5',
             txType: 4
           }
         ]
       },
-      message: ""
+      message: ''
     };
 
     // 返回模拟数据（开发完成后替换为上面的实际接口调用）

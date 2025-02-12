@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-06 14:35:27
+ * @LastEditTime: 2025-02-11 17:25:31
  * @Description:
  */
 import {
@@ -216,7 +216,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Currency',
+          title: 'Token',
           field: 'currency',
           notNeedEllipsis: true,
           width: 100

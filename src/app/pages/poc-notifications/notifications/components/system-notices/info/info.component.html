@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:03:55
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-26 16:32:18
+ * @LastEditTime: 2025-02-11 16:51:10
  * @Description: 
 -->
 <app-page-header
@@ -19,7 +19,7 @@
       <nz-card nzTitle="" class="m-r-8 none-bottom">
         <h2 nz-typography>{{ info.title }}</h2>
         <p nz-typography>
-          {{ 'Published On: ' }}{{ info.sendTime | map: 'timeStamp' }}
+          {{ 'Published on: ' }}{{ info.sendTime | map: 'timeStamp' }}
         </p>
         <p [innerHTML]="info.content" class="m-t-20"></p>
       </nz-card>

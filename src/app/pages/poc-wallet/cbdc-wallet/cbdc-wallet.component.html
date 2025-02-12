@@ -278,7 +278,7 @@
           "
           *ngIf="state === 5 && region === 1 && walletType === 1"
         >
-          Top up
+          Top-up
         </span>
       </ng-container>
       <ng-container *appAuth="'R01010104'">
@@ -295,7 +295,7 @@
           "
           *ngIf="state === 5 && region === 1 && walletType === 1"
         >
-          Withdraw
+          Withdrawal
         </span>
       </ng-container>
       <ng-container *appAuth="'R01010105'">
@@ -323,7 +323,7 @@
 </ng-template>
 <nz-modal
   [(nzVisible)]="isVisibleTopUp"
-  nzTitle="Top up"
+  nzTitle="Top-up"
   (nzOnCancel)="cancelTopUp()"
   [nzClosable]="false"
   [nzWidth]="800"
@@ -494,7 +494,7 @@
 </nz-modal>
 <nz-modal
   [(nzVisible)]="isVisibleWithdraw"
-  nzTitle="Withdraw"
+  nzTitle="Withdrawal"
   (nzOnCancel)="cancelWithdraw()"
   [nzClosable]="false"
   [nzWidth]="800"

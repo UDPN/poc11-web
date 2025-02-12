@@ -287,11 +287,11 @@ export const MapSet = {
     7: 'Weekly',
     30: 'Monthly'
   },
-  // <!-- 1: Top-up 2: Withdraw 3: Transfer4Swap 5:Exchange -->
+  // <!-- 1: Top-up 2: Withdrawal 3: Transfer4Swap 5:Exchange -->
 
   statementsTxnType: {
     1: 'Top-up',
-    2: 'Withdraw',
+    2: 'Withdrawal',
     3: 'Transfer',
     4: 'Swap',
     5: 'Exchange'
@@ -343,7 +343,7 @@ export const MapSet = {
     40: 'finish',
     50: 'finish'
   },
-  
+
   enterpriseOnboardApprovalSecondStatus: {
     0: 'process',
     1: 'finish',

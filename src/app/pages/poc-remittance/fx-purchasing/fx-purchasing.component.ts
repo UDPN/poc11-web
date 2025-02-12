@@ -550,7 +550,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
               this.reveingCurrecy.replace('-UDPN', '') +
               '/' +
               this.purchCurrecy.replace('-UDPN', '') +
-              ' Fx Rate';
+              ' FX Rate';
             res.forEach((item: any) => {
               resultData.push({
                 rateId: item.rateId,

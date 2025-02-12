@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:59:18
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-20 15:34:01
+ * @LastEditTime: 2025-02-11 17:59:34
  * @Description: 
 -->
 <app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-remittance/transaction-record'"
@@ -21,7 +21,7 @@
                 [style]="{'color': info.cbdcCount > 0 ? '#39A16A' : '#E53E3E'}">{{
                 info.cbdcCount > 0 ? '+' : ''}}{{ (info.cbdcCount |
                 map:'toThousandthMark') + ' ' +
-                info.fromCurrency
+                info.toCurrency
                 }}</span></nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
@@ -68,12 +68,12 @@
           [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8'}" *ngIf="info.fromCurrency !== info.toCurrency">
           <nz-descriptions nzTitle="" [nzColumn]="1" [nzColon]="false" [nzBordered]="false"
             class="card-descriptions-order">
-            <nz-descriptions-item nzTitle="Settlement Bank">{{ info.settlementBank
+            <nz-descriptions-item nzTitle="Liquidity Provider">{{ info.settlementBank
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Fx Rate">{{ '1 ' + info.fromCurrency
+            <nz-descriptions-item nzTitle="FX Rate">{{ '1 ' + info.fromCurrency
               + ' = ' + info.exchangeRate + ' ' + info.toCurrency
               }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Commission">{{ (info.commission | map:'toThousandthMark') + ' ' +
+            <nz-descriptions-item nzTitle="Commission Fee">{{ (info.commission | map:'toThousandthMark') + ' ' +
               info.fromCurrency }}</nz-descriptions-item>
           </nz-descriptions>
         </nz-card>

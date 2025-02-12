@@ -29,7 +29,7 @@ export interface Tdata {
   amount: number;
   currency: string;
   password: string;
-  txType: any; //  1: Top Up 2: Withdraw
+  txType: any; //  1: Top-up 2: Withdrawal
   walletAddress?: string;
 }
 

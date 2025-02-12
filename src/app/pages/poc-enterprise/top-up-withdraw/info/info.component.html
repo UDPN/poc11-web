@@ -58,7 +58,7 @@
           </nz-descriptions>
         </nz-card>
 
-        <!-- title: (Top-up / Withdraw) Information -->
+        <!-- title: (Top-up / Withdrawal) Information -->
         <ng-container *ngIf="info.transactionType">
           <nz-card
             [nzTitle]="
@@ -127,12 +127,12 @@
                 <nz-descriptions-item nzTitle="Enterprise Account">{{
                   info?.bankAccount
                 }}</nz-descriptions-item>
-                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Amount' : 'Received Amount'">{{
+                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Amount' : 'Receiving Amount'">{{
                   (info?.paymentAmount | map: 'toThousandthMark') +
                     ' ' +
                     info.currency
                 }}</nz-descriptions-item>
-                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Time' : 'Received Time'">{{
+                <nz-descriptions-item [nzTitle]="info.transactionType === 3 ? 'Payment Time' : 'Receiving Time'">{{
                   info?.paymentAmount | map: 'timeStamp'
                 }}</nz-descriptions-item>
               </nz-descriptions>

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:20:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-02 16:10:10
+ * @LastEditTime: 2025-02-11 16:50:50
  * @Description:
  */
 import {
@@ -104,7 +104,7 @@ export class SystemNoticesComponent implements OnInit, AfterViewInit {
           width: 500
         },
         {
-          title: 'Published On',
+          title: 'Published on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

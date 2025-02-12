@@ -25,7 +25,9 @@
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Source Token
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
@@ -43,7 +45,7 @@
                   </div>
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Currency</ng-container
+                      >Please input your Source Token</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -176,14 +178,16 @@
         style="background: #fff; border-radius: 16px; padding: 4px"
       >
         <nz-card
-          nzTitle="Receiving Information"
+          nzTitle="Receiver Information"
           nzBordered="false"
           class="none-bottom"
         >
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Target Token
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
@@ -201,7 +205,7 @@
                   </div>
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Available Balance</ng-container
+                      >Please input your Target Token</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -242,7 +246,7 @@
                   </div>
                   <ng-template #receivingWalletAddressError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Receiving Wallet Address</ng-container
+                      >Please input your Receiver Wallet Address</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -476,7 +480,7 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="FX Purchasing Confirmation"
+  nzTitle="Confirm FX Purchase"
   (nzOnCancel)="cancelView()"
   [nzClosable]="false"
   [nzWidth]="1000"
@@ -497,7 +501,7 @@
         [nzSm]="24"
         [nzXs]="24"
       >
-        <nz-card nzTitle="Sending Information" class="info-none-bottom">
+        <nz-card nzTitle="Sender Information" class="info-none-bottom">
           <nz-descriptions
             nzLayout="vertical"
             nzTitle=""
@@ -511,7 +515,7 @@
                 ' ' +
                 purchCurrecy.replace('-UDPN', '')
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Sending Wallet Address">{{
+            <nz-descriptions-item nzTitle="Sender Wallet Address">{{
               validateForm.controls['transactionWalletAddress'].value
             }}</nz-descriptions-item>
             <!-- <nz-descriptions-item nzTitle="Custodian Bank">{{
@@ -540,7 +544,7 @@
         [nzSm]="24"
         [nzXs]="24"
       >
-        <nz-card nzTitle="Receiving Information" class="info-none-bottom">
+        <nz-card nzTitle="Receiver Information" class="info-none-bottom">
           <nz-descriptions
             nzLayout="vertical"
             nzTitle=""
@@ -554,7 +558,7 @@
                 ' ' +
                 reveingCurrecy.replace('-UDPN', '')
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Receiving Wallet Address">{{
+            <nz-descriptions-item nzTitle="Receiver Wallet Address">{{
               receivingWalletAddressShow
             }}</nz-descriptions-item>
             <!-- <nz-descriptions-item nzTitle="Custodian Bank">{{
@@ -582,7 +586,7 @@
           <nz-descriptions-item nzTitle="FX Settlement Bank">{{
             checkedItemComment[0].sp
           }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Exchange Rate">{{
+          <nz-descriptions-item nzTitle="FX Rate">{{
             checkedItemComment[0].currencyShow
           }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Commission Fee">{{

@@ -53,8 +53,10 @@ export class AddComponent implements OnInit {
   metaArrStrSignPass: string[] = [];
   addAddressArr: string[] = [];
   testStatus = false;
+  messageTip: any = `For the first wallet created with the home Custodian Bank, it is referred to as the "Master Wallet". Subsequent wallets are labeled as "Sub-wallet". 
+  For the first wallet created with the foreign Custodian Bank, it is referred to as the "Main Wallet". Subsequent wallets are labeled as "Sub-wallet".`;
   creationMethodTip: string =
-    'The system will create and register a main or sub-wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
+    'The system will generate a wallet address and an associated private key. The private key will be automatically created and hosted within the sandbox system.';
   public metaArr$ = this.metaMaskService.MetaArray$;
 
   constructor(
@@ -108,7 +110,7 @@ export class AddComponent implements OnInit {
         } else {
           this.validateForm.removeControl('walletAddress');
           this.creationMethodTip =
-            'The system will create and register a main or sub-wallet in the corresponding token system. The private key will be automatically created and hosted within the sandbox system.';
+            'The system will generate a wallet address and an associated private key. The private key will be automatically created and hosted within the sandbox system.';
         }
       });
   }

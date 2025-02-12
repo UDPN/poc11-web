@@ -592,7 +592,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           this.availableCurrecyModel.replace('-UDPN', '') +
           '/' +
           this.beneficiaryCurrency.replace('-UDPN', '') +
-          ' Fx Rate';
+          ' FX Rate';
         res.forEach((item: any) => {
           resultData.push({
             rateId: item.rateId,

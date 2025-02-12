@@ -65,12 +65,12 @@ export class JournallistComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
-  // Transaction Type:1:Top-up 2:Withdraw 3:IntemnalTransfer 4:External Transfer Out 5:Extemal Transfer In6:Extemal FX Transfer Out 7:External FX Transfer In8:FX Purchasing Transfer Out 9:FX PurchasingTransfer In
+  // Transaction Type:1:Top-up 2:Withdrawal 3:IntemnalTransfer 4:External Transfer Out 5:Extemal Transfer In6:Extemal FX Transfer Out 7:External FX Transfer In8:FX Purchasing Transfer Out 9:FX PurchasingTransfer In
 
   transactionTypes = [
     { value: '', label: 'All' },
     { value: '1', label: 'Top-Up' },
-    { value: '2', label: 'Withdraw' },
+    { value: '2', label: 'Withdrawal' },
     { value: '3', label: 'Intemnal Transfer' },
     { value: '4', label: 'External Transfer Out' },
     { value: '5', label: 'Extemal Transfer In' },
@@ -300,7 +300,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
   getTransactionTypeName(type: number): string {
     const typeMap: { [key: number]: string } = {
       1: 'Top-up',
-      2: 'Withdraw',
+      2: 'Withdrawal',
       3: 'Internal Transfer',
       4: 'External Transfer out',
       5: 'External Transfer in',

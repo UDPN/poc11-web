@@ -59,12 +59,12 @@
   </ng-container>
   <ng-container *appAuth="'R020205'">
     <span class="operate-text" (click)="getTopUp(reserveCurrency, capitalPoolAddress, reserveAccount, reserveBalance, capitalPoolCurrency)">
-      Top up
+      Top-up
     </span>
   </ng-container>
   <ng-container *appAuth="'R020206'">
     <span class="operate-text" (click)="getWithdraw(capitalPoolCurrency, capitalPoolAddress, capitalPoolRealBalance, reserveAccount, reserveCurrency)">
-      Withdraw
+      Withdrawal
     </span>
   </ng-container>
 </ng-template>
@@ -112,7 +112,7 @@
       [disabled]="!this.editValidateForm.valid">Confirm</button>
   </div>
 </nz-modal>
-<!-- <nz-modal [(nzVisible)]="isVisibleTopUp" nzTitle="Top up" (nzOnCancel)="cancelTopUp()" [nzClosable]="false"
+<!-- <nz-modal [(nzVisible)]="isVisibleTopUp" nzTitle="Top-up" (nzOnCancel)="cancelTopUp()" [nzClosable]="false"
   [nzWidth]="800" nzCentered="true">
   <div *nzModalContent>
     <form nz-form [formGroup]="topUpForm">
@@ -209,7 +209,7 @@
       [disabled]="!this.topUpForm.valid">Submit</button>
   </div>
 </nz-modal>
-<nz-modal [(nzVisible)]="isVisibleWithdraw" nzTitle="Withdraw" (nzOnCancel)="cancelWithdraw()" [nzClosable]="false"
+<nz-modal [(nzVisible)]="isVisibleWithdraw" nzTitle="Withdrawal" (nzOnCancel)="cancelWithdraw()" [nzClosable]="false"
   [nzWidth]="800" nzCentered="true">
   <div *nzModalContent>
     <form nz-form [formGroup]="withdrawForm">
@@ -299,7 +299,7 @@
 </nz-modal> -->
 <nz-modal
   [(nzVisible)]="isVisibleTopUp"
-  nzTitle="Top up"
+  nzTitle="Top-up"
   (nzOnCancel)="cancelTopUp()"
   [nzClosable]="false"
   [nzWidth]="800"
@@ -470,7 +470,7 @@
 </nz-modal>
 <nz-modal
   [(nzVisible)]="isVisibleWithdraw"
-  nzTitle="Withdraw"
+  nzTitle="Withdrawal"
   (nzOnCancel)="cancelWithdraw()"
   [nzClosable]="false"
   [nzWidth]="800"

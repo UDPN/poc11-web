@@ -9,7 +9,7 @@
           nzBordered="false"
           class="m-b-10"
         >
-          <!-- Top-up / Withdraw -->
+          <!-- Top-up / Withdrawal -->
           <form nz-form nzLayout="vertical" *ngIf="i === 0">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
               <div
@@ -176,7 +176,7 @@
               </div>
             </div>
           </form>
-          <!-- Top-up / Withdraw -->
+          <!-- Top-up / Withdrawal -->
           <!-- Transfer / FX Purchasing -->
           <form nz-form nzLayout="vertical" *ngIf="i === 1">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
@@ -432,7 +432,7 @@
   </p>
 </ng-template>
 
-<!-- Top-up / Withdraw -->
+<!-- Top-up / Withdrawal -->
 <ng-template #walletAddressTpl let-walletAddress="walletAddress">
   <p
     [title]="walletAddress"
@@ -490,7 +490,7 @@
     </span>
   </ng-container>
 </ng-template>
-<!-- Top-up / Withdraw -->
+<!-- Top-up / Withdrawal -->
 
 <!-- Transfer / FX Purchasing -->
 <ng-template #fromTpl let-fromAccountAddress="fromAccountAddress">

@@ -192,7 +192,7 @@
   "MSG_00_1015": "Password cannot be empty",
   "MSG_00_1016": "Wallet account is unavailable",
   "MSG_00_1017": "Save failed",
-  "MSG_00_1018": "Top up and withdrawal type not selected",
+  "MSG_00_1018": "Top-up and withdrawal type not selected",
   "MSG_00_1019": "Failed to update wallet balance after deposit and withdrawal",
   "MSG_00_1020": "Account address is unavailable",
   "MSG_00_1021": "Bank account id cannot be empty",

@@ -42,7 +42,9 @@
             </div>
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Token Currency
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
@@ -60,7 +62,7 @@
                   </div>
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Available Balance</ng-container
+                      >Please input your Token Currency</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -236,7 +238,9 @@
             </div>
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Token Currency
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
@@ -254,7 +258,7 @@
                   </div>
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Available Balance</ng-container
+                      >Please input your Token Currency</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -413,16 +417,16 @@
             [nzColon]="true"
             [nzBordered]="false"
           >
-            <nz-descriptions-item nzTitle="FX Rate">{{
+            <nz-descriptions-item nzTitle="FX Rate" nzSpan="2">{{
               remiInfo.rate
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Commission Fee">{{
+            <nz-descriptions-item nzTitle="Commission Fee" nzSpan="2">{{
               remiInfo.com
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Total Debit Amount">{{
+            <nz-descriptions-item nzTitle="Total Debit Amount" nzSpan="2">{{
               remiInfo.total
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Receiving Amount">{{
+            <nz-descriptions-item nzTitle="Receiving Amount" nzSpan="2">{{
               remiInfo.reve
             }}</nz-descriptions-item
             ><nz-descriptions-item
@@ -564,7 +568,7 @@
 </ng-template>
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="Remittance Information Confirmation"
+  nzTitle="Confirm Transfer"
   (nzOnCancel)="cancelView()"
   [nzClosable]="false"
   [nzWidth]="1000"
@@ -644,7 +648,7 @@
             class="card-descriptions-vertical"
             style="height: 400px"
           >
-            <nz-descriptions-item nzTitle="Received Amount:">{{
+            <nz-descriptions-item nzTitle="Receiving Amount:">{{
               validateForm.controls['amount'].value +
                 ' ' +
                 beneficiaryCurrency.replace('-UDPN', '')
@@ -678,7 +682,7 @@
           <nz-descriptions-item nzTitle="FX Settlement Bank">{{
             checkedItemComment[0].sp
           }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Exchange Rate">{{
+          <nz-descriptions-item nzTitle="FX Rate">{{
             checkedItemComment[0].currency
           }}</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Commission Fee">{{
@@ -687,7 +691,7 @@
           <nz-descriptions-item nzTitle="Total Debit Amount">{{
             checkedItemComment[0].total
           }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Received Amount">{{
+          <nz-descriptions-item nzTitle="Receiving Amount">{{
             checkedItemComment[0].info.reve
           }}</nz-descriptions-item>
         </nz-descriptions>
