@@ -8,6 +8,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FxTransactionsComponent } from './fx-transactions.component';
+import { InfoComponent } from './info/info.component';
+import { ActionCode } from '@app/config/actionCode';
 
 const routes: Routes = [
   {
@@ -16,6 +18,16 @@ const routes: Routes = [
     data: {
       title: 'liquidityFxTransactions',
       key: 'liquidity-fx-transactions',
+      shouldDetach: 'no'
+    }
+  },
+  {
+    path: 'info',
+    component: InfoComponent,
+    data: {
+      title: 'walletInfo',
+      key: 'wallet-info',
+      authCode: ActionCode.TabsDetail,
       shouldDetach: 'no'
     }
   }

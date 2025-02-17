@@ -1,1 +1,315 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2025-02-17 10:19:38
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-17 15:31:48
+ * @Description: 
+-->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Transaction No.</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="transactionNo"
+                [(ngModel)]="searchParam.transactionNo"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Source Liquidity Pool Address</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="sourceLiquidityPoolAddress"
+                [(ngModel)]="searchParam.sourceLiquidityPoolAddress"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Target Liquidity Pool Address </nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="targetLiquidityPoolAddress"
+                [(ngModel)]="searchParam.targetLiquidityPoolAddress"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Sender Wallet Address</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="senderWalletAddress"
+                [(ngModel)]="searchParam.senderWalletAddress"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Receiver Wallet Address </nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="receiverWalletAddress"
+                [(ngModel)]="searchParam.receiverWalletAddress"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Token Pair</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="tokenPair"
+                [(ngModel)]="searchParam.tokenPair"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of currencyList"
+                  [nzValue]="item.key"
+                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>FX Type </nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="fxType"
+                [(ngModel)]="searchParam.fxType"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of currencyList"
+                  [nzValue]="item.key"
+                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Status</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="status"
+                [(ngModel)]="searchParam.status"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="1" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="2" nzLabel="Success"></nz-option>
+                <nz-option nzValue="3" nzLabel="Failed"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                class="full-with"
+                name="creation"
+                [(ngModel)]="searchParam.creation"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="24"
+          [nzXl]="24"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="m-b-8 text-right p-0"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap [tableTitle]="'FX Transactions'" [isNormalTable]="true"
+    ><app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #transactionNoTpl let-transactionNo="transactionNo">
+      <p
+        nz-typography
+        [nzCopyable]="transactionNo ? true : false"
+        [nzCopyText]="transactionNo"
+      ></p>
+    </ng-template>
+    <ng-template #sourceTokenTpl let-sourceToken="sourceToken">
+      <div class="display-flex">
+        <div>
+          <p nz-typography [nzCopyable]="true" [nzCopyText]="sourceToken">
+            {{ sourceToken | map: 'showPart' }}
+          </p>
+          <p>{{ '100.00 tEUR' }}</p>
+        </div>
+        <div>
+          <span
+            class="arrow-right m-l-10 m-r-10"
+            nz-icon
+            nzType="arrow-right"
+            nzTheme="outline"
+          ></span>
+        </div>
+        <div>
+          <p nz-typography [nzCopyable]="true" [nzCopyText]="sourceToken">
+            {{ sourceToken | map: 'showPart' }}
+          </p>
+          <p>{{ '100.00 tEUR' }}</p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #transactionNoTpl let-transactionNo="transactionNo">
+      <p
+        nz-typography
+        [nzCopyable]="transactionNo ? true : false"
+        [nzCopyText]="transactionNo"
+      ></p>
+    </ng-template>
+    <ng-template #fxTypeTpl let-transactionNo="transactionNo">
+      <nz-tag class="opacity-7" [nzColor]="color">{{ 'Network FX' }}</nz-tag>
+    </ng-template>
+    <ng-template
+      #operationTpl
+      let-transactionNo="transactionNo"
+      let-receivingBankName="receivingBankName"
+    >
+      <ng-container *appAuth="''">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-liquidity/fx-transactions/info"
+          [queryParams]="{transactionNo}"
+        >
+          Details
+        </span>
+      </ng-container>
+    </ng-template></app-card-table-wrap
+  >
+</div>
