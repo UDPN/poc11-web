@@ -167,6 +167,14 @@ const routes: Routes = [
           )
       },
       {
+        path: 'poc-liquidity',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-liquidity/poc-liquidity.module').then(
+            (m) => m.PocLiquidityModule
+          )
+      },
+      {
         path: 'system',
         loadChildren: () =>
           import('../../pages/system/system.module').then((m) => m.SystemModule)
