@@ -26,7 +26,7 @@
         [nzStatus]="info.status | map: 'enterpriseOnboardApprovalSecondStatus'"
         [nzDescription]="approvalTpl"
       ></nz-step>
-      <nz-step
+      <!-- <nz-step
         [nzTitle]="'On-chain execution'"
         [nzStatus]="info.status | map: 'enterpriseOnboardApprovalThirdStatus'"
         [nzDescription]="
@@ -35,7 +35,7 @@
             ? ' creation is executed successfully on the chain'
             : ' is waiting to be executed on the chain')
         "
-      ></nz-step>
+      ></nz-step> -->
     </nz-steps>
   </div>
 </nz-card>
@@ -60,7 +60,9 @@
   <!-- Pending Approval -->
   <ng-container *ngIf="info?.status === 0">
     <div>
-      {{ 'The enterprise onboarding creation request is awaiting confirmation' }}
+      {{
+        'The enterprise onboarding creation request is awaiting confirmation'
+      }}
     </div>
     <ng-container *ngIf="!rejectStatus">
       <nz-space class="m-t-10 m-b-10">

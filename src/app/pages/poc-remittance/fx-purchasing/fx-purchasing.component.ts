@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
+import { ThemeOptionsKey, aesKey, aesVi } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -85,6 +86,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   transactionWalletAddressArr: any[] = [];
   inputType = 0;
   sendName = '';
+  color: string = '';
   beneficiaryName = '';
   remiInfo: {
     rate: any;
@@ -112,7 +114,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     private fxPurchasingService: FxPurchasingService,
     private modal: NzModalService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private windowService: WindowService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -130,6 +133,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     let datePipe: DatePipe = new DatePipe('en-US');
     this.timeString = datePipe
       .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
@@ -215,7 +220,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
             currecy: item.digitalSymbol,
             currecySymbol: item.digitalCurrencyName,
             walletAddress: item.wallets,
-            legalCurrencySymbol: item.legalCurrencySymbol
+            legalCurrencySymbol: item.legalCurrencySymbol,
+            digitalSymbol: item.digitalSymbol
           });
         });
         this.onReceiving(0);
@@ -267,9 +273,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.beneficiaryName = this.fxReceivingData[e]?.currecy;
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.reveingCurrecyModelShowIcon =
-      this.fxReceivingData[e].legalCurrencySymbol === null
+      this.fxReceivingData[e].digitalSymbol === null
         ? ''
-        : this.fxReceivingData[e].legalCurrencySymbol;
+        : this.fxReceivingData[e].digitalSymbol;
     this.reveingCurrecyModelShow =
       this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
     this.reveingCurrecyModelCount = thousandthMark(
@@ -380,9 +386,9 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendName = this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.purchCurrecyModelShowIcon =
-      this.fxPurchaseData[e].legalCurrencySymbol === null
+      this.fxPurchaseData[e].digitalSymbol === null
         ? ''
-        : this.fxPurchaseData[e].legalCurrencySymbol;
+        : this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecyModelShow =
       this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
     this.purchCurrecyModelCount = thousandthMark(
@@ -555,19 +561,20 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
               resultData.push({
                 rateId: item.rateId,
                 sp: item.provider,
+                fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+                toCapitalPoolAddress: item.toCapitalPoolAddress,
                 currency:
-                  '1 ' +
                   item.from.replace('-UDPN', '') +
+                  '/' +
+                  item.to.replace('-UDPN', '') +
                   ' = ' +
-                  item.rate +
-                  ' ' +
-                  item.to.replace('-UDPN', ''),
+                  item.rate.toFixed(2),
                 currencyShow:
-                  '1 ' +
                   item.from.replace('-UDPN', '') +
+                  '/' +
+                  item.to.replace('-UDPN', '') +
                   ' = ' +
-                  item.rate +
-                  item.to.replace('-UDPN', ''),
+                  item.rate.toFixed(2),
                 rate: item.rate,
                 com: this.getValCom(item),
                 total: this.getValTotal(item),

@@ -597,13 +597,14 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           resultData.push({
             rateId: item.rateId,
             sp: item.provider,
+            fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+            toCapitalPoolAddress: item.toCapitalPoolAddress,
             currency:
-              '1 ' +
               item.from.replace('-UDPN', '') +
+              '/' +
+              item.to.replace('-UDPN', '') +
               ' = ' +
-              item.rate +
-              ' ' +
-              item.to.replace('-UDPN', ''),
+              item.rate.toFixed(2),
             rate: item.rate,
             com: this.getValCom(item),
             total: this.getValTotal(item),
@@ -695,7 +696,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.sendName = val[0].digitalSymbol;
     this.availableCurrecyModelShowIcon =
-      val[0].legalCurrencySymbol === null ? '' : val[0].legalCurrencySymbol;
+      val[0].digitalSymbol === null ? '' : val[0].digitalSymbol;
     this.availableCurrecyModelShow =
       this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
     this.availableCount = thousandthMark(
@@ -771,7 +772,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       (item: any) => item.digitalCurrencyName === e
     );
     this.beneficiaryName = val[0]['digitalSymbol'];
-    this.beneficiaryCurrencyIcon = val[0]['legalCurrencySymbol'];
+    this.beneficiaryCurrencyIcon = val[0]['digitalSymbol'];
     // centralBankId
     this.newToCommercialBankId = val[0]['centralBankId'];
     this.BeneficiaryArr = val[0]['beneficiaryWalletExtendedRespVOs'];
