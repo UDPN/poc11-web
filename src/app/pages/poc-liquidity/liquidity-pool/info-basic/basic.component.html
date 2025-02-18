@@ -1,0 +1,73 @@
+<nz-spin [nzSpinning]="loading">
+  <!-- Liquidity Pool Wallet Information -->
+  <nz-card [nzTitle]="'Liquidity Pool Wallet Information'" class="m-b-24">
+    <nz-descriptions [nzColumn]="2" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="Liquidity Pool Address">
+        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.liquidityPoolAddress">
+          {{ poolInfo.liquidityPoolAddress }}
+        </p>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Token">
+        {{ poolInfo.token }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Wallet Balance">
+        {{ poolInfo.walletBalance }}
+        <nz-tag *ngIf="poolInfo.belowMinimumWallet" nzColor="warning">Below the minimum requirement</nz-tag>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Authorized Amount">
+        {{ poolInfo.authorizedAmount }}
+        <br>
+        Available: {{ poolInfo.availableAmount }}
+        <nz-tag *ngIf="poolInfo.belowMinimumAuthorized" nzColor="warning">Below the minimum requirement</nz-tag>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Min Balance Req.">
+        <span>
+          {{ poolInfo.minBalanceReq }}
+          <i nz-icon nzType="info-circle" nzTheme="outline" 
+             nz-tooltip 
+             nzTooltipTitle="Minimum balance requirement for the liquidity pool">
+          </i>
+        </span>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Status">
+        <nz-tag [nzColor]="poolInfo.status === 'Active' ? 'success' : 'error'">
+          {{ poolInfo.status }}
+        </nz-tag>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Created by">
+        {{ poolInfo.createdBy }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Created on">
+        {{ poolInfo.createdOn | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+
+  <!-- Liquidity Pool Wallet Registration Transaction Information -->
+  <nz-card [nzTitle]="'Liquidity Pool Wallet Registration Transaction Information'" class="m-b-24">
+    <nz-descriptions [nzColumn]="1" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="Transaction Hash">
+        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.transactionHash">
+          {{ poolInfo.transactionHash }}
+        </p>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Transaction Time">
+        {{ poolInfo.transactionTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+
+  <!-- Token Pair Information -->
+  <nz-card [nzTitle]="'Token Pair Information'">
+    <nz-descriptions [nzColumn]="1" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="Token Pair">
+        <nz-tag *ngFor="let pair of poolInfo.tokenPairs" class="m-r-8">
+          {{ pair }}
+        </nz-tag>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+</nz-spin>

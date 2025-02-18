@@ -1,0 +1,89 @@
+<!-- Search Form -->
+<nz-card [nzTitle]="'Query'" [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+  <form nz-form nzLayout="vertical">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>Wallet Address</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="" name="walletAddress" [(ngModel)]="searchParam.walletAddress" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>Transaction Type</nz-form-label>
+          <nz-form-control>
+            <nz-select name="transactionType" [(ngModel)]="searchParam.transactionType" style="width: 100%">
+              <nz-option *ngFor="let type of transactionTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>Transaction Hash</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="" name="transactionHash" [(ngModel)]="searchParam.transactionHash" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-select name="status" [(ngModel)]="searchParam.status" style="width: 100%">
+              <nz-option *ngFor="let status of statusOptions" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <nz-form-item>
+          <nz-form-label>Transaction Time</nz-form-label>
+          <nz-form-control>
+            <nz-range-picker style="width: 100%" name="transactionTime" [(ngModel)]="searchParam.transactionTime"></nz-range-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzXXl]="24" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24" class="text-right">
+        <button nz-button nzType="primary" (click)="getDataList()">Query</button>
+        <button nz-button class="m-l-8" (click)="resetForm()">Reset</button>
+      </div>
+    </div>
+  </form>
+</nz-card>
+
+<!-- Transactions List -->
+<app-card-table-wrap [isNormalTable]="true" [tableTitle]="'Transactions'">
+  <div class="m-b-16">
+    <span>Liquidity Pool Address: </span>
+    <span nz-typography [nzCopyable]="true" [nzCopyText]="poolAddress">{{ poolAddress }}</span>
+  </div>
+
+  <app-ant-table
+    (changePageSize)="changePageSize($event)"
+    (changePageNum)="getDataList($event)"
+    [tableConfig]="tableConfig"
+    [tableData]="dataList"
+  ></app-ant-table>
+
+  <ng-template #addressTpl let-text="field" let-item="item">
+    <span nz-typography [nzCopyable]="true" [nzCopyText]="item[text]">{{ item[text] }}</span>
+  </ng-template>
+
+  <ng-template #amountTpl let-amount="amount">
+    <span [class.text-success]="!isNegativeAmount(amount)" [class.text-danger]="isNegativeAmount(amount)">
+      {{ amount }}
+    </span>
+  </ng-template>
+
+  <ng-template #statusTpl let-status="status">
+    <nz-tag [nzColor]="getStatusColor(status)">{{ status }}</nz-tag>
+  </ng-template>
+
+  <ng-template #actionTpl let-item="item">
+    <a class="operate-text">Details</a>
+  </ng-template>
+</app-card-table-wrap>
+

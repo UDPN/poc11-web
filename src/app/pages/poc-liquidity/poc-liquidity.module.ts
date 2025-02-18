@@ -8,9 +8,8 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@app/shared/shared.module';
 import { PocLiquidityRoutingModule } from './poc-liquidity-routing.module';
-
 @NgModule({
   declarations: [],
-  imports: [SharedModule, PocLiquidityRoutingModule]
+  imports: [SharedModule, PocLiquidityRoutingModule],
 })
 export class PocLiquidityModule {}
