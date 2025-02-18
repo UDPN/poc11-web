@@ -241,10 +241,20 @@ export const MapSet = {
     2: 'Unfreeze'
   },
   operationStatus: {
-    3: 'Pending Approval',
-    4: 'Processing',
-    5: 'Success',
-    6: 'Rejected'
+    5: 'Pending Approval',
+    20: 'Processing',
+    35: 'Active',
+    15: 'Rejected',
+    40: 'Failed',
+    50: 'Inactive'
+  },
+  operationStatusColor: {
+    5: 'volcano',
+    20: 'blue',
+    35: 'green',
+    15: 'red',
+    40: 'red',
+    50: 'default'
   },
   walletType: {
     1: 'Master Wallet',

@@ -412,3 +412,8 @@
     nzTooltipOverlayClassName="buils"
   ></i>
 </ng-template>
+<ng-template #stateTpl let-state="state">
+  <nz-tag [nzColor]="state | map: 'operationStatusColor'">{{
+    state | map: 'operationStatus'
+  }}</nz-tag>
+</ng-template>

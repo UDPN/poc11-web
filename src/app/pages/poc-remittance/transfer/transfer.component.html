@@ -91,11 +91,16 @@
                       class="unit-postion"
                       style="color: rgba(0, 0, 0, 0.45)"
                     >
-                      <span> {{ this.availableCurrecyModelShow }}</span>
+                      <span>
+                        {{
+                          this.availableCurrecyModelShow +
+                            ' ' +
+                            this.availableCount
+                        }}</span
+                      >
                       <span class="m-l-5 m-r-5">{{
                         this.availableCurrecyModelShowIcon
                       }}</span>
-                      <span>{{ this.availableCount }}</span>
                     </div>
                   </div>
                   <ng-template #remitterWalletAddressError let-control>
@@ -140,6 +145,9 @@
                     <ng-container *ngIf="control.hasError('regular')"
                       >The selected wallet doesn’t have sufficient
                       funds</ng-container
+                    >
+                    <ng-container *ngIf="control.hasError('regular1')"
+                      >Please fill in the correct amount</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -355,6 +363,9 @@
                     <ng-container *ngIf="control.hasError('regular')"
                       >Please fill in the correct amount</ng-container
                     >
+                    <ng-container *ngIf="control.hasError('regular1')"
+                      >Please fill in the correct amount</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -395,7 +406,7 @@
         </nz-card>
       </div>
 
-      <ng-container *ngIf="settlementStatus">
+      <ng-container *ngIf="settlementStatus && this.validateForm.valid">
         <div
           nz-col
           nz-col

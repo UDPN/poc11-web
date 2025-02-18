@@ -32,6 +32,8 @@ export class InfoComponent implements OnInit {
   toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('stateTpl', { static: true })
+  stateTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -229,8 +231,7 @@ export class InfoComponent implements OnInit {
         },
         {
           title: 'Status',
-          field: 'state',
-          pipe: 'operationStatus',
+          tdTemplate: this.stateTpl,
           width: 150
         }
       ],

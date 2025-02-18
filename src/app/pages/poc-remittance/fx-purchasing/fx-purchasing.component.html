@@ -98,11 +98,16 @@
                       class="unit-postion"
                       style="color: rgba(0, 0, 0, 0.45)"
                     >
-                      <span> {{ this.purchCurrecyModelShow }}</span>
+                      <span>
+                        {{
+                          this.purchCurrecyModelShow +
+                            ' ' +
+                            this.purchCurrecyModelCount
+                        }}</span
+                      >
                       <span class="m-l-5 m-r-5">{{
                         this.purchCurrecyModelShowIcon
                       }}</span>
-                      <span>{{ this.purchCurrecyModelCount }}</span>
                     </div>
                   </div>
                   <ng-template #transactionWalletAddressError let-control>
@@ -159,6 +164,9 @@
                     <ng-container *ngIf="control.hasError('regular')"
                       >The selected wallet doesn’t have sufficient
                       funds.</ng-container
+                    >
+                    <ng-container *ngIf="control.hasError('regular1')"
+                      >Please fill in the correct amount</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -237,11 +245,16 @@
                       class="unit-postion"
                       style="color: rgba(0, 0, 0, 0.45)"
                     >
-                      <span> {{ this.reveingCurrecyModelShow }}</span>
+                      <span>
+                        {{
+                          this.reveingCurrecyModelShow +
+                            ' ' +
+                            this.reveingCurrecyModelCount
+                        }}</span
+                      >
                       <span class="m-l-5 m-r-5">{{
                         this.reveingCurrecyModelShowIcon
                       }}</span>
-                      <span>{{ this.reveingCurrecyModelCount }}</span>
                     </div>
                   </div>
                   <ng-template #receivingWalletAddressError let-control>
@@ -279,9 +292,9 @@
                       >Please input your FX Purchase Amount</ng-container
                     >
 
-                    <ng-container
-                      *ngIf="control.hasError('regular')"
-                    ></ng-container>
+                    <ng-container *ngIf="control.hasError('regular')"
+                      >Please fill in the correct amount</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -289,9 +302,8 @@
           </form>
         </nz-card>
       </div>
-      <ng-container *ngIf="showStatus">
+      <ng-container *ngIf="showStatus && this.validateForm.valid">
         <div
-          nz-col
           nz-col
           [nzXXl]="23"
           [nzXl]="23"
