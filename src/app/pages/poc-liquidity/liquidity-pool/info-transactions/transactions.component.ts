@@ -1,0 +1,211 @@
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
+import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
+import { finalize } from 'rxjs';
+
+interface SearchParams {
+  walletAddress: string;
+  transactionType: string;
+  transactionHash: string;
+  status: string;
+  transactionTime: Date[];
+}
+
+@Component({
+  selector: 'app-transactions',
+  templateUrl: './transactions.component.html',
+  styleUrls: ['./transactions.component.less']
+})
+export class TransactionsComponent implements OnInit {
+  @ViewChild('addressTpl', { static: false }) addressTpl!: TemplateRef<any>;
+  @ViewChild('amountTpl', { static: false }) amountTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
+  @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
+
+  tableConfig!: AntTableConfig;
+  dataList: any[] = [];
+  loading = false;
+  poolAddress = '0x1234...5678'; // Replace with actual pool address
+
+  searchParam: SearchParams = {
+    walletAddress: '',
+    transactionType: '',
+    transactionHash: '',
+    status: '',
+    transactionTime: []
+  };
+
+  transactionTypes = [
+    { label: 'All', value: '' },
+    { label: 'Transfer', value: 'Transfer' },
+    { label: 'FX Purchasing', value: 'FX Purchasing' }
+  ];
+
+  statusOptions = [
+    { label: 'All', value: '' },
+    { label: 'Success', value: 'Success' },
+    { label: 'Processing', value: 'Processing' },
+    { label: 'Active', value: 'Active' }
+  ];
+
+  constructor(
+    private route: ActivatedRoute,
+    private message: NzMessageService,
+    private liquidityPoolService: LiquidityPoolService
+  ) {}
+
+  ngOnInit() {
+    this.initTableConfig();
+    this.getDataList();
+  }
+
+  initTableConfig() {
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'Transaction No.',
+          field: 'no',
+          width: 120,
+          tdTemplate: this.addressTpl
+        },
+        {
+          title: 'From',
+          field: 'from',
+          width: 160,
+          tdTemplate: this.addressTpl
+        },
+        {
+          title: 'To',
+          field: 'to',
+          width: 160,
+          tdTemplate: this.addressTpl
+        },
+        {
+          title: 'Transaction Type',
+          field: 'type',
+          width: 120
+        },
+        {
+          title: 'Amount',
+          field: 'amount',
+          width: 120,
+          tdTemplate: this.amountTpl
+        },
+        {
+          title: 'FX Rate',
+          field: 'fxRate',
+          width: 100
+        },
+        {
+          title: 'Transaction Time',
+          field: 'time',
+          width: 160,
+          pipe: 'date:MMM d, y, HH:mm:ss'
+        },
+        {
+          title: 'Transaction Hash',
+          field: 'hash',
+          width: 160,
+          tdTemplate: this.addressTpl
+        },
+        {
+          title: 'Status',
+          field: 'status',
+          width: 100,
+          tdTemplate: this.statusTpl
+        },
+        {
+          title: 'Actions',
+          tdTemplate: this.actionTpl,
+          width: 80,
+          fixed: true,
+          fixedDir: 'right'
+        }
+      ],
+      total: 0,
+      pageSize: 10,
+      pageIndex: 1,
+      loading: false,
+      xScroll: 1300
+    };
+  }
+
+  getDataList(e?: NzTableQueryParams | number) {
+    if (typeof e === 'number') {
+      this.tableConfig.pageIndex = e;
+    } else if (e) {
+      this.tableConfig.pageIndex = e.pageIndex;
+    }
+
+    const params = {
+      ...this.searchParam,
+      pageSize: this.tableConfig.pageSize,
+      pageIndex: this.tableConfig.pageIndex
+    };
+
+    this.loading = true;
+    this.tableConfig.loading = true;
+
+    this.liquidityPoolService.getTransactionList(params)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.tableConfig.loading = false;
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.code === 0) {
+            this.dataList = res.data.rows || [];
+            this.tableConfig.total = res.data.page.total || 0;
+          } else {
+            this.message.error(res.msg || 'Failed to load transaction list');
+            this.dataList = [];
+            this.tableConfig.total = 0;
+          }
+        },
+        error: (error) => {
+          console.error('Failed to load transaction list:', error);
+          this.message.error('Failed to load transaction list');
+          this.dataList = [];
+          this.tableConfig.total = 0;
+        }
+      });
+  }
+
+  changePageSize(pageSize: number) {
+    this.tableConfig.pageSize = pageSize;
+    this.getDataList(1);
+  }
+
+  resetForm() {
+    this.searchParam = {
+      walletAddress: '',
+      transactionType: '',
+      transactionHash: '',
+      status: '',
+      transactionTime: []
+    };
+    this.getDataList(1);
+  }
+
+  isNegativeAmount(amount: string): boolean {
+    return amount.startsWith('-');
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'Success':
+        return 'success';
+      case 'Processing':
+        return 'processing';
+      case 'Active':
+        return 'blue';
+      default:
+        return 'default';
+    }
+  }
+}

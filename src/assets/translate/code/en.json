@@ -329,5 +329,22 @@
   "MSG_00_9005": "file does not exist",
   "MSG_00_9006": "sftp file download failed",
   "MSG_00_9007": "sftp file upload failed",
-  "MSG_03_8000": "bank info not exist"
+  "MSG_03_8000": "bank info not exist",
+  "02-17-s": "start",
+  "MSG_05_2000": "Enterprise ID cannot be empty",
+  "MSG_05_2001": "Invalid email format",
+  "MSG_05_2002": "Enterprise name cannot be empty",
+  "MSG_05_2003": "Enterprise contact person cannot be empty",
+  "MSG_05_2004": "Enterprise contact email cannot be empty",
+  "MSG_05_2005": "Failed to generate public-private key pair",
+  "MSG_05_2006": "Enterprise does not exist",
+  "MSG_05_2007": "Invalid enterprise status",
+  "MSG_05_2008": "Review status cannot be empty",
+  "MSG_05_2009": "Review remarks cannot be empty",
+  "MSG_05_2010": "Enterprise operation record does not exist",
+  "MSG_05_2011": "Invalid enterprise review status",
+  "MSG_05_2012": "Invalid enterprise wallet review status",
+  "MSG_05_2013": "Enterprise identifier cannot be empty",
+  "MSG_05_2014": "Failed to download enterprise key information",
+  "02-17-e": "end"
 }

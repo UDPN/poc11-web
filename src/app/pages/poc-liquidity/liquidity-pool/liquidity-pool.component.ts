@@ -1,24 +1,45 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   OnInit,
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
+import { SearchCommonVO } from '@app/core/services/types';
+import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
+
+interface SearchParam {
+  liquidityPoolAddress: string;
+  token: string;
+  createdTime: any[];
+  status: string;
+}
 
 @Component({
   selector: 'app-liquidity-pool',
   templateUrl: './liquidity-pool.component.html',
-  styleUrl: './liquidity-pool.component.less'
+  styleUrls: ['./liquidity-pool.component.less']
 })
 export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   @ViewChild('headerContent', { static: false })
   headerContent!: TemplateRef<NzSafeAny>;
   @ViewChild('headerExtra', { static: false })
   headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('addressTpl', { static: true })
+  addressTpl!: TemplateRef<NzSafeAny>;
+
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -26,8 +47,29 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     desc: '',
     footer: ''
   };
+  searchParam: Partial<SearchParam> = {
+    liquidityPoolAddress: '',
+    token: '',
+    status: '',
+    createdTime: []
+  };
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
+  tableConfig!: AntTableConfig;
+  dataList: NzSafeAny[] = [];
+  tokenList: Array<{ key: string; value: string }> = [];
 
-  constructor() {}
+  constructor(
+    private liquidityPoolService: LiquidityPoolService,
+    private cdr: ChangeDetectorRef,
+    private message: NzMessageService,
+    private modal: NzModalService
+  ) {}
+
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -37,5 +79,149 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       footer: ''
     };
   }
-  ngOnInit(): void {}
+
+  ngOnInit() {
+    this.initTable();
+    this.getTokenList();
+  }
+
+  getTokenList(): void {
+    this.liquidityPoolService.getTokenList().subscribe({
+      next: (res) => {
+        if (res.code === 0) {
+          this.tokenList = res.data;
+        }
+      }
+    });
+  }
+
+  tableChangeDectction(): void {
+    this.dataList = [...this.dataList];
+    this.cdr.detectChanges();
+  }
+
+  tableLoading(isLoading: boolean): void {
+    this.tableConfig.loading = isLoading;
+    this.tableChangeDectction();
+  }
+
+  resetForm(): void {
+    this.searchParam = {
+      liquidityPoolAddress: '',
+      token: '',
+      status: '',
+      createdTime: []
+    };
+    this.getDataList(this.tableQueryParams);
+  }
+
+  changePageSize(e: number): void {
+    this.tableConfig.pageSize = e;
+  }
+
+  getDataList(e?: NzTableQueryParams): void {
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.liquidityPoolService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.code === 0) {
+            this.dataList = res.data?.rows || [];
+            this.tableConfig.total = res.data?.page?.total || 0;
+            this.tableConfig.pageIndex = params.pageNum;
+            this.tableLoading(false);
+            this.cdr.markForCheck();
+          } else {
+            this.message.error(res.message || 'Failed to fetch liquidity pool list');
+          }
+        },
+        error: () => {
+          this.message.error('Failed to fetch liquidity pool list');
+          this.tableLoading(false);
+        }
+      });
+  }
+
+  private initTable(): void {
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'Liquidity Pool Address',
+          field: 'liquidityPoolAddress',
+          tdTemplate: this.addressTpl,
+          width: 180
+        },
+        {
+          title: 'Token',
+          field: 'token',
+          width: 100
+        },
+        {
+          title: 'Wallet Balance',
+          field: 'walletBalance',
+          width: 180
+        },
+        {
+          title: 'Authorized Amount',
+          field: 'authorizedAmount',
+          width: 300
+        },
+        {
+          title: 'Min Balance Req.',
+          field: 'minBalanceReq',
+          width: 180
+        },
+        {
+          title: 'Created on',
+          field: 'createdOn',
+          pipe: 'date:MMM d, y, HH:mm:ss',
+          width: 180
+        },
+        {
+          title: 'Status',
+          field: 'status',
+          tdTemplate: this.statusTpl,
+          width: 100
+        },
+        {
+          title: 'Actions',
+          tdTemplate: this.operationTpl,
+          fixed: true,
+          fixedDir: 'right',
+          showAction: false,
+          width: 180
+        }
+      ],
+      total: 0,
+      showCheckbox: false,
+      loading: false,
+      pageSize: 10,
+      pageIndex: 1
+    };
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'Active':
+        return 'success';
+      case 'Processing':
+        return 'processing';
+      case 'Failed':
+        return 'error';
+      case 'Inactive':
+        return 'default';
+      default:
+        return 'default';
+    }
+  }
 }
