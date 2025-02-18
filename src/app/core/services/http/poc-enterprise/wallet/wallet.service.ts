@@ -61,7 +61,7 @@ export class WalletService {
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/enterprise/wallet/listPage', param).pipe(
+    return this.https.post('/v2/enterprise/wallet/listPage', param).pipe(
       map((response: any) => {
         return response;
       })
@@ -69,7 +69,7 @@ export class WalletService {
   }
 
   public getBasicInfo(params: { bankAccountId: any }): Observable<any> {
-    return this.http.post(`/v1/enterprise/wallet/detail`, params);
+    return this.http.post(`/v2/enterprise/wallet/detail`, params);
   }
 
   public getTopUpAndWithdrawInfo(
@@ -87,7 +87,7 @@ export class WalletService {
       }
     };
     return this.https
-      .post('/v1/enterprise/wallet/detail/topUpAndWithdraw', param)
+      .post('/v2/enterprise/wallet/detail/topUpAndWithdraw', param)
       .pipe(
         map((response: any) => {
           return response;
@@ -110,7 +110,7 @@ export class WalletService {
       }
     };
     return this.https
-      .post('/v1/enterprise/wallet/detail/transferAndFxpurchasing', param)
+      .post('/v2/enterprise/wallet/detail/transferAndFxpurchasing', param)
       .pipe(
         map((response: any) => {
           return response;
@@ -119,10 +119,10 @@ export class WalletService {
   }
 
   public approve(params: Adata): Observable<any> {
-    return this.http.post(`/v1/enterprise/wallet/process`, params);
+    return this.http.post(`/v2/enterprise/wallet/process`, params);
   }
 
   public getStatusUpdate(params: Gdata): Observable<any> {
-    return this.http.post(`/v1/enterprise/wallet/update/status`, params);
+    return this.http.post(`/v2/enterprise/wallet/update/status`, params);
   }
 }

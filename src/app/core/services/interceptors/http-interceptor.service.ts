@@ -60,7 +60,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         return res;
       });
       let prefixUrl: string = '';
-      if (req.url.indexOf('wcbdccommercial') !== -1) {
+      if (req.url.indexOf('v2') !== -1) {
         prefixUrl = '/wcbdccommercial';
       } else {
         prefixUrl = '/api/manage';

@@ -54,7 +54,7 @@ export class TransactionsService {
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/tx/order/listPage', param).pipe(
+    return this.https.post('/v2/tx/order/listPage', param).pipe(
       map((response: any) => {
         return response;
       })
@@ -94,7 +94,7 @@ export class TransactionsService {
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/tx/transfer/listPage', param).pipe(
+    return this.https.post('/v2/tx/transfer/listPage', param).pipe(
       map((response: any) => {
         return response;
       })

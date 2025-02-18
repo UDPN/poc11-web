@@ -66,7 +66,7 @@ export class TopUpWithdrawService {
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/tx/approval/order/listPage', param).pipe(
+    return this.https.post('/v2/tx/approval/order/listPage', param).pipe(
       map((response: any) => {
         return response;
       })
@@ -106,7 +106,7 @@ export class TopUpWithdrawService {
         pageNum: pageIndex
       }
     };
-    return this.https.post('/v1/tx/approval/transfer/listPage', param).pipe(
+    return this.https.post('/v2/tx/approval/transfer/listPage', param).pipe(
       map((response: any) => {
         return response;
       })
@@ -114,18 +114,18 @@ export class TopUpWithdrawService {
   }
 
   public getInfo(params: { accountCbdcId: any }): Observable<any> {
-    return this.http.post(`/v1/tx/approval/order/detail`, params);
+    return this.http.post(`/v2/tx/approval/order/detail`, params);
   }
 
   public getTransferInfo(params: { transferId: any }): Observable<any> {
-    return this.http.post(`/v1/tx/approval/transfer/detail`, params);
+    return this.http.post(`/v2/tx/approval/transfer/detail`, params);
   }
 
   public getTopUpWithdrawApprove(params: Gdata): Observable<any> {
-    return this.http.post(`/v1/tx/approval/order/audit`, params);
+    return this.http.post(`/v2/tx/approval/order/audit`, params);
   }
 
   public getTransferApprove(params: Tdata): Observable<any> {
-    return this.http.post(`/v1/tx/approval/transfer/audit`, params);
+    return this.http.post(`/v2/tx/approval/transfer/audit`, params);
   }
 }

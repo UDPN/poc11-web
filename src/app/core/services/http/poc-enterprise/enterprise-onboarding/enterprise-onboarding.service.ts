@@ -152,46 +152,46 @@ export class EnterpriseOnboardingService {
       }
     };
 
-    return this.https.post('/v1/enterprise/listPage', param);
+    return this.https.post('/v2/enterprise/listPage', param);
   }
 
   public saveEnterprise(data: EnterpriseSubmitData): Observable<any> {
-    return this.https.post('/v1/enterprise/save', data);
+    return this.https.post('/v2/enterprise/save', data);
   }
 
   public getEnterpriseCode(): Observable<any> {
-    return this.https.post('/v1/enterprise/getEnterpriseCode', {});
+    return this.https.post('/v2/enterprise/getEnterpriseCode', {});
   }
 
   public getEnterpriseDetail(params: EnterpriseDetailParams): Observable<any> {
-    return this.https.post('/v1/enterprise/detail/basicInfo', params);
+    return this.https.post('/v2/enterprise/detail/basicInfo', params);
   }
 
   public editEnterprise(data: EnterpriseEditData): Observable<any> {
-    return this.https.post('/v1/enterprise/edit', data);
+    return this.https.post('/v2/enterprise/edit', data);
   }
 
 
   public userWalletList(data: EnterpriseEditData): Observable<any> {
-    return this.https.post('/v1/enterprise/detail/userWalletList', data);
+    return this.https.post('/v2/enterprise/detail/userWalletList', data);
   }
 
   public getTokenList(): Observable<any> {
-    return this.https.post('/v1/enterprise/tokenList', {});
+    return this.https.post('/v2/enterprise/tokenList', {});
   }
 
   public updateEnterpriseState(params: EnterpriseStateParams): Observable<any> {
-    return this.https.post('/v1/enterprise/updateState', params);
+    return this.https.post('/v2/enterprise/updateState', params);
   }
 
   public getUserWalletList(params: WalletListParams): Observable<any> {
-    return this.https.post('/v1/enterprise/detail/userWalletList', params);
+    return this.https.post('/v2/enterprise/detail/userWalletList', params);
   }
 
   public getOperationRecords(params: OperationRecordsParams): Observable<any> {
-    return this.https.post('/v1/enterprise/detail/operationRecords', params);
+    return this.https.post('/v2/enterprise/detail/operationRecords', params);
   }
   public setAudit(params: any): Observable<any> {
-    return this.https.post('/v1/enterprise/audit', params);
+    return this.https.post('/v2/enterprise/audit', params);
   }
 }
