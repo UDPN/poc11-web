@@ -61,9 +61,9 @@ export class HttpInterceptorService implements HttpInterceptor {
       });
       let prefixUrl: string = '';
       if (req.url.indexOf('v2') !== -1) {
-        prefixUrl = '/wcbdccommercial';
-      } else {
         prefixUrl = '/api/manage';
+      } else {
+        prefixUrl = '/wcbdccommercial';
       }
       httpConfig = {
         headers: req.headers.set('token', token),
