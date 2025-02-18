@@ -115,12 +115,13 @@
                 [(ngModel)]="searchParam.status"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="5" nzLabel="Pending Approval"></nz-option>
-                <nz-option nzValue="20" nzLabel="Processing"></nz-option>
-                <nz-option nzValue="35" nzLabel="Active"></nz-option>
-                <nz-option nzValue="15" nzLabel="Rejected"></nz-option>
-                <nz-option nzValue="40" nzLabel="Failed"></nz-option>
-                <nz-option nzValue="50" nzLabel="Inactive"></nz-option>
+                <nz-option nzValue="1" nzLabel="Pending Approval"></nz-option>
+                <nz-option nzValue="3" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="4" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="5" nzLabel="Active"></nz-option>
+                <nz-option nzValue="2" nzLabel="Rejected"></nz-option>
+                <nz-option nzValue="6" nzLabel="Failed"></nz-option>
+                <nz-option nzValue="8" nzLabel="Inactive"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -191,7 +192,7 @@
       <ng-container *appAuth="''">
         <span
           class="operate-text"
-          *ngIf="status === 5"
+          *ngIf="status === 1"
           routerLink="/poc/poc-enterprise/wallet/info"
           [queryParams]="{
             bankAccountId,

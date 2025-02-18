@@ -17,9 +17,9 @@
       ></nz-step>
       <nz-step
         [nzTitle]="
-          info.status === 5
+          info.status === 1
             ? 'Approval'
-            : info.status === 15
+            : info.status === 2
             ? 'Rejected'
             : 'Approved'
         "
@@ -31,7 +31,7 @@
         [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"
         [nzDescription]="
           'The wallet' +
-          (info.status === 35 || info.status === 50
+          (info.status === 5 || info.status === 8
             ? ' creation is executed successfully on the chain'
             : ' is waiting to be executed on the chain')
         "
@@ -42,7 +42,7 @@
 
 <ng-template #approvalTpl>
   <!-- other status -->
-  <ng-container *ngIf="info?.status !== 5">
+  <ng-container *ngIf="info?.status !== 1">
     <span>{{
       'on ' +
         (info?.reviewerTime | map: 'timeStamp') +
@@ -50,7 +50,7 @@
         info?.reviewerUserName
     }}</span>
     <div
-      *ngIf="info?.status === 15 && info?.reviewerRemarks"
+      *ngIf="info?.status === 2 && info?.reviewerRemarks"
       style="background-color: rgba(254, 215, 215, 0.3)"
       class="m-t-10 p-8"
     >
@@ -58,7 +58,7 @@
     </div>
   </ng-container>
   <!-- Pending Approval -->
-  <ng-container *ngIf="info?.status === 5">
+  <ng-container *ngIf="info?.status === 1">
     <div>
       {{ 'The wallet creation request is awaiting confirmation' }}
     </div>

@@ -311,20 +311,22 @@ export const MapSet = {
     6: 'Failed'
   },
   enterpriseWalletStatus: {
-    5: 'Pending Approval',
-    20: 'Processing',
-    35: 'Active',
-    15: 'Rejected',
-    40: 'Failed',
-    50: 'Inactive'
+    1: 'Pending Approval',
+    3: 'Processing',
+    4: 'Processing',
+    5: 'Active',
+    2: 'Rejected',
+    6: 'Failed',
+    8: 'Inactive'
   },
   enterpriseWalletStatusColor: {
-    5: 'volcano',
-    20: 'blue',
-    35: 'green',
-    15: 'red',
-    40: 'red',
-    50: 'default'
+    1: 'volcano',
+    3: 'blue',
+    4: 'blue',
+    5: 'green',
+    2: 'red',
+    6: 'red',
+    8: 'default'
   },
   walletTopUpWithdrawInfoType: {
     3: 'Top-up',
@@ -336,12 +338,13 @@ export const MapSet = {
     3: 'Transfer'
   },
   enterpriseApprovalSecondStatus: {
-    5: 'process',
-    15: 'error',
-    20: 'finish',
-    35: 'finish',
-    40: 'finish',
-    50: 'finish'
+    1: 'process',
+    3: 'finish',
+    4: 'finish',
+    5: 'finish',
+    2: 'error',
+    6: 'finish',
+    8: 'finish'
   },
 
   enterpriseOnboardApprovalSecondStatus: {
@@ -357,12 +360,13 @@ export const MapSet = {
     3: 'wait'
   },
   enterpriseApprovalThirdStatus: {
-    5: 'wait',
-    15: 'wait',
-    20: 'process',
-    35: 'finish',
-    40: 'error',
-    50: 'finish'
+    1: 'wait',
+    2: 'wait',
+    3: 'process',
+    4: 'process',
+    5: 'finish',
+    6: 'error',
+    8: 'finish'
   },
   transferApprovalSecondStatus: {
     5: 'process',

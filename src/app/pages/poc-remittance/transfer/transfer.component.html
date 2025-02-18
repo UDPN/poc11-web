@@ -120,7 +120,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group
-                        [nzAddOnBefore]="availableCurrecyModelShowIcon"
+                        [nzAddOnAfter]="availableCurrecyModelShowIcon"
                       >
                         <input
                           type="number"
@@ -336,7 +336,7 @@
                 <nz-form-control [nzErrorTip]="AmountError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
-                      <nz-input-group [nzAddOnBefore]="beneficiaryCurrencyIcon">
+                      <nz-input-group [nzAddOnAfter]="beneficiaryCurrencyIcon">
                         <input
                           type="number"
                           value="amountValue"
@@ -405,57 +405,8 @@
           [nzMd]="23"
           [nzSm]="24"
           [nzXs]="24"
-          class="m-t-15 remit"
-          style="background: #fff; border-radius: 16px; padding: 24px"
-        >
-          <div class="remit-title">FX Order Details</div>
-          <nz-descriptions
-            nzLayout="vertical"
-            nzTitle=""
-            [nzColumn]="{ xxl: 4, xl: 4, lg: 2, md: 2, sm: 1, xs: 1 }"
-            class="m-t-20 m-l-20 m-r-20 card-descriptions-order-else"
-            [nzColon]="true"
-            [nzBordered]="false"
-          >
-            <nz-descriptions-item nzTitle="FX Rate" nzSpan="2">{{
-              remiInfo.rate
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Commission Fee" nzSpan="2">{{
-              remiInfo.com
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Total Debit Amount" nzSpan="2">{{
-              remiInfo.total
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Receiving Amount" nzSpan="2">{{
-              remiInfo.reve
-            }}</nz-descriptions-item
-            ><nz-descriptions-item
-              nzSpan="2"
-              [nzTitle]="this.sendName + ' Liquidity Wallet Address'"
-              >{{ remiInfo.fromCapitalPoolAddress }}</nz-descriptions-item
-            ><nz-descriptions-item
-              nzSpan="2"
-              [nzTitle]="this.beneficiaryName + ' Liquidity Wallet Address'"
-              >{{ remiInfo.toCapitalPoolAddress }}</nz-descriptions-item
-            ></nz-descriptions
-          >
-        </div>
-        <div
-          nz-col
-          nz-col
-          [nzXXl]="23"
-          [nzXl]="23"
-          [nzLg]="23"
-          [nzMd]="23"
-          [nzSm]="24"
-          [nzXs]="24"
           class="m-t-60"
-          style="
-            background: #fff;
-            border-radius: 16px;
-            padding: 4px;
-            display: none;
-          "
+          style="background: #fff; border-radius: 16px; padding: 4px"
         >
           <div>
             <nz-card
@@ -463,9 +414,33 @@
               nzBordered="false"
               class="none-bottom"
             >
-              <span style="color: rgb(174, 6, 6)">
-                {{ 'Indicative rate expires as at ' + timeString }}</span
-              >
+              <div class="m-b-10">
+                <span>{{ 'Amount: ' }}</span>
+                <span class="operate-text" style="font-size: 20px"
+                  ><b>{{
+                    this.validateForm.get('reni_sendAmount')?.value
+                      | map: 'toThousandthMark'
+                  }}</b></span
+                >
+                <span
+                  ><b>{{ availableCurrecyModelShowIcon }}</b></span
+                >
+                <span
+                  class="arrow-right m-l-10 m-r-10"
+                  nz-icon
+                  nzType="arrow-right"
+                  nzTheme="outline"
+                ></span>
+                <span class="operate-text" style="font-size: 20px"
+                  ><b>{{
+                    this.validateForm.get('amount')?.value
+                      | map: 'toThousandthMark'
+                  }}</b></span
+                >
+                <span
+                  ><b>{{ beneficiaryCurrencyIcon }}</b></span
+                >
+              </div>
               <nz-table
                 #rowSelectionTable
                 nzShowSizeChanger
@@ -476,11 +451,21 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th>FX Liquidity Provider</th>
-                    <!-- <th>Currency Pair</th> -->
-                    <th>FX Rate</th>
-                    <th>Commission Fee</th>
-                    <th>Total Debit Amount</th>
+                    <th>
+                      FX Rate<!-- <nz-tag style="opacity: 0.7" [nzColor]="color">{{
+                      ''
+                    }}</nz-tag> -->
+                    </th>
+                    <th>Liquidity Provider Name</th>
+                    <th>
+                      {{
+                        availableCurrecyModelShowIcon +
+                          ' Liquidity Pool Address'
+                      }}
+                    </th>
+                    <th>
+                      {{ beneficiaryCurrencyIcon + ' Liquidity Pool Address' }}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -503,17 +488,11 @@
                         <label nz-radio [nzValue]="i"></label>
                       </nz-radio-group>
                     </td>
-                    <td>{{ data.sp }}</td>
                     <td>{{ data.currency }}</td>
-                    <!-- <td>{{ data.rate }}</td> -->
-                    <td>{{ data.com }}</td>
+                    <td>{{ data.sp }}</td>
+                    <td>{{ data.fromCapitalPoolAddress }}</td>
                     <td>
-                      <b>{{ data.total }}</b>
-                      <span
-                        style="color: blue; font-weight: 600; margin-left: 30px"
-                        *ngIf="i === 0"
-                        >{{ ' Recommended!' }}</span
-                      >
+                      {{ data.toCapitalPoolAddress }}
                     </td>
                   </tr>
                 </tbody>
@@ -525,7 +504,7 @@
     </div>
   </nz-card>
   <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25 m-b-10 m-r-60">
-    <div nz-col nzSpan="24" style="text-align: end">
+    <div nz-col nzSpan="22" style="text-align: end">
       <button
         *appAuth="'R01020101'"
         nz-button
@@ -576,125 +555,71 @@
   [nzBodyStyle]="{ 'max-height': '700px' }"
 >
   <div *nzModalContent>
-    <div
-      nz-row
-      style="display: flex; justify-content: space-around; align-items: center"
-      class="m-t-30"
-    >
-      <div
-        nz-col
-        [nzXXl]="11"
-        [nzXl]="11"
-        [nzLg]="11"
-        [nzMd]="11"
-        [nzSm]="24"
-        [nzXs]="24"
-      >
-        <nz-card nzTitle="Remitter Information" class="info-none-bottom">
+    <div nz-row>
+      <div nz-col [nzSpan]="24">
+        <nz-card [nzBordered]="false">
           <nz-descriptions
-            nzLayout="vertical"
             nzTitle=""
             [nzColumn]="1"
             [nzColon]="false"
             [nzBordered]="false"
-            class="card-descriptions-vertical"
-            style="height: 400px"
+            class="card-descriptions-order"
           >
-            <nz-descriptions-item nzTitle="Sending Amount:">{{
-              validateForm.controls['reni_sendAmount'].value +
-                ' ' +
-                availableCurrecyModel.replace('-UDPN', '')
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Remitter's Name:">{{
-              remitterBankName
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Remitter's Wallet Address:">{{
-              newRemitterWalletAddress
-            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Amount"
+              ><span class="operate-text" style="font-size: 16px"
+                ><b>{{
+                  this.validateForm.get('reni_sendAmount')?.value
+                    | map: 'toThousandthMark'
+                }}</b></span
+              >
+              <span>{{ availableCurrecyModelShowIcon }}</span>
+              <span
+                class="arrow-right m-l-10 m-r-10"
+                nz-icon
+                nzType="arrow-right"
+                nzTheme="outline"
+              ></span>
+              <span class="operate-text" style="font-size: 16px"
+                ><b>{{
+                  this.validateForm.get('amount')?.value
+                    | map: 'toThousandthMark'
+                }}</b></span
+              >
+              <span>{{ beneficiaryCurrencyIcon }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item nzTitle="Sender Wallet Address"
+              ><p
+                nz-typography
+                [nzCopyable]="true"
+                [nzCopyText]="newRemitterWalletAddress"
+              >
+                {{ newRemitterWalletAddress }}
+              </p></nz-descriptions-item
+            >
+            <nz-descriptions-item nzTitle="Receiver Wallet Address"
+              ><p
+                nz-typography
+                [nzCopyable]="true"
+                [nzCopyText]="newBeneficialWalletAddress"
+              >
+                {{ newBeneficialWalletAddress }}
+              </p></nz-descriptions-item
+            >
+            <ng-container *ngIf="beneficiaryCurrency !== availableCurrecyModel"
+              ><nz-descriptions-item nzTitle="FX Rate"
+                >{{ checkedItemComment[0].currency
+                }}<!-- <nz-tag style="opacity: 0.7" [nzColor]="color">{{
+                        ''
+                      }}</nz-tag> --></nz-descriptions-item
+              ><nz-descriptions-item nzTitle="Liquidity Provider Name">{{
+                checkedItemComment[0].sp
+              }}</nz-descriptions-item></ng-container
+            >
             <nz-descriptions-item nzTitle="Remittance Note:">{{
               validateForm.controls['remittanceInformation'].value
             }}</nz-descriptions-item>
-            <!-- <nz-descriptions-item nzTitle="Enduser Information:">88888</nz-descriptions-item> -->
           </nz-descriptions>
         </nz-card>
-      </div>
-      <div
-        nz-col
-        [nzXXl]="1"
-        [nzXl]="1"
-        [nzLg]="1"
-        [nzMd]="1"
-        [nzSm]="0"
-        [nzXs]="0"
-      >
-        <img src="../../../../assets/imgs//arrow.png" alt="" />
-      </div>
-      <div
-        nz-col
-        [nzXXl]="11"
-        [nzXl]="11"
-        [nzLg]="11"
-        [nzMd]="11"
-        [nzSm]="24"
-        [nzXs]="24"
-      >
-        <nz-card nzTitle="Beneficiary Information" class="info-none-bottom">
-          <nz-descriptions
-            nzLayout="vertical"
-            nzTitle=""
-            [nzColumn]="1"
-            [nzColon]="false"
-            [nzBordered]="false"
-            class="card-descriptions-vertical"
-            style="height: 400px"
-          >
-            <nz-descriptions-item nzTitle="Receiving Amount:">{{
-              validateForm.controls['amount'].value +
-                ' ' +
-                beneficiaryCurrency.replace('-UDPN', '')
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Beneficiary's Name:">{{
-              bankNames
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Beneficiary's Wallet Address:">{{
-              newBeneficialWalletAddress
-            }}</nz-descriptions-item>
-          </nz-descriptions>
-        </nz-card>
-      </div>
-      <div
-        *ngIf="beneficiaryCurrency !== availableCurrecyModel"
-        nz-col
-        [nzXXl]="24"
-        [nzXl]="24"
-        [nzLg]="24"
-        [nzMd]="24"
-        [nzSm]="24"
-        [nzXs]="24"
-      >
-        <nz-descriptions
-          nzLayout="vertical"
-          [nzColumn]="{ xxl: 5, xl: 5, lg: 5, md: 5, sm: 5, xs: 5 }"
-          [nzColon]="false"
-          [nzBordered]="false"
-          class="card-descriptions-vertical m-t-25"
-        >
-          <nz-descriptions-item nzTitle="FX Settlement Bank">{{
-            checkedItemComment[0].sp
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="FX Rate">{{
-            checkedItemComment[0].currency
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Commission Fee">{{
-            checkedItemComment[0].com
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Total Debit Amount">{{
-            checkedItemComment[0].total
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Receiving Amount">{{
-            checkedItemComment[0].info.reve
-          }}</nz-descriptions-item>
-        </nz-descriptions>
       </div>
     </div>
   </div>
