@@ -26,18 +26,16 @@
           [nzDescription]="approvalTpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.txHash && info.txTime">
-        <nz-step
-          [nzTitle]="'On-chain execution'"
-          [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"
-          [nzDescription]="
-            'The wallet' +
-            (info.status === 5 || info.status === 8
-              ? ' creation is executed successfully on the chain'
-              : ' is waiting to be executed on the chain')
-          "
-        ></nz-step
-      ></ng-container>
+      <nz-step
+        [nzTitle]="'On-chain execution'"
+        [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"
+        [nzDescription]="
+          'The wallet' +
+          (info.status === 5 || info.status === 8
+            ? ' creation is executed successfully on the chain'
+            : ' is waiting to be executed on the chain')
+        "
+      ></nz-step>
     </nz-steps>
   </div>
 </nz-card>
