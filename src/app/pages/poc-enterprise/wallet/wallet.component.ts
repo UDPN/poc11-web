@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-22 14:49:39
+ * @LastEditTime: 2025-02-19 16:45:58
  * @Description:
  */
 import {
@@ -196,7 +196,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Currency',
+          title: 'Token',
           field: 'currency',
           notNeedEllipsis: true,
           width: 100
