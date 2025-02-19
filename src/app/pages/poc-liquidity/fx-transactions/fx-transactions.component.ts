@@ -59,7 +59,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
   operationTpl!: TemplateRef<NzSafeAny>;
 
   currencyList: Array<any> = [];
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   color: string = '';
   pageHeaderInfo: Partial<PageHeaderType> = {

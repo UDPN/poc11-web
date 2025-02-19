@@ -74,7 +74,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild('transferOperationTpl', { static: true })
   transferOperationTpl!: TemplateRef<NzSafeAny>;
   tabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   currencyList: any[] = [];
   tabIndex: number = 0;

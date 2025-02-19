@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-23 14:21:04
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-11 16:55:49
+ * @LastEditTime: 2025-02-19 11:03:00
  * @Description: 
 -->
 <div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
@@ -151,7 +151,6 @@
   [nzClosable]="false"
   [nzWidth]="800"
   nzCentered="true"
-  class="aaa"
   [nzFooter]="null"
 >
   <div *nzModalContent>
@@ -182,7 +181,7 @@
           <div nz-col nzSpan="24">
             <nz-form-item>
               <nz-form-label nzRequired nzSpan="24" class="text-left">
-                {{'Recipient'}}{{ visibleTitle === 'New Message' ? '(Admin of the selected bank)' : ''}} 
+                {{'Receipient '}}{{ visibleTitle === 'New Message' ? '(Admin of the selected bank)' : ''}} 
               </nz-form-label>
               <div nz-row [nzGutter]="24" nzJustify="space-between" nzAlign="middle">
                   <nz-form-control
@@ -329,7 +328,7 @@
                   style="display: flex;justify-content: flex-start;padding: 10px;"
                 >
                   <div><b>{{'Content:'}}</b></div>
-                  <div [innerHTML]="item.content"></div>
+                  <div [innerHTML]="item.content" style="width: 600px;"></div>
                 </div>
               </span>
             </p>

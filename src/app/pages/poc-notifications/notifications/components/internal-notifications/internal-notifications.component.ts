@@ -35,7 +35,7 @@ export class InternalNotificationsComponent {
     filter: []
   };
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   modalInfo: any = {};
   isVisible: boolean = false;
   constructor(

@@ -170,10 +170,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (control.value === '') {
+    if (!control.value) {
       return { error: true, required: true };
     } else if (control.value > this.purchCurrecyCount) {
       return { regular: true, error: true };
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -189,7 +191,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -276,8 +278,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fxReceivingData[e].digitalSymbol === null
         ? ''
         : this.fxReceivingData[e].digitalSymbol;
-    this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.reveingCurrecyModelShow = 'Available Balance: ';
     this.reveingCurrecyModelCount = thousandthMark(
       this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']
     );
@@ -345,8 +346,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     //   (item: any) => item.bankAccountId === e
     // );
     // this.validateForm.get('transactionWalletAddressId')?.setValue(e);
-    this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.purchCurrecyModelShow = 'Available Balance: ';
     this.purchCurrecyModelCount = thousandthMark(
       this.transactionWalletAddressArr[e]['cbdcCount']
     );
@@ -371,8 +371,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.fxReceivingDataWallets.filter(
       (item: any) => item.bankAccountId === e
     );
-    this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.reveingCurrecyModelShow = 'Available Balance: ';
     this.reveingCurrecyModelCount = thousandthMark(val[0]['cbdcCount']);
     this.availableBalance = val[0]['cbdcCount'];
     if (this.reveingCurrecy === this.purchCurrecy) {
@@ -389,8 +388,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fxPurchaseData[e].digitalSymbol === null
         ? ''
         : this.fxPurchaseData[e].digitalSymbol;
-    this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.purchCurrecyModelShow = 'Available Balance: ';
     this.purchCurrecyModelCount = thousandthMark(
       this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
         'cbdcCount'

@@ -409,17 +409,17 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Currency',
+          title: 'Token Currency',
           field: 'currency',
           notNeedEllipsis: true,
-          width: 120
+          width: 150
         },
         {
           title: 'Balance',
           field: 'balance',
           pipe: 'toThousandthMark',
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'Created on',

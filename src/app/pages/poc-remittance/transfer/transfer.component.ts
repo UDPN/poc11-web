@@ -217,10 +217,12 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (control.value === '') {
+    if (!control.value) {
       return { error: true, required: true };
     } else if (control.value > this.availableCurrecyModelCount) {
       return { regular: true, error: true };
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -288,7 +290,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       this.availableCurrecyModel === this.beneficiaryCurrency
     ) {
       return { regular: true, error: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
       return { regular1: true, error: true };
     }
     return {};
@@ -390,8 +392,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
-    this.availableCurrecyModelShow =
-      this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
+    this.availableCurrecyModelShow = 'Available Balance: ';
     this.availableCount = thousandthMark(val[0].cbdcCount);
     this.validateForm
       .get('availableBalance')
