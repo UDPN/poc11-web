@@ -194,4 +194,11 @@ export class EnterpriseOnboardingService {
   public setAudit(params: any): Observable<any> {
     return this.https.post('/v2/enterprise/audit', params);
   }
+
+  public downloadSecretKey(enterpriseId: number): Observable<any> {
+    return this.https.post('/v2/enterprise/downloadSpSecretKey', 
+      { enterpriseId }, 
+      { responseType: 'blob' }
+    );
+  }
 }
