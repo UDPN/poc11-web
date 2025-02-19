@@ -85,7 +85,7 @@
                 [nzXs]="24"
               >
                 <nz-form-item>
-                  <nz-form-label>Currency</nz-form-label>
+                  <nz-form-label>Token Currency</nz-form-label>
                   <nz-form-control>
                     <nz-select
                       nzPlaceHolder=""
@@ -512,21 +512,21 @@
   #amountTpl
   let-transactionType="transactionType"
   let-amount="amount"
-  let-currency="currency"
+  let-tokenSymbol="tokenSymbol"
 >
   <p
     [title]="
       (transactionType === 3 ? ' + ' : ' - ') +
       (amount | map: 'toThousandthMark') +
       ' ' +
-      currency
+      tokenSymbol
     "
   >
     {{
       (transactionType === 3 ? ' + ' : ' - ') +
         (amount | map: 'toThousandthMark') +
         ' ' +
-        currency
+        tokenSymbol
     }}
   </p>
 </ng-template>

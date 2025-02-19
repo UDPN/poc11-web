@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-17 15:02:35
+ * @LastEditTime: 2025-02-19 16:14:36
  * @Description:
  */
 import {
@@ -15,20 +15,25 @@ import {
 } from '@angular/core';
 import { ThemeOptionsKey } from '@app/config/constant';
 import { WindowService } from '@app/core/services/common/window.service';
+import { LiquidityFxTransactionsService } from '@app/core/services/http/poc-liquidity/fx-transactions/fx-transactions.service';
+import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs';
 
 interface SearchParam {
   transactionNo: string;
-  sourceLiquidityPoolAddress: string;
-  targetLiquidityPoolAddress: string;
-  senderWalletAddress: string;
-  receiverWalletAddress: string;
-  tokenPair: string | number;
+  fromCapitalAddress: string;
+  toCapitalAddress: string;
+  fromWalletAddress: string;
+  toWalletAddress: string;
+  tokenPair: any;
+  fromCurrency: string;
+  toCurrency: string;
   fxType: string | number;
-  creation: any;
+  txTime: any;
   status: any;
 }
 @Component({
@@ -58,7 +63,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
 
-  currencyList: Array<any> = [];
+  tokenPairList: Array<any> = [];
   dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   color: string = '';
@@ -71,13 +76,15 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
   };
   searchParam: Partial<SearchParam> = {
     transactionNo: '',
-    sourceLiquidityPoolAddress: '',
-    targetLiquidityPoolAddress: '',
-    senderWalletAddress: '',
-    receiverWalletAddress: '',
+    fromCapitalAddress: '',
+    toCapitalAddress: '',
+    fromWalletAddress: '',
+    toWalletAddress: '',
     tokenPair: '',
+    fromCurrency: '',
+    toCurrency: '',
     fxType: '',
-    creation: [],
+    txTime: [],
     status: ''
   };
   tableQueryParams: NzTableQueryParams = {
@@ -89,7 +96,8 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private liquidityFxTransactionsService: LiquidityFxTransactionsService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -104,8 +112,14 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
     this.color = JSON.parse(themeOptionsKey).color;
     this.initTable();
+    this.getTokenPairList();
   }
 
+  getTokenPairList() {
+    this.liquidityFxTransactionsService.getTokenPair().subscribe((res: any) => {
+      this.tokenPairList = res;
+    });
+  }
   tableChangeDectction(): void {
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
@@ -123,19 +137,46 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {
       transactionNo: '',
-      sourceLiquidityPoolAddress: '',
-      targetLiquidityPoolAddress: '',
-      senderWalletAddress: '',
-      receiverWalletAddress: '',
+      fromCapitalAddress: '',
+      toCapitalAddress: '',
+      fromWalletAddress: '',
+      toWalletAddress: '',
       tokenPair: '',
+      fromCurrency: '',
+      toCurrency: '',
       fxType: '',
-      creation: [],
+      txTime: [],
       status: ''
     };
     this.getDataList(this.tableQueryParams);
   }
 
-  getDataList(e?: NzTableQueryParams): void {}
+  getDataList(e?: NzTableQueryParams): void {
+    if (this.searchParam.tokenPair) {
+      this.searchParam.fromCurrency = this.searchParam.tokenPair.split('/')[0];
+      this.searchParam.toCurrency = this.searchParam.tokenPair.split('/')[1];
+    }
+    this.tableConfig.loading = true;
+    const params: SearchCommonVO<any> = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+    this.liquidityFxTransactionsService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data?.rows;
+        this.tableConfig.total = _.data.page.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
+  }
 
   private initTable(): void {
     this.tableConfig = {

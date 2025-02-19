@@ -10,17 +10,22 @@
         [nzStatus]="'finish'"
         [nzDescription]="'on ' + (info?.createTime | map: 'timeStamp')"
       ></nz-step>
-      <nz-step
-        [nzTitle]="
-          info.status === 1
-            ? 'Approval'
-            : info.status === 2
-            ? 'Rejected'
-            : 'Approved'
-        "
-        [nzStatus]="info.status | map: 'enterpriseApprovalSecondStatus'"
-        [nzDescription]="approvalTpl"
-      ></nz-step>
+      <!-- 1:Pending Approval; other：displayed only when there is approval information currently available  -->
+      <ng-container
+        *ngIf="info.status === 1 || (info.status !== 1 && info.reviewerTime)"
+      >
+        <nz-step
+          [nzTitle]="
+            info.status === 1
+              ? 'Approval'
+              : info.status === 2
+              ? 'Rejected'
+              : 'Approved'
+          "
+          [nzStatus]="info.status | map: 'enterpriseApprovalSecondStatus'"
+          [nzDescription]="approvalTpl"
+        ></nz-step>
+      </ng-container>
       <nz-step
         [nzTitle]="'On-chain execution'"
         [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"

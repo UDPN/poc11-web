@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 11:16:12
+ * @LastEditTime: 2025-02-19 16:45:03
  * @Description:
  */
 import {
@@ -187,8 +187,6 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!
     };
     if (this.tabIndex === 0) {
-      console.log('aaadcfsdcf');
-
       params.filters = this.searchParam;
       this.topUpWithdrawService
         .fetchList(params.pageNum, params.pageSize, params.filters)
@@ -246,10 +244,10 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             width: 140
           },
           {
-            title: 'Currency',
-            field: 'currency',
+            title: 'Token Currency',
+            field: 'tokenSymbol',
             notNeedEllipsis: true,
-            width: 100
+            width: 120
           },
           {
             title: 'Type',

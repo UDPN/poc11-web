@@ -47,7 +47,7 @@
                     ? ' + '
                     : ' - '
                 }}<span *ngIf="info.transactionType">{{
-                  (info.amount | map: 'toThousandthMark') + ' ' + info.currency
+                  (info.amount | map: 'toThousandthMark') + ' ' + info.tokenSymbol
                 }}</span
                 ><span *ngIf="!info.transactionType">{{
                   info.transferType === 2
@@ -94,11 +94,11 @@
                   {{ info.walletAddress }}
                 </p></nz-descriptions-item
               >
-              <nz-descriptions-item nzTitle="Currency">{{
-                info.currency
+              <nz-descriptions-item nzTitle="Token Currency">{{
+                info.tokenSymbol
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Amount">{{
-                (info.amount | map: 'toThousandthMark') + ' ' + info.currency
+                (info.amount | map: 'toThousandthMark') + ' ' + info.tokenSymbol
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Applied on">{{
                 info.appliedOn | map: 'timeStamp'
@@ -151,7 +151,7 @@
                       : 'Receiving Time'
                   "
                   >{{
-                    info?.paymentAmount | map: 'timeStamp'
+                    info?.paymentTime | map: 'timeStamp'
                   }}</nz-descriptions-item
                 >
               </nz-descriptions>

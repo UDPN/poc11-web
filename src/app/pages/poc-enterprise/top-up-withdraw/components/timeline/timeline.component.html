@@ -8,20 +8,19 @@
       <nz-step
         [nzTitle]="'Created'"
         [nzStatus]="'finish'"
-        [nzDescription]="
-          'on ' +
-          (info?.appliedOn | map: 'timeStamp') +
-          ' by ' +
-          info?.appliedBy
-        "
+        [nzDescription]="'on ' + (info?.appliedOn | map: 'timeStamp')"
       ></nz-step>
-      <nz-step
-        [nzTitle]="
-          status === 5 ? 'Approval' : status === 15 ? 'Rejected' : 'Approved'
-        "
-        [nzStatus]="status | map: 'transferApprovalSecondStatus'"
-        [nzDescription]="approvalTpl"
-      ></nz-step>
+      <ng-container
+        *ngIf="info.status === 5 || (info.status !== 5 && info.approvedOn)"
+      >
+        <nz-step
+          [nzTitle]="
+            status === 5 ? 'Approval' : status === 15 ? 'Rejected' : 'Approved'
+          "
+          [nzStatus]="status | map: 'transferApprovalSecondStatus'"
+          [nzDescription]="approvalTpl"
+        ></nz-step
+      ></ng-container>
       <nz-step
         [nzTitle]="'On-chain execution'"
         [nzStatus]="status | map: 'transferApprovalThirdStatus'"

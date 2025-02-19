@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-10 11:37:30
+ * @LastEditTime: 2025-02-19 16:42:33
  * @Description:
  */
 import {
@@ -236,8 +236,8 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             width: 130
           },
           {
-            title: 'Currency',
-            field: 'currency',
+            title: 'Token Currency',
+            field: 'tokenSymbol',
             notNeedEllipsis: true,
             width: 100
           },
