@@ -59,11 +59,11 @@
                 [(ngModel)]="searchParam.status"
                 style="width: 100%"
               >
-                <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="Processing" nzLabel="Processing"></nz-option>
-                <nz-option nzValue="Active" nzLabel="Active"></nz-option>
-                <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
-                <nz-option nzValue="Failed" nzLabel="Failed"></nz-option>
+                <nz-option [nzValue]="''" nzLabel="All"></nz-option>
+                <nz-option [nzValue]="0" nzLabel="In Progress"></nz-option>
+                <nz-option [nzValue]="1" nzLabel="Successful"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Failed"></nz-option>
+                <nz-option [nzValue]="3" nzLabel="Disabled"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -102,7 +102,7 @@
       </p>
     </ng-template>
     <ng-template #statusTpl let-status="status">
-      <nz-tag [nzColor]="getStatusColor(status)">{{ status }}</nz-tag>
+      <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
     </ng-template>
     <ng-template #operationTpl let-id="id">
       <ng-container *appAuth="''">

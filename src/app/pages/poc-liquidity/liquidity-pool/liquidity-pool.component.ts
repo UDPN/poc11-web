@@ -20,7 +20,7 @@ interface SearchParam {
   liquidityPoolAddress: string;
   token: string;
   createdTime: any[];
-  status: string;
+  status: number | string;
 }
 
 @Component({
@@ -210,18 +210,33 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     };
   }
 
-  getStatusColor(status: string): string {
+  getStatusColor(status: number): string {
     switch (status) {
-      case 'Active':
-        return 'success';
-      case 'Processing':
+      case 0:
         return 'processing';
-      case 'Failed':
+      case 1:
+        return 'success';
+      case 2:
         return 'error';
-      case 'Inactive':
+      case 3:
         return 'default';
       default:
         return 'default';
+    }
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 0:
+        return 'Progress';
+      case 1:
+        return 'Active';
+      case 2:
+        return 'Inactive';
+      case 3:
+        return 'Rejected';
+      default:
+        return 'Unknown';
     }
   }
 }

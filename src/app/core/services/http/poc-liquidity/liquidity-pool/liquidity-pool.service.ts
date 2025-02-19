@@ -77,16 +77,16 @@ export class LiquidityPoolService {
   ): Observable<any> {
     const param = {
       data: {
-        liquidityPoolAddress: filters.liquidityPoolAddress || '',
-        token: filters.token || '',
-        status: filters.status || '',
-        createStartTime: filters.createdTime?.[0]
+        liquidityPollAddress: filters.liquidityPoolAddress || '',
+        tokenId: filters.token || 0,
+        status: filters.status || 0,
+        startCreatedTime: filters.createdTime?.[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.createdTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : 0,
-        createEndTime: filters.createdTime?.[1]
+        endCreatedTime: filters.createdTime?.[1]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.createdTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
@@ -99,67 +99,7 @@ export class LiquidityPoolService {
       }
     };
 
-    // 模拟数据
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next({
-          code: 0,
-          data: {
-            rows: [
-              {
-                liquidityPoolAddress: '0xc46d...71b5',
-                token: 'tUSD',
-                walletBalance: '100,000,000.00 tUSD',
-                authorizedAmount: '--',
-                minBalanceReq: '50,000,000.00 tUSD',
-                createdOn: new Date('2024-03-10T10:23:12+08:00').getTime(),
-                status: 'Processing'
-              },
-              {
-                liquidityPoolAddress: '0x4740...3a76',
-                token: 'tEUR',
-                walletBalance: '100,000,000.00 tEUR',
-                authorizedAmount: '100,000,000.00 tEUR (Available:100,000,000.00 tEUR)',
-                minBalanceReq: '50,000,000.00 tEUR',
-                createdOn: new Date('2024-03-09T10:23:12+08:00').getTime(),
-                status: 'Active'
-              },
-              {
-                liquidityPoolAddress: '0x7e8d...f3f0',
-                token: 'tSAR',
-                walletBalance: '100,000,000.00 tSAR',
-                authorizedAmount: '100,000,000.00 tSAR (Available:100,000,000.00 tSAR)',
-                minBalanceReq: '50,000,000.00 tSAR',
-                createdOn: new Date('2024-03-08T10:23:12+08:00').getTime(),
-                status: 'Inactive'
-              },
-              {
-                liquidityPoolAddress: '0x7e8d...f3f0',
-                token: 'tSAR',
-                walletBalance: '100,000,000.00 tSAR',
-                authorizedAmount: '--',
-                minBalanceReq: '50,000,000.00 tSAR',
-                createdOn: new Date('2024-03-07T10:23:12+08:00').getTime(),
-                status: 'Inactive'
-              },
-              {
-                liquidityPoolAddress: '0x7e8d...f3f0',
-                token: 'tSAR',
-                walletBalance: '--',
-                authorizedAmount: '--',
-                minBalanceReq: '50,000,000.00 tSAR',
-                createdOn: new Date('2024-03-06T10:23:12+08:00').getTime(),
-                status: 'Failed'
-              }
-            ],
-            page: {
-              total: 5
-            }
-          }
-        });
-        observer.complete();
-      }, 500);
-    });
+    return this.https.post('/v2/liquidity-poll/list', param);
   }
 
   public getTokenList(): Observable<any> {
