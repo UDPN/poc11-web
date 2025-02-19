@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-10 13:47:28
+ * @LastEditTime: 2025-02-19 11:16:12
  * @Description:
  */
 import {
@@ -76,7 +76,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
   @ViewChild('transferOperationTpl', { static: true })
   transferOperationTpl!: TemplateRef<NzSafeAny>;
   tabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   currencyList: any[] = [];
   tabIndex: number = 0;
@@ -299,7 +299,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Appllication No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 140
           },
           {
             title: 'Enterprise Code',

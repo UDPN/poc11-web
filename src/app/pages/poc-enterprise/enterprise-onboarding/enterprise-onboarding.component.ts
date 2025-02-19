@@ -48,7 +48,7 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -118,10 +118,14 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-  updateStatus(currentStatus: number, enterpriseId: number, enterpriseName: string) {
+  updateStatus(
+    currentStatus: number,
+    enterpriseId: number,
+    enterpriseName: string
+  ) {
     const newStatus = currentStatus === 1 ? 2 : 1; // 如果当前是启用状态，则切换到禁用，反之亦然
     const statusText = newStatus === 1 ? 'enable' : 'disable';
-    
+
     this.modal.confirm({
       nzTitle: `Are you sure you want to ${statusText} <b>${enterpriseName}</b>?`,
       nzContent: '',
@@ -135,7 +139,11 @@ export class EnterpriseOnboardingComponent implements OnInit, AfterViewInit {
             .subscribe({
               next: (res) => {
                 if (res.code === 0) {
-                  this.message.success(`${statusText.charAt(0).toUpperCase() + statusText.slice(1)} successfully!`);
+                  this.message.success(
+                    `${
+                      statusText.charAt(0).toUpperCase() + statusText.slice(1)
+                    } successfully!`
+                  );
                   this.getDataList(this.tableQueryParams);
                   resolve(true);
                 } else {
