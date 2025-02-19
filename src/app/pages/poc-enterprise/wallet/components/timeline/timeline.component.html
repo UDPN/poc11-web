@@ -8,12 +8,7 @@
       <nz-step
         [nzTitle]="'Created'"
         [nzStatus]="'finish'"
-        [nzDescription]="
-          'on ' +
-          (info?.createTime | map: 'timeStamp') +
-          ' by ' +
-          info?.createUser
-        "
+        [nzDescription]="'on ' + (info?.createTime | map: 'timeStamp')"
       ></nz-step>
       <nz-step
         [nzTitle]="
