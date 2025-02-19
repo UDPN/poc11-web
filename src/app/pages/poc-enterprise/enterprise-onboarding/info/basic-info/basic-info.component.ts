@@ -25,7 +25,7 @@ interface EnterpriseDetail {
   txHash: string;
   txTime: number;
   walletApproval: number;
-  enterpriseId:number
+  enterpriseId: number;
 }
 
 @Component({
@@ -65,7 +65,7 @@ export class BasicInfoComponent implements OnInit {
     txHash: '',
     txTime: 0,
     walletApproval: 0,
-    enterpriseId:0
+    enterpriseId: 0
   };
 
   constructor(
@@ -159,5 +159,89 @@ export class BasicInfoComponent implements OnInit {
       default:
         return 'default';
     }
+  }
+
+  copy(text: string): void {
+    if (!text) {
+      return;
+    }
+
+    // 创建一个临时文本区域
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+
+    try {
+      // 首先尝试使用现代的 Clipboard API
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(
+          () => {
+            this.message.success('Copied successfully');
+          },
+          () => {
+            // 如果 Clipboard API 失败，回退到传统方法
+            this.fallbackCopyToClipboard(textArea);
+          }
+        );
+      } else {
+        // 在不支持 Clipboard API 的环境中使用传统方法
+        this.fallbackCopyToClipboard(textArea);
+      }
+    } finally {
+      // 清理临时元素
+      document.body.removeChild(textArea);
+    }
+  }
+
+  private fallbackCopyToClipboard(textArea: HTMLTextAreaElement): void {
+    try {
+      // 选择文本
+      textArea.select();
+      textArea.setSelectionRange(0, 99999); // 对于移动设备
+
+      // 执行复制命令
+      const successful = document.execCommand('copy');
+      if (successful) {
+        this.message.success('Copied successfully');
+      } else {
+        this.message.error('Copy failed');
+      }
+    } catch (err) {
+      this.message.error('Copy failed');
+    }
+  }
+
+  downloadSecretKey(): void {
+    if (!this.enterpriseDetail.enterpriseId) {
+      this.message.error('Enterprise ID is required');
+      return;
+    }
+
+    this.enterpriseService.downloadSecretKey(this.enterpriseDetail.enterpriseId)
+      .subscribe({
+        next: (response: Blob) => {
+          // 创建一个链接元素
+          const downloadLink = document.createElement('a');
+          const url = window.URL.createObjectURL(response);
+          downloadLink.href = url;
+          
+          // 设置文件名
+          downloadLink.download = `openapi_key_${this.enterpriseDetail.enterpriseCode}.txt`;
+          
+          // 添加到文档并触发点击
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          
+          // 清理
+          document.body.removeChild(downloadLink);
+          window.URL.revokeObjectURL(url);
+          
+          this.message.success('Downloaded successfully');
+        },
+        error: (err) => {
+          this.message.error('Download failed');
+          console.error('Download error:', err);
+        }
+      });
   }
 } 
