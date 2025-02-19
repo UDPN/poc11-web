@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-17 15:31:48
+ * @LastEditTime: 2025-02-19 16:05:56
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -47,8 +47,8 @@
               <input
                 nz-input
                 placeholder=""
-                name="sourceLiquidityPoolAddress"
-                [(ngModel)]="searchParam.sourceLiquidityPoolAddress"
+                name="fromCapitalAddress"
+                [(ngModel)]="searchParam.fromCapitalAddress"
               />
             </nz-form-control>
           </nz-form-item>
@@ -68,8 +68,8 @@
               <input
                 nz-input
                 placeholder=""
-                name="targetLiquidityPoolAddress"
-                [(ngModel)]="searchParam.targetLiquidityPoolAddress"
+                name="toCapitalAddress"
+                [(ngModel)]="searchParam.toCapitalAddress"
               />
             </nz-form-control>
           </nz-form-item>
@@ -89,8 +89,8 @@
               <input
                 nz-input
                 placeholder=""
-                name="senderWalletAddress"
-                [(ngModel)]="searchParam.senderWalletAddress"
+                name="fromWalletAddress"
+                [(ngModel)]="searchParam.fromWalletAddress"
               />
             </nz-form-control>
           </nz-form-item>
@@ -110,8 +110,8 @@
               <input
                 nz-input
                 placeholder=""
-                name="receiverWalletAddress"
-                [(ngModel)]="searchParam.receiverWalletAddress"
+                name="toWalletAddress"
+                [(ngModel)]="searchParam.toWalletAddress"
               />
             </nz-form-control>
           </nz-form-item>
@@ -135,9 +135,9 @@
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
-                  *ngFor="let item of currencyList"
-                  [nzValue]="item.key"
-                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency"
+                  *ngFor="let item of tokenPairList"
+                  [nzValue]="item.fromCurrency + '/' + item.toCurrency"
+                  [nzLabel]="item.fromCurrency + '/' + item.toCurrency"
                 >
                 </nz-option>
               </nz-select>
@@ -162,13 +162,29 @@
                 [(ngModel)]="searchParam.fxType"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option
-                  *ngFor="let item of currencyList"
-                  [nzValue]="item.key"
-                  [nzLabel]="item.sourceCurrency + '->' + item.targetCurrency"
-                >
-                </nz-option>
+                <nz-option nzValue="1" nzLabel="Local FX"></nz-option>
+                <nz-option nzValue="2" nzLabel="Network FX"></nz-option>
               </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                class="full-with"
+                name="txTime"
+                [(ngModel)]="searchParam.txTime"
+              ></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -190,30 +206,10 @@
                 [(ngModel)]="searchParam.status"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="1" nzLabel="Processing"></nz-option>
-                <nz-option nzValue="2" nzLabel="Success"></nz-option>
-                <nz-option nzValue="3" nzLabel="Failed"></nz-option>
+                <nz-option nzValue="30" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="35" nzLabel="Success"></nz-option>
+                <nz-option nzValue="40" nzLabel="Failed"></nz-option>
               </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
-            <nz-form-control>
-              <nz-range-picker
-                class="full-with"
-                name="creation"
-                [(ngModel)]="searchParam.creation"
-              ></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -260,15 +256,29 @@
         nz-typography
         [nzCopyable]="transactionNo ? true : false"
         [nzCopyText]="transactionNo"
-      ></p>
+      >
+        {{ transactionNo | map: 'showPart' }}
+      </p>
     </ng-template>
-    <ng-template #sourceTokenTpl let-sourceToken="sourceToken">
+    <ng-template
+      #sourceTokenTpl
+      let-fromWalletAddress="fromWalletAddress"
+      let-fromCapitalAddress="fromCapitalAddress"
+      let-fromAmount="fromAmount"
+      let-fromCurrency="fromCurrency"
+    >
       <div class="display-flex">
         <div>
-          <p nz-typography [nzCopyable]="true" [nzCopyText]="sourceToken">
-            {{ sourceToken | map: 'showPart' }}
+          <p
+            nz-typography
+            [nzCopyable]="fromWalletAddress ? true : false"
+            [nzCopyText]="fromWalletAddress"
+          >
+            {{ fromWalletAddress | map: 'showPart' }}
           </p>
-          <p>{{ '100.00 tEUR' }}</p>
+          <p>
+            {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
+          </p>
         </div>
         <div>
           <span
@@ -279,33 +289,110 @@
           ></span>
         </div>
         <div>
-          <p nz-typography [nzCopyable]="true" [nzCopyText]="sourceToken">
-            {{ sourceToken | map: 'showPart' }}
+          <p
+            nz-typography
+            [nzCopyable]="fromCapitalAddress ? true : false"
+            [nzCopyText]="fromCapitalAddress"
+          >
+            {{ fromCapitalAddress | map: 'showPart' }}
           </p>
-          <p>{{ '100.00 tEUR' }}</p>
+          <p>
+            {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
+          </p>
         </div>
       </div>
     </ng-template>
-    <ng-template #transactionNoTpl let-transactionNo="transactionNo">
-      <p
-        nz-typography
-        [nzCopyable]="transactionNo ? true : false"
-        [nzCopyText]="transactionNo"
-      ></p>
-    </ng-template>
-    <ng-template #fxTypeTpl let-transactionNo="transactionNo">
-      <nz-tag class="opacity-7" [nzColor]="color">{{ 'Network FX' }}</nz-tag>
+    <ng-template
+      #targetTokenTpl
+      let-toWalletAddress="toWalletAddress"
+      let-toCapitalAddress="toCapitalAddress"
+      let-toAmount="toAmount"
+      let-toCurrency="toCurrency"
+    >
+      <div class="display-flex">
+        <div>
+          <p
+            nz-typography
+            [nzCopyable]="toCapitalAddress ? true : false"
+            [nzCopyText]="toCapitalAddress"
+          >
+            {{ toCapitalAddress | map: 'showPart' }}
+          </p>
+          <p>{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</p>
+        </div>
+        <div>
+          <span
+            class="arrow-right m-l-10 m-r-10"
+            nz-icon
+            nzType="arrow-right"
+            nzTheme="outline"
+          ></span>
+        </div>
+        <div>
+          <p
+            nz-typography
+            [nzCopyable]="toWalletAddress ? true : false"
+            [nzCopyText]="toWalletAddress"
+          >
+            {{ toWalletAddress | map: 'showPart' }}
+          </p>
+          <p>{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</p>
+        </div>
+      </div>
     </ng-template>
     <ng-template
-      #operationTpl
-      let-transactionNo="transactionNo"
-      let-receivingBankName="receivingBankName"
+      #transactionAmountTpl
+      let-fromAmount="fromAmount"
+      let-toAmount="toAmount"
+      let-fromCurrency="fromCurrency"
+      let-toCurrency="toCurrency"
     >
+      <div class="display-flex">
+        <div>
+          <p>
+            {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
+          </p>
+        </div>
+        <div>
+          <span
+            class="arrow-right m-l-10 m-r-10"
+            nz-icon
+            nzType="arrow-right"
+            nzTheme="outline"
+          ></span>
+        </div>
+        <div>
+          <p>{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template
+      #tokenPairTpl
+      let-fromCurrency="fromCurrency"
+      let-toCurrency="toCurrency"
+      let-exchangeRate="exchangeRate"
+    >
+      <p>
+        {{ fromCurrency + '/' + toCurrency + ' = '
+        }}{{ exchangeRate | map: 'toThousandRate' }}
+      </p>
+    </ng-template>
+    <ng-template #fxTypeTpl let-fxType="fxType">
+      <nz-tag class="opacity-7" [nzColor]="color">{{
+        fxType | map: 'fxType'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="status | map: 'fxTransactionStatusColor'">{{
+        status | map: 'fxTransactionStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template #operationTpl let-transferId="transferId">
       <ng-container *appAuth="''">
         <span
           class="operate-text"
           routerLink="/poc/poc-liquidity/fx-transactions/info"
-          [queryParams]="{transactionNo}"
+          [queryParams]="{transferId}"
         >
           Details
         </span>

@@ -391,6 +391,20 @@ export const MapSet = {
     20: 'process',
     35: 'finish',
     40: 'error'
+  },
+  fxType: {
+    1: 'Local FX',
+    2: 'Network FX'
+  },
+  fxTransactionStatus: {
+    30: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  fxTransactionStatusColor: {
+    30: 'blue',
+    35: 'green',
+    40: 'red'
   }
 };
 

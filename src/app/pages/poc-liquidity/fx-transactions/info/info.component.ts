@@ -2,11 +2,14 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 13:41:58
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-17 14:22:59
+ * @LastEditTime: 2025-02-19 15:58:48
  * @Description:
  */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ThemeOptionsKey } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
+import { LiquidityFxTransactionsService } from '@app/core/services/http/poc-liquidity/fx-transactions/fx-transactions.service';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 
 @Component({
@@ -23,11 +26,16 @@ export class InfoComponent implements OnInit {
     footer: ''
   };
   info: any = {};
+  color: string = '';
+  transactionSummary: any = {};
+  sourceTokenInformation: any = {};
+  targetTokenInformation: any = {};
   agreementUrl: any = '';
   constructor(
     public routeInfo: ActivatedRoute,
-    // private pocFxTransactionsService: PocFxTransactionsService,
-    private cdr: ChangeDetectorRef
+    private liquidityFxTransactionsService: LiquidityFxTransactionsService,
+    private cdr: ChangeDetectorRef,
+    private windowService: WindowService
   ) {}
 
   ngAfterViewInit(): void {
@@ -50,18 +58,23 @@ export class InfoComponent implements OnInit {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     this.getInfo();
   }
 
   getInfo(): void {
     this.routeInfo.queryParams.subscribe((params) => {
-      // this.pocFxTransactionsService
-      //   .info({ transactionNo: params['transactionNo'] })
-      //   .subscribe((res: any) => {
-      //     this.info = res;
-      //     this.cdr.markForCheck();
-      //     return;
-      //   });
+      this.liquidityFxTransactionsService
+        .getInfo({ transferId: params['transferId'] })
+        .subscribe((res: any) => {
+          this.info = res;
+          this.transactionSummary = res.transactionSummary;
+          this.sourceTokenInformation = res.sourceTokenInformation;
+          this.targetTokenInformation = res.targetTokenInformation;
+          this.cdr.markForCheck();
+          return;
+        });
     });
   }
 }

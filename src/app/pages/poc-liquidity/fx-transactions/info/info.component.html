@@ -17,55 +17,64 @@
       <nz-descriptions-item nzTitle="Transaction No." [nzSpan]="3"
         ><p
           nz-typography
-          [nzCopyable]="info.transactionNo ? true : false"
-          [nzCopyText]="info.transactionNo"
+          [nzCopyable]="transactionSummary?.transactionNo ? true : false"
+          [nzCopyText]="transactionSummary?.transactionNo"
         >
-          {{ info.transactionNo }}
+          {{ transactionSummary?.transactionNo }}
         </p></nz-descriptions-item
       >
       <nz-descriptions-item nzTitle="Transaction Amount" [nzSpan]="3"
-        ><b>{{ info.fromAmount | map: 'toThousandthMark' }}</b
-        >{{ ' ' + (info.formCurrency | map: 'null') }}
+        ><b>{{ transactionSummary?.fromAmount | map: 'toThousandthMark' }}</b
+        >{{ ' ' + (transactionSummary?.fromTokenSymbol | map: 'null') }}
         <span
           class="arrow-right m-l-10 m-r-10"
           nz-icon
           nzType="arrow-right"
           nzTheme="outline"
         ></span>
-        <b>{{ info.toAmount | map: 'toThousandthMark' }}</b
-        >{{ ' ' + (info.toCurrency | map: 'null') }}</nz-descriptions-item
+        <b>{{ transactionSummary?.toAmount | map: 'toThousandthMark' }}</b
+        >{{
+          ' ' + (transactionSummary?.toTokenSymbol | map: 'null')
+        }}</nz-descriptions-item
       >
-      <nz-descriptions-item nzTitle="FX Rate" [nzSpan]="3">{{
-        info.formCurrency +
-          '/' +
-          info.toCurrency +
-          ' = ' +
-          (info.exchangeRate | map: 'toThousandRate')
-      }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="FX Rate" [nzSpan]="3"
+        >{{
+          transactionSummary?.fromTokenSymbol +
+            '/' +
+            transactionSummary?.toTokenSymbol +
+            ' = ' +
+            (transactionSummary?.fxRate | map: 'toThousandRate')
+        }}<nz-tag class="opacity-7" [nzColor]="color">{{
+          transactionSummary?.fxType | map: 'fxType'
+        }}</nz-tag></nz-descriptions-item
+      >
       <nz-descriptions-item nzTitle="Liquidity Provider Name" [nzSpan]="3">{{
-        info.spName | map: 'null'
+        transactionSummary?.liquidityProviderName | map: 'null'
       }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Liquidity Provider ID" [nzSpan]="3"
         ><p
           nz-typography
-          [nzCopyable]="info.spCode ? true : false"
-          [nzCopyText]="info.spCode"
+          [nzCopyable]="transactionSummary?.liquidityProviderId ? true : false"
+          [nzCopyText]="transactionSummary?.liquidityProviderId"
         >
-          {{ info.spCode | map: 'null' }}
+          {{ transactionSummary?.liquidityProviderId | map: 'null' }}
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Created on" [nzSpan]="3">{{
-        info.transactionDate | map: 'timeStamp'
+        transactionSummary?.createTime | map: 'timeStamp'
       }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Status" [nzSpan]="3"
-        ><nz-tag [nzColor]="info.status === 1 ? 'success' : 'error'">{{
-          info.status | map: 'transactionsStatus'
-        }}</nz-tag>
+      <nz-descriptions-item nzTitle="Status" [nzSpan]="3">
+        <nz-tag
+          [nzColor]="
+            transactionSummary?.status | map: 'fxTransactionStatusColor'
+          "
+          >{{ transactionSummary?.status | map: 'fxTransactionStatus' }}</nz-tag
+        >
       </nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
   <nz-card [nzBordered]="true" [nzTitle]="'Transaction Log'" class="m-b-10">
-    <b nz-typography class="operate-text">Source Token Information</b>
+    <b nz-typography class="operate-text">{{ 'Source Token Information' }}</b>
     <nz-descriptions
       nzTitle=""
       [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
@@ -74,49 +83,51 @@
       class="m-t-15 m-b-30"
     >
       <nz-descriptions-item nzTitle="Sender Bank Name" [nzSpan]="3">
-        {{ info.fromBankName | map: 'null' }}
+        {{ sourceTokenInformation?.sourceBankName | map: 'null' }}
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Sender Wallet Address (From)" [nzSpan]="3"
         ><p
           nz-typography
-          [nzCopyable]="info.fromAccount ? true : false"
-          [nzCopyText]="info.fromAccount"
+          [nzCopyable]="
+            sourceTokenInformation?.senderWalletAddress ? true : false
+          "
+          [nzCopyText]="sourceTokenInformation?.senderWalletAddress"
         >
-          {{ info.fromAccount }}
+          {{ sourceTokenInformation?.senderWalletAddress }}
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item
         nzTitle="Source Liquidity Pool Address(To)"
         [nzSpan]="3"
       >
-        <!-- <p
+        <p
           nz-typography
-          [nzCopyable]="info.toAccount ? true : false"
-          [nzCopyText]="info.toAccount"
+          [nzCopyable]="
+            sourceTokenInformation?.sourceLiquidityPoolAddress ? true : false
+          "
+          [nzCopyText]="sourceTokenInformation?.sourceLiquidityPoolAddress"
         >
-          {{ info.toAccount }}
-        </p> -->
+          {{ sourceTokenInformation?.sourceLiquidityPoolAddress }}
+        </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Amount" [nzSpan]="3"
-        ><b>{{ info.fromAmount | map: 'toThousandthMark' }}</b
-        >{{ ' ' + (info.formCurrency | map: 'null') }}</nz-descriptions-item
+        ><b>{{ sourceTokenInformation?.amount | map: 'toThousandthMark' }}</b
+        >{{ ' ' + sourceTokenInformation?.tokenSymbol }}</nz-descriptions-item
       >
       <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">
-        <!-- <p
+        <p
           nz-typography
-          [nzCopyable]="info.spCode ? true : false"
-          [nzCopyText]="info.spCode"
+          [nzCopyable]="sourceTokenInformation?.txHash ? true : false"
+          [nzCopyText]="sourceTokenInformation?.txHash"
         >
-          {{ info.spCode | map: 'null' }}
-        </p> -->
+          {{ sourceTokenInformation?.txHash | map: 'null' }}
+        </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Transaction Time" [nzSpan]="3">
-        <!-- {{
-        info.transactionDate | map: 'timeStamp'
-        }} -->
+        {{ sourceTokenInformation?.txTime | map: 'timeStamp' }}
       </nz-descriptions-item>
     </nz-descriptions>
-    <b nz-typography class="operate-text">Target Token Information</b>
+    <b nz-typography class="operate-text">{{ 'Target Token Information' }}</b>
     <nz-descriptions
       nzTitle=""
       [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
@@ -125,46 +136,48 @@
       class="m-t-15"
     >
       <nz-descriptions-item nzTitle="Receiver Bank Name" [nzSpan]="3">
-        {{ info.toBankName | map: 'null' }}
+        {{ targetTokenInformation?.receiverBankName | map: 'null' }}
       </nz-descriptions-item>
       <nz-descriptions-item
         nzTitle="Target Liquidity Pool Address(From)"
         [nzSpan]="3"
       >
-        <!-- <p
+        <p
           nz-typography
-          [nzCopyable]="info.fromAccount ? true : false"
-          [nzCopyText]="info.fromAccount"
+          [nzCopyable]="
+            targetTokenInformation?.targetLiquidityPoolAddress ? true : false
+          "
+          [nzCopyText]="targetTokenInformation?.targetLiquidityPoolAddress"
         >
-          {{ info.fromAccount }}
-        </p> -->
+          {{ targetTokenInformation?.targetLiquidityPoolAddress }}
+        </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Receiver Wallet Address (To)" [nzSpan]="3">
         <p
           nz-typography
-          [nzCopyable]="info.toAccount ? true : false"
-          [nzCopyText]="info.toAccount"
+          [nzCopyable]="
+            targetTokenInformation?.receiverWalletAddress ? true : false
+          "
+          [nzCopyText]="targetTokenInformation?.receiverWalletAddress"
         >
-          {{ info.toAccount }}
+          {{ targetTokenInformation?.receiverWalletAddress }}
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Amount" [nzSpan]="3"
-        ><b>{{ info.toAmount | map: 'toThousandthMark' }}</b
-        >{{ ' ' + (info.toCurrency | map: 'null') }}</nz-descriptions-item
+        ><b>{{ targetTokenInformation?.amount | map: 'toThousandthMark' }}</b
+        >{{ ' ' + targetTokenInformation?.tokenSymbol }}</nz-descriptions-item
       >
       <nz-descriptions-item nzTitle="Transaction Hash" [nzSpan]="3">
-        <!-- <p
+        <p
           nz-typography
-          [nzCopyable]="info.spCode ? true : false"
-          [nzCopyText]="info.spCode"
+          [nzCopyable]="targetTokenInformation?.txHash ? true : false"
+          [nzCopyText]="targetTokenInformation?.txHash"
         >
-          {{ info.spCode | map: 'null' }}
-        </p> -->
+          {{ targetTokenInformation?.txHash | map: 'null' }}
+        </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Transaction Time" [nzSpan]="3">
-        <!-- {{
-        info.transactionDate | map: 'timeStamp'
-        }} -->
+        {{ targetTokenInformation?.txTime | map: 'timeStamp' }}
       </nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
