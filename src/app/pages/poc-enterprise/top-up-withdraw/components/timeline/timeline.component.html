@@ -8,31 +8,32 @@
       <nz-step
         [nzTitle]="'Created'"
         [nzStatus]="'finish'"
-        [nzDescription]="
-          'on ' +
-          (info?.appliedOn | map: 'timeStamp') +
-          ' by ' +
-          info?.appliedBy
-        "
+        [nzDescription]="'on ' + (info?.appliedOn | map: 'timeStamp')"
       ></nz-step>
-      <nz-step
-        [nzTitle]="
-          status === 5 ? 'Approval' : status === 15 ? 'Rejected' : 'Approved'
-        "
-        [nzStatus]="status | map: 'transferApprovalSecondStatus'"
-        [nzDescription]="approvalTpl"
-      ></nz-step>
-      <nz-step
-        [nzTitle]="'On-chain execution'"
-        [nzStatus]="status | map: 'transferApprovalThirdStatus'"
-        [nzDescription]="
-          'The ' +
-          type +
-          (status === 35
-            ? ' creation is executed successfully on the chain'
-            : ' is waiting to be executed on the chain')
-        "
-      ></nz-step>
+      <ng-container
+        *ngIf="info.status === 5 || (info.status !== 5 && info.approvedOn)"
+      >
+        <nz-step
+          [nzTitle]="
+            status === 5 ? 'Approval' : status === 15 ? 'Rejected' : 'Approved'
+          "
+          [nzStatus]="status | map: 'transferApprovalSecondStatus'"
+          [nzDescription]="approvalTpl"
+        ></nz-step
+      ></ng-container>
+      <ng-container *ngIf="info.txHash && info.txTime"
+        ><nz-step
+          [nzTitle]="'On-chain execution'"
+          [nzStatus]="status | map: 'transferApprovalThirdStatus'"
+          [nzDescription]="
+            'The ' +
+            type +
+            (status === 35
+              ? ' creation is executed successfully on the chain'
+              : ' is waiting to be executed on the chain')
+          "
+        ></nz-step
+      ></ng-container>
     </nz-steps>
   </div>
 </nz-card>
