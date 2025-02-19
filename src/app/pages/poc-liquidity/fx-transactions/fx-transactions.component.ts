@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 16:14:36
+ * @LastEditTime: 2025-02-19 17:26:28
  * @Description:
  */
 import {
@@ -117,7 +117,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
 
   getTokenPairList() {
     this.liquidityFxTransactionsService.getTokenPair().subscribe((res: any) => {
-      this.tokenPairList = res;
+      this.tokenPairList = res.data;
     });
   }
   tableChangeDectction(): void {
