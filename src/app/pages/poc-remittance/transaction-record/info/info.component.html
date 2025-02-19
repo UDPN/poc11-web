@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:59:18
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-12 11:19:21
+ * @LastEditTime: 2025-02-19 10:41:35
  * @Description: 
 -->
 <app-page-header [backTpl]="backTpl" [backUrl]="'/poc/poc-remittance/transaction-record'"
@@ -20,7 +20,7 @@
             <nz-descriptions-item [nzTitle]="info.type | map: 'transactionsRecordType'"><span
                 [style]="{'color': info.cbdcCount > 0 ? '#39A16A' : '#E53E3E'}">{{
                 info.cbdcCount > 0 ? '+' : ''}}{{ (info.cbdcCount |
-                map:'toThousandthMark')}}{{info.cbdcCount > 0 ? info.toCurrency : info.fromCurrency}}</span></nz-descriptions-item>
+                map:'toThousandthMark')}}{{' ' + (info.cbdcCount > 0 ? info.toCurrency : info.fromCurrency)}}</span></nz-descriptions-item>
           </nz-descriptions>
         </nz-card>
         <nz-card [nzTitle]="info.fromCbdcCount > 0 ? 'Receiver Information' : 'Payment Information'" nzBordered="false"
