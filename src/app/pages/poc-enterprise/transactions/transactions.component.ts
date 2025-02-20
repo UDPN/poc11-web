@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 16:42:33
+ * @LastEditTime: 2025-02-20 14:00:21
  * @Description:
  */
 import {
@@ -261,7 +261,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             width: 150
           },
           {
-            title: 'Applied On',
+            title: 'Transaction Time',
             field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
