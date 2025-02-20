@@ -237,14 +237,10 @@
         <p
           [title]="chainAccountAddress"
           nz-typography
-          nzCopyable
+          [nzCopyable]="chainAccountAddress ? true : false"
           [nzCopyText]="chainAccountAddress"
         >
-          {{
-            chainAccountAddress.length > 12
-              ? chainAccountAddress.slice(0, 12) + '...'
-              : chainAccountAddress
-          }}
+          {{ chainAccountAddress | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container *ngIf="!chainAccountAddress">

@@ -90,7 +90,7 @@
                 info.enterpriseCode
               }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="Wallet Address">
-                <p nz-typography nzCopyable [nzCopyText]="info.walletAddress">
+                <p nz-typography [nzCopyable]="info.walletAddress ? true : false" [nzCopyText]="info.walletAddress">
                   {{ info.walletAddress }}
                 </p></nz-descriptions-item
               >
@@ -188,7 +188,7 @@
               <nz-descriptions-item nzTitle="From">
                 <p
                   nz-typography
-                  nzCopyable
+                  [nzCopyable]="info.fromAccountAddress ? true : false"
                   [nzCopyText]="info.fromAccountAddress"
                 >
                   {{ info.fromAccountAddress }}
@@ -202,7 +202,7 @@
               <nz-descriptions-item nzTitle="To">
                 <p
                   nz-typography
-                  nzCopyable
+                  [nzCopyable]="info.toAccountAddress ? true : false"
                   [nzCopyText]="info.toAccountAddress"
                 >
                   {{ info.toAccountAddress }}
@@ -248,7 +248,7 @@
                 nzTitle="Base Currency Liquidity Wallet Address"
                 ><p
                   nz-typography
-                  nzCopyable
+                  [nzCopyable]="info.baseCurrencyLiquidityWalletAddress ? true : false"
                   [nzCopyText]="info.baseCurrencyLiquidityWalletAddress"
                 >
                   {{ info.baseCurrencyLiquidityWalletAddress }}
@@ -258,7 +258,7 @@
                 nzTitle="Quote Currency Liquidity Wallet Address"
                 ><p
                   nz-typography
-                  nzCopyable
+                  [nzCopyable]="info.quoteCurrencyLiquidityWalletAddress ? true : false"
                   [nzCopyText]="info.quoteCurrencyLiquidityWalletAddress"
                 >
                   {{ info.quoteCurrencyLiquidityWalletAddress }}

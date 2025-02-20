@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 16:45:03
+ * @LastEditTime: 2025-02-20 15:06:17
  * @Description:
  */
 import {
@@ -38,7 +38,7 @@ interface TransferSearchParam {
   sendingCurrency: string | number;
   toAccountAddress: string;
   receivingCurrency: string | number;
-  createTime: any;
+  appliedOn: any;
   state: string;
   type: string | number;
 }
@@ -104,7 +104,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
     sendingCurrency: '',
     receivingCurrency: '',
     type: '',
-    createTime: []
+    appliedOn: []
   };
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -170,7 +170,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
         sendingCurrency: '',
         receivingCurrency: '',
         type: '',
-        createTime: []
+        appliedOn: []
       };
     }
     this.getDataList(this.tableQueryParams);
@@ -303,13 +303,13 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Enterprise Code',
             field: 'enterpriseCode',
             notNeedEllipsis: true,
-            width: 130
+            width: 140
           },
           {
             title: 'From',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 140
           },
           {
             title: 'Sending Amount',
@@ -321,13 +321,13 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'To',
             tdTemplate: this.toTpl,
             notNeedEllipsis: true,
-            width: 120
+            width: 140
           },
           {
             title: 'Receiving Amount',
             tdTemplate: this.receivingAmountTpl,
             notNeedEllipsis: true,
-            width: 140
+            width: 150
           },
           {
             title: 'Transaction Type',
@@ -338,7 +338,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
           },
           {
             title: 'Applied On',
-            field: 'txTime',
+            field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
             width: 130
@@ -347,7 +347,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Status',
             tdTemplate: this.transferStatusTpl,
             notNeedEllipsis: true,
-            width: 150
+            width: 140
           },
           {
             title: 'Actions',
@@ -355,7 +355,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             fixed: true,
             fixedDir: 'right',
             showAction: false,
-            width: 150
+            width: 130
           }
         ],
         total: 0,

@@ -88,15 +88,15 @@ export class TopUpWithdrawService {
         state: filters.state || '',
         toAccountAddress: filters.toAccountAddress || '',
         type: filters.type || '',
-        appliedOnBegin: filters.createTime[0]
+        appliedOnBegin: filters.appliedOn[0]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
+              this.date.transform(filters.appliedOn[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
-        appliedOnEnd: filters.createTime[1]
+        appliedOnEnd: filters.appliedOn[1]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
+              this.date.transform(filters.appliedOn[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )
           : ''

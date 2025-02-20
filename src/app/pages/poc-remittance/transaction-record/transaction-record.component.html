@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-11 17:25:19
+ * @LastEditTime: 2025-02-20 14:49:17
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -221,14 +221,10 @@
         <p
           [title]="serialNumber"
           nz-typography
-          nzCopyable
+          [nzCopyable]="serialNumber ? true : false"
           [nzCopyText]="serialNumber"
         >
-          {{
-            serialNumber.length > 12
-              ? serialNumber.slice(0, 12) + '...'
-              : serialNumber
-          }}
+          {{ serialNumber | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container *ngIf="serialNumber === '' || serialNumber === null">
@@ -240,14 +236,10 @@
         <p
           [title]="fromAccountAddress"
           nz-typography
-          nzCopyable
+          [nzCopyable]="fromAccountAddress ? true : false"
           [nzCopyText]="fromAccountAddress"
         >
-          {{
-            fromAccountAddress.length > 12
-              ? fromAccountAddress.slice(0, 12) + '...'
-              : fromAccountAddress
-          }}
+          {{ fromAccountAddress | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container
@@ -262,14 +254,10 @@
         <p
           [title]="toAccountAddress"
           nz-typography
-          nzCopyable
+          [nzCopyable]="toAccountAddress ? true : false"
           [nzCopyText]="toAccountAddress"
         >
-          {{
-            toAccountAddress.length > 12
-              ? toAccountAddress.slice(0, 12) + '...'
-              : toAccountAddress
-          }}
+          {{ toAccountAddress | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container

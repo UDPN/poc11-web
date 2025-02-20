@@ -400,8 +400,8 @@
                   <nz-form-control>
                     <nz-range-picker
                       style="width: 100%"
-                      name="createTime"
-                      [(ngModel)]="transferSearchParam.createTime"
+                      name="appliedOn"
+                      [(ngModel)]="transferSearchParam.appliedOn"
                     ></nz-range-picker>
                   </nz-form-control>
                 </nz-form-item>
@@ -493,7 +493,7 @@
     [nzCopyable]="applicationId ? true : false"
     [nzCopyText]="applicationId"
   >
-    {{ applicationId | map: 'showPartBefore' }}
+    {{ applicationId | map: 'showPartEight' }}
   </p>
 </ng-template>
 
@@ -505,7 +505,7 @@
     [nzCopyable]="walletAddress ? true : false"
     [nzCopyText]="walletAddress"
   >
-    {{ walletAddress | map: 'showPartBefore' }}
+    {{ walletAddress | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template
@@ -571,7 +571,7 @@
     [nzCopyable]="fromAccountAddress ? true : false"
     [nzCopyText]="fromAccountAddress"
   >
-    {{ fromAccountAddress | map: 'showPartBefore' }}
+    {{ fromAccountAddress | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template #toTpl let-toAccountAddress="toAccountAddress">
@@ -581,7 +581,7 @@
     [nzCopyable]="toAccountAddress ? true : false"
     [nzCopyText]="toAccountAddress"
   >
-    {{ toAccountAddress | map: 'showPartBefore' }}
+    {{ toAccountAddress | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template

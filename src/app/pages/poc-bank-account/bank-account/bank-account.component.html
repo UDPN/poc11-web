@@ -31,17 +31,17 @@
           >
             <nz-descriptions-item [nzTitle]="'Custodian Bank'"
               ><span>{{
-                info?.centralBankName | map: 'showPart'
+                info?.centralBankName | map: 'showPartEight'
               }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Number'"
               ><span
                 nz-typography
-                nzCopyable
+                [nzCopyable]="info?.bankAccountNo ? true : false"
                 [nzCopyText]="info?.bankAccountNo"
                 style="color: #fff"
                 [title]="info?.bankAccountNo"
-                >{{ info?.bankAccountNo | map: 'showPart' }}</span
+                >{{ info?.bankAccountNo | map: 'showPartEight' }}</span
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Mock Money Balance'"
@@ -84,11 +84,11 @@
             <nz-descriptions-item [nzTitle]="'Master Wallet Address'"
               ><span
                 nz-typography
-                nzCopyable
+                [nzCopyable]="walletInfo?.walletAddress ? true : false"
                 [nzCopyText]="walletInfo?.walletAddress"
                 style="color: #fff"
                 [title]="walletInfo?.walletAddress"
-                >{{ walletInfo?.walletAddress | map: 'showPart' }}</span
+                >{{ walletInfo?.walletAddress | map: 'showPartEight' }}</span
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Current Balance'"
@@ -301,11 +301,11 @@
       <p
         [title]="transactionId"
         nz-typography
-        nzCopyable
+        [nzCopyable]="transactionId ? true : false"
         *ngIf="transactionId"
         [nzCopyText]="transactionId"
       >
-        {{ transactionId | map: 'showPartTen' }}
+        {{ transactionId | map: 'showPartEight' }}
       </p>
       <p *ngIf="!transactionId">{{ '--' }}</p>
     </ng-template>

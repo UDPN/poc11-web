@@ -471,11 +471,11 @@ export class MapPipe implements PipeTransform {
         return '--';
       }
     }
-    if (arg === 'showPartTen') {
+    if (arg === 'showPartEight') {
       if (value) {
-        if (value?.length > 10) {
+        if (value?.length > 8) {
           return (
-            value.substring(0, 6) +
+            value.substring(0, 4) +
             '....' +
             value.substring(value.length - 4, value.length)
           );

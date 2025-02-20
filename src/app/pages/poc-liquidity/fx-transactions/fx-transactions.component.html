@@ -257,7 +257,7 @@
         [nzCopyable]="transactionNo ? true : false"
         [nzCopyText]="transactionNo"
       >
-        {{ transactionNo | map: 'showPart' }}
+        {{ transactionNo | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template
@@ -274,7 +274,7 @@
             [nzCopyable]="fromWalletAddress ? true : false"
             [nzCopyText]="fromWalletAddress"
           >
-            {{ fromWalletAddress | map: 'showPart' }}
+            {{ fromWalletAddress | map: 'showPartEight' }}
           </p>
           <p>
             {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
@@ -294,7 +294,7 @@
             [nzCopyable]="fromCapitalAddress ? true : false"
             [nzCopyText]="fromCapitalAddress"
           >
-            {{ fromCapitalAddress | map: 'showPart' }}
+            {{ fromCapitalAddress | map: 'showPartEight' }}
           </p>
           <p>
             {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
@@ -316,7 +316,7 @@
             [nzCopyable]="toCapitalAddress ? true : false"
             [nzCopyText]="toCapitalAddress"
           >
-            {{ toCapitalAddress | map: 'showPart' }}
+            {{ toCapitalAddress | map: 'showPartEight' }}
           </p>
           <p>{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</p>
         </div>
@@ -334,7 +334,7 @@
             [nzCopyable]="toWalletAddress ? true : false"
             [nzCopyText]="toWalletAddress"
           >
-            {{ toWalletAddress | map: 'showPart' }}
+            {{ toWalletAddress | map: 'showPartEight' }}
           </p>
           <p>{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</p>
         </div>

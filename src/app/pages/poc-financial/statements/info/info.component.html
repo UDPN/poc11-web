@@ -187,13 +187,23 @@
       <span [title]="key">{{ key }}</span>
     </ng-template>
     <ng-template #fileIdTpl let-fileId="fileId">
-      <p [title]="fileId" nz-typography nzCopyable [nzCopyText]="fileId">
-        {{ fileId | map: 'showPartTen' }}
+      <p
+        [title]="fileId"
+        nz-typography
+        [nzCopyable]="fileId ? true : false"
+        [nzCopyText]="fileId"
+      >
+        {{ fileId | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #fileHashTpl let-fileHash="fileHash">
-      <p [title]="fileHash" nz-typography nzCopyable [nzCopyText]="fileHash">
-        {{ fileHash | map: 'showPartTen' }}
+      <p
+        [title]="fileHash"
+        nz-typography
+        [nzCopyable]="fileHash ? true : false"
+        [nzCopyText]="fileHash"
+      >
+        {{ fileHash | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #statusTpl let-exportState="exportState">
@@ -202,8 +212,13 @@
       }}</nz-tag>
     </ng-template>
     <ng-template #proofHashTpl let-proofHash="proofHash">
-      <p [title]="proofHash" nz-typography nzCopyable [nzCopyText]="proofHash">
-        {{ proofHash | map: 'showPartTen' }}
+      <p
+        [title]="proofHash"
+        nz-typography
+        [nzCopyable]="proofHash ? true : false"
+        [nzCopyText]="proofHash"
+      >
+        {{ proofHash | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #proofStatusTpl let-proofState="proofState">

@@ -601,7 +601,7 @@
             <nz-descriptions-item nzTitle="Sender Wallet Address"
               ><p
                 nz-typography
-                [nzCopyable]="true"
+                [nzCopyable]="newRemitterWalletAddress ? true : false"
                 [nzCopyText]="newRemitterWalletAddress"
               >
                 {{ newRemitterWalletAddress }}
@@ -610,7 +610,7 @@
             <nz-descriptions-item nzTitle="Receiver Wallet Address"
               ><p
                 nz-typography
-                [nzCopyable]="true"
+                [nzCopyable]="newBeneficialWalletAddress ? true : false"
                 [nzCopyText]="newBeneficialWalletAddress"
               >
                 {{ newBeneficialWalletAddress }}

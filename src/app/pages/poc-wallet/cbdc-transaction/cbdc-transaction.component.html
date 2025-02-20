@@ -167,14 +167,10 @@
         <p
           [title]="transactionNo"
           nz-typography
-          nzCopyable
+          [nzCopyable]="transactionNo ? true : false"
           [nzCopyText]="transactionNo"
         >
-          {{
-            transactionNo.length > 12
-              ? transactionNo.slice(0, 12) + '...'
-              : transactionNo
-          }}
+          {{ transactionNo | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container *ngIf="!transactionNo">
@@ -186,17 +182,13 @@
         <p
           [title]="type === 1 ? to : from"
           nz-typography
-          nzCopyable
+          [nzCopyable]="(type === 1 ? to : from) ? true : false"
           [nzCopyText]="type === 1 ? to : from"
         >
           {{
             type === 1
-              ? to.length > 12
-                ? to.slice(0, 12) + '...'
-                : to
-              : from.length > 12
-              ? from.slice(0, 12) + '...'
-              : from
+              ? (to | map: 'showPartEight')
+              : (from | map: 'showPartEight')
           }}
         </p>
       </ng-container>
@@ -204,7 +196,7 @@
     <ng-template #toTpl let-to="to">
       <ng-container *ngIf="to">
         <p [title]="to" nz-typography nzCopyable [nzCopyText]="to">
-          {{ to.length > 12 ? to.slice(0, 12) + '...' : to }}
+          {{ to | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container *ngIf="!to">

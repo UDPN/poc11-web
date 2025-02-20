@@ -80,7 +80,7 @@
     routerLink="/poc/poc-enterprise/transaction-approval/info"
     [queryParams]="{ accountCbdcId }"
   >
-    {{ transactionNo | map: 'showPartBefore' }}
+    {{ transactionNo | map: 'showPartEight' }}
   </a>
 </ng-template>
 <ng-template
@@ -96,7 +96,7 @@
     routerLink="/poc/poc-enterprise/transaction-approval/info"
     [queryParams]="{ transferId }"
   >
-    {{ transactionNo | map: 'showPartBefore' }}
+    {{ transactionNo | map: 'showPartEight' }}
   </a>
 </ng-template>
 <ng-template
@@ -111,7 +111,7 @@
     [nzCopyable]="toAddress || fromAddress ? true : false"
     [nzCopyText]="type === 3 ? toAddress : fromAddress"
   >
-    {{ (type === 3 ? toAddress : fromAddress) | map: 'showPartBefore' }}
+    {{ (type === 3 ? toAddress : fromAddress) | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template #fromTpl let-from="from">
@@ -121,7 +121,7 @@
     [nzCopyable]="from ? true : false"
     [nzCopyText]="from"
   >
-    {{ from | map: 'showPartBefore' }}
+    {{ from | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template #toTpl let-to="to">
@@ -131,7 +131,7 @@
     [nzCopyable]="to ? true : false"
     [nzCopyText]="to"
   >
-    {{ to | map: 'showPartBefore' }}
+    {{ to | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template
@@ -167,7 +167,7 @@
     [nzCopyable]="txHash ? true : false"
     [nzCopyText]="txHash"
   >
-    {{ txHash | map: 'showPartBefore' }}
+    {{ txHash | map: 'showPartEight' }}
   </p>
 </ng-template>
 <ng-template #statusTpl>

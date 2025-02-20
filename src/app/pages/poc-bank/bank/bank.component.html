@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-04-18 15:13:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-11 17:43:11
+ * @LastEditTime: 2025-02-20 14:43:48
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -219,7 +219,7 @@
         >
           <p
             nz-typography
-            nzCopyable
+            [nzCopyable]="item ? true : false"
             [nzCopyTooltips]="['Copy', 'Copy successful']"
             [nzContent]="item"
           ></p>

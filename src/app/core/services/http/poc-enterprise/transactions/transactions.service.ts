@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-10 15:20:22
+ * @LastEditTime: 2025-02-20 15:05:24
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -30,16 +30,14 @@ export class TransactionsService {
     const param: any = {
       data: {
         applicationId: filters.applicationId || '',
-        appliedOnBegin: filters.appliedOn[0]
+        startTxTime: filters.txTime[0]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.appliedOn[0], 'yyyy-MM-dd') +
-                ' 00:00:00'
+              this.date.transform(filters.txTime[0], 'yyyy-MM-dd') + ' 00:00:00'
             )
           : '',
-        appliedOnEnd: filters.appliedOn[1]
+        endTxTime: filters.txTime[1]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.appliedOn[1], 'yyyy-MM-dd') +
-                ' 23:59:59'
+              this.date.transform(filters.txTime[1], 'yyyy-MM-dd') + ' 23:59:59'
             )
           : '',
         currency: filters.currency || '',
@@ -76,16 +74,14 @@ export class TransactionsService {
         txHash: filters.txHash || '',
         toAccountAddress: filters.toAccountAddress || '',
         type: filters.type || '',
-        appliedOnBegin: filters.createTime[0]
+        startTxTime: filters.txTime[0]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
-                ' 00:00:00'
+              this.date.transform(filters.txTime[0], 'yyyy-MM-dd') + ' 00:00:00'
             )
           : '',
-        appliedOnEnd: filters.createTime[1]
+        endTxTime: filters.txTime[1]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
-                ' 23:59:59'
+              this.date.transform(filters.txTime[1], 'yyyy-MM-dd') + ' 23:59:59'
             )
           : ''
       },

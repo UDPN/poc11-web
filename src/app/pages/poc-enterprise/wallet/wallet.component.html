@@ -167,10 +167,10 @@
       <p
         [title]="accountAddress"
         nz-typography
-        nzCopyable
+        [nzCopyable]="accountAddress ? true : false"
         [nzCopyText]="accountAddress"
       >
-        {{ accountAddress | map: 'showPartBefore' }}
+        {{ accountAddress | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #balanceTpl let-balance="balance" let-currency="currency">

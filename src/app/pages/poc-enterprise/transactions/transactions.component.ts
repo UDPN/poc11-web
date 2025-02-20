@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-20 14:00:21
+ * @LastEditTime: 2025-02-20 15:05:48
  * @Description:
  */
 import {
@@ -26,7 +26,7 @@ interface SearchParam {
   walletAddress: any;
   enterpriseCode: string;
   currency: string | number;
-  appliedOn: any;
+  txTime: any;
   transactionType: string | number;
   txHash: string;
 }
@@ -38,7 +38,7 @@ interface TransferSearchParam {
   sendingCurrency: string | number;
   toAccountAddress: string;
   receivingCurrency: string | number;
-  createTime: any;
+  txTime: any;
   state: string;
   type: string | number;
   txHash: string;
@@ -90,7 +90,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
     enterpriseCode: '',
     currency: '',
     transactionType: '',
-    appliedOn: [],
+    txTime: [],
     txHash: ''
   };
   transferSearchParam: Partial<TransferSearchParam> = {
@@ -101,7 +101,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
     sendingCurrency: '',
     receivingCurrency: '',
     type: '',
-    createTime: [],
+    txTime: [],
     txHash: ''
   };
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -156,7 +156,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
         currency: '',
         txHash: '',
         transactionType: '',
-        appliedOn: []
+        txTime: []
       };
     } else {
       this.transferSearchParam = {
@@ -168,7 +168,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
         sendingCurrency: '',
         receivingCurrency: '',
         type: '',
-        createTime: []
+        txTime: []
       };
     }
     this.getDataList(this.tableQueryParams);
@@ -262,7 +262,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
           },
           {
             title: 'Transaction Time',
-            field: 'appliedOn',
+            field: 'txTime',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
             width: 150

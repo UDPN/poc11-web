@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-27 13:38:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-10 09:39:04
+ * @LastEditTime: 2025-02-20 14:43:09
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -49,8 +49,16 @@
   ></nz-card>
 </div>
 <ng-template #gatewayUrlTpl>
-  <p nz-typography nzCopyable [nzCopyText]="searchParam.gatewayUrl"></p>
+  <p
+    nz-typography
+    [nzCopyable]="searchParam.gatewayUrl ? true : false"
+    [nzCopyText]="searchParam.gatewayUrl"
+  ></p>
 </ng-template>
 <ng-template #accessKeyTpl>
-  <p nz-typography nzCopyable [nzCopyText]="searchParam.accessKey"></p>
+  <p
+    nz-typography
+    [nzCopyable]="searchParam.accessKey ? true : false"
+    [nzCopyText]="searchParam.accessKey"
+  ></p>
 </ng-template>
