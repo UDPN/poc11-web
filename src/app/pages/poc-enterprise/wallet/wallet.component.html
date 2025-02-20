@@ -187,6 +187,8 @@
       #operationTpl
       let-status="status"
       let-bankAccountId="bankAccountId"
+      let-accountAddress="accountAddress"
+      let-enterpriseCode="enterpriseCode"
     >
       <ng-container *appAuth="''">
         <span
@@ -210,6 +212,20 @@
         >
           {{ status === 35 ? 'Deactivate' : 'Activate' }}
         </span>
+        <!-- <span
+          class="operate-text"
+          *ngIf="status === 35 || status === 50"
+          (click)="
+            isOpenVisable(
+              bankAccountId,
+              accountAddress,
+              enterpriseCode,
+              status === 35 ? 1 : 2
+            )
+          "
+        >
+          {{ status === 35 ? 'Deactivate' : 'Activate' }}
+        </span> -->
       </ng-container>
       <ng-container *appAuth="''">
         <span
@@ -223,3 +239,82 @@
     </ng-template>
   </app-card-table-wrap>
 </div>
+<!-- <nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="this.visibleTitle"
+  (nzOnCancel)="cancelVisible()"
+  [nzClosable]="false"
+  [nzWidth]="600"
+  nzCentered="true"
+>
+  <div *nzModalContent>
+    <form nz-form [formGroup]="visibleForm" nzLayout="vertical">
+      <div>
+        {{ this.visibleTip }}
+      </div>
+      <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+        <div nz-col nzSpan="20" class="m-t-30">
+          <nz-form-item>
+            <nz-form-label nzSpan="24" class="text-left">
+              Wallet Address
+            </nz-form-label>
+            <nz-form-control nzSpan="24" class="m-b-20">
+              <input
+                nz-input
+                formControlName="accountAddress"
+                readonly
+                class="onboard-disabled"
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzSpan="24" class="text-left">
+              Enterprise Code</nz-form-label
+            >
+            <nz-form-control nzSpan="24" class="m-b-20">
+              <input
+                nz-input
+                formControlName="enterpriseCode"
+                readonly
+                class="onboard-disabled"
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="24" class="text-left">
+              Comments
+            </nz-form-label>
+            <nz-form-control
+              nzSpan="24"
+              class="m-b-20"
+              [nzErrorTip]="commentsError"
+            >
+              <textarea
+                nz-input
+                formControlName="comments"
+                maxlength="200"
+              ></textarea>
+              <ng-template #commentsError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Comments</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelVisible()">Cancel</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="onStatusUpdate()"
+      [nzLoading]="isLoading"
+      [disabled]="!this.visibleForm.valid"
+    >
+      Confirm
+    </button>
+  </div>
+</nz-modal> -->

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 16:45:58
+ * @LastEditTime: 2025-02-20 14:02:00
  * @Description:
  */
 import {
@@ -13,11 +13,13 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { WalletService } from '@app/core/services/http/poc-enterprise/wallet/wallet.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { fnCheckForm } from '@app/utils/tools';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -73,12 +75,21 @@ export class WalletComponent implements OnInit, AfterViewInit {
   };
   tableConfig!: AntTableConfig;
 
+  // isVisible: boolean = false;
+  // bankAccountId: string = '';
+  // walletState: number = 0;
+  // visibleForm!: FormGroup;
+  // visibleTitle: string = '';
+  // visibleTip: string = '';
+  // isLoading: boolean = false;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
     private message: NzMessageService,
     private walletService: WalletService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private fb: FormBuilder
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -91,6 +102,11 @@ export class WalletComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.initTable();
+    // this.visibleForm = this.fb.group({
+    //   accountAddress: ['', [Validators.required]],
+    //   enterpriseCode: ['', [Validators.required]],
+    //   comments: ['', [Validators.required]]
+    // });
     this.commonService.currencyList().subscribe((res: any) => {
       this.currencyList = res;
     });
@@ -157,6 +173,68 @@ export class WalletComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // isOpenVisable(
+  //   bankAccountId: any,
+  //   accountAddress: string,
+  //   enterpriseCode: string,
+  //   walletState: number
+  // ) {
+  //   this.isVisible = true;
+  //   this.bankAccountId = bankAccountId;
+  //   this.walletState = walletState;
+  //   this.visibleForm.get('accountAddress')?.setValue(accountAddress);
+  //   this.visibleForm.get('enterpriseCode')?.setValue(enterpriseCode);
+  //   if (walletState === 1) {
+  //     this.visibleTitle = 'Deactivate Enterprise Wallet';
+  //     this.visibleTip =
+  //       'Disabling the wallet will prevent the enterprise from processing token transactions.';
+  //   } else {
+  //     this.visibleTitle = 'Activate Enterprise Wallet';
+  //     this.visibleTip =
+  //       'Enabling the wallet will allow the enterprise to process token transactions.';
+  //   }
+  // }
+
+  // cancelVisible() {
+  //   this.isVisible = false;
+  //   this.bankAccountId = '';
+  //   this.walletState = 0;
+  //   this.visibleForm.reset();
+  //   this.visibleTitle = '';
+  //   this.visibleTip = '';
+  // }
+
+  // onStatusUpdate() {
+  //   if (!fnCheckForm(this.visibleForm)) {
+  //     return;
+  //   }
+  //   this.isLoading = true;
+  //   this.walletService
+  //     .getStatusUpdate({
+  //       bankAccountId: this.bankAccountId,
+  //       walletState: this.walletState,
+  //       comments: this.visibleForm.get('comments')?.value
+  //     })
+  //     .pipe(finalize(() => (this.isLoading = false)))
+  //     .subscribe({
+  //       next: (res) => {
+  //         if (res) {
+  //           this.message
+  //             .success('Submitted', { nzDuration: 1000 })
+  //             .onClose.subscribe(() => {
+  //               this.visibleForm.reset();
+  //               this.getDataList(this.tableQueryParams);
+  //             });
+  //         }
+  //         this.isLoading = false;
+  //         this.cdr.markForCheck();
+  //       },
+  //       error: (err) => {
+  //         this.isLoading = false;
+  //         this.cdr.markForCheck();
+  //       }
+  //     });
+  // }
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
