@@ -92,26 +92,27 @@
       [tableConfig]="tableConfig"
       [tableData]="dataList"
     ></app-ant-table>
-    <ng-template #addressTpl let-liquidityPoolAddress="liquidityPoolAddress">
-      <p
-        nz-typography
-        [nzCopyable]="liquidityPoolAddress ? true : false"
-        [nzCopyText]="liquidityPoolAddress"
-      >
-        {{ liquidityPoolAddress }}
-      </p>
+    <ng-template #addressTpl let-liquidityPollAddress="liquidityPollAddress">
+      <span nz-typography [nzCopyable]="true" [nzCopyText]="liquidityPollAddress">
+        {{ liquidityPollAddress | slice:0:6 }}...{{ liquidityPollAddress | slice:-4 }}
+      </span>
+    </ng-template>
+    <ng-template #minBalanceTpl let-minBalance="minBalance" let-symbol="symbol">
+      <span>
+        {{ minBalance | map: 'toThousandthMark'}}{{" "+ symbol }}
+      </span>
     </ng-template>
     <ng-template #statusTpl let-status="status">
       <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-id="id">
+    <ng-template #operationTpl let-liquidityPoolId="liquidityPoolId">
       <ng-container *appAuth="''">
-        <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{id}">
+        <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{liquidityPoolId}">
           Details
         </span>
       </ng-container>
       <ng-container *appAuth="''">
-        <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/reauthorize" [queryParams]="{id}">
+        <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/reauthorize" [queryParams]="{liquidityPoolId}">
           Reauthorize
         </span>
       </ng-container>
@@ -120,10 +121,10 @@
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
             <li nz-menu-item>
-              <span routerLink="/poc/poc-liquidity/liquidity-pool/activate" [queryParams]="{id}">Activate</span>
+              <span routerLink="/poc/poc-liquidity/liquidity-pool/activate" [queryParams]="{liquidityPoolId}">Activate</span>
             </li>
             <li nz-menu-item>
-              <span routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{id}">Details</span>
+              <span routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{liquidityPoolId}">Details</span>
             </li>
           </ul>
         </nz-dropdown-menu>

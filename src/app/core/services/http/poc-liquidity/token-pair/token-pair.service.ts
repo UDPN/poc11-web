@@ -54,19 +54,19 @@ export class TokenPairService {
     const param = {
       data: {
         tokenPair: filters.tokenPair || '',
-        status: filters.status || 0,
+        status: filters.status || '',
         startUpdatedTime: filters.updatedTime?.[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.updatedTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
-          : 0,
+          : '',
         endUpdatedTime: filters.updatedTime?.[1]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.updatedTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )
-          : 0
+          : ''
       },
       page: {
         pageNum: pageIndex,

@@ -3,8 +3,8 @@
   <nz-card [nzTitle]="'Liquidity Pool Wallet Information'" class="m-b-24">
     <nz-descriptions [nzColumn]="2" [nzBordered]="true">
       <nz-descriptions-item nzTitle="Liquidity Pool Address">
-        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.liquidityPoolAddress">
-          {{ poolInfo.liquidityPoolAddress }}
+        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.liquidityPollAddress">
+          {{ poolInfo.liquidityPollAddress }}
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Token">
@@ -13,13 +13,9 @@
 
       <nz-descriptions-item nzTitle="Wallet Balance">
         {{ poolInfo.walletBalance }}
-        <nz-tag *ngIf="poolInfo.belowMinimumWallet" nzColor="warning">Below the minimum requirement</nz-tag>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Authorized Amount">
         {{ poolInfo.authorizedAmount }}
-        <br>
-        Available: {{ poolInfo.availableAmount }}
-        <nz-tag *ngIf="poolInfo.belowMinimumAuthorized" nzColor="warning">Below the minimum requirement</nz-tag>
       </nz-descriptions-item>
 
       <nz-descriptions-item nzTitle="Min Balance Req.">
@@ -32,8 +28,8 @@
         </span>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Status">
-        <nz-tag [nzColor]="poolInfo.status === 'Active' ? 'success' : 'error'">
-          {{ poolInfo.status }}
+        <nz-tag [nzColor]="getStatusColor(poolInfo.status)">
+          {{ getStatusText(poolInfo.status) }}
         </nz-tag>
       </nz-descriptions-item>
 
@@ -41,7 +37,7 @@
         {{ poolInfo.createdBy }}
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Created on">
-        {{ poolInfo.createdOn | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+        {{ poolInfo.createdTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
       </nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
@@ -50,12 +46,12 @@
   <nz-card [nzTitle]="'Liquidity Pool Wallet Registration Transaction Information'" class="m-b-24">
     <nz-descriptions [nzColumn]="1" [nzBordered]="true">
       <nz-descriptions-item nzTitle="Transaction Hash">
-        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.transactionHash">
-          {{ poolInfo.transactionHash }}
+        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.txHash">
+          {{ poolInfo.txHash }}
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Transaction Time">
-        {{ poolInfo.transactionTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+        {{ poolInfo.txTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
       </nz-descriptions-item>
     </nz-descriptions>
   </nz-card>

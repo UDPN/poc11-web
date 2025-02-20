@@ -26,8 +26,8 @@ export class InfoComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      if (params['id']) {
-        this.id = params['id'];
+      if (params['liquidityPoolId']) {
+        this.id = params['liquidityPoolId'];
       }
     });
   }
