@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
@@ -6,7 +6,7 @@ import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.compo
 import { finalize } from 'rxjs';
 
 interface SearchParams {
-  operationType: string;
+  operationType: number;
 }
 
 @Component({
@@ -15,23 +15,25 @@ interface SearchParams {
   styleUrls: ['./operation.component.less']
 })
 export class OperationComponent implements OnInit {
+  @Input() id: string = '';
   @ViewChild('hashTpl', { static: false }) hashTpl!: TemplateRef<any>;
   @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
   @ViewChild('remarksTpl', { static: false }) remarksTpl!: TemplateRef<any>;
+  @ViewChild('operationTypeTpl', { static: false }) operationTypeTpl!: TemplateRef<any>;
 
   tableConfig!: AntTableConfig;
   dataList: any[] = [];
   loading = false;
 
   searchParam: SearchParams = {
-    operationType: ''
+    operationType: 0
   };
 
   operationTypes = [
-    { label: 'All', value: '' },
-    { label: 'Register', value: 'Register' },
-    { label: 'Activate', value: 'Activate' },
-    { label: 'Deactivate', value: 'Deactivate' }
+    { label: 'All', value: 0 },
+    { label: 'Register', value: 1 },
+    { label: 'Activate', value: 2 },
+    { label: 'Deactivate', value: 3 }
   ];
 
   constructor(
@@ -50,36 +52,37 @@ export class OperationComponent implements OnInit {
         {
           title: 'Operation Type',
           field: 'operationType',
-          width: 120
+          width: 120,
+          tdTemplate: this.operationTypeTpl
         },
         {
-          title: 'Created by',
+          title: 'Operator',
           field: 'createdBy',
           width: 120
         },
         {
-          title: 'Created on',
-          field: 'createdOn',
+          title: 'Operation Time',
+          field: 'createdTime',
           width: 180,
           pipe: 'date:MMM d, y, HH:mm:ss'
+        },
+        {
+          title: 'Transaction Time',
+          field: 'txTime',
+          width: 180,
+          pipe: 'date:MMM d, y, HH:mm:ss'
+        },
+        {
+          title: 'Transaction Hash',
+          field: 'txHash',
+          width: 160,
+          tdTemplate: this.hashTpl
         },
         {
           title: 'Remarks',
           field: 'remarks',
           width: 200,
           tdTemplate: this.remarksTpl
-        },
-        {
-          title: 'Transaction Time',
-          field: 'transactionTime',
-          width: 180,
-          pipe: 'date:MMM d, y, HH:mm:ss'
-        },
-        {
-          title: 'Transaction Hash',
-          field: 'transactionHash',
-          width: 160,
-          tdTemplate: this.hashTpl
         },
         {
           title: 'Status',
@@ -89,7 +92,7 @@ export class OperationComponent implements OnInit {
         }
       ],
       total: 0,
-      pageSize: 5,
+      pageSize: 10,
       pageIndex: 1,
       loading: false,
       xScroll: 1300
@@ -104,15 +107,15 @@ export class OperationComponent implements OnInit {
     }
 
     const params = {
-      ...this.searchParam,
-      pageSize: this.tableConfig.pageSize,
-      pageIndex: this.tableConfig.pageIndex
+      operationType: this.searchParam.operationType,
+      pageIndex: this.tableConfig.pageIndex,
+      pageSize: this.tableConfig.pageSize
     };
 
     this.loading = true;
     this.tableConfig.loading = true;
 
-    this.liquidityPoolService.getOperationList(params)
+    this.liquidityPoolService.getOperationList(params, this.id)
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -125,14 +128,14 @@ export class OperationComponent implements OnInit {
             this.dataList = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
           } else {
-            this.message.error(res.msg || 'Failed to load operation list');
+            this.message.error(res.message || '获取操作记录失败');
             this.dataList = [];
             this.tableConfig.total = 0;
           }
         },
         error: (error) => {
-          console.error('Failed to load operation list:', error);
-          this.message.error('Failed to load operation list');
+          console.error('获取操作记录失败:', error);
+          this.message.error('获取操作记录失败');
           this.dataList = [];
           this.tableConfig.total = 0;
         }
@@ -146,21 +149,47 @@ export class OperationComponent implements OnInit {
 
   resetForm() {
     this.searchParam = {
-      operationType: ''
+      operationType: 0
     };
     this.getDataList(1);
   }
 
-  getStatusColor(status: string): string {
+  getStatusColor(status: number): string {
     switch (status) {
-      case 'Success':
+      case 1:
         return 'success';
-      case 'Failed':
+      case 2:
+        return 'processing';
+      case 3:
         return 'error';
-      case 'Rejected':
-        return 'warning';
       default:
         return 'default';
+    }
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 1:
+        return 'Success';
+      case 2:
+        return 'Processing';
+      case 3:
+        return 'Failed';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getOperationTypeText(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Register';
+      case 2:
+        return 'Activate';
+      case 3:
+        return 'Deactivate';
+      default:
+        return 'Unknown';
     }
   }
 }

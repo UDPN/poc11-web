@@ -1,7 +1,20 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { LiquidityPoolService, LiquidityPoolInfo } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
+import { LiquidityPoolService, PoolInfoResponse } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
+
+interface DisplayPoolInfo {
+  liquidityPollAddress: string;
+  token: string;
+  walletBalance: string;
+  authorizedAmount: string;
+  minBalanceReq: string;
+  status: number;
+  createdBy: string;
+  createdTime: number;
+  txHash: string;
+  txTime: number;
+  tokenPairs: string[];
+}
 
 @Component({
   selector: 'app-basic',
@@ -11,21 +24,18 @@ import { LiquidityPoolService, LiquidityPoolInfo } from '@app/core/services/http
 export class BasicComponent implements OnInit, OnChanges {
   @Input() id: string = '';
   loading = false;
-  poolInfo: LiquidityPoolInfo = {
-    liquidityPoolAddress: '',
+  poolInfo: DisplayPoolInfo = {
+    liquidityPollAddress: '',
     token: '',
     walletBalance: '',
     authorizedAmount: '',
-    availableAmount: '',
     minBalanceReq: '',
-    status: '',
+    status: 0,
     createdBy: '',
-    createdOn: 0,
-    transactionHash: '',
-    transactionTime: 0,
-    tokenPairs: [],
-    belowMinimumWallet: false,
-    belowMinimumAuthorized: false
+    createdTime: 0,
+    txHash: '',
+    txTime: 0,
+    tokenPairs: []
   };
 
   constructor(
@@ -50,24 +60,22 @@ export class BasicComponent implements OnInit, OnChanges {
     console.log('Fetching pool info for ID:', this.id);
 
     this.liquidityPoolService.getPoolInfo(this.id).subscribe({
-      next: (res) => {
+      next: (res: PoolInfoResponse) => {
         console.log('API Response:', res);
         if (res.code === 0 && res.data) {
+          const { data } = res;
           this.poolInfo = {
-            liquidityPoolAddress: res.data.liquidityPoolAddress || '',
-            token: res.data.token || '',
-            walletBalance: res.data.walletBalance || '',
-            authorizedAmount: res.data.authorizedAmount || '',
-            availableAmount: res.data.availableAmount || '',
-            minBalanceReq: res.data.minBalanceReq || '',
-            status: res.data.status || '',
-            createdBy: res.data.createdBy || '',
-            createdOn: res.data.createdOn || 0,
-            transactionHash: res.data.transactionHash || '',
-            transactionTime: res.data.transactionTime || 0,
-            tokenPairs: res.data.tokenPairs || [],
-            belowMinimumWallet: res.data.belowMinimumWallet || false,
-            belowMinimumAuthorized: res.data.belowMinimumAuthorized || false
+            liquidityPollAddress: data.liquidityPollAddress,
+            token: data.token,
+            walletBalance: `${Number(data.walletBalance).toLocaleString()} ${data.symbol}`,
+            authorizedAmount: `${Number(data.authorizedAmount).toLocaleString()} ${data.symbol}`,
+            minBalanceReq: `${Number(data.minBalance).toLocaleString()} ${data.symbol}`,
+            status: data.status,
+            createdBy: data.createdBy,
+            createdTime: data.createdTime,
+            txHash: data.txHash,
+            txTime: data.txTime,
+            tokenPairs: data.tokenPairInformationList.map(pair => `${pair.fromToken}/${pair.toToken}`)
           };
           console.log('Processed poolInfo:', this.poolInfo);
         } else {
@@ -81,5 +89,35 @@ export class BasicComponent implements OnInit, OnChanges {
         this.loading = false;
       }
     });
+  }
+
+  getStatusColor(status: number): string {
+    switch (status) {
+      case 1:
+        return 'success';
+      case 0:
+        return 'processing';
+      case 2:
+        return 'error';
+      case 3:
+        return 'default';
+      default:
+        return 'default';
+    }
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 1:
+        return 'Active';
+      case 0:
+        return 'In Progress';
+      case 2:
+        return 'Failed';
+      case 3:
+        return 'Disabled';
+      default:
+        return 'Unknown';
+    }
   }
 }

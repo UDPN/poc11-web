@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
@@ -6,11 +6,10 @@ import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.compo
 import { finalize } from 'rxjs';
 
 interface SearchParams {
-  operationType: string;
   operationTime: Date[];
   transactionHash: string;
   transactionTime: Date[];
-  status: string;
+  status: number;
 }
 
 @Component({
@@ -19,32 +18,27 @@ interface SearchParams {
   styleUrls: ['./authorization.component.less']
 })
 export class AuthorizationComponent implements OnInit {
+  @Input() id: string = '';
   @ViewChild('hashTpl', { static: false }) hashTpl!: TemplateRef<any>;
   @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
+  @ViewChild('amountTpl', { static: false }) amountTpl!: TemplateRef<any>;
 
   tableConfig!: AntTableConfig;
   dataList: any[] = [];
   loading = false;
 
   searchParam: SearchParams = {
-    operationType: '',
     operationTime: [],
     transactionHash: '',
     transactionTime: [],
-    status: ''
+    status: 0
   };
 
-  operationTypes = [
-    { label: 'All', value: '' },
-    { label: 'Authorize', value: 'Authorize' },
-    { label: 'Reauthorize', value: 'Reauthorize' }
-  ];
-
   statusOptions = [
-    { label: 'All', value: '' },
-    { label: 'Success', value: 'Success' },
-    { label: 'Processing', value: 'Processing' },
-    { label: 'Expired', value: 'Expired' }
+    { label: 'All', value: 0 },
+    { label: 'Success', value: 1 },
+    { label: 'Processing', value: 2 },
+    { label: 'Active', value: 3 }
   ];
 
   constructor(
@@ -61,24 +55,15 @@ export class AuthorizationComponent implements OnInit {
     this.tableConfig = {
       headers: [
         {
-          title: 'Operation Type',
-          field: 'operationType',
-          width: 120
-        },
-        {
-          title: 'Change Type',
-          field: 'changeType',
-          width: 120
-        },
-        {
-          title: 'Token Name',
-          field: 'tokenName',
+          title: 'Token',
+          field: 'tokenSymbol',
           width: 100
         },
         {
           title: 'Authorized Amount',
           field: 'authorizedAmount',
-          width: 150
+          width: 150,
+          tdTemplate: this.amountTpl
         },
         {
           title: 'Operation Time',
@@ -88,13 +73,13 @@ export class AuthorizationComponent implements OnInit {
         },
         {
           title: 'Transaction Time',
-          field: 'transactionTime',
+          field: 'txTime',
           width: 180,
           pipe: 'date:MMM d, y, HH:mm:ss'
         },
         {
           title: 'Transaction Hash',
-          field: 'transactionHash',
+          field: 'txHash',
           width: 160,
           tdTemplate: this.hashTpl
         },
@@ -120,16 +105,10 @@ export class AuthorizationComponent implements OnInit {
       this.tableConfig.pageIndex = e.pageIndex;
     }
 
-    const params = {
-      ...this.searchParam,
-      pageSize: this.tableConfig.pageSize,
-      pageIndex: this.tableConfig.pageIndex
-    };
-
     this.loading = true;
     this.tableConfig.loading = true;
 
-    this.liquidityPoolService.getAuthorizationList(params)
+    this.liquidityPoolService.getAuthorizationList(this.searchParam, this.id)
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -142,7 +121,7 @@ export class AuthorizationComponent implements OnInit {
             this.dataList = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
           } else {
-            this.message.error(res.msg || 'Failed to load authorization list');
+            this.message.error(res.message || 'Failed to load authorization list');
             this.dataList = [];
             this.tableConfig.total = 0;
           }
@@ -163,25 +142,41 @@ export class AuthorizationComponent implements OnInit {
 
   resetForm() {
     this.searchParam = {
-      operationType: '',
       operationTime: [],
       transactionHash: '',
       transactionTime: [],
-      status: ''
+      status: 0
     };
     this.getDataList(1);
   }
 
-  getStatusColor(status: string): string {
+  getStatusColor(status: number): string {
     switch (status) {
-      case 'Success':
+      case 1:
         return 'success';
-      case 'Processing':
+      case 2:
         return 'processing';
-      case 'Expired':
-        return 'default';
+      case 3:
+        return 'blue';
       default:
         return 'default';
     }
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 1:
+        return 'Success';
+      case 2:
+        return 'Processing';
+      case 3:
+        return 'Active';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  formatAmount(amount: number, symbol: string): string {
+    return `${amount.toFixed(2)} ${symbol}`;
   }
 }

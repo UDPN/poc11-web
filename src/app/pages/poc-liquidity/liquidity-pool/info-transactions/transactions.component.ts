@@ -1,17 +1,18 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { finalize } from 'rxjs';
+import { timeToTimestampMillisecond } from '@app/utils/tools';
 
 interface SearchParams {
   walletAddress: string;
-  transactionType: string;
-  transactionHash: string;
-  status: string;
-  transactionTime: Date[];
+  txType: number;
+  txHash: string;
+  status: number;
+  txTime: Date[];
 }
 
 @Component({
@@ -25,30 +26,31 @@ export class TransactionsComponent implements OnInit {
   @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
   @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
+  @Input() id: string = '';
+
   tableConfig!: AntTableConfig;
-  dataList: any[] = [];
+  tableData: any[] = [];
   loading = false;
-  poolAddress = '0x1234...5678'; // Replace with actual pool address
 
   searchParam: SearchParams = {
     walletAddress: '',
-    transactionType: '',
-    transactionHash: '',
-    status: '',
-    transactionTime: []
+    txType: 0,
+    txHash: '',
+    status: 0,
+    txTime: []
   };
 
   transactionTypes = [
-    { label: 'All', value: '' },
-    { label: 'Transfer', value: 'Transfer' },
-    { label: 'FX Purchasing', value: 'FX Purchasing' }
+    { label: 'All', value: 0 },
+    { label: 'Transfer', value: 1 },
+    { label: 'FX Purchasing', value: 2 }
   ];
 
   statusOptions = [
-    { label: 'All', value: '' },
-    { label: 'Success', value: 'Success' },
-    { label: 'Processing', value: 'Processing' },
-    { label: 'Active', value: 'Active' }
+    { label: 'All', value: 0 },
+    { label: 'Success', value: 1 },
+    { label: 'Processing', value: 2 },
+    { label: 'Active', value: 3 }
   ];
 
   constructor(
@@ -62,30 +64,35 @@ export class TransactionsComponent implements OnInit {
     this.getDataList();
   }
 
+  changePageSize(pageSize: number): void {
+    this.tableConfig.pageSize = pageSize;
+    this.getDataList(1);
+  }
+
   initTableConfig() {
     this.tableConfig = {
       headers: [
         {
           title: 'Transaction No.',
-          field: 'no',
+          field: 'transactionNo',
           width: 120,
           tdTemplate: this.addressTpl
         },
         {
           title: 'From',
-          field: 'from',
+          field: 'fromAddress',
           width: 160,
           tdTemplate: this.addressTpl
         },
         {
           title: 'To',
-          field: 'to',
+          field: 'toAddress',
           width: 160,
           tdTemplate: this.addressTpl
         },
         {
           title: 'Transaction Type',
-          field: 'type',
+          field: 'txType',
           width: 120
         },
         {
@@ -101,13 +108,13 @@ export class TransactionsComponent implements OnInit {
         },
         {
           title: 'Transaction Time',
-          field: 'time',
+          field: 'txTime',
           width: 160,
           pipe: 'date:MMM d, y, HH:mm:ss'
         },
         {
           title: 'Transaction Hash',
-          field: 'hash',
+          field: 'txHash',
           width: 160,
           tdTemplate: this.addressTpl
         },
@@ -141,9 +148,19 @@ export class TransactionsComponent implements OnInit {
     }
 
     const params = {
-      ...this.searchParam,
-      pageSize: this.tableConfig.pageSize,
-      pageIndex: this.tableConfig.pageIndex
+      data: {
+        liquidityPoolId: Number(this.id),
+        status: this.searchParam.status,
+        txEndTime: this.searchParam.txTime?.[1] ? timeToTimestampMillisecond(this.searchParam.txTime[1]) : 0,
+        txHash: this.searchParam.txHash,
+        txStartTime: this.searchParam.txTime?.[0] ? timeToTimestampMillisecond(this.searchParam.txTime[0]) : 0,
+        txType: this.searchParam.txType,
+        walletAddress: this.searchParam.walletAddress
+      },
+      page: {
+        pageNum: this.tableConfig.pageIndex,
+        pageSize: this.tableConfig.pageSize
+      }
     };
 
     this.loading = true;
@@ -159,53 +176,76 @@ export class TransactionsComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.code === 0) {
-            this.dataList = res.data.rows || [];
+            this.tableData = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
           } else {
-            this.message.error(res.msg || 'Failed to load transaction list');
-            this.dataList = [];
+            this.message.error(res.message || 'Failed to load transaction list');
+            this.tableData = [];
             this.tableConfig.total = 0;
           }
         },
         error: (error) => {
           console.error('Failed to load transaction list:', error);
           this.message.error('Failed to load transaction list');
-          this.dataList = [];
+          this.tableData = [];
           this.tableConfig.total = 0;
         }
       });
   }
 
-  changePageSize(pageSize: number) {
-    this.tableConfig.pageSize = pageSize;
-    this.getDataList(1);
-  }
-
   resetForm() {
     this.searchParam = {
       walletAddress: '',
-      transactionType: '',
-      transactionHash: '',
-      status: '',
-      transactionTime: []
+      txType: 0,
+      txHash: '',
+      status: 0,
+      txTime: []
     };
     this.getDataList(1);
   }
 
-  isNegativeAmount(amount: string): boolean {
-    return amount.startsWith('-');
-  }
-
-  getStatusColor(status: string): string {
+  getStatusColor(status: number): string {
     switch (status) {
-      case 'Success':
+      case 1:
         return 'success';
-      case 'Processing':
+      case 2:
         return 'processing';
-      case 'Active':
+      case 3:
         return 'blue';
       default:
         return 'default';
     }
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 1:
+        return 'Success';
+      case 2:
+        return 'Processing';
+      case 3:
+        return 'Active';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getTransactionTypeText(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Transfer';
+      case 2:
+        return 'FX Purchasing';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  formatAmount(amount: number, symbol: string): string {
+    return `${amount >= 0 ? '+' : ''}${amount.toFixed(2)} ${symbol}`;
+  }
+
+  formatFxRate(rate: number, fromSymbol: string, toSymbol: string): string {
+    return `${fromSymbol}/${toSymbol} = ${rate.toFixed(2)}`;
   }
 }

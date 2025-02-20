@@ -39,6 +39,8 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('addressTpl', { static: true })
   addressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('minBalanceTpl', { static: true })
+  minBalanceTpl!: TemplateRef<NzSafeAny>;
 
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -157,7 +159,7 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Liquidity Pool Address',
-          field: 'liquidityPoolAddress',
+          field: 'liquidityPollAddress',
           tdTemplate: this.addressTpl,
           width: 180
         },
@@ -174,23 +176,26 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Authorized Amount',
           field: 'authorizedAmount',
+ 
           width: 300
         },
         {
           title: 'Min Balance Req.',
           field: 'minBalanceReq',
+          tdTemplate: this.minBalanceTpl,
           width: 180
         },
         {
           title: 'Created on',
-          field: 'createdOn',
-          pipe: 'date:MMM d, y, HH:mm:ss',
+          field: 'createdTime',
+          pipe: 'timeStamp',
           width: 180
         },
         {
           title: 'Status',
           field: 'status',
           tdTemplate: this.statusTpl,
+
           width: 100
         },
         {
