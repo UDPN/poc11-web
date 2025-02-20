@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 16:02:59
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 15:18:18
+ * @LastEditTime: 2025-02-20 17:23:15
  * @Description:
  */
 import { Injectable } from '@angular/core';
@@ -38,14 +38,16 @@ export class LiquidityFxTransactionsService {
         toCurrency: filters.toCurrency || '',
         toWalletAddress: filters.toWalletAddress || '',
         transactionNo: filters.transactionNo || '',
-        txEndTime: filters.txTime[1]
+        createStartTime: filters.createTime[1]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.txTime[1], 'yyyy-MM-dd') + ' 23:59:59'
+              this.date.transform(filters.createTime[1], 'yyyy-MM-dd') +
+                ' 23:59:59'
             )
           : '',
-        txStartTime: filters.txTime[0]
+        txStartTime: filters.createTime[0]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.txTime[0], 'yyyy-MM-dd') + ' 00:00:00'
+              this.date.transform(filters.createTime[0], 'yyyy-MM-dd') +
+                ' 00:00:00'
             )
           : ''
       },
