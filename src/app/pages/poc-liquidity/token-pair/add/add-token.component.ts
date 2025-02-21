@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { Location } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { TokenPairService } from '@app/core/services/http/poc-liquidity/token-pair/token-pair.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Router } from '@angular/router';
 
 interface TokenPair {
   label: string;
@@ -26,29 +29,46 @@ export class AddTokenComponent implements OnInit, AfterViewInit {
 
   allChecked = false;
   indeterminate = false;
+  loading = false;
+  submitting = false;
 
-  tokenPairs: TokenPair[] = [
-    { label: 'tUSD/tEUR', value: 'tUSD/tEUR' },
-    { label: 'tUSD/tSAR', value: 'tUSD/tSAR' },
-    { label: 'tUSD/tAED', value: 'tUSD/tAED' },
-    { label: 'tSAR/tEUR', value: 'tSAR/tEUR' },
-    { label: 'tSAR/tUSD', value: 'tSAR/tUSD' },
-    { label: 'tSAR/tAED', value: 'tSAR/tAED' },
-    { label: 'tAED/tEUR', value: 'tAED/tEUR' },
-    { label: 'tAED/tUSD', value: 'tAED/tUSD' },
-    { label: 'tAED/tSAR', value: 'tAED/tSAR' }
-  ];
+  tokenPairs: TokenPair[] = [];
 
   constructor(
     private fb: FormBuilder,
     private location: Location,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private tokenPairService: TokenPairService,
+    private modal: NzModalService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       fxType: ['Local FX', [Validators.required]],
       selectedTokens: [[], [Validators.required]]
+    });
+    this.loadTokenPairs();
+  }
+
+  loadTokenPairs(): void {
+    this.loading = true;
+    this.tokenPairService.saveLocalTokenPairList().subscribe({
+      next: (res) => {
+        if (res.code === 0) {
+          this.tokenPairs = res.data.map(pair => ({
+            label: `${pair.fromCurrency}/${pair.toCurrency}`,
+            value: `${pair.fromCurrency}/${pair.toCurrency}`
+          }));
+        } else {
+          this.message.error(res.message || 'Failed to load token pairs');
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        this.message.error('Failed to load token pairs');
+        this.loading = false;
+      }
     });
   }
 
@@ -71,19 +91,58 @@ export class AddTokenComponent implements OnInit, AfterViewInit {
   }
 
   submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-      // TODO: Implement form submission
-      this.message.success('Submitted successfully');
-      this.location.back();
-    } else {
+    if (this.submitting) {
+      return;
+    }
+
+    if (!this.validateForm.valid) {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsTouched();
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      return;
     }
+
+    const selectedTokens = this.validateForm.get('selectedTokens')?.value || [];
+    if (selectedTokens.length === 0) {
+      this.message.error('Please select at least one token pair');
+      return;
+    }
+
+    this.modal.confirm({
+      nzTitle: 'Confirm',
+      nzContent: 'Are you sure you want to submit?',
+      nzOnOk: () => {
+        this.submitting = true;
+        
+        const tokenPairRequests = selectedTokens.map((pair: string) => {
+          const [fromCurrency, toCurrency] = pair.split('/');
+          return {
+            fromCurrency,
+            toCurrency
+          };
+        });
+
+        this.tokenPairService.saveLocalTokenPair(tokenPairRequests[0]).subscribe({
+          next: (res) => {
+            if (res.code === 0) {
+              this.message.success('Submitted successfully');
+              this.router.navigate(['/poc/poc-liquidity/token-pair']);
+            } else {
+              this.message.error(res.message || 'Failed to submit');
+            }
+          },
+          error: (error) => {
+            this.message.error('Failed to submit');
+          },
+          complete: () => {
+            this.submitting = false;
+          }
+        });
+      }
+    });
   }
 
   updateAllChecked(checked: boolean): void {

@@ -26,7 +26,32 @@ import { finalize } from 'rxjs';
 interface SearchParam {
   tokenPair: string;
   updatedTime: any[];
-  status: number | string;
+  status: number;
+}
+
+interface TokenPairResponse {
+  code: number;
+  data: {
+    page: {
+      isFirstPage: boolean;
+      isLastPage: boolean;
+      pageNum: number;
+      pageSize: number;
+      pages: number;
+      total: number;
+    };
+    rows: Array<{
+      createTime: number;
+      createUser: string;
+      exchangeRate: number;
+      fromCurrency: string;
+      rateId: number;
+      state: number;
+      toCurrency: string;
+      updateTime: number;
+    }>;
+  };
+  message: string;
 }
 
 @Component({
@@ -53,8 +78,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   };
   searchParam: Partial<SearchParam> = {
     tokenPair: '',
-    status: '',
-    updatedTime: []
+    updatedTime: [],
+    status: 0
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -113,8 +138,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {
       tokenPair: '',
-      status: '',
-      updatedTime: []
+      updatedTime: [],
+      status: 0
     };
     this.getDataList(this.tableQueryParams);
   }
@@ -131,27 +156,29 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
 
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
-    const params: SearchCommonVO<any> = {
+    const params = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
 
-    const request$ = this.selectedTab === 'local' 
-      ? this.tokenPairService.fetchList(params.pageNum, params.pageSize, params.filters)
-      : this.tokenPairService.fetchNetworkList(params.pageNum, params.pageSize, params.filters);
-
-    request$
+    this.tokenPairService.fetchList(params.pageNum, params.pageSize, params.filters)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
         })
       )
       .subscribe({
-        next: (res: any) => {
+        next: (res: TokenPairResponse) => {
           if (res.code === 0) {
-            this.dataList = res.data?.rows || [];
-            this.tableConfig.total = res.data?.page?.total || 0;
+            this.dataList = res.data.rows.map(item => ({
+              tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
+              fxRate: item.exchangeRate.toString(),
+              updatedTime: item.updateTime,
+              status: item.state,
+              id: item.rateId
+            }));
+            this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
             this.tableLoading(false);
             this.cdr.markForCheck();
@@ -161,7 +188,6 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.message.error('Failed to fetch token pair list');
-          this.tableLoading(false);
         }
       });
   }
@@ -170,25 +196,20 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     this.tableConfig = {
       headers: [
         {
-          title: 'No.',
-          field: 'id',
-          width: 80
-        },
-        {
           title: 'Token Pair',
           field: 'tokenPair',
-          width: 120
+          width: 150
         },
         {
           title: 'FX Rate',
           field: 'fxRate',
-          width: 100
+          width: 150
         },
         {
-          title: 'FX Rate Updated on',
+          title: 'Updated on',
           field: 'updatedTime',
           pipe: 'date:MMM d, y, HH:mm:ss',
-          width: 180
+          width: 200
         },
         {
           title: 'Status',
@@ -199,11 +220,13 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
-          width: 120
+          fixed: true,
+          fixedDir: 'right',
+          showAction: false,
+          width: 150
         }
       ],
       total: 0,
-      showCheckbox: false,
       loading: false,
       pageSize: 10,
       pageIndex: 1
@@ -212,12 +235,12 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
 
   getStatusColor(status: number): string {
     switch (status) {
-      case 0:
-        return 'processing';
       case 1:
         return 'success';
+      case 0:
+        return 'processing';
       case 2:
-        return 'default';
+        return 'error';
       default:
         return 'default';
     }
@@ -225,10 +248,10 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
 
   getStatusText(status: number): string {
     switch (status) {
-      case 0:
-        return 'Processing';
       case 1:
         return 'Active';
+      case 0:
+        return 'Processing';
       case 2:
         return 'Inactive';
       default:

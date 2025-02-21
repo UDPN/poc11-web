@@ -45,7 +45,14 @@
       <!-- Form Actions -->
       <div class="form-actions">
         <button nz-button (click)="onBack()">Back</button>
-        <button nz-button nzType="primary" type="submit">Submit</button>
+        <button 
+          nz-button 
+          nzType="primary" 
+          type="submit" 
+          [nzLoading]="submitting"
+          [disabled]="!validateForm.valid || validateForm.get('selectedTokens')?.value?.length === 0">
+          Submit
+        </button>
       </div>
     </form>
   </nz-card>
