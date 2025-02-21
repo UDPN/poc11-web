@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 17:26:28
+ * @LastEditTime: 2025-02-20 17:44:16
  * @Description:
  */
 import {
@@ -33,7 +33,7 @@ interface SearchParam {
   fromCurrency: string;
   toCurrency: string;
   fxType: string | number;
-  txTime: any;
+  createTime: any;
   status: any;
 }
 @Component({
@@ -63,7 +63,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
 
-  tokenPairList: Array<any> = [];
+  tokenPairList: any = [];
   dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   color: string = '';
@@ -84,7 +84,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     fromCurrency: '',
     toCurrency: '',
     fxType: '',
-    txTime: [],
+    createTime: [],
     status: ''
   };
   tableQueryParams: NzTableQueryParams = {
@@ -117,7 +117,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
 
   getTokenPairList() {
     this.liquidityFxTransactionsService.getTokenPair().subscribe((res: any) => {
-      this.tokenPairList = res.data;
+      this.tokenPairList = res;
     });
   }
   tableChangeDectction(): void {
@@ -145,7 +145,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
       fromCurrency: '',
       toCurrency: '',
       fxType: '',
-      txTime: [],
+      createTime: [],
       status: ''
     };
     this.getDataList(this.tableQueryParams);
