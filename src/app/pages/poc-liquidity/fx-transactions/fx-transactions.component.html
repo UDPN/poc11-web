@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-19 16:05:56
+ * @LastEditTime: 2025-02-21 13:39:53
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -374,7 +374,7 @@
     >
       <p>
         {{ fromCurrency + '/' + toCurrency + ' = '
-        }}{{ exchangeRate | map: 'toThousandRate' }}
+        }}{{ exchangeRate | map: 'toThousandthMark' }}
       </p>
     </ng-template>
     <ng-template #fxTypeTpl let-fxType="fxType">
