@@ -21,6 +21,7 @@ interface SearchParam {
   token: string;
   createdTime: any[];
   status: number | string;
+  minBalanceReq: string;
 }
 
 @Component({
@@ -41,6 +42,12 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   addressTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('minBalanceTpl', { static: true })
   minBalanceTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('minBalanceHeaderTpl', { static: true })
+  minBalanceHeaderTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletBalanceTpl', { static: true })
+  walletBalanceTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('authorizedAmountTpl', { static: true })
+  authorizedAmountTpl!: TemplateRef<NzSafeAny>;
 
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -53,7 +60,8 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     liquidityPoolAddress: '',
     token: '',
     status: '',
-    createdTime: []
+    createdTime: [],
+    minBalanceReq: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -112,7 +120,8 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       liquidityPoolAddress: '',
       token: '',
       status: '',
-      createdTime: []
+      createdTime: [],
+      minBalanceReq: ''
     };
     this.getDataList(this.tableQueryParams);
   }
@@ -122,6 +131,7 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
+    console.log(this.searchParam);
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
@@ -171,31 +181,32 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Wallet Balance',
           field: 'walletBalance',
-          width: 180
+          tdTemplate: this.walletBalanceTpl,
+          width: 120
         },
         {
           title: 'Authorized Amount',
           field: 'authorizedAmount',
- 
-          width: 300
+          tdTemplate: this.authorizedAmountTpl,
+          width: 120
         },
         {
           title: 'Min Balance Req.',
+          thTemplate: this.minBalanceHeaderTpl,
           field: 'minBalanceReq',
           tdTemplate: this.minBalanceTpl,
-          width: 180
+          width: 150
         },
         {
           title: 'Created on',
           field: 'createdTime',
           pipe: 'timeStamp',
-          width: 180
+          width: 260
         },
         {
           title: 'Status',
           field: 'status',
           tdTemplate: this.statusTpl,
-
           width: 100
         },
         {

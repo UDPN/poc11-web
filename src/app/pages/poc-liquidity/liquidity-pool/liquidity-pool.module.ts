@@ -9,7 +9,6 @@ import { BasicComponent } from './info-basic/basic.component';
 import { OperationComponent } from './info-operation/operation.component';
 import { TransactionsComponent } from './info-transactions/transactions.component';
 import { InfoComponent } from './info/info.component';
-
 @NgModule({
   declarations: [
     LiquidityPoolComponent,
@@ -18,7 +17,8 @@ import { InfoComponent } from './info/info.component';
     BasicComponent,
     OperationComponent,
     TransactionsComponent,
-    InfoComponent
+    InfoComponent,
+    
   ],
   imports: [CommonModule, SharedModule, LiquidityPoolRoutingModule]
 })

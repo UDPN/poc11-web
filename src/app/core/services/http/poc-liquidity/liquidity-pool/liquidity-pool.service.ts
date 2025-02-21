@@ -213,7 +213,7 @@ export class LiquidityPoolService {
       data: {
         liquidityPollAddress: filters.liquidityPoolAddress || '',
         tokenId: filters.token || '',
-        status: filters.status || '',
+        status: filters.status ,
         startCreatedTime: filters.createdTime?.[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.createdTime[0], 'yyyy-MM-dd') +
