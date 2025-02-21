@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-21 13:42:23
+ * @LastEditTime: 2025-02-21 14:10:11
  * @Description:
  */
 import {
@@ -222,7 +222,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Created on',
-          field: 'transactionDate',
+          field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 180
