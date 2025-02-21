@@ -12,4 +12,4 @@ import { PocLiquidityRoutingModule } from './poc-liquidity-routing.module';
   declarations: [],
   imports: [SharedModule, PocLiquidityRoutingModule],
 })
-export class PocLiquidityModule {}
+    export class PocLiquidityModule {}

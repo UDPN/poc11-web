@@ -12,15 +12,18 @@ import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.compo
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
+import { ActivateModalComponent } from './activate-modal/activate-modal.component';
+import { ReauthorizeModalComponent } from './reauthorize-modal/reauthorize-modal.component';
 
 interface SearchParam {
   liquidityPoolAddress: string;
   token: string;
   createdTime: any[];
   status: number | string;
+  minBalanceReq: string;
 }
 
 @Component({
@@ -41,6 +44,12 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   addressTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('minBalanceTpl', { static: true })
   minBalanceTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('minBalanceHeaderTpl', { static: true })
+  minBalanceHeaderTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletBalanceTpl', { static: true })
+  walletBalanceTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('authorizedAmountTpl', { static: true })
+  authorizedAmountTpl!: TemplateRef<NzSafeAny>;
 
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -53,7 +62,8 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     liquidityPoolAddress: '',
     token: '',
     status: '',
-    createdTime: []
+    createdTime: [],
+    minBalanceReq: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -64,6 +74,7 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   tokenList: Array<{ key: string; value: string }> = [];
+  comments: string = '';
 
   constructor(
     private liquidityPoolService: LiquidityPoolService,
@@ -112,7 +123,8 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       liquidityPoolAddress: '',
       token: '',
       status: '',
-      createdTime: []
+      createdTime: [],
+      minBalanceReq: ''
     };
     this.getDataList(this.tableQueryParams);
   }
@@ -122,6 +134,7 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
+    console.log(this.searchParam);
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
@@ -171,31 +184,32 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Wallet Balance',
           field: 'walletBalance',
-          width: 180
+          tdTemplate: this.walletBalanceTpl,
+          width: 120
         },
         {
           title: 'Authorized Amount',
           field: 'authorizedAmount',
- 
-          width: 300
+          tdTemplate: this.authorizedAmountTpl,
+          width: 120
         },
         {
           title: 'Min Balance Req.',
-          field: 'minBalanceReq',
+          thTemplate: this.minBalanceHeaderTpl,
+          field: 'minBalance',
           tdTemplate: this.minBalanceTpl,
-          width: 180
+          width: 150
         },
         {
           title: 'Created on',
           field: 'createdTime',
           pipe: 'timeStamp',
-          width: 180
+          width: 260
         },
         {
           title: 'Status',
           field: 'status',
           tdTemplate: this.statusTpl,
-
           width: 100
         },
         {
@@ -243,5 +257,51 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       default:
         return 'Unknown';
     }
+  }
+
+  showActivateModal(liquidityPoolAddress: string, token: string, liquidityPoolId: number, status: number): void {
+    const modal = this.modal.create<ActivateModalComponent>({
+      nzTitle: status === 1 ? 'Deactivate Liquidity Pool' : 'Activate Liquidity Pool',
+      nzContent: ActivateModalComponent,
+      nzWidth: 600,
+      nzData: {
+        liquidityPoolAddress,
+        token,
+        liquidityPoolId,
+        status
+      }
+    });
+
+    modal.afterClose.subscribe((comments: string) => {
+      if (comments) {
+        this.message.success(`Liquidity Pool ${status === 1 ? 'deactivated' : 'activated'} successfully`);
+        this.getDataList(this.tableQueryParams);
+      }
+    });
+  }
+
+  showReauthorizeModal(liquidityPoolAddress: string, token: string, liquidityPoolId: number, balance: string, minBalanceReq: string): void {
+    console.log(liquidityPoolAddress, token, liquidityPoolId, balance, minBalanceReq);
+    const modal = this.modal.create<ReauthorizeModalComponent>({
+      nzTitle: undefined,
+      nzContent: ReauthorizeModalComponent,
+      nzWidth: 520,
+      nzFooter: null,
+      nzClassName: 'reauthorize-modal',
+      nzData: {
+        liquidityPoolAddress,
+        token,
+        liquidityPoolId,
+        balance,
+        minBalanceReq
+      }
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result) {
+        this.message.success('Reauthorize successfully');
+        this.getDataList(this.tableQueryParams);
+      }
+    });
   }
 }

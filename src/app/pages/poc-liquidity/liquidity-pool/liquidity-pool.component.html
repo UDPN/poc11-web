@@ -68,6 +68,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
         <div nz-col [nzXXl]="16" [nzXl]="16" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24" class="m-b-8 text-right p-0">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
@@ -97,38 +98,56 @@
         {{ liquidityPollAddress | slice:0:6 }}...{{ liquidityPollAddress | slice:-4 }}
       </span>
     </ng-template>
+    <ng-template #walletBalanceTpl let-walletBalance="walletBalance" let-symbol="symbol">
+      <span>
+        {{ walletBalance | map: 'toThousandthMark'}}{{" "+ symbol }}
+      </span>
+    </ng-template>
+    <ng-template #authorizedAmountTpl let-authorizedAmount="authorizedAmount" let-symbol="symbol">
+      <span>
+        {{ authorizedAmount | map: 'toThousandthMark'}}{{" "+ symbol }}
+      </span>
+    </ng-template>
     <ng-template #minBalanceTpl let-minBalance="minBalance" let-symbol="symbol">
       <span>
         {{ minBalance | map: 'toThousandthMark'}}{{" "+ symbol }}
       </span>
     </ng-template>
+    <ng-template #minBalanceHeaderTpl>
+      <span>Min Balance Req.</span>
+      <i 
+        nz-icon 
+        nzType="info-circle" 
+        nzTheme="outline"
+        nz-tooltip
+        nzTooltipTitle="A minimum balance is required for the Kissen Network Liquidity Pool."
+        class="m-l-4"
+      ></i>
+    </ng-template>
     <ng-template #statusTpl let-status="status">
       <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-liquidityPoolId="liquidityPoolId">
+    <ng-template #operationTpl let-liquidityPollAddress="liquidityPollAddress" let-status="status" let-token="token" let-liquidityPoolId="liquidityPoolId" let-walletBalance="walletBalance" let-minBalance="minBalance" >
+      <ng-container *appAuth="''">
+        <span class="operate-text" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)" *ngIf="status !== 1">
+          Activate
+        </span>
+      </ng-container>
       <ng-container *appAuth="''">
         <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{liquidityPoolId}">
           Details
         </span>
       </ng-container>
       <ng-container *appAuth="''">
-        <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/reauthorize" [queryParams]="{liquidityPoolId}">
+        <span class="operate-text" *ngIf="status === 1" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)">
+          Deactivate
+        </span>
+      </ng-container>
+      <ng-container *appAuth="''">
+        <span class="operate-text" (click)="showReauthorizeModal(liquidityPollAddress, token, liquidityPoolId, walletBalance, minBalance)" *ngIf="status === 1">
           Reauthorize
         </span>
       </ng-container>
-      <!-- <nz-dropdown [nzDropdownMenu]="menu" *appAuth="''"> -->
-        <span class="operate-text">More<i nz-icon nzType="down"></i></span>
-        <nz-dropdown-menu #menu="nzDropdownMenu">
-          <ul nz-menu>
-            <li nz-menu-item>
-              <span routerLink="/poc/poc-liquidity/liquidity-pool/activate" [queryParams]="{liquidityPoolId}">Activate</span>
-            </li>
-            <li nz-menu-item>
-              <span routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{liquidityPoolId}">Details</span>
-            </li>
-          </ul>
-        </nz-dropdown-menu>
-      <!-- </nz-dropdown> -->
     </ng-template>
   </app-card-table-wrap>
 </div>

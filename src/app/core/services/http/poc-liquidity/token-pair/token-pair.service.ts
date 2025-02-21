@@ -36,6 +36,26 @@ export interface OperationRecord {
   status: string;
 }
 
+interface TokenPairListResponse {
+  code: number;
+  data: Array<{
+    fromCurrency: string;
+    toCurrency: string;
+  }>;
+  message: string;
+}
+
+interface SaveTokenPairRequest {
+  fromCurrency: string;
+  toCurrency: string;
+}
+
+interface SaveTokenPairResponse {
+  code: number;
+  data: Record<string, never>;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -53,20 +73,20 @@ export class TokenPairService {
   ): Observable<any> {
     const param = {
       data: {
-        tokenPair: filters.tokenPair || '',
-        status: filters.status || '',
-        startUpdatedTime: filters.updatedTime?.[0]
+        startTime: filters.updatedTime?.[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.updatedTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
           : '',
-        endUpdatedTime: filters.updatedTime?.[1]
+        endTime: filters.updatedTime?.[1]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.updatedTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )
-          : ''
+          : '',
+        rateId: '',
+        state: filters.status || ''
       },
       page: {
         pageNum: pageIndex,
@@ -74,50 +94,7 @@ export class TokenPairService {
       }
     };
 
-    // Mock data
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next({
-          code: 0,
-          data: {
-            rows: [
-              {
-                id: 1,
-                tokenPair: 'tEUR/tUSD',
-                fxRate: '--',
-                updatedTime: null,
-                status: 0
-              },
-              {
-                id: 2,
-                tokenPair: 'tEUR/tSAR',
-                fxRate: '3.89',
-                updatedTime: new Date('2024-03-09T10:23:12+08:00').getTime(),
-                status: 1
-              },
-              {
-                id: 3,
-                tokenPair: 'tEUR/tAED',
-                fxRate: '3.81',
-                updatedTime: new Date('2024-03-08T10:23:12+08:00').getTime(),
-                status: 2
-              },
-              {
-                id: 4,
-                tokenPair: 'tUSD/tEUR',
-                fxRate: '3.81',
-                updatedTime: new Date('2024-03-08T10:23:12+08:00').getTime(),
-                status: 2
-              }
-            ],
-            page: {
-              total: 4
-            }
-          }
-        });
-        observer.complete();
-      }, 500);
-    });
+    return this.https.post<any>('/v2/liquidity/rate/local/listPage', param);
   }
 
   public fetchNetworkList(
@@ -313,5 +290,13 @@ export class TokenPairService {
     }
 
     return of(mockData).pipe(delay(500));
+  }
+
+  public saveLocalTokenPair(params: SaveTokenPairRequest): Observable<SaveTokenPairResponse> {
+    return this.https.post<SaveTokenPairResponse>('/v2/liquidity/rate/local/save', params);
+  }
+
+  public saveLocalTokenPairList(): Observable<TokenPairListResponse> {
+    return this.https.post<TokenPairListResponse>('/v2/liquidity/rate/local/save/tokenPair/list', {});
   }
 }
