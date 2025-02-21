@@ -9,6 +9,9 @@ import { BasicComponent } from './info-basic/basic.component';
 import { OperationComponent } from './info-operation/operation.component';
 import { TransactionsComponent } from './info-transactions/transactions.component';
 import { InfoComponent } from './info/info.component';
+import { ActivateModalComponent } from './activate-modal/activate-modal.component';
+import { ReauthorizeModalComponent } from './reauthorize-modal/reauthorize-modal.component';
+
 @NgModule({
   declarations: [
     LiquidityPoolComponent,
@@ -18,7 +21,8 @@ import { InfoComponent } from './info/info.component';
     OperationComponent,
     TransactionsComponent,
     InfoComponent,
-    
+    ActivateModalComponent,
+    ReauthorizeModalComponent
   ],
   imports: [CommonModule, SharedModule, LiquidityPoolRoutingModule]
 })

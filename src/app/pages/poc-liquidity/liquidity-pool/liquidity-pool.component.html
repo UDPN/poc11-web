@@ -127,36 +127,26 @@
     <ng-template #statusTpl let-status="status">
       <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-liquidityPoolId="liquidityPoolId" let-status="status">
+    <ng-template #operationTpl let-liquidityPollAddress="liquidityPollAddress" let-status="status" let-token="token" let-liquidityPoolId="liquidityPoolId" let-walletBalance="walletBalance" let-minBalance="minBalance" >
       <ng-container *appAuth="''">
-        <span class="operate-text" >
+        <span class="operate-text" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)" *ngIf="status !== 1">
           Activate
         </span>
-      </ng-container >
+      </ng-container>
       <ng-container *appAuth="''">
         <span class="operate-text" routerLink="/poc/poc-liquidity/liquidity-pool/info" [queryParams]="{liquidityPoolId}">
           Details
         </span>
       </ng-container>
       <ng-container *appAuth="''">
-        <span class="operate-text" *ngIf="status === 1" routerLink="/poc/poc-liquidity/liquidity-pool/reauthorize" [queryParams]="{liquidityPoolId}">
+        <span class="operate-text" *ngIf="status === 1" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)">
+          Deactivate
+        </span>
+      </ng-container>
+      <ng-container *appAuth="''">
+        <span class="operate-text" (click)="showReauthorizeModal(liquidityPollAddress, token, liquidityPoolId, walletBalance, minBalance)" *ngIf="status === 1">
           Reauthorize
         </span>
-      </ng-container >
-      <ng-container *appAuth="''" >
-      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" *ngIf="status === 1">
-        More
-        <span nz-icon nzType="down" nzTheme="outline"></span>
-      </a>
-      <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item>Deactivate</li>
-          <li nz-menu-divider></li>
-          <li nz-menu-item nzDisabled>Top up</li>
-          <li nz-menu-item nzDisabled>Withdraw</li>
-          <li nz-menu-item nzDisabled>FX Purchasing</li>
-        </ul>
-      </nz-dropdown-menu>
       </ng-container>
     </ng-template>
   </app-card-table-wrap>

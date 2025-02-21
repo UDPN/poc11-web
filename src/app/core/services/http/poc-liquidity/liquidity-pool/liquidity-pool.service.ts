@@ -194,6 +194,29 @@ interface TransactionResponse {
   message: string;
 }
 
+interface ModifyStatusRequest {
+  liquidityPoolId: number;
+  liquidityPoolStatus: number;
+  remarks: string;
+}
+
+interface ModifyStatusResponse {
+  code: number;
+  data: Record<string, never>;
+  message: string;
+}
+
+interface ReauthorizeRequest {
+  authorizedAmount: number | string;
+  liquidityPoolId: number;
+}
+
+interface ReauthorizeResponse {
+  code: number;
+  data: Record<string, never>;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -301,5 +324,13 @@ export class LiquidityPoolService {
 
   public register(entries: RegisterPoolEntry[]): Observable<RegisterResponse> {
     return this.https.post<RegisterResponse>('/v2/liquidity-poll/register', entries);
+  }
+
+  public modifyStatus(params: ModifyStatusRequest): Observable<ModifyStatusResponse> {
+    return this.http.post('/v2/liquidity-poll/status/modification', params);
+  }
+
+  public reauthorize(params: ReauthorizeRequest): Observable<ReauthorizeResponse> {
+    return this.https.post<ReauthorizeResponse>('/v2/liquidity-poll/reauthorize', params);
   }
 }
