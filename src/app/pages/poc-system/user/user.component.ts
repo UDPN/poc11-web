@@ -215,7 +215,7 @@ export class UserComponent implements OnInit {
           show: true
         },
         {
-          title: 'User Name',
+          title: 'Username',
           field: 'userName',
           notNeedEllipsis: true,
           width: 180
