@@ -59,7 +59,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
             <nz-form-control>
               <nz-range-picker
                 style="width: 100%"
@@ -156,7 +156,7 @@
           class="operate-text"
           *ngIf="status === 0"
           routerLink="/poc/poc-enterprise/enterprise-onboarding/apprval"
-          [queryParams]="{enterpriseId: enterpriseId, status: status}"
+          [queryParams]="{ enterpriseId: enterpriseId, status: status }"
         >
           Approval
         </span>
@@ -167,14 +167,14 @@
           (click)="updateStatus(status, enterpriseId, enterpriseName)"
           *ngIf="status === 1 || status === 2"
         >
-          {{ status  === 1 ? 'Deactivate' : 'Activate' }}
+          {{ status === 1 ? 'Deactivate' : 'Activate' }}
         </span>
       </ng-container>
       <ng-container *appAuth="''">
         <span
           class="operate-text"
           routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
-          [queryParams]="{enterpriseId: enterpriseId, status: status}"
+          [queryParams]="{ enterpriseId: enterpriseId, status: status }"
         >
           Details
         </span> </ng-container
@@ -183,8 +183,7 @@
           class="operate-text"
           *ngIf="status === 1 || status === 2 || status === 3"
           routerLink="/poc/poc-enterprise/enterprise-onboarding/add"
-          [queryParams]="{enterpriseId: enterpriseId, status: status}"
-      
+          [queryParams]="{ enterpriseId: enterpriseId, status: status }"
         >
           Edit
         </span>

@@ -43,24 +43,13 @@
             '/' +
             transactionSummary?.toCurrency +
             ' = ' +
-            (transactionSummary?.exchangeRate | map: 'toThousandRate')
+            (transactionSummary?.exchangeRate | map: 'toThousandthMark')
         }}<nz-tag class="opacity-7" [nzColor]="color">{{
           transactionSummary?.fxType | map: 'fxType'
         }}</nz-tag></nz-descriptions-item
       >
       <nz-descriptions-item nzTitle="Liquidity Provider Name" [nzSpan]="3">
-        <!-- {{
-          transactionSummary?.liquidityProviderName | map: 'null'
-        }} -->
-      </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Liquidity Provider ID" [nzSpan]="3">
-        <!-- <p
-          nz-typography
-          [nzCopyable]="transactionSummary?.liquidityProviderId ? true : false"
-          [nzCopyText]="transactionSummary?.liquidityProviderId"
-        >
-          {{ transactionSummary?.liquidityProviderId | map: 'null' }}
-        </p> -->
+        {{ transactionSummary?.liquidityProviderName | map: 'null' }}
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Created on" [nzSpan]="3">{{
         transactionSummary?.createTime | map: 'timeStamp'
