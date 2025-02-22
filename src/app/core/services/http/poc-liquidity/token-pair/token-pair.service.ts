@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Observable, of } from 'rxjs';
 import { timeToTimestampMillisecond } from '@app/utils/tools';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 
 interface SearchParams {
   tokenPair: string;
@@ -104,20 +104,19 @@ export class TokenPairService {
   ): Observable<any> {
     const param = {
       data: {
-        tokenPair: filters.tokenPair || '',
-        status: filters.status || 0,
-        startUpdatedTime: filters.updatedTime?.[0]
+        startTime: filters.updatedTime?.[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.updatedTime[0], 'yyyy-MM-dd') +
                 ' 00:00:00'
             )
-          : 0,
-        endUpdatedTime: filters.updatedTime?.[1]
+          : '',
+        endTime: filters.updatedTime?.[1]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.updatedTime[1], 'yyyy-MM-dd') +
                 ' 23:59:59'
             )
-          : 0
+          : '',
+        rateId: '',
       },
       page: {
         pageNum: pageIndex,
@@ -125,50 +124,14 @@ export class TokenPairService {
       }
     };
 
-    // Mock data for network FX
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next({
-          code: 0,
-          data: {
-            rows: [
-              {
-                id: 1,
-                tokenPair: 'tEUR/tUSD',
-                fxRate: '--',
-                updatedTime: null,
-                status: 0
-              },
-              {
-                id: 2,
-                tokenPair: 'tEUR/tSAR',
-                fxRate: '3.89',
-                updatedTime: new Date('2024-03-09T10:23:12+08:00').getTime(),
-                status: 1
-              },
-              {
-                id: 3,
-                tokenPair: 'tEUR/tAED',
-                fxRate: '3.81',
-                updatedTime: new Date('2024-03-08T10:23:12+08:00').getTime(),
-                status: 2
-              },
-              {
-                id: 4,
-                tokenPair: 'tUSD/tEUR',
-                fxRate: '--',
-                updatedTime: new Date('2024-03-08T10:23:12+08:00').getTime(),
-                status: 2
-              }
-            ],
-            page: {
-              total: 4
-            }
-          }
-        });
-        observer.complete();
-      }, 500);
-    });
+    return this.https.post<any>('/v2/liquidity/rate/network/listPage', param).pipe(
+      map(response => {
+        if (response.code === 0) {
+          return response.data;
+        }
+        throw new Error(response.message);
+      })
+    );
   }
 
   public getTokenPairList(): Observable<any> {
@@ -298,5 +261,32 @@ export class TokenPairService {
 
   public saveLocalTokenPairList(): Observable<TokenPairListResponse> {
     return this.https.post<TokenPairListResponse>('/v2/liquidity/rate/local/save/tokenPair/list', {});
+  }
+
+  public getLocalRates(): Observable<{ key: string; value: number }[]> {
+    return this.https.post<any>('/v2/liquidity/rate/local/list', {}).pipe(
+      map(response => {
+        if (response.code === 0) {
+          return response.data.map((item: { fromCurrency: string; toCurrency: string; rateId: number }) => ({
+            key: `${item.fromCurrency}/${item.toCurrency}`,
+            value: item.rateId
+          }));
+        }
+        return [];
+      })
+    );
+  }
+  public getNetRates(): Observable<{ key: string; value: number }[]> {
+    return this.https.post<any>('/v2/liquidity/rate/network/list', {}).pipe(
+      map(response => {
+        if (response.code === 0) {
+          return response.data.map((item: { fromCurrency: string; toCurrency: string; rateId: number }) => ({
+            key: `${item.fromCurrency}/${item.toCurrency}`,
+            value: item.rateId
+          }));
+        }
+        return [];
+      })
+    );
   }
 }

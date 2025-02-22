@@ -116,13 +116,20 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   }
 
   getTokenPairList(): void {
-    this.tokenPairService.getTokenPairList().subscribe({
-      next: (res) => {
-        if (res.code === 0) {
-          this.tokenPairList = res.data;
+    if (this.selectedTab === 'network') {
+      this.tokenPairService.getNetRates().subscribe({
+        next: (res: any) => {
+          this.tokenPairList = res;
         }
-      }
-    });
+      });
+    } else {
+      this.tokenPairService.getLocalRates().subscribe({
+        next: (res: any) => {
+          this.tokenPairList = res;
+        }
+      });
+    }
+
   }
 
   tableChangeDectction(): void {
@@ -143,7 +150,6 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     };
     this.getDataList(this.tableQueryParams);
   }
-
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -151,7 +157,13 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
     this.selectedTab = index === 0 ? 'local' : 'network';
-    this.getDataList(this.tableQueryParams);
+    this.getTokenPairList();
+    
+    if (this.selectedTab === 'network') {
+      this.getNetworkDataList(this.tableQueryParams);
+    } else {
+      this.getDataList(this.tableQueryParams);
+    }
   }
 
   getDataList(e?: NzTableQueryParams): void {
@@ -171,7 +183,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res: TokenPairResponse) => {
           if (res.code === 0) {
-            this.dataList = res.data.rows.map(item => ({
+            this.dataList = res.data.rows.map((item: { createTime: number; createUser: string; exchangeRate: number; fromCurrency: string; rateId: number; state: number; toCurrency: string; updateTime: number; }) => ({
               tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
               fxRate: item.exchangeRate.toString(),
               updatedTime: item.updateTime,
@@ -192,6 +204,44 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       });
   }
 
+  getNetworkDataList(e?: NzTableQueryParams): void {
+    this.tableConfig.loading = true;
+    const params = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+
+    this.tokenPairService.fetchNetworkList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.code === 0) {
+            this.dataList = res.data.rows.map((item: { createTime: number; createUser: string; exchangeRate: number; fromCurrency: string; rateId: number; state: number; toCurrency: string; updateTime: number; }) => ({
+              tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
+              fxRate: item.exchangeRate.toString(),
+              updatedTime: item.updateTime,
+              status: item.state,
+              id: item.rateId
+            }));
+            this.tableConfig.total = res.data.page.total;
+            this.tableConfig.pageIndex = params.pageNum;
+            this.tableLoading(false);
+            this.cdr.markForCheck();
+          } else {
+            this.message.error(res.message || '获取网络FX列表失败');
+          }
+        },
+        error: () => {
+          this.message.error('获取网络FX列表失败');
+        }
+      });
+  }
+
   private initTable(): void {
     this.tableConfig = {
       headers: [
@@ -208,7 +258,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         {
           title: 'Updated on',
           field: 'updatedTime',
-          pipe: 'date:MMM d, y, HH:mm:ss',
+          pipe: 'timeStamp',
           width: 200
         },
         {
