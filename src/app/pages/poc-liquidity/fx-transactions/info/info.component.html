@@ -44,7 +44,7 @@
             transactionSummary?.toCurrency +
             ' = ' +
             (transactionSummary?.exchangeRate | map: 'toThousandthMark')
-        }}<nz-tag class="opacity-7" [nzColor]="color">{{
+        }}<nz-tag class="opacity-7 m-l-15" [nzColor]="color">{{
           transactionSummary?.fxType | map: 'fxType'
         }}</nz-tag></nz-descriptions-item
       >
