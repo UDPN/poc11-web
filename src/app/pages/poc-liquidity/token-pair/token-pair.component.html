@@ -127,15 +127,15 @@
       }}</nz-tag>
     </ng-template>
 
-    <ng-template #operationTpl let-id="id">
+    <ng-template #operationTpl let-rateId="rateId">
       <ng-container *appAuth="''" >
-        <span class="operate-text" routerLink="/poc/poc-liquidity/token-pair/infoToken">Details</span>
+        <span class="operate-text" routerLink="/poc/poc-liquidity/token-pair/infoToken" [queryParams]="{rateId}">Details</span>
       </ng-container>
       <ng-container *appAuth="''">
-        <span class="operate-text" *ngIf="getStatusText(id) === 'Active'"
+        <span class="operate-text" *ngIf="getStatusText(rateId) === 'Active'"
           >Deactivate</span
         >
-        <span class="operate-text" *ngIf="getStatusText(id) === 'Inactive'"
+        <span class="operate-text" *ngIf="getStatusText(rateId) === 'Inactive'"
           >Activate</span
         >
       </ng-container>

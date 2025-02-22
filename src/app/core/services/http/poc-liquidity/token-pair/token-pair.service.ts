@@ -56,6 +56,84 @@ interface SaveTokenPairResponse {
   message: string;
 }
 
+interface NetworkTokenPairItem {
+  exchangeRate: number;
+  fromCurrency: string;
+  toCurrency: string;
+  updateTime: number;
+}
+
+interface NetworkTokenPairResponse {
+  code: number;
+  data: NetworkTokenPairItem[];
+  message: string;
+}
+
+interface NetworkTokenPairSaveRequest {
+  fromCurrency: string;
+  toCurrency: string;
+}
+
+interface NetworkTokenPairSaveResponse {
+  code: number;
+  data: Record<string, never>;
+  message: string;
+}
+
+interface TokenPairDetailRequest {
+  rateId: number;
+}
+
+export interface TokenPairDetailResponse {
+  code: number;
+  data: {
+    createTime: number;
+    createUser: string;
+    exchangeRate: number;
+    fromCurrency: string;
+    rateId: number;
+    state: number;
+    toCurrency: string;
+    updateTime: number;
+  };
+  message: string;
+}
+
+interface FxRateHistoryRequest {
+  data: {
+    endTime: number;
+    rateId: number;
+    startTime: number;
+  };
+  page: {
+    pageNum: number;
+    pageSize: number;
+  };
+}
+
+interface FxRateHistoryResponse {
+  code: number;
+  data: {
+    page: {
+      isFirstPage: boolean;
+      isLastPage: boolean;
+      pageNum: number;
+      pageSize: number;
+      pages: number;
+      total: number;
+    };
+    rows: Array<{
+      createTime: number;
+      exchangeRate: number;
+      fromCurrency: string;
+      rateId: number;
+      rateRecordId: number;
+      toCurrency: string;
+    }>;
+  };
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -127,7 +205,7 @@ export class TokenPairService {
     return this.https.post<any>('/v2/liquidity/rate/network/listPage', param).pipe(
       map(response => {
         if (response.code === 0) {
-          return response.data;
+          return response;
         }
         throw new Error(response.message);
       })
@@ -151,108 +229,41 @@ export class TokenPairService {
     });
   }
 
-  public getTokenPairDetail(): Observable<any> {
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next({
-          code: 0,
-          data: {
-            tokenPair: 'tEUR/tSAR',
-            fxType: 'Local FX',
-            status: 1, // 1: Active, 0: Processing, 2: Inactive
-            fxRate: '1 tEUR = 3.89 tSAR',
-            fxRateUpdatedOn: new Date('2024-03-10T10:23:12+08:00').getTime(),
-            createdBy: 'Admin',
-            createdOn: new Date('2024-07-07T10:14:41+08:00').getTime()
-          }
-        });
-        observer.complete();
-      }, 500);
-    });
+  public getTokenPairDetail(rateId: number): Observable<TokenPairDetailResponse> {
+    const params: TokenPairDetailRequest = { rateId };
+    return this.https.post<TokenPairDetailResponse>('/v2/liquidity/rate/local/detail/basic', params);
   }
 
-  public getFxRateHistory(params: { startDate?: Date; endDate?: Date }): Observable<any> {
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next({
-          code: 0,
-          data: {
-            rows: [
-              {
-                tokenPair: '1 tEUR/tSAR',
-                fxRate: '3.89',
-                date: new Date('2024-03-09T09:12:41+08:00').getTime()
-              },
-              {
-                tokenPair: '1 tEUR/tSAR',
-                fxRate: '3.89',
-                date: new Date('2024-03-09T09:10:41+08:00').getTime()
-              },
-              {
-                tokenPair: '1 tEUR/tSAR',
-                fxRate: '3.89',
-                date: new Date('2024-03-09T09:08:41+08:00').getTime()
-              },
-              {
-                tokenPair: '1 tEUR/tSAR',
-                fxRate: '3.89',
-                date: new Date('2024-03-09T09:06:41+08:00').getTime()
-              }
-            ],
-            page: {
-              total: 4
-            }
-          }
-        });
-        observer.complete();
-      }, 500);
-    });
-  }
-
-  public getOperationRecords(params: { operationType?: string }): Observable<any> {
-    // Mock data
-    const mockData = {
-      code: 0,
+  public getFxRateHistory(params: { rateId: number; startDate?: Date; endDate?: Date; pageSize?: number; pageIndex?: number }): Observable<FxRateHistoryResponse> {
+    const param: FxRateHistoryRequest = {
       data: {
-        rows: [
-          {
-            operationType: 'Activate',
-            createdBy: 'yunying',
-            createdOn: new Date('2024-05-15 12:14:41').getTime(),
-            comments: 'Activate token pairs.',
-            status: 'Success'
-          },
-          {
-            operationType: 'Deactivate',
-            createdBy: 'yunying',
-            createdOn: new Date('2024-05-10 13:14:41').getTime(),
-            comments: 'Deactivate token pairs.',
-            status: 'Success'
-          },
-          {
-            operationType: 'Add',
-            createdBy: 'yunying',
-            createdOn: new Date('2024-05-10 12:30:41').getTime(),
-            comments: 'N/A',
-            status: 'Success'
-          }
-        ],
-        page: {
-          total: 3
-        }
+        rateId: params.rateId,
+        startTime: params.startDate ? timeToTimestampMillisecond(
+          this.date.transform(params.startDate, 'yyyy-MM-dd') + ' 00:00:00'
+        ) : 0,
+        endTime: params.endDate ? timeToTimestampMillisecond(
+          this.date.transform(params.endDate, 'yyyy-MM-dd') + ' 23:59:59'
+        ) : 0
       },
-      message: 'Success'
+      page: {
+        pageNum: params.pageIndex || 1,
+        pageSize: params.pageSize || 10
+      }
     };
+    return this.https.post<FxRateHistoryResponse>('/v2/liquidity/rate/local/detail/history', param);
+  }
 
-    // Filter by operation type if provided
-    if (params.operationType) {
-      mockData.data.rows = mockData.data.rows.filter(
-        record => record.operationType === params.operationType
-      );
-      mockData.data.page.total = mockData.data.rows.length;
-    }
-
-    return of(mockData).pipe(delay(500));
+  public getOperationRecords(params: {
+    data: {
+      rateId: number;
+      operationType?: string;
+    };
+    page: {
+      pageNum: number;
+      pageSize: number;
+    };
+  }): Observable<any> {
+    return this.https.post<any>('/v2/liquidity/rate/local/detail/operation', params);
   }
 
   public saveLocalTokenPair(params: SaveTokenPairRequest): Observable<SaveTokenPairResponse> {
@@ -288,5 +299,13 @@ export class TokenPairService {
         return [];
       })
     );
+  }
+
+  public getNetworkTokenPairList(): Observable<NetworkTokenPairResponse> {
+    return this.https.post<NetworkTokenPairResponse>('/v2/liquidity/rate/network/save/tokenPair/list', {});
+  }
+
+  public saveNetworkTokenPair(params: NetworkTokenPairSaveRequest[]): Observable<NetworkTokenPairSaveResponse> {
+    return this.https.post<NetworkTokenPairSaveResponse>('/v2/liquidity/rate/network/save', params);
   }
 }

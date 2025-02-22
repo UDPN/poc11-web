@@ -188,7 +188,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
               fxRate: item.exchangeRate.toString(),
               updatedTime: item.updateTime,
               status: item.state,
-              id: item.rateId
+              rateId: item.rateId
             }));
             this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
@@ -226,18 +226,18 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
               fxRate: item.exchangeRate.toString(),
               updatedTime: item.updateTime,
               status: item.state,
-              id: item.rateId
+              rateId: item.rateId
             }));
             this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
             this.tableLoading(false);
             this.cdr.markForCheck();
           } else {
-            this.message.error(res.message || '获取网络FX列表失败');
+            this.message.error(res.message );
           }
         },
         error: () => {
-          this.message.error('获取网络FX列表失败');
+          this.message.error('error');
         }
       });
   }
@@ -273,7 +273,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 150
+          width: 150,
+          field: 'rateId'
         }
       ],
       total: 0,
