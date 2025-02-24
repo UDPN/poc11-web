@@ -22,6 +22,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
+import { OperateModalComponent } from './operate-modal/operate-modal.component';
 
 interface SearchParam {
   tokenPair: string;
@@ -263,25 +264,22 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Updated on',
-          field: 'updatedTime',
-          pipe: 'timeStamp',
-          width: 200
-        },
-        {
           title: 'Status',
           field: 'status',
-          tdTemplate: this.statusTpl,
-          width: 100
+          width: 100,
+          tdTemplate: this.statusTpl
         },
         {
-          title: 'Actions',
-          tdTemplate: this.operationTpl,
-          fixed: true,
-          fixedDir: 'right',
-          showAction: false,
+          title: 'Updated Time',
+          field: 'updatedTime',
+          width: 180,
+          pipe: 'date:yyyy-MM-dd HH:mm:ss'
+        },
+        {
+          title: 'Operation',
           width: 150,
-          field: 'rateId'
+          fixed: true,
+          tdTemplate: this.operationTpl
         }
       ],
       total: 0,
@@ -291,29 +289,49 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     };
   }
 
-  getStatusColor(status: number): string {
-    switch (status) {
-      case 1:
-        return 'success';
+  getStatusText(state: number): string {
+    switch (state) {
       case 0:
-        return 'processing';
-      case 2:
-        return 'error';
+        return 'Inactive';
+      case 1:
+        return 'Active';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getStatusColor(state: number): string {
+    switch (state) {
+      case 0:
+        return 'red';
+      case 1:
+        return 'green';
       default:
         return 'default';
     }
   }
 
-  getStatusText(status: number): string {
-    switch (status) {
-      case 1:
-        return 'Active';
-      case 0:
-        return 'Processing';
-      case 2:
-        return 'Inactive';
-      default:
-        return 'Unknown';
-    }
+  openOperateModal(rateId: number, tokenPair: string, isActivate: boolean): void {
+    const modal = this.modal.create({
+      nzTitle: isActivate ? 'Activate Token Pair' : 'Deactivate Token Pair',
+      nzContent: OperateModalComponent,
+      nzData: {
+        rateId: rateId,
+        tokenPair: tokenPair,
+        isActivate
+      },
+      nzFooter: null,
+      nzWidth: 520
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result) {
+        this.loadTokenPairList();
+      }
+    });
+  }
+
+  loadTokenPairList(): void {
+    this.getDataList(this.tableQueryParams);
   }
 }

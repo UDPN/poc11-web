@@ -8,6 +8,7 @@ import { AddNetComponent } from './add-net/add-net.component';
 import { InfoTokenComponent } from './info-token/info-token.component';
 import { InfoBasicComponent } from './info-basic/info-basic.component';
 import { InfoOperationComponent } from './info-operation/info-operation.component';
+import { OperateModalComponent } from './operate-modal/operate-modal.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { InfoOperationComponent } from './info-operation/info-operation.componen
     AddNetComponent,
     InfoTokenComponent,
     InfoBasicComponent,
-    InfoOperationComponent
+    InfoOperationComponent,
+    OperateModalComponent
   ],
   imports: [CommonModule, SharedModule, TokenPairRoutingModule]
 })
