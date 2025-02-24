@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-21 14:10:11
+ * @LastEditTime: 2025-02-22 16:15:13
  * @Description:
  */
 import {
@@ -206,7 +206,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           title: 'Transaction Amount',
           tdTemplate: this.transactionAmountTpl,
           notNeedEllipsis: true,
-          width: 180
+          width: 200
         },
         {
           title: 'Token Pair',
@@ -218,14 +218,14 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           title: 'FX Type',
           tdTemplate: this.fxTypeTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 180
+          width: 150
         },
         {
           title: 'Status',
@@ -239,7 +239,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 100
+          width: 80
         }
       ],
       total: 0,
