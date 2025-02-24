@@ -90,8 +90,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   tokenPairList: Array<{ key: string; value: string }> = [];
-  selectedTabIndex = 0;
-  selectedTab = 'local';
+  selectedTabIndex = Number(localStorage.getItem('tokenPairTabIndex')) || 0;
+  selectedTab = localStorage.getItem('tokenPairTab') || 'local';
 
   constructor(
     private tokenPairService: TokenPairService,
@@ -113,16 +113,23 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getTokenPairList();
+    this.getDataList();
   }
 
   getTokenPairList(): void {
-    this.tokenPairService.getTokenPairList().subscribe({
-      next: (res) => {
-        if (res.code === 0) {
-          this.tokenPairList = res.data;
+    if (this.selectedTab === 'network') {
+      this.tokenPairService.getNetRates().subscribe({
+        next: (res: any) => {
+          this.tokenPairList = res;
         }
-      }
-    });
+      });
+    } else {
+      this.tokenPairService.getLocalRates().subscribe({
+        next: (res: any) => {
+          this.tokenPairList = res;
+        }
+      });
+    }
   }
 
   tableChangeDectction(): void {
@@ -143,7 +150,6 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     };
     this.getDataList(this.tableQueryParams);
   }
-
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -151,7 +157,20 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
     this.selectedTab = index === 0 ? 'local' : 'network';
-    this.getDataList(this.tableQueryParams);
+    
+    // 保存到 localStorage
+    localStorage.setItem('tokenPairTabIndex', index.toString());
+    localStorage.setItem('tokenPairTab', this.selectedTab);
+
+    // 重置搜索条件和分页
+    this.searchParam = {};
+    this.tableConfig.pageIndex = 1;
+    
+    if (this.selectedTab === 'local') {
+      this.getDataList();
+    } else {
+      this.getNetworkDataList();
+    }
   }
 
   getDataList(e?: NzTableQueryParams): void {
@@ -171,12 +190,12 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res: TokenPairResponse) => {
           if (res.code === 0) {
-            this.dataList = res.data.rows.map(item => ({
+            this.dataList = res.data.rows.map((item: { createTime: number; createUser: string; exchangeRate: number; fromCurrency: string; rateId: number; state: number; toCurrency: string; updateTime: number; }) => ({
               tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
               fxRate: item.exchangeRate.toString(),
               updatedTime: item.updateTime,
               status: item.state,
-              id: item.rateId
+              rateId: item.rateId
             }));
             this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
@@ -188,6 +207,44 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.message.error('Failed to fetch token pair list');
+        }
+      });
+  }
+
+  getNetworkDataList(e?: NzTableQueryParams): void {
+    this.tableConfig.loading = true;
+    const params = {
+      pageSize: this.tableConfig.pageSize!,
+      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
+      filters: this.searchParam
+    };
+
+    this.tokenPairService.fetchNetworkList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.code === 0) {
+            this.dataList = res.data.rows.map((item: { createTime: number; createUser: string; exchangeRate: number; fromCurrency: string; rateId: number; state: number; toCurrency: string; updateTime: number; }) => ({
+              tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
+              fxRate: item.exchangeRate.toString(),
+              updatedTime: item.updateTime,
+              status: item.state,
+              rateId: item.rateId
+            }));
+            this.tableConfig.total = res.data.page.total;
+            this.tableConfig.pageIndex = params.pageNum;
+            this.tableLoading(false);
+            this.cdr.markForCheck();
+          } else {
+            this.message.error(res.message );
+          }
+        },
+        error: () => {
+          this.message.error('error');
         }
       });
   }
@@ -208,7 +265,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         {
           title: 'Updated on',
           field: 'updatedTime',
-          pipe: 'date:MMM d, y, HH:mm:ss',
+          pipe: 'timeStamp',
           width: 200
         },
         {
@@ -223,7 +280,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 150
+          width: 150,
+          field: 'rateId'
         }
       ],
       total: 0,

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-info-token',
@@ -15,8 +16,16 @@ export class InfoTokenComponent implements OnInit, AfterViewInit {
     footer: ''
   };
 
+  rateId: number = 0;
+
+  constructor(private route: ActivatedRoute) {}
+
   ngOnInit(): void {
-    // Initialize any required data
+    this.route.queryParams.subscribe(params => {
+      if (params['rateId']) {
+        this.rateId = Number(params['rateId']);
+      }
+    });
   }
 
   ngAfterViewInit(): void {

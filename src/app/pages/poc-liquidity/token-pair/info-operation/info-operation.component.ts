@@ -1,7 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { TokenPairService, OperationRecord } from '@app/core/services/http/poc-liquidity/token-pair/token-pair.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { TokenPairService } from '@app/core/services/http/poc-liquidity/token-pair/token-pair.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+
+interface OperationRecord {
+  createTime: number;
+  createUser: string;
+  exchangeRate: number;
+  fromCurrency: string;
+  operationType: number;
+  rateId: number;
+  rateRecordId: number;
+  remarks: string;
+  state: number;
+  toCurrency: string;
+  txHash: string;
+  txTime: number;
+}
 
 @Component({
   selector: 'app-info-operation',
@@ -9,12 +24,13 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
   styleUrl: './info-operation.component.less'
 })
 export class InfoOperationComponent implements OnInit {
+  @Input() rateId: number = 0;
   loading = false;
   operationRecords: OperationRecord[] = [];
   total = 0;
   pageSize = 10;
   pageIndex = 1;
-  operationType = 'All';
+  operationType = 0;
 
   constructor(
     private tokenPairService: TokenPairService,
@@ -28,7 +44,14 @@ export class InfoOperationComponent implements OnInit {
   getOperationRecords(): void {
     this.loading = true;
     const params = {
-      operationType: this.operationType === 'All' ? '' : this.operationType
+      data: {
+        rateId: this.rateId,
+        operationType: this.operationType
+      },
+      page: {
+        pageNum: this.pageIndex,
+        pageSize: this.pageSize
+      }
     };
 
     this.tokenPairService.getOperationRecords(params).subscribe({
@@ -55,20 +78,50 @@ export class InfoOperationComponent implements OnInit {
   }
 
   resetSearch(): void {
-    this.operationType = 'All';
+    this.operationType = 0;
+    this.pageIndex = 1;
     this.getOperationRecords();
   }
 
-  getStatusColor(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'success':
+  getStatusColor(state: number): string {
+    switch (state) {
+      case 35:
         return 'success';
-      case 'processing':
+      case 30:
         return 'processing';
-      case 'failed':
+      case 40:
+      case 15:
         return 'error';
       default:
         return 'default';
+    }
+  }
+
+  getStatusText(state: number): string {
+    switch (state) {
+      case 35:
+        return 'Success';
+      case 30:
+        return 'Processing';
+      case 40:
+        return 'Failed';
+      case 15:
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getOperationTypeText(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Add';
+      case 3:
+        return 'Activate';
+      case 4:
+        return 'Deactivate';
+      default:
+        return 'Unknown';
     }
   }
 }
