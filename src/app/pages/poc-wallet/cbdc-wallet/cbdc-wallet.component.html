@@ -408,7 +408,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Amount
+              Payment Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="amountError"
@@ -423,14 +423,14 @@
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Amount</ng-container
+                  >Please input your Payment Amount</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular1')"
-                  >The Amount cannot be greater than the Available
+                  >The Payment Amount cannot be greater than the Available
                   Amount</ng-container
                 >
               </ng-template>
@@ -438,7 +438,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Token Received
+              Top-up Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="receivedError"
@@ -458,7 +458,7 @@
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Token Received</ng-container
+                  >Please input your Top-up Amount</ng-container
                 >
               </ng-template>
             </nz-form-control>
@@ -576,7 +576,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Amount
+              Receiving Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="amount1Error"
@@ -591,14 +591,14 @@
               </ng-template>
               <ng-template #amount1Error let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Amount</ng-container
+                  >Please input your Receiving Amount</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular1')"
-                  >The Amount cannot be greater than the Available
+                  >The Receiving Amount cannot be greater than the Available
                   Amount</ng-container
                 >
               </ng-template>
@@ -606,7 +606,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Token Received
+              Withdrawal Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="receivedError"
@@ -626,7 +626,7 @@
               </ng-template>
               <ng-template #receivedError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Token Received</ng-container
+                  >Please input your Withdrawal Amount</ng-container
                 >
               </ng-template>
             </nz-form-control>

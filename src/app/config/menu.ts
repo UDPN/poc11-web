@@ -226,17 +226,6 @@ const menuNav: Menu[] = [
     ]
   },
   {
-    menuName: 'FX Rate Query',
-    id: 8,
-    fatherId: 0,
-    icon: 'stock',
-    open: false,
-    selected: false,
-    menuType: 'C',
-    path: '/poc/poc-fx-rate/fx-rate',
-    code: 'R0103'
-  },
-  {
     menuName: 'Bank Query',
     id: 9,
     fatherId: 0,
@@ -290,26 +279,6 @@ const menuNav: Menu[] = [
     menuType: 'C',
     path: '/poc/poc-download-center/download-center',
     code: 'R0108'
-  },
-  {
-    fatherId: 0,
-    id: 12,
-    menuType: 'C',
-    code: 'R0201',
-    menuGroup: true,
-    groupName: 'As a Liquidity Provider',
-    groupCollapseName: 'Commercial'
-  },
-  {
-    menuName: 'Become A Liquidity Provider',
-    id: 13,
-    fatherId: 0,
-    icon: 'check-square',
-    open: false,
-    selected: false,
-    menuType: 'C',
-    path: '/poc/poc-activate-settlement/activate-settlement',
-    code: 'R0201'
   },
   {
     menuName: 'Capital Pool Management',
