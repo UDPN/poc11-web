@@ -302,7 +302,13 @@
           </form>
         </nz-card>
       </div>
-      <ng-container *ngIf="showStatus && this.validateForm.valid">
+      <ng-container
+        *ngIf="
+          showStatus &&
+          this.validateForm.get('amount')?.value &&
+          this.validateForm.get('reni_sendAmount')?.value
+        "
+      >
         <div
           nz-col
           [nzXXl]="23"

@@ -406,7 +406,13 @@
         </nz-card>
       </div>
 
-      <ng-container *ngIf="settlementStatus && this.validateForm.valid">
+      <ng-container
+        *ngIf="
+          settlementStatus &&
+          this.validateForm.get('amount')?.value &&
+          this.validateForm.get('reni_sendAmount')?.value
+        "
+      >
         <div
           nz-col
           nz-col
