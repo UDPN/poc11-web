@@ -189,6 +189,8 @@
       let-bankAccountId="bankAccountId"
       let-accountAddress="accountAddress"
       let-enterpriseCode="enterpriseCode"
+      let-balance="balance"
+      let-currency="currency"
     >
       <ng-container *appAuth="''">
         <span
@@ -207,10 +209,10 @@
       <ng-container *appAuth="''">
         <span
           class="operate-text"
-          *ngIf="status === 35 || status === 50"
-          (click)="updateStatus(bankAccountId, status === 35 ? 1 : 2)"
+          *ngIf="status === 5 || status === 8"
+          (click)="updateStatus(bankAccountId, status === 5 ? 1 : 2)"
         >
-          {{ status === 35 ? 'Deactivate' : 'Activate' }}
+          {{ status === 5 ? 'Deactivate' : 'Activate' }}
         </span>
         <!-- <span
           class="operate-text"
@@ -220,6 +222,8 @@
               bankAccountId,
               accountAddress,
               enterpriseCode,
+              balance,
+              currency
               status === 35 ? 1 : 2
             )
           "
@@ -266,6 +270,7 @@
                 class="onboard-disabled"
               />
             </nz-form-control>
+            <div>{{'Balance: '}}{{ this.balance | map: 'toThousandthMark' }}{{ ' ' + this.currency }}</div>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzSpan="24" class="text-left">

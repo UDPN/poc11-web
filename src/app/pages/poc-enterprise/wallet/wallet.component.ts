@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-20 14:02:00
+ * @LastEditTime: 2025-02-24 13:45:05
  * @Description:
  */
 import {
@@ -82,6 +82,8 @@ export class WalletComponent implements OnInit, AfterViewInit {
   // visibleTitle: string = '';
   // visibleTip: string = '';
   // isLoading: boolean = false;
+  // balance: any = '';
+  // currency: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -177,11 +179,15 @@ export class WalletComponent implements OnInit, AfterViewInit {
   //   bankAccountId: any,
   //   accountAddress: string,
   //   enterpriseCode: string,
+  //   balance: any,
+  //   currency: string,
   //   walletState: number
   // ) {
   //   this.isVisible = true;
   //   this.bankAccountId = bankAccountId;
   //   this.walletState = walletState;
+  //   this.balance = balance;
+  //   this.currency = currency;
   //   this.visibleForm.get('accountAddress')?.setValue(accountAddress);
   //   this.visibleForm.get('enterpriseCode')?.setValue(enterpriseCode);
   //   if (walletState === 1) {
@@ -202,6 +208,8 @@ export class WalletComponent implements OnInit, AfterViewInit {
   //   this.visibleForm.reset();
   //   this.visibleTitle = '';
   //   this.visibleTip = '';
+  //   this.balance = '';
+  //   this.currency = '';
   // }
 
   // onStatusUpdate() {
