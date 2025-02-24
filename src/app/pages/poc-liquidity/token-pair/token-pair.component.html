@@ -127,18 +127,13 @@
       }}</nz-tag>
     </ng-template>
 
-    <ng-template #operationTpl let-rateId="rateId">
-      <ng-container *appAuth="''" >
-        <span class="operate-text" routerLink="/poc/poc-liquidity/token-pair/infoToken" [queryParams]="{rateId}">Details</span>
+    <ng-template #operationTpl let-status="status" let-rateId="rateId" let-tokenPair="tokenPair">
+      <ng-container>
+        <a *ngIf="status === 1" (click)="openOperateModal(rateId, tokenPair, true)">Activate</a>
+        <a *ngIf="status === 2" (click)="openOperateModal(rateId, tokenPair, false)">Deactivate</a>
+        <nz-divider nzType="vertical"></nz-divider>
       </ng-container>
-      <ng-container *appAuth="''">
-        <span class="operate-text" *ngIf="getStatusText(rateId) === 'Active'"
-          >Deactivate</span
-        >
-        <span class="operate-text" *ngIf="getStatusText(rateId) === 'Inactive'"
-          >Activate</span
-        >
-      </ng-container>
+      <a [routerLink]="['/poc-liquidity/token-pair/info', rateId]">Details</a>
     </ng-template>
   </app-card-table-wrap>
 </div>

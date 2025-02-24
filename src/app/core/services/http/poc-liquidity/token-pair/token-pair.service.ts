@@ -173,6 +173,17 @@ interface OperationRecordsResponse {
   };
   message: string;
 }
+export interface TokenPairOperateRequest {
+  rateId: number;
+  state: number;
+  comments: string;
+}
+
+export interface TokenPairOperateResponse {
+  code: number;
+  data: Record<string, never>;
+  message: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -369,5 +380,13 @@ export class TokenPairService {
 
   public saveNetworkTokenPair(params: NetworkTokenPairSaveRequest[]): Observable<NetworkTokenPairSaveResponse> {
     return this.https.post<NetworkTokenPairSaveResponse>('/v2/liquidity/rate/network/save', params);
+  }
+
+  public operateTokenPair(params: TokenPairOperateRequest): Observable<TokenPairOperateResponse> {
+    const selectedTab = localStorage.getItem('tokenPairTab');
+    const apiUrl = selectedTab === 'local' 
+      ? '/v2/liquidity/rate/local/operate'
+      : '/v2/liquidity/rate/network/operate';
+    return this.https.post<TokenPairOperateResponse>(apiUrl, params);
   }
 }
