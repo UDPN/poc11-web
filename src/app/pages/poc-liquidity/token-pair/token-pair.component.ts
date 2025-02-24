@@ -90,8 +90,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   tokenPairList: Array<{ key: string; value: string }> = [];
-  selectedTabIndex = 0;
-  selectedTab = 'local';
+  selectedTabIndex = Number(localStorage.getItem('tokenPairTabIndex')) || 0;
+  selectedTab = localStorage.getItem('tokenPairTab') || 'local';
 
   constructor(
     private tokenPairService: TokenPairService,
@@ -113,6 +113,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.initTable();
     this.getTokenPairList();
+    this.getDataList();
   }
 
   getTokenPairList(): void {
@@ -129,7 +130,6 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         }
       });
     }
-
   }
 
   tableChangeDectction(): void {
@@ -157,12 +157,19 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
     this.selectedTab = index === 0 ? 'local' : 'network';
-    this.getTokenPairList();
     
-    if (this.selectedTab === 'network') {
-      this.getNetworkDataList(this.tableQueryParams);
+    // 保存到 localStorage
+    localStorage.setItem('tokenPairTabIndex', index.toString());
+    localStorage.setItem('tokenPairTab', this.selectedTab);
+
+    // 重置搜索条件和分页
+    this.searchParam = {};
+    this.tableConfig.pageIndex = 1;
+    
+    if (this.selectedTab === 'local') {
+      this.getDataList();
     } else {
-      this.getDataList(this.tableQueryParams);
+      this.getNetworkDataList();
     }
   }
 

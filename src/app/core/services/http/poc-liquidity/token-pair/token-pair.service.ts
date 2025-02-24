@@ -134,6 +134,46 @@ interface FxRateHistoryResponse {
   message: string;
 }
 
+interface OperationRecordsRequest {
+  data: {
+    operationType: number | string;
+    rateId: number;
+  };
+  page: {
+    pageNum: number;
+    pageSize: number;
+  };
+}
+
+interface OperationRecordsResponse {
+  code: number;
+  data: {
+    page: {
+      isFirstPage: boolean;
+      isLastPage: boolean;
+      pageNum: number;
+      pageSize: number;
+      pages: number;
+      total: number;
+    };
+    rows: Array<{
+      createTime: number;
+      createUser: string;
+      exchangeRate: number;
+      fromCurrency: string;
+      operationType: number;
+      rateId: number;
+      rateRecordId: number;
+      remarks: string;
+      state: number;
+      toCurrency: string;
+      txHash: string;
+      txTime: number;
+    }>;
+  };
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -231,7 +271,11 @@ export class TokenPairService {
 
   public getTokenPairDetail(rateId: number): Observable<TokenPairDetailResponse> {
     const params: TokenPairDetailRequest = { rateId };
-    return this.https.post<TokenPairDetailResponse>('/v2/liquidity/rate/local/detail/basic', params);
+    const selectedTab = localStorage.getItem('tokenPairTab');
+    const apiUrl = selectedTab === 'local' 
+      ? '/v2/liquidity/rate/local/detail/basic'
+      : '/v2/liquidity/rate/network/detail/basic';
+    return this.https.post<TokenPairDetailResponse>(apiUrl, params);
   }
 
   public getFxRateHistory(params: { rateId: number; startDate?: Date; endDate?: Date; pageSize?: number; pageIndex?: number }): Observable<FxRateHistoryResponse> {
@@ -250,20 +294,38 @@ export class TokenPairService {
         pageSize: params.pageSize || 10
       }
     };
-    return this.https.post<FxRateHistoryResponse>('/v2/liquidity/rate/local/detail/history', param);
+    const selectedTab = localStorage.getItem('tokenPairTab');
+    const apiUrl = selectedTab === 'local' 
+      ? '/v2/liquidity/rate/local/detail/history'
+      : '/v2/liquidity/rate/network/detail/history';
+    return this.https.post<FxRateHistoryResponse>(apiUrl, param);
   }
 
   public getOperationRecords(params: {
     data: {
       rateId: number;
-      operationType?: string;
+      operationType?: number;
     };
     page: {
       pageNum: number;
       pageSize: number;
     };
-  }): Observable<any> {
-    return this.https.post<any>('/v2/liquidity/rate/local/detail/operation', params);
+  }): Observable<OperationRecordsResponse> {
+    const requestParams: OperationRecordsRequest = {
+      data: {
+        rateId: params.data.rateId,
+        operationType: params.data.operationType || ""
+      },
+      page: {
+        pageNum: params.page.pageNum,
+        pageSize: params.page.pageSize
+      }
+    };
+    const selectedTab = localStorage.getItem('tokenPairTab');
+    const apiUrl = selectedTab === 'local' 
+      ? '/v2/liquidity/rate/local/detail/records'
+      : '/v2/liquidity/rate/network/detail/records';
+    return this.https.post<OperationRecordsResponse>(apiUrl, requestParams);
   }
 
   public saveLocalTokenPair(params: SaveTokenPairRequest): Observable<SaveTokenPairResponse> {

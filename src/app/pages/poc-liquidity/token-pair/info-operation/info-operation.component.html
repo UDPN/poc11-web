@@ -6,10 +6,10 @@
       </div>
       <div nz-col>
         <nz-select [(ngModel)]="operationType" class="operation-type-select">
-          <nz-option nzValue="All" nzLabel="All"></nz-option>
-          <nz-option nzValue="Activate" nzLabel="Activate"></nz-option>
-          <nz-option nzValue="Deactivate" nzLabel="Deactivate"></nz-option>
-          <nz-option nzValue="Add" nzLabel="Add"></nz-option>
+          <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+          <nz-option [nzValue]="1" nzLabel="Add"></nz-option>
+          <nz-option [nzValue]="3" nzLabel="Activate"></nz-option>
+          <nz-option [nzValue]="4" nzLabel="Deactivate"></nz-option>
         </nz-select>
       </div>
       <div nz-col>
@@ -34,19 +34,23 @@
         <th>Operation Type</th>
         <th>Created by</th>
         <th>Created on</th>
+        <!-- <th>FX Rate</th>
+        <th>Token Pair</th> -->
         <th>Comments</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data">
-        <td>{{ data.operationType }}</td>
-        <td>{{ data.createdBy }}</td>
-        <td>{{ data.createdOn | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
-        <td>{{ data.comments }}</td>
+        <td>{{ getOperationTypeText(data.operationType) }}</td>
+        <td>{{ data.createUser }}</td>
+        <td>{{ data.createTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
+        <!-- <td>1 {{ data.fromCurrency }} = {{ data.exchangeRate }} {{ data.toCurrency }}</td>
+        <td>{{ data.fromCurrency }}/{{ data.toCurrency }}</td> -->
+        <td>{{ data.remarks || '-' }}</td>
         <td>
-          <nz-tag [nzColor]="getStatusColor(data.status)">
-            {{ data.status }}
+          <nz-tag [nzColor]="getStatusColor(data.state)">
+            {{ getStatusText(data.state) }}
           </nz-tag>
         </td>
       </tr>
