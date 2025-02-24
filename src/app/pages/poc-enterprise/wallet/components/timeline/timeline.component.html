@@ -29,17 +29,26 @@
       <nz-step
         [nzTitle]="'On-chain execution'"
         [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"
-        [nzDescription]="
-          'The wallet' +
-          (info.status === 5 || info.status === 8
-            ? ' creation is executed successfully on the chain'
-            : ' is waiting to be executed on the chain')
-        "
+        [nzDescription]="chainTpl"
       ></nz-step>
     </nz-steps>
   </div>
 </nz-card>
+<ng-template #chainTpl>
+  <span *ngIf="info.status !== 6">{{
+    'The wallet' +
+      (info.status === 5 || info.status === 8
+        ? ' creation is executed successfully on the chain'
+        : ' creation is waiting to be executed on the chain')
+  }}</span>
 
+  <span *ngIf="info.status === 6">
+    <p>{{ 'Failed' }}</p>
+    <!-- no show -->
+    <!-- <p>{{ 'Reason: ' + info.failedReason }}</p>
+    <p>{{ 'on ' + info.failedTime }}</p> -->
+  </span>
+</ng-template>
 <ng-template #approvalTpl>
   <!-- other status -->
   <ng-container *ngIf="info?.status !== 1">
