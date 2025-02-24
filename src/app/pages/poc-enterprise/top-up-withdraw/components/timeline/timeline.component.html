@@ -8,7 +8,16 @@
       <nz-step
         [nzTitle]="'Created'"
         [nzStatus]="'finish'"
-        [nzDescription]="'on ' + (info?.appliedOn | map: 'timeStamp')"
+        [nzDescription]="
+          'on ' +
+          (info?.appliedOn | map: 'timeStamp') +
+          ' by Enterprise (****' +
+          info.enterpriseCode.substring(
+            info.enterpriseCode.length - 4,
+            info.enterpriseCode.length
+          ) +
+          ')'
+        "
       ></nz-step>
       <ng-container
         *ngIf="info.status === 5 || (info.status !== 5 && info.approvedOn)"
@@ -24,18 +33,28 @@
       <nz-step
         [nzTitle]="'On-chain execution'"
         [nzStatus]="status | map: 'transferApprovalThirdStatus'"
-        [nzDescription]="
-          'The ' +
-          type +
-          (status === 35
-            ? ' creation is executed successfully on the chain'
-            : ' is waiting to be executed on the chain')
-        "
+        [nzDescription]="chainTpl"
       ></nz-step>
     </nz-steps>
   </div>
 </nz-card>
 
+<ng-template #chainTpl>
+  <span *ngIf="status !== 40">{{
+    'The ' +
+      type +
+      (status === 35
+        ? ' request is executed successfully on the chain'
+        : ' request is waiting to be executed on the chain')
+  }}</span>
+
+  <span *ngIf="status === 40">
+    <p>{{ 'Failed' }}</p>
+    <!-- no show -->
+    <!-- <p>{{ 'Reason: ' + info.failedReason }}</p>
+    <p>{{ 'on ' + info.failedTime }}</p> -->
+  </span>
+</ng-template>
 <ng-template #approvalTpl>
   <!-- other status -->
   <ng-container *ngIf="status !== 5">
@@ -53,7 +72,7 @@
   <!-- Pending Approval -->
   <ng-container *ngIf="status === 5">
     <div>
-      {{ 'The ' + type + ' creation request is awaiting confirmation' }}
+      {{ 'The ' + type + ' request is awaiting confirmation' }}
     </div>
     <ng-container *ngIf="!rejectStatus">
       <nz-space class="m-t-10 m-b-10">
