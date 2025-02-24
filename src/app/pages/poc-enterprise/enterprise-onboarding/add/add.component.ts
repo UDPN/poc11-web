@@ -111,10 +111,10 @@ export class AddComponent implements OnInit, AfterViewInit {
               email: detail.contactEmail,
               description: detail.remarks,
               // 其他字段需要根据实际返回数据映射
-              enterpriseBank: '',  // 需要后端确认字段
-              enterpriseAccount: '', // 需要后端确认字段
+              enterpriseBank: detail.enterpriseFlatBank,  // 需要后端确认字段
+              enterpriseAccount: detail.enterpriseFlatAccount, // 需要后端确认字段
               generateWallet: '1', // 需要后端确认字段
-              approvalValue: 0 // 需要后端确认字段
+              approvalValue: detail.txApprovalThreshold // 需要后端确认字段
             });
           } else {
             this.message.error(res.message || 'Failed to get enterprise detail');

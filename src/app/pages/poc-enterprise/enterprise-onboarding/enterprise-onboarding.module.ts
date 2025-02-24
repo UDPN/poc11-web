@@ -9,6 +9,7 @@ import { OperationRecordsComponent } from './info/operation-records/operation-re
 import { WalletsComponent } from './info/wallets/wallets.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { ApprovalComponent } from './approval/approval.component';
+import { OpInfoComponent } from './op-info/op-info.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ApprovalComponent } from './approval/approval.component';
     BasicInfoComponent,
     OperationRecordsComponent,
     WalletsComponent,
-    TimelineComponent
+    TimelineComponent,
+    OpInfoComponent
   ],
   imports: [SharedModule, EnterpriseOnboardingRoutingModule]
 })

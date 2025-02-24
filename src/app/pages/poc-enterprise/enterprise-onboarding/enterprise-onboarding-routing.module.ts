@@ -12,6 +12,7 @@ import { ActionCode } from '@app/config/actionCode';
 import { InfoComponent } from './info/info.component';
 import { AddComponent } from './add/add.component';
 import { ApprovalComponent } from './approval/approval.component';
+import { OpInfoComponent } from './op-info/op-info.component';
 
 const routes: Routes = [
   {
@@ -58,6 +59,16 @@ const routes: Routes = [
     component: AddComponent,
     data: {
       title: 'enterpriseOnboardingEdit',
+      key: 'enterprise-onboarding-edit',
+      authCode: ActionCode.TabsDetail,
+      shouldDetach: 'no'
+    }
+  },
+  {
+    path: 'op-info',
+    component: OpInfoComponent,
+    data: {
+      title: 'enterpriseOnboardingOpInfo',
       key: 'enterprise-onboarding-edit',
       authCode: ActionCode.TabsDetail,
       shouldDetach: 'no'

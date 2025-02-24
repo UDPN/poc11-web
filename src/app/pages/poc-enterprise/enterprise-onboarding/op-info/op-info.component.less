@@ -1,0 +1,74 @@
+.normal-detail-table-wrap {
+  background-color: #f0f2f5;
+  min-height: calc(100vh - 64px);
+
+  .card-descriptions-order {
+    :global {
+      .ant-descriptions-title {
+        font-weight: 500;
+        font-size: 16px;
+      }
+      .ant-descriptions-item-label {
+        color: rgba(0, 0, 0, 0.65);
+      }
+      .ant-descriptions-item-content {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .token-tags-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    background: #fafafa;
+    border-radius: 4px;
+    width: 100%;
+  }
+
+  .token-tag {
+    margin: 0;
+    padding: 4px 8px;
+    font-size: 14px;
+    background-color: #C8E2E2;
+    border-color: #d6e4ff;
+    color: #000000;
+  }
+
+  .approval-card {
+    height: 100%;
+
+    .approval-title {
+      margin-bottom: 24px;
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.85);
+    }
+
+    .approval-steps {
+      margin-bottom: 24px;
+    }
+
+    .approval-actions {
+      text-align: right;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+  }
+
+  .m-r-8 {
+    margin-right: 8px;
+  }
+
+  nz-tag {
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    font-size: 14px;
+    background-color: #f0f5ff;
+    border-color: #d6e4ff;
+    color: #2f54eb;
+  }
+}
