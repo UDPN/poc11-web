@@ -129,7 +129,7 @@
     </ng-template>
     <ng-template #operationTpl let-liquidityPollAddress="liquidityPollAddress" let-status="status" let-token="token" let-liquidityPoolId="liquidityPoolId" let-walletBalance="walletBalance" let-minBalance="minBalance" >
       <ng-container *appAuth="''">
-        <span class="operate-text" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)" *ngIf="status !== 0">
+        <span class="operate-text" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)" *ngIf="status === 3 ">
           Activate
         </span>
       </ng-container>

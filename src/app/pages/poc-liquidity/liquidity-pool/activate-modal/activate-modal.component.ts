@@ -48,7 +48,7 @@ export class ActivateModalComponent {
     this.isLoading = true;
     const params = {
       liquidityPoolId: this.liquidityPoolId,
-      liquidityPoolStatus: this.status === 1 ? 1 : 3, // 如果当前是激活状态则切换到未激活，反之亦然
+      liquidityPoolStatus: this.status === 1 ? 3 : 1, // 如果当前是激活状态则切换到未激活，反之亦然
       remarks: this.comments
     };
 
