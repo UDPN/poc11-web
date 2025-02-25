@@ -25,26 +25,8 @@
           <td>{{ data.totalBalance }} {{ data.tokenName }}</td>
           <td>{{ data.createTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
           <td>
-            <nz-tag
-              [nzColor]="
-                data.status === 35
-                  ? 'success'
-                  : data.status === 30
-                  ? 'processing'
-                  : data.status === 40
-                  ? 'error'
-                  : 'default'
-              "
-            >
-              {{
-                data.status === 35
-                  ? 'Active'
-                  : data.status === 30
-                  ? 'Processing'
-                  : data.status === 40
-                  ? 'Failed'
-                  : 'Inactive'
-              }}
+            <nz-tag [nzColor]="getStatusColor(data.status)">
+              {{ getStatusText(data.status) }}
             </nz-tag>
           </td>
         </tr>

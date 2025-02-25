@@ -30,6 +30,17 @@ export class AddComponent implements OnInit, AfterViewInit {
   enterpriseId: number = 0;
   status: number = 0;
   tokenList: any[] = [];
+
+  // 添加千分位格式化方法
+  formatNumber(value: number): string {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // 移除千分位
+  parseNumber(value: string): number {
+    return Number(value.replace(/,/g, ''));
+  }
+
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -88,8 +99,21 @@ export class AddComponent implements OnInit, AfterViewInit {
       enterpriseBank: [null, [this.enterpriseBankValidator]],
       enterpriseAccount: [null],
       generateWallet: ['1', [Validators.required]],
-      approvalValue: [0, [Validators.required]],
+      approvalValue: [this.formatNumber(5000), [Validators.required]],
       description: [null]
+    });
+
+    // 监听 approvalValue 的值变化
+    this.validateForm.get('approvalValue')?.valueChanges.subscribe(value => {
+      if (value) {
+        const numericValue = this.parseNumber(value);
+        const formattedValue = this.formatNumber(numericValue);
+        if (value !== formattedValue) {
+          this.validateForm.patchValue({
+            approvalValue: formattedValue
+          }, { emitEvent: false });
+        }
+      }
     });
   }
 
@@ -114,14 +138,12 @@ export class AddComponent implements OnInit, AfterViewInit {
               enterpriseBank: detail.enterpriseFlatBank,  // 需要后端确认字段
               enterpriseAccount: detail.enterpriseFlatAccount, // 需要后端确认字段
               generateWallet: '1', // 需要后端确认字段
-              approvalValue: detail.txApprovalThreshold // 需要后端确认字段
+              approvalValue: this.formatNumber(detail.txApprovalThreshold || 5000)
             });
-          } else {
-            this.message.error(res.message || 'Failed to get enterprise detail');
-          }
+          } 
         },
         error: (err) => {
-          this.message.error(err.message || 'Failed to get enterprise detail');
+          console.error(err.message || 'Failed to get enterprise detail');
         }
       });
   }
@@ -134,12 +156,10 @@ export class AddComponent implements OnInit, AfterViewInit {
           this.validateForm.patchValue({
             enterpriseCode: res.data
           });
-        } else {
-          this.message.error(res.message || 'Failed to get Enterprise Code');
         }
       },
       error: (err) => {
-        this.message.error(err.message || 'Failed to get Enterprise Code');
+        console.error(err.message || 'Failed to get Enterprise Code');
       }
     });
   }
@@ -150,12 +170,10 @@ export class AddComponent implements OnInit, AfterViewInit {
       next: (res) => {
         if (res.code === 0) {
           this.tokenList = res.data || [];
-        } else {
-          this.message.error(res.message || 'Failed to get token list');
-        }
+        } 
       },
       error: (err) => {
-        this.message.error(err.message || 'Failed to get token list');
+        console.error(err.message || 'Failed to get token list');
       }
     });
   }
@@ -163,7 +181,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   enterpriseNameValidator = (
     control: UntypedFormControl
   ): { [s: string]: boolean } => {
-    if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
+    if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -172,7 +190,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   contactNameValidator = (
     control: UntypedFormControl
   ): { [s: string]: boolean } => {
-    if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
+    if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -181,7 +199,7 @@ export class AddComponent implements OnInit, AfterViewInit {
   enterpriseBankValidator = (
     control: UntypedFormControl
   ): { [s: string]: boolean } => {
-    if (!/^[A-Za-z0-9]{0,50}$/.test(control.value)) {
+    if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -203,7 +221,7 @@ export class AddComponent implements OnInit, AfterViewInit {
         enterpriseFlatAccount: formValue.enterpriseAccount || '',
         enterpriseFlatBank: formValue.enterpriseBank || '',
         enterpriseName: formValue.enterpriseName,
-        txApprovalThreshold: Number(formValue.approvalValue),
+        txApprovalThreshold: this.parseNumber(formValue.approvalValue),
         walletApproval: Number(formValue.generateWallet),
         enterpriseCode: formValue.enterpriseCode
       };
@@ -222,12 +240,12 @@ export class AddComponent implements OnInit, AfterViewInit {
             );
             this.router.navigate(['/poc/poc-enterprise/enterprise-onboarding']);
           } else {
-            this.message.error(res.message || `${this.enterpriseId ? 'Update' : 'Save'} failed`);
+            console.error(res.message || `${this.enterpriseId ? 'Update' : 'Save'} failed`);
           }
         },
         error: (err) => {
           this.isLoading = false;
-          this.message.error(err.message || `${this.enterpriseId ? 'Update' : 'Save'} failed`);
+          console.error(err.message || `${this.enterpriseId ? 'Update' : 'Save'} failed`);
         }
       });
     } else {
