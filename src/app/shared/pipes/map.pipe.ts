@@ -131,8 +131,8 @@ export const MapSet = {
   EnterpriseStatusColor: {
     0: 'warning',
     1: 'green',
-    2: 'red',
-    3: 'default'
+    2: 'default',
+    3: 'red'
   },
   walletTransactionsStatusColor: {
     1: 'volcano',
