@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-24 13:45:05
+ * @LastEditTime: 2025-02-25 13:57:17
  * @Description:
  */
 import {
@@ -51,6 +51,10 @@ export class WalletComponent implements OnInit, AfterViewInit {
   balanceTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('accountAddressTpl', { static: true })
   accountAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('enterpriseCodeTpl', { static: true })
+  enterpriseCodeTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('numberTpl', { static: true })
+  numberTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     accountAddress: '',
     enterpriseCode: '',
@@ -75,15 +79,15 @@ export class WalletComponent implements OnInit, AfterViewInit {
   };
   tableConfig!: AntTableConfig;
 
-  // isVisible: boolean = false;
-  // bankAccountId: string = '';
-  // walletState: number = 0;
-  // visibleForm!: FormGroup;
-  // visibleTitle: string = '';
-  // visibleTip: string = '';
-  // isLoading: boolean = false;
-  // balance: any = '';
-  // currency: string = '';
+  isVisible: boolean = false;
+  bankAccountId: string = '';
+  walletState: number = 0;
+  visibleForm!: FormGroup;
+  visibleTitle: string = '';
+  visibleTip: string = '';
+  isLoading: boolean = false;
+  balance: any = '';
+  currency: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -104,11 +108,11 @@ export class WalletComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.initTable();
-    // this.visibleForm = this.fb.group({
-    //   accountAddress: ['', [Validators.required]],
-    //   enterpriseCode: ['', [Validators.required]],
-    //   comments: ['', [Validators.required]]
-    // });
+    this.visibleForm = this.fb.group({
+      accountAddress: [''],
+      enterpriseCode: [''],
+      remarks: ['', [Validators.required]]
+    });
     this.commonService.currencyList().subscribe((res: any) => {
       this.currencyList = res;
     });
@@ -139,110 +143,76 @@ export class WalletComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
 
-  updateStatus(bankAccountId: any, walletState: number) {
-    let statusValue = '';
+  isOpenVisable(
+    bankAccountId: any,
+    accountAddress: string,
+    enterpriseCode: string,
+    balance: any,
+    currency: string,
+    walletState: number
+  ) {
+    this.isVisible = true;
+    this.bankAccountId = bankAccountId;
+    this.walletState = walletState;
+    this.balance = balance;
+    this.currency = currency;
+    this.visibleForm.get('accountAddress')?.setValue(accountAddress);
+    this.visibleForm.get('enterpriseCode')?.setValue(enterpriseCode);
     if (walletState === 1) {
-      statusValue = 'deactivate';
+      this.visibleTitle = 'Deactivate Enterprise Wallet';
+      this.visibleTip =
+        'Disabling the wallet will prevent the enterprise from processing token transactions.';
     } else {
-      statusValue = 'activate';
+      this.visibleTitle = 'Activate Enterprise Wallet';
+      this.visibleTip =
+        'Enabling the wallet will allow the enterprise to process token transactions.';
     }
-    const toolStatus =
-      statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
-    this.modal.confirm({
-      nzTitle: `Are you sure you want to ${statusValue} ?`,
-      nzContent: '',
-      nzOnOk: () =>
-        new Promise((resolve, reject) => {
-          this.walletService
-            .getStatusUpdate({ bankAccountId, walletState })
-            .subscribe({
-              next: (res) => {
-                resolve(true);
-                this.cdr.markForCheck();
-                if (res) {
-                  this.message.success(`${toolStatus} successfully!`, {
-                    nzDuration: 1000
-                  });
-                }
-                this.getDataList();
-              },
-              error: (err) => {
-                reject(true);
-                this.cdr.markForCheck();
-              }
-            });
-        }).catch(() => console.log('Oops errors!'))
-    });
   }
 
-  // isOpenVisable(
-  //   bankAccountId: any,
-  //   accountAddress: string,
-  //   enterpriseCode: string,
-  //   balance: any,
-  //   currency: string,
-  //   walletState: number
-  // ) {
-  //   this.isVisible = true;
-  //   this.bankAccountId = bankAccountId;
-  //   this.walletState = walletState;
-  //   this.balance = balance;
-  //   this.currency = currency;
-  //   this.visibleForm.get('accountAddress')?.setValue(accountAddress);
-  //   this.visibleForm.get('enterpriseCode')?.setValue(enterpriseCode);
-  //   if (walletState === 1) {
-  //     this.visibleTitle = 'Deactivate Enterprise Wallet';
-  //     this.visibleTip =
-  //       'Disabling the wallet will prevent the enterprise from processing token transactions.';
-  //   } else {
-  //     this.visibleTitle = 'Activate Enterprise Wallet';
-  //     this.visibleTip =
-  //       'Enabling the wallet will allow the enterprise to process token transactions.';
-  //   }
-  // }
+  cancelVisible() {
+    this.isVisible = false;
+    this.bankAccountId = '';
+    this.walletState = 0;
+    this.visibleForm.reset();
+    this.visibleTitle = '';
+    this.visibleTip = '';
+    this.balance = '';
+    this.currency = '';
+  }
 
-  // cancelVisible() {
-  //   this.isVisible = false;
-  //   this.bankAccountId = '';
-  //   this.walletState = 0;
-  //   this.visibleForm.reset();
-  //   this.visibleTitle = '';
-  //   this.visibleTip = '';
-  //   this.balance = '';
-  //   this.currency = '';
-  // }
-
-  // onStatusUpdate() {
-  //   if (!fnCheckForm(this.visibleForm)) {
-  //     return;
-  //   }
-  //   this.isLoading = true;
-  //   this.walletService
-  //     .getStatusUpdate({
-  //       bankAccountId: this.bankAccountId,
-  //       walletState: this.walletState,
-  //       comments: this.visibleForm.get('comments')?.value
-  //     })
-  //     .pipe(finalize(() => (this.isLoading = false)))
-  //     .subscribe({
-  //       next: (res) => {
-  //         if (res) {
-  //           this.message
-  //             .success('Submitted', { nzDuration: 1000 })
-  //             .onClose.subscribe(() => {
-  //               this.visibleForm.reset();
-  //               this.getDataList(this.tableQueryParams);
-  //             });
-  //         }
-  //         this.isLoading = false;
-  //         this.cdr.markForCheck();
-  //       },
-  //       error: (err) => {
-  //         this.isLoading = false;
-  //         this.cdr.markForCheck();
-  //       }
-  //     });
-  // }
+  onStatusUpdate() {
+    if (!fnCheckForm(this.visibleForm)) {
+      return;
+    }
+    this.isLoading = true;
+    this.walletService
+      .getStatusUpdate({
+        bankAccountId: this.bankAccountId,
+        walletState: this.walletState,
+        remarks: this.visibleForm.get('remarks')?.value
+      })
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message
+              .success('Submitted', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                this.visibleForm.reset();
+                this.getDataList(this.tableQueryParams);
+              });
+          }
+          this.isVisible = false;
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isVisible = false;
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
   getDataList(e?: NzTableQueryParams): void {
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
@@ -259,6 +229,9 @@ export class WalletComponent implements OnInit, AfterViewInit {
       )
       .subscribe((_: any) => {
         this.dataList = _.data?.rows;
+        this.dataList.forEach((item: any, i: any) => {
+          Object.assign(item, { key: (params.pageNum - 1) * 10 + i + 1 });
+        });
         this.tableConfig.total = _.data.page.total;
         this.tableConfig.pageIndex = params.pageNum;
         this.tableLoading(false);
@@ -270,6 +243,12 @@ export class WalletComponent implements OnInit, AfterViewInit {
     this.tableConfig = {
       headers: [
         {
+          title: 'No.',
+          tdTemplate: this.numberTpl,
+          notNeedEllipsis: true,
+          width: 60
+        },
+        {
           title: 'Wallet Address',
           tdTemplate: this.accountAddressTpl,
           notNeedEllipsis: true,
@@ -277,7 +256,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
         },
         {
           title: 'Enterprise Code',
-          field: 'enterpriseCode',
+          tdTemplate: this.enterpriseCodeTpl,
           notNeedEllipsis: true,
           width: 150
         },

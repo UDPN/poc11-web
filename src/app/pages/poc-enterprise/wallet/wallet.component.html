@@ -163,6 +163,19 @@
       [tableConfig]="tableConfig"
       [tableData]="dataList"
     ></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #enterpriseCodeTpl let-enterpriseCode="enterpriseCode">
+      <p
+        [title]="enterpriseCode"
+        nz-typography
+        [nzCopyable]="enterpriseCode ? true : false"
+        [nzCopyText]="enterpriseCode"
+      >
+        {{ enterpriseCode }}
+      </p></ng-template
+    >
     <ng-template #accountAddressTpl let-accountAddress="accountAddress">
       <p
         [title]="accountAddress"
@@ -173,10 +186,20 @@
         {{ accountAddress | map: 'showPartEight' }}
       </p>
     </ng-template>
-    <ng-template #balanceTpl let-balance="balance" let-currency="currency">
-      <span [title]="(balance | map: 'toThousandthMark') + ' ' + currency"
-        >{{ balance | map: 'toThousandthMark' }}{{ ' ' + currency }}</span
+    <ng-template
+      #balanceTpl
+      let-balance="balance"
+      let-currency="currency"
+      let-status="status"
+    >
+      <ng-container *ngIf="status === 5 || status === 8">
+        <span [title]="(balance | map: 'toThousandthMark') + ' ' + currency"
+          >{{ balance | map: 'toThousandthMark' }}{{ ' ' + currency }}</span
+        ></ng-container
       >
+      <ng-container *ngIf="status !== 5 && status !== 8">{{
+        '--'
+      }}</ng-container>
     </ng-template>
     <ng-template #statusTpl let-status="status">
       <nz-tag [nzColor]="status | map: 'enterpriseWalletStatusColor'">{{
@@ -210,26 +233,19 @@
         <span
           class="operate-text"
           *ngIf="status === 5 || status === 8"
-          (click)="updateStatus(bankAccountId, status === 5 ? 1 : 2)"
-        >
-          {{ status === 5 ? 'Deactivate' : 'Activate' }}
-        </span>
-        <!-- <span
-          class="operate-text"
-          *ngIf="status === 35 || status === 50"
           (click)="
             isOpenVisable(
               bankAccountId,
               accountAddress,
               enterpriseCode,
               balance,
-              currency
-              status === 35 ? 1 : 2
+              currency,
+              status === 5 ? 1 : 2
             )
           "
         >
-          {{ status === 35 ? 'Deactivate' : 'Activate' }}
-        </span> -->
+          {{ status === 5 ? 'Deactivate' : 'Activate' }}
+        </span>
       </ng-container>
       <ng-container *appAuth="''">
         <span
@@ -243,7 +259,7 @@
     </ng-template>
   </app-card-table-wrap>
 </div>
-<!-- <nz-modal
+<nz-modal
   [(nzVisible)]="isVisible"
   [nzTitle]="this.visibleTitle"
   (nzOnCancel)="cancelVisible()"
@@ -270,7 +286,10 @@
                 class="onboard-disabled"
               />
             </nz-form-control>
-            <div>{{'Balance: '}}{{ this.balance | map: 'toThousandthMark' }}{{ ' ' + this.currency }}</div>
+            <div>
+              {{ 'Balance: ' }}{{ this.balance | map: 'toThousandthMark'
+              }}{{ ' ' + this.currency }}
+            </div>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzSpan="24" class="text-left">
@@ -296,7 +315,7 @@
             >
               <textarea
                 nz-input
-                formControlName="comments"
+                formControlName="remarks"
                 maxlength="200"
               ></textarea>
               <ng-template #commentsError let-control>
@@ -322,4 +341,4 @@
       Confirm
     </button>
   </div>
-</nz-modal> -->
+</nz-modal>
