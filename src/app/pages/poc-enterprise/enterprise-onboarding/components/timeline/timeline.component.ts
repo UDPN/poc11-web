@@ -70,8 +70,9 @@ export class TimelineComponent implements OnInit {
           if (res) {
             this.message.success(`${messageValue} successfully!`, {
               nzDuration: 1000
+            }).onClose.subscribe(() => {
+              window.location.reload();
             });
-            // window.location.reload();
           }
           this.isLoading = false;
           this.cdr.markForCheck();

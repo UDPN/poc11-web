@@ -39,6 +39,7 @@ export class OpInfoComponent implements OnInit, AfterViewInit {
         this.loading = false;
         if (res.code === 0) {
           this.detailInfo = res.data;
+          this.detailInfo.enterpriseId = this.enterpriseId;
         } else {
           this.message.error(res.message || 'Failed to get enterprise detail');
         }
