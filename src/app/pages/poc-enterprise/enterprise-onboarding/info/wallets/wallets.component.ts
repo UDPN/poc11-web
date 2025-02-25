@@ -28,25 +28,21 @@ export class WalletsComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 1:
-        return 'Saved';
-      case 3:
-        return 'Withdrawn';
-      case 5:
         return 'Pending Review';
-      case 10:
-        return 'Under Review';
-      case 15:
+      case 2:
         return 'Review Rejected';
-      case 20:
-        return 'Review Approved/Pending Chain';
-      case 30:
-        return 'Chain Processing';
-      case 35:
-        return 'Chain Success';
-      case 40:
-        return 'Chain Failed';
-      case 45:
-        return 'Deleted';
+      case 3:
+        return 'Review Approved';
+      case 4:
+        return 'Wallet Opening';
+      case 5:
+        return 'Active';
+      case 6:
+        return 'Submit Failed';
+      case 7:
+        return 'Under Review';
+      case 8:
+        return 'Frozen';
       default:
         return 'Unknown';
     }
@@ -55,25 +51,21 @@ export class WalletsComponent implements OnInit {
   getStatusColor(status: number): string {
     switch (status) {
       case 1:
-        return 'default';  // 灰色
+        return 'warning';    // 待审核 - 黄色
+      case 2:
+        return 'error';      // 审核失败 - 红色
       case 3:
-        return 'default';  // 灰色
+        return 'warning';    // 审核通过 - 黄色
+      case 4:
+        return 'processing'; // 钱包开通中 - 蓝色
       case 5:
-        return 'warning';  // 黄色
-      case 10:
-        return 'processing';  // 蓝色
-      case 15:
-        return 'error';  // 红色
-      case 20:
-        return 'warning';  // 黄色
-      case 30:
-        return 'processing';  // 蓝色
-      case 35:
-        return 'success';  // 绿色
-      case 40:
-        return 'error';  // 红色
-      case 45:
-        return 'default';  // 灰色
+        return 'success';    // 开通成功 - 绿色
+      case 6:
+        return 'error';      // 提交失败 - 红色
+      case 7:
+        return 'processing'; // 审核中 - 蓝色
+      case 8:
+        return 'default';    // 冻结 - 灰色
       default:
         return 'default';
     }
