@@ -21,6 +21,7 @@ export interface Adata {
 export interface Gdata {
   bankAccountId: string | number;
   walletState: number;
+  remarks: string;
 }
 
 @Injectable({
