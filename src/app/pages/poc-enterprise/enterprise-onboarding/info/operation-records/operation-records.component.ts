@@ -76,13 +76,13 @@ export class OperationRecordsComponent implements OnInit {
   getOperationTypeText(type: number): string {
     switch (type) {
       case 1:
-        return 'Onboard';
+        return 'Opened';
       case 2:
-        return 'Edit';
+        return 'Edited';
       case 3:
-        return 'Enable';
+        return 'Started';
       case 4:
-        return 'Deactivate';
+        return 'Disabled';
       default:
         return 'Unknown';
     }
@@ -90,13 +90,26 @@ export class OperationRecordsComponent implements OnInit {
 
   getStatusColor(status: number): string {
     switch (status) {
-      case 35:
-        return 'success';
-      case 30:
-        return 'processing';
-      case 40:
+      case 1:
+        return 'success';  // 保存 - 绿色
+      case 3:
+        return 'default';  // 撤回 - 灰色
+      case 5:
+        return 'warning';  // 待审核 - 黄色
+      case 10:
+        return 'processing';  // 审核中 - 蓝色
       case 15:
-        return 'error';
+        return 'error';  // 审核拒绝 - 红色
+      case 20:
+        return 'warning';  // 审核通过/待上链 - 黄色
+      case 30:
+        return 'processing';  // 上链中/轮询查询交易回执 - 蓝色
+      case 35:
+        return 'success';  // 上链成功 - 绿色
+      case 40:
+        return 'error';  // 上链失败 - 红色
+      case 45:
+        return 'default';  // 删除 - 灰色
       default:
         return 'default';
     }
@@ -104,14 +117,26 @@ export class OperationRecordsComponent implements OnInit {
 
   getStatusText(status: number): string {
     switch (status) {
-      case 35:
-        return 'Success';
-      case 30:
-        return 'Processing';
-      case 40:
-        return 'Failed';
+      case 1:
+        return 'Saved';
+      case 3:
+        return 'Withdrawn';
+      case 5:
+        return 'Pending Review';
+      case 10:
+        return 'Under Review';
       case 15:
-        return 'Rejected';
+        return 'Review Rejected';
+      case 20:
+        return 'Review Approved/Pending Chain';
+      case 30:
+        return 'Chain Processing';
+      case 35:
+        return 'Chain Success';
+      case 40:
+        return 'Chain Failed';
+      case 45:
+        return 'Deleted';
       default:
         return 'Unknown';
     }

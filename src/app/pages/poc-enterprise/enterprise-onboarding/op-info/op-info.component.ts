@@ -52,30 +52,32 @@ export class OpInfoComponent implements OnInit, AfterViewInit {
   }
 
   getStatusText(status: number): string {
+
     switch (status) {
       case 0:
-        return 'In Progress';
+        return 'Pending Approval';
       case 1:
-        return 'Successful';
+        return 'Active';
       case 2:
-        return 'Failed';
+        return 'Inactive';
       case 3:
-        return 'Disabled';
+        return 'Failed';
       default:
         return 'Unknown';
     }
   }
+ 
 
   getStatusTagColor(status: number): string {
     switch (status) {
       case 0:
-        return 'processing';  // 进行中 - 蓝色
+        return 'warning'; 
       case 1:
-        return 'success';     // 成功 - 绿色
+        return 'green';   
       case 2:
-        return 'error';       // 失败 - 红色
+        return 'default';     
       case 3:
-        return 'default';     // 禁用 - 灰色
+        return 'red';     
       default:
         return 'default';
     }
