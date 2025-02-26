@@ -215,23 +215,27 @@ export class InfoComponent implements OnInit {
           title: 'Operation Type',
           field: 'type',
           pipe: 'operationType',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Transaction Hash',
           field: 'txHash',
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 280
         },
         {
           title: 'Transaction Time',
           field: 'txTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Status',
           tdTemplate: this.stateTpl,
+          notNeedEllipsis: true,
           width: 150
         }
       ],

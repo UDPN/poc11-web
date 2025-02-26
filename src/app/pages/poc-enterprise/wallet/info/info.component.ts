@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-10 13:35:38
+ * @LastEditTime: 2025-02-25 16:43:50
  * @Description:
  */
 import {
@@ -28,26 +28,34 @@ import { finalize } from 'rxjs';
   styleUrl: './info.component.less'
 })
 export class InfoComponent implements OnInit, AfterViewInit {
+  // Transfer
+  @ViewChild('otherTransactionNoTpl', { static: true })
+  otherTransactionNoTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('otherSenderWalletAddressTpl', { static: true })
+  otherSenderWalletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('otherReceiverWalletAddressTpl', { static: true })
+  otherReceiverWalletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('otherAmountTpl', { static: true })
+  otherAmountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('otherFxRateTpl', { static: true })
+  otherFxRateTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('otherStatusTpl', { static: true })
+  otherStatusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('otherOperationTpl', { static: true })
+  otherOperationTpl!: TemplateRef<NzSafeAny>;
+
+  // top-up/withdrawal
   @ViewChild('transactionNoTpl', { static: true })
   transactionNoTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('transfertransactionNoTpl', { static: true })
-  transfertransactionNoTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('fromTpl', { static: true })
-  fromTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('toTpl', { static: true })
-  toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('sendingAmountTpl', { static: true })
-  sendingAmountTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('transactionHashTpl', { static: true })
-  transactionHashTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('receivingAmountTpl', { static: true })
-  receivingAmountTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  accountAddress: string = '';
   info: any = {};
   detailsTabs = ['Basic Information', 'Transactions'];
   transactionsTabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
@@ -79,14 +87,14 @@ export class InfoComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: this.type === 'info' ? 'Details' : 'Approval',
+      title: 'Details',
       breadcrumbs: [
         { name: 'Enterprise Management' },
         {
           name: 'Wallet Management',
           url: '/poc/poc-enterprise/wallet'
         },
-        { name: this.type === 'info' ? 'Details' : 'Approval' }
+        { name: 'Details' }
       ],
       extra: '',
       desc: '',
@@ -95,11 +103,9 @@ export class InfoComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.routeInfo.queryParams.subscribe((params) => {
+      this.accountAddress = params['accountAddress'];
       this.getBasicDetail();
-      this.type = params['type'];
-      if (this.type === 'info') {
-        this.transactionsIndexChange(0);
-      }
+      this.transactionsIndexChange(0);
     });
   }
 
@@ -218,50 +224,61 @@ export class InfoComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Transaction No.',
-          tdTemplate: this.transfertransactionNoTpl,
+          tdTemplate: this.otherTransactionNoTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {
-          title: 'From',
-          tdTemplate: this.fromTpl,
-          width: 110
+          title: 'Sender Wallet Address',
+          tdTemplate: this.otherSenderWalletAddressTpl,
+          notNeedEllipsis: true,
+          width: 130
         },
         {
-          title: 'Sending Amount',
-          tdTemplate: this.sendingAmountTpl,
-          width: 100
-        },
-        {
-          title: 'To',
-          tdTemplate: this.toTpl,
-          width: 110
-        },
-        {
-          title: 'Receiving Amount',
-          tdTemplate: this.receivingAmountTpl,
-          width: 100
+          title: 'Receiver Wallet Address',
+          tdTemplate: this.otherReceiverWalletAddressTpl,
+          notNeedEllipsis: true,
+          width: 140
         },
         {
           title: 'Type',
           field: 'type',
           pipe: 'walletTransferInfoType',
+          notNeedEllipsis: true,
           width: 100
         },
         {
-          title: 'Transaction Hash',
-          tdTemplate: this.transactionHashTpl,
-          width: 110
+          title: 'Amount',
+          tdTemplate: this.otherAmountTpl,
+          notNeedEllipsis: true,
+          width: 150
         },
         {
-          title: 'Transaction Time',
-          field: 'txTime',
+          title: 'FX Rate',
+          tdTemplate: this.otherFxRateTpl,
+          notNeedEllipsis: true,
+          width: 120
+        },
+        {
+          title: 'Created on',
+          field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Status',
-          tdTemplate: this.statusTpl,
+          tdTemplate: this.otherStatusTpl,
+          notNeedEllipsis: true,
+          width: 80
+        },
+        {
+          title: 'Actions',
+          tdTemplate: this.otherOperationTpl,
+          notNeedEllipsis: true,
+          fixed: true,
+          fixedDir: 'right',
+          showAction: false,
           width: 80
         }
       ],
@@ -287,12 +304,6 @@ export class InfoComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Currency',
-          field: 'currency',
-          notNeedEllipsis: true,
-          width: 100
-        },
-        {
           title: 'Type',
           field: 'type',
           pipe: 'walletTopUpWithdrawInfoType',
@@ -306,23 +317,31 @@ export class InfoComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Transaction Hash',
-          tdTemplate: this.transactionHashTpl,
+          title: 'Token',
+          field: 'currency',
           notNeedEllipsis: true,
-          width: 100
+          width: 80
         },
         {
-          title: 'Transaction Time',
-          field: 'txTime',
+          title: 'Created on',
+          field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 100
+          width: 180
         },
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
           width: 100
+        },
+        {
+          title: 'Actions',
+          tdTemplate: this.operationTpl,
+          fixed: true,
+          fixedDir: 'right',
+          showAction: false,
+          width: 80
         }
       ],
       total: 0,

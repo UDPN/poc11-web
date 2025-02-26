@@ -157,7 +157,9 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
             this.tableLoading(false);
             this.cdr.markForCheck();
           } else {
-            this.message.error(res.message || 'Failed to fetch liquidity pool list');
+            this.message.error(
+              res.message || 'Failed to fetch liquidity pool list'
+            );
           }
         },
         error: () => {
@@ -174,23 +176,27 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
           title: 'Liquidity Pool Address',
           field: 'liquidityPollAddress',
           tdTemplate: this.addressTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Token',
           field: 'token',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Wallet Balance',
           field: 'walletBalance',
           tdTemplate: this.walletBalanceTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Authorized Amount',
           field: 'authorizedAmount',
           tdTemplate: this.authorizedAmountTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
@@ -198,23 +204,27 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
           thTemplate: this.minBalanceHeaderTpl,
           field: 'minBalance',
           tdTemplate: this.minBalanceTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Created on',
           field: 'createdTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 260
         },
         {
           title: 'Status',
           field: 'status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
@@ -259,9 +269,15 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     }
   }
 
-  showActivateModal(liquidityPoolAddress: string, token: string, liquidityPoolId: number, status: number): void {
+  showActivateModal(
+    liquidityPoolAddress: string,
+    token: string,
+    liquidityPoolId: number,
+    status: number
+  ): void {
     const modal = this.modal.create<ActivateModalComponent>({
-      nzTitle: status === 1 ? 'Deactivate Liquidity Pool' : 'Activate Liquidity Pool',
+      nzTitle:
+        status === 1 ? 'Deactivate Liquidity Pool' : 'Activate Liquidity Pool',
       nzContent: ActivateModalComponent,
       nzWidth: 600,
       nzData: {
@@ -274,14 +290,30 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
 
     modal.afterClose.subscribe((comments: string) => {
       if (comments) {
-        this.message.success(`Liquidity Pool ${status === 1 ? 'deactivated' : 'activated'} successfully`);
+        this.message.success(
+          `Liquidity Pool ${
+            status === 1 ? 'deactivated' : 'activated'
+          } successfully`
+        );
         this.getDataList(this.tableQueryParams);
       }
     });
   }
 
-  showReauthorizeModal(liquidityPoolAddress: string, token: string, liquidityPoolId: number, balance: string, minBalanceReq: string): void {
-    console.log(liquidityPoolAddress, token, liquidityPoolId, balance, minBalanceReq);
+  showReauthorizeModal(
+    liquidityPoolAddress: string,
+    token: string,
+    liquidityPoolId: number,
+    balance: string,
+    minBalanceReq: string
+  ): void {
+    console.log(
+      liquidityPoolAddress,
+      token,
+      liquidityPoolId,
+      balance,
+      minBalanceReq
+    );
     const modal = this.modal.create<ReauthorizeModalComponent>({
       nzTitle: undefined,
       nzContent: ReauthorizeModalComponent,

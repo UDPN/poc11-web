@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-20 15:05:24
+ * @LastEditTime: 2025-02-26 11:26:38
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -72,6 +72,7 @@ export class TransactionsService {
         receivingCurrency: filters.receivingCurrency || '',
         sendingCurrency: filters.sendingCurrency || '',
         txHash: filters.txHash || '',
+        state: filters.state || '',
         toAccountAddress: filters.toAccountAddress || '',
         type: filters.type || '',
         startTxTime: filters.txTime[0]

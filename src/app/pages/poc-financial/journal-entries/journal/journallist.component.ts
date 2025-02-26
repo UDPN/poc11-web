@@ -177,6 +177,7 @@ export class JournallistComponent implements OnInit, AfterViewInit {
         {
           title: 'Actions',
           tdTemplate: this.actionTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           width: 100

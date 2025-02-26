@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-20 15:06:17
+ * @LastEditTime: 2025-02-26 12:20:53
  * @Description:
  */
 import {
@@ -55,16 +55,19 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
   headerExtra!: TemplateRef<NzSafeAny>;
   @ViewChild('appllicationNoTpl', { static: true })
   appllicationNoTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('enterpriseCodeTpl', { static: true })
+  enterpriseCodeTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('fromTpl', { static: true })
   fromTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('toTpl', { static: true })
   toTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('sendingAmountTpl', { static: true })
-  sendingAmountTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('receivingAmountTpl', { static: true })
-  receivingAmountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transferAmountTpl', { static: true })
+  transferAmountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transferFxRateTpl', { static: true })
+  transferFxRateTpl!: TemplateRef<NzSafeAny>;
+
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
@@ -226,14 +229,14 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
       this.tableConfig = {
         headers: [
           {
-            title: 'Appllication No.',
+            title: 'Transaction No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
             width: 140
           },
           {
             title: 'Enterprise Code',
-            field: 'enterpriseCode',
+            tdTemplate: this.enterpriseCodeTpl,
             notNeedEllipsis: true,
             width: 150
           },
@@ -242,12 +245,6 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             tdTemplate: this.walletAddressTpl,
             notNeedEllipsis: true,
             width: 140
-          },
-          {
-            title: 'Token Currency',
-            field: 'tokenSymbol',
-            notNeedEllipsis: true,
-            width: 120
           },
           {
             title: 'Type',
@@ -263,7 +260,13 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             width: 150
           },
           {
-            title: 'Applied On',
+            title: 'Token',
+            field: 'tokenSymbol',
+            notNeedEllipsis: true,
+            width: 120
+          },
+          {
+            title: 'Created on',
             field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
@@ -278,6 +281,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
           {
             title: 'Actions',
             tdTemplate: this.operationTpl,
+            notNeedEllipsis: true,
             fixed: true,
             fixedDir: 'right',
             showAction: false,
@@ -294,50 +298,44 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
       this.tableConfig = {
         headers: [
           {
-            title: 'Appllication No.',
+            title: 'Transaction No.',
             tdTemplate: this.appllicationNoTpl,
             notNeedEllipsis: true,
             width: 140
           },
           {
-            title: 'Enterprise Code',
-            field: 'enterpriseCode',
-            notNeedEllipsis: true,
-            width: 140
-          },
-          {
-            title: 'From',
+            title: 'Sender Wallet Address',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
             width: 140
           },
           {
-            title: 'Sending Amount',
-            tdTemplate: this.sendingAmountTpl,
-            notNeedEllipsis: true,
-            width: 140
-          },
-          {
-            title: 'To',
+            title: 'Receiver Wallet Address',
             tdTemplate: this.toTpl,
-            notNeedEllipsis: true,
-            width: 140
-          },
-          {
-            title: 'Receiving Amount',
-            tdTemplate: this.receivingAmountTpl,
             notNeedEllipsis: true,
             width: 150
           },
           {
-            title: 'Transaction Type',
+            title: 'Type',
             field: 'type',
             pipe: 'walletTransferInfoType',
             notNeedEllipsis: true,
             width: 140
           },
           {
-            title: 'Applied On',
+            title: 'Amount',
+            tdTemplate: this.transferAmountTpl,
+            notNeedEllipsis: true,
+            width: 140
+          },
+          {
+            title: 'FX Rate',
+            tdTemplate: this.transferFxRateTpl,
+            notNeedEllipsis: true,
+            width: 180
+          },
+          {
+            title: 'Created on',
             field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,

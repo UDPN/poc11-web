@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 09:54:05
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-17 10:28:57
+ * @LastEditTime: 2025-02-26 12:13:19
  * @Description:
  */
 import {
@@ -158,7 +158,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
     this.selectedTab = index === 0 ? 'local' : 'network';
-    
+
     // 保存到 localStorage
     localStorage.setItem('tokenPairTabIndex', index.toString());
     localStorage.setItem('tokenPairTab', this.selectedTab);
@@ -166,7 +166,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     // 重置搜索条件和分页
     this.searchParam = {};
     this.tableConfig.pageIndex = 1;
-    
+
     if (this.selectedTab === 'local') {
       this.getDataList();
     } else {
@@ -182,7 +182,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       filters: this.searchParam
     };
 
-    this.tokenPairService.fetchList(params.pageNum, params.pageSize, params.filters)
+    this.tokenPairService
+      .fetchList(params.pageNum, params.pageSize, params.filters)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
@@ -191,19 +192,32 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res: TokenPairResponse) => {
           if (res.code === 0) {
-            this.dataList = res.data.rows.map((item: { createTime: number; createUser: string; exchangeRate: number; fromCurrency: string; rateId: number; state: number; toCurrency: string; updateTime: number; }) => ({
-              tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
-              fxRate: item.exchangeRate.toString(),
-              updatedTime: item.updateTime,
-              status: item.state,
-              rateId: item.rateId
-            }));
+            this.dataList = res.data.rows.map(
+              (item: {
+                createTime: number;
+                createUser: string;
+                exchangeRate: number;
+                fromCurrency: string;
+                rateId: number;
+                state: number;
+                toCurrency: string;
+                updateTime: number;
+              }) => ({
+                tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
+                fxRate: item.exchangeRate.toString(),
+                updatedTime: item.updateTime,
+                status: item.state,
+                rateId: item.rateId
+              })
+            );
             this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
             this.tableLoading(false);
             this.cdr.markForCheck();
           } else {
-            this.message.error(res.message || 'Failed to fetch token pair list');
+            this.message.error(
+              res.message || 'Failed to fetch token pair list'
+            );
           }
         },
         error: () => {
@@ -220,7 +234,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       filters: this.searchParam
     };
 
-    this.tokenPairService.fetchNetworkList(params.pageNum, params.pageSize, params.filters)
+    this.tokenPairService
+      .fetchNetworkList(params.pageNum, params.pageSize, params.filters)
       .pipe(
         finalize(() => {
           this.tableLoading(false);
@@ -229,19 +244,30 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (res: any) => {
           if (res.code === 0) {
-            this.dataList = res.data.rows.map((item: { createTime: number; createUser: string; exchangeRate: number; fromCurrency: string; rateId: number; state: number; toCurrency: string; updateTime: number; }) => ({
-              tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
-              fxRate: item.exchangeRate.toString(),
-              updatedTime: item.updateTime,
-              status: item.state,
-              rateId: item.rateId
-            }));
+            this.dataList = res.data.rows.map(
+              (item: {
+                createTime: number;
+                createUser: string;
+                exchangeRate: number;
+                fromCurrency: string;
+                rateId: number;
+                state: number;
+                toCurrency: string;
+                updateTime: number;
+              }) => ({
+                tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
+                fxRate: item.exchangeRate.toString(),
+                updatedTime: item.updateTime,
+                status: item.state,
+                rateId: item.rateId
+              })
+            );
             this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
             this.tableLoading(false);
             this.cdr.markForCheck();
           } else {
-            this.message.error(res.message );
+            this.message.error(res.message);
           }
         },
         error: () => {
@@ -256,29 +282,34 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
         {
           title: 'Token Pair',
           field: 'tokenPair',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'FX Rate',
           field: 'fxRate',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Status',
           field: 'status',
           width: 100,
+          notNeedEllipsis: true,
           tdTemplate: this.statusTpl
         },
         {
           title: 'Updated Time',
           field: 'updatedTime',
           width: 180,
-          pipe: 'date:yyyy-MM-dd HH:mm:ss'
+          pipe: 'date:yyyy-MM-dd HH:mm:ss',
+          notNeedEllipsis: true
         },
         {
           title: 'Operation',
           width: 150,
           fixed: true,
+          notNeedEllipsis: true,
           tdTemplate: this.operationTpl
         }
       ],
@@ -311,7 +342,11 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openOperateModal(rateId: number, tokenPair: string, isActivate: boolean): void {
+  openOperateModal(
+    rateId: number,
+    tokenPair: string,
+    isActivate: boolean
+  ): void {
     const modal = this.modal.create({
       nzTitle: isActivate ? 'Activate Token Pair' : 'Deactivate Token Pair',
       nzContent: OperateModalComponent,

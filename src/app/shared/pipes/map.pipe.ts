@@ -116,11 +116,29 @@ export const MapSet = {
     6: 'Failed',
     7: 'Processing'
   },
+  walletInfoTransactionsStatus: {
+    5: 'Pending Approval',
+    10: 'Processing',
+    15: 'Rejected',
+    20: 'Processing',
+    30: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  walletInfoTransactionsStatusColor: {
+    5: 'volcano',
+    10: 'blue',
+    15: 'red',
+    20: 'blue',
+    30: 'blue',
+    35: 'green',
+    40: 'red'
+  },
   walletTransactionsRecordStatus: {
-    1: 'Pending',
-    4: 'Processing',
-    5: 'Success',
-    6: 'Failed'
+    5: 'Pending',
+    20: 'Processing',
+    35: 'Success',
+    40: 'Failed'
   },
   EnterpriseStatus: {
     0: 'Pending Approval',
@@ -152,10 +170,10 @@ export const MapSet = {
     3: 'Transfer'
   },
   transactionsRecordStatusColor: {
-    1: 'volcano',
-    4: 'purple',
-    5: 'cyan',
-    6: 'red'
+    5: 'volcano',
+    20: 'purple',
+    35: 'green',
+    40: 'red'
   },
   region: {
     1: 'Home',
@@ -343,8 +361,8 @@ export const MapSet = {
     4: 'Withdrawal'
   },
   walletTransferInfoType: {
-    1: 'Transfer',
-    2: 'FX Purchasing',
+    1: 'Cross-Token Transfer',
+    2: 'Exchange',
     3: 'Transfer'
   },
   enterpriseApprovalSecondStatus: {
@@ -389,6 +407,20 @@ export const MapSet = {
     5: 'wait',
     15: 'wait',
     20: 'process',
+    35: 'finish',
+    40: 'error'
+  },
+  transferSourceThirdStatus: {
+    5: 'wait',
+    15: 'wait',
+    20: 'process',
+    35: 'finish',
+    40: 'finish'
+  },
+  transferTargetThirdStatus: {
+    5: 'wait',
+    15: 'wait',
+    20: 'wait',
     35: 'finish',
     40: 'error'
   },
@@ -484,6 +516,13 @@ export class MapPipe implements PipeTransform {
         }
       } else {
         return '--';
+      }
+    }
+    if (arg === 'showAfterFour') {
+      if (value) {
+        return '( ****' + value.substring(value.length - 4, value.length) + ')';
+      } else {
+        return '';
       }
     }
     if (arg === 'showPart') {

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-20 15:05:48
+ * @LastEditTime: 2025-02-26 12:19:54
  * @Description:
  */
 import {
@@ -29,6 +29,7 @@ interface SearchParam {
   txTime: any;
   transactionType: string | number;
   txHash: string;
+  status: any;
 }
 
 interface TransferSearchParam {
@@ -57,6 +58,8 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
   appllicationNoTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transferTxnTpl', { static: true })
+  transferTxnTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('fromTpl', { static: true })
   fromTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('toTpl', { static: true })
@@ -67,12 +70,25 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
   receivingAmountTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transferAmountTpl', { static: true })
+  transferAmountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transferFxRateTpl', { static: true })
+  transferFxRateTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('transferStatusTpl', { static: true })
+  transferStatusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('txHashTpl', { static: true })
   txHashTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusTpl', { static: true })
+  statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
   operationTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transferOperationTpl', { static: true })
   transferOperationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('txnTpl', { static: true })
+  txnTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('enterpriseCodeTpl', { static: true })
+  enterpriseCodeTpl!: TemplateRef<NzSafeAny>;
+
   tabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
   dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
@@ -91,7 +107,8 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
     currency: '',
     transactionType: '',
     txTime: [],
-    txHash: ''
+    txHash: '',
+    status: ''
   };
   transferSearchParam: Partial<TransferSearchParam> = {
     applicationId: '',
@@ -102,7 +119,8 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
     receivingCurrency: '',
     type: '',
     txTime: [],
-    txHash: ''
+    txHash: '',
+    state: ''
   };
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
@@ -156,7 +174,8 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
         currency: '',
         txHash: '',
         transactionType: '',
-        txTime: []
+        txTime: [],
+        status: ''
       };
     } else {
       this.transferSearchParam = {
@@ -168,7 +187,8 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
         sendingCurrency: '',
         receivingCurrency: '',
         type: '',
-        txTime: []
+        txTime: [],
+        state: ''
       };
     }
     this.getDataList(this.tableQueryParams);
@@ -224,8 +244,14 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
       this.tableConfig = {
         headers: [
           {
+            title: 'Transaction No.',
+            tdTemplate: this.txnTpl,
+            notNeedEllipsis: true,
+            width: 150
+          },
+          {
             title: 'Enterprise Code',
-            field: 'enterpriseCode',
+            tdTemplate: this.enterpriseCodeTpl,
             notNeedEllipsis: true,
             width: 150
           },
@@ -234,12 +260,6 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             tdTemplate: this.walletAddressTpl,
             notNeedEllipsis: true,
             width: 130
-          },
-          {
-            title: 'Token Currency',
-            field: 'tokenSymbol',
-            notNeedEllipsis: true,
-            width: 100
           },
           {
             title: 'Type',
@@ -255,21 +275,28 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             width: 150
           },
           {
-            title: 'Transaction Hash',
-            tdTemplate: this.txHashTpl,
+            title: 'Token',
+            field: 'tokenSymbol',
             notNeedEllipsis: true,
-            width: 150
+            width: 100
           },
           {
-            title: 'Transaction Time',
+            title: 'Created on',
             field: 'txTime',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
             width: 150
           },
           {
+            title: 'Status',
+            tdTemplate: this.statusTpl,
+            notNeedEllipsis: true,
+            width: 150
+          },
+          {
             title: 'Actions',
             tdTemplate: this.operationTpl,
+            notNeedEllipsis: true,
             fixed: true,
             fixedDir: 'right',
             showAction: false,
@@ -286,34 +313,22 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
       this.tableConfig = {
         headers: [
           {
-            title: 'Enterprise Code',
-            field: 'enterpriseCode',
+            title: 'Transaction No.',
+            tdTemplate: this.transferTxnTpl,
             notNeedEllipsis: true,
             width: 150
           },
           {
-            title: 'From',
+            title: 'Sender Wallet Address',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
             width: 130
           },
           {
-            title: 'Sending Amount',
-            tdTemplate: this.sendingAmountTpl,
-            notNeedEllipsis: true,
-            width: 140
-          },
-          {
-            title: 'To',
+            title: 'Receiver Wallet Address',
             tdTemplate: this.toTpl,
             notNeedEllipsis: true,
             width: 130
-          },
-          {
-            title: 'Receiving Amount',
-            tdTemplate: this.receivingAmountTpl,
-            notNeedEllipsis: true,
-            width: 140
           },
           {
             title: 'Type',
@@ -323,15 +338,27 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             width: 120
           },
           {
-            title: 'Transaction Hash',
-            tdTemplate: this.txHashTpl,
+            title: 'Amount',
+            tdTemplate: this.transferAmountTpl,
             notNeedEllipsis: true,
             width: 150
           },
           {
-            title: 'Transaction Time',
+            title: 'FX Rate',
+            tdTemplate: this.transferFxRateTpl,
+            notNeedEllipsis: true,
+            width: 180
+          },
+          {
+            title: 'Created on',
             field: 'txTime',
             pipe: 'timeStamp',
+            notNeedEllipsis: true,
+            width: 150
+          },
+          {
+            title: 'Status',
+            tdTemplate: this.transferStatusTpl,
             notNeedEllipsis: true,
             width: 150
           },

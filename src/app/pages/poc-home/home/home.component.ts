@@ -541,6 +541,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

@@ -8,16 +8,7 @@
       <nz-step
         [nzTitle]="'Created'"
         [nzStatus]="'finish'"
-        [nzDescription]="
-          'on ' +
-          (info?.appliedOn | map: 'timeStamp') +
-          ' by Enterprise (****' +
-          info.enterpriseCode.substring(
-            info.enterpriseCode.length - 4,
-            info.enterpriseCode.length
-          ) +
-          ')'
-        "
+        [nzDescription]="createTpl"
       ></nz-step>
       <ng-container
         *ngIf="info.status === 5 || (info.status !== 5 && info.approvedOn)"
@@ -30,30 +21,80 @@
           [nzDescription]="approvalTpl"
         ></nz-step
       ></ng-container>
-      <nz-step
-        [nzTitle]="'On-chain execution'"
-        [nzStatus]="status | map: 'transferApprovalThirdStatus'"
-        [nzDescription]="chainTpl"
-      ></nz-step>
+      <ng-container *ngIf="type || info.type === 3">
+        <nz-step
+          [nzTitle]="'On-chain execution'"
+          [nzStatus]="status | map: 'transferApprovalThirdStatus'"
+          [nzDescription]="chainTpl"
+        ></nz-step>
+      </ng-container>
+      <ng-container *ngIf="info.type === 1 || info.type === 2">
+        <nz-step
+          [nzTitle]="'Source token on-chain execution'"
+          [nzStatus]="status | map: 'transferSourceThirdStatus'"
+          [nzDescription]="sourceChainTpl"
+        ></nz-step>
+        <nz-step
+          [nzTitle]="'Target token on-chain execution'"
+          [nzStatus]="status | map: 'transferTargetThirdStatus'"
+          [nzDescription]="targetChainTpl"
+        ></nz-step>
+      </ng-container>
     </nz-steps>
   </div>
 </nz-card>
 
+<ng-template #createTpl
+  ><span>{{
+    'on ' + (info?.appliedOn | map: 'timeStamp') + ' by Enterprise '
+  }}</span
+  ><a [title]="info.enterpriseCode">{{
+    info.enterpriseCode | map: 'showAfterFour'
+  }}</a></ng-template
+>
 <ng-template #chainTpl>
-  <span *ngIf="status !== 40">{{
-    'The ' +
-      type +
-      (status === 35
-        ? ' request is executed successfully on the chain'
-        : ' request is waiting to be executed on the chain')
-  }}</span>
-
+  <span *ngIf="status !== 40">
+    <ng-container *ngIf="type">{{
+      'The ' +
+        type +
+        (status === 35
+          ? ' request is executed successfully on the chain'
+          : ' request is waiting to be executed on the chain')
+    }}</ng-container
+    ><ng-container *ngIf="!type">
+      {{
+        status === 35
+          ? 'The transfer request is executed successfully on the chain'
+          : 'The transfer request is waiting to be executed on the chain'
+      }}
+    </ng-container></span
+  >
   <span *ngIf="status === 40">
     <p>{{ 'Failed' }}</p>
     <!-- no show -->
     <!-- <p>{{ 'Reason: ' + info.failedReason }}</p>
     <p>{{ 'on ' + info.failedTime }}</p> -->
   </span>
+</ng-template>
+<ng-template #targetChainTpl>
+  <span *ngIf="status !== 40">{{
+    status === 35
+      ? 'The target token transfer request is executed successfully on the chain'
+      : 'The target token transfer request is waiting to be executed on the chain'
+  }}</span>
+  <span *ngIf="status === 40">
+    <p>{{ 'Failed' }}</p>
+    <!-- no show -->
+    <!-- <p>{{ 'Reason: ' + info.failedReason }}</p>
+    <p>{{ 'on ' + info.failedTime }}</p> -->
+  </span>
+</ng-template>
+<ng-template #sourceChainTpl>
+  <span>{{
+    status === 35
+      ? 'The source token transfer request is executed successfully on the chain'
+      : 'The source token transfer request is waiting to be executed on the chain'
+  }}</span>
 </ng-template>
 <ng-template #approvalTpl>
   <!-- other status -->
@@ -71,9 +112,24 @@
   </ng-container>
   <!-- Pending Approval -->
   <ng-container *ngIf="status === 5">
-    <div>
-      {{ 'The ' + type + ' request is awaiting confirmation' }}
-    </div>
+    <ng-container *ngIf="type"
+      ><div>
+        {{ 'The ' + type + ' request is awaiting confirmation' }}
+      </div></ng-container
+    >
+    <ng-container *ngIf="!type"
+      ><div>
+        {{
+          'The ' +
+            (info.type === 1
+              ? 'cross-token transfer'
+              : info.type === 3
+              ? 'transfer'
+              : '') +
+            ' request is awaiting confirmation'
+        }}
+      </div></ng-container
+    >
     <ng-container *ngIf="!rejectStatus">
       <nz-space class="m-t-10 m-b-10">
         <button

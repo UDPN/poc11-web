@@ -12,41 +12,41 @@
       ></nz-step>
       <!-- 1:Pending Approval; other：displayed only when there is approval information currently available  -->
       <ng-container
-        *ngIf="info.status === 1 || (info.status !== 1 && info.reviewerTime)"
+        *ngIf="info?.status === 1 || (info?.status !== 1 && info?.reviewerTime)"
       >
         <nz-step
           [nzTitle]="
-            info.status === 1
+            info?.status === 1
               ? 'Approval'
-              : info.status === 2
+              : info?.status === 2
               ? 'Rejected'
               : 'Approved'
           "
-          [nzStatus]="info.status | map: 'enterpriseApprovalSecondStatus'"
+          [nzStatus]="info?.status | map: 'enterpriseApprovalSecondStatus'"
           [nzDescription]="approvalTpl"
         ></nz-step>
       </ng-container>
       <nz-step
         [nzTitle]="'On-chain execution'"
-        [nzStatus]="info.status | map: 'enterpriseApprovalThirdStatus'"
+        [nzStatus]="info?.status | map: 'enterpriseApprovalThirdStatus'"
         [nzDescription]="chainTpl"
       ></nz-step>
     </nz-steps>
   </div>
 </nz-card>
 <ng-template #chainTpl>
-  <span *ngIf="info.status !== 6">{{
+  <span *ngIf="info?.status !== 6">{{
     'The wallet' +
-      (info.status === 5 || info.status === 8
+      (info?.status === 5 || info?.status === 8
         ? ' creation is executed successfully on the chain'
         : ' creation is waiting to be executed on the chain')
   }}</span>
 
-  <span *ngIf="info.status === 6">
+  <span *ngIf="info?.status === 6">
     <p>{{ 'Failed' }}</p>
     <!-- no show -->
-    <!-- <p>{{ 'Reason: ' + info.failedReason }}</p>
-    <p>{{ 'on ' + info.failedTime }}</p> -->
+    <!-- <p>{{ 'Reason: ' + info?.failedReason }}</p>
+    <p>{{ 'on ' + info?.failedTime }}</p> -->
   </span>
 </ng-template>
 <ng-template #approvalTpl>

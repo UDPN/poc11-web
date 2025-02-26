@@ -288,6 +288,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

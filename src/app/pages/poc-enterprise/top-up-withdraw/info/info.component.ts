@@ -19,6 +19,8 @@ import {
   OnInit
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ThemeOptionsKey } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { TopUpWithdrawService } from '@app/core/services/http/poc-enterprise/top-up-withdraw/top-up-withdraw.service';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 
@@ -29,6 +31,7 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
 })
 export class InfoComponent implements OnInit, AfterViewInit {
   info: any = {};
+  color: string = '';
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -40,7 +43,8 @@ export class InfoComponent implements OnInit, AfterViewInit {
   constructor(
     private routeInfo: ActivatedRoute,
     private topUpWithdrawService: TopUpWithdrawService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private windowService: WindowService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -59,6 +63,8 @@ export class InfoComponent implements OnInit, AfterViewInit {
     };
   }
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     this.routeInfo.queryParams.subscribe((params) => {
       if (params['accountCbdcId']) {
         this.getInfo(params['accountCbdcId'], 1);

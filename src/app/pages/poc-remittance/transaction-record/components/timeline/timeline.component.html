@@ -7,21 +7,21 @@
         [nzStatus]="'finish'"
         [nzDescription]="step1Tpl"
       ></nz-step>
-      <ng-container *ngIf="info.state === 6">
+      <ng-container *ngIf="info.state === 40">
         <nz-step
           [nzTitle]="'The Remitter: Transfers w-EUR to the recipient'"
           [nzStatus]="'error'"
           [nzDescription]="step4Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 5">
+      <ng-container *ngIf="info.state === 35">
         <nz-step
           [nzTitle]="'The Remitter: Transfers w-EUR to the recipient'"
           [nzStatus]="'finish'"
           [nzDescription]="step3Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 1 || info.state === 4">
+      <ng-container *ngIf="info.state === 5 || info.state === 20">
         <nz-step
           [nzTitle]="'The Remitter: Transfers w-EUR to the recipient'"
           [nzStatus]="'wait'"
@@ -50,14 +50,14 @@
       ></nz-step>
       <!-------- step3 -------->
       <ng-container *ngIf="info.transactionLogTrees[2]?.state !== -1">
-        <ng-container *ngIf="info.state === 1 || info.state === 4">
+        <ng-container *ngIf="info.state === 5 || info.state === 20">
           <nz-step
             nzTitle="The Remitter: Authorize Token Swap and FX Smart Contracts"
             [nzStatus]="'process'"
             [nzDescription]="step2Tpl"
           ></nz-step>
         </ng-container>
-        <ng-container *ngIf="info.state === 5">
+        <ng-container *ngIf="info.state === 35">
           <nz-step
             nzTitle="The Remitter: Authorize Token Swap and FX Smart Contracts"
             [nzStatus]="'finish'"
@@ -67,21 +67,21 @@
       </ng-container>
       <!-------- step3 -------->
       <!-------- step4 -------->
-      <ng-container *ngIf="info.state === 5">
+      <ng-container *ngIf="info.state === 35">
         <nz-step
           nzTitle="The Token Swap and FX Smart Contracts: Call the liquidity provider wallet to initiate the transfer"
           [nzStatus]="'finish'"
           [nzDescription]="step9Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 6">
+      <ng-container *ngIf="info.state === 40">
         <nz-step
           nzTitle="The Token Swap and FX Smart Contracts: Call the liquidity provider wallet to initiate the transfer"
           [nzStatus]="'error'"
           [nzDescription]="step7Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 1 || info.state === 4">
+      <ng-container *ngIf="info.state === 5 || info.state === 20">
         <nz-step
           nzTitle="The Token Swap and FX Smart Contracts: Call the liquidity provider wallet to initiate the transfer"
           [nzStatus]="'process'"
