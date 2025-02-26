@@ -135,7 +135,8 @@ export const MapSet = {
     40: 'red'
   },
   walletTransactionsRecordStatus: {
-    5: 'Pending',
+    5: 'Pending Approval',
+    15: 'Rejected',
     20: 'Processing',
     35: 'Success',
     40: 'Failed'
@@ -171,6 +172,7 @@ export const MapSet = {
   },
   transactionsRecordStatusColor: {
     5: 'volcano',
+    15: 'red',
     20: 'purple',
     35: 'green',
     40: 'red'
