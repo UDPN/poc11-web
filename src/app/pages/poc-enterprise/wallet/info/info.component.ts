@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-25 16:43:50
+ * @LastEditTime: 2025-02-26 16:22:10
  * @Description:
  */
 import {
@@ -58,7 +58,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
   accountAddress: string = '';
   info: any = {};
   detailsTabs = ['Basic Information', 'Transactions'];
-  transactionsTabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
+  transactionsTabs = ['Top-up / Withdraw', 'Transfer / FX Purchasing'];
   transactionsIndex: any = 0;
   tableConfig!: AntTableConfig;
   transferTableConfig!: AntTableConfig;

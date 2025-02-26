@@ -1,10 +1,3 @@
-<!--
- * @Author: chenyuting
- * @Date: 2025-01-15 14:14:02
- * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-17 10:45:18
- * @Description: 
--->
 <app-page-header
   [backTpl]="backTpl"
   [backUrl]="'/poc/poc-enterprise/transactions'"
@@ -14,69 +7,468 @@
   <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
 </ng-template>
 <div class="normal-detail-table-wrap">
-  <nz-card [nzBordered]="true" class="m-b-10" nzTitle="Application Information">
-    <nz-descriptions
-      [nzColon]="false"
-      [nzBordered]="true"
-      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+  <div nz-row class="m-t-10">
+    <div
+      nz-col
+      [nzXXl]="14"
+      [nzXl]="14"
+      [nzLg]="24"
+      [nzMd]="14"
+      [nzSm]="24"
+      [nzXs]="24"
     >
-      <nz-descriptions-item nzTitle="Enterprise Name">{{
-        info.enterpriseName
-      }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Enterprise ID">{{
-        info.enterpriseId
-      }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="From">{{
-        info.from
-      }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Sending Amount">{{
-        info.sendingAmount
-      }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="To">{{ info.to }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Receiving Amount">{{
-        info.receivingAmount
-      }}</nz-descriptions-item
-      ><nz-descriptions-item nzTitle="Type" nzSpan="3">{{
-        info.type
-      }}</nz-descriptions-item></nz-descriptions
-    >
-  </nz-card>
-  <nz-card [nzBordered]="true" class="m-b-10" [nzTitle]="titleTpl">
-    <nz-descriptions
-      [nzColon]="false"
-      [nzBordered]="false"
-      nzLayout="vertical"
-      [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
-    >
-      <nz-descriptions-item nzTitle="Transaction Hash"
-        ><p
-          [title]="info.transactionHash"
-          nz-typography
-          [nzCopyable]="info.transactionHash ? true : false"
-          [nzCopyText]="info.transactionHash"
+      <nz-card nzTitle="" class="m-r-8 none-bottom">
+        <!-- title: (transactionType = 3：Top-up / 4：Withdrawal) Information -->
+        <ng-container *ngIf="!info.transferId">
+          <nz-card
+            nzBordered="false"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            [nzTitle]="
+              (info.transactionType | map: 'walletTopUpWithdrawInfoType') +
+              ' Details'
+            "
+          >
+            <nz-descriptions
+              nzTitle=""
+              [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+            >
+              ><nz-descriptions-item
+                [nzTitle]="
+                  info.transactionType | map: 'walletTopUpWithdrawInfoType'
+                "
+                ><span>{{
+                  (info.amount | map: 'toThousandthMark') +
+                    ' ' +
+                    info.tokenSymbol
+                }}</span></nz-descriptions-item
+              >
+            </nz-descriptions>
+          </nz-card>
+          <nz-card
+            [nzTitle]="
+              info.transactionType === 3
+                ? 'Top-up Information'
+                : 'Withdrawal Information'
+            "
+            nzBordered="false"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            class="m-t-25"
+          >
+            <nz-descriptions
+              nzTitle=""
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+            >
+              <nz-descriptions-item nzTitle="Transaction No."
+                ><p
+                  nz-typography
+                  [nzCopyable]="info.applicationId ? true : false"
+                  [nzCopyText]="info.applicationId"
+                >
+                  {{ info.applicationId }}
+                </p>
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Enterprise Code"
+                ><p
+                  nz-typography
+                  [nzCopyable]="info.enterpriseCode ? true : false"
+                  [nzCopyText]="info.enterpriseCode"
+                >
+                  {{ info.enterpriseCode }}
+                </p>
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Wallet Address">
+                <p
+                  nz-typography
+                  [nzCopyable]="info.walletAddress ? true : false"
+                  [nzCopyText]="info.walletAddress"
+                >
+                  {{ info.walletAddress }}
+                </p></nz-descriptions-item
+              >
+              <nz-descriptions-item nzTitle="Created on">{{
+                info.appliedOn | map: 'timeStamp'
+              }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+          <nz-card
+            nzTitle="Transaction Information"
+            nzBordered="false"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            class="m-t-25"
+          >
+            <nz-descriptions
+              nzTitle=""
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+            >
+              <nz-descriptions-item nzTitle="Transaction Hash">{{
+                info.txHash | map: 'nullValue'
+              }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Time">{{
+                info.txTime | map: 'timeStamp'
+              }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Status"
+                ><nz-tag
+                  [nzColor]="
+                    info.status | map: 'enterpriseTransactionStatusColor'
+                  "
+                  >{{
+                    info.status | map: 'enterpriseTransactionStatus'
+                  }}</nz-tag
+                ></nz-descriptions-item
+              >
+            </nz-descriptions>
+          </nz-card>
+        </ng-container>
+        <!-- title: (transactionType = 3：Top-up / 4：Withdrawal) Information -->
+
+        <!-- title: (type= 2: FX Purchasing / 3: Transfer) Information -->
+        <!-- 1: 'Cross-Token Transfer' 2: 'Exchange' 3: 'Transfer' -->
+        <ng-container *ngIf="info.transferId">
+          <ng-container *ngIf="info.type === 1 || info.type === 2">
+            <nz-card
+              nzBordered="false"
+              [nzTitle]="
+                info.type === 1
+                  ? 'Cross-Token Transfer Details'
+                  : 'FX Purchasing Details'
+              "
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item
+                  [nzTitle]="
+                    info.type === 1 ? 'Cross-Token Transfer' : 'Amount'
+                  "
+                  ><div class="display-flex">
+                    <div>
+                      <p>
+                        {{ info.sendingAmount | map: 'toThousandthMark'
+                        }}{{ ' ' + info.sendingCurrency }}
+                      </p>
+                    </div>
+                    <div>
+                      <span
+                        class="arrow-right m-l-10 m-r-10"
+                        nz-icon
+                        nzType="arrow-right"
+                        nzTheme="outline"
+                      ></span>
+                    </div>
+                    <div>
+                      <p>
+                        {{ info.receivingAmount | map: 'toThousandthMark'
+                        }}{{ ' ' + info.receivingCurrency }}
+                      </p>
+                    </div>
+                  </div></nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'FX Rate'">{{
+                  info.sendingCurrency +
+                    '/' +
+                    info.receivingCurrency +
+                    ' = ' +
+                    (info.fxRate | map: 'toThousandthMark')
+                }}</nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card>
+            <nz-card
+              nzBordered="false"
+              [nzTitle]="
+                info.type === 1
+                  ? 'Cross-Token Transfer Information'
+                  : 'FX Purchasing Information'
+              "
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item [nzTitle]="'Transaction No.'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.applicationId ? true : false"
+                    [nzCopyText]="info.applicationId"
+                  >
+                    {{ info.applicationId }}
+                  </p>
+                </nz-descriptions-item>
+                <ng-container *ngIf="info.type === 2"
+                  ><nz-descriptions-item [nzTitle]="'Enterprise Code'"
+                    ><p
+                      nz-typography
+                      [nzCopyable]="info.enterpriseCode ? true : false"
+                      [nzCopyText]="info.enterpriseCode"
+                    >
+                      {{ info.enterpriseCode }}
+                    </p>
+                  </nz-descriptions-item></ng-container
+                >
+                <nz-descriptions-item [nzTitle]="'Sender Wallet Address'">
+                  <div>
+                    <p
+                      nz-typography
+                      [nzCopyable]="info.fromAccountAddress ? true : false"
+                      [nzCopyText]="info.fromAccountAddress"
+                    >
+                      {{ info.fromAccountAddress }}
+                    </p>
+                    <p *ngIf="info.type === 1">
+                      {{ 'Enterprise Code: ' + info.enterpriseCode }}
+                    </p>
+                  </div> </nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Receiver Wallet Address'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.toAccountAddress ? true : false"
+                    [nzCopyText]="info.toAccountAddress"
+                  >
+                    {{ info.toAccountAddress }}
+                  </p> </nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Created on'">
+                  {{ info.appliedOn | map: 'timeStamp' }}
+                </nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card>
+            <nz-card
+              nzBordered="false"
+              [nzTitle]="'Liquidity Provider Information'"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item [nzTitle]="'Liquidity Provider Name'">{{
+                  info.commission
+                }}</nz-descriptions-item
+                ><nz-descriptions-item
+                  [nzTitle]="info.sendingCurrency + ' Liquidity Pool Address'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="
+                      info.baseCurrencyLiquidityWalletAddress ? true : false
+                    "
+                    [nzCopyText]="info.baseCurrencyLiquidityWalletAddress"
+                  >
+                    {{ info.baseCurrencyLiquidityWalletAddress }}
+                  </p> </nz-descriptions-item
+                ><nz-descriptions-item
+                  [nzTitle]="info.receivingCurrency + ' Liquidity Pool Address'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="
+                      info.quoteCurrencyLiquidityWalletAddress ? true : false
+                    "
+                    [nzCopyText]="info.quoteCurrencyLiquidityWalletAddress"
+                  >
+                    {{ info.quoteCurrencyLiquidityWalletAddress }}
+                  </p>
+                </nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card>
+            <nz-card
+              nzBordered="false"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+              [nzTitle]="'Transaction Information'"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item
+                  [nzTitle]="sourceTpl"
+                ></nz-descriptions-item>
+                <nz-descriptions-item [nzTitle]="'Transaction Hash'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.txHash ? true : false"
+                    [nzCopyText]="info.txHash"
+                  >
+                    {{ info.txHash }}
+                  </p></nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Transaction Time'">
+                  {{ info.txTime | map: 'timeStamp' }}
+                </nz-descriptions-item>
+                <nz-descriptions-item
+                  [nzTitle]="targetTpl"
+                ></nz-descriptions-item>
+                <nz-descriptions-item [nzTitle]="'Transaction Hash'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.targetTxHash ? true : false"
+                    [nzCopyText]="info.targetTxHash"
+                  >
+                    {{ info.targetTxHash }}
+                  </p></nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Transaction Time'">
+                  {{
+                    info.targetTxTime | map: 'timeStamp'
+                  }} </nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Status'">
+                  <nz-tag
+                    [nzColor]="
+                      info.state | map: 'enterpriseTransactionStatusColor'
+                    "
+                    >{{
+                      info.state | map: 'enterpriseTransactionStatus'
+                    }}</nz-tag
+                  >
+                </nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card></ng-container
+          ><ng-container *ngIf="info.type === 3">
+            <nz-card
+              nzBordered="false"
+              [nzTitle]="'Transfer Details'"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item [nzTitle]="'Transfer'"
+                  >{{ info.sendingAmount | map: 'toThousandthMark'
+                  }}{{ ' ' + info.sendingCurrency }}</nz-descriptions-item
+                >
+              </nz-descriptions>
+            </nz-card>
+            <nz-card
+              nzBordered="false"
+              [nzTitle]="'Transfer Information'"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item [nzTitle]="'Transaction No.'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.applicationId ? true : false"
+                    [nzCopyText]="info.applicationId"
+                  >
+                    {{ info.applicationId }}
+                  </p>
+                </nz-descriptions-item>
+                <nz-descriptions-item [nzTitle]="'Sender Wallet Address'">
+                  <div>
+                    <p
+                      nz-typography
+                      [nzCopyable]="info.fromAccountAddress ? true : false"
+                      [nzCopyText]="info.fromAccountAddress"
+                    >
+                      {{ info.fromAccountAddress }}
+                    </p>
+                    <p *ngIf="info.type === 1">
+                      {{ 'Enterprise Code: ' + info.enterpriseCode }}
+                    </p>
+                  </div> </nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Receiver Wallet Address'"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.toAccountAddress ? true : false"
+                    [nzCopyText]="info.toAccountAddress"
+                  >
+                    {{ info.toAccountAddress }}
+                  </p> </nz-descriptions-item
+                ><nz-descriptions-item [nzTitle]="'Created on'">
+                  {{ info.appliedOn | map: 'timeStamp' }}
+                </nz-descriptions-item>
+              </nz-descriptions>
+            </nz-card>
+            <nz-card
+              nzTitle="Transaction Information"
+              nzBordered="false"
+              [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+              class="m-t-25"
+            >
+              <nz-descriptions
+                nzTitle=""
+                [nzColumn]="1"
+                [nzColon]="false"
+                [nzBordered]="false"
+                class="card-descriptions-order"
+              >
+                <nz-descriptions-item nzTitle="Transaction Hash">{{
+                  info.txHash | map: 'nullValue'
+                }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Transaction Time">{{
+                  info.txTime | map: 'timeStamp'
+                }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Status"
+                  ><nz-tag
+                    [nzColor]="
+                      info.state | map: 'enterpriseTransactionStatusColor'
+                    "
+                    >{{
+                      info.state | map: 'enterpriseTransactionStatus'
+                    }}</nz-tag
+                  ></nz-descriptions-item
+                >
+              </nz-descriptions>
+            </nz-card></ng-container
+          ></ng-container
         >
-          {{ info.transactionHash }}
-        </p></nz-descriptions-item
-      >
-      <nz-descriptions-item nzTitle="Transaction Time">{{
-        info.transactionTime | map: 'timeStamp'
-      }}</nz-descriptions-item></nz-descriptions
+      </nz-card>
+    </div>
+    <div
+      nz-col
+      [nzXXl]="10"
+      [nzXl]="10"
+      [nzLg]="24"
+      [nzMd]="10"
+      [nzSm]="24"
+      [nzXs]="24"
+      style="background-color: #fff"
     >
-  </nz-card>
+      <nz-card nzTitle="" class="m-r-8 m-t-5" style="border: none">
+        <ng-container *ngIf="!info.transferId">
+          <app-timeline [info]="info" [status]="info.status" [type]="info.transactionType === 3 ? 'top-up' : 'withdraw'" />
+        </ng-container>
+        <ng-container *ngIf="info.transferId">
+          <app-timeline [info]="info" [status]="info.state" [type]="''" />
+        </ng-container>
+      </nz-card>
+    </div>
+  </div>
 </div>
-<ng-template #titleTpl>
-  <span>{{ 'Transfer Transaction Hash' }}</span>
-  <i
-    class="m-l-5"
-    style="color: #3c5686; font-size: 20px"
-    nz-icon
-    nzType="question-circle"
-    nzTooltipPlacement="right"
-    nzTheme="fill"
-    nz-tooltip
-    [nzTooltipTitle]="'Transaction hash for successful Transfer.'"
-    nzTooltipColor="#3c5686"
-    nzTooltipTrigger="click"
-    nzTooltipOverlayClassName="buils"
-  ></i>
-</ng-template>
+<ng-template #sourceTpl>
+  <p [style]="{ color: this.color }">
+    {{ 'Source Token Transaction Information' }}
+  </p></ng-template
+>
+<ng-template #targetTpl>
+  <p [style]="{ color: this.color }">
+    {{ 'Target Token Transaction Information' }}
+  </p></ng-template
+>

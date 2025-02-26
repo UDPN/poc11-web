@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 10:36:23
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-10 13:16:58
+ * @LastEditTime: 2025-02-26 15:46:37
  * @Description:
  */
 /*
@@ -32,6 +32,7 @@ import { PageHeaderType } from '@app/shared/components/page-header/page-header.c
 export class InfoComponent implements OnInit, AfterViewInit {
   info: any = {};
   color: string = '';
+  routertType: string = '';
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -48,14 +49,14 @@ export class InfoComponent implements OnInit, AfterViewInit {
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Details`,
+      title: this.routertType ? 'Approval' : 'Details',
       breadcrumbs: [
         { name: 'Enterprise Management' },
         {
           name: 'Transaction Approval',
           url: '/poc/poc-enterprise/transaction-approval'
         },
-        { name: 'Details' }
+        { name: this.routertType ? 'Approval' : 'Details' }
       ],
       extra: '',
       desc: '',
@@ -66,6 +67,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
     const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
     this.color = JSON.parse(themeOptionsKey).color;
     this.routeInfo.queryParams.subscribe((params) => {
+      this.routertType = params['type'] || '';
       if (params['accountCbdcId']) {
         this.getInfo(params['accountCbdcId'], 1);
       } else {

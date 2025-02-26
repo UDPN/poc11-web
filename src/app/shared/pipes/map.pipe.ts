@@ -166,7 +166,7 @@ export const MapSet = {
     2: 'Withdrawal'
   },
   transactionsRecordType: {
-    1: 'Swap',
+    1: 'Cross-Token Transfer',
     2: 'Exchange',
     3: 'Transfer'
   },
@@ -317,8 +317,6 @@ export const MapSet = {
     7: 'Weekly',
     30: 'Monthly'
   },
-  // <!-- 1: Top-up 2: Withdrawal 3: Transfer4Swap 5:Exchange -->
-
   statementsTxnType: {
     1: 'Top-up',
     2: 'Withdrawal',

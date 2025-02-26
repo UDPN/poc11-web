@@ -2,14 +2,14 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 10:48:53
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-15 14:16:46
+ * @LastEditTime: 2025-02-26 15:41:42
  * @Description:
  */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ActionCode } from '@app/config/actionCode';
-import { InfoComponent } from './info/info.component';
 import { TransactionsComponent } from './transactions.component';
+import { InfoComponent } from './info/info.component';
 
 const routes: Routes = [
   {

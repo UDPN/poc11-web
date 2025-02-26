@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 12:19:54
+ * @LastEditTime: 2025-02-26 16:21:27
  * @Description:
  */
 import {
@@ -89,7 +89,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
   @ViewChild('enterpriseCodeTpl', { static: true })
   enterpriseCodeTpl!: TemplateRef<NzSafeAny>;
 
-  tabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
+  tabs = ['Top-up / Withdraw', 'Transfer / FX Purchasing'];
   dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   currencyList: any[] = [];
