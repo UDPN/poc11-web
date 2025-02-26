@@ -28,17 +28,17 @@ export class WalletsComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 1:
-        return 'Pending Review';
+        return 'Pending Approval';
       case 2:
-        return 'Review Rejected';
+        return 'Rejected';
       case 3:
-        return 'Review Approved';
+        return 'Processing';
       case 4:
-        return 'Wallet Opening';
+        return 'Processing';
       case 5:
         return 'Active';
       case 6:
-        return 'Submit Failed';
+        return 'Failed';
       case 7:
         return 'Under Review';
       case 8:
