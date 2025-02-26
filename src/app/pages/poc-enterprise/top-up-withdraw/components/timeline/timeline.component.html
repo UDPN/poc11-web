@@ -11,7 +11,10 @@
         [nzDescription]="createTpl"
       ></nz-step>
       <ng-container
-        *ngIf="info.status === 5 || (info.status !== 5 && info.approvedOn)"
+        *ngIf="
+          info.status === 5 ||
+          (info.status !== 5 && info.approvedOn && info.approvedBy)
+        "
       >
         <nz-step
           [nzTitle]="
