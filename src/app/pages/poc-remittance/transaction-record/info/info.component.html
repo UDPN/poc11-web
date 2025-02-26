@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:59:18
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 17:19:09
+ * @LastEditTime: 2025-02-26 17:23:35
  * @Description: 
 -->
 <app-page-header
@@ -26,11 +26,6 @@
     >
       <nz-card nzTitle="" class="m-r-8 none-bottom">
         <nz-card
-          [nzTitle]="
-            info.type === 2
-              ? 'FX Purchasing Details'
-              : (info.type | map: 'transactionsRecordType') + ' Details'
-          "
           nzBordered="false"
           [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
         >

@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-12 11:17:20
+ * @LastEditTime: 2025-02-26 17:37:15
  * @Description:
  */
 import {
@@ -49,6 +49,7 @@ export class InfoComponent implements OnInit {
     fromCurrency: '',
     toCurrency: ''
   };
+  type: any = '';
   detailsTabs = ['Basic Information', 'Transaction', 'Operation Record'];
   constructor(
     public routeInfo: ActivatedRoute,
@@ -60,7 +61,12 @@ export class InfoComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
-      title: `Details`,
+      title:
+        this.type === '2'
+          ? 'FX Purchasing Details'
+          : this.type === '1'
+          ? 'Cross-Token Transfer Details'
+          : 'Transfer Details',
       breadcrumbs: [
         {
           name: 'Remittance Management'
@@ -69,7 +75,9 @@ export class InfoComponent implements OnInit {
           name: 'Transaction Records',
           url: '/poc/poc-remittance/transaction-record'
         },
-        { name: 'Details' }
+        {
+          name: 'Details'
+        }
       ],
       extra: '',
       desc: '',
@@ -81,6 +89,7 @@ export class InfoComponent implements OnInit {
     const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
     this.color = JSON.parse(themeOptionsKey).color;
     this.routeInfo.queryParams.subscribe((params) => {
+      this.type = params['type'];
       this.transactionRecordService
         .getInfo({ transferId: params['transferId'] })
         .subscribe((res) => {

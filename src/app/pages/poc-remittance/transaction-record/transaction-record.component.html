@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 15:07:31
+ * @LastEditTime: 2025-02-26 17:41:15
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -233,17 +233,17 @@
     </ng-template>
     <ng-template
       #amountTpl
-      let-sendingAmount="sendingAmount"
-      let-sendingCurrency="sendingCurrency"
-      let-receivingAmount="receivingAmount"
-      let-receivingCurrency="receivingCurrency"
+      let-fromCbdcCount="fromCbdcCount"
+      let-fromCurrency="fromCurrency"
+      let-toCbdcCount="toCbdcCount"
+      let-toCurrency="toCurrency"
     >
       <div class="display-flex">
         <div>
           <p>
-            {{ sendingAmount | map: 'toThousandthMark' }}
+            {{ fromCbdcCount | map: 'toThousandthMark' }}
           </p>
-          <p>{{ sendingCurrency }}</p>
+          <p>{{ fromCurrency }}</p>
         </div>
         <div>
           <span
@@ -255,31 +255,31 @@
         </div>
         <div>
           <p>
-            {{ receivingAmount | map: 'toThousandthMark' }}
+            {{ toCbdcCount | map: 'toThousandthMark' }}
           </p>
-          <p>{{ receivingCurrency }}</p>
+          <p>{{ toCurrency }}</p>
         </div>
       </div>
     </ng-template>
     <ng-template
       #fxRateTpl
-      let-sendingCurrency="sendingCurrency"
-      let-receivingCurrency="receivingCurrency"
+      let-fromCurrency="fromCurrency"
+      let-toCurrency="toCurrency"
       let-fxRate="fxRate"
     >
-      {{ sendingCurrency + '/' + receivingCurrency + ' = ' + fxRate }}
+      <!-- {{ fromCurrency + '/' + toCurrency + ' = ' + fxRate }} -->
     </ng-template>
     <ng-template #statusTpl let-state="state">
       <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{
         state | map: 'walletTransactionsRecordStatus'
       }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-transferId="transferId">
+    <ng-template #operationTpl let-transferId="transferId" let-type="type">
       <ng-container *appAuth="'R010203'">
         <span
           class="operate-text"
           routerLink="/poc/poc-remittance/transaction-record/info"
-          [queryParams]="{transferId}"
+          [queryParams]="{transferId, type}"
         >
           Details
         </span>
