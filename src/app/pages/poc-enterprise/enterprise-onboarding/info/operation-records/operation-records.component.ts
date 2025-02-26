@@ -76,13 +76,13 @@ export class OperationRecordsComponent implements OnInit {
   getOperationTypeText(type: number): string {
     switch (type) {
       case 1:
-        return 'Opened';
+        return 'Onboard';
       case 2:
-        return 'Edited';
+        return 'Edit';
       case 3:
-        return 'Started';
+        return 'Activate';
       case 4:
-        return 'Disabled';
+        return 'Deactivate';
       default:
         return 'Unknown';
     }
@@ -122,19 +122,19 @@ export class OperationRecordsComponent implements OnInit {
       case 3:
         return 'Withdrawn';
       case 5:
-        return 'Pending Review';
+        return 'Pending Approval';
       case 10:
         return 'Under Review';
       case 15:
-        return 'Review Rejected';
+        return 'Rejected';
       case 20:
-        return 'Review Approved/Pending Chain';
+        return 'Processing';
       case 30:
-        return 'Chain Processing';
+        return 'Processing';
       case 35:
-        return 'Chain Success';
+        return 'Success';
       case 40:
-        return 'Chain Failed';
+        return 'Failed';
       case 45:
         return 'Deleted';
       default:
