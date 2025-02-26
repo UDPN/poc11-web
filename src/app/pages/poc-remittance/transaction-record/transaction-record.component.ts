@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-11 17:25:31
+ * @LastEditTime: 2025-02-26 14:54:56
  * @Description:
  */
 import {
@@ -67,6 +67,8 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('fxRateTpl', { static: true })
+  fxRateTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creationTime: [],
     state: '',
@@ -194,7 +196,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'From',
@@ -213,19 +215,19 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           field: 'type',
           pipe: 'transactionsRecordType',
           notNeedEllipsis: true,
-          width: 100
-        },
-        {
-          title: 'Token',
-          field: 'currency',
-          notNeedEllipsis: true,
-          width: 100
+          width: 150
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
           notNeedEllipsis: true,
-          width: 100
+          width: 150
+        },
+        {
+          title: 'FX Rate',
+          tdTemplate: this.fxRateTpl,
+          notNeedEllipsis: true,
+          width: 150
         },
         {
           title: 'Created on',

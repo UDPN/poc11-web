@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 12:20:53
+ * @LastEditTime: 2025-02-26 16:21:51
  * @Description:
  */
 import {
@@ -78,7 +78,7 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
   operationTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transferOperationTpl', { static: true })
   transferOperationTpl!: TemplateRef<NzSafeAny>;
-  tabs = ['Top-up / Withdrawal', 'Transfer / FX Purchasing'];
+  tabs = ['Top-up / Withdraw', 'Transfer / FX Purchasing'];
   dataList: NzSafeAny[] = [];
   tableConfig!: AntTableConfig;
   currencyList: any[] = [];

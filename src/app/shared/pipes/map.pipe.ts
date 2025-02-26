@@ -166,7 +166,7 @@ export const MapSet = {
     2: 'Withdrawal'
   },
   transactionsRecordType: {
-    1: 'Swap',
+    1: 'Cross-Token Transfer',
     2: 'Exchange',
     3: 'Transfer'
   },

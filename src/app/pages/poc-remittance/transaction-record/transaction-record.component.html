@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 13:52:00
+ * @LastEditTime: 2025-02-26 15:07:31
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -96,37 +96,10 @@
                 [(ngModel)]="searchParam.type"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
-                <nz-option nzValue="2" nzLabel="Exchange"> </nz-option>
-                <nz-option nzValue="1" nzLabel="Swap"> </nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div
-          nz-col
-          [nzXXl]="8"
-          [nzXl]="8"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-        >
-          <nz-form-item>
-            <nz-form-label>Token</nz-form-label>
-            <nz-form-control>
-              <nz-select
-                nzPlaceHolder=""
-                name="centralBankId"
-                [(ngModel)]="searchParam.centralBankId"
-              >
-                <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option
-                  *ngFor="let item of currencyList"
-                  [nzValue]="item.centralBankId"
-                  [nzLabel]="item.digitalSymbol"
-                >
+                <nz-option nzValue="1" nzLabel="Cross-Token Transfer">
                 </nz-option>
+                <nz-option nzValue="2" nzLabel="Exchange"> </nz-option>
+                <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -169,8 +142,8 @@
                 [(ngModel)]="searchParam.state"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="5" nzLabel="Pending Approval"></nz-option>
-                <nz-option nzValue="15" nzLabel="Rejected"></nz-option>
+                <!-- <nz-option nzValue="5" nzLabel="Pending Approval"></nz-option>
+                <nz-option nzValue="15" nzLabel="Rejected"></nz-option> -->
                 <nz-option nzValue="35" nzLabel="Success"></nz-option>
                 <nz-option nzValue="40" nzLabel="Failed"></nz-option>
                 <nz-option nzValue="20" nzLabel="Processing"></nz-option>
@@ -178,16 +151,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div
-          nz-col
-          [nzXXl]="16"
-          [nzXl]="16"
-          [nzLg]="12"
-          [nzMd]="12"
-          [nzSm]="24"
-          [nzXs]="24"
-          class="m-b-8 text-right p-0"
-        >
+        <div nz-col [nzSpan]="24" class="m-b-8 text-right p-0">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>
@@ -267,11 +231,43 @@
         {{ toAccountAddress | map: 'nullValue' }}
       </ng-container>
     </ng-template>
-    <ng-template #amountTpl let-cbdcCount="cbdcCount">
-      <span [style]="{ color: cbdcCount > 0 ? '#39A16A' : '#E53E3E' }"
-        >{{ cbdcCount > 0 ? '+' : ''
-        }}{{ cbdcCount | map: 'toThousandthMark' }}</span
-      >
+    <ng-template
+      #amountTpl
+      let-sendingAmount="sendingAmount"
+      let-sendingCurrency="sendingCurrency"
+      let-receivingAmount="receivingAmount"
+      let-receivingCurrency="receivingCurrency"
+    >
+      <div class="display-flex">
+        <div>
+          <p>
+            {{ sendingAmount | map: 'toThousandthMark' }}
+          </p>
+          <p>{{ sendingCurrency }}</p>
+        </div>
+        <div>
+          <span
+            class="arrow-right m-l-10 m-r-10"
+            nz-icon
+            nzType="arrow-right"
+            nzTheme="outline"
+          ></span>
+        </div>
+        <div>
+          <p>
+            {{ receivingAmount | map: 'toThousandthMark' }}
+          </p>
+          <p>{{ receivingCurrency }}</p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template
+      #fxRateTpl
+      let-sendingCurrency="sendingCurrency"
+      let-receivingCurrency="receivingCurrency"
+      let-fxRate="fxRate"
+    >
+      {{ sendingCurrency + '/' + receivingCurrency + ' = ' + fxRate }}
     </ng-template>
     <ng-template #statusTpl let-state="state">
       <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{

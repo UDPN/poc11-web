@@ -2,12 +2,11 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:03:37
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 16:00:17
+ * @LastEditTime: 2025-02-10 13:19:29
  * @Description:
  */
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { TopUpWithdrawService } from '@app/core/services/http/poc-enterprise/top-up-withdraw/top-up-withdraw.service';
 import { fnCheckForm } from '@app/utils/tools';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -29,13 +28,10 @@ export class TimelineComponent implements OnInit {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private message: NzMessageService,
-    private topUpWithdrawService: TopUpWithdrawService,
-    private router: Router
+    private topUpWithdrawService: TopUpWithdrawService
   ) {}
 
   ngOnInit(): void {
-    console.log(this.router.url.substring(this.router.url.indexOf('?')));
-
     this.validateForm = this.fb.group({
       reason: [null, [Validators.required]]
     });
@@ -68,9 +64,6 @@ export class TimelineComponent implements OnInit {
         approvalStatus: value === 'reject' ? 2 : 3
       };
       const messageValue = value === 'reject' ? 'Reject' : 'Approve';
-      const routerAfter = this.router.url.substring(
-        this.router.url.indexOf('?')
-      );
       this.topUpWithdrawService
         .getTopUpWithdrawApprove(params)
         .pipe(finalize(() => this.isLoading === false))
@@ -80,13 +73,7 @@ export class TimelineComponent implements OnInit {
               this.message.success(`${messageValue} successfully!`, {
                 nzDuration: 1000
               });
-              if (value === 'reject') {
-                window.location.reload();
-              } else {
-                this.router.navigateByUrl(
-                  `/poc/poc-enterprise/transactions/info${routerAfter}`
-                );
-              }
+              window.location.reload();
             }
             this.isLoading = false;
             this.cdr.markForCheck();
@@ -105,9 +92,6 @@ export class TimelineComponent implements OnInit {
         approvalStatus: value === 'reject' ? 2 : 3
       };
       const messageValue = value === 'reject' ? 'Reject' : 'Approve';
-      const routerAfter = this.router.url.substring(
-        this.router.url.indexOf('?')
-      );
       this.topUpWithdrawService
         .getTransferApprove(params)
         .pipe(finalize(() => this.isLoading === false))
@@ -117,13 +101,7 @@ export class TimelineComponent implements OnInit {
               this.message.success(`${messageValue} successfully!`, {
                 nzDuration: 1000
               });
-              if (value === 'reject') {
-                window.location.reload();
-              } else {
-                this.router.navigateByUrl(
-                  `/poc/poc-enterprise/transactions/info${routerAfter}`
-                );
-              }
+              window.location.reload();
             }
             this.isLoading = false;
             this.cdr.markForCheck();

@@ -13,6 +13,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ThemeOptionsKey } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransactionRecordService } from '@app/core/services/http/poc-remittance/transaction/transaction.service';
@@ -34,6 +36,7 @@ export class InfoComponent implements OnInit {
   fromTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('toTpl', { static: true })
   toTpl!: TemplateRef<NzSafeAny>;
+  color: string = '';
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -51,7 +54,8 @@ export class InfoComponent implements OnInit {
     public routeInfo: ActivatedRoute,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef,
-    private transactionRecordService: TransactionRecordService
+    private transactionRecordService: TransactionRecordService,
+    private windowService: WindowService
   ) {}
 
   ngAfterViewInit(): void {
@@ -74,6 +78,8 @@ export class InfoComponent implements OnInit {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     this.routeInfo.queryParams.subscribe((params) => {
       this.transactionRecordService
         .getInfo({ transferId: params['transferId'] })
