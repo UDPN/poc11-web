@@ -12,8 +12,7 @@
       ></nz-step>
       <ng-container
         *ngIf="
-          info.status === 5 ||
-          (info.status !== 5 && info.approvedOn && info.approvedBy)
+          status === 5 || (status !== 5 && info.approvedOn && info.approvedBy)
         "
       >
         <nz-step
