@@ -226,7 +226,7 @@ export class BasicInfoComponent implements OnInit {
           downloadLink.href = url;
           
           // 设置文件名
-          downloadLink.download = `openapi_key_${this.enterpriseDetail.enterpriseCode}.txt`;
+          downloadLink.download = `openapi_key_${this.enterpriseDetail.enterpriseCode}.zip`;
           
           // 添加到文档并触发点击
           document.body.appendChild(downloadLink);
