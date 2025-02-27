@@ -17,9 +17,9 @@ interface SearchParams {
 export class OperationComponent implements OnInit {
   @Input() id: string = '';
   @ViewChild('hashTpl', { static: false }) hashTpl!: TemplateRef<any>;
-  @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
   @ViewChild('remarksTpl', { static: false }) remarksTpl!: TemplateRef<any>;
-  @ViewChild('operationTypeTpl', { static: false }) operationTypeTpl!: TemplateRef<any>;
+  @ViewChild('operationTypeTpl', { static: true }) operationTypeTpl!: TemplateRef<any>;
 
   tableConfig!: AntTableConfig;
   dataList: any[] = [];
@@ -31,9 +31,9 @@ export class OperationComponent implements OnInit {
 
   operationTypes = [
     { label: 'All', value: 0 },
-    { label: 'Register', value: 1 },
-    { label: 'Activate', value: 2 },
-    { label: 'Deactivate', value: 3 }
+    { label: 'Open', value: 1 },
+    { label: 'Enable', value: 2 },
+    { label: 'Disable', value: 3 }
   ];
 
   constructor(
@@ -156,12 +156,14 @@ export class OperationComponent implements OnInit {
 
   getStatusColor(status: number): string {
     switch (status) {
+      case 0:
+        return 'processing';
       case 1:
         return 'success';
       case 2:
-        return 'processing';
-      case 3:
         return 'error';
+      case 3:
+        return 'default';
       default:
         return 'default';
     }
@@ -169,12 +171,14 @@ export class OperationComponent implements OnInit {
 
   getStatusText(status: number): string {
     switch (status) {
+      case 0:
+        return 'In Progress';
       case 1:
         return 'Success';
       case 2:
-        return 'Processing';
-      case 3:
         return 'Failed';
+      case 3:
+        return 'rejected';
       default:
         return 'Unknown';
     }
@@ -183,11 +187,11 @@ export class OperationComponent implements OnInit {
   getOperationTypeText(type: number): string {
     switch (type) {
       case 1:
-        return 'Register';
+        return 'Open';
       case 2:
-        return 'Activate';
+        return 'Enable';
       case 3:
-        return 'Deactivate';
+        return 'Disable';
       default:
         return 'Unknown';
     }

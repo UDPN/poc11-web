@@ -24,6 +24,10 @@
     [tableConfig]="tableConfig"
     [tableData]="dataList"
   ></app-ant-table>
+  <ng-template #operationTypeTpl let-operationType="operationType">
+    <span>{{ getOperationTypeText(operationType) }}</span>
+  </ng-template>
+
 
   <ng-template #hashTpl let-text="field" let-item="item">
     <ng-container *ngIf="item[text]">
@@ -39,6 +43,6 @@
   </ng-template>
 
   <ng-template #statusTpl let-status="status">
-    <nz-tag [nzColor]="getStatusColor(status)">{{ status }}</nz-tag>
+    <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
   </ng-template>
 </app-card-table-wrap>

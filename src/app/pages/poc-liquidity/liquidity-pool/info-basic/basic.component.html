@@ -51,7 +51,7 @@
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Transaction Time">
-        {{ poolInfo.txTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+        {{ poolInfo.txTime ? (poolInfo.txTime | date:'MMM d, y, HH:mm:ss') + ' UTC+08:00' : '--' }}
       </nz-descriptions-item>
     </nz-descriptions>
   </nz-card>
