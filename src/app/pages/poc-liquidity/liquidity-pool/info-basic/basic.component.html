@@ -46,8 +46,8 @@
   <nz-card [nzTitle]="'Liquidity Pool Wallet Registration Transaction Information'" class="m-b-24">
     <nz-descriptions [nzColumn]="1" [nzBordered]="true">
       <nz-descriptions-item nzTitle="Transaction Hash">
-        <p nz-typography [nzCopyable]="true" [nzCopyText]="poolInfo.txHash">
-          {{ poolInfo.txHash }}
+        <p nz-typography [nzCopyable]="poolInfo.txHash ? true : false" [nzCopyText]="poolInfo.txHash">
+          {{ poolInfo.txHash || '--' }}
         </p>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Transaction Time">
@@ -60,9 +60,14 @@
   <nz-card [nzTitle]="'Token Pair Information'">
     <nz-descriptions [nzColumn]="1" [nzBordered]="true">
       <nz-descriptions-item nzTitle="Token Pair">
-        <nz-tag *ngFor="let pair of poolInfo.tokenPairs" class="m-r-8">
-          {{ pair }}
-        </nz-tag>
+        <ng-container *ngIf="poolInfo.tokenPairs.length > 0; else noTokenPairs">
+          <nz-tag *ngFor="let pair of poolInfo.tokenPairs" class="m-r-8">
+            {{ pair || '--' }}
+          </nz-tag>
+        </ng-container>
+        <ng-template #noTokenPairs>
+            --
+        </ng-template>
       </nz-descriptions-item>
     </nz-descriptions>
   </nz-card>

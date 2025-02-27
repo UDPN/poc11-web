@@ -286,7 +286,7 @@ export class LiquidityPoolService {
         txEndTime: params.transactionTime?.[1] ? timeToTimestampMillisecond(params.transactionTime[1]) : '',
         txHash: params.transactionHash || '',
         txStartTime: params.transactionTime?.[0] ? timeToTimestampMillisecond(params.transactionTime[0]) : '',
-        txStatus: params.status ? Number(params.status) : 0
+        txStatus: params.status ? Number(params.status) : ''
       },
       page: {
         pageNum: params.pageIndex || 1,
