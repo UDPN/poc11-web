@@ -165,13 +165,8 @@
                       [(ngModel)]="searchParam.status"
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
-                      <nz-option
-                        nzValue="5"
-                        nzLabel="Pending Approval"
-                      ></nz-option>
                       <nz-option nzValue="20" nzLabel="Processing"></nz-option>
                       <nz-option nzValue="40" nzLabel="Failed"></nz-option>
-                      <nz-option nzValue="15" nzLabel="Rejected"></nz-option>
                       <nz-option nzValue="35" nzLabel="Success"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -297,9 +292,10 @@
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
                       <nz-option
-                        nzValue="2"
-                        nzLabel="FX Purchasing"
+                        nzValue="1"
+                        nzLabel="Cross-Token Transfer"
                       ></nz-option>
+                      <nz-option nzValue="2" nzLabel="Exchange"></nz-option>
                       <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -343,13 +339,8 @@
                       [(ngModel)]="transferSearchParam.state"
                     >
                       <nz-option nzValue="" nzLabel="All"></nz-option>
-                      <nz-option
-                        nzValue="5"
-                        nzLabel="Pending Approval"
-                      ></nz-option>
                       <nz-option nzValue="20" nzLabel="Processing"></nz-option>
                       <nz-option nzValue="40" nzLabel="Failed"></nz-option>
-                      <nz-option nzValue="15" nzLabel="Rejected"></nz-option>
                       <nz-option nzValue="35" nzLabel="Success"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -387,7 +378,7 @@
           [tableTitle]="
             i === 0
               ? 'Top-up / Withdraw Transactions'
-              : 'Transfer / FX purchasing Transactions'
+              : 'Transfer / FX Purchasing Transactions'
           "
         >
           <app-ant-table

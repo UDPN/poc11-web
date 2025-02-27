@@ -72,6 +72,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   purchCurrecyModelShow = '';
   purchCurrecyModelCount = '';
   purchCurrecyModelShowIcon = '';
+  rateType: any = 0;
   reveingCurrecy!: string;
   reveingCurrecyModelShow = '';
   reveingCurrecyModelCount = '';
@@ -550,6 +551,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           })
           .subscribe((res) => {
             let resultData: any[] = [];
+            this.rateType = res[0].rateType;
             this.transferTitle =
               this.reveingCurrecy.replace('-UDPN', '') +
               '/' +

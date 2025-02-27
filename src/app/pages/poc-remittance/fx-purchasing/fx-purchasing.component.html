@@ -365,9 +365,9 @@
                     <th></th>
                     <th>
                       FX Rate
-                      <!-- <nz-tag style="opacity: 0.7" [nzColor]="color">{{
-                        ''
-                      }}</nz-tag> -->
+                      <nz-tag style="opacity: 0.7" [nzColor]="color">{{
+                        rateType | map: 'fxType'
+                      }}</nz-tag>
                     </th>
                     <th>Liquidity Provider Name</th>
                     <!-- <th>Currency Pair</th> -->
@@ -527,10 +527,10 @@
                 {{ receivingWalletAddressShow }}
               </p></nz-descriptions-item
             ><nz-descriptions-item nzTitle="FX Rate"
-              >{{ checkedItemComment[0].currencyShow
-              }}<!-- <nz-tag style="opacity: 0.7" [nzColor]="color">{{
-                        ''
-                      }}</nz-tag> --></nz-descriptions-item
+              >{{ checkedItemComment[0].currencyShow }}
+              <nz-tag style="opacity: 0.7" [nzColor]="color" class="m-l-15">{{
+                this.rateType | map: 'fxType'
+              }}</nz-tag> </nz-descriptions-item
             ><nz-descriptions-item nzTitle="Liquidity Provider Name">{{
               checkedItemComment[0].sp
             }}</nz-descriptions-item>
