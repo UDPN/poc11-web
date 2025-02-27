@@ -219,23 +219,23 @@ export class BasicInfoComponent implements OnInit {
 
     this.enterpriseService.downloadSecretKey(this.enterpriseDetail.enterpriseId)
       .subscribe({
-        next: (response: Blob) => {
-          // 创建一个链接元素
+        next: (response: any) => {
+          const contentDisposition = response.headers.get('Content-Disposition');
+          const filename = contentDisposition
+            ? contentDisposition.split('filename=')[1].split(';')[0].replace(/"/g, '')
+            : 'default_filename.zip'; // 默认文件名
+
+          const url = window.URL.createObjectURL(response.body); // 使用 response.body
           const downloadLink = document.createElement('a');
-          const url = window.URL.createObjectURL(response);
           downloadLink.href = url;
-          
-          // 设置文件名
-          downloadLink.download = `openapi_key_${this.enterpriseDetail.enterpriseCode}.zip`;
-          
-          // 添加到文档并触发点击
+          downloadLink.download = filename; // 使用提取的文件名
+
           document.body.appendChild(downloadLink);
           downloadLink.click();
-          
-          // 清理
+
           document.body.removeChild(downloadLink);
           window.URL.revokeObjectURL(url);
-          
+
           this.message.success('Downloaded successfully');
         },
         error: (err) => {
