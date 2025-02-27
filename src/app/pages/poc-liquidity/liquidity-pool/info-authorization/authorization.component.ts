@@ -36,9 +36,10 @@ export class AuthorizationComponent implements OnInit {
 
   statusOptions = [
     { label: 'All', value: 0 },
-    { label: 'Success', value: 1 },
-    { label: 'Processing', value: 2 },
-    { label: 'Active', value: 3 }
+    { label: 'Pending Authorization', value: 1 },
+    { label: 'Under Authorization', value: 2 },
+    { label: 'Successful Authorization', value: 3 },
+    { label: 'Failed Authorization', value: 4 }
   ];
 
   constructor(
@@ -69,13 +70,13 @@ export class AuthorizationComponent implements OnInit {
           title: 'Operation Time',
           field: 'operationTime',
           width: 180,
-          pipe: 'date:MMM d, y, HH:mm:ss'
+          pipe: 'timeStamp',
         },
         {
           title: 'Transaction Time',
           field: 'txTime',
           width: 180,
-          pipe: 'date:MMM d, y, HH:mm:ss'
+          pipe: 'timeStamp',
         },
         {
           title: 'Transaction Hash',
@@ -152,12 +153,14 @@ export class AuthorizationComponent implements OnInit {
 
   getStatusColor(status: number): string {
     switch (status) {
-      case 1:
-        return 'success';
-      case 2:
-        return 'processing';
       case 3:
+        return 'success';
+      case 1:
+        return 'processing';
+      case 2:
         return 'blue';
+      case 4:
+        return 'red';
       default:
         return 'default';
     }
@@ -166,11 +169,13 @@ export class AuthorizationComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 1:
-        return 'Success';
+        return 'Pending Authorization';
       case 2:
-        return 'Processing';
+        return 'Under Authorization';
       case 3:
-        return 'Active';
+        return 'Successful Authorization';
+      case 4:
+        return 'Failed Authorization';
       default:
         return 'Unknown';
     }

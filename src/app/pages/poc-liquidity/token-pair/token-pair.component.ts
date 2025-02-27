@@ -302,7 +302,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
           title: 'Updated Time',
           field: 'updatedTime',
           width: 180,
-          pipe: 'date:yyyy-MM-dd HH:mm:ss',
+          pipe: 'timeStamp',
           notNeedEllipsis: true
         },
         {
