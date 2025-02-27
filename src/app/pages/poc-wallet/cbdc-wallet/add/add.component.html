@@ -43,7 +43,7 @@
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10">Custodian Bank </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Token Currency</nz-form-label>
           <nz-form-control [nzErrorTip]="centralBankError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -51,7 +51,9 @@
                   <nz-option
                     *ngFor="let item of centralBankList"
                     [nzValue]="item.centralBankId"
-                    [nzLabel]="item.centralBankName"
+                    [nzLabel]="
+                      item.digitalSymbol + '( ' + item.centralBankName + ' )'
+                    "
                   >
                   </nz-option>
                 </nz-select>
@@ -63,13 +65,13 @@
             </div>
             <ng-template #centralBankError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please select your Custodian Bank
+                >Please select your Token Currency
               </ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
           <nz-form-label nzRequired nzSpan="10"> Token Currency </nz-form-label>
           <nz-form-control [nzErrorTip]="currencyError">
@@ -90,7 +92,7 @@
             </ng-template>
           </nz-form-control>
         </nz-form-item>
-      </div>
+      </div> -->
       <ng-container
         *ngIf="this.validateForm.get('creationMethod')?.value === 1"
       >

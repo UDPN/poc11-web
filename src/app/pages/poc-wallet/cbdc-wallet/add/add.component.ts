@@ -144,7 +144,7 @@ export class AddComponent implements OnInit {
     this.validateForm = this.fb.group({
       creationMethod: [0, [Validators.required]],
       centralBankId: ['', [Validators.required]],
-      currency: ['', [Validators.required]],
+      // currency: ['', [Validators.required]],
       bnCode: [null, [Validators.required]]
     });
   }
