@@ -57,13 +57,11 @@ export class ActivateModalComponent {
         this.isLoading = false;
         if (res.code === 0) {
           this.modal.close(this.comments);
-        } else {
-          this.message.error(res.message || 'Failed to modify liquidity pool status');
-        }
+        } 
       },
       error: (err) => {
         this.isLoading = false;
-        this.message.error(err.message || 'Failed to modify liquidity pool status');
+        console.log(err.message || 'Failed to modify liquidity pool status');
       }
     });
   }

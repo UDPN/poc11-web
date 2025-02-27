@@ -305,14 +305,16 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     token: string,
     liquidityPoolId: number,
     balance: string,
-    minBalanceReq: string
+    minBalanceReq: string,
+    authorizedAmount: string
   ): void {
     console.log(
       liquidityPoolAddress,
       token,
       liquidityPoolId,
       balance,
-      minBalanceReq
+      minBalanceReq,
+      authorizedAmount
     );
     const modal = this.modal.create<ReauthorizeModalComponent>({
       nzTitle: undefined,
@@ -325,7 +327,8 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
         token,
         liquidityPoolId,
         balance,
-        minBalanceReq
+        minBalanceReq,
+        authorizedAmount
       }
     });
 
