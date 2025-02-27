@@ -29,11 +29,14 @@ export class OperationComponent implements OnInit {
     operationType: 0
   };
 
+
+
+
   operationTypes = [
     { label: 'All', value: 0 },
-    { label: 'Open', value: 1 },
-    { label: 'Enable', value: 2 },
-    { label: 'Disable', value: 3 }
+    { label: 'Register', value: 1 },
+    { label: 'Activate', value: 2 },
+    { label: 'Deactivate', value: 3 }
   ];
 
   constructor(
@@ -185,13 +188,14 @@ export class OperationComponent implements OnInit {
   }
 
   getOperationTypeText(type: number): string {
+
     switch (type) {
       case 1:
-        return 'Open';
+        return 'Register';
       case 2:
-        return 'Enable';
+        return 'Activate';
       case 3:
-        return 'Disable';
+        return 'Deactivate';
       default:
         return 'Unknown';
     }
