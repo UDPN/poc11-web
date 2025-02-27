@@ -259,11 +259,11 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       case 0:
         return 'Progress';
       case 1:
-        return 'Active';
+        return 'Successful';
       case 2:
-        return 'Inactive';
+        return 'Failed';
       case 3:
-        return 'Rejected';
+        return 'Disabled';
       default:
         return 'Unknown';
     }
