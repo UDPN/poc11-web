@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 17:41:15
+ * @LastEditTime: 2025-02-26 17:59:04
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -265,9 +265,13 @@
       #fxRateTpl
       let-fromCurrency="fromCurrency"
       let-toCurrency="toCurrency"
-      let-fxRate="fxRate"
+      let-exchangeRate="exchangeRate"
+      let-type="type"
     >
-      <!-- {{ fromCurrency + '/' + toCurrency + ' = ' + fxRate }} -->
+      <ng-container *ngIf="type === 1 || type === 2">{{
+        fromCurrency + '/' + toCurrency + ' = ' + exchangeRate
+      }}</ng-container>
+      <ng-container *ngIf="type === 3">{{ 'N/A' }}</ng-container>
     </ng-template>
     <ng-template #statusTpl let-state="state">
       <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{
