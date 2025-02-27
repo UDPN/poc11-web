@@ -48,9 +48,9 @@ export class TransactionsComponent implements OnInit {
 
   statusOptions = [
     { label: 'All', value: 0 },
-    { label: 'Success', value: 1 },
-    { label: 'Processing', value: 2 },
-    { label: 'Active', value: 3 }
+    { label: 'Processing', value: 30 },
+    { label: 'Successful', value: 35 },
+    { label: 'Failed', value: 40 }
   ];
 
   constructor(
@@ -110,7 +110,7 @@ export class TransactionsComponent implements OnInit {
           title: 'Transaction Time',
           field: 'txTime',
           width: 160,
-          pipe: 'date:MMM d, y, HH:mm:ss'
+          pipe: 'timeStamp',
         },
         {
           title: 'Transaction Hash',
@@ -206,12 +206,12 @@ export class TransactionsComponent implements OnInit {
 
   getStatusColor(status: number): string {
     switch (status) {
-      case 1:
+      case 35:
         return 'success';
-      case 2:
+      case 30:
         return 'processing';
-      case 3:
-        return 'blue';
+      case 40:
+        return 'red';
       default:
         return 'default';
     }
@@ -219,12 +219,12 @@ export class TransactionsComponent implements OnInit {
 
   getStatusText(status: number): string {
     switch (status) {
-      case 1:
-        return 'Success';
-      case 2:
-        return 'Processing';
-      case 3:
-        return 'Active';
+      case 30:
+        return 'processing';
+      case 35:
+        return 'successful';
+      case 40:
+        return 'failed';
       default:
         return 'Unknown';
     }
@@ -233,9 +233,9 @@ export class TransactionsComponent implements OnInit {
   getTransactionTypeText(type: number): string {
     switch (type) {
       case 1:
-        return 'Transfer';
+        return 'local Rate';
       case 2:
-        return 'FX Purchasing';
+        return 'network rate';
       default:
         return 'Unknown';
     }

@@ -64,13 +64,13 @@ export class OperationComponent implements OnInit {
           title: 'Operation Time',
           field: 'createdTime',
           width: 180,
-          pipe: 'date:MMM d, y, HH:mm:ss'
+          pipe: 'timeStamp',
         },
         {
           title: 'Transaction Time',
           field: 'txTime',
           width: 180,
-          pipe: 'date:MMM d, y, HH:mm:ss'
+          pipe: 'timeStamp',
         },
         {
           title: 'Transaction Hash',
