@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { Route, Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
+import { ThemeOptionsKey, aesKey, aesVi } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
@@ -86,6 +87,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   valueValidator: string = '';
   valueValidator1: string = '';
   oldAmount: any = '';
+  rateType: any = 0;
   remiInfo: {
     rate: any;
     com: any;
@@ -103,6 +105,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   inputType = 0;
   bankNames = '';
+  color: string = '';
   amountValue: any;
   reniSendAmountValue: any;
   isError: boolean = true;
@@ -114,7 +117,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder,
     private transferService: TransferService,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private windowService: WindowService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -177,6 +181,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     let datePipe: DatePipe = new DatePipe('en-US');
     this.timeString = datePipe
       .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
@@ -589,6 +595,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .subscribe((res) => {
         let resultData: any[] = [];
+        this.rateType = res[0].rateType;
         this.transferTitle =
           this.availableCurrecyModel.replace('-UDPN', '') +
           '/' +

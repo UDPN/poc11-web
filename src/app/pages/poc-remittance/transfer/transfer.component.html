@@ -469,9 +469,10 @@
                   <tr>
                     <th></th>
                     <th>
-                      FX Rate<!-- <nz-tag style="opacity: 0.7" [nzColor]="color">{{
-                      ''
-                    }}</nz-tag> -->
+                      FX Rate
+                      <nz-tag style="opacity: 0.7" [nzColor]="color">{{
+                        this.rateType | map: 'fxType'
+                      }}</nz-tag>
                     </th>
                     <th>Liquidity Provider Name</th>
                     <th>
@@ -625,9 +626,12 @@
             <ng-container *ngIf="beneficiaryCurrency !== availableCurrecyModel"
               ><nz-descriptions-item nzTitle="FX Rate"
                 >{{ checkedItemComment[0].currency
-                }}<!-- <nz-tag style="opacity: 0.7" [nzColor]="color">{{
-                        ''
-                      }}</nz-tag> --></nz-descriptions-item
+                }}<nz-tag
+                  style="opacity: 0.7"
+                  [nzColor]="color"
+                  class="m-l-15"
+                  >{{ this.rateType | map: 'fxType' }}</nz-tag
+                ></nz-descriptions-item
               ><nz-descriptions-item nzTitle="Liquidity Provider Name">{{
                 checkedItemComment[0].sp
               }}</nz-descriptions-item></ng-container
