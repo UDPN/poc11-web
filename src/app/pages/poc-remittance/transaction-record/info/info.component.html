@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-20 14:59:18
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 17:23:35
+ * @LastEditTime: 2025-02-27 17:42:24
  * @Description: 
 -->
 <app-page-header
@@ -169,14 +169,30 @@
             </nz-descriptions-item>
             <ng-container *ngIf="info.type === 1 || info.type === 3">
               <nz-descriptions-item [nzTitle]="'Remittance Note'" nzSpan="3">
-                <ng-container *ngIf="info.remarks">
-                  <textarea nz-input rows="3">{{ info.remarks }}</textarea>
-                </ng-container>
-                <ng-container *ngIf="!info.remarks">{{ '--' }}</ng-container>
+                {{ info.remarks | map: 'nullValue' }}
               </nz-descriptions-item>
             </ng-container>
           </nz-descriptions>
         </nz-card>
+        <ng-container *ngIf="info.type === 1"
+          ><nz-card
+            nzBordered="false"
+            class="m-t-25"
+            [nzBodyStyle]="{ 'border-bottom': '1px solid #e8e8e8' }"
+            [nzTitle]="'Liquidity Provider Information'"
+            ><nz-descriptions
+              nzTitle=""
+              [nzColumn]="1"
+              [nzColon]="false"
+              [nzBordered]="false"
+              class="card-descriptions-order"
+            >
+              <nz-descriptions-item nzTitle="Liquidity Provider Name">
+                {{ info.settlementBank | map: 'nullValue' }}
+              </nz-descriptions-item></nz-descriptions
+            ></nz-card
+          ></ng-container
+        >
         <nz-card
           nzTitle="Transaction Information"
           nzBordered="false"
@@ -228,7 +244,7 @@
         [nzBodyStyle]="{ 'padding-bottom': '50px', 'padding-top': '50px' }"
         class="m-r-8"
       >
-        <app-record-timeline [info]="info" />
+        <!-- <app-record-timeline [info]="info" /> -->
       </nz-card>
     </div>
   </div>
