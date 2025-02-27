@@ -323,9 +323,13 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   getStatusText(state: number): string {
     switch (state) {
       case 0:
-        return 'Inactive';
+        return 'Opening';
       case 1:
-        return 'Active';
+        return 'Success';
+      case 2:
+        return 'Failed';
+      case 3:
+        return 'Disabled';
       default:
         return 'Unknown';
     }
@@ -334,9 +338,13 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   getStatusColor(state: number): string {
     switch (state) {
       case 0:
-        return 'red';
+        return 'processing';
       case 1:
-        return 'green';
+        return 'success';
+      case 2:
+        return 'error';
+      case 3:
+        return 'default';
       default:
         return 'default';
     }

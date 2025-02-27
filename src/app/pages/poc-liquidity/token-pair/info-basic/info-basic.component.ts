@@ -129,12 +129,14 @@ export class InfoBasicComponent implements OnInit, OnChanges {
 
   getStatusColor(status: number): string {
     switch (status) {
-      case 1:
-        return 'success';
       case 0:
         return 'processing';
+      case 1:
+        return 'success';
       case 2:
         return 'error';
+      case 3:
+        return 'default';
       default:
         return 'default';
     }
@@ -142,12 +144,14 @@ export class InfoBasicComponent implements OnInit, OnChanges {
 
   getStatusText(status: number): string {
     switch (status) {
-      case 1:
-        return 'Active';
       case 0:
-        return 'Processing';
+        return 'Opening';
+      case 1:
+        return 'Success';
       case 2:
-        return 'Inactive';
+        return 'Failed';
+      case 3:
+        return 'Disabled';
       default:
         return 'Unknown';
     }

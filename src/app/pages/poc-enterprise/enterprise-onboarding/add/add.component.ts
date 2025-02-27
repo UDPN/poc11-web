@@ -137,7 +137,7 @@ export class AddComponent implements OnInit, AfterViewInit {
               // 其他字段需要根据实际返回数据映射
               enterpriseBank: detail.enterpriseFlatBank,  // 需要后端确认字段
               enterpriseAccount: detail.enterpriseFlatAccount, // 需要后端确认字段
-              generateWallet: '1', // 需要后端确认字段
+              generateWallet: String(detail.walletApproval), // 需要后端确认字段
               approvalValue: this.formatNumber(detail.txApprovalThreshold || 5000)
             });
           } 
