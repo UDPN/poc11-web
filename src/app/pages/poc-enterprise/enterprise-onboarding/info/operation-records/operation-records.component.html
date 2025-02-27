@@ -48,7 +48,11 @@
       <tbody>
         <tr *ngFor="let data of basicTable.data">
           <td>{{ getOperationTypeText(data.operationType) }}</td>
-          <td>{{ data.createUser }}</td>
+          <td>
+            <p nz-typography [nzCopyable]="data.createUser ? true : false" [nzCopyText]="data.createUser">
+              {{ data.createUser || '' }}
+            </p>
+          </td>
           <td>{{ data.createTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
           <td>
             <nz-tag [nzColor]="getStatusColor(data.status)">
