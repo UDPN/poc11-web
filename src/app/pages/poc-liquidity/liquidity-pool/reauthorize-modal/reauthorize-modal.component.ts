@@ -23,6 +23,7 @@ export class ReauthorizeModalComponent implements OnInit {
   liquidityPoolId: number;
   walletBalance: string = '';
   minBalanceReq: string = '';
+  authorizedAmount: string = '';
   isLoading = false;
   validateForm!: FormGroup;
   isWalletBalanceInsufficient = false;
@@ -57,20 +58,25 @@ export class ReauthorizeModalComponent implements OnInit {
           Validators.required,
           Validators.min(Number(this.minBalanceReq))
         ]
-      ]
+      ],
+      increasedAuthorizedAmount: [0] // 默认值为0
     });
 
-    // 监听授权金额的变化
-    this.validateForm.get('authorizedAmount')?.valueChanges.subscribe(value => {
-      if (Number(value) < Number(this.minBalanceReq)) {
-        this.validateForm.get('authorizedAmount')?.setErrors({ 
-          min: { 
-            min: this.minBalanceReq, 
-            actual: value 
-          } 
-        });
-      }
+    // 监听授权金额和增加授权金额的变化
+    this.validateForm.get('authorizedAmount')?.valueChanges.subscribe(() => {
+      this.checkWalletBalance();
     });
+
+    this.validateForm.get('increasedAuthorizedAmount')?.valueChanges.subscribe(() => {
+      this.checkWalletBalance();
+    });
+  }
+
+  private checkWalletBalance(): void {
+    const authorizedAmount = Number(this.validateForm.get('authorizedAmount')?.value) || 0;
+    const increasedAuthorizedAmount = Number(this.validateForm.get('increasedAuthorizedAmount')?.value) || 0;
+
+    this.isWalletBalanceInsufficient = (authorizedAmount + increasedAuthorizedAmount) < Number(this.minBalanceReq);
   }
 
   handleCancel(): void {

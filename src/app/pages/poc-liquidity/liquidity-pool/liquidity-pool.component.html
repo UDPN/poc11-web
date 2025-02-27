@@ -127,7 +127,7 @@
     <ng-template #statusTpl let-status="status">
       <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
     </ng-template>
-    <ng-template #operationTpl let-liquidityPollAddress="liquidityPollAddress" let-status="status" let-token="token" let-liquidityPoolId="liquidityPoolId" let-walletBalance="walletBalance" let-minBalance="minBalance" >
+    <ng-template #operationTpl let-liquidityPollAddress="liquidityPollAddress" let-status="status" let-token="token" let-liquidityPoolId="liquidityPoolId" let-walletBalance="walletBalance" let-minBalance="minBalance" let-authorizedAmount="authorizedAmount">
       <ng-container *appAuth="''">
         <span class="operate-text" (click)="showActivateModal(liquidityPollAddress, token, liquidityPoolId, status)" *ngIf="status === 3 ">
           Activate
@@ -144,7 +144,7 @@
         </span>
       </ng-container>
       <ng-container *appAuth="''">
-        <span class="operate-text" (click)="showReauthorizeModal(liquidityPollAddress, token, liquidityPoolId, walletBalance, minBalance)" *ngIf="status === 1">
+        <span class="operate-text" (click)="showReauthorizeModal(liquidityPollAddress, token, liquidityPoolId, walletBalance, minBalance, authorizedAmount)" *ngIf="status === 1">
           Authorize
         </span>
       </ng-container>
