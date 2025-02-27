@@ -70,7 +70,7 @@
                   [nzCopyable]="info.applicationId ? true : false"
                   [nzCopyText]="info.applicationId"
                 >
-                  {{ info.applicationId }}
+                  {{ info.applicationId | map: 'nullValue' }}
                 </p>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Enterprise Code"
@@ -79,7 +79,7 @@
                   [nzCopyable]="info.enterpriseCode ? true : false"
                   [nzCopyText]="info.enterpriseCode"
                 >
-                  {{ info.enterpriseCode }}
+                  {{ info.enterpriseCode | map: 'nullValue' }}
                 </p>
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Wallet Address">
@@ -88,7 +88,7 @@
                   [nzCopyable]="info.walletAddress ? true : false"
                   [nzCopyText]="info.walletAddress"
                 >
-                  {{ info.walletAddress }}
+                  {{ info.walletAddress | map: 'nullValue' }}
                 </p></nz-descriptions-item
               >
               <nz-descriptions-item nzTitle="Created on">{{
@@ -109,9 +109,15 @@
               [nzBordered]="false"
               class="card-descriptions-order"
             >
-              <nz-descriptions-item nzTitle="Transaction Hash">{{
-                info.txHash | map: 'nullValue'
-              }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Transaction Hash"
+                ><p
+                  nz-typography
+                  [nzCopyable]="info.txHash ? true : false"
+                  [nzCopyText]="info.txHash"
+                >
+                  {{ info.txHash | map: 'nullValue' }}
+                </p></nz-descriptions-item
+              >
               <nz-descriptions-item nzTitle="Transaction Time">{{
                 info.txTime | map: 'timeStamp'
               }}</nz-descriptions-item>
@@ -207,7 +213,7 @@
                     [nzCopyable]="info.applicationId ? true : false"
                     [nzCopyText]="info.applicationId"
                   >
-                    {{ info.applicationId }}
+                    {{ info.applicationId | map: 'nullValue' }}
                   </p>
                 </nz-descriptions-item>
                 <ng-container *ngIf="info.type === 2"
@@ -217,7 +223,7 @@
                       [nzCopyable]="info.enterpriseCode ? true : false"
                       [nzCopyText]="info.enterpriseCode"
                     >
-                      {{ info.enterpriseCode }}
+                      {{ info.enterpriseCode | map: 'nullValue' }}
                     </p>
                   </nz-descriptions-item></ng-container
                 >
@@ -228,7 +234,7 @@
                       [nzCopyable]="info.fromAccountAddress ? true : false"
                       [nzCopyText]="info.fromAccountAddress"
                     >
-                      {{ info.fromAccountAddress }}
+                      {{ info.fromAccountAddress | map: 'nullValue' }}
                     </p>
                     <p *ngIf="info.type === 1">
                       {{ 'Enterprise Code: ' + info.enterpriseCode }}
@@ -240,7 +246,7 @@
                     [nzCopyable]="info.toAccountAddress ? true : false"
                     [nzCopyText]="info.toAccountAddress"
                   >
-                    {{ info.toAccountAddress }}
+                    {{ info.toAccountAddress | map: 'nullValue' }}
                   </p> </nz-descriptions-item
                 ><nz-descriptions-item [nzTitle]="'Created on'">
                   {{ info.appliedOn | map: 'timeStamp' }}
@@ -271,7 +277,9 @@
                     "
                     [nzCopyText]="info.baseCurrencyLiquidityWalletAddress"
                   >
-                    {{ info.baseCurrencyLiquidityWalletAddress }}
+                    {{
+                      info.baseCurrencyLiquidityWalletAddress | map: 'nullValue'
+                    }}
                   </p> </nz-descriptions-item
                 ><nz-descriptions-item
                   [nzTitle]="info.receivingCurrency + ' Liquidity Pool Address'"
@@ -282,7 +290,10 @@
                     "
                     [nzCopyText]="info.quoteCurrencyLiquidityWalletAddress"
                   >
-                    {{ info.quoteCurrencyLiquidityWalletAddress }}
+                    {{
+                      info.quoteCurrencyLiquidityWalletAddress
+                        | map: 'nullValue'
+                    }}
                   </p>
                 </nz-descriptions-item>
               </nz-descriptions>
@@ -308,7 +319,7 @@
                     [nzCopyable]="info.txHash ? true : false"
                     [nzCopyText]="info.txHash"
                   >
-                    {{ info.txHash }}
+                    {{ info.txHash | map: 'nullValue' }}
                   </p></nz-descriptions-item
                 ><nz-descriptions-item [nzTitle]="'Transaction Time'">
                   {{ info.txTime | map: 'timeStamp' }}
@@ -322,7 +333,7 @@
                     [nzCopyable]="info.targetTxHash ? true : false"
                     [nzCopyText]="info.targetTxHash"
                   >
-                    {{ info.targetTxHash }}
+                    {{ info.targetTxHash | map: 'nullValue' }}
                   </p></nz-descriptions-item
                 ><nz-descriptions-item [nzTitle]="'Transaction Time'">
                   {{
@@ -377,7 +388,7 @@
                     [nzCopyable]="info.applicationId ? true : false"
                     [nzCopyText]="info.applicationId"
                   >
-                    {{ info.applicationId }}
+                    {{ info.applicationId | map: 'nullValue' }}
                   </p>
                 </nz-descriptions-item>
                 <nz-descriptions-item [nzTitle]="'Sender Wallet Address'">
@@ -387,7 +398,7 @@
                       [nzCopyable]="info.fromAccountAddress ? true : false"
                       [nzCopyText]="info.fromAccountAddress"
                     >
-                      {{ info.fromAccountAddress }}
+                      {{ info.fromAccountAddress | map: 'nullValue' }}
                     </p>
                     <p *ngIf="info.type === 1">
                       {{ 'Enterprise Code: ' + info.enterpriseCode }}
@@ -399,7 +410,7 @@
                     [nzCopyable]="info.toAccountAddress ? true : false"
                     [nzCopyText]="info.toAccountAddress"
                   >
-                    {{ info.toAccountAddress }}
+                    {{ info.toAccountAddress | map: 'nullValue' }}
                   </p> </nz-descriptions-item
                 ><nz-descriptions-item [nzTitle]="'Created on'">
                   {{ info.appliedOn | map: 'timeStamp' }}
@@ -419,9 +430,15 @@
                 [nzBordered]="false"
                 class="card-descriptions-order"
               >
-                <nz-descriptions-item nzTitle="Transaction Hash">{{
-                  info.txHash | map: 'nullValue'
-                }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Transaction Hash"
+                  ><p
+                    nz-typography
+                    [nzCopyable]="info.txHash ? true : false"
+                    [nzCopyText]="info.txHash"
+                  >
+                    {{ info.txHash | map: 'nullValue' }}
+                  </p></nz-descriptions-item
+                >
                 <nz-descriptions-item nzTitle="Transaction Time">{{
                   info.txTime | map: 'timeStamp'
                 }}</nz-descriptions-item>
