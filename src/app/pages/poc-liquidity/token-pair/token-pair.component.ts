@@ -112,6 +112,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.selectedTabIndex = 0;
     this.initTable();
     this.getTokenPairList();
     this.getDataList();
