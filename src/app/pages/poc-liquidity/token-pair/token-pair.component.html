@@ -1,10 +1,7 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <nz-card
-    nzTitle="Query"
-    class="m-b-10"
-  >
+  <nz-card nzTitle="Query" class="m-b-10">
     <form nz-form nzLayout="vertical">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
         <div
@@ -104,14 +101,22 @@
     </form>
   </nz-card>
 
-  <nz-tabset class="m-b-10" [(nzSelectedIndex)]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+  <nz-tabset
+    class="m-b-10"
+    [(nzSelectedIndex)]="selectedTabIndex"
+    (nzSelectedIndexChange)="onTabChange($event)"
+  >
     <nz-tab nzTitle="Local FX"></nz-tab>
     <nz-tab nzTitle="Network FX"></nz-tab>
   </nz-tabset>
 
   <app-card-table-wrap
     [isNormalTable]="true"
-    [tableTitle]="selectedTab === 'local' ? 'Local FX Token Pairs' : 'Network FX Token Pairs'"
+    [tableTitle]="
+      selectedTab === 'local'
+        ? 'Local FX Token Pairs'
+        : 'Network FX Token Pairs'
+    "
     [btnTpl]="selectedTab === 'local' ? localFxBtn : networkFxBtn"
   >
     <app-ant-table
@@ -127,19 +132,42 @@
       }}</nz-tag>
     </ng-template>
 
-    <ng-template #operationTpl let-status="status" let-rateId="rateId" let-tokenPair="tokenPair">
+    <ng-template
+      #operationTpl
+      let-status="status"
+      let-rateId="rateId"
+      let-tokenPair="tokenPair"
+    >
       <ng-container>
-        <a *ngIf="status === 1" (click)="openOperateModal(rateId, tokenPair, true)">Activate</a>
-        <a *ngIf="status === 2" (click)="openOperateModal(rateId, tokenPair, false)">Deactivate</a>
+        <a
+          *ngIf="status === 1"
+          (click)="openOperateModal(rateId, tokenPair, true)"
+          >Activate</a
+        >
+        <a
+          *ngIf="status === 2"
+          (click)="openOperateModal(rateId, tokenPair, false)"
+          >Deactivate</a
+        >
         <nz-divider nzType="vertical"></nz-divider>
       </ng-container>
-      <a [routerLink]="['/poc-liquidity/token-pair/info', rateId]">Details</a>
+      <a
+        routerLink="/poc/poc-liquidity/token-pair/infoToken"
+        [queryParams]="{ rateId: rateId }"
+        >Details</a
+      >
     </ng-template>
   </app-card-table-wrap>
 </div>
 
 <ng-template #localFxBtn>
-  <button *appAuth="''" nz-button nzType="primary" class="m-r-8" routerLink="/poc/poc-liquidity/token-pair/add" >
+  <button
+    *appAuth="''"
+    nz-button
+    nzType="primary"
+    class="m-r-8"
+    routerLink="/poc/poc-liquidity/token-pair/add"
+  >
     <i nz-icon nzType="plus"></i>
     New
   </button>
@@ -147,7 +175,13 @@
 </ng-template>
 
 <ng-template #networkFxBtn>
-  <button *appAuth="''" nz-button nzType="primary" class="m-r-8" routerLink="/poc/poc-liquidity/token-pair/addNet">
+  <button
+    *appAuth="''"
+    nz-button
+    nzType="primary"
+    class="m-r-8"
+    routerLink="/poc/poc-liquidity/token-pair/addNet"
+  >
     <i nz-icon nzType="plus"></i>
     New
   </button>
