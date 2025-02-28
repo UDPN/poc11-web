@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-28 13:37:13
+ * @LastEditTime: 2025-02-28 14:53:02
  * @Description:
  */
 import {
@@ -27,6 +27,7 @@ interface SearchParam {
   enterpriseCode: string;
   currency: string | number;
   txTime: any;
+  appliedOn: any;
   transactionType: string | number;
   txHash: string;
   status: any;
@@ -40,6 +41,7 @@ interface TransferSearchParam {
   toAccountAddress: string;
   receivingCurrency: string | number;
   txTime: any;
+  appliedOn: any;
   state: string;
   type: string | number;
   txHash: string;
@@ -107,6 +109,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
     currency: '',
     transactionType: '',
     txTime: [],
+    appliedOn: [],
     txHash: '',
     status: ''
   };
@@ -119,6 +122,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
     receivingCurrency: '',
     type: '',
     txTime: [],
+    appliedOn: [],
     txHash: '',
     state: ''
   };
@@ -175,6 +179,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
         txHash: '',
         transactionType: '',
         txTime: [],
+        appliedOn: [],
         status: ''
       };
     } else {
@@ -188,6 +193,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
         receivingCurrency: '',
         type: '',
         txTime: [],
+        appliedOn: [],
         state: ''
       };
     }
@@ -282,7 +288,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
           },
           {
             title: 'Created on',
-            field: 'txTime',
+            field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
             width: 150
@@ -351,7 +357,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
           },
           {
             title: 'Created on',
-            field: 'txTime',
+            field: 'appliedOn',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
             width: 130

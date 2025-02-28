@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-11 17:35:16
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 11:26:38
+ * @LastEditTime: 2025-02-28 14:53:23
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -30,6 +30,18 @@ export class TransactionsService {
     const param: any = {
       data: {
         applicationId: filters.applicationId || '',
+        appliedOnBegin: filters.appliedOn[0]
+          ? timeToTimestampMillisecond(
+              this.date.transform(filters.appliedOn[0], 'yyyy-MM-dd') +
+                ' 00:00:00'
+            )
+          : '',
+        appliedOnEnd: filters.appliedOn[1]
+          ? timeToTimestampMillisecond(
+              this.date.transform(filters.appliedOn[1], 'yyyy-MM-dd') +
+                ' 23:59:59'
+            )
+          : '',
         startTxTime: filters.txTime[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.txTime[0], 'yyyy-MM-dd') + ' 00:00:00'
@@ -75,6 +87,18 @@ export class TransactionsService {
         state: filters.state || '',
         toAccountAddress: filters.toAccountAddress || '',
         type: filters.type || '',
+        appliedOnBegin: filters.appliedOn[0]
+          ? timeToTimestampMillisecond(
+              this.date.transform(filters.appliedOn[0], 'yyyy-MM-dd') +
+                ' 00:00:00'
+            )
+          : '',
+        appliedOnEnd: filters.appliedOn[1]
+          ? timeToTimestampMillisecond(
+              this.date.transform(filters.appliedOn[1], 'yyyy-MM-dd') +
+                ' 23:59:59'
+            )
+          : '',
         startTxTime: filters.txTime[0]
           ? timeToTimestampMillisecond(
               this.date.transform(filters.txTime[0], 'yyyy-MM-dd') + ' 00:00:00'
