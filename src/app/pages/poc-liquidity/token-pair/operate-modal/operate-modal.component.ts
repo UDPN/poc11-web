@@ -17,7 +17,7 @@ export interface OperateModalData {
 export class OperateModalComponent implements OnInit {
   rateId: number = 0;
   tokenPair: string = '';
-  isActivate: boolean = false;
+  isActivate: any;
   comments: string = '';
   isLoading: boolean = false;
 
@@ -43,7 +43,7 @@ export class OperateModalComponent implements OnInit {
     this.isLoading = true;
     this.tokenPairService.operateTokenPair({
       rateId: this.rateId,
-      state: this.isActivate ? 1 : 2,
+      state: this.isActivate===1? 3 : 1,
       comments: this.comments.trim()
     }).subscribe({
       next: (response) => {
