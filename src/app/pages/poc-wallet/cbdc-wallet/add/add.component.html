@@ -9,7 +9,7 @@
 <div class="normal-detail-table-wrap">
   <nz-card
     [nzBodyStyle]="{ 'padding-bottom': 0 }"
-    [nzTitle]="'Wallet Creations'"
+    [nzTitle]="'Wallet Creation'"
     class="m-b-10"
   >
     <form nz-form [formGroup]="validateForm" class="m-t-25 m-b-30">
@@ -26,7 +26,8 @@
                   ></nz-option>
                   <nz-option
                     [nzValue]="1"
-                    nzLabel="Custom Creation"
+                    nzDisabled
+                    nzLabel="Metamask Creation"
                   ></nz-option>
                 </nz-select>
               </div>
@@ -36,14 +37,13 @@
                 >Please select your Creation Methode</ng-container
               >
             </ng-template>
+            <div>{{ this.creationMethodTip }}</div>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10"
-            >Central Bank/Custodian Bank
-          </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Token Currency</nz-form-label>
           <nz-form-control [nzErrorTip]="centralBankError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -51,24 +51,29 @@
                   <nz-option
                     *ngFor="let item of centralBankList"
                     [nzValue]="item.centralBankId"
-                    [nzLabel]="item.centralBankName"
+                    [nzLabel]="
+                      item.digitalSymbol + '( ' + item.centralBankName + ' )'
+                    "
                   >
                   </nz-option>
                 </nz-select>
               </div>
-              <div>Bank for wallet address.</div>
+              <div>
+                Select the Custodian Bank and the system will register the
+                wallet in the corresponding Token system.
+              </div>
             </div>
             <ng-template #centralBankError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please select your Central Bank/Custodian Bank
+                >Please select your Token Currency
               </ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-          <nz-form-label nzRequired nzSpan="10"> Currency </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10"> Token Currency </nz-form-label>
           <nz-form-control [nzErrorTip]="currencyError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -82,12 +87,12 @@
             </div>
             <ng-template #currencyError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please input your Currency</ng-container
+                >Please input your Token Currency</ng-container
               >
             </ng-template>
           </nz-form-control>
         </nz-form-item>
-      </div>
+      </div> -->
       <ng-container
         *ngIf="this.validateForm.get('creationMethod')?.value === 1"
       >
@@ -126,14 +131,14 @@
               </div>
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Currency</ng-container
+                  >Please input your Wallet Address</ng-container
                 >
               </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
       </ng-container>
-      <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
+      <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
           <nz-form-label nzRequired nzSpan="10">
             Business Node ID
@@ -167,7 +172,7 @@
             </ng-template>
           </nz-form-control>
         </nz-form-item>
-      </div>
+      </div> -->
       <ng-container
         *ngIf="
           this.validateForm.get('creationMethod')?.value === 1 &&
@@ -176,7 +181,7 @@
       >
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="8">
-            <nz-form-control [nzErrorTip]="nodeError">
+            <nz-form-control>
               <div nz-row>
                 <div nz-col nzSpan="24">
                   <button
@@ -382,9 +387,7 @@
             <div nz-col nzSpan="24">
               <nz-alert
                 nzType="info"
-                [nzMessage]="
-                  'The system will create and register a wallet in the corresponding Token wallet contract.'
-                "
+                [nzMessage]="this.messageTip"
                 nzShowIcon
               ></nz-alert>
             </div>
@@ -395,7 +398,7 @@
   </nz-card>
 </div>
 <ng-template #titleTpl
-  >Wallet Creations
+  >Wallet Creation
   <span class="m-l-10" style="color: #91929e"
     >( Choose the central bank to create a wallet, each central bank can hold up
     to 2 wallets. )</span

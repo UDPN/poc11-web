@@ -28,6 +28,8 @@ import { SplitNavStoreService } from '@store/common-store/split-nav-store.servic
 import { ThemeService } from '@store/common-store/theme.service';
 import { UserInfoService } from '@store/common-store/userInfo.service';
 import { fnStopMouseEvent } from '@utils/tools';
+import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
+import { CommonService } from '@app/core/services/http/common/common.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -55,6 +57,7 @@ export class NavBarComponent implements OnInit {
   copyMenus: Menu[] = [];
   authCodeArray: string[] = [];
   subTheme$: Observable<any>;
+  logoImg: string = '';
 
   constructor(
     private router: Router,
@@ -67,6 +70,8 @@ export class NavBarComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private themesService: ThemeService,
     private titleServe: Title,
+    private styleService: StyleService,
+    private commonService: CommonService,
     @Inject(DOCUMENT) private doc: Document
   ) {
     this.initMenus();
@@ -87,6 +92,7 @@ export class NavBarComponent implements OnInit {
     this.subMixiModeSideMenu();
 
     this.subIsCollapsed();
+
     this.subAuth();
     this.router.events
       .pipe(
@@ -314,6 +320,22 @@ export class NavBarComponent implements OnInit {
     this.subTheme$.subscribe((options) => {
       if (options.mode === 'top' && !this.isOverMode) {
         this.closeMenu();
+      }
+    });
+    this.styleService.search().subscribe((res: any) => {
+      if (res) {
+        // this.systemName = res.systemName;
+        this.logoImg = res.logoFileHash;
+        sessionStorage.setItem('logoFileHash', res.logoFileHash);
+        this.cdr.markForCheck();
+        // if (res.logoFileHash) {
+        //   this.commonService
+        //     .downImg({ hash: res.logoFileHash })
+        //     .subscribe((resu) => {
+        //       this.logoImg = 'data:image/jpg;base64,' + resu;
+        //       this.cdr.markForCheck();
+        //     });
+        // }
       }
     });
     this.clientName = sessionStorage.getItem('clientName');

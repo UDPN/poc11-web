@@ -42,17 +42,17 @@ const routes: Routes = [
         path: 'poc-bank',
         data: { preload: true },
         loadChildren: () =>
-          import(
-            '../../pages/poc-bank/poc-bank.module'
-          ).then((m) => m.PocBankModule)
+          import('../../pages/poc-bank/poc-bank.module').then(
+            (m) => m.PocBankModule
+          )
       },
       {
         path: 'poc-fx-rate',
         data: { preload: true },
         loadChildren: () =>
-          import(
-            '../../pages/poc-fx-rate/poc-fx-rate.module'
-          ).then((m) => m.PocFxRateModule)
+          import('../../pages/poc-fx-rate/poc-fx-rate.module').then(
+            (m) => m.PocFxRateModule
+          )
       },
       {
         path: 'poc-fx-transactions',
@@ -116,6 +116,62 @@ const routes: Routes = [
         loadChildren: () =>
           import('../../pages/poc-onboard/poc-onboard.module').then(
             (m) => m.PocSpOnboardModule
+          )
+      },
+      {
+        path: 'poc-financial',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-financial/poc-financial.module').then(
+            (m) => m.PocFinancialModule
+          )
+      },
+      {
+        path: 'poc-download-center',
+        data: { preload: true },
+        loadChildren: () =>
+          import(
+            '../../pages/poc-download-center/poc-download-center.module'
+          ).then((m) => m.PocDownloadCenterModule)
+      },
+      {
+        path: 'poc-bank-account',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-bank-account/poc-bank-account.module').then(
+            (m) => m.PocBankAccountModule
+          )
+      },
+      {
+        path: 'poc-notifications',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-notifications/poc-notifications.module').then(
+            (m) => m.PocNotificationsModule
+          )
+      },
+      {
+        path: 'poc-access-key',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-access-key/poc-access-key.module').then(
+            (m) => m.PocAccessKeyModule
+          )
+      },
+      {
+        path: 'poc-enterprise',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-enterprise/poc-enterprise.module').then(
+            (m) => m.PocEnterpriseModule
+          )
+      },
+      {
+        path: 'poc-liquidity',
+        data: { preload: true },
+        loadChildren: () =>
+          import('../../pages/poc-liquidity/poc-liquidity.module').then(
+            (m) => m.PocLiquidityModule
           )
       },
       {

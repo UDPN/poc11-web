@@ -1,0 +1,456 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<div class="normal-table-wrap">
+  <nz-card nzTitle="Selecting Token">
+    <form nz-form [formGroup]="transactionForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <!-- Ledger Name -->
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">Ledger Name</nz-form-label>
+            <nz-form-control [nzErrorTip]="ledgerNameErrorTpl">
+              <input
+                nz-input
+                formControlName="ledgerName"
+                placeholder="Ledger Name"
+                (ngModelChange)="ledgerNameControl?.markAsDirty()"
+                (blur)="ledgerNameControl?.markAsTouched()"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <ng-template #ledgerNameErrorTpl let-control>
+          <ng-container *ngIf="control.hasError('required')"
+            >Please enter Ledger Name</ng-container
+          >
+        </ng-template>
+        <!-- Token Name -->
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">Token Name</nz-form-label>
+            <nz-form-control>
+              <ng-container *ngIf="isEditMode; else tokenSelect">
+                <input nz-input [value]="selectedToken?.tokenName" disabled />
+              </ng-container>
+              <ng-template #tokenSelect>
+                <nz-select
+                  formControlName="tokenName"
+                  (ngModelChange)="onTokenSelect($event)"
+                  nzShowSearch
+                >
+                  <nz-option
+                    *ngFor="let token of tokenList"
+                    [nzValue]="token"
+                    [nzLabel]="token.tokenName"
+                  >
+                  </nz-option>
+                </nz-select>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- Pegged Currency -->
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">Pegged Currency</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                [value]="selectedToken?.currencySymbol"
+                disabled
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- Token Price -->
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">Token Price</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                [value]="
+                  tokenList && tokenList.length
+                    ? '1 ' +
+                      selectedToken?.tokenSymbol +
+                      ' = ' +
+                      selectedToken?.tokenPrice +
+                      ' ' +
+                      selectedToken?.currencySymbol
+                    : ''
+                "
+                disabled
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+</div>
+<div class="m-t-10 m-r-10 m-l-10">
+  <nz-card nzTitle="Configuring Business Mapping" class="mt-4">
+    <div class="transaction-form">
+      <form nz-form [formGroup]="transactionForm">
+        <div formArrayName="transactionGroups">
+          <ng-container
+            *ngFor="
+              let group of transactionGroups.controls;
+              let groupIndex = index
+            "
+            [formGroupName]="groupIndex"
+          >
+            <div class="form-container">
+              <!-- Left Side -->
+              <div class="left-side">
+                <div class="label-row">
+                  <span class="required-label">Transaction Type</span>
+                </div>
+                <div class="input-row">
+                  <input
+                    nz-input
+                    formControlName="transactionType"
+                    [disabled]="true"
+                    style="width: 230px"
+                    class="disabled-input"
+                    readonly
+                  />
+                  <!-- 暂时隐藏删除按钮 -->
+                  <!-- <button *ngIf="groupIndex > 0" 
+                      nz-button 
+                      nzType="text" 
+                      nzDanger
+                      (click)="removeTransactionGroup(groupIndex)" 
+                      nz-tooltip 
+                      nzTooltipTitle="Delete this transaction group">
+                <i nz-icon nzType="delete"></i>
+              </button> -->
+                </div>
+              </div>
+
+              <!-- Right Side -->
+              <div class="right-side">
+                <div formArrayName="transactions">
+                  <ng-container
+                    *ngFor="
+                      let transaction of getTransactions(group).controls;
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
+                    <div class="transaction-group">
+                      <!-- 只在第一个交易显示标签行 -->
+                      <div class="label-row" *ngIf="i === 0">
+                        <span class="required-label">Debit/Credit</span>
+                        <span class="required-label">Financial Category</span>
+                        <span class="required-label">Account Code</span>
+                        <span class="required-label">Account Name</span>
+                        <span class="required-label">Amount</span>
+                        <span>Account Category</span>
+                        <span>Actions</span>
+                        <!-- 新增的列标题 -->
+                      </div>
+                      <div class="input-row">
+                        <nz-form-item>
+                          <nz-form-control>
+                            <nz-select
+                              formControlName="debitCredit"
+                              (ngModelChange)="
+                                onDebitCreditChange(transaction, groupIndex)
+                              "
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'debitCredit',
+                                  groupIndex
+                                )
+                              "
+                            >
+                              <nz-option
+                                nzValue="Debit"
+                                nzLabel="Debit"
+                              ></nz-option>
+                              <nz-option
+                                nzValue="Credit"
+                                nzLabel="Credit"
+                              ></nz-option>
+                            </nz-select>
+                            <div
+                              *ngIf="
+                                isFieldInvalid(
+                                  transaction,
+                                  'debitCredit',
+                                  groupIndex
+                                )
+                              "
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div role="alert">Please select debit/credit</div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                          <nz-form-control>
+                            <nz-select
+                              formControlName="financialType"
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'financialType',
+                                  groupIndex
+                                )
+                              "
+                            >
+                              <nz-option nzValue="1" nzLabel="Fiat"></nz-option>
+                              <nz-option
+                                nzValue="2"
+                                nzLabel="Token"
+                              ></nz-option>
+                              <nz-option nzValue="3" nzLabel="Fee"></nz-option>
+                            </nz-select>
+                            <div
+                              *ngIf="
+                                isFieldInvalid(
+                                  transaction,
+                                  'financialType',
+                                  groupIndex
+                                )
+                              "
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div role="alert">
+                                Please select financial type
+                              </div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                          <nz-form-control>
+                            <nz-input-group>
+                              <input
+                                nz-input
+                                formControlName="accountCode"
+                                [placeholder]="'Please enter account code'"
+                                (input)="
+                                  onAccountCodeSearch($event, groupIndex, i)
+                                "
+                                [class.ant-form-item-has-error]="
+                                  isFieldInvalid(
+                                    transaction,
+                                    'accountCode',
+                                    groupIndex
+                                  )
+                                "
+                              />
+                              <div
+                                *ngIf="
+                                  currentFilteredSubjects[groupIndex + '-' + i]
+                                    ?.length ||
+                                  loadingSubjects[groupIndex + '-' + i]
+                                "
+                                class="ant-select-dropdown"
+                              >
+                                <nz-spin
+                                  *ngIf="loadingSubjects[groupIndex + '-' + i]"
+                                  class="loading-spin"
+                                ></nz-spin>
+                                <ul
+                                  *ngIf="!loadingSubjects[groupIndex + '-' + i]"
+                                >
+                                  <li
+                                    *ngFor="
+                                      let subject of currentFilteredSubjects[
+                                        groupIndex + '-' + i
+                                      ]
+                                    "
+                                    (click)="
+                                      onAccountCodeSelect(
+                                        transaction,
+                                        subject,
+                                        groupIndex,
+                                        i
+                                      )
+                                    "
+                                  >
+                                    {{ subject.subjectCode }} -
+                                    {{ subject.subjectTitle }}
+                                  </li>
+                                </ul>
+                              </div>
+                            </nz-input-group>
+                            <div
+                              *ngIf="
+                                isFieldInvalid(
+                                  transaction,
+                                  'accountCode',
+                                  groupIndex
+                                )
+                              "
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div role="alert">Please enter account code</div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                          <nz-form-control>
+                            <input
+                              nz-input
+                              formControlName="accountName"
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'accountName',
+                                  groupIndex
+                                )
+                              "
+                            />
+                            <div
+                              *ngIf="
+                                isFieldInvalid(
+                                  transaction,
+                                  'accountName',
+                                  groupIndex
+                                )
+                              "
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div role="alert">Please enter account name</div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                          <nz-form-control>
+                            <input
+                              nz-input
+                              formControlName="amount"
+                              [placeholder]="
+                                getAmountPlaceholder(groupIndex, transaction)
+                              "
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'amount',
+                                  groupIndex
+                                )
+                              "
+                              [disabled]="true"
+                            />
+                            <div
+                              *ngIf="isFieldInvalid(transaction, 'amount', groupIndex) || transaction.get('amount')?.errors?.['balanceError']"
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div
+                                *ngIf="transaction.get('amount')?.errors?.['required']"
+                                role="alert"
+                              >
+                                Please enter amount
+                              </div>
+                              <div
+                                *ngIf="transaction.get('amount')?.errors?.['pattern']"
+                                role="alert"
+                              >
+                                Please enter a valid number
+                              </div>
+                              <div
+                                *ngIf="transaction.get('amount')?.errors?.['balanceError']"
+                                role="alert"
+                              >
+                                {{transaction.get('amount')?.errors?.['balanceError']}}
+                              </div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                          <nz-form-control>
+                            <input
+                              nz-input
+                              formControlName="accountCategory"
+                              [class.ant-form-item-has-error]="
+                                isFieldInvalid(
+                                  transaction,
+                                  'accountCategory',
+                                  groupIndex
+                                )
+                              "
+                            />
+                            <div
+                              *ngIf="
+                                isFieldInvalid(
+                                  transaction,
+                                  'accountCategory',
+                                  groupIndex
+                                )
+                              "
+                              class="ant-form-item-explain ant-form-item-explain-error"
+                            >
+                              <div role="alert">
+                                Please enter account category
+                              </div>
+                            </div>
+                          </nz-form-control>
+                        </nz-form-item>
+
+                        <div class="button-group">
+                          <button
+                            nz-button
+                            nzType="text"
+                            (click)="
+                              onSaveTransaction(transaction, groupIndex, i)
+                            "
+                            nz-tooltip
+                            nzTooltipTitle="Save"
+                          >
+                            <i nz-icon nzType="save"></i>
+                          </button>
+                          <button
+                            nz-button
+                            nzType="text"
+                            *ngIf="canShowDeleteButton(groupIndex, i)"
+                            (click)="removeTransaction(groupIndex, i)"
+                          >
+                            <i nz-icon nzType="delete"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <!-- Add22222 button for each group -->
+                <button
+                  nz-button
+                  class="add-single-button"
+                  (click)="addSingleTransaction(groupIndex)"
+                >
+                  <i nz-icon nzType="plus"></i>
+                  Add
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Main Add button at the bottom -->
+        <div class="button-group-bottom">
+          <!-- <button
+            nz-button
+            class="add-group-button"
+            (click)="addTransactionGroup()"
+          >
+            <i nz-icon nzType="plus"></i>
+            Add
+          </button> -->
+          <button nz-button nzType="primary" (click)="onSubmit()">
+            <i nz-icon nzType="save"></i>
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </nz-card>
+</div>

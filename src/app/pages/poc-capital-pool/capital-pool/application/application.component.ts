@@ -56,7 +56,7 @@ export class ApplicationComponent implements OnInit {
     private pocCapitalPoolService: PocCapitalPoolService,
     private cdr: ChangeDetectorRef,
     public _commonService: CommonService
-  ) { }
+  ) {}
   ngOnInit() {
     this.initTable();
     this.initSelect();
@@ -134,21 +134,24 @@ export class ApplicationComponent implements OnInit {
         {
           title: 'Application No.',
           field: 'applicationNo',
+          notNeedEllipsis: true,
           width: 320
         },
         {
           title: 'Currency',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 160
         },
         {
           title: 'Currency Business Type',
           field: 'applicationType',
           pipe: 'exchangeBusinessType',
+          notNeedEllipsis: true,
           width: 180
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'applicationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
@@ -165,11 +168,13 @@ export class ApplicationComponent implements OnInit {
           title: 'Status',
           field: 'status',
           pipe: 'foreignStatus',
+          notNeedEllipsis: true,
           width: 160
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

@@ -82,11 +82,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   nzOption: any[] = [];
   value: string[] = [];
   testSeries: any[] = [];
-  isOkLoading: boolean = false;
-  topUpForm!: FormGroup;
-  withdrawForm!: FormGroup;
-  passwordForm!: FormGroup;
-  isVisibleTopUp: boolean = false;
   // colorScheme: Color = {
   //   domain: ['#5AA454', '#E44D25', '#7aa3e5', '#a8385d', '#aae3f5'],
   //   name: '',
@@ -134,9 +129,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   currency: any;
   txType: number = 0;
   balance: any = '';
-  isVisibleWithdraw: boolean = false;
-  isVisibleEnterPassword: boolean = false;
-  isLoading: boolean = false;
   constructor(
     private pocHomeService: PocHomeService,
     private cdr: ChangeDetectorRef,
@@ -167,14 +159,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       ?.valueChanges.subscribe((item: number) => {
         this.getMovements(item);
       });
-    this.topUpForm.get('amount')?.valueChanges.subscribe((item: number) => {
-      this.topUpForm.get('fiatAmount')?.setValue(item);
-      // this.getFiatAmount(item);
-    });
-    this.withdrawForm.get('amount')?.valueChanges.subscribe((item: number) => {
-      this.withdrawForm.get('fiatAmount')?.setValue(item);
-      // this.getFiatAmount(item);
-    });
     this.fetchNumbers();
     this.pageHeaderInfo = {
       title: ``,
@@ -205,33 +189,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currencyForm = this.fb.group({
       currency: ['']
     });
-    this.topUpForm = this.fb.group({
-      commercialBank: [null, [Validators.required]],
-      chainAccountAddress: [null, [Validators.required]],
-      transactionReferenceNo: [
-        null,
-        [Validators.required, this.transactionReferenceNoValidator]
-      ],
-      reserveAccount: [
-        null,
-        [Validators.required, this.reserveAccountValidator]
-      ],
-      amount: [null, [Validators.required, this.topUpAmountValidator]],
-      fiatAmount: [null, [Validators.required]]
-    });
-    this.withdrawForm = this.fb.group({
-      commercialBank: [null, [Validators.required]],
-      chainAccountAddress: [null, [Validators.required]],
-      reserveAccount: [
-        null,
-        [Validators.required, this.reserveAccountValidator]
-      ],
-      amount: [null, [Validators.required, this.withdrawAmountValidator]],
-      fiatAmount: [null, [Validators.required]]
-    });
-    this.passwordForm = this.fb.group({
-      pwd: [null, [Validators.required]]
-    });
     const fn = () => {
       const myChart: any = echarts.init(
         document.getElementById('chart-container')
@@ -252,54 +209,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.view = [300, 300];
     }
   }
-
-  topUpAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
-      return { regular: true, error: true };
-    }
-    return {};
-  };
-
-  withdrawAmountValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
-      return { regular: true, error: true };
-    } else if (control.value > Number(this.balance)) {
-      return { regular1: true, error: true };
-    }
-    return {};
-  };
-
-  transactionReferenceNoValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^([a-zA-Z0-9\s-._#!@￥%&*?/]{1,100})$/.test(control.value)) {
-      return { regular: true, error: true };
-    } else if (control.value.length > 50) {
-      return { regular1: true, error: true };
-    }
-    return {};
-  };
-
-  reserveAccountValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^(([0-9]\d*))?$/.test(control.value)) {
-      return { regular: true, error: true };
-    } else if (control.value.length > 30) {
-      return { regular1: true, error: true };
-    }
-    return {};
-  };
 
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
@@ -416,130 +325,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.balance = count1;
       }
     });
-  }
-
-  getTopUp(currency: string, chainAccountAddress: string) {
-    this.currency = currency;
-    let list = this.walletBalanceList;
-    let count = Number(chainAccountAddress.split('-')[1]) - 1;
-    let count1 = Number(chainAccountAddress.split('-')[0]);
-    list.map((item: any) => {
-      if (currency === item.currency) {
-        this.walletAddress = item.walletList[count].chainAccountAddress;
-        this.balance = count1;
-      }
-    });
-    this.topUpForm.get('chainAccountAddress')?.setValue(this.walletAddress);
-    this.topUpForm
-      .get('commercialBank')
-      ?.setValue(sessionStorage.getItem('systemName'));
-    this.isVisibleTopUp = true;
-  }
-
-  getWithdraw(currency: string, chainAccountAddress: string) {
-    this.currency = currency;
-    let list = this.walletBalanceList;
-    let count = Number(chainAccountAddress.split('-')[1]) - 1;
-    let count1 = Number(chainAccountAddress.split('-')[0]);
-    list.map((item: any) => {
-      if (currency === item.currency) {
-        this.walletAddress = item.walletList[count].chainAccountAddress;
-        this.balance = count1;
-      }
-    });
-    this.withdrawForm.get('chainAccountAddress')?.setValue(this.walletAddress);
-    this.withdrawForm
-      .get('commercialBank')
-      ?.setValue(sessionStorage.getItem('systemName'));
-    this.isVisibleWithdraw = true;
-  }
-
-  cancelTopUp() {
-    this.isVisibleTopUp = false;
-    this.topUpForm.reset();
-  }
-
-  cancelWithdraw() {
-    this.isVisibleWithdraw = false;
-    this.withdrawForm.reset();
-  }
-
-  cancelEnterPassword() {
-    this.isVisibleEnterPassword = false;
-    this.passwordForm.reset();
-    this.topUpForm.reset();
-    this.withdrawForm.reset();
-  }
-
-  topUp() {
-    this.isVisibleTopUp = false;
-    this.isVisibleEnterPassword = true;
-    this.txType = 1;
-  }
-
-  withdraw() {
-    this.isVisibleWithdraw = false;
-    this.isVisibleEnterPassword = true;
-    this.txType = 2;
-  }
-
-  confirmEnterPassword() {
-    this.isOkLoading = true;
-    const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
-    const params: any = {
-      amount:
-        this.txType === 1
-          ? this.topUpForm.get('amount')?.value
-          : this.withdrawForm.get('amount')?.value,
-      fiatAmount:
-        this.txType === 1
-          ? this.topUpForm.get('fiatAmount')?.value
-          : this.withdrawForm.get('fiatAmount')?.value,
-      password: code,
-      txType: this.txType === 1 ? 1 : 2,
-      reserveAccount:
-        this.txType === 1
-          ? this.topUpForm.get('reserveAccount')?.value
-          : this.withdrawForm.get('reserveAccount')?.value,
-      walletAddress:
-        this.txType === 1
-          ? this.topUpForm.get('chainAccountAddress')?.value
-          : this.withdrawForm.get('chainAccountAddress')?.value
-    };
-    if (this.txType === 1) {
-      params['transactionReferenceNo'] = this.topUpForm.get(
-        'transactionReferenceNo'
-      )?.value;
-    }
-    const amount = thousandthMark(params.amount) + ' ' + this.currency;
-    this.cbdcWalletService
-      .topUpOrWithdraw(params)
-      .pipe(finalize(() => (this.isOkLoading = false)))
-      .subscribe({
-        next: (res) => {
-          if (res) {
-            this.isVisibleEnterPassword = false;
-            this.message.success(
-              this.txType === 1
-                ? `Top-up ${amount} successful`
-                : `withdraw ${amount} successful`,
-              { nzDuration: 1000 }
-            );
-            if (this.txType === 1) {
-              this.topUpForm.reset();
-            } else {
-              this.withdrawForm.reset();
-            }
-          }
-          this.passwordForm.reset();
-          this.isOkLoading = false;
-          this.cdr.markForCheck();
-        },
-        error: (err) => {
-          this.isOkLoading = false;
-          this.cdr.markForCheck();
-        }
-      });
   }
 
   getMovements(currency?: any) {
@@ -729,18 +514,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           title: 'Transaction Currency',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Currency Pair ID',
           field: 'chainRateId',
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 320
         },
         {
           title: 'Exchange Rate',
           field: 'exchangeRate',
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 120
         },
         {
@@ -753,6 +541,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
@@ -801,7 +590,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       legend: {
-        // data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        // data: ['Top-up', 'Transfer In', 'Withdrawal', 'Transfer Out'],
         data: [
           {
             name: 'Top-up',
@@ -812,7 +601,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             icon: 'circle'
           },
           {
-            name: 'Withdraw',
+            name: 'Withdrawal',
             icon: 'circle'
           },
           {
@@ -841,7 +630,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           data: param.transferInAmount
         },
         {
-          name: 'Withdraw',
+          name: 'Withdrawal',
           type: 'line',
           data: param.withdrawAmount
         },

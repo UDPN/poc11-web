@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-28 19:38:56
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-20 14:18:50
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -42,7 +42,7 @@ export class DeatilsGuardChild implements CanActivateChild {
     | Promise<boolean | UrlTree> {
     return this._informationService.detail().pipe(
       map((data) => {
-        if (data === null) {
+        if (data && data.spStatus === 0) {
           this.router.navigateByUrl('/information/form');
           return false;
         }

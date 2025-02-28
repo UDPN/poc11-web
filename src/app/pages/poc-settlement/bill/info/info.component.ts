@@ -46,13 +46,16 @@ export class InfoComponent implements OnInit {
     private billService: BillService,
     private commonService: CommonService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Details`,
       breadcrumbs: [
         { name: 'Settlement Management' },
-        { name: 'Monthly income statement', url: '/poc/poc-settlement/billing' },
+        {
+          name: 'Monthly income statement',
+          url: '/poc/poc-settlement/billing'
+        },
         { name: 'Details' }
       ],
       extra: '',
@@ -87,16 +90,19 @@ export class InfoComponent implements OnInit {
           title: 'Charging Model',
           field: 'chargingModel',
           pipe: 'chargingModel',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Commission Rate',
           tdTemplate: this.commissionTpl,
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Max Commission Amount',
           tdTemplate: this.maxCommissionTpl,
+          notNeedEllipsis: true,
           pipe: 'nullValue',
           width: 300
         },
@@ -110,6 +116,7 @@ export class InfoComponent implements OnInit {
         {
           title: 'Modified By',
           field: 'modifyUser',
+          notNeedEllipsis: true,
           width: 220
         }
       ],

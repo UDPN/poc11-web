@@ -38,7 +38,7 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
   onSubmitStatus = false;
   updateStatus!: number;
   initData: any;
-
+  selectValue: any = [];
   constructor(
     private fb: FormBuilder,
     private modalService: NzModalService,
@@ -62,26 +62,49 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     //     this.countryListData = res.dataInfo;
     //     this.cdr.markForCheck();
     //   });
+    this.validateForm.get('userNotice')?.valueChanges.subscribe((item: any) => {
+      if (item === false) {
+        this.validateForm.get('userNotice')?.setValue(null);
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.getWalletAddress();
-    this.getCentralBank();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required]],
       bankBic: [null, [Validators.required]],
+      spBriefIntroduction: [
+        null,
+        [Validators.required, this.spBriefIntroductionValidator]
+      ],
+      spDescription: [null, [this.spDescriptionValidator]],
       centralBankName: [null, [Validators.required]],
-      spBriefIntroduction: [null, [Validators.required]],
-      spDescription: [null, [Validators.required]],
-      bnCode: [null, [Validators.required]],
-      spBesuWalletAddress: [null, [Validators.required]],
+      peggedCurrency: [null, [Validators.required]],
+      blockchain: [null, [Validators.required]],
       contactName: [null, [Validators.required]],
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
-      detailedAddress: [null, [Validators.required]],
-      businessLicenseUrl: [null, [Validators.required]],
-      fileName: [null, [Validators.required]],
+      detailedAddress: [null],
+      interbankSettlementStatus: [1, [Validators.required]],
+      paymentStatus: [null],
+      userNotice: [null, [Validators.required]]
     });
+    this._informationService.detail().subscribe((res) => {
+      this.validateForm.get('spName')?.setValue(res.spName);
+      this.validateForm.get('bankBic')?.setValue(res.bankBic);
+      this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
+      this.validateForm.get('peggedCurrency')?.setValue(res.peggedCurrency);
+      this.validateForm.get('blockchain')?.setValue(res.blockchain);
+      this.validateForm.get('contactName')?.setValue(res.contactName);
+      this.validateForm.get('mobileNumber')?.setValue(res.mobileNumber);
+      this.validateForm.get('email')?.setValue(res.email);
+    });
+  }
+
+  goToPdf() {
+    window.open(
+      '/assets/network-access-agreement/network-access-agreement.pdf'
+    );
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -105,21 +128,25 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     return {};
   };
 
-  getCentralBank() {
-    this._informationService.getCentralBank().subscribe((res) => {
-      if (res) {
-        this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
-      }
-      this.cdr.markForCheck();
-    });
-  }
+  spBriefIntroductionValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value?.length > 100) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
-  getWalletAddress() {
-    this._informationService.getWalletAddress().subscribe((res) => {
-      this.validateForm.get('spBesuWalletAddress')?.setValue(res);
-      this.cdr.markForCheck();
-    })
-  }
+  spDescriptionValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (control.value?.length > 500) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
   onSubmit() {
     if (!fnCheckForm(this.validateForm)) {
@@ -127,28 +154,38 @@ export class FormInformationComponent implements OnInit, AfterViewInit {
     }
     this.modalService.confirm({
       nzClassName: 'n-modal',
-      nzTitle: 'Are you sure to submit?',
+      nzTitle: 'Are you sure you want to submit this application?',
       nzContent:
         '<b>After the information is submitted, it will enter the review stage, please wait patiently</b>',
       nzOnOk: () => {
         this.onSubmitStatus = true;
         this._informationService
-          .uploadImg(this.fileImgWord)
-          .subscribe((res) => {
-            this.validateForm.get('businessLicenseUrl')?.setValue(res);
-            this._informationService
-              .addForm(this.validateForm.value)
-              .subscribe((result) => {
-                this.onSubmitStatus = false;
-                if (result) {
-                  this.message
-                  .success('The data has been submitted, please be patient!')
-                  .onClose.subscribe((_) => {
-                    this.router.navigateByUrl('/information/detail');
-                  });
-                }
-                this.cdr.markForCheck();
-              });
+          .addForm({
+            spName: this.validateForm.get('spName')?.value,
+            bankBic: this.validateForm.get('bankBic')?.value,
+            contactName: this.validateForm.get('contactName')?.value,
+            detailedAddress: this.validateForm.get('detailedAddress')?.value,
+            email: this.validateForm.get('email')?.value,
+            interbankSettlementStatus: this.validateForm.get(
+              'interbankSettlementStatus'
+            )?.value,
+            mobileNumber: this.validateForm.get('mobileNumber')?.value,
+            paymentStatus:
+              this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
+            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')
+              ?.value,
+            spDescription: this.validateForm.get('spDescription')?.value
+          })
+          .subscribe((result) => {
+            this.onSubmitStatus = false;
+            if (result) {
+              this.message
+                .success('The data has been submitted, please be patient!')
+                .onClose.subscribe((_) => {
+                  this.router.navigateByUrl('/information/detail');
+                });
+            }
+            this.cdr.markForCheck();
           });
       }
     });

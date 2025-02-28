@@ -72,7 +72,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
     private pocFxTransactionsService: PocFxTransactionsService,
     private cdr: ChangeDetectorRef,
     private _commonService: CommonService
-  ) { }
+  ) {}
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -160,7 +160,7 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         commercialBankId: this.searchParam.commercialBankId,
         commercialBankName: this.searchParam.commercialBankName,
         receivingBankName: this.searchParam.receivingBankName
-      },
+      }
     };
     this.pocFxTransactionsService
       .getList(params.pageNum, params.pageSize, params.filters)
@@ -184,25 +184,29 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction No.',
           field: 'transactionNo',
+          notNeedEllipsis: true,
           width: 350
         },
         {
           title: 'Commercial Bank Name',
           field: 'commercialBankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Receiving Bank Name',
           field: 'receivingBankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'transactionDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
@@ -212,11 +216,13 @@ export class FxTransactionsComponent implements OnInit, AfterViewInit {
           title: 'Status',
           field: 'status',
           pipe: 'transactionsStatus',
+          notNeedEllipsis: true,
           width: 120
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

@@ -215,16 +215,18 @@ export class FxRateHistoryComponent implements OnInit, AfterViewInit {
         {
           title: 'Currency Pair',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Exchange Rate',
           field: 'exchangeRate',
           pipe: 'toThousandRate',
+          notNeedEllipsis: true,
           width: 200
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'rateDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,

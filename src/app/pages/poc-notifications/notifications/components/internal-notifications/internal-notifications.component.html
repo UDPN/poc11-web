@@ -1,0 +1,55 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-23 14:20:16
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-03 11:20:07
+ * @Description: 
+-->
+<app-card-table-wrap [isNormalTable]="true" tableTitle="Transaction Messages">
+  <app-ant-table
+    (changePageSize)="changePageSize($event)"
+    (changePageNum)="getDataList($event)"
+    [tableConfig]="tableConfig"
+    [tableData]="dataList"
+  ></app-ant-table
+  ><ng-template #numberTpl let-key="key">
+    <span [title]="key">{{ key }}</span>
+  </ng-template>
+  <ng-template #contentTpl let-content="content" let-readState="readState">
+    <span
+      [title]="content"
+      [innerHTML]="content"
+      [style]="readState === 0 ? 'font-weight: 600' : ''"
+    >
+    </span>
+  </ng-template>
+  <ng-template #operationTpl let-chatMsgId="chatMsgId" let-msgType="msgType">
+    <ng-container *appAuth="'R01050201'">
+      <span class="operate-text" (click)="getModal(chatMsgId)"> Details </span>
+    </ng-container>
+    <ng-container *appAuth="'R01050202'">
+      <span class="operate-text" (click)="onDelete(chatMsgId)"> Delete </span>
+    </ng-container></ng-template
+  >
+</app-card-table-wrap>
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Transaction Messages"
+  (nzOnCancel)="cancel()"
+  [nzClosable]="false"
+  [nzWidth]="600"
+  nzCentered="true"
+>
+  <div *nzModalContent>
+    <div class="m-l-15 m-r-15" [innerHTML]="this.modalInfo.content"></div>
+    <div
+      style="display: flex; justify-content: right; align-items: center"
+      class="m-t-20 operate-text"
+    >
+      {{ this.modalInfo.createTime | map: 'timeStamp' }}
+    </div>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="cancel()">Close</button>
+  </div>
+</nz-modal>

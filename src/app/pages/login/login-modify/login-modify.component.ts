@@ -1,7 +1,13 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-
 
 import { IsNightKey } from '@config/constant';
 import { DestroyService } from '@core/services/common/destory.service';
@@ -16,7 +22,6 @@ import { LoginService } from '@app/core/services/http/login/login.service';
 import { LogoService } from '@app/core/services/http/poc-system/logo.service';
 import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
 import { CommonService } from '@app/core/services/http/common/common.service';
-
 
 export enum LoginType {
   Normal,
@@ -54,7 +59,10 @@ export class LoginModifyComponent implements OnInit {
   }
 
   formData: LoginFormComponentInterface[] = [
-    { type: LoginType.Normal, component: new DynamicComponent(NormalLoginComponent, {}) },
+    {
+      type: LoginType.Normal,
+      component: new DynamicComponent(NormalLoginComponent, {})
+    }
   ];
 
   constructor(
@@ -69,16 +77,18 @@ export class LoginModifyComponent implements OnInit {
     private logoService: LogoService,
     private styleService: StyleService,
     private commonService: CommonService
-  ) { }
+  ) {}
 
   getCurrentComponent(type: LoginType): LoginFormComponentInterface {
-    return this.formData.find(item => item.type === type)!;
+    return this.formData.find((item) => item.type === type)!;
   }
 
   to(adItem: LoginFormComponentInterface): void {
     const viewContainerRef = this.adHost.viewContainerRef;
     viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent<AdComponent>(adItem.component.component);
+    const componentRef = viewContainerRef.createComponent<AdComponent>(
+      adItem.component.component
+    );
     componentRef.instance.data = adItem.component.data;
 
     this.cdr.detectChanges();
@@ -96,7 +106,7 @@ export class LoginModifyComponent implements OnInit {
     this.login1StoreService
       .getLoginTypeStore()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(res => {
+      .subscribe((res) => {
         this.to(this.getCurrentComponent(res));
       });
   }
@@ -106,35 +116,30 @@ export class LoginModifyComponent implements OnInit {
     this.breakpointObserver
       .observe(['(max-width: 1200px)'])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(res => {
+      .subscribe((res) => {
         this.isOverModel = res.matches;
         this.login1StoreService.setIsLogin1OverModelStore(res.matches);
         this.cdr.detectChanges();
       });
-      this.styleService.search().subscribe((res: any) => {
-        if (res) {
-          this.systemName = res.systemName;
-          if (res.logoFileHash) {
-            this.commonService
-            .downImg({ hash: res.logoFileHash })
-            .subscribe((resu) => {
-              this.logoImg = 'data:image/jpg;base64,' + resu;
-              sessionStorage.setItem('logoImg', this.logoImg);
-              this.cdr.markForCheck();
-            });
-            this.isDefaultLogo = false;
-          } else {
-            this.isDefaultLogo = true;
-          }
-        }
+    this.styleService.search().subscribe((res: any) => {
+      if (res) {
+        this.systemName = res.systemName;
+        // if (res.logoFileHash) {
+        //   this.commonService
+        //   .downImg({ hash: res.logoFileHash })
+        //   .subscribe((resu) => {
+        //     this.logoImg = 'data:image/jpg;base64,' + resu;
+        //     sessionStorage.setItem('logoImg', this.logoImg);
+        //     this.cdr.markForCheck();
+        //   });
+        //   this.isDefaultLogo = false;
+        // } else {
+        //   this.isDefaultLogo = true;
+        // }
+      }
       this.cdr.markForCheck();
-    })
-
+    });
   }
-
-
-
-
 
   getBnName() {
     // this.dataService.fetchBnName().subscribe(res => {

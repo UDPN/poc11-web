@@ -19,8 +19,8 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  applicationTime: Array<any>;
-  approvalTime: Array<any>;
+  applicationTime: any;
+  approvalTime: any;
   businessApplicationStatus: string;
   businessApplicationCode: string;
   applicationType: string;
@@ -66,7 +66,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
     private foreignExchangeApplyService: ForeignExchangeApplyService,
     private cdr: ChangeDetectorRef,
     public _commonService: CommonService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -154,21 +154,24 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
         {
           title: 'Application No.',
           field: 'applicationNo',
+          notNeedEllipsis: true,
           width: 350
         },
         {
           title: 'FX Pair',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Application Type',
           field: 'applicationType',
           pipe: 'exchangeBusinessType',
+          notNeedEllipsis: true,
           width: 220
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'applicationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
@@ -185,6 +188,7 @@ export class ForeignExchangeApplyComponent implements OnInit, AfterViewInit {
           title: 'Status',
           field: 'status',
           pipe: 'foreignStatus',
+          notNeedEllipsis: true,
           width: 160
         },
         {

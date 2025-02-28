@@ -1,4 +1,11 @@
-import { Component, TemplateRef, ViewChild, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonService } from '@app/core/services/http/common/common.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocHomeService } from '@app/core/services/http/poc-home/poc-home.service';
@@ -28,13 +35,17 @@ interface ListParam {
 @Component({
   selector: 'app-settlement',
   templateUrl: './settlement.component.html',
-  styleUrls: ['./settlement.component.less'],
+  styleUrls: ['./settlement.component.less']
 })
 export class SettlementComponent implements OnInit, AfterViewInit {
-  @ViewChild('headerContent', { static: false }) headerContent!: TemplateRef<NzSafeAny>;
-  @ViewChild('headerExtra', { static: false }) headerExtra!: TemplateRef<NzSafeAny>;
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('exchangeRateTpl', { static: true }) exchangeRateTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerContent', { static: false })
+  headerContent!: TemplateRef<NzSafeAny>;
+  @ViewChild('headerExtra', { static: false })
+  headerExtra!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('exchangeRateTpl', { static: true })
+  exchangeRateTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumb: [],
@@ -56,8 +67,17 @@ export class SettlementComponent implements OnInit, AfterViewInit {
   chargingModelList: any = [];
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
-  tableQueryParams: NzTableQueryParams = { pageIndex: 1, pageSize: 10, sort: [], filter: [] };
-  constructor(private settlementService: SettlementService, private cdr: ChangeDetectorRef, public _commonService: CommonService) { }
+  tableQueryParams: NzTableQueryParams = {
+    pageIndex: 1,
+    pageSize: 10,
+    sort: [],
+    filter: []
+  };
+  constructor(
+    private settlementService: SettlementService,
+    private cdr: ChangeDetectorRef,
+    public _commonService: CommonService
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -86,22 +106,28 @@ export class SettlementComponent implements OnInit, AfterViewInit {
   resetForm(): void {
     this.searchParam = {};
     this.listParam = {};
-    this.searchParam.pairedExchangeRate = '',
-      this.searchParam.chargingModel = ''
+    (this.searchParam.pairedExchangeRate = ''),
+      (this.searchParam.chargingModel = '');
     this.getDataList(this.tableQueryParams);
   }
 
-
   initSelect() {
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' }).subscribe((res) => {
-      this.pairedList = res.dataInfo;
-      this.pairedList.map((item: any, i: any) => {
-        Object.assign(item, { key: i + 1 })
+    this._commonService
+      .commonApi({ dropDownTypeCode: 'drop_down_exchange_rate_info' })
+      .subscribe((res) => {
+        this.pairedList = res.dataInfo;
+        this.pairedList.map((item: any, i: any) => {
+          Object.assign(item, { key: i + 1 });
+        });
+      });
+    this._commonService
+      .commonApi({
+        dropDownTypeCode: 'drop_down_business_status_info',
+        csePCode: 'FXSP_CHARGING_MODEL'
       })
-    })
-    this._commonService.commonApi({ dropDownTypeCode: 'drop_down_business_status_info', csePCode: 'FXSP_CHARGING_MODEL' }).subscribe((res) => {
-      this.chargingModelList = res.dataInfo;
-    })
+      .subscribe((res) => {
+        this.chargingModelList = res.dataInfo;
+      });
   }
 
   changePageSize(e: number): void {
@@ -111,17 +137,17 @@ export class SettlementComponent implements OnInit, AfterViewInit {
   getDataList(e?: NzTableQueryParams): void {
     this.pairedList.map((item: any) => {
       if (this.searchParam.pairedExchangeRate === item.key) {
-        this.listParam.sourceCurrency = item.sourceCurrency,
-          this.listParam.sourcePlatform = item.sourcePlatform,
-          this.listParam.targetCurrency = item.targetCurrency,
-          this.listParam.targetPlatform = item.targetPlatform
+        (this.listParam.sourceCurrency = item.sourceCurrency),
+          (this.listParam.sourcePlatform = item.sourcePlatform),
+          (this.listParam.targetCurrency = item.targetCurrency),
+          (this.listParam.targetPlatform = item.targetPlatform);
       } else if (this.searchParam.pairedExchangeRate === '') {
-        this.listParam.sourceCurrency = '',
-          this.listParam.sourcePlatform = '',
-          this.listParam.targetCurrency = '',
-          this.listParam.targetPlatform = ''
+        (this.listParam.sourceCurrency = ''),
+          (this.listParam.sourcePlatform = ''),
+          (this.listParam.targetCurrency = ''),
+          (this.listParam.targetPlatform = '');
       }
-    })
+    });
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
@@ -136,15 +162,20 @@ export class SettlementComponent implements OnInit, AfterViewInit {
         chargingModel: this.searchParam.chargingModel
       }
     };
-    this.settlementService.getList(params.pageNum, params.pageSize, params.filters).pipe(finalize(() => {
-      this.tableLoading(false);
-    })).subscribe((_: any) => {
-      this.dataList = _.data;
-      this.tableConfig.total = _?.resultPageInfo?.total;
-      this.tableConfig.pageIndex = params.pageNum;
-      this.tableLoading(false);
-      this.cdr.markForCheck();
-    });
+    this.settlementService
+      .getList(params.pageNum, params.pageSize, params.filters)
+      .pipe(
+        finalize(() => {
+          this.tableLoading(false);
+        })
+      )
+      .subscribe((_: any) => {
+        this.dataList = _.data;
+        this.tableConfig.total = _?.resultPageInfo?.total;
+        this.tableConfig.pageIndex = params.pageNum;
+        this.tableLoading(false);
+        this.cdr.markForCheck();
+      });
   }
 
   private initTable(): void {
@@ -153,39 +184,43 @@ export class SettlementComponent implements OnInit, AfterViewInit {
         {
           title: 'Model Code',
           field: 'settlementModelCode',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Model Name',
           field: 'settlementModelName',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Currency Pair',
           tdTemplate: this.exchangeRateTpl,
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Charging Model',
           field: 'chargingModel',
           pipe: 'chargingModel',
+          notNeedEllipsis: true,
           width: 220
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
           width: 180
-
-        },
+        }
       ],
       total: 0,
       showCheckbox: false,
       loading: false,
       pageSize: 10,
-      pageIndex: 1,
+      pageIndex: 1
     };
   }
 }

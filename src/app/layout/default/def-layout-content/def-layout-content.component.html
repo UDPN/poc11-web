@@ -1,4 +1,7 @@
 <app-top-progress-bar></app-top-progress-bar>
+<app-collapsible-pdf
+  pdfUrl="assets/notice/Kissen Sandbox Must Read Notice.pdf"
+></app-collapsible-pdf>
 <nz-layout class="min-screen-full-height">
   <nz-sider
     [nzTheme]="(themesOptions$ | async)!.theme"
@@ -115,7 +118,7 @@
         <ng-content></ng-content>
       </nz-content>
       <nz-footer *ngIf="themesOptions.hasFooterArea" class="text-center"
-        >UDPN &#64; Commercial Bank Management Control Panel 2024</nz-footer
+        >UDPN &#64; Commercial Bank Control Panel 2024</nz-footer
       >
     </nz-layout>
   </nz-layout>
@@ -126,6 +129,11 @@
 <!-- <app-chat (changeShows)="showChats = false" *ngIf="showChats"></app-chat> -->
 
 <ng-template #trigger>
+  <img
+    style="width: 80px"
+    src="../../../../assets/imgs/kissen/logo.svg"
+    alt=""
+  />
   <ul
     nz-menu
     [nzTheme]="

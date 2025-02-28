@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
@@ -10,7 +17,10 @@ import { AntTableConfig } from '@shared/components/ant-table/ant-table.component
 import { PageHeaderType } from '@shared/components/page-header/page-header.component';
 import { TreeNodeInterface } from '@shared/components/tree-table/tree-table.component';
 import { MapKeyType, MapPipe, MapSet } from '@shared/pipes/map.pipe';
-import { fnFlatDataHasParentToTree, fnFlattenTreeDataByDataList } from '@utils/treeTableTools';
+import {
+  fnFlatDataHasParentToTree,
+  fnFlattenTreeDataByDataList
+} from '@utils/treeTableTools';
 import { ModalBtnStatus } from '@widget/base-modal';
 import { DeptManageModalService } from '@widget/biz-widget/system/dept-manage-modal/dept-manage-modal.service';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -30,14 +40,16 @@ interface SearchParam {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeptComponent implements OnInit {
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('state', { static: true }) state!: TemplateRef<NzSafeAny>;
   ActionCode = ActionCode;
   searchParam: Partial<SearchParam> = {};
 
   tableConfig!: AntTableConfig;
   pageHeaderInfo: Partial<PageHeaderType> = {
-    title: 'Department of management (database once every 10 minutes to recover from a backup)',
+    title:
+      'Department of management (database once every 10 minutes to recover from a backup)',
     breadcrumb: ['Home page', 'System management', 'Department of management']
   };
   dataList: TreeNodeInterface[] = [];
@@ -58,9 +70,7 @@ export class DeptComponent implements OnInit {
     this.getDataList();
   }
 
-  
   tableChangeDectction(): void {
-    
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
@@ -84,18 +94,16 @@ export class DeptComponent implements OnInit {
           this.tableLoading(false);
         })
       )
-      .subscribe(deptList => {
+      .subscribe((deptList) => {
         const target = fnFlatDataHasParentToTree(deptList.list);
         this.dataList = fnFlattenTreeDataByDataList(target);
         this.tableLoading(false);
       });
   }
 
-
   check(id: string, children: any[], parent: any[]): void {
     this.message.success(id);
   }
-
 
   resetForm(): void {
     this.searchParam = {};
@@ -104,7 +112,7 @@ export class DeptComponent implements OnInit {
 
   add(fatherId: number): void {
     this.deptModalService.show({ nzTitle: 'add' }).subscribe(
-      res => {
+      (res) => {
         if (!res || res.status === ModalBtnStatus.Cancel) {
           return;
         }
@@ -113,7 +121,7 @@ export class DeptComponent implements OnInit {
         this.tableLoading(true);
         this.addEditData(param, 'addDepts');
       },
-      error => this.tableLoading(false)
+      (error) => this.tableLoading(false)
     );
   }
 
@@ -143,15 +151,14 @@ export class DeptComponent implements OnInit {
             }
             this.getDataList();
           },
-          error => this.tableLoading(false)
+          (error) => this.tableLoading(false)
         );
       }
     });
   }
 
-  
   edit(id: number, fatherId: number): void {
-    this.dataService.getDeptsDetail(id).subscribe(res => {
+    this.dataService.getDeptsDetail(id).subscribe((res) => {
       this.deptModalService.show({ nzTitle: 'edit' }, res).subscribe(
         ({ modalValue, status }) => {
           if (status === ModalBtnStatus.Cancel) {
@@ -162,12 +169,11 @@ export class DeptComponent implements OnInit {
           this.tableLoading(true);
           this.addEditData(modalValue, 'editDepts');
         },
-        error => this.tableLoading(false)
+        (error) => this.tableLoading(false)
       );
     });
   }
 
-  
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -178,32 +184,37 @@ export class DeptComponent implements OnInit {
         {
           title: 'Department name',
           width: 230,
+          notNeedEllipsis: true,
           field: 'departmentName'
         },
         {
           title: 'Department of state',
           field: 'state',
+          notNeedEllipsis: true,
           tdTemplate: this.state,
           width: 100
         },
         {
           title: 'The sorting',
+          notNeedEllipsis: true,
           field: 'orderNum',
           width: 100
         },
         {
           title: 'Creation time',
           field: 'createTime',
+          notNeedEllipsis: true,
           pipe: 'date:yyyy-MM-dd HH:mm',
           width: 180
         },
         {
           title: 'operation',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 180,
+          width: 180
         }
       ],
       total: 0,
@@ -216,6 +227,8 @@ export class DeptComponent implements OnInit {
 
   ngOnInit(): void {
     this.initTable();
-    this.stateOptions = [...MapPipe.transformMapToArray(MapSet.available, MapKeyType.Boolean)];
+    this.stateOptions = [
+      ...MapPipe.transformMapToArray(MapSet.available, MapKeyType.Boolean)
+    ];
   }
 }

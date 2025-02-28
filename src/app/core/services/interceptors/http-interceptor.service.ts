@@ -59,13 +59,19 @@ export class HttpInterceptorService implements HttpInterceptor {
       this.pocHomeService.isFirstLogin().subscribe((res: any) => {
         return res;
       });
+      let prefixUrl: string = '';
+      if (req.url.indexOf('v2') !== -1) {
+        prefixUrl = '/api/manage';
+      } else {
+        prefixUrl = '/wcbdccommercial';
+      }
       httpConfig = {
         headers: req.headers.set('token', token),
-        url: (environment.production ? '/wcbdccommercial' : '') + req.url
+        url: (environment.production ? prefixUrl : '') + req.url
       };
     } else {
       httpConfig = {
-        url: (environment.production ? '/fxsp' : '') + req.url
+        url: (environment.production ? '/lpcp' : '') + req.url
       };
     }
     req = req.clone({
@@ -86,8 +92,8 @@ export class HttpInterceptorService implements HttpInterceptor {
     const status = error.status;
     if (error instanceof TimeoutError) {
       this.modal.error({
-        nzTitle: 'Error',
-        nzContent: 'the request has timed out !'
+        nzTitle: 'the request has timed out !',
+        nzContent: ''
       });
     }
     let errMsg = '';
@@ -96,9 +102,9 @@ export class HttpInterceptorService implements HttpInterceptor {
         this.errorCode.close();
       }
       this.errorCode = this.modal.error({
-        nzTitle: 'Error',
-        nzContent:
-          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contract support.'
+        nzTitle:
+          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contact support.',
+        nzContent: ''
       });
     }
     return throwError({
@@ -151,8 +157,8 @@ export class HttpInterceptorService implements HttpInterceptor {
           if (!this.firstCode) {
             if (event.body.code !== 1) {
               this.modal.error({
-                nzTitle: 'error',
-                nzContent: this.translate.instant(`MSG_${event.body.code}`)
+                nzTitle: this.translate.instant(`MSG_${event.body.code}`),
+                nzContent: ''
               });
             }
           }
@@ -166,7 +172,7 @@ export class HttpInterceptorService implements HttpInterceptor {
               this.reLoginCode.close();
             }
             this.reLoginCode = this.modal.error({
-              nzTitle: 'Login information expired, log in again',
+              nzTitle: 'Login information expired, please log in again',
               nzContent: ''
             });
           });
@@ -177,8 +183,8 @@ export class HttpInterceptorService implements HttpInterceptor {
           event.body.message !== 'MSG_00_0005'
         ) {
           this.modal.error({
-            nzTitle: 'error',
-            nzContent: this.translate.instant(`${event.body.message}`)
+            nzTitle: this.translate.instant(`${event.body.message}`),
+            nzContent: ''
           });
           return event;
         }
@@ -187,25 +193,25 @@ export class HttpInterceptorService implements HttpInterceptor {
           (event.body.code === 1 && event.body.message !== 'MSG_00_0005')
         ) {
           this.modal.error({
-            nzTitle: 'Error',
-            nzContent: 'System error, please try again later !'
+            nzTitle: 'System error, please try again later !',
+            nzContent: ''
           });
           return event;
         }
         if (event.body.code === 50000) {
           this.modal.error({
-            nzTitle: 'Error',
-            nzContent:
-              'Encounter an internal error, please contact VN admin with message code: 50000 !'
+            nzTitle:
+              'Encounter an internal error, please contact VN admin with message code: 50000 !',
+            nzContent: ''
           });
           return event;
         }
         if (otherFilterCode.includes(event.body.code)) {
           this.modal.error({
-            nzTitle: 'error',
-            nzContent: this.translate.instant(`MSG_${event.body.code}`, {
+            nzTitle: this.translate.instant(`MSG_${event.body.code}`, {
               value: event.body.data
-            })
+            }),
+            nzContent: ''
           });
           return event;
         }

@@ -1,8 +1,15 @@
 /*
+ * @Author: chenyuting
+ * @Date: 2024-12-09 15:40:45
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-12 11:15:36
+ * @Description:
+ */
+/*
  * @Author: zhangxuefeng
  * @Date: 2023-12-26 16:43:23
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-26 17:47:32
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-11 17:52:34
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -22,7 +29,7 @@ export interface Sdata {
 export interface Tdata {
   amount: number;
   password: string;
-  txType: any; //  1: Top Up 2: Withdraw
+  txType: any; //  1: Top-up 2: Withdrawal
   walletAddress?: string;
 }
 
@@ -77,6 +84,9 @@ export class TransactionRecordService {
   }
 
   public getInfo(param: { transferId: any }): Observable<any> {
-    return this.http.post(`/v1/remittanceManagement/transaction/details`, param);
+    return this.http.post(
+      `/v1/remittanceManagement/transaction/details`,
+      param
+    );
   }
 }

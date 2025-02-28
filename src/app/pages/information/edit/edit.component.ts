@@ -52,7 +52,7 @@ export class EditComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private updateStoreService: UpdateStoreService,
     private destroy$: DestroyService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     // this._commonService
     //   .commonApi({
@@ -66,22 +66,24 @@ export class EditComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.getWalletAddress();
-    this.getCentralBank();
     this.validateForm = this.fb.group({
       spName: [null, [Validators.required]],
       bankBic: [null, [Validators.required]],
+      spBriefIntroduction: [
+        null,
+        [Validators.required, this.spBriefIntroductionValidator]
+      ],
+      spDescription: [null, [this.spDescriptionValidator]],
       centralBankName: [null, [Validators.required]],
-      spBriefIntroduction: [null, [Validators.required]],
-      spDescription: [null, [Validators.required]],
-      bnCode: [null, [Validators.required]],
-      spBesuWalletAddress: [null, [Validators.required]],
+      peggedCurrency: [null, [Validators.required]],
+      blockchain: [null, [Validators.required]],
       contactName: [null, [Validators.required]],
       mobileNumber: [null],
       email: [null, [Validators.required, this.emailValidator]],
-      detailedAddress: [null, [Validators.required]],
-      businessLicenseUrl: [null, [Validators.required]],
-      fileName: [null, [Validators.required]],
+      detailedAddress: [null],
+      interbankSettlementStatus: [1, [Validators.required]],
+      paymentStatus: [null],
+      userNotice: [null, [Validators.required]]
     });
     this._informationService.detail().subscribe((res) => {
       this.validateForm.get('spName')?.setValue(res.spName);
@@ -91,42 +93,42 @@ export class EditComponent implements OnInit, AfterViewInit {
         .get('spBriefIntroduction')
         ?.setValue(res.spBriefIntroduction);
       this.validateForm.get('spDescription')?.setValue(res.spDescription);
-      this.validateForm.get('bnCode')?.setValue(res.bnCode);
-      this.validateForm
-        .get('spBesuWalletAddress')
-        ?.setValue(res.spBesuWalletAddress);
+      this.validateForm.get('detailedAddress')?.setValue(res.detailedAddress);
+      this.validateForm.get('peggedCurrency')?.setValue(res.peggedCurrency);
+      this.validateForm.get('blockchain')?.setValue(res.blockchain);
       this.validateForm.get('contactName')?.setValue(res.contactName);
       this.validateForm.get('mobileNumber')?.setValue(res.mobileNumber);
       this.validateForm.get('email')?.setValue(res.email);
-      this.validateForm.get('detailedAddress')?.setValue(res.detailedAddress);
-      this.validateForm.get('fileName')?.setValue(res.fileName);
       this.validateForm
-        .get('businessLicenseUrl')
-        ?.setValue(res.businessLicenseUrl);
-      this.businessLicenseUrlOld = res.businessLicenseUrl;
-      this._informationService
-        .downImg({ hash: res.businessLicenseUrl })
-        .subscribe((resu) => {
-          this.fileImg = 'data:image/jpg;base64,' + resu;
-          this.cdr.markForCheck();
-        });
+        .get('paymentStatus')
+        ?.setValue(res.paymentStatus === 1 ? true : false);
+      this.validateForm.get('userNotice')?.setValue(true);
     });
   }
 
-  getCentralBank() {
-    this._informationService.getCentralBank().subscribe((res) => {
-      if (res) {
-        this.validateForm.get('centralBankName')?.setValue(res.centralBankName);
-      }
-      this.cdr.markForCheck();
-    });
-  }
+  spBriefIntroductionValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value?.length > 100) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
 
-  getWalletAddress() {
-    this._informationService.getWalletAddress().subscribe((res) => {
-      this.validateForm.get('spBesuWalletAddress')?.setValue(res);
-      this.cdr.markForCheck();
-    });
+  spDescriptionValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (control.value?.length > 500) {
+      return { regular: true, error: true };
+    }
+    return {};
+  };
+  goToPdf() {
+    window.open(
+      '/assets/network-access-agreement/network-access-agreement.pdf'
+    );
   }
   spNameValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
     if (!control.value) {
@@ -161,90 +163,34 @@ export class EditComponent implements OnInit, AfterViewInit {
         '<b>After the information is submitted, it will enter the review stage, please wait patiently</b>',
       nzOnOk: () => {
         this.onSubmitStatus = true;
-        if (
-          this.businessLicenseUrlOld ===
-          this.validateForm.get('businessLicenseUrl')?.value
-        ) {
-          this._informationService
-            .addForm(this.validateForm.value)
-            .subscribe((result) => {
-              this.onSubmitStatus = false;
-              if (result) {
-                this.message
+        this._informationService
+          .addForm({
+            spName: this.validateForm.get('spName')?.value,
+            bankBic: this.validateForm.get('bankBic')?.value,
+            contactName: this.validateForm.get('contactName')?.value,
+            detailedAddress: this.validateForm.get('detailedAddress')?.value,
+            email: this.validateForm.get('email')?.value,
+            interbankSettlementStatus: this.validateForm.get(
+              'interbankSettlementStatus'
+            )?.value,
+            mobileNumber: this.validateForm.get('mobileNumber')?.value,
+            paymentStatus:
+              this.validateForm.get('paymentStatus')?.value === true ? 1 : 0,
+            spBriefIntroduction: this.validateForm.get('spBriefIntroduction')
+              ?.value,
+            spDescription: this.validateForm.get('spDescription')?.value
+          })
+          .subscribe((result) => {
+            this.onSubmitStatus = false;
+            if (result) {
+              this.message
                 .success('The data has been submitted, please be patient!')
                 .onClose.subscribe((_) => {
                   this.router.navigateByUrl('/information/detail');
                 });
-              }
-              this.cdr.markForCheck();
-            });
-        } else {
-          this._informationService
-            .uploadImg(this.fileImgWord)
-            .subscribe((res) => {
-              this.validateForm.get('businessLicenseUrl')?.setValue(res);
-              this._informationService
-                .addForm(this.validateForm.value)
-                .subscribe((result) => {
-                  this.onSubmitStatus = false;
-                  if (result) {
-                    this.message
-                    .success('The data has been submitted, please be patient!')
-                    .onClose.subscribe((_) => {
-                      this.router.navigateByUrl('/information/detail');
-                    });
-                  }
-                  this.cdr.markForCheck();
-                });
-            });
-        }
-        // if (
-        //   this.businessLicenseUrlOld ===
-        //   this.validateForm.get('businessLicenseUrl')?.value
-        // ) {
-        //   this._informationService
-        //     .addForm(this.validateForm.value)
-        //     .subscribe((result) => {
-        //       this.onSubmitStatus = false;
-        //       this.message
-        //         .success('The data has been submitted, please be patient!')
-        //         .onClose.subscribe((_) => {
-        //           this.router.navigateByUrl('/information/detail');
-        //         });
-        //       this.cdr.markForCheck();
-        //     });
-        // } else {
-        //   this._informationService
-        //     .uploadImg(this.fileImgWord)
-        //     .subscribe((res) => {
-        //       this.validateForm.get('businessLicenseUrl')?.setValue(res);
-        //       this._informationService
-        //         .editForm({
-        //           spBriefIntroduction: this.validateForm.get(
-        //             'spBriefIntroduction'
-        //           )?.value,
-        //           spDescription: this.validateForm.get('spDescription')?.value,
-        //           bnCode: this.validateForm.get('bnCode')?.value,
-        //           contactName: this.validateForm.get('contactName')?.value,
-        //           mobileNumber: this.validateForm.get('mobileNumber')?.value,
-        //           email: this.validateForm.get('email')?.value,
-        //           detailedAddress:
-        //             this.validateForm.get('detailedAddress')?.value,
-        //           businessLicenseUrl:
-        //             this.validateForm.get('businessLicenseUrl')?.value,
-        //           spCode: this.validateForm.get('spCode')?.value
-        //         })
-        //         .subscribe((result) => {
-        //           this.onSubmitStatus = false;
-        //           this.message
-        //             .success('The data has been submitted, please be patient!')
-        //             .onClose.subscribe((_) => {
-        //               this.router.navigateByUrl('/information/detail');
-        //             });
-        //           this.cdr.markForCheck();
-        //         });
-        //     });
-        // }
+            }
+            this.cdr.markForCheck();
+          });
       }
     });
   }
@@ -259,12 +205,9 @@ export class EditComponent implements OnInit, AfterViewInit {
       this.fileImg = reader.result;
       this.fileImgWord = $event.target.files[0];
       this.cdr.markForCheck();
-      this.validateForm
-        .get('fileName')
-        ?.setValue(this.fileImgWord['name']);
+      this.validateForm.get('fileName')?.setValue(this.fileImgWord['name']);
       this.validateForm.get('businessLicenseUrl')?.setValue(this.fileImg);
       this.validateForm.get('fileName')?.setValue(this.fileImgWord['name']);
-
     };
   }
 

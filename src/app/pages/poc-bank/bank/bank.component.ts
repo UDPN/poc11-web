@@ -1,3 +1,10 @@
+/*
+ * @Author: chenyuting
+ * @Date: 2024-12-10 17:23:08
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-24 19:55:57
+ * @Description:
+ */
 import {
   Component,
   TemplateRef,
@@ -155,7 +162,7 @@ export class BankComponent implements OnInit, AfterViewInit {
     this.tableConfig.pageSize = e;
   }
   getDataList(e?: NzTableQueryParams): void {
-    this.tableConfig.loading = true;
+    this.tableLoading(true);
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
@@ -183,33 +190,39 @@ export class BankComponent implements OnInit, AfterViewInit {
         {
           title: 'Commercial Bank Name',
           field: 'commercialBankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Region',
           field: 'region',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'BIC',
           field: 'commercialBic',
+          notNeedEllipsis: true,
           width: 200
         },
         {
-          title: 'Central Bank/Custodian Bank ',
+          title: 'Custodian Bank',
           field: 'centralBankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
-          title: 'Currency',
+          title: 'Token',
           field: 'currency',
-          width: 200
+          notNeedEllipsis: true,
+          width: 120
         },
         {
-          title: 'Wallet Address',
+          title: 'Number of Wallets',
           field: 'walletAddressNumber',
           tdTemplate: this.walletAddressTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 120
         }
       ],
       total: 0,

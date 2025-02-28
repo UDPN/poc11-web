@@ -1,8 +1,8 @@
 <!--
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 10:48:53
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-10-09 13:22:15
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-04 14:13:09
  * @Description: 
 -->
 <app-def-layout-content>
@@ -19,7 +19,6 @@
   <ng-container top-header>
     <ng-container *ngTemplateOutlet="headerTpl"></ng-container>
   </ng-container>
-
   <ng-template #headerTpl>
     <app-tool-bar>
       <ng-container
@@ -43,21 +42,21 @@
             <!-- <img class="m-l-10" style="max-height: 32px; max-width: 54px" src="assets/imgs/logo.svg" alt="" /> -->
             <span
               class="m-l-20"
-              [style]="{ color: '#3c5686' }"
+              class="default-top-head-color"
               [ngClass]="{ logo: !(isCollapsed$ | async) }"
             >
+              <!-- <img [src]="logoImg" alt="" class="m-r-20" *ngIf="logoImg" />
+              <span *ngIf="!isCollapsed">{{
+                this.systemName ? this.systemName : ''
+              }}</span> -->
               <img
-                [src]="logoImg"
+                src="../../../assets/imgs/kissen/logo-white.svg"
                 alt=""
                 style="padding-bottom: 5px"
                 class="m-r-20"
-                *ngIf="logoImg"
               />
-              <span *ngIf="!isCollapsed">{{
-                this.systemName ? this.systemName : ''
-              }}</span>
-              <span class="m-l-50">{{
-                'Commercial Bank Management Control Panel'
+              <span class="m-l-50" style="font-weight: 400">{{
+                'Commercial Bank Control Panel'
               }}</span>
             </span>
           </ng-container>
@@ -71,7 +70,6 @@
       </ng-container>
     </app-tool-bar>
   </ng-template>
-
   <ng-container mixheader>
     <app-tool-bar>
       <ng-container left *ngIf="isOverMode">
@@ -91,18 +89,24 @@
             [style]="{ color: '#ffff' }"
             [ngClass]="{ logo: !(isCollapsed$ | async) }"
           >
-            <img
+            <!-- <img
               [src]="logoImg"
+              alt=""
+              style="padding-bottom: 5px; width: 164px; height: 60px"
+              class="m-r-20"
+              *ngIf="logoImg"
+            /> -->
+            <!-- <span *ngIf="!isCollapsed">{{
+              this.systemName ? this.systemName : ''
+            }}</span> -->
+            <img
+              src="../../../assets/imgs/kissen/logo-white.svg"
               alt=""
               style="padding-bottom: 5px"
               class="m-r-20"
-              *ngIf="logoImg"
             />
-            <span *ngIf="!isCollapsed">{{
-              this.systemName ? this.systemName : ''
-            }}</span>
-            <span class="m-l-50">{{
-              'Commercial Bank Management Control Panel'
+            <span class="m-l-30" style="font-weight: 400">{{
+              'Commercial Bank Control Panel'
             }}</span>
           </span>
           <span class="sp-18 m-r-25"></span>

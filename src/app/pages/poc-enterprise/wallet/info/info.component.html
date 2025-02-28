@@ -1,0 +1,277 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2025-01-20 14:59:21
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-26 16:50:59
+ * @Description: 
+-->
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-enterprise/wallet'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
+      <nz-tab *ngFor="let tab of detailsTabs; index as i" [nzTitle]="tab">
+        <ng-container *ngIf="i === 0">
+          <nz-card [nzBordered]="false" nzTitle="Wallet Information"
+            ><nz-descriptions
+              [nzColon]="false"
+              [nzBordered]="true"
+              [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }"
+            >
+              <nz-descriptions-item nzTitle="Wallet Address"
+                ><span
+                  nz-typography
+                  [nzCopyable]="info?.chainAccountAddress ? true : false"
+                  [nzCopyText]="info?.chainAccountAddress"
+                >
+                  {{ info?.chainAccountAddress }}
+                </span>
+                <span class="m-l-15"
+                  ><nz-tag
+                    [nzColor]="
+                      info?.status | map: 'enterpriseWalletStatusColor'
+                    "
+                    >{{ info?.status | map: 'enterpriseWalletStatus' }}</nz-tag
+                  ></span
+                ></nz-descriptions-item
+              ><nz-descriptions-item nzTitle="Enterprise Code"
+                ><p
+                  nz-typography
+                  [nzCopyable]="info?.enterpriseCode ? true : false"
+                  [nzCopyText]="info?.enterpriseCode"
+                >
+                  {{ info?.enterpriseCode }}
+                </p> </nz-descriptions-item
+              ><nz-descriptions-item nzTitle="Currency">{{
+                info?.currency
+              }}</nz-descriptions-item
+              ><nz-descriptions-item nzTitle="Balance">{{
+                (info?.balance | map: 'toThousandthMark') + ' ' + info?.currency
+              }}</nz-descriptions-item
+              ><nz-descriptions-item nzTitle="Created By">{{
+                info?.createUser
+              }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Created on">{{
+                info?.createTime | map: 'timeStamp'
+              }}</nz-descriptions-item></nz-descriptions
+            >
+          </nz-card>
+          <nz-card
+            [nzBordered]="false"
+            nzTitle="Wallet Creation Transaction Information"
+            ><nz-descriptions
+              [nzColon]="false"
+              [nzBordered]="true"
+              [nzColumn]="1"
+              ><nz-descriptions-item nzTitle="Transaction Hash"
+                ><p
+                  nz-typography
+                  [nzCopyable]="info?.txHash ? true : false"
+                  [nzCopyText]="info?.txHash"
+                >
+                  {{ info?.txHash | map: 'nullValue' }}
+                </p></nz-descriptions-item
+              >
+              <nz-descriptions-item nzTitle="Transaction Time">{{
+                info?.txTime | map: 'timeStamp'
+              }}</nz-descriptions-item></nz-descriptions
+            ></nz-card
+          >
+        </ng-container>
+        <ng-container *ngIf="i === 1">
+          <nz-card nzTitle="" nzBordered="false">
+            <nz-tabset
+              (nzSelectedIndexChange)="transactionsIndexChange($event)"
+            >
+              <nz-tab
+                *ngFor="let tabs of transactionsTabs; index as index"
+                [nzTitle]="tabs"
+              >
+                <ng-container *ngIf="transactionsIndex === 0">
+                  <!-- <div class="m-b-20">
+                    {{ 'Enterprise Wallet Address: '
+                    }}<b>{{ this.accountAddress }}</b>
+                  </div> -->
+                  <app-ant-table
+                    (changePageSize)="changePageSize($event)"
+                    (changePageNum)="getTopUpWithdrawDataList($event)"
+                    [tableConfig]="tableConfig"
+                    [tableData]="dataList"
+                  ></app-ant-table>
+                </ng-container>
+                <ng-container *ngIf="transactionsIndex === 1">
+                  <!-- <div class="m-b-20">
+                    {{ 'Enterprise Wallet Address: '
+                    }}<b>{{ this.accountAddress }}</b>
+                  </div> -->
+                  <app-ant-table
+                    (changePageSize)="changePageSize1($event)"
+                    (changePageNum)="getTransferDataList($event)"
+                    [tableConfig]="transferTableConfig"
+                    [tableData]="transferDataList"
+                  ></app-ant-table>
+                </ng-container> </nz-tab
+            ></nz-tabset>
+          </nz-card>
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>
+
+<!-- Top-up/Withdraw -->
+<ng-template
+  #transactionNoTpl
+  let-transactionNo="transactionNo"
+  let-accountCbdcId="accountCbdcId"
+>
+  <a
+    [title]="transactionNo"
+    nz-typography
+    [nzCopyable]="transactionNo ? true : false"
+    [nzCopyText]="transactionNo"
+    routerLink="/poc/poc-enterprise/transaction-approval/info"
+    [queryParams]="{ accountCbdcId }"
+  >
+    {{ transactionNo | map: 'showPartEight' }}
+  </a>
+</ng-template>
+<ng-template
+  #walletAddressTpl
+  let-type="type"
+  let-fromAddress="fromAddress"
+  let-toAddress="toAddress"
+>
+  <p
+    [title]="type === 3 ? toAddress : fromAddress"
+    nz-typography
+    [nzCopyable]="toAddress || fromAddress ? true : false"
+    [nzCopyText]="type === 3 ? toAddress : fromAddress"
+  >
+    {{ (type === 3 ? toAddress : fromAddress) | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #statusTpl let-status="status">
+  <nz-tag [nzColor]="status | map: 'walletInfoTransactionsStatusColor'">{{
+    status | map: 'walletInfoTransactionsStatus'
+  }}</nz-tag>
+</ng-template>
+<ng-template #amountTpl let-type="type" let-amount="amount">
+  <span
+    [title]="amount | map: 'toThousandthMark'"
+    [style]="{ color: type === 3 ? '#39A16A' : '#E53E3E' }"
+    >{{ type === 3 ? ' + ' : ' - '
+    }}{{ amount | map: 'toThousandthMark' }}</span
+  >
+</ng-template>
+<ng-template #operationTpl let-accountCbdcId="accountCbdcId">
+  <span
+    class="operate-text"
+    routerLink="/poc/poc-enterprise/transactions/info"
+    [queryParams]="{accountCbdcId}"
+  >
+    Details
+  </span>
+</ng-template>
+<!-- Top-up/Withdraw -->
+
+<!-- Transfer -->
+<ng-template
+  #otherTransactionNoTpl
+  let-transactionNo="transactionNo"
+  let-transferId="transferId"
+>
+  <a
+    [title]="transactionNo"
+    nz-typography
+    [nzCopyable]="transactionNo ? true : false"
+    [nzCopyText]="transactionNo"
+    routerLink="/poc/poc-enterprise/transaction-approval/info"
+    [queryParams]="{ transferId }"
+  >
+    {{ transactionNo | map: 'showPartEight' }}
+  </a>
+</ng-template>
+<ng-template #otherSenderWalletAddressTpl let-from="from">
+  <p
+    [title]="from"
+    nz-typography
+    [nzCopyable]="from ? true : false"
+    [nzCopyText]="from"
+  >
+    {{ from | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #otherReceiverWalletAddressTpl let-to="to">
+  <p
+    [title]="to"
+    nz-typography
+    [nzCopyable]="to ? true : false"
+    [nzCopyText]="to"
+  >
+    {{ to | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #otherStatusTpl>
+  <nz-tag [nzColor]="'green'">{{ 'Success' }}</nz-tag>
+</ng-template>
+<ng-template
+  #otherAmountTpl
+  let-sendingCurrency="sendingCurrency"
+  let-sendingAmount="sendingAmount"
+  let-receivingAmount="receivingAmount"
+  let-receivingCurrency="receivingCurrency"
+>
+  <div class="display-flex">
+    <div>
+      <p>
+        {{ sendingAmount | map: 'toThousandthMark' }}
+      </p>
+      <p>{{ sendingCurrency }}</p>
+    </div>
+    <div>
+      <span
+        class="arrow-right m-l-10 m-r-10"
+        nz-icon
+        nzType="arrow-right"
+        nzTheme="outline"
+      ></span>
+    </div>
+    <div>
+      <p>
+        {{ receivingAmount | map: 'toThousandthMark' }}
+      </p>
+      <p>{{ receivingCurrency }}</p>
+    </div>
+  </div>
+</ng-template>
+<ng-template
+  #otherFxRateTpl
+  let-sendingCurrency="sendingCurrency"
+  let-receivingCurrency="receivingCurrency"
+  let-exchangeRate="exchangeRate"
+>
+  <span>{{
+    sendingCurrency +
+      '/' +
+      receivingCurrency +
+      ' = ' +
+      (exchangeRate | map: 'toThousandthMark')
+  }}</span>
+</ng-template>
+<ng-template #otherOperationTpl let-transferId="transferId">
+  <span
+    class="operate-text"
+    routerLink="/poc/poc-enterprise/transactions/info"
+    [queryParams]="{transferId}"
+  >
+    Details
+  </span>
+</ng-template>
+<!-- Transfer -->

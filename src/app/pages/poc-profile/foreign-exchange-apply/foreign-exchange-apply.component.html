@@ -1,71 +1,155 @@
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" [nzTitle]="'FX Pair Application Query'" class="m-b-10">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'FX Pair Application Query'"
+    class="m-b-10"
+  >
     <form nz-form nzLayout="vertical">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
           <nz-form-item>
             <nz-form-label>Application No.</nz-form-label>
             <nz-form-control>
-              <input nz-input placeholder="" name="businessApplicationCode"
-                [(ngModel)]="searchParam.businessApplicationCode" />
+              <input
+                nz-input
+                placeholder=""
+                name="businessApplicationCode"
+                [(ngModel)]="searchParam.businessApplicationCode"
+              />
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
           <nz-form-item>
             <nz-form-label>Application Type</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="businessApplicationStatus" [(ngModel)]="searchParam.applicationType">
+              <nz-select
+                nzPlaceHolder=""
+                name="businessApplicationStatus"
+                [(ngModel)]="searchParam.applicationType"
+              >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of businessTypeList" [nzValue]="item.cseValue" [nzLabel]="item.cseDesc">
+                <nz-option
+                  *ngFor="let item of businessTypeList"
+                  [nzValue]="item.cseValue"
+                  [nzLabel]="item.cseDesc"
+                >
                 </nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Created On</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
             <nz-form-control>
-              <nz-range-picker style="width: 100%" name="applicationTime"
-                [(ngModel)]="searchParam.applicationTime"></nz-range-picker>
+              <nz-range-picker
+                style="width: 100%"
+                name="applicationTime"
+                [(ngModel)]="searchParam.applicationTime"
+              ></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Onboarded On</nz-form-label>
             <nz-form-control>
-              <nz-range-picker style="width: 100%" name="approvalTime"
-                [(ngModel)]="searchParam.approvalTime"></nz-range-picker>
+              <nz-range-picker
+                style="width: 100%"
+                name="approvalTime"
+                [(ngModel)]="searchParam.approvalTime"
+              ></nz-range-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
           <nz-form-item>
             <nz-form-label>Status</nz-form-label>
             <nz-form-control>
-              <nz-select nzPlaceHolder="" name="businessApplicationStatus"
-                [(ngModel)]="searchParam.businessApplicationStatus">
+              <nz-select
+                nzPlaceHolder=""
+                name="businessApplicationStatus"
+                [(ngModel)]="searchParam.businessApplicationStatus"
+              >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let item of statusList" [nzValue]="item.cseValue" [nzLabel]="item.cseDesc">
+                <nz-option
+                  *ngFor="let item of statusList"
+                  [nzValue]="item.cseValue"
+                  [nzLabel]="item.cseDesc"
+                >
                 </nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
 
-        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24" class="m-b-8 text-right p-0">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="m-b-8 text-right p-0"
+        >
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control>
               <div nz-col [nzSpan]="24">
-                <button nz-button [nzType]="'primary'" (click)="getDataList(this.tableQueryParams)">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
                   Query
                 </button>
-                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()">Reset</a>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
               </div>
             </nz-form-control>
           </nz-form-item>
@@ -73,20 +157,32 @@
       </div>
     </form>
   </nz-card>
-  <app-card-table-wrap [tableTitle]="'FX Pair Application List'" [isNormalTable]="true" [btnTpl]="createBtn">
-    <app-ant-table (changePageSize)="changePageSize($event)" (changePageNum)="getDataList($event)"
-      [tableConfig]="tableConfig" [tableData]="dataList"></app-ant-table>
+  <app-card-table-wrap
+    [tableTitle]="'FX Pair Application List'"
+    [isNormalTable]="true"
+    [btnTpl]="createBtn"
+  >
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
     <ng-template #currencyTpl let-currency="currency">
       <span *ngFor="let item of currency; index as i">
-        <span [title]="item">{{ item.split('-')[0] + '-' + item.split('-')[1] + '-' + item.split('-')[3] + '-' +
-          item.split('-')[4] }}</span>
-        <br>
+        <span [title]="item | map: 'currencyPair'">{{
+          item | map: 'currencyPair'
+        }}</span>
+        <br />
       </span>
     </ng-template>
     <ng-template #operationTpl let-applicationNo="applicationNo">
       <ng-container *appAuth="'R020302'">
-        <span class="operate-text" routerLink="/poc/poc-profile/foreign-exchange-apply/info"
-          [queryParams]="{applicationNo}">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-profile/foreign-exchange-apply/info"
+          [queryParams]="{applicationNo}"
+        >
           Details
         </span>
       </ng-container>
@@ -94,12 +190,24 @@
   </app-card-table-wrap>
   <div>
     <ng-template #createBtn>
-      <button routerLink="/poc/poc-profile/foreign-exchange-apply/add" *appAuth="'R020301'" nz-button nzType="primary"
-        class="m-r-8">
+      <button
+        routerLink="/poc/poc-profile/foreign-exchange-apply/add"
+        *appAuth="'R020301'"
+        nz-button
+        nzType="primary"
+        class="m-r-8"
+      >
         Activate Exchange Pair
       </button>
-      <button routerLink="/poc/poc-profile/foreign-exchange-apply/reduce" *appAuth="'R020303'" nz-button
-        nzType="primary" class="m-r-8">
+      <button
+        routerLink="/poc/poc-profile/foreign-exchange-apply/reduce"
+        *appAuth="'R020303'"
+        nz-button
+        nzType="primary"
+        class="m-r-8"
+      >
         Deactivate Exchange Pair
       </button>
     </ng-template>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-card [nzTitle]="'Token Pair Information'">
+    <nz-descriptions [nzBordered]="true" [nzColumn]="2">
+      <nz-descriptions-item nzTitle="Token Pair">
+        {{ tokenPairInfo.tokenPair }}
+        <nz-tag [nzColor]="'blue'" class="m-l-8">{{ tokenPairInfo.fxType }}</nz-tag>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Status">
+        <nz-tag [nzColor]="getStatusColor(tokenPairInfo.status)">
+          {{ getStatusText(tokenPairInfo.status) }}
+        </nz-tag>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="FX Rate">
+        {{ tokenPairInfo.fxRate }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="FX Rate Updated on">
+        {{ tokenPairInfo.fxRateUpdatedOn | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Created by">
+        {{ tokenPairInfo.createdBy }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Created on">
+        {{ tokenPairInfo.createdOn | date:'MMM d, y, HH:mm:ss' }} UTC+08:00
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+
+  <!-- FX Rate History -->
+  <nz-card [nzTitle]="'FX Rate History'" class="m-t-16">
+    <!-- Search Form -->
+    <div class="m-b-16">
+      <div nz-row [nzGutter]="16" nzAlign="middle">
+        <div nz-col>
+          <span class="label">Date</span>
+        </div>
+        <div nz-col>
+          <nz-range-picker
+            [(ngModel)]="dateRange"
+          ></nz-range-picker>
+        </div>
+        <div nz-col>
+          <button nz-button (click)="resetSearch()">Reset</button>
+          <button nz-button nzType="primary" class="m-l-8" (click)="getFxRateHistory()">Query</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Table -->
+    <nz-table
+      #basicTable
+      [nzData]="historyList"
+      [nzFrontPagination]="false"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      [nzLoading]="historyLoading"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Token Pair</th>
+          <th>FX Rate</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.tokenPair }}</td>
+          <td>{{ data.fxRate }}</td>
+          <td>{{ data.date | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</nz-spin>

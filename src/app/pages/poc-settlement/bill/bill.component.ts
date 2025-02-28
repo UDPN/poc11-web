@@ -105,7 +105,7 @@ export class BillComponent implements OnInit, AfterViewInit {
     private router: Router,
     private fb: NonNullableFormBuilder,
     private modal: NzModalService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -261,9 +261,7 @@ export class BillComponent implements OnInit, AfterViewInit {
       this.listOfControl[index - 1].controlInstance,
       this.fb.control('', [Validators.required, this.emailValidator])
     );
-    if (!this.validateForm
-      .get(this.listOfControl[0].controlInstance)
-      ?.value) {
+    if (!this.validateForm.get(this.listOfControl[0].controlInstance)?.value) {
       this.validateForm
         .get(this.listOfControl[0].controlInstance)
         ?.setValue(sessionStorage.getItem('email'));
@@ -340,36 +338,42 @@ export class BillComponent implements OnInit, AfterViewInit {
         {
           title: 'Statement No.',
           field: 'billNo',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Date',
           field: 'billCycle',
           pipe: 'monthStamp',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Bank ID',
           field: 'bankId',
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Bank Name',
           field: 'bankName',
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Currency Pair',
           tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Statement Amount',
           tdTemplate: this.billingAmountTpl,
+          notNeedEllipsis: true,
           width: 150
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createDate',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
@@ -378,6 +382,7 @@ export class BillComponent implements OnInit, AfterViewInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

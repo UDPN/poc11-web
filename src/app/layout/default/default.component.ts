@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 
@@ -33,7 +40,15 @@ export class DefaultComponent implements OnInit, AfterViewInit {
   @ViewChild('navDrawer') navDrawer!: NavDrawerComponent;
   version: any;
   constructor(
-    private styleService: StyleService, private commonService: CommonService, private destroy$: DestroyService, private logoService: LogoService, private cdr: ChangeDetectorRef, private themesService: ThemeService, private driverService: DriverService, private windowService: WindowService) { }
+    private styleService: StyleService,
+    private commonService: CommonService,
+    private destroy$: DestroyService,
+    private logoService: LogoService,
+    private cdr: ChangeDetectorRef,
+    private themesService: ThemeService,
+    private driverService: DriverService,
+    private windowService: WindowService
+  ) {}
 
   changeCollapsed(): void {
     if (this.isOverMode) {
@@ -44,16 +59,15 @@ export class DefaultComponent implements OnInit, AfterViewInit {
     this.themesService.setIsCollapsed(this.isCollapsed);
   }
 
-
   subTheme(): void {
     this.themesService
       .getIsCollapsed()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(res => (this.isCollapsed = res));
+      .subscribe((res) => (this.isCollapsed = res));
     this.themesService
       .getIsOverMode()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(res => (this.isOverMode = res));
+      .subscribe((res) => (this.isOverMode = res));
   }
 
   prepareRoute(outlet: RouterOutlet): string {
@@ -65,7 +79,6 @@ export class DefaultComponent implements OnInit, AfterViewInit {
       return;
     }
     this.windowService.setStorage(IsFirstLogin, 'false');
-
   }
 
   ngOnInit(): void {
@@ -75,16 +88,16 @@ export class DefaultComponent implements OnInit, AfterViewInit {
     this.styleService.search().subscribe((res: any) => {
       if (res) {
         this.systemName = res.systemName;
-        if (res.logoFileHash) {
-          this.commonService
-            .downImg({ hash: res.logoFileHash })
-            .subscribe((resu) => {
-              this.logoImg = 'data:image/jpg;base64,' + resu;
-              this.cdr.markForCheck();
-            });
-        }
+        // if (res.logoFileHash) {
+        //   this.commonService
+        //     .downImg({ hash: res.logoFileHash })
+        //     .subscribe((resu) => {
+        //       this.logoImg = 'data:image/jpg;base64,' + resu;
+        //       this.cdr.markForCheck();
+        //     });
+        // }
       }
-    })
+    });
     // this.logoService.search({ logoType: 2 }).subscribe((res: any) => {
     //   if (res.length <= 0) {
     //     this.logoImg = '../../../../assets/imgs/system/bn.png';

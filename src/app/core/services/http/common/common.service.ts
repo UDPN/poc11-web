@@ -1,11 +1,11 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-10-17 16:27:46
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-22 16:04:12
  * @Description:
  */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BaseHttpService } from '../base-http.service';
@@ -36,5 +36,27 @@ export class CommonService {
 
   public downImg(params: { hash: string }): Observable<any> {
     return this.http.post(`/v1/fxsp/sys/file/download`, params);
+  }
+
+  public download(busId: any, busType: any): Observable<any> {
+    return this.https.get(
+      `/v1/export/task/download?busId=${busId}&busType=${busType}`,
+      {
+        responseType: 'blob',
+        observe: 'response'
+      }
+    );
+  }
+
+  public tokenList(): Observable<any> {
+    return this.http.get(`/v1/common/token/list`);
+  }
+
+  public blockchainList(): Observable<any> {
+    return this.http.get(`/v1/common/blockchain/list`);
+  }
+
+  public currencyList(): Observable<any> {
+    return this.http.post(`/v1/common/centralBankList`);
   }
 }

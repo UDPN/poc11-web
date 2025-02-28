@@ -6,13 +6,26 @@
     width: 100%;
     height: 100%;
     margin-left: -48%;
-    background-image: url('../../../../assets/imgs/login1/login-bg-logo.svg');
+    background-image: url('../../../../assets/imgs/login1/group.svg');
     background-position: 100%;
+
     background-repeat: no-repeat;
-    background-size: auto 100%;
+    background-size: 60% 60%;
     content: '';
   }
 
+  .title-container{
+    position: absolute;
+    left: 100px;
+    top: 3rem;
+    img:first-child{
+      width: 8rem;
+    }
+    img:last-child{
+      margin-left: 3rem;
+      width: 15rem;
+    }
+  }
   &.is-night:before {
     background-image: url('../../../../assets/imgs/login1/login1-bg-dark.svg');
   }
@@ -89,4 +102,7 @@ img {
   color: #fff !important; 
   text-align: center !important;  
   font-size: 24px !important; 
+}
+.ssst{
+  border-radius: 17px !important;
 }

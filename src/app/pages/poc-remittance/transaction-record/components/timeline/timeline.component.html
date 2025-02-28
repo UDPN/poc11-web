@@ -7,24 +7,30 @@
         [nzStatus]="'finish'"
         [nzDescription]="step1Tpl"
       ></nz-step>
-      <ng-container *ngIf="info.state === 6">
+      <ng-container *ngIf="info.state === 40">
         <nz-step
-          [nzTitle]="'The Remitter: Transfers w-EUR to the recipient'"
+          [nzTitle]="
+            'The Remitter: Transfers ' + info.fromCurrency + ' to the recipient'
+          "
           [nzStatus]="'error'"
           [nzDescription]="step4Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 5">
+      <ng-container *ngIf="info.state === 35">
         <nz-step
-          [nzTitle]="'The Remitter: Transfers w-EUR to the recipient'"
+          [nzTitle]="
+            'The Remitter: Transfers ' + info.fromCurrency + ' to the recipient'
+          "
           [nzStatus]="'finish'"
           [nzDescription]="step3Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 1 || info.state === 4">
+      <ng-container *ngIf="info.state === 5 || info.state === 20">
         <nz-step
-          [nzTitle]="'The Remitter: Transfers w-EUR to the recipient'"
-          [nzStatus]="'wait'"
+          [nzTitle]="
+            'The Remitter: Transfers ' + info.fromCurrency + ' to the recipient'
+          "
+          [nzStatus]="'process'"
           [nzDescription]="step2Tpl"
         ></nz-step>
       </ng-container>
@@ -41,47 +47,49 @@
       ></nz-step>
       <nz-step
         [nzTitle]="
-          'The Remitter: Calculate the w-USD amount based on the exchange rate'
+          'The Remitter: Calculate the ' +
+          info.toCurrency +
+          ' amount based on the exchange rate'
         "
         [nzStatus]="'finish'"
         [nzDescription]="step6Tpl"
       ></nz-step>
       <!-------- step3 -------->
-      <ng-container *ngIf="info.transactionLogTrees[2]?.state !== -1">
-        <ng-container *ngIf="info.state === 1 || info.state === 4">
+      <!-- <ng-container *ngIf="info.transactionLogTrees[2]?.state !== -1">
+        <ng-container *ngIf="info.state === 5 || info.state === 20">
           <nz-step
             nzTitle="The Remitter: Authorize Token Swap and FX Smart Contracts"
             [nzStatus]="'process'"
             [nzDescription]="step2Tpl"
           ></nz-step>
         </ng-container>
-        <ng-container *ngIf="info.state === 5">
+        <ng-container *ngIf="info.state === 35">
           <nz-step
             nzTitle="The Remitter: Authorize Token Swap and FX Smart Contracts"
             [nzStatus]="'finish'"
             [nzDescription]="step8Tpl"
           ></nz-step>
         </ng-container>
-      </ng-container>
+      </ng-container> -->
       <!-------- step3 -------->
       <!-------- step4 -------->
-      <ng-container *ngIf="info.state === 5">
+      <ng-container *ngIf="info.state === 35">
         <nz-step
-          nzTitle="The Token Swap and FX Smart Contracts: Call the SP wallet to initiate the transfer"
+          nzTitle="The FX Smart Contracts: Call the Liquidity Pool wallet to initiate the transfer"
           [nzStatus]="'finish'"
           [nzDescription]="step9Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 6">
+      <ng-container *ngIf="info.state === 40">
         <nz-step
-          nzTitle="The Token Swap and FX Smart Contracts: Call the SP wallet to initiate the transfer"
+          nzTitle="The FX Smart Contracts: Call the Liquidity Pool wallet to initiate the transfer"
           [nzStatus]="'error'"
           [nzDescription]="step7Tpl"
         ></nz-step>
       </ng-container>
-      <ng-container *ngIf="info.state === 1 || info.state === 4">
+      <ng-container *ngIf="info.state === 5 || info.state === 20">
         <nz-step
-          nzTitle="The Token Swap and FX Smart Contracts: Call the SP wallet to initiate the transfer"
+          nzTitle="The FX Smart Contracts: Call the Liquidity Pool wallet to initiate the transfer"
           [nzStatus]="'process'"
           [nzDescription]="step10Tpl"
         ></nz-step>
@@ -94,7 +102,15 @@
 <!------ Transfer  ----->
 <ng-template #step1Tpl>
   <ul>
-    <li>{{ 'Transaction No.: ' + info.serialNumber }}</li>
+    <li>
+      <span>{{ 'Transaction No.: ' }}</span
+      ><span
+        nz-typography
+        [nzCopyable]="true"
+        [nzCopyText]="info.serialNumber"
+        >{{ info.serialNumber }}</span
+      >
+    </li>
     <li>
       {{ 'on ' + (info.transactionLogTrees[0]?.txTime | map: 'timeStamp') }}
     </li>
@@ -124,18 +140,18 @@
       <p>{{ info.transactionLogTrees[1]?.txHash | map: 'nullValue' }}</p>
     </li>
     <li>
-      {{ info.transactionLogTrees[1]?.txTime | map: 'timeStamp' }}
+      {{ 'on ' + (info.transactionLogTrees[1]?.txTime | map: 'timeStamp') }}
     </li>
   </ul>
 </ng-template>
 <ng-template #step4Tpl>
   <ul>
     <li>
-      {{ 'Status: ' + (info.state | map: 'walletTransactionsRecordStatus') }}
+      {{ info.state | map: 'walletTransactionsRecordStatus' }}
     </li>
-    <li>{{ 'Reason: ' + info.failureReason }}</li>
+    <li>{{ 'Reason: ' + (info.failureReason | map: 'nullValue') }}</li>
     <li>
-      {{ info.transactionLogTrees[1]?.txTime | map: 'timeStamp' }}
+      {{ 'on ' + (info.transactionLogTrees[1]?.txTime | map: 'timeStamp') }}
     </li>
   </ul>
 </ng-template>
@@ -147,7 +163,7 @@
       {{
         'The remitter transfers ' +
           info.fromCurrency +
-          " from remitter's wallet to recipient's" +
+          " from remitter's wallet to recipient's " +
           info.toCurrency +
           ' wallet'
       }}
@@ -158,7 +174,7 @@
         'on ' +
           (info.createTime | map: 'timeStamp') +
           ' by ' +
-          (info.createUser | map: 'null')
+          (info.fromBankName | map: 'null')
       }}
     </li>
   </ul>
@@ -167,7 +183,7 @@
   <ul>
     <li>
       {{
-        (info.fromCbdcCount | map: 'toThousandthMark') +
+        (info.timeLineCbdcCount | map: 'toThousandthMark') +
           ' ' +
           info.fromCurrency +
           ' = ' +
@@ -177,41 +193,33 @@
       }}
       {{
         'with FX: 1 ' +
-          info.fromCurrency.split('-')[1] +
+          info.fromCurrency +
           ' = ' +
           info.exchangeRate +
           ' ' +
-          info.toCurrency.split('-')[1]
+          info.toCurrency
       }}
     </li>
     <li>
-      {{
-        'Commission: ' +
-          (info.commission | map: 'toThousandthMark') +
-          ' ' +
-          info.fromCurrency
-      }}
-    </li>
-    <li>
-      {{ info.transactionLogTrees[1]?.txTime | map: 'timeStamp' }}
+      {{ 'on ' + (info.transactionLogTrees[1]?.txTime | map: 'timeStamp') }}
     </li>
   </ul>
 </ng-template>
 <ng-template #step7Tpl>
   <ul>
     <li>
-      {{ 'Status: ' + (info.state | map: 'walletTransactionsRecordStatus') }}
+      {{ info.state | map: 'walletTransactionsRecordStatus' }}
     </li>
-    <li>{{ 'Reason: ' + info.failureReason }}</li>
+    <li>{{ 'Reason: ' + (info.failureReason | map: 'nullValue') }}</li>
     <li>
-      {{ info.transactionLogTrees[3]?.txTime | map: 'timeStamp' }}
+      {{ 'on ' + (info.transactionLogTrees[3]?.txTime | map: 'timeStamp') }}
     </li>
   </ul>
 </ng-template>
 <ng-template #step8Tpl>
   <ul>
     <li>
-      {{ 'Transfer ' }}
+      {{ 'Authorize ' }}
       <span style="font-weight: 700">{{
         (info.fromCbdcCount | map: 'toThousandthMark') + ' ' + info.fromCurrency
       }}</span>
@@ -241,7 +249,11 @@
       <span style="font-weight: 700">{{
         (info.toCbdcCount | map: 'toThousandthMark') + ' ' + info.toCurrency
       }}</span>
-      {{ 'from SP ' + info.toCurrency + " wallet to recipient's wallet" }}
+      {{
+        'from liquidity provider ' +
+          info.toCurrency +
+          " wallet to recipient's wallet "
+      }}
       <p>{{ info.toAccountAddress }}</p>
     </li>
     <li>
@@ -249,7 +261,7 @@
       <p>{{ info.transactionLogTrees[3]?.txHash | map: 'nullValue' }}</p>
     </li>
     <li>
-      {{ info.transactionLogTrees[3]?.txTime | map: 'timeStamp' }}
+      {{ 'on ' + (info.transactionLogTrees[3]?.txTime | map: 'timeStamp') }}
     </li>
   </ul>
 </ng-template>

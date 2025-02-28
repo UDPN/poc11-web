@@ -8,7 +8,9 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:webpack-browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "customWebpackConfig": {
           "path": "./webpack.config.js"
@@ -41,10 +43,15 @@
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["src/styles/themes"]
+          "includePaths": [
+            "src/styles/themes"
+          ]
         },
-        "scripts": ["node_modules/driver.js/dist/driver.min.js"],
+        "scripts": [
+          "node_modules/driver.js/dist/driver.min.js"
+        ],
         "allowedCommonJsDependencies": [
+          "quill-delta",
           "@ethereumjs/tx",
           "@ethereumjs/common",
           "web3",
@@ -105,6 +112,48 @@
           ],
           "outputHashing": "all"
         },
+        "liquidity-production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "5mb",
+              "maximumError": "6mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10mb",
+              "maximumError": "5mb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.liquidity-prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "liquidity-development": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "5mb",
+              "maximumError": "6mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10mb",
+              "maximumError": "5mb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.liquidity.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
         "development": {
           "buildOptimizer": false,
           "optimization": false,
@@ -143,12 +192,16 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["{projectRoot}/src"]
+        "lintFilePatterns": [
+          "{projectRoot}/src"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectName}"
+      ],
       "options": {
         "jestConfig": "jest.config.ts"
       }

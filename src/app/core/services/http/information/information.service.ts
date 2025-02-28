@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-25 13:20:00
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-18 15:29:18
  * @Description:
  */
 import { HttpClient } from '@angular/common/http';
@@ -12,27 +12,28 @@ import { BaseHttpService } from '../base-http.service';
 
 export interface InformationData {
   bankBic: string;
-  bnCode: string;
-  businessLicenseUrl: string;
   contactName: string;
   detailedAddress: string;
   email: string;
-  fileName: string;
+  interbankSettlementStatus: string | number;
   mobileNumber: string;
+  paymentStatus: string | number;
   spBriefIntroduction: string;
   spDescription: string;
   spName: string;
 }
 export interface InformationEditData {
-  spBriefIntroduction: string;
-  spDescription: string;
-  bnCode: string;
   contactName: string;
   mobileNumber: string;
   email: string;
   detailedAddress: string;
-  businessLicenseUrl: string;
   spCode: string;
+  spName: string;
+  bankBic: string;
+  spBriefIntroduction: string;
+  spDescription: string;
+  interbankSettlementStatus: string | number;
+  paymentStatus: string | number;
 }
 @Injectable({
   providedIn: 'root'

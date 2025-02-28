@@ -41,6 +41,7 @@ import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { StyleService } from '@app/core/services/http/poc-system/system-style/style.service';
 import { SocketService } from '@app/core/services/common/socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CommonService } from '@app/core/services/http/common/common.service';
 
 export interface SettingInterface {
   theme: 'dark' | 'light';
@@ -60,12 +61,14 @@ export interface SettingInterface {
 
 @Component({
   selector: 'app-normal-login',
-  templateUrl: './normal-login.component.html',
+  templateUrl: './kissen-login.component.html',
+
   styleUrls: ['./normal-login.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroyService]
 })
 export class NormalLoginComponent implements OnInit {
+  logoImg: string = '';
   validateForm!: FormGroup;
   passwordVisible = false;
   password?: string;
@@ -110,9 +113,9 @@ export class NormalLoginComponent implements OnInit {
     private themesService: ThemeService,
     private nzConfigService: NzConfigService,
     private styleService: StyleService,
-
+    private commonService: CommonService,
     private notification: NzNotificationService
-  ) { }
+  ) {}
 
   submitForm(): void {
     if (!fnCheckForm(this.validateForm)) {
@@ -137,6 +140,7 @@ export class NormalLoginComponent implements OnInit {
           sessionStorage.setItem('clientName', result.realName);
           sessionStorage.setItem('email', result.email);
           sessionStorage.setItem('token', result.token);
+          sessionStorage.setItem('pdfViewerExpanded', 'false');
 
           let dataFromat: any = {
             aud: [],
@@ -157,7 +161,7 @@ export class NormalLoginComponent implements OnInit {
           console.log(tokens);
           this.loginInOutService.loginIn(tokens).then(() => {
             this.message
-              .success('Login successfully!', { nzDuration: 1000 })
+              .success('Login successful!', { nzDuration: 1000 })
               .onClose!.subscribe((res) => {
                 this.router.navigateByUrl('/poc/poc-home/home');
               });
@@ -174,9 +178,22 @@ export class NormalLoginComponent implements OnInit {
 
   getThemeOptions() {
     this.styleService.search().subscribe((res: any) => {
+      this.logoImg = res.logoFileHash;
+      this.systemTitle = res.systemName;
+      sessionStorage.setItem('systemName', res.systemName);
+      // if (res.logoFileHash) {
+      //   this.commonService
+      //   .downImg({ hash: res.logoFileHash })
+      //   .subscribe((resu) => {
+      //     this.logoImg = 'data:image/jpg;base64,' + resu;
+      //     sessionStorage.setItem('logoImg', this.logoImg);
+      //     this.cdr.markForCheck();
+      //   });
+      //   // this.isDefaultLogo = false;
+      // } else {
+      //   this.isDefaultLogo = true;
+      // }
       if (res.themeColor) {
-        this.systemTitle = res.systemName;
-        sessionStorage.setItem('systemName', res.systemName);
         this.nzConfigService.set('theme', {
           primaryColor: res.themeColor
         });
@@ -211,8 +228,14 @@ export class NormalLoginComponent implements OnInit {
         this.cdr.markForCheck();
       });
     this.validateForm = this.fb.group({
-      clientName: [environment.clientName ? environment.clientName : '', [Validators.required]],
-      pwd: [environment.password ? environment.password : '', [Validators.required, this.pwdValidator]],
+      clientName: [
+        environment.clientName ? environment.clientName : '',
+        [Validators.required]
+      ],
+      pwd: [
+        environment.password ? environment.password : '',
+        [Validators.required, this.pwdValidator]
+      ],
       captchaCode: ['', [Validators.required]],
       keySuffix: ['']
     });
@@ -234,15 +257,16 @@ export class NormalLoginComponent implements OnInit {
       environment.localUrl +
       '/v1/fxsp/anon/generate/captcha?' +
       fnRandomString(8, '');
-    this.dataService.getCaptcha(url).subscribe(resp => {
+    this.dataService.getCaptcha(url).subscribe((resp) => {
       const data = JSON.parse(resp.body);
       this.srcUrl = 'data:image/jpg;base64,' + data.data.baseStr;
       let randomstr = resp.headers.get('Randomstr');
       let ss = resp.headers.get('Randomcode');
       if (randomstr) {
-        this.validateForm.get('captchaCode')?.setValue(ss);
+        // this.validateForm.get('captchaCode')?.setValue(ss);
+        this.validateForm.get('captchaCode')?.setValue('');
       }
-    })
+    });
     this.cdr.markForCheck();
   }
 }

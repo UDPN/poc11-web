@@ -1,3 +1,10 @@
+/*
+ * @Author: chenyuting
+ * @Date: 2024-12-09 15:40:52
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-28 09:50:57
+ * @Description:
+ */
 import {
   Component,
   TemplateRef,
@@ -7,6 +14,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransactionRecordService } from '@app/core/services/http/poc-remittance/transaction/transaction.service';
@@ -59,6 +67,8 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('fxRateTpl', { static: true })
+  fxRateTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creationTime: [],
     state: '',
@@ -100,8 +110,10 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private transactionRecordService: TransactionRecordService,
-    private transferService: TransferService
-  ) { }
+    private transferService: TransferService,
+    private router: Router,
+    public routeInfo: ActivatedRoute
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -113,7 +125,19 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.routeInfo.queryParams.subscribe((params) => {
+      if (JSON.stringify(params) !== '{}') {
+        this.searchParam.serialNumber = params['traceId'];
+      }
+    });
     this.initTable();
+    if (this.router.url.indexOf('?') !== -1) {
+      history.replaceState(
+        this.router.url,
+        '',
+        this.router.url.substring(0, this.router.url.indexOf('?'))
+      );
+    }
     this.transferService.fetchBankList().subscribe((res: any) => {
       this.currencyList = res;
     });
@@ -171,53 +195,61 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 110
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 110
         },
         {
           title: 'To',
           tdTemplate: this.toTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 110
         },
         {
           title: 'Type',
           field: 'type',
           pipe: 'transactionsRecordType',
-          width: 100
+          notNeedEllipsis: true,
+          width: 130
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 200
         },
         {
-          title: 'Currency',
-          field: 'currency',
-          width: 100
+          title: 'FX Rate',
+          tdTemplate: this.fxRateTpl,
+          notNeedEllipsis: true,
+          width: 140
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 150
+          width: 130
         },
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
-          width: 150
+          notNeedEllipsis: true,
+          width: 100
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 150
+          width: 60
         }
       ],
       total: 0,

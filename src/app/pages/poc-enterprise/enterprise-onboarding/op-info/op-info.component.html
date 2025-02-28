@@ -1,0 +1,142 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-enterprise/enterprise-onboarding'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+
+<div class="normal-detail-table-wrap">
+  <nz-spin [nzSpinning]="loading">
+    <div nz-row [nzGutter]="16">
+      <!-- 左侧详情 -->
+      <div nz-col [nzSpan]="16">
+        <nz-card>
+          <nz-descriptions
+            nzTitle="Enterprise Onboarding Details"
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order"
+          >
+            <nz-descriptions-item nzTitle="Operation Type">{{
+              detailInfo.operationType
+            }}</nz-descriptions-item>
+          </nz-descriptions>
+
+          <nz-divider></nz-divider>
+
+          <nz-descriptions
+            nzTitle="Enterprise Basic Information"
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order"
+          >
+            <nz-descriptions-item nzTitle="Enterprise Code">{{
+              detailInfo.enterpriseCode
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Enterprise Name">{{
+              detailInfo.enterpriseName
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Contact Name">{{
+              detailInfo.contactName || '--'
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Email">{{
+              detailInfo.contactEmail
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Enterprise Bank">{{
+              detailInfo.enterpriseFlatBank
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Enterprise Account">{{
+              detailInfo.enterpriseFlatAccount
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Description">{{
+              detailInfo.description
+            }}</nz-descriptions-item>
+          </nz-descriptions>
+
+          <nz-divider></nz-divider>
+
+          <nz-descriptions
+            nzTitle="Approval Rules and Settings"
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order"
+          >
+            <nz-descriptions-item nzTitle="Generate Wallet">{{
+              detailInfo.walletApproval === 1
+                ? 'Approval Required'
+                : 'No Approval Required'
+            }}</nz-descriptions-item>
+            <nz-descriptions-item
+              nzTitle="Maximum transfer amount allowed without requiring approval (excluding transactions within a single account)"
+              >{{
+                detailInfo.txApprovalThreshold || '0.00'
+              }}</nz-descriptions-item
+            >
+          </nz-descriptions>
+
+          <nz-divider></nz-divider>
+
+          <nz-descriptions
+            nzTitle="Token Permission"
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order"
+          >
+            <nz-descriptions-item nzTitle="Token Name">
+              <div class="token-tags-wrapper">
+                <nz-tag
+                  *ngFor="let token of detailInfo.tokenList"
+                  class="token-tag"
+                >
+                  {{ token.tokenName }} (Hyperledger Besu)
+                </nz-tag>
+              </div>
+            </nz-descriptions-item>
+          </nz-descriptions>
+
+          <nz-divider></nz-divider>
+
+          <nz-descriptions
+            nzTitle="Creation Information"
+            [nzColumn]="1"
+            [nzColon]="false"
+            [nzBordered]="false"
+            class="card-descriptions-order"
+          >
+            <nz-descriptions-item nzTitle="Created by">{{
+              detailInfo.createUser
+            }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Created on"
+              >{{
+                detailInfo.createTime | date: 'MMM d, y, HH:mm:ss'
+              }}
+              UTC+08:00</nz-descriptions-item
+            >
+            <nz-descriptions-item nzTitle="Status">
+              <nz-tag [nzColor]="getStatusTagColor(detailInfo.status)">{{
+                getStatusText(detailInfo.status)
+              }}</nz-tag>
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </nz-card>
+      </div>
+
+      <!-- 右侧审核详情 -->
+      <div nz-col [nzSpan]="8">
+        <nz-card class="approval-card">
+          <h3 class="approval-title">Approval Details</h3>
+
+          <div class="approval-steps">
+            <app-timeline [info]="detailInfo"></app-timeline>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </nz-spin>
+</div>

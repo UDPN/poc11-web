@@ -2,13 +2,17 @@
  * @Author: chenyuting
  * @Date: 2024-04-18 15:13:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-05-10 09:51:16
+ * @LastEditTime: 2025-02-20 14:43:48
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
 
 <div class="normal-table-wrap">
-  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10" nzTitle="Query">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    class="m-b-10"
+    nzTitle="Query"
+  >
     <form nz-form nzLayout="vertical">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
         <div
@@ -91,7 +95,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label>Currency</nz-form-label>
+            <nz-form-label>Token</nz-form-label>
             <nz-form-control>
               <nz-select
                 nzPlaceHolder=""
@@ -160,8 +164,14 @@
     nz-button
     nzType="link"
     class="link-button"
+    style="text-decoration: underline"
     (click)="open(commercialBankName, currency, walletAddress)"
-    >{{ count }}</a
+    >{{ count }}
+    <span
+      class="m-l-10"
+      style="font-size: 10px; font-weight: 600; font-style: oblique"
+      >{{ 'Check All' }}</span
+    ></a
   >
 </ng-template>
 <nz-drawer
@@ -170,7 +180,7 @@
   [nzMask]="false"
   [nzClosable]="true"
   nzPlacement="right"
-  nzTitle="Wallet Address Informations"
+  nzTitle="Wallet List"
   (nzOnClose)="close()"
 >
   <ng-container *nzDrawerContent>
@@ -187,7 +197,7 @@
             this.commercialBankName
           }}</span></nz-descriptions-item
         >
-        <nz-descriptions-item nzTitle="Currency"
+        <nz-descriptions-item nzTitle="Token"
           ><span class="font-bold">{{
             this.currency
           }}</span></nz-descriptions-item
@@ -201,10 +211,15 @@
         class="m-t-25"
       >
         @for (item of this.walletAddressList; track item) {
-        <li nz-list-item nzNoFlex class="m-t-10 m-b-10" style="margin-right: -24px;">
+        <li
+          nz-list-item
+          nzNoFlex
+          class="m-t-10 m-b-10"
+          style="margin-right: -24px"
+        >
           <p
             nz-typography
-            nzCopyable
+            [nzCopyable]="item ? true : false"
             [nzCopyTooltips]="['Copy', 'Copy successful']"
             [nzContent]="item"
           ></p>

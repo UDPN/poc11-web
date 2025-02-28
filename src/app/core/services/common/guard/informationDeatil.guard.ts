@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-21 10:20:36
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2023-12-28 19:43:00
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-24 14:25:08
  * @Description:
  */
 import { map } from 'rxjs/operators';
@@ -41,7 +41,7 @@ export class DeatilsGuard implements CanActivate {
     | Promise<boolean | UrlTree> {
     return this._informationService.detail().pipe(
       map((data) => {
-        if (data === null) {
+        if (data && data.spStatus === 0) {
           this.router.navigateByUrl('/information/form');
           return false;
         }

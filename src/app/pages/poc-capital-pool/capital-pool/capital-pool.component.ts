@@ -16,6 +16,7 @@ import {
 import { aesKey, aesVi } from '@app/config/constant';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
+import { CbdcWalletService } from '@app/core/services/http/poc-wallet/cbdc-wallet/cbdc-wallet.service';
 import { ThemeService } from '@app/core/services/store/common-store/theme.service';
 import { SearchCommonVO } from '@app/core/services/types';
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
@@ -85,10 +86,13 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   currency: any;
   txType: number = 0;
   balance: any = '';
+  reserveCurrency: any = '';
+  reserveBalance: any = '';
   isOkLoading: boolean = false;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
+    private cbdcWalletService: CbdcWalletService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
@@ -153,10 +157,6 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.topUpForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      transactionReferenceNo: [
-        null,
-        [Validators.required, this.transactionReferenceNoValidator]
-      ],
       reserveAccount: [
         null,
         [Validators.required, this.reserveAccountValidator]
@@ -184,6 +184,8 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    } else if (control.value > Number(this.reserveBalance)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -326,7 +328,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
           this.editValidateForm.get('amount')?.reset();
           if (res) {
             this.message
-              .success('Edit successfully!', { nzDuration: 1000 })
+              .success('Edit completed', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 this.getDataList();
               });
@@ -342,30 +344,38 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
   }
 
   getTopUp(
-    currency: string,
+    reserveCurrency: string,
     chainAccountAddress: string,
-    capitalPoolBalance: string
+    reserveAccount: any,
+    reserveBalance: any,
+    currency: any
   ) {
+    this.reserveCurrency = reserveCurrency;
+    this.reserveBalance = reserveBalance;
     this.currency = currency;
-    this.balance = capitalPoolBalance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.topUpForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
   }
 
   getWithdraw(
     currency: string,
     chainAccountAddress: string,
-    capitalPoolBalance: string
+    balance: any,
+    reserveAccount: any,
+    reserveCurrency: any
   ) {
+    this.reserveCurrency = reserveCurrency;
     this.currency = currency;
-    this.balance = capitalPoolBalance;
+    this.balance = balance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.withdrawForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.withdrawForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleWithdraw = true;
   }
 
@@ -402,7 +412,7 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
     this.isOkLoading = true;
     const code = fnEncrypts(this.passwordForm.getRawValue(), aesKey, aesVi);
     const params: any = {
-      currency: this.currency,
+      // currency: this.currency,
       amount:
         this.txType === 1
           ? this.topUpForm.get('amount')?.value
@@ -427,8 +437,11 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         'transactionReferenceNo'
       )?.value;
     }
-    const amount = thousandthMark(params.amount) + ' ' + this.currency;
-    this.pocCapitalPoolService
+    const amount =
+      thousandthMark(params.amount) +
+      ' ' +
+      (this.txType === 1 ? this.currency : this.reserveCurrency);
+    this.cbdcWalletService
       .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
       .subscribe({
@@ -473,21 +486,25 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Capital Pool',
           tdTemplate: this.capitalTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Account/Wallet',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Balance',
           tdTemplate: this.balanceTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
           title: 'Authorized',
           tdTemplate: this.authorTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
@@ -500,11 +517,13 @@ export class CapitalPoolComponent implements OnInit, AfterViewInit {
         {
           title: 'Pre-authorized Debit',
           tdTemplate: this.authorizedTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

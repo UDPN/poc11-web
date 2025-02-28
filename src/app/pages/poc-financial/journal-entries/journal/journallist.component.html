@@ -1,0 +1,216 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<div class="normal-table-wrap">
+  <nz-card
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    [nzTitle]="'Query'"
+    class="m-b-10"
+  >
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="8"
+          [nzMd]="8"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Transaction ID</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder="Transaction ID"
+                [(ngModel)]="searchParam.traceId"
+                name="traceId"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="8"
+          [nzMd]="8"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Date</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="dateTime"
+                [(ngModel)]="searchParam.dateTime"
+              >
+              </nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="8"
+          [nzMd]="8"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Transaction Type</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="txType"
+                [(ngModel)]="searchParam.txType"
+              >
+                <nz-option
+                  *ngFor="let type of transactionTypes"
+                  [nzValue]="type.value"
+                  [nzLabel]="type.label"
+                >
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24" class="text-right m-b-30">
+          <button
+            nz-button
+            nzType="primary"
+            class="m-r-8"
+            (click)="getDataList(tableQueryParams)"
+          >
+            Query
+          </button>
+          <button nz-button (click)="resetForm()">Reset</button>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+
+  <nz-card [nzTitle]="'Transaction List'" [nzExtra]="ExtraTemplate">
+    <nz-table
+      #basicTable
+      [nzData]="dataList"
+      [nzTotal]="tableConfig.total"
+      [nzPageSize]="tableConfig.pageSize"
+      [nzPageIndex]="tableConfig.pageIndex"
+      [nzLoading]="tableConfig.loading"
+      [nzBordered]="true"
+      [nzShowSizeChanger]="true"
+      [nzShowQuickJumper]="true"
+      [nzFrontPagination]="false"
+      (nzPageIndexChange)="getDataList($event)"
+      (nzPageSizeChange)="changePageSize($event)"
+    >
+      <thead>
+        <tr>
+          <th>Transaction ID</th>
+          <th>Date</th>
+          <th>Transaction Type</th>
+          <th>Blockchain</th>
+          <th>Account Code</th>
+          <th>Account Name</th>
+          <th style="width: 300px">Particulars</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of basicTable.data">
+          <tr
+            *ngFor="
+              let transaction of data.transactions;
+              let first = first;
+              let count = count
+            "
+          >
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              <div style="display: block; word-break: break-all">
+                {{ data.traceId }}
+                <i
+                  nz-icon
+                  nzType="copy"
+                  nzTheme="outline"
+                  class="m-l-8 cursor-pointer"
+                  (click)="copyTraceId(data.traceId, $event)"
+                  nz-tooltip
+                  nzTooltipTitle="Copy"
+                >
+                </i>
+              </div>
+            </td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              {{ data.dateTime | date: 'MMM dd, yyyy HH:mm:ss' }}
+            </td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              {{ getTransactionTypeName(data.txType) }}
+            </td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              {{ data.blockchainName }}
+            </td>
+            <td>{{ transaction.subjectCode }}</td>
+            <td>{{ transaction.subjectTitle }}</td>
+            <td style="word-break: break-all; text-align: left">
+              <span *ngIf="transaction.particularsAccount"
+                >{{ getTransactionTypeName(data.txType)
+                }}{{ ' ' + transaction.stablecoinName }}{{ ' ( '
+                }}{{ transaction.particularsAccount | map: 'showPartEight'
+                }}{{ ' )' }}</span
+              >
+              <span *ngIf="!transaction.particularsAccount"
+                >{{ getTransactionTypeName(data.txType)
+                }}{{ ' ' + transaction.stablecoinName }}</span
+              >
+            </td>
+            <td>
+              {{
+                transaction.loanType === 1
+                  ? (transaction.txAmount | number: '1.2-2') +
+                    ' ' +
+                    transaction.currencyName
+                  : ''
+              }}
+            </td>
+            <td>
+              {{
+                transaction.loanType === 2
+                  ? (transaction.txAmount | number: '1.2-2') +
+                    ' ' +
+                    transaction.currencyName
+                  : ''
+              }}
+            </td>
+            <td *ngIf="first" [attr.rowspan]="data.transactions.length">
+              <span
+                class="operate-text"
+                *appAuth="'R01070103'"
+                [routerLink]="
+                  data.txType === 1 || data.txType === 2
+                    ? '/poc/poc-wallet/cbdc-transaction'
+                    : '/poc/poc-remittance/transaction-record'
+                "
+                [queryParams]="{ traceId: data.traceId }"
+                >Txn Details</span
+              >
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+<ng-template #ExtraTemplate>
+  <button
+    nz-button
+    [nzType]="'primary'"
+    (click)="getExport()"
+    [nzLoading]="exportLoading"
+  >
+    Export
+  </button>
+</ng-template>

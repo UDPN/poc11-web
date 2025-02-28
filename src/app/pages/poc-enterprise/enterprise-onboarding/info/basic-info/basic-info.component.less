@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  
+  .normal-detail-table-wrap {
+    margin: 24px;
+    background-color: #f0f2f5;
+  }
+
+  nz-card {
+    margin-bottom: 24px;
+  }
+
+  .m-b-15 {
+    margin-bottom: 15px;
+  }
+
+  .m-t-15 {
+    margin-top: 15px;
+  }
+
+  .m-r-8 {
+    margin-right: 8px;
+  }
+
+  .m-b-24 {
+    margin-bottom: 24px;
+  }
+
+  .copy-icon {
+    margin-left: 8px;
+    color: rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    
+    &:hover {
+      color: var(--ant-primary-color);
+    }
+  }
+
+  ::ng-deep {
+    .ant-descriptions-bordered {
+      .ant-descriptions-item-label {
+        width: 25%;
+        background-color: #fafafa;
+      }
+    }
+
+    .ant-card-head {
+      min-height: 48px;
+      padding: 0 12px;
+      
+      .ant-card-head-title {
+        padding: 12px 0;
+      }
+    }
+
+    .ant-descriptions-title {
+      margin-bottom: 16px;
+    }
+
+    .ant-timeline {
+      padding: 16px;
+    }
+
+    .ant-timeline-item-content {
+      h4 {
+        margin-bottom: 4px;
+        color: rgba(0, 0, 0, 0.85);
+      }
+
+      p {
+        margin-bottom: 0;
+        color: rgba(0, 0, 0, 0.45);
+      }
+    }
+
+    .ant-descriptions-item-content {
+      .ant-tag {
+        margin-left: 8px;
+      }
+    }
+
+    .ant-tag {
+      margin-right: 8px;
+      
+      &.ant-tag-success {
+        color: #389e0d;
+        background: #f6ffed;
+        border-color: #b7eb8f;
+      }
+    }
+
+    .token-tag {
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      font-size: 14px;
+      border-radius: 2px;
+      background-color: #f5f5f5;
+      border: 1px solid #d9d9d9;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+}
+
+.info-section {
+  margin-bottom: 24px;
+
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  .info-table {
+    border: 1px solid #f0f0f0;
+    border-radius: 2px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      tr {
+        border-bottom: 1px solid #f0f0f0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      td {
+        padding: 16px 24px;
+        font-size: 14px;
+        line-height: 1.5;
+
+        &.label {
+          width: 25%;
+          background-color: #fafafa;
+          font-weight: normal;
+          color: rgba(0, 0, 0, 0.85);
+        }
+      }
+    }
+  }
+}

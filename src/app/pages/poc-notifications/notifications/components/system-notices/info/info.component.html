@@ -1,0 +1,28 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-23 14:03:55
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-11 16:51:10
+ * @Description: 
+-->
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-notifications/notifications'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+<div class="normal-detail-table-wrap">
+  <div nz-row class="m-t-10">
+    <div nz-col [nzSpan]="24">
+      <nz-card nzTitle="" class="m-r-8 none-bottom">
+        <h2 nz-typography>{{ info.title }}</h2>
+        <p nz-typography>
+          {{ 'Published on: ' }}{{ info.sendTime | map: 'timeStamp' }}
+        </p>
+        <p [innerHTML]="info.content" class="m-t-20"></p>
+      </nz-card>
+    </div>
+  </div>
+</div>

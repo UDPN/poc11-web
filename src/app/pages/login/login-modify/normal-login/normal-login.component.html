@@ -3,7 +3,7 @@
     BN Name: {{ instance }}
   </h2> -->
   <p class="m-b-30 title" [class.is-over-model]="isOverModel">
-    Commercial Bank Management Control Panel
+    Commercial Bank Control Panel
   </p>
   <p
     class="m-b-50 title"
@@ -35,7 +35,7 @@
           />
           <ng-template #userNameError let-control>
             <ng-container *ngIf="control.hasError('required')"
-              >Please input your User Name</ng-container
+              >Please input User Name</ng-container
             >
           </ng-template>
         </nz-form-control>
@@ -54,11 +54,11 @@
           </nz-input-group>
           <ng-template #passwordError let-control>
             <ng-container *ngIf="control.hasError('required')"
-              >Please input your Password</ng-container
+              >Please input Password</ng-container
             >
             <ng-container *ngIf="control.hasError('regular')">
-              The password is a combination of 8-20 digits of numbers and
-              letters with at least one uppercase letter
+              The passworThe password is a combination of 8-20 digits of numbers
+              and letters with at least one uppercase letter
             </ng-container>
           </ng-template>
           <ng-template #suffixTemplate>

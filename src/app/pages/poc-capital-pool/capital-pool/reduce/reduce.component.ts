@@ -15,7 +15,6 @@ import { finalize } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 
-
 @Component({
   selector: 'app-reduce',
   templateUrl: './reduce.component.html',
@@ -39,19 +38,19 @@ export class ReduceComponent implements OnInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [
     {
-      'id': '0',
-      'currency': 'USDC',
-      'platform': 'ETH'
+      id: '0',
+      currency: 'USDC',
+      platform: 'ETH'
     },
     {
-      'id': '1',
-      'currency': 'USDP',
-      'platform': 'ETH'
+      id: '1',
+      currency: 'USDP',
+      platform: 'ETH'
     },
     {
-      'id': '2',
-      'currency': 'EURS',
-      'platform': 'ETH'
+      id: '2',
+      currency: 'EURS',
+      platform: 'ETH'
     }
   ];
   indeterminate: boolean = false;
@@ -67,7 +66,7 @@ export class ReduceComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private location: Location,
     private message: NzMessageService
-  ) { }
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: `Deactivate Currency`,
@@ -109,23 +108,29 @@ export class ReduceComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    const listOfEnabledData = this.listOfCurrentPageData.filter(({ disabled }) => !disabled);
+    const listOfEnabledData = this.listOfCurrentPageData.filter(
+      ({ disabled }) => !disabled
+    );
     if (listOfEnabledData && listOfEnabledData.length > 0) {
-      this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
-    };
-    this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
+      this.checked = listOfEnabledData.every(({ id }) =>
+        this.setOfCheckedId.has(id)
+      );
+    }
+    this.indeterminate =
+      listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      !this.checked;
     let array: any = [];
     this.setOfCheckedId.forEach((id) => {
-      this.listOfCurrentPageData.forEach(item => {
+      this.listOfCurrentPageData.forEach((item) => {
         if (item['id'] === id) {
           array.push({
             capitalPoolCurrency: item['capitalPoolCurrency'],
             capitalPoolPlatform: item['capitalPoolPlatform'],
-            capitalPoolAddress: item['capitalPoolAddress'],
+            capitalPoolAddress: item['capitalPoolAddress']
           });
         }
-      })
-    })
+      });
+    });
     this.submitCurrency = array;
   }
 
@@ -151,21 +156,26 @@ export class ReduceComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
-    this.pocCapitalPoolService.reduce({ settlementInformations: this.submitCurrency }).pipe(finalize(() => this.isLoading = false)).subscribe({
-      next: res => {
-        if (res) {
-          this.message.success('Deactivate successfully!', { nzDuration: 1000 }).onClose.subscribe(() => {
-            this.location.back();
-          });
+    this.pocCapitalPoolService
+      .reduce({ settlementInformations: this.submitCurrency })
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.message
+              .success('Deactivated', { nzDuration: 1000 })
+              .onClose.subscribe(() => {
+                this.location.back();
+              });
+          }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
         }
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      },
-      error: err => {
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      }
-    })
+      });
   }
 
   onBack() {
@@ -173,11 +183,13 @@ export class ReduceComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.foreignExchangeApplyService.getSpApprovedInfo().subscribe((res: any) => {
-      this.info = res;
-      this.cdr.markForCheck();
-      return;
-    });
+    this.foreignExchangeApplyService
+      .getSpApprovedInfo()
+      .subscribe((res: any) => {
+        this.info = res;
+        this.cdr.markForCheck();
+        return;
+      });
   }
 
   getReduceList() {
@@ -185,7 +197,7 @@ export class ReduceComponent implements OnInit {
       this.dataList = res;
       this.dataList.forEach((item: any, index: number) => {
         item.id = index;
-      })
+      });
       this.cdr.markForCheck();
       return;
     });

@@ -1,47 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Project Kissen</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.snow.min.css"
+    />
+    <style type="text/css">
+      .global-loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        will-change: transform;
+        transition: opacity 0.5s ease-in-out;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <title>Project Kissen</title>
-  <base href="/" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <style type="text/css">
-    .global-loader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      opacity: 1;
-      will-change: transform;
-      transition: opacity 0.5s ease-in-out;
-    }
+      .global-loader-fade-in {
+        will-change: transform;
+        opacity: 0;
+      }
 
-    .global-loader-fade-in {
-      will-change: transform;
-      opacity: 0;
-    }
+      .global-loader-hidden {
+        display: none;
+      }
 
-    .global-loader-hidden {
-      display: none;
-    }
-
-    .global-loader h1 {
-      font-family: 'Helvetica Neue', Helvetica, sans-serif;
-      font-weight: normal;
-      font-size: 26px;
-      letter-spacing: 0.04rem;
-      white-space: pre;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-image: repeating-linear-gradient(to right,
+      .global-loader h1 {
+        font-family: 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        font-size: 26px;
+        letter-spacing: 0.04rem;
+        white-space: pre;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: repeating-linear-gradient(
+          to right,
           #f44336,
           #9c27b0,
           #3f51b5,
@@ -49,80 +53,79 @@
           #009688,
           #8bc34a,
           #ffeb3b,
-          #ff9800);
-      background-size: 750% auto;
-      background-position: 0 100%;
-      animation: gradient 20s infinite;
-      animation-fill-mode: forwards;
-      animation-timing-function: linear;
-    }
-
-    .night-bg {
-      background-color: #141414;
-    }
-
-    @keyframes gradient {
-      0% {
-        background-position: 0 0;
+          #ff9800
+        );
+        background-size: 750% auto;
+        background-position: 0 100%;
+        animation: gradient 20s infinite;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
       }
 
-      100% {
-        background-position: -750% 0;
-      }
-    }
-
-
-    .loading {
-      position: relative;
-      width: 50px;
-      perspective: 200px;
-    }
-
-    .loading:before,
-    .loading:after {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      content: "";
-      animation: jumping 0.5s infinite alternate;
-      background: rgba(0, 0, 0, 0);
-    }
-
-    .loading:before {
-      left: 0;
-    }
-
-    .loading:after {
-      right: 0;
-      animation-delay: 0.15s;
-    }
-
-    @keyframes jumping {
-      0% {
-        transform: scale(1) translateY(0px) rotateX(0deg);
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      .night-bg {
+        background-color: #141414;
       }
 
-      100% {
-        transform: scale(1.2) translateY(-25px) rotateX(45deg);
-        background: #3C5686;
-        box-shadow: 0 25px 40px #798cb1;
+      @keyframes gradient {
+        0% {
+          background-position: 0 0;
+        }
+
+        100% {
+          background-position: -750% 0;
+        }
       }
+
+      .loading {
+        position: relative;
+        width: 50px;
+        perspective: 200px;
+      }
+
+      .loading:before,
+      .loading:after {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        content: '';
+        animation: jumping 0.5s infinite alternate;
+        background: rgba(0, 0, 0, 0);
+      }
+
+      .loading:before {
+        left: 0;
+      }
+
+      .loading:after {
+        right: 0;
+        animation-delay: 0.15s;
+      }
+
+      @keyframes jumping {
+        0% {
+          transform: scale(1) translateY(0px) rotateX(0deg);
+          box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        100% {
+          transform: scale(1.2) translateY(-25px) rotateX(45deg);
+          background: #3c5686;
+          box-shadow: 0 25px 40px #798cb1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <app-root></app-root>
+    <div id="globalLoader" class="global-loader">
+      <div class="loading"></div>
+    </div>
+  </body>
+  <script>
+    const isNight = window.localStorage.getItem('IsNightKey');
+    if (isNight === 'true') {
+      document.getElementById('globalLoader').className += ' night-bg';
     }
-  </style>
-</head>
-
-<body>
-  <app-root></app-root>
-  <div id="globalLoader" class="global-loader">
-    <div class="loading"></div>
-  </div>
-</body>
-<script>
-  const isNight = window.localStorage.getItem('IsNightKey');
-  if (isNight === 'true') {
-    document.getElementById('globalLoader').className += ' night-bg';
-  }
-</script>
-
+  </script>
 </html>

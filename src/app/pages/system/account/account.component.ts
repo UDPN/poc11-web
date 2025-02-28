@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
@@ -31,11 +38,13 @@ interface SearchParam {
 })
 export class AccountComponent implements OnInit {
   @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<any>;
-  @ViewChild('availableFlag', { static: true }) availableFlag!: TemplateRef<NzSafeAny>;
+  @ViewChild('availableFlag', { static: true })
+  availableFlag!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {};
   tableConfig!: AntTableConfig;
   pageHeaderInfo: Partial<PageHeaderType> = {
-    title: 'Account management (database once every 10 minutes to recover from a backup)',
+    title:
+      'Account management (database once every 10 minutes to recover from a backup)',
     breadcrumb: ['Home page', 'User management', 'Account management']
   };
   dataList: User[] = [];
@@ -77,7 +86,7 @@ export class AccountComponent implements OnInit {
           this.tableLoading(false);
         })
       )
-      .subscribe(data => {
+      .subscribe((data) => {
         const { list, total, pageNum } = data;
         this.dataList = [...list];
         this.tableConfig.total = total!;
@@ -87,14 +96,13 @@ export class AccountComponent implements OnInit {
       });
   }
 
-  
   setRole(id: number): void {
-    this.router.navigate(['/default/system/role-manager/set-role'], { queryParams: { id: id } });
+    this.router.navigate(['/default/system/role-manager/set-role'], {
+      queryParams: { id: id }
+    });
   }
 
-  
   tableChangeDectction(): void {
-    
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
@@ -106,14 +114,14 @@ export class AccountComponent implements OnInit {
 
   add(): void {
     this.modalService.show({ nzTitle: 'new' }).subscribe(
-      res => {
+      (res) => {
         if (!res || res.status === ModalBtnStatus.Cancel) {
           return;
         }
         this.tableLoading(true);
         this.addEditData(res.modalValue, 'addAccount');
       },
-      error => this.tableLoading(false)
+      (error) => this.tableLoading(false)
     );
   }
 
@@ -122,17 +130,18 @@ export class AccountComponent implements OnInit {
     this.getDataList();
   }
 
-  
   edit(id: number): void {
-    this.dataService.getAccountDetail(id).subscribe(res => {
-      this.modalService.show({ nzTitle: 'The editor' }, res).subscribe(({ modalValue, status }) => {
-        if (status === ModalBtnStatus.Cancel) {
-          return;
-        }
-        modalValue.id = id;
-        this.tableLoading(true);
-        this.addEditData(modalValue, 'editAccount');
-      });
+    this.dataService.getAccountDetail(id).subscribe((res) => {
+      this.modalService
+        .show({ nzTitle: 'The editor' }, res)
+        .subscribe(({ modalValue, status }) => {
+          if (status === ModalBtnStatus.Cancel) {
+            return;
+          }
+          modalValue.id = id;
+          this.tableLoading(true);
+          this.addEditData(modalValue, 'editAccount');
+        });
     });
   }
 
@@ -161,7 +170,7 @@ export class AccountComponent implements OnInit {
           this.tableLoading(false);
         })
       )
-      .subscribe(res => {
+      .subscribe((res) => {
         this.getDataList();
       });
   }
@@ -173,7 +182,7 @@ export class AccountComponent implements OnInit {
         nzTitle: 'Sure you want to delete?',
         nzContent: 'Cannot be retrieved after deletion',
         nzOnOk: () => {
-          this.checkedCashArray.forEach(item => {
+          this.checkedCashArray.forEach((item) => {
             tempArrays.push(item.id);
           });
           this.tableLoading(true);
@@ -192,7 +201,7 @@ export class AccountComponent implements OnInit {
                 this.getDataList();
                 this.checkedCashArray = [];
               },
-              error => this.tableLoading(false)
+              (error) => this.tableLoading(false)
             );
         }
       });
@@ -216,13 +225,11 @@ export class AccountComponent implements OnInit {
             }
             this.getDataList();
           },
-          error => this.tableLoading(false)
+          (error) => this.tableLoading(false)
         );
       }
     });
   }
-
-  
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
@@ -238,7 +245,9 @@ export class AccountComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.availableOptions = [...MapPipe.transformMapToArray(MapSet.available, MapKeyType.Boolean)];
+    this.availableOptions = [
+      ...MapPipe.transformMapToArray(MapSet.available, MapKeyType.Boolean)
+    ];
     this.initTable();
   }
 
@@ -249,55 +258,65 @@ export class AccountComponent implements OnInit {
         {
           title: 'The user name',
           field: 'userName',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Whether the available',
           width: 100,
           field: 'available',
+          notNeedEllipsis: true,
           tdTemplate: this.availableFlag
         },
         {
           title: 'gender',
           width: 70,
           field: 'sex',
-          pipe: 'sex'
+          pipe: 'sex',
+          notNeedEllipsis: true
         },
         {
           title: 'Mobile phone',
           width: 100,
-          field: 'mobile'
+          field: 'mobile',
+          notNeedEllipsis: true
         },
         {
           title: 'email',
           width: 100,
-          field: 'email'
+          field: 'email',
+          notNeedEllipsis: true
         },
         {
           title: 'Last login time',
           width: 120,
           field: 'lastLoginTime',
+          notNeedEllipsis: true,
           pipe: 'date:yyyy-MM-dd HH:mm'
         },
         {
           title: 'Creation time',
           width: 100,
           field: 'createTime',
+          notNeedEllipsis: true,
           pipe: 'date:yyyy-MM-dd HH:mm'
         },
         {
           title: 'The phone',
           width: 100,
+          notNeedEllipsis: true,
           field: 'telephone'
         },
         {
           title: 'Subordinate departments',
           width: 100,
+          notNeedEllipsis: true,
           field: 'departmentName'
         },
         {
           title: 'operation',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

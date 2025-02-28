@@ -1,0 +1,64 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-23 11:23:10
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-03 11:19:19
+ * @Description: 
+-->
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap card-container">
+  <nz-card class="tabs-style">
+    <nz-tabset
+      class="tabs-style"
+      nzType="card"
+      (nzSelectedIndexChange)="onChangeTab($event)"
+      [nzSelectedIndex]="tabIndex"
+      [nzTabBarExtraContent]="extraTemplate"
+    >
+      <nz-tab *ngFor="let tab of Tabs; index as i" [nzTitle]="titleTemplate">
+        <ng-template #titleTemplate>
+          <nz-badge nzStatus="success" *ngIf="tab.count !== 0"> </nz-badge>
+          {{ tab.name }}
+        </ng-template>
+        <ng-container *appAuth="'R010501'">
+          <div *ngIf="i === 0">
+            <app-system-notices />
+          </div>
+        </ng-container>
+        <ng-container *appAuth="'R010502'">
+          <div *ngIf="i === 1">
+            <app-internal-notifications />
+          </div>
+        </ng-container>
+        <ng-container *appAuth="'R010503'">
+          <div *ngIf="i === 2" >
+            <app-interactive-messages />
+          </div>
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>
+<ng-template #extraTemplate>      
+  <i
+    class="m-l-5"
+    style="color: #3c5686; font-size: 20px;"
+    nz-icon
+    nzType="question-circle"
+    nzTooltipPlacement="right"
+    nzTheme="fill"
+    nz-tooltip
+    [nzTooltipTitle]="titleToolTemplate"
+    nzTooltipColor="#3c5686"
+    nzTooltipTrigger="click"
+    nzTooltipOverlayClassName="buils"
+  ></i>
+</ng-template>
+<ng-template #titleToolTemplate>
+  <span><b>{{'Network Notifications: '}}</b>{{'Notices released by Kissen Management.'}}</span>
+  <br><br>
+  <span><b>{{'Transaction Messages: '}}</b>{{'Notifications regarding the operations of the Commercial Bank Control Panel.'}}</span>
+  <br><br>
+  <span><b>{{'Interbank Messages: '}}</b>{{'Interactive messages between your bank and other participating banks in the Kissen network.'}}</span>
+</ng-template>    

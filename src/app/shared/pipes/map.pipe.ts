@@ -116,11 +116,44 @@ export const MapSet = {
     6: 'Failed',
     7: 'Processing'
   },
+  walletInfoTransactionsStatus: {
+    5: 'Pending Approval',
+    10: 'Processing',
+    15: 'Rejected',
+    20: 'Processing',
+    30: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  walletInfoTransactionsStatusColor: {
+    5: 'volcano',
+    10: 'blue',
+    15: 'red',
+    20: 'blue',
+    30: 'blue',
+    35: 'green',
+    40: 'red'
+  },
   walletTransactionsRecordStatus: {
-    1: 'Pending',
-    4: 'Processing',
-    5: 'Success',
-    6: 'Failed'
+    5: 'Pending Approval',
+    10: 'Processing',
+    15: 'Rejected',
+    20: 'Processing',
+    30: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  EnterpriseStatus: {
+    0: 'Pending Approval',
+    1: 'Active',
+    2: 'Inactive',
+    3: 'Failed'
+  },
+  EnterpriseStatusColor: {
+    0: 'warning',
+    1: 'green',
+    2: 'default',
+    3: 'red'
   },
   walletTransactionsStatusColor: {
     1: 'volcano',
@@ -135,18 +168,21 @@ export const MapSet = {
     2: 'Withdrawal'
   },
   transactionsRecordType: {
-    1: 'Swap',
+    1: 'Cross-Token Transfer',
     2: 'Exchange',
     3: 'Transfer'
   },
   transactionsRecordStatusColor: {
-    1: 'volcano',
-    4: 'purple',
-    5: 'cyan',
-    6: 'red'
+    5: 'volcano',
+    10: 'purple',
+    15: 'red',
+    20: 'purple',
+    30: 'purple',
+    35: 'green',
+    40: 'red'
   },
   region: {
-    1: 'Domestic',
+    1: 'Home',
     2: 'Foreign'
   },
   walletStatus: {
@@ -204,6 +240,20 @@ export const MapSet = {
     5: 'Success',
     6: 'Failed'
   },
+  enterpriseTransactionStatus: {
+    5: 'Pending Approval',
+    15: 'Rejected',
+    20: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  enterpriseTransactionStatusColor: {
+    5: 'volcano',
+    15: 'red',
+    20: 'blue',
+    35: 'green',
+    40: 'red'
+  },
   logTreeStatus: {
     1: 'process',
     2: 'finish',
@@ -215,10 +265,182 @@ export const MapSet = {
     2: 'Unfreeze'
   },
   operationStatus: {
-    3: 'Pending Approval',
+    5: 'Pending Approval',
+    20: 'Processing',
+    35: 'Active',
+    15: 'Rejected',
+    40: 'Failed',
+    50: 'Inactive'
+  },
+  operationStatusColor: {
+    5: 'volcano',
+    20: 'blue',
+    35: 'green',
+    15: 'red',
+    40: 'red',
+    50: 'default'
+  },
+  walletType: {
+    1: 'Master Wallet',
+    2: 'Main Wallet',
+    3: 'Sub Wallet'
+  },
+  downloadCenterStatus: {
+    0: 'Pending',
+    1: 'Processing',
+    2: 'Completed',
+    3: 'Failed'
+  },
+  downloadCenterStatusColor: {
+    0: 'volcano',
+    1: 'blue',
+    2: 'green',
+    3: 'red'
+  },
+  moduleType: {
+    1: 'Journal Entries',
+    5: 'Statements and Reports',
+    10: 'Audit Trail',
+    15: 'Interest Settlement',
+    20: 'Token Statistics Report'
+  },
+  transactionDirection: {
+    1: 'Withdrawal',
+    2: 'Top-up'
+  },
+  statementStatus: {
+    20: 'Active',
+    30: 'Inactive'
+  },
+  statementStatusColor: {
+    20: 'green',
+    30: 'default'
+  },
+  exportStrategy: {
+    1: 'Daily',
+    7: 'Weekly',
+    30: 'Monthly'
+  },
+  statementsTxnType: {
+    1: 'Top-up',
+    2: 'Withdrawal',
+    3: 'Transfer',
+    4: 'Swap',
+    5: 'Exchange'
+  },
+  proofStatusColor: {
+    2: 'volcano',
+    3: 'volcano',
+    4: 'blue',
+    5: 'green',
+    6: 'red'
+  },
+  proofStatus: {
+    2: 'Pending',
+    3: 'Pending',
     4: 'Processing',
     5: 'Success',
-    6: 'Rejected'
+    6: 'Failed'
+  },
+  enterpriseWalletStatus: {
+    1: 'Pending Approval',
+    3: 'Processing',
+    4: 'Processing',
+    5: 'Active',
+    2: 'Rejected',
+    6: 'Failed',
+    8: 'Inactive'
+  },
+  enterpriseWalletStatusColor: {
+    1: 'volcano',
+    3: 'blue',
+    4: 'blue',
+    5: 'green',
+    2: 'red',
+    6: 'red',
+    8: 'default'
+  },
+  walletTopUpWithdrawInfoType: {
+    3: 'Top-up',
+    4: 'Withdrawal'
+  },
+  walletTransferInfoType: {
+    1: 'Cross-Token Transfer',
+    2: 'Exchange',
+    3: 'Transfer'
+  },
+  enterpriseApprovalSecondStatus: {
+    1: 'process',
+    3: 'finish',
+    4: 'finish',
+    5: 'finish',
+    2: 'error',
+    6: 'finish',
+    8: 'finish'
+  },
+
+  enterpriseOnboardApprovalSecondStatus: {
+    0: 'process',
+    1: 'finish',
+    2: 'finish',
+    3: 'error'
+  },
+  enterpriseOnboardApprovalThirdStatus: {
+    0: 'wait',
+    1: 'finish',
+    2: 'finish',
+    3: 'wait'
+  },
+  enterpriseApprovalThirdStatus: {
+    1: 'wait',
+    2: 'wait',
+    3: 'process',
+    4: 'process',
+    5: 'finish',
+    6: 'error',
+    8: 'finish'
+  },
+  transferApprovalSecondStatus: {
+    5: 'process',
+    15: 'error',
+    20: 'finish',
+    35: 'finish',
+    40: 'finish'
+  },
+  transferApprovalThirdStatus: {
+    5: 'wait',
+    15: 'wait',
+    20: 'process',
+    35: 'finish',
+    40: 'error'
+  },
+  transferSourceThirdStatus: {
+    5: 'wait',
+    15: 'wait',
+    20: 'process',
+    35: 'finish',
+    40: 'finish'
+  },
+  transferTargetThirdStatus: {
+    5: 'wait',
+    15: 'wait',
+    20: 'wait',
+    35: 'finish',
+    40: 'error'
+  },
+  fxType: {
+    1: 'Local FX',
+    2: 'Network FX'
+  },
+  fxTransactionStatus: {
+    20: 'Processing',
+    35: 'Success',
+    40: 'Failed'
+  },
+  fxTransactionStatusColor: {
+    20: 'blue',
+    35: 'green',
+    40: 'red'
   }
 };
 
@@ -272,6 +494,54 @@ export class MapPipe implements PipeTransform {
         return (value = '--');
       } else {
         return value;
+      }
+    }
+    if (arg === 'showPartBefore') {
+      if (value) {
+        if (value?.length > 12) {
+          return value.substring(0, 12) + '....';
+        } else {
+          return value;
+        }
+      } else {
+        return '--';
+      }
+    }
+    if (arg === 'showPartEight') {
+      if (value) {
+        if (value?.length > 8) {
+          return (
+            value.substring(0, 4) +
+            '....' +
+            value.substring(value.length - 4, value.length)
+          );
+        } else {
+          return value;
+        }
+      } else {
+        return '--';
+      }
+    }
+    if (arg === 'showAfterFour') {
+      if (value) {
+        return '( ****' + value.substring(value.length - 4, value.length) + ')';
+      } else {
+        return '';
+      }
+    }
+    if (arg === 'showPart') {
+      if (value) {
+        if (value?.length > 30) {
+          return (
+            value.substring(0, 6) +
+            '....' +
+            value.substring(value.length - 4, value.length)
+          );
+        } else {
+          return value;
+        }
+      } else {
+        return '--';
       }
     }
     if (arg === 'failedTime') {
@@ -335,6 +605,30 @@ export class MapPipe implements PipeTransform {
         }
         let res = this.datePipe.transform(value, 'MMMM y');
         return res?.replace('GMT', 'UTC');
+      }
+    }
+    if (arg === 'dayStamp') {
+      if (!value || value.length < 10) {
+        return (value = '--');
+      } else {
+        // return timestampToMonth(value);
+        value = value.toString();
+        if (value.length === 10) {
+          value = Number(value) * 1000;
+        }
+        let res = this.datePipe.transform(value, 'MMMM d, y');
+        console.log(res);
+
+        return res?.replace('GMT', 'UTC');
+      }
+    }
+    if (arg === 'currencyPair') {
+      if (!value) {
+        return (value = '--');
+      } else if (value.indexOf('-UDPN') !== 1) {
+        return value.replaceAll('-UDPN', '');
+      } else {
+        return value;
       }
     }
     let type: string = arg;

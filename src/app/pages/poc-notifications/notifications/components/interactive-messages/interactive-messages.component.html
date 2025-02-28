@@ -1,0 +1,365 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2024-12-23 14:21:04
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-19 11:03:00
+ * @Description: 
+-->
+<div nz-row class="m-t-10" nzJustify="center" nzAlign="middle" nzGutter="24">
+  <div nz-col [nzSpan]="24">
+    <div nz-row nzJustify="space-between" nzGutter="24" class="m-b-20">
+      <div nz-col>
+        <button
+          nz-button
+          [nzSize]="'large'"
+          nzType="primary"
+          *appAuth="'R01050301'"
+          style="border-radius: 12px"
+          (click)="toCompose('New Message')"
+        >
+          <img
+            class="m-r-10"
+            src="../../../../../../assets/imgs/notification-send.svg"
+            alt=""
+          />
+          {{ 'New' }}
+        </button>
+      </div>
+      <div nz-col>
+        <nz-select (ngModelChange)="getSendType($event)" ngModel="" class="m-l-15 select-notice" nzSize="large">
+          <nz-option nzValue="" nzLabel="All"></nz-option>
+          <nz-option [nzValue]="1" nzLabel="Outbox"></nz-option>
+          <nz-option [nzValue]="2" nzLabel="Inbox"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div *ngFor="let item of dataList; index as i">
+      <nz-card
+        nzBordered="false"
+        nzTitle=""
+        class="m-r-8 m-b-20"
+        [style.background]="item.sendType === 1 ? '#EEFAEE': '#EEF4FA'"
+        style="border-radius: 12px"
+      >
+        <div nz-row nzJustify="space-between" nzAlign="middle" nzGutter="24">
+          <div nz-col>
+            <div nz-row nzJustify="space-between" nzAlign="middle">
+              <b [style.color]="item.sendType === 1 ? '#08D434' : '#0841D4'">
+                {{ item.sendType === 1 ? item.toBankName : item.fromBankName }}
+              </b>
+              <!-- <div nz-col class="notice-card">
+                <img nz-col class="m-l-10 m-r-10" src="" alt="" />
+              </div>
+              <span>{{ item.fromBankName }}</span>
+              <img
+                nz-col
+                class="m-l-50 m-r-50"
+                [src]="'../../../../../../assets/imgs/' + (item.sendType === 1 ? 'notification-arrow-green.svg': 'notification-arrow.svg')"
+                alt=""
+              />
+              <div nz-col class="notice-card">
+                <img nz-col class="m-l-10 m-r-10" src="" alt="" />
+              </div>
+              <span>{{ item.toBankName }}</span> -->
+            </div>
+          </div>
+          <div nz-col>
+            <span [style]="item.sendType === 1 ? 'color: #67B496' : 'color: #60a3ce'">{{ 'Send by ' + item.fromName }}</span>
+          </div>
+        </div>
+        <div class="m-t-20 m-b-20">
+          <p nz-typography>
+            <span *ngIf="item.readState === 0"
+              ><b>{{ item.title }}</b></span
+            >
+            <span *ngIf="item.readState === 1">{{ item.title }}</span>
+          </p>
+        </div>
+        <nz-divider></nz-divider>
+    
+        <div
+          nz-row
+          nzJustify="space-between"
+          nzAlign="middle"
+          nzGutter="24"
+          class="m-b-10"
+        >
+          <div nz-col>
+            <span [style]="item.sendType === 1 ? 'color: #67B496' : 'color: #60a3ce'">{{
+              item.sendTime | map: 'timeStamp'
+            }}</span>
+          </div>
+          <div nz-col>
+            <nz-space>
+              <span *nzSpaceItem>
+                <button 
+                  nz-button 
+                  [nzSize]="'large'"
+                  *appAuth="'R01050302'"
+                  nzType="text" 
+                  (click)="toCompose('View', item.chatMsgId, item.msgCode)"
+                >
+                  <img
+                    class="m-r-10"
+                    style="width: 20px; height: 20px"
+                    [src]="'../../../../../../assets/imgs/' + (item.sendType === 2 ? 'notification-view.svg' : 'notification-view-green.svg')"
+                    alt=""
+                  />
+                  View >></button
+                >
+              </span>
+              <span *nzSpaceItem>
+                <button 
+                  *appAuth="'R01050303'"
+                  nz-button 
+                  [nzSize]="'large'" 
+                  nzType="text" 
+                  (click)="toCompose('Reply', item.chatMsgId, item.msgCode)"
+                  >
+                    <img
+                      class="m-r-10"
+                      style="width: 20px; height: 20px"
+                      [src]="'../../../../../../assets/imgs/' + (item.sendType === 2 ? 'notification-reply.svg' : 'notification-reply-green.svg')"
+                      alt=""
+                    />
+                    Reply
+                </button>
+              </span>
+             </nz-space>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <div style="display: flex;justify-content: right;align-items: center;">
+      <nz-pagination
+        [(nzPageIndex)]="current"
+        [nzTotal]="total"
+        [nzSize]="'small'"
+        [nzShowTotal]="rangeTemplate"
+        (nzPageIndexChange)="getCurrentIndex($event)"
+      ></nz-pagination>
+      <ng-template #rangeTemplate let-range="range" let-total>
+        {{ range[0] }}-{{ range[1] }} of {{ total }} items
+      </ng-template>
+    </div>
+  </div>
+</div>
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="visibleTitle"
+  (nzOnCancel)="cancelSend()"
+  [nzClosable]="false"
+  [nzWidth]="800"
+  nzCentered="true"
+  [nzFooter]="null"
+>
+  <div *nzModalContent>
+    <nz-space *ngIf="visibleTitle === 'View'" class="m-b-20">
+      <button 
+        *nzSpaceItem 
+        nz-button 
+        [nzSize]="'large'" 
+        nzType="primary" 
+        style="border-radius: 12px"
+        (click)="toCompose('Reply', this.chatMsgId, this.msgCode)"
+        >
+          Reply
+      </button>
+      <button 
+        *nzSpaceItem 
+        nz-button 
+        [nzSize]="'large'" 
+        nzType="default" 
+        style="border-radius: 12px"
+        (click)="cancelSend()"
+        >Close
+      </button>
+    </nz-space>
+    <div *ngIf="visibleTitle !== 'View'">
+      <form nz-form [formGroup]="sendForm" nzLayout="vertical">
+        <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label nzRequired nzSpan="24" class="text-left">
+                {{'Receipient '}}{{ visibleTitle === 'New Message' ? '(Admin of the selected bank)' : ''}} 
+              </nz-form-label>
+              <div nz-row [nzGutter]="24" nzJustify="space-between" nzAlign="middle">
+                  <nz-form-control
+                    [nzErrorTip]="recipientError"
+                    nzSpan="12"
+                    class="m-b-20"
+                  >
+                    <nz-select
+                      nzPlaceHolder=""
+                      formControlName="toClientType"
+                      [nzDisabled]="visibleTitle === 'Reply' ? true : false"
+                      (ngModelChange)="onSelectBank($event)"
+                    >
+                      <nz-option [nzValue]="1" nzLabel="Custodian Bank"></nz-option>
+                      <nz-option [nzValue]="2" nzLabel="Commercial Bank"></nz-option>
+                    </nz-select>
+                    <ng-template #recipientError let-control>
+                      <ng-container *ngIf="control.hasError('required')"
+                        >Please input your Recipient</ng-container
+                      >
+                    </ng-template>
+                </nz-form-control>
+                <nz-form-control
+                  nzSpan="12"
+                  class="m-b-20"
+                >
+                  <nz-select
+                    nzPlaceHolder=""
+                    [nzDisabled]="visibleTitle === 'Reply' ? true : false"
+                    formControlName="toClientCode"
+                  >
+                    <nz-option
+                      *ngFor="let item of bankNameList; index as i"
+                      [nzValue]="item.bankIdentifierCode"
+                      [nzLabel]="item.bankName"
+                    >
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+             
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzRequired nzSpan="24" class="text-left">
+                Subject
+              </nz-form-label>
+              <nz-form-control
+                [nzErrorTip]="subjectError"
+                nzSpan="24"
+                class="m-b-20"
+              >
+                <input
+                  nz-input
+                  [readonly]="visibleTitle === 'Reply' ? true : false"
+                  [ngClass]="visibleTitle === 'Reply' ? 'onboard-disabled': ''"
+                  formControlName="title"
+                />
+                <ng-template #subjectError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please input your Subject</ng-container
+                  >
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzRequired nzSpan="24" class="text-left">
+                Message
+              </nz-form-label>
+              <nz-form-control
+                [nzErrorTip]="contentError"
+                nzSpan="24"
+                class="m-b-20"
+              >
+              <div nz-row>
+                <div nz-col nzSpan="24" >
+                  <quill-editor style="height:150px; max-height: 150px;" placeholder="" [modules]="modules" formControlName="content"/>
+                </div>
+                <ng-template #contentError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Please input your Message</ng-container
+                  >
+                </ng-template>
+              </div>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control nzSpan="24">  
+                <div style="text-align: end;">
+                  <nz-space>
+                    <button 
+                      nz-button 
+                      *nzSpaceItem 
+                      nzType="text" 
+                      class="operate-text"
+                      (click)="cancelSend()"
+                    > 
+                      Cancel
+                    </button>
+                    <button
+                      nz-button
+                      nzType="primary"
+                      *nzSpaceItem
+                      (click)="send()"
+                      [nzLoading]="isLoading"
+                      [disabled]="!this.sendForm.valid"
+                    >
+                      Send
+                    </button>
+                  </nz-space>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="visibleTitle !== 'New Message'">
+      <div *ngFor="let item of chatInfo; index as i">
+        <nz-card
+          nzBordered="false"
+          nzTitle=""
+          class="m-b-20"
+          [style.background]="item.sendType === 1 ? '#EEFAEE': '#EEF4FA'"
+          style="border-radius: 12px"
+        >
+          <div nz-row nzJustify="space-between" nzAlign="middle" nzGutter="24">
+            <div nz-col>
+              <div nz-row nzJustify="space-between" nzAlign="middle">
+                <b [style.color]="item.sendType === 1 ? '#08D434' : '#0841D4'">
+                  {{ item.sendType === 1 ? item.toBankName : item.fromBankName }}
+                </b>
+              </div>
+            </div>
+            <div nz-col>
+              <span [style.color]="item.sendType === 1 ? '#67B496' : '#60a3ce'">{{ 'Send by ' + item.fromName }}</span>
+            </div>
+          </div>
+          <div class="m-t-20 m-b-20">
+            <p>
+              <span [style]="item.readState === 0 ? 'font-weight: 600' : ''">
+                <div class="m-b-20"><b class="m-r-5">{{'Subject:'}}</b>{{ item.title }}</div>
+                <div 
+                  [style.border]="item.sendType === 1 ? '1px solid rgba(77, 154, 56, 0.27)' : '1px solid rgba(60, 148, 203, 0.27)'" 
+                  style="display: flex;justify-content: flex-start;padding: 10px;"
+                >
+                  <div><b>{{'Content:'}}</b></div>
+                  <div [innerHTML]="item.content" style="width: 600px;"></div>
+                </div>
+              </span>
+            </p>
+          </div>
+      
+          <div
+            nz-row
+            nzGutter="24"
+            class="m-b-10"
+          >
+            <div nz-col>
+              <span [style]="item.sendType === 1 ? 'color: #67B496' : 'color: #60a3ce'">{{
+                item.sendTime | map: 'timeStamp'
+              }}</span>
+            </div>
+           
+          </div>
+        </nz-card>
+      </div>
+      <div style="display: flex;justify-content: right;align-items: center;">
+        <nz-pagination
+          [(nzPageIndex)]="current"
+          [nzTotal]="infoTotal"
+          [nzSize]="'small'"
+          [nzShowTotal]="rangeTemplate"
+          (nzPageIndexChange)="getInfoCurrentIndex($event)"
+        ></nz-pagination>
+        <ng-template #rangeTemplate let-range="range" let-total>
+          {{ range[0] }}-{{ range[1] }} of {{ total }} items
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</nz-modal>

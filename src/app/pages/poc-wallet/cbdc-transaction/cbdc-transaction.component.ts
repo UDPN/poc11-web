@@ -7,6 +7,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { CbdcTransactionService } from '@app/core/services/http/poc-wallet/cbdc-transaction/cbdc-transaction.service';
@@ -20,12 +21,11 @@ import { finalize } from 'rxjs';
 
 interface SearchParam {
   transactionNo: string;
-  from: string;
-  to: string;
   type: string;
   currency: string;
   createTime: any;
   status: string;
+  to: string;
 }
 
 @Component({
@@ -40,10 +40,10 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   headerExtra!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionNoTpl', { static: true })
   transactionNoTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('fromTpl', { static: true })
-  fromTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('toTpl', { static: true })
-  toTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletAddressTpl', { static: true })
+  walletAddressTpl!: TemplateRef<NzSafeAny>;
+  // @ViewChild('toTpl', { static: true })
+  // toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionHashTpl', { static: true })
   transactionHashTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('operationTpl', { static: true })
@@ -55,7 +55,8 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   searchParam: Partial<SearchParam> = {
     createTime: [],
     status: '',
-    type: ''
+    type: '',
+    to: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -82,8 +83,10 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
     private themesService: ThemeService,
     private dataService: LoginService,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private router: Router,
+    public routeInfo: ActivatedRoute
+  ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
@@ -95,7 +98,19 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.routeInfo.queryParams.subscribe((params) => {
+      if (JSON.stringify(params) !== '{}') {
+        this.searchParam.transactionNo = params['traceId'];
+      }
+    });
     this.initTable();
+    if (this.router.url.indexOf('?') !== -1) {
+      history.replaceState(
+        this.router.url,
+        '',
+        this.router.url.substring(0, this.router.url.indexOf('?'))
+      );
+    }
   }
 
   tableChangeDectction(): void {
@@ -149,36 +164,36 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 150
         },
         {
-          title: 'From',
-          tdTemplate: this.fromTpl,
-          width: 100
-        },
-        {
-          title: 'To',
-          tdTemplate: this.toTpl,
-          width: 100
+          title: 'Master Wallet Address',
+          tdTemplate: this.walletAddressTpl,
+          notNeedEllipsis: true,
+          width: 150
         },
         {
           title: 'Type',
           field: 'type',
           pipe: 'walletTransactionsType',
+          notNeedEllipsis: true,
           width: 100
+        },
+        {
+          title: 'Token Currency',
+          field: 'currency',
+          notNeedEllipsis: true,
+          width: 150
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
-          width: 100
+          notNeedEllipsis: true,
+          width: 120
         },
         {
-          title: 'Currency',
-          field: 'currency',
-          width: 100
-        },
-        {
-          title: 'Created On',
+          title: 'Created on',
           field: 'creationTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
@@ -187,15 +202,17 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
-          width: 150
+          notNeedEllipsis: true,
+          width: 100
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 150
+          width: 100
         }
       ],
       total: 0,

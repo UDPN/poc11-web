@@ -1,8 +1,8 @@
 <!--
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 13:39:28
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-10-09 18:00:25
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-01-04 10:27:03
  * @Description: 
 -->
 <div>
@@ -65,8 +65,23 @@
               <div nz-col nzSpan="12" class="enterpriseName">
                 <nz-form-item>
                   <nz-form-label nzSpan="24"
-                    >Commercial Bank Name</nz-form-label
-                  >
+                    >Commercial Bank Name
+                    <i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The name of the commercial bank you provided when submitting the onboarding application to the custodian bank.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
                   <nz-form-control>
                     <div style="text-align: left">
                       {{ detailData.spName }}
@@ -76,7 +91,23 @@
               </div>
               <div nz-col nzSpan="12" class="countryId">
                 <nz-form-item>
-                  <nz-form-label nzSpan="24">BIC</nz-form-label>
+                  <nz-form-label nzSpan="24"
+                    >BIC<i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The BIC you provided when submitting your onboarding application to the custodian bank.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
                   <nz-form-control>
                     <div style="text-align: left">
                       {{ detailData.bankBic }}
@@ -89,19 +120,7 @@
         </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <nz-form-label nzSpan="10"
-              >Central Bank/Custodian Bank
-            </nz-form-label>
-            <nz-form-control>
-              <div style="text-align: left">
-                {{ detailData.centralBankName }}
-              </div>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <nz-form-label nzSpan="10">Brief Introduction </nz-form-label>
+            <nz-form-label nzSpan="10">Official Website</nz-form-label>
             <nz-form-control>
               <div style="text-align: left">
                 {{ detailData.spBriefIntroduction }}
@@ -119,29 +138,116 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-
+        <div nz-row nzJustify="center" nzAlign="middle">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div class="onboarding-title">
+              Currency Information<i
+                class="m-l-5"
+                style="color: #3c5686; font-size: 20px"
+                nz-icon
+                nzType="question-circle"
+                nzTooltipPlacement="right"
+                nzTheme="fill"
+                nz-tooltip
+                nzTooltipTitle="The system will automatically create the master wallet to enable you to access the token-based currency systems and the sandbox."
+                nzTooltipColor="#3c5686"
+                nzTooltipTrigger="click"
+                nzTooltipOverlayClassName="buils"
+              ></i>
+            </div>
+          </div>
+        </div>
         <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <nz-form-label nzSpan="10">BN ID </nz-form-label>
+            <nz-form-label nzSpan="10"
+              >Custodian Bank<i
+                class="m-l-5"
+                style="color: #3c5686; font-size: 20px"
+                nz-icon
+                nzType="question-circle"
+                nzTooltipPlacement="right"
+                nzTheme="fill"
+                nz-tooltip
+                [nzTooltipTitle]="
+                  'Your default custodian bank information associated with your account.'
+                "
+                nzTooltipColor="#3c5686"
+                nzTooltipTrigger="click"
+                nzTooltipOverlayClassName="buils"
+              ></i>
+            </nz-form-label>
             <nz-form-control>
               <div style="text-align: left">
-                {{ detailData.bnCode }}
+                {{ detailData.centralBankName }}
               </div>
             </nz-form-control>
           </nz-form-item>
         </div>
-
-        <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10 nodeName">
-          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <nz-form-label nzSpan="10">Wallet Address(Besu) </nz-form-label>
-            <nz-form-control>
-              <div style="text-align: left">
-                {{ detailData.spBesuWalletAddress }}
+        <div
+          nz-row
+          nzJustify="center"
+          nzAlign="middle"
+          class="m-b-10"
+          nzGutter="8"
+        >
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div nz-row nzJustify="space-between" nzGutter="8">
+              <div nz-col nzSpan="12" class="enterpriseName">
+                <nz-form-item>
+                  <nz-form-label nzSpan="24"
+                    >Home Currency<i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The digital currency information of the custodian bank you have accessed.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
+                  <nz-form-control>
+                    <div style="text-align: left">
+                      {{ detailData.peggedCurrency }}
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
               </div>
-            </nz-form-control>
-          </nz-form-item>
+              <div nz-col nzSpan="12" class="countryId">
+                <nz-form-item>
+                  <nz-form-label nzSpan="24"
+                    >Blockchain
+                    <i
+                      class="m-l-5"
+                      style="color: #3c5686; font-size: 20px"
+                      nz-icon
+                      nzType="question-circle"
+                      nzTooltipPlacement="right"
+                      nzTheme="fill"
+                      nz-tooltip
+                      [nzTooltipTitle]="
+                        'The name of the blockchain network on which the digital currency smart contract of your connected custodian bank is deployed.'
+                      "
+                      nzTooltipColor="#3c5686"
+                      nzTooltipTrigger="click"
+                      nzTooltipOverlayClassName="buils"
+                    ></i
+                  ></nz-form-label>
+                  <nz-form-control>
+                    <div style="text-align: left">
+                      {{ detailData.blockchain }}
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
         </div>
-
         <div nz-row nzJustify="center" nzAlign="middle">
           <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
             <div class="onboarding-title">Contact Information</div>
@@ -199,27 +305,96 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-row nzJustify="center" nzAlign="middle">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div class="onboarding-title">Activated Services</div>
+          </div>
+        </div>
         <div
           nz-row
           nzJustify="center"
           nzAlign="middle"
-          class="m-b-10 businessLicense"
+          style="margin-top: -40px"
+          class="m-b-10 nodeName"
         >
           <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
-            <nz-form-label nzRequired nzSpan="24"
-              >Business License
-            </nz-form-label>
+            <nz-form-label nzSpan="10"> </nz-form-label>
             <nz-form-control>
-              <div style="text-align: left">
-                <img
-                  nz-image
-                  width="160px"
-                  height="160px"
-                  *ngIf="srcUrl"
-                  [nzSrc]="srcUrl"
-                  alt=""
-                />
+              <div nz-row>
+                <div nz-col nzSpan="24">
+                  <nz-checkbox-wrapper style="width: 100%">
+                    <div nz-row>
+                      <div nz-col nzSpan="12">
+                        <label nz-checkbox nzDisabled [nzChecked]="true">
+                          Interbank Cross-border Settlement<i
+                            class="m-l-5"
+                            style="color: #3c5686; font-size: 20px"
+                            nz-icon
+                            nzType="question-circle"
+                            nzTooltipPlacement="right"
+                            nzTheme="fill"
+                            nz-tooltip
+                            [nzTooltipTitle]="
+                              'Cross-border settlements between commercial banks'
+                            "
+                            nzTooltipColor="#3c5686"
+                            nzTooltipTrigger="click"
+                            nzTooltipOverlayClassName="buils"
+                          ></i>
+                        </label>
+                      </div>
+                      <div nz-col nzSpan="12">
+                        <label
+                          nz-checkbox
+                          nzDisabled
+                          [nzChecked]="detailData.paymentStatus === 1"
+                          >Cross-border Payment & Remittance<i
+                            class="m-l-5"
+                            style="color: #3c5686; font-size: 20px"
+                            nz-icon
+                            nzType="question-circle"
+                            nzTooltipPlacement="right"
+                            nzTheme="fill"
+                            nz-tooltip
+                            [nzTooltipTitle]="'enterprise customers.'"
+                            nzTooltipColor="#3c5686"
+                            nzTooltipTrigger="click"
+                            nzTooltipOverlayClassName="buils"
+                          ></i>
+                        </label>
+                      </div>
+                    </div>
+                  </nz-checkbox-wrapper>
+                </div>
               </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-row nzJustify="center" nzAlign="middle">
+          <div nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <div class="onboarding-title">Terms of Use</div>
+          </div>
+        </div>
+        <div
+          nz-row
+          nzJustify="center"
+          nzAlign="middle"
+          style="margin-top: -40px"
+          class="m-b-10 nodeName"
+        >
+          <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="9">
+            <nz-form-label nzSpan="10"></nz-form-label>
+            <nz-form-control>
+              <label nz-checkbox [nzChecked]="true" nzDisabled>
+                I have read and agree to
+                <a (click)="goToPdf()">
+                  <span>{{
+                    '"' +
+                      'Terms of Use for Accessing Project Kissen Sandbox' +
+                      '"'
+                  }}</span>
+                </a></label
+              >
             </nz-form-control>
           </nz-form-item>
         </div>

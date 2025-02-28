@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
+import { ThemeOptionsKey, aesKey, aesVi } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -69,9 +70,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   purchCurrecyCount!: string;
   purchCurrecyList: any[] = [];
   purchCurrecyModelShow = '';
+  purchCurrecyModelCount = '';
   purchCurrecyModelShowIcon = '';
+  rateType: any = 0;
   reveingCurrecy!: string;
   reveingCurrecyModelShow = '';
+  reveingCurrecyModelCount = '';
   reveingCurrecyModelShowIcon = '';
   showStatus = false;
   receivingWalletAddressList: any[] = [];
@@ -82,17 +86,26 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   timeSubscription!: Subscription;
   transactionWalletAddressArr: any[] = [];
   inputType = 0;
+  sendName = '';
+  color: string = '';
+  beneficiaryName = '';
   remiInfo: {
     rate: any;
     com: any;
     total: any;
     reve: any;
+    fromCapitalPoolAddress: any;
+    toCapitalPoolAddress: any;
   } = {
     rate: '',
     com: '',
     total: '',
-    reve: ''
+    reve: '',
+    fromCapitalPoolAddress: '',
+    toCapitalPoolAddress: ''
   };
+  amountValue: any;
+  reniSendAmountValue: any;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -102,7 +115,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     private fxPurchasingService: FxPurchasingService,
     private modal: NzModalService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private windowService: WindowService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -120,6 +134,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     let datePipe: DatePipe = new DatePipe('en-US');
     this.timeString = datePipe
       .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
@@ -155,10 +171,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (control.value === '') {
+    if (!control.value) {
       return { error: true, required: true };
     } else if (control.value > this.purchCurrecyCount) {
       return { regular: true, error: true };
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -174,7 +192,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -205,7 +223,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
             currecy: item.digitalSymbol,
             currecySymbol: item.digitalCurrencyName,
             walletAddress: item.wallets,
-            legalCurrencySymbol: item.legalCurrencySymbol
+            legalCurrencySymbol: item.legalCurrencySymbol,
+            digitalSymbol: item.digitalSymbol
           });
         });
         this.onReceiving(0);
@@ -250,19 +269,20 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
       rate: '',
       com: '',
       total: '',
-      reve: ''
+      reve: '',
+      fromCapitalPoolAddress: '',
+      toCapitalPoolAddress: ''
     };
+    this.beneficiaryName = this.fxReceivingData[e]?.currecy;
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.reveingCurrecyModelShowIcon =
-      this.fxReceivingData[e].legalCurrencySymbol === null
+      this.fxReceivingData[e].digitalSymbol === null
         ? ''
-        : this.fxReceivingData[e].legalCurrencySymbol;
-    this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.reveingCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']);
+        : this.fxReceivingData[e].digitalSymbol;
+    this.reveingCurrecyModelShow = 'Available Balance: ';
+    this.reveingCurrecyModelCount = thousandthMark(
+      this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']
+    );
     this.availableBalance =
       this.fxReceivingData[e]['walletAddress'][0]['cbdcCount'];
 
@@ -327,12 +347,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     //   (item: any) => item.bankAccountId === e
     // );
     // this.validateForm.get('transactionWalletAddressId')?.setValue(e);
-    this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.purchCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(this.transactionWalletAddressArr[e]['cbdcCount']);
+    this.purchCurrecyModelShow = 'Available Balance: ';
+    this.purchCurrecyModelCount = thousandthMark(
+      this.transactionWalletAddressArr[e]['cbdcCount']
+    );
     this.availableBalance = this.transactionWalletAddressArr[e]['cbdcCount'];
 
     this.purchCurrecyCount = this.transactionWalletAddressArr[e]['cbdcCount'];
@@ -354,12 +372,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.fxReceivingDataWallets.filter(
       (item: any) => item.bankAccountId === e
     );
-    this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.reveingCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(val[0]['cbdcCount']);
+    this.reveingCurrecyModelShow = 'Available Balance: ';
+    this.reveingCurrecyModelCount = thousandthMark(val[0]['cbdcCount']);
     this.availableBalance = val[0]['cbdcCount'];
     if (this.reveingCurrecy === this.purchCurrecy) {
     } else {
@@ -368,22 +382,19 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   onPurchCurrecy(e: number) {
     // // 加载receiving currency
-    // this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
+    this.refreshReceivingInfo(this.fxPurchaseData[e].centralBankId);
+    this.sendName = this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.purchCurrecyModelShowIcon =
-      this.fxPurchaseData[e].legalCurrencySymbol === null
+      this.fxPurchaseData[e].digitalSymbol === null
         ? ''
-        : this.fxPurchaseData[e].legalCurrencySymbol;
-    this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.purchCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(
-        this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
-          'cbdcCount'
-        ]
-      );
+        : this.fxPurchaseData[e].digitalSymbol;
+    this.purchCurrecyModelShow = 'Available Balance: ';
+    this.purchCurrecyModelCount = thousandthMark(
+      this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
+        'cbdcCount'
+      ]
+    );
     this.availableBalance =
       this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
         'cbdcCount'
@@ -417,6 +428,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         ]
       );
     this.validateForm.get('transactionWalletAddressId')?.setValue(0);
+    this.setSendAndAmount();
+    this.setShowStatus(false);
     if (this.reveingCurrecy === this.purchCurrecy) {
     } else {
       this.findExchange(4);
@@ -518,6 +531,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   findExchange(index: number) {
+    this.amountValue = this.validateForm.get('amount')?.value;
+    this.reniSendAmountValue = this.validateForm.get('reni_sendAmount')?.value;
     if (this.reveingCurrecy !== this.purchCurrecy) {
       if (
         (this.validateForm.get('amount')?.value !== '' &&
@@ -536,28 +551,30 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           })
           .subscribe((res) => {
             let resultData: any[] = [];
+            this.rateType = res[0].rateType;
             this.transferTitle =
               this.reveingCurrecy.replace('-UDPN', '') +
               '/' +
               this.purchCurrecy.replace('-UDPN', '') +
-              ' Fx Rate';
+              ' FX Rate';
             res.forEach((item: any) => {
               resultData.push({
                 rateId: item.rateId,
                 sp: item.provider,
+                fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+                toCapitalPoolAddress: item.toCapitalPoolAddress,
                 currency:
-                  '1 ' +
                   item.from.replace('-UDPN', '') +
+                  '/' +
+                  item.to.replace('-UDPN', '') +
                   ' = ' +
-                  item.rate +
-                  ' ' +
-                  item.to.replace('-UDPN', ''),
+                  item.rate.toFixed(2),
                 currencyShow:
-                  '1 ' +
                   item.from.replace('-UDPN', '') +
+                  '/' +
+                  item.to.replace('-UDPN', '') +
                   ' = ' +
-                  item.rate +
-                  item.to.replace('-UDPN', ''),
+                  item.rate.toFixed(2),
                 rate: item.rate,
                 com: this.getValCom(item),
                 total: this.getValTotal(item),
@@ -570,13 +587,14 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
                     ' ' +
                     item.to.replace('-UDPN', ''),
                   com: this.getValCom(item),
+                  fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+                  toCapitalPoolAddress: item.toCapitalPoolAddress,
                   total: this.getValTotal(item),
                   reve:
                     this.getValReve(item) + ' ' + item.to.replace('-UDPN', '')
                 }
               });
             });
-            console.log(resultData);
             this.nzLoading = false;
             this.dataList = resultData.sort(this.compare('total'));
             this.checkedItemComment = [];
@@ -602,16 +620,20 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.validateForm
       .get('amount')
       ?.valueChanges.pipe(debounceTime(1000))
-      .subscribe((_) => {
-        this.findExchange(6);
+      .subscribe((res) => {
+        if (res !== this.amountValue) {
+          this.findExchange(6);
+        }
       });
   }
   fromEventSendAmount() {
     this.validateForm
       .get('reni_sendAmount')
       ?.valueChanges.pipe(debounceTime(1000))
-      .subscribe((_) => {
-        this.findExchange(6);
+      .subscribe((res) => {
+        if (res !== this.reniSendAmountValue) {
+          this.findExchange(6);
+        }
       });
   }
   compare(p: string) {
@@ -711,8 +733,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (res.code === 0 || res.code === '0') {
           this.modal
             .success({
-              nzTitle: 'Success',
-              nzContent: 'Transfer successful!'
+              nzTitle: 'FX purchase completed',
+              nzContent: ''
             })
             .afterClose.subscribe((_) => {
               // this.initData();
@@ -725,18 +747,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isLoading = false;
           this.isVisible = false;
         } else {
-          this.modal
-            .error({
-              nzTitle: 'Error',
-              nzContent: this.translate.instant(`${res.message}`)
-            })
-            .afterClose.subscribe((_) => {
-              this.passwordForm.reset();
-              this.isVisibleEnterPassword = true;
-              this.cdr.markForCheck();
-              this.isLoading = false;
-            });
+          this.passwordForm.reset();
+          this.isLoading = false;
         }
+        this.cdr.markForCheck();
       });
   }
 }

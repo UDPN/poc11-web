@@ -1,0 +1,35 @@
+  <nz-card [nzTitle]="'Wallet List'">
+    <nz-table
+      #basicTable
+      [nzData]="walletList"
+      [nzFrontPagination]="false"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      [nzLoading]="loading"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Wallet Address</th>
+          <th>Token Name</th>
+          <th>Total Balance</th>
+          <th>Created on</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.chainAccountAddress }}</td>
+          <td>{{ data.tokenName }}</td>
+          <td>{{ data.totalBalance }} {{ data.tokenName }}</td>
+          <td>{{ data.createTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
+          <td>
+            <nz-tag [nzColor]="getStatusColor(data.status)">
+              {{ getStatusText(data.status) }}
+            </nz-tag>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>

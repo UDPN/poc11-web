@@ -1,8 +1,8 @@
 /*
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:54:28
- * @LastEditors: zhangxuefeng
- * @LastEditTime: 2024-01-05 13:27:59
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2024-12-24 17:42:17
  * @Description:
  */
 import {
@@ -50,7 +50,7 @@ export class AddPoolComponent implements OnInit {
   validateForm: FormRecord<FormControl<string>> = this.fb.record({});
   listOfControl: Array<{
     id: number;
-    crrency: any;
+    currency: any;
     status: any;
     capitalPoolAddress: any;
   }> = [];
@@ -69,6 +69,8 @@ export class AddPoolComponent implements OnInit {
   editFileList: any = [];
   @ViewChild('authorizedTpl', { static: true })
   authorizedTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('currencyTpl', { static: true })
+  currencyTpl!: TemplateRef<NzSafeAny>;
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   constructor(
@@ -83,7 +85,7 @@ export class AddPoolComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute
-  ) { }
+  ) {}
   ngOnInit(): void {
     this.initSelectOptionEdit(0);
     this.edit();
@@ -99,6 +101,11 @@ export class AddPoolComponent implements OnInit {
         this.dataList = res.capitalPoolList;
         this.editFileList = res.fileList;
         this.dataList.forEach((item: any, i: any) => {
+          // item.capitalPoolCurrency =
+          //   item.capitalPoolCurrency.split('-')[0] +
+          //   '-' +
+          //   item.capitalPoolPlatform;
+          item.capitalPoolCurrency = item.capitalPoolCurrency.split('-')[0];
           Object.assign(item, { key: i });
         });
         if (res.fileList && res.fileList.length > 0) {
@@ -210,13 +217,13 @@ export class AddPoolComponent implements OnInit {
 
       const control = {
         id,
-        crrency: `currency${id}`,
+        currency: `currency${id}`,
         status: `status${id}`,
         capitalPoolAddress: `capitalPoolAddress${id}`
       };
       const index = this.listOfControl.push(control);
       this.validateForm.addControl(
-        this.listOfControl[index - 1].crrency,
+        this.listOfControl[index - 1].currency,
         this.fb.control('', Validators.required)
       );
       this.validateForm.addControl(
@@ -260,10 +267,12 @@ export class AddPoolComponent implements OnInit {
           arr.push(item.currency);
         });
         if (type === 1) {
+          console.log(arr);
           this.selectOptionPacths$.next(arr);
           this.selectOptionPacthsLenght = arr.length;
         }
         if (type === 0) {
+          console.log(arr);
           this.selectOptionAll$.next(arr);
           this.selectOptionPacthsLenght = arr.length;
         }
@@ -296,6 +305,8 @@ export class AddPoolComponent implements OnInit {
           }
         });
         this.selectOptionPacths$.next(arrs);
+        console.log(this.selectOptionPacths$, '22222');
+
         this.selectOptionPacthsLenght = arrs.length;
       });
     });
@@ -341,7 +352,7 @@ export class AddPoolComponent implements OnInit {
     });
   }
   removeField(
-    i: { id: number; crrency: any; status: any; capitalPoolAddress: any },
+    i: { id: number; currency: any; status: any; capitalPoolAddress: any },
     e: MouseEvent
   ): void {
     e.preventDefault();
@@ -372,13 +383,13 @@ export class AddPoolComponent implements OnInit {
       }
       const index = this.listOfControl.indexOf(i);
       this.listOfControl.splice(index, 1);
-      this.validateForm.removeControl(i.crrency);
+      this.validateForm.removeControl(i.currency);
       this.validateForm.removeControl(i.status);
       this.validateForm.removeControl(i.capitalPoolAddress);
     }
   }
   onChange(
-    i: { id: number; crrency: any; status: any; capitalPoolAddress: any },
+    i: { id: number; currency: any; status: any; capitalPoolAddress: any },
     e: MouseEvent
   ) {
     this.setOldArr(i.id, e.toString());
@@ -398,8 +409,8 @@ export class AddPoolComponent implements OnInit {
       this.listCheckArr.length === 0
         ? []
         : this.listCheckArr[index] === undefined
-          ? []
-          : this.listCheckArr[index];
+        ? []
+        : this.listCheckArr[index];
     this.listCheckArr[index] = ss.concat(str);
   }
   onSubmit() {
@@ -449,7 +460,6 @@ export class AddPoolComponent implements OnInit {
       for (const key in this.dataList) {
         delete this.dataList[key].key;
       }
-
       this.addData(
         this.dataList.length < uniqueArr.length ? uniqueArr : this.dataList,
         []
@@ -521,8 +531,8 @@ export class AddPoolComponent implements OnInit {
     if (type === 1) {
       return {
         capitalPoolPlatform: 'UDPN',
-        capitalPoolCurrency:
-          currency.split('-')[0] + '-' + currency.split('-')[1],
+        // capitalPoolCurrency: currency.split('-')[0] + '-' + 'UDPN',
+        capitalPoolCurrency: currency.split('-')[0],
         capitalPoolAddress: targetCurrency
       };
     }
@@ -542,6 +552,9 @@ export class AddPoolComponent implements OnInit {
       array.push({ fileCode: item.fileCode, fileUrl: item.fileUrl });
     });
     this.fileList = array;
+    console.log(arr);
+
+    // return;
     this.pocActivateSettlementService
       .save({
         capitalPoolList: arr,
@@ -573,17 +586,20 @@ export class AddPoolComponent implements OnInit {
       headers: [
         {
           title: 'Currency',
-          field: 'capitalPoolCurrency',
+          tdTemplate: this.currencyTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Account/Wallet (Capital Pool Address)',
           field: 'capitalPoolAddress',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'Actions',
           tdTemplate: this.authorizedTpl,
+          notNeedEllipsis: true,
           width: 120
         }
       ],

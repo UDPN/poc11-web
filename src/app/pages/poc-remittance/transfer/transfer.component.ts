@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { Route, Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
+import { ThemeOptionsKey, aesKey, aesVi } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
@@ -67,7 +68,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   availableCurrecyModel = '';
   availableCurrecyModelCount = '';
   availableCurrecyModelShow = '';
+  availableCount = '';
   availableCurrecyModelShowIcon = '';
+  sendName = '';
+  beneficiaryName = '';
   settlementStatus = false;
   beneficiaryCurrencyName: any = '';
   transferTitle: string = '';
@@ -80,20 +84,31 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   timeString: any = '';
   timeSubscription!: Subscription;
   newRemitterWalletAddress: string = '';
+  valueValidator: string = '';
+  valueValidator1: string = '';
   oldAmount: any = '';
+  rateType: any = 0;
   remiInfo: {
     rate: any;
     com: any;
     total: any;
     reve: any;
+    fromCapitalPoolAddress: any;
+    toCapitalPoolAddress: any;
   } = {
     rate: '',
     com: '',
     total: '',
-    reve: ''
+    reve: '',
+    fromCapitalPoolAddress: '',
+    toCapitalPoolAddress: ''
   };
   inputType = 0;
   bankNames = '';
+  color: string = '';
+  amountValue: any;
+  reniSendAmountValue: any;
+  isError: boolean = true;
   constructor(
     private pocCapitalPoolService: PocCapitalPoolService,
     private themesService: ThemeService,
@@ -102,13 +117,58 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder,
     private transferService: TransferService,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private windowService: WindowService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
   }
   ngAfterViewInit(): void {
     // this.fromEventBeneficialWalletAddress();
+    this.validateForm
+      .get('beneficialWalletAddress')
+      ?.valueChanges.subscribe((res) => {
+        this.remitterWalletAddressList.map((item) => {
+          if (
+            item.bankAccountId ===
+            this.validateForm.get('remitterWalletAddress')?.value
+          ) {
+            this.valueValidator = item.chainAccountAddress;
+          }
+        });
+        this.BeneficiaryArr.map((item) => {
+          if (item.bankWalletId === res) {
+            this.valueValidator1 = item.chainAccountAddress;
+          }
+        });
+        if (this.valueValidator === this.valueValidator1) {
+          this.isError = true;
+        } else {
+          this.isError = false;
+        }
+      });
+    this.validateForm
+      .get('remitterWalletAddress')
+      ?.valueChanges.subscribe((res) => {
+        this.remitterWalletAddressList.map((item) => {
+          if (item.bankAccountId === res) {
+            this.valueValidator = item.chainAccountAddress;
+          }
+        });
+        this.BeneficiaryArr.map((item) => {
+          if (
+            item.bankWalletId ===
+            this.validateForm.get('beneficialWalletAddress')?.value
+          ) {
+            this.valueValidator1 = item.chainAccountAddress;
+          }
+        });
+        if (this.valueValidator === this.valueValidator1) {
+          this.isError = true;
+        } else {
+          this.isError = false;
+        }
+      });
     this.formEventCurrencyInterbankSettlementAmount();
     this.formEventCurrencyInterbankSettlementSendAmount();
     this.pageHeaderInfo = {
@@ -121,6 +181,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     let datePipe: DatePipe = new DatePipe('en-US');
     this.timeString = datePipe
       .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
@@ -143,7 +205,10 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         [Validators.required, this.beneficialWalletAddressValidator]
       ],
       amount: ['', [Validators.required, this.amountValidator]],
-      remitterWalletAddress: [null, [Validators.required]],
+      remitterWalletAddress: [
+        null,
+        [Validators.required, this.remitterWalletAddressValidator]
+      ],
       availableBalance: [null, [Validators.required]],
       remitterBankName: [null, [Validators.required]],
       remitterBankId: ['', [Validators.required]],
@@ -158,10 +223,12 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (control.value === '') {
+    if (!control.value) {
       return { error: true, required: true };
     } else if (control.value > this.availableCurrecyModelCount) {
       return { regular: true, error: true };
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -170,6 +237,53 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   ): { [s: string]: boolean } => {
     if (control.value === '') {
       return { error: true, required: true };
+    } else if (control.value) {
+      this.remitterWalletAddressList.map((item) => {
+        if (
+          item.bankAccountId ===
+          this.validateForm.get('remitterWalletAddress')?.value
+        ) {
+          this.valueValidator = item.chainAccountAddress;
+        }
+      });
+      this.BeneficiaryArr.map((item) => {
+        if (item.bankWalletId === control.value) {
+          this.valueValidator1 = item.chainAccountAddress;
+        }
+      });
+      if (this.valueValidator === this.valueValidator1) {
+        return { error: true, regular: true };
+      } else {
+        return {};
+      }
+    }
+    return {};
+  };
+
+  remitterWalletAddressValidator = (
+    control: FormControl
+  ): { [s: string]: boolean } => {
+    if (control.value === '') {
+      return { error: true, required: true };
+    } else if (control.value) {
+      this.remitterWalletAddressList.map((item) => {
+        if (item.bankAccountId === control.value) {
+          this.valueValidator = item.chainAccountAddress;
+        }
+      });
+      this.BeneficiaryArr.map((item) => {
+        if (
+          item.bankWalletId ===
+          this.validateForm.get('beneficialWalletAddress')?.value
+        ) {
+          this.valueValidator1 = item.chainAccountAddress;
+        }
+      });
+      if (this.valueValidator === this.valueValidator1) {
+        return { error: true, regular: true };
+      } else {
+        return {};
+      }
     }
     return {};
   };
@@ -182,7 +296,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       this.availableCurrecyModel === this.beneficiaryCurrency
     ) {
       return { regular: true, error: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
       return { regular1: true, error: true };
     }
     return {};
@@ -284,12 +398,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
-    this.availableCurrecyModelShow =
-      this.availableCurrecyModel.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.availableCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(val[0].cbdcCount);
+    this.availableCurrecyModelShow = 'Available Balance: ';
+    this.availableCount = thousandthMark(val[0].cbdcCount);
     this.validateForm
       .get('availableBalance')
       ?.setValue(thousandthMark(val[0]['cbdcCount']));
@@ -343,6 +453,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // Check field
   getExchange() {
+    this.amountValue = this.validateForm.get('amount')?.value;
+    this.reniSendAmountValue = this.validateForm.get('reni_sendAmount')?.value;
     if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
       if (
         (this.validateForm.get('amount')?.value !== '' &&
@@ -483,22 +595,24 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .subscribe((res) => {
         let resultData: any[] = [];
+        this.rateType = res[0].rateType;
         this.transferTitle =
           this.availableCurrecyModel.replace('-UDPN', '') +
           '/' +
           this.beneficiaryCurrency.replace('-UDPN', '') +
-          ' Fx Rate';
+          ' FX Rate';
         res.forEach((item: any) => {
           resultData.push({
             rateId: item.rateId,
             sp: item.provider,
+            fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+            toCapitalPoolAddress: item.toCapitalPoolAddress,
             currency:
-              '1 ' +
               item.from.replace('-UDPN', '') +
+              '/' +
+              item.to.replace('-UDPN', '') +
               ' = ' +
-              item.rate +
-              ' ' +
-              item.to.replace('-UDPN', ''),
+              item.rate.toFixed(2),
             rate: item.rate,
             com: this.getValCom(item),
             total: this.getValTotal(item),
@@ -511,6 +625,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
                 ' ' +
                 item.to.replace('-UDPN', ''),
               com: this.getValCom(item),
+              fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+              toCapitalPoolAddress: item.toCapitalPoolAddress,
               total: this.getValTotal(item),
               reve: this.getValReve(item) + ' ' + item.to.replace('-UDPN', '')
             }
@@ -558,7 +674,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             emitEvent: false
           });
         } else {
-          this.getExchange();
+          if (res !== this.amountValue) {
+            this.getExchange();
+          }
         }
       });
   }
@@ -572,7 +690,9 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
             emitEvent: false
           });
         } else {
-          this.getExchange();
+          if (res !== this.reniSendAmountValue) {
+            this.getExchange();
+          }
         }
       });
   }
@@ -582,14 +702,14 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.availableCurrecy.filter(
       (item: any) => item.digitalCurrencyName === e
     );
+    this.sendName = val[0].digitalSymbol;
     this.availableCurrecyModelShowIcon =
-      val[0].legalCurrencySymbol === null ? '' : val[0].legalCurrencySymbol;
+      val[0].digitalSymbol === null ? '' : val[0].digitalSymbol;
     this.availableCurrecyModelShow =
-      this.availableCurrecyModel.replace('-UDPN', '') +
-      ' Available Balance: ' +
-      this.availableCurrecyModelShowIcon +
-      ' ' +
-      thousandthMark(val[0].remitterInformationExtendInfoList[0].cbdcCount);
+      this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
+    this.availableCount = thousandthMark(
+      val[0].remitterInformationExtendInfoList[0].cbdcCount
+    );
     this.availableCurrecyModelCount =
       val[0].remitterInformationExtendInfoList[0].cbdcCount;
     this.validateForm
@@ -652,12 +772,15 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       rate: '',
       com: '',
       total: '',
-      reve: ''
+      reve: '',
+      fromCapitalPoolAddress: '',
+      toCapitalPoolAddress: ''
     };
     const val = this.newAmountArr.filter(
       (item: any) => item.digitalCurrencyName === e
     );
-    this.beneficiaryCurrencyIcon = val[0]['legalCurrencySymbol'];
+    this.beneficiaryName = val[0]['digitalSymbol'];
+    this.beneficiaryCurrencyIcon = val[0]['digitalSymbol'];
     // centralBankId
     this.newToCommercialBankId = val[0]['centralBankId'];
     this.BeneficiaryArr = val[0]['beneficiaryWalletExtendedRespVOs'];
@@ -742,7 +865,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.validateForm.value);
     if (this.validateForm.valid) {
       if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
         if (this.checkedItemComment.length === 0) {
@@ -814,8 +936,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
         if (res.code === 0) {
           this.modal
             .success({
-              nzTitle: 'Success',
-              nzContent: 'Transfer successful!'
+              nzTitle: 'Transfer completed',
+              nzContent: ''
             })
             .afterClose.subscribe((_) => {
               // this.initData();
@@ -830,7 +952,6 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isVisible = false;
         } else {
           this.passwordForm.reset();
-          this.isVisibleEnterPassword = true;
           this.isLoading = false;
         }
         this.cdr.markForCheck();

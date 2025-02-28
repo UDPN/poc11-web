@@ -55,6 +55,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   centralBankTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('walletAddressTpl', { static: true })
   walletAddressTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('walletAdressTitleTpl', { static: true })
+  walletAdressTitleTpl!: TemplateRef<NzSafeAny>;
   isVisibleTopUp: boolean = false;
   isVisibleWithdraw: boolean = false;
   isVisibleEnterPassword: boolean = false;
@@ -89,6 +91,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   currency: any;
   txType: number = 0;
   balance: any = '';
+  reserveBalance: any = '';
+  reserveCurrency: any = '';
   constructor(
     private cbdcWalletService: CbdcWalletService,
     private themesService: ThemeService,
@@ -102,15 +106,13 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.topUpForm.get('amount')?.valueChanges.subscribe((item: number) => {
       this.topUpForm.get('fiatAmount')?.setValue(item);
-      // this.getFiatAmount(item);
     });
     this.withdrawForm.get('amount')?.valueChanges.subscribe((item: number) => {
       this.withdrawForm.get('fiatAmount')?.setValue(item);
-      // this.getFiatAmount(item);
     });
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Wallet Management', 'Wallet Management '],
+      breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -123,10 +125,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     this.topUpForm = this.fb.group({
       commercialBank: [null, [Validators.required]],
       chainAccountAddress: [null, [Validators.required]],
-      transactionReferenceNo: [
-        null,
-        [Validators.required, this.transactionReferenceNoValidator]
-      ],
       reserveAccount: [
         null,
         [Validators.required, this.reserveAccountValidator]
@@ -154,6 +152,8 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       return { error: true, required: true };
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
+    } else if (control.value > Number(this.reserveBalance)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -166,19 +166,6 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     } else if (control.value > Number(this.balance)) {
-      return { regular1: true, error: true };
-    }
-    return {};
-  };
-
-  transactionReferenceNoValidator = (
-    control: FormControl
-  ): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { error: true, required: true };
-    } else if (!/^([a-zA-Z0-9\s-._#!@￥%&*?/]{1,100})$/.test(control.value)) {
-      return { regular: true, error: true };
-    } else if (control.value.length > 50) {
       return { regular1: true, error: true };
     }
     return {};
@@ -264,23 +251,39 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getTopUp(currency: string, chainAccountAddress: string, balance: any) {
+  getTopUp(
+    reserveCurrency: string,
+    chainAccountAddress: string,
+    reserveAccount: any,
+    reserveBalance: any,
+    currency: any
+  ) {
+    this.reserveCurrency = reserveCurrency;
+    this.reserveBalance = reserveBalance;
     this.currency = currency;
-    this.balance = balance;
     this.topUpForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.topUpForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.topUpForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleTopUp = true;
   }
 
-  getWithdraw(currency: string, chainAccountAddress: string, balance: any) {
+  getWithdraw(
+    currency: string,
+    chainAccountAddress: string,
+    balance: any,
+    reserveAccount: any,
+    reserveCurrency: any
+  ) {
+    this.reserveCurrency = reserveCurrency;
     this.currency = currency;
     this.balance = balance;
     this.withdrawForm.get('chainAccountAddress')?.setValue(chainAccountAddress);
     this.withdrawForm
       .get('commercialBank')
       ?.setValue(sessionStorage.getItem('systemName'));
+    this.withdrawForm.get('reserveAccount')?.setValue(reserveAccount);
     this.isVisibleWithdraw = true;
   }
 
@@ -336,12 +339,10 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           ? this.topUpForm.get('chainAccountAddress')?.value
           : this.withdrawForm.get('chainAccountAddress')?.value
     };
-    if (this.txType === 1) {
-      params['transactionReferenceNo'] = this.topUpForm.get(
-        'transactionReferenceNo'
-      )?.value;
-    }
-    const amount = thousandthMark(params.amount) + ' ' + this.currency;
+    const amount =
+      thousandthMark(params.amount) +
+      ' ' +
+      (this.txType === 1 ? this.currency : this.reserveCurrency);
     this.cbdcWalletService
       .topUpOrWithdraw(params)
       .pipe(finalize(() => (this.isOkLoading = false)))
@@ -381,34 +382,47 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
       headers: [
         {
           title: 'Wallet Address',
+          thTemplate: this.walletAdressTitleTpl,
           tdTemplate: this.walletAddressTpl,
+          notNeedEllipsis: true,
           width: 200
         },
         {
-          title: 'Central Bank/Custodian Bank ',
+          title: 'Custodian Bank',
           thTemplate: this.centralBankTpl,
           field: 'centralBankName',
-          width: 260
+          notNeedEllipsis: true,
+          width: 200
+        },
+        {
+          title: 'Region',
+          field: 'region',
+          pipe: 'region',
+          notNeedEllipsis: true,
+          width: 120
         },
         {
           title: 'Wallet Type',
-          field: 'region',
-          pipe: 'region',
+          field: 'walletType',
+          pipe: 'walletType',
+          notNeedEllipsis: true,
           width: 150
         },
         {
-          title: 'Currency',
+          title: 'Token Currency',
           field: 'currency',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Balance',
           field: 'balance',
           pipe: 'toThousandthMark',
-          width: 150
+          notNeedEllipsis: true,
+          width: 120
         },
         {
-          title: 'Created On',
+          title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
@@ -417,15 +431,17 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
+          notNeedEllipsis: true,
           width: 180
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 180
+          width: 250
         }
       ],
       total: 0,

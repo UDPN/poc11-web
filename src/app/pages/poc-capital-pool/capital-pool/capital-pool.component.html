@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-27 14:08:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-05-23 17:56:22
+ * @LastEditTime: 2025-01-09 17:17:43
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -49,8 +49,8 @@
 <ng-template #authorizedTpl>
   <span>{{ 'Yes' }}</span>
 </ng-template>
-<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress"
-  let-currencyPrecision="currencyPrecision" let-capitalPoolRealBalance="capitalPoolRealBalance">
+<ng-template #operationTpl let-capitalPoolCurrency="capitalPoolCurrency" let-capitalPoolAddress="capitalPoolAddress" let-reserveBalance="reserveBalance"
+  let-currencyPrecision="currencyPrecision" let-capitalPoolRealBalance="capitalPoolRealBalance" let-reserveCurrency="reserveCurrency" let-reserveAccount="reserveAccount">
   <ng-container>
     <span class="operate-text" *appAuth="'R020204'"
       (click)="getEdit(capitalPoolCurrency, capitalPoolAddress, currencyPrecision)">
@@ -58,13 +58,13 @@
     </span>
   </ng-container>
   <ng-container *appAuth="'R020205'">
-    <span class="operate-text" (click)="getTopUp(capitalPoolCurrency, capitalPoolAddress, capitalPoolRealBalance)">
-      Top up
+    <span class="operate-text" (click)="getTopUp(reserveCurrency, capitalPoolAddress, reserveAccount, reserveBalance, capitalPoolCurrency)">
+      Top-up
     </span>
   </ng-container>
   <ng-container *appAuth="'R020206'">
-    <span class="operate-text" (click)="getWithdraw(capitalPoolCurrency, capitalPoolAddress, capitalPoolRealBalance)">
-      Withdraw
+    <span class="operate-text" (click)="getWithdraw(capitalPoolCurrency, capitalPoolAddress, capitalPoolRealBalance, reserveAccount, reserveCurrency)">
+      Withdrawal
     </span>
   </ng-container>
 </ng-template>
@@ -112,7 +112,7 @@
       [disabled]="!this.editValidateForm.valid">Confirm</button>
   </div>
 </nz-modal>
-<nz-modal [(nzVisible)]="isVisibleTopUp" nzTitle="Top up" (nzOnCancel)="cancelTopUp()" [nzClosable]="false"
+<!-- <nz-modal [(nzVisible)]="isVisibleTopUp" nzTitle="Top-up" (nzOnCancel)="cancelTopUp()" [nzClosable]="false"
   [nzWidth]="800" nzCentered="true">
   <div *nzModalContent>
     <form nz-form [formGroup]="topUpForm">
@@ -209,7 +209,7 @@
       [disabled]="!this.topUpForm.valid">Submit</button>
   </div>
 </nz-modal>
-<nz-modal [(nzVisible)]="isVisibleWithdraw" nzTitle="Withdraw" (nzOnCancel)="cancelWithdraw()" [nzClosable]="false"
+<nz-modal [(nzVisible)]="isVisibleWithdraw" nzTitle="Withdrawal" (nzOnCancel)="cancelWithdraw()" [nzClosable]="false"
   [nzWidth]="800" nzCentered="true">
   <div *nzModalContent>
     <form nz-form [formGroup]="withdrawForm">
@@ -233,7 +233,7 @@
             <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="16">
               <input nz-input formControlName="chainAccountAddress" readonly class="onboard-disabled" />
               <div>
-                {{'Available Amount: '}} {{ (this.balance | map:'toThousandthMark') + ' ' + this.currency }}
+                {{'Available Amount: '}} {{this.balance | map:'toThousandthMark'}}{{' ' + this.currency }}
               </div>
               <ng-template #walletAddressError let-control>
                 <ng-container *ngIf="control.hasError('required')">Please input your Wallet Address</ng-container>
@@ -296,22 +296,352 @@
     <button nz-button nzType="primary" (click)="withdraw()" [nzLoading]="isLoading"
       [disabled]="!this.withdrawForm.valid">Submit</button>
   </div>
+</nz-modal> -->
+<nz-modal
+  [(nzVisible)]="isVisibleTopUp"
+  nzTitle="Top-up"
+  (nzOnCancel)="cancelTopUp()"
+  [nzClosable]="false"
+  [nzWidth]="800"
+  nzCentered="true"
+>
+  <div *nzModalContent>
+    <form nz-form [formGroup]="topUpForm">
+      <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+        <div nz-col nzSpan="20">
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Commercial Bank
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="commercialBankError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <input
+                nz-input
+                formControlName="commercialBank"
+                readonly
+                class="onboard-disabled"
+              />
+              <ng-template #commercialBankError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Commercial Bank</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Wallet Address
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="walletAddressError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <input
+                nz-input
+                formControlName="chainAccountAddress"
+                readonly
+                class="onboard-disabled"
+              />
+              <ng-template #walletAddressError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Wallet Address</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Bank Account
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="bankAccountError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <input
+                nz-input
+                formControlName="reserveAccount"
+                readonly
+                class="onboard-disabled"
+              />
+              <div>
+                {{ 'Available Amount: ' }}
+                {{ this.reserveBalance | map: 'toThousandthMark' }}
+                {{ ' ' + this.reserveCurrency }}
+              </div>
+              <ng-template #bankAccountError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Bank Account</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular1')"
+                  >The maximum limit is 30 characters.</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular')"
+                  >Format error. Please use numbers.</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Amount
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="amountError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                <input nz-input formControlName="amount" />
+              </nz-input-group>
+              <ng-template #addOnAfterTemplate>
+                <label>{{ this.reserveCurrency }}</label>
+              </ng-template>
+              <ng-template #amountError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Amount</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular')"
+                  >You can enter only positive integer numbers with a maximum of
+                  2 decimal places.</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular1')"
+                  >The Amount cannot be greater than the Available
+                  Amount</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Token Received
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="receivedError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1">
+                <input
+                  nz-input
+                  formControlName="fiatAmount"
+                  readonly
+                  class="onboard-disabled"
+                />
+              </nz-input-group>
+              <ng-template #addOnAfterTemplate1>
+                <label>{{ this.currency }}</label>
+              </ng-template>
+              <ng-template #receivedError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Token Received</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <!-- <nz-alert nzType="info" [nzDescription]="descriptionTemplate" nzShowIcon></nz-alert>
+          <ng-template #descriptionTemplate>
+            <h5 nz-typography>
+              Please ensure that your fiat collateral account has sufficient balance as insufficient balance may result
+              in
+              failed recharge.
+            </h5>
+          </ng-template> -->
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelTopUp()">Back</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="topUp()"
+      [nzLoading]="isLoading"
+      [disabled]="!this.topUpForm.valid"
+    >
+      Submit
+    </button>
+  </div>
 </nz-modal>
-
+<nz-modal
+  [(nzVisible)]="isVisibleWithdraw"
+  nzTitle="Withdrawal"
+  (nzOnCancel)="cancelWithdraw()"
+  [nzClosable]="false"
+  [nzWidth]="800"
+  nzCentered="true"
+>
+  <div *nzModalContent>
+    <form nz-form [formGroup]="withdrawForm">
+      <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
+        <div nz-col nzSpan="20">
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Commercial Bank
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="commercialBankError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <input
+                nz-input
+                formControlName="commercialBank"
+                readonly
+                class="onboard-disabled"
+              />
+              <ng-template #commercialBankError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Commercial Bank</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Wallet Address
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="walletAddressError" nzSpan="16">
+              <input
+                nz-input
+                formControlName="chainAccountAddress"
+                readonly
+                class="onboard-disabled"
+              />
+              <div>
+                {{ 'Available Amount: ' }}
+                {{
+                  (this.balance | map: 'toThousandthMark') + ' ' + this.currency
+                }}
+              </div>
+              <ng-template #walletAddressError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Wallet Address</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Bank Account
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="bankAccountError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <input
+                nz-input
+                formControlName="reserveAccount"
+                readonly
+                class="onboard-disabled"
+              />
+              <ng-template #bankAccountError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Bank Account</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular1')"
+                  >The maximum limit is 30 characters.</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular')"
+                  >Format error. Please use numbers.</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Amount
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="amount1Error"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                <input nz-input formControlName="amount" />
+              </nz-input-group>
+              <ng-template #addOnAfterTemplate>
+                <label>{{ this.reserveCurrency }}</label>
+              </ng-template>
+              <ng-template #amount1Error let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Amount</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular')"
+                  >You can enter only positive integer numbers with a maximum of
+                  2 decimal places.</ng-container
+                >
+                <ng-container *ngIf="control.hasError('regular1')"
+                  >The Amount cannot be greater than the Available
+                  Amount</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzRequired nzSpan="8" class="text-left">
+              Token Received
+            </nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="receivedError"
+              nzSpan="16"
+              class="m-b-20"
+            >
+              <nz-input-group [nzAddOnAfter]="addOnAfterTemplate1">
+                <input
+                  nz-input
+                  formControlName="fiatAmount"
+                  readonly
+                  class="onboard-disabled"
+                />
+              </nz-input-group>
+              <ng-template #addOnAfterTemplate1>
+                <label>{{ this.currency }}</label>
+              </ng-template>
+              <ng-template #receivedError let-control>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Please input your Token Received</ng-container
+                >
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancelWithdraw()">Back</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="withdraw()"
+      [nzLoading]="isLoading"
+      [disabled]="!this.withdrawForm.valid"
+    >
+      Submit
+    </button>
+  </div>
+</nz-modal>
 <nz-modal [(nzVisible)]="isVisibleEnterPassword" nzTitle="Enter Login Password" (nzOnCancel)="cancelEnterPassword()"
   [nzClosable]="false" [nzWidth]="700" nzCentered="true">
   <div *nzModalContent>
-    <form nz-form [formGroup]="passwordForm">
+    <form nz-form [formGroup]="passwordForm" nzLayout="vertical">
       <div nz-row [nzGutter]="24" nzJustify="center" nzAlign="middle">
         <div nz-col nzSpan="20">
           <nz-form-item class="m-t-15">
-            <nz-form-label nzRequired nzSpan="6" class="text-left">
-              Password
+            <nz-form-label nzRequired nzSpan="24" class="text-left">
+              {{ 'Password (Please input login password)' }}
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="passwordError" nzSpan="18">
+            <nz-form-control [nzErrorTip]="passwordError" nzSpan="24">
               <input [type]="'password'" nz-input formControlName="pwd" />
               <ng-template #passwordError let-control>
-                <ng-container *ngIf="control.hasError('required')">Please input your Password</ng-container>
+                <ng-container *ngIf="control.hasError('required')">Please input login password</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>

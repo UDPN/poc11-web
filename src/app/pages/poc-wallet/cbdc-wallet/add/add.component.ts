@@ -53,6 +53,10 @@ export class AddComponent implements OnInit {
   metaArrStrSignPass: string[] = [];
   addAddressArr: string[] = [];
   testStatus = false;
+  messageTip: any = `For the first wallet created with the home Custodian Bank, it is referred to as the "Master Wallet". Subsequent wallets are labeled as "Sub-wallet". 
+  For the first wallet created with the foreign Custodian Bank, it is referred to as the "Main Wallet". Subsequent wallets are labeled as "Sub-wallet".`;
+  creationMethodTip: string =
+    'The system will generate a wallet address and an associated private key. The private key will be automatically created and hosted within the sandbox system.';
   public metaArr$ = this.metaMaskService.MetaArray$;
 
   constructor(
@@ -78,7 +82,7 @@ export class AddComponent implements OnInit {
           name: 'Wallet Management'
         },
         {
-          name: 'Wallet Management ',
+          name: 'Wallet Management',
           url: '/poc/poc-wallet/cbdc-wallet'
         },
         { name: 'Create' }
@@ -100,9 +104,13 @@ export class AddComponent implements OnInit {
             'walletAddress',
             this.fb.control('', [Validators.required])
           );
+          this.creationMethodTip =
+            'You can create the wallet and manage the private key via the MetaMask plugin in the browser. If you have not installed the plugin, please do so first.';
           this.getWalletAddress();
         } else {
           this.validateForm.removeControl('walletAddress');
+          this.creationMethodTip =
+            'The system will generate a wallet address and an associated private key. The private key will be automatically created and hosted within the sandbox system.';
         }
       });
   }
@@ -136,7 +144,7 @@ export class AddComponent implements OnInit {
     this.validateForm = this.fb.group({
       creationMethod: [0, [Validators.required]],
       centralBankId: ['', [Validators.required]],
-      currency: ['', [Validators.required]],
+      // currency: ['', [Validators.required]],
       bnCode: [null, [Validators.required]]
     });
   }
@@ -294,7 +302,7 @@ export class AddComponent implements OnInit {
         next: (res) => {
           if (res) {
             this.message
-              .success('Add successfully!', { nzDuration: 1000 })
+              .success('Wallet added!', { nzDuration: 1000 })
               .onClose.subscribe(() => {
                 this.validateForm.reset();
                 this.location.back();
