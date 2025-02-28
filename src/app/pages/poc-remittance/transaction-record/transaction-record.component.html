@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-28 09:49:54
+ * @LastEditTime: 2025-02-28 11:22:15
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -238,18 +238,28 @@
       let-toCbdcCount="toCbdcCount"
       let-toCurrency="toCurrency"
     >
-      <span
-        >{{ fromCbdcCount | map: 'toThousandthMark'
-        }}{{ ' ' + fromCurrency }}</span
-      ><span
-        class="arrow-right m-l-10 m-r-10"
-        nz-icon
-        nzType="arrow-right"
-        nzTheme="outline"
-      ></span
-      ><span
-        >{{ toCbdcCount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</span
-      >
+      <div class="display-flex">
+        <div style="width: 90px; text-align: right">
+          <p>
+            {{ fromCbdcCount | map: 'toThousandthMark' }}
+          </p>
+          <p>{{ ' ' + fromCurrency }}</p>
+        </div>
+        <div>
+          <span
+            class="arrow-right m-l-10 m-r-10"
+            nz-icon
+            nzType="arrow-right"
+            nzTheme="outline"
+          ></span>
+        </div>
+        <div style="text-align: right">
+          <p>
+            {{ toCbdcCount | map: 'toThousandthMark' }}
+          </p>
+          <p>{{ ' ' + toCurrency }}</p>
+        </div>
+      </div>
     </ng-template>
     <ng-template
       #fxRateTpl

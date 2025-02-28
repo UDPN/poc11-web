@@ -433,12 +433,12 @@ export const MapSet = {
     2: 'Network FX'
   },
   fxTransactionStatus: {
-    30: 'Processing',
+    20: 'Processing',
     35: 'Success',
     40: 'Failed'
   },
   fxTransactionStatusColor: {
-    30: 'blue',
+    20: 'blue',
     35: 'green',
     40: 'red'
   }

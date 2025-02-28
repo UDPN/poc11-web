@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 16:21:27
+ * @LastEditTime: 2025-02-28 11:35:03
  * @Description:
  */
 import {
@@ -322,13 +322,13 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             title: 'Sender Wallet Address',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 180
           },
           {
             title: 'Receiver Wallet Address',
             tdTemplate: this.toTpl,
             notNeedEllipsis: true,
-            width: 130
+            width: 180
           },
           {
             title: 'Type',
@@ -341,7 +341,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             title: 'Amount',
             tdTemplate: this.transferAmountTpl,
             notNeedEllipsis: true,
-            width: 150
+            width: 240
           },
           {
             title: 'FX Rate',
@@ -354,13 +354,13 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             field: 'txTime',
             pipe: 'timeStamp',
             notNeedEllipsis: true,
-            width: 150
+            width: 130
           },
           {
             title: 'Status',
             tdTemplate: this.transferStatusTpl,
             notNeedEllipsis: true,
-            width: 150
+            width: 130
           },
           {
             title: 'Actions',
@@ -368,7 +368,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             fixed: true,
             fixedDir: 'right',
             showAction: false,
-            width: 100
+            width: 60
           }
         ],
         total: 0,
