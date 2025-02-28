@@ -49,23 +49,10 @@ export class ReauthorizeModalComponent implements OnInit {
     this.validateForm = this.fb.group({
       currency: [{ value: this.token, disabled: true }],
       liquidityPoolAddress: [{ value: this.liquidityPoolAddress, disabled: true }],
-      authorizedAmount: [
-        { 
-          value: this.walletBalance, 
-          disabled: this.isWalletBalanceInsufficient 
-        }, 
-        [
-          Validators.required,
-          Validators.min(Number(this.minBalanceReq))
-        ]
-      ],
+
       increasedAuthorizedAmount: [0] // 默认值为0
     });
 
-    // 监听授权金额和增加授权金额的变化
-    this.validateForm.get('authorizedAmount')?.valueChanges.subscribe(() => {
-      this.checkWalletBalance();
-    });
 
     this.validateForm.get('increasedAuthorizedAmount')?.valueChanges.subscribe(() => {
       this.checkWalletBalance();
@@ -73,10 +60,11 @@ export class ReauthorizeModalComponent implements OnInit {
   }
 
   private checkWalletBalance(): void {
-    const authorizedAmount = Number(this.validateForm.get('authorizedAmount')?.value) || 0;
-    const increasedAuthorizedAmount = Number(this.validateForm.get('increasedAuthorizedAmount')?.value) || 0;
 
-    this.isWalletBalanceInsufficient = (authorizedAmount + increasedAuthorizedAmount) < Number(this.minBalanceReq);
+    const increasedAuthorizedAmount = Number(this.validateForm.get('increasedAuthorizedAmount')?.value) || 0;
+    console.log(increasedAuthorizedAmount);
+    this.isWalletBalanceInsufficient = (Number(this.authorizedAmount) + increasedAuthorizedAmount) < Number(this.minBalanceReq);
+    console.log(this.isWalletBalanceInsufficient);
   }
 
   handleCancel(): void {
@@ -85,21 +73,17 @@ export class ReauthorizeModalComponent implements OnInit {
 
   handleOk(): void {
     if (this.validateForm.valid && !this.isWalletBalanceInsufficient) {
-      const authorizedAmount = this.validateForm.get('authorizedAmount')?.value;
-      if (!authorizedAmount) {
-        this.message.error('Please enter authorized amount');
+      const authorizedAmountss = this.validateForm.get('increasedAuthorizedAmount')?.value;
+      if (!authorizedAmountss) {
+        // this.message.error('Please enter authorized amount');
         return;
       }
 
-      if (Number(authorizedAmount) < Number(this.minBalanceReq)) {
-        this.message.error('Authorized amount must be greater than or equal to minimum balance requirement');
-        return;
-      }
 
       this.isLoading = true;
       const params = {
         liquidityPoolId: this.liquidityPoolId,
-        authorizedAmount: authorizedAmount
+        authorizedAmount: this.validateForm.get('increasedAuthorizedAmount')?.value
       };
 
       this.liquidityPoolService.reauthorize(params).subscribe({
@@ -107,13 +91,10 @@ export class ReauthorizeModalComponent implements OnInit {
           this.isLoading = false;
           if (res.code === 0) {
             this.modal.close(true);
-          } else {
-            this.message.error(res.message || 'Failed to reauthorize liquidity pool');
           }
         },
         error: (err) => {
           this.isLoading = false;
-          this.message.error(err.message || 'Failed to reauthorize liquidity pool');
         }
       });
     } else {
