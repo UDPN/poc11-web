@@ -70,9 +70,10 @@
                 [(ngModel)]="searchParam.status"
                 style="width: 100%"
               >
-                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-                <nz-option [nzValue]="1" nzLabel="Processing"></nz-option>
-                <nz-option [nzValue]="2" nzLabel="Active"></nz-option>
+                <nz-option [nzValue]="" nzLabel="All"></nz-option>
+                <nz-option [nzValue]="0" nzLabel="Processing"></nz-option>
+                <nz-option [nzValue]="1" nzLabel="Active"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="filed"></nz-option>
                 <nz-option [nzValue]="3" nzLabel="Inactive"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -140,12 +141,12 @@
     >
       <ng-container>
         <a
-          *ngIf="status === 1"
+          *ngIf="status === 2"
           (click)="openOperateModal(rateId, tokenPair, true)"
           >Activate</a
         >
         <a
-          *ngIf="status === 2"
+          *ngIf="status === 1"
           (click)="openOperateModal(rateId, tokenPair, false)"
           >Deactivate</a
         >

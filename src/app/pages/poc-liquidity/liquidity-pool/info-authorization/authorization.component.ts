@@ -20,7 +20,7 @@ interface SearchParams {
 export class AuthorizationComponent implements OnInit {
   @Input() id: string = '';
   @ViewChild('hashTpl', { static: false }) hashTpl!: TemplateRef<any>;
-  @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
   @ViewChild('amountTpl', { static: false }) amountTpl!: TemplateRef<any>;
 
   tableConfig!: AntTableConfig;
@@ -36,10 +36,10 @@ export class AuthorizationComponent implements OnInit {
 
   statusOptions = [
     { label: 'All', value: 0 },
-    { label: 'Pending Authorization', value: 1 },
-    { label: 'Under Authorization', value: 2 },
-    { label: 'Successful Authorization', value: 3 },
-    { label: 'Failed Authorization', value: 4 }
+    { label: 'Pending ', value: 1 },
+    { label: 'Under ', value: 2 },
+    { label: 'Successful ', value: 3 },
+    { label: 'Failed ', value: 4 }
   ];
 
   constructor(
@@ -86,7 +86,6 @@ export class AuthorizationComponent implements OnInit {
         },
         {
           title: 'Status',
-          field: 'status',
           width: 100,
           tdTemplate: this.statusTpl
         }
@@ -119,7 +118,10 @@ export class AuthorizationComponent implements OnInit {
       .subscribe({
         next: (res) => {
           if (res.code === 0) {
-            this.dataList = res.data.rows || [];
+            this.dataList = res.data.rows.map(item => ({
+              ...item,
+              status: item.status || 0
+            })) || [];
             this.tableConfig.total = res.data.page.total || 0;
           } else {
             this.message.error(res.message || 'Failed to load authorization list');
@@ -169,13 +171,13 @@ export class AuthorizationComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 1:
-        return 'Pending Authorization';
+        return 'Pending ';
       case 2:
-        return 'Under Authorization';
+        return 'Under ';
       case 3:
-        return 'Successful Authorization';
+        return 'Successful ';
       case 4:
-        return 'Failed Authorization';
+        return 'Failed ';
       default:
         return 'Unknown';
     }
