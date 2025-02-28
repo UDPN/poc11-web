@@ -141,12 +141,12 @@
     >
       <ng-container>
         <a
-          *ngIf="status === 1"
+          *ngIf="status === 2"
           (click)="openOperateModal(rateId, tokenPair, true)"
           >Activate</a
         >
         <a
-          *ngIf="status === 2"
+          *ngIf="status === 1"
           (click)="openOperateModal(rateId, tokenPair, false)"
           >Deactivate</a
         >
