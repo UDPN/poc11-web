@@ -131,14 +131,12 @@ export class OperationComponent implements OnInit {
             this.dataList = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
           } else {
-            this.message.error(res.message || '获取操作记录失败');
+            // this.message.error(res.message || '获取操作记录失败');
             this.dataList = [];
             this.tableConfig.total = 0;
           }
         },
         error: (error) => {
-          console.error('获取操作记录失败:', error);
-          this.message.error('获取操作记录失败');
           this.dataList = [];
           this.tableConfig.total = 0;
         }
