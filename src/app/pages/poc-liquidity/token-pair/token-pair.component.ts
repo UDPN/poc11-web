@@ -112,10 +112,12 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.selectedTabIndex = 0;
     this.initTable();
-    this.getTokenPairList();
+    console.log(this.selectedTab);
+
     this.getDataList();
+
+    this.getTokenPairList();
   }
 
   getTokenPairList(): void {
@@ -168,11 +170,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     this.searchParam = {};
     this.tableConfig.pageIndex = 1;
 
-    if (this.selectedTab === 'local') {
-      this.getDataList();
-    } else {
-      this.getNetworkDataList();
-    }
+    this.getDataList();
+    this.getTokenPairList();
   }
 
   getDataList(e?: NzTableQueryParams): void {
@@ -214,7 +213,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
             this.tableConfig.total = res.data.page.total;
             this.tableConfig.pageIndex = params.pageNum;
             this.tableLoading(false);
-            this.cdr.markForCheck();
+            // this.cdr.markForCheck();
           } else {
             this.message.error(
               res.message || 'Failed to fetch token pair list'
@@ -227,55 +226,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       });
   }
 
-  getNetworkDataList(e?: NzTableQueryParams): void {
-    this.tableConfig.loading = true;
-    const params = {
-      pageSize: this.tableConfig.pageSize!,
-      pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
-      filters: this.searchParam
-    };
 
-    this.tokenPairService
-      .fetchNetworkList(params.pageNum, params.pageSize, params.filters)
-      .pipe(
-        finalize(() => {
-          this.tableLoading(false);
-        })
-      )
-      .subscribe({
-        next: (res: any) => {
-          if (res.code === 0) {
-            this.dataList = res.data.rows.map(
-              (item: {
-                createTime: number;
-                createUser: string;
-                exchangeRate: number;
-                fromCurrency: string;
-                rateId: number;
-                state: number;
-                toCurrency: string;
-                updateTime: number;
-              }) => ({
-                tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
-                fxRate: item.exchangeRate.toString(),
-                updatedTime: item.updateTime,
-                status: item.state,
-                rateId: item.rateId
-              })
-            );
-            this.tableConfig.total = res.data.page.total;
-            this.tableConfig.pageIndex = params.pageNum;
-            this.tableLoading(false);
-            this.cdr.markForCheck();
-          } else {
-            this.message.error(res.message);
-          }
-        },
-        error: () => {
-          this.message.error('error');
-        }
-      });
-  }
 
   private initTable(): void {
     this.tableConfig = {

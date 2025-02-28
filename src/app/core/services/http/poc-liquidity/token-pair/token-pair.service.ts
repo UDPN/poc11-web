@@ -222,46 +222,15 @@ export class TokenPairService {
         pageSize: pageSize
       }
     };
+    const selectedTab = localStorage.getItem('tokenPairTab');
+    const apiUrl = selectedTab === 'local' 
+      ? '/v2/liquidity/rate/local/listPage'
+      : '/v2/liquidity/rate/network/listPage';
+    return this.https.post<TokenPairDetailResponse>(apiUrl, param);
 
-    return this.https.post<any>('/v2/liquidity/rate/local/listPage', param);
   }
 
-  public fetchNetworkList(
-    pageIndex: number,
-    pageSize: number,
-    filters: any
-  ): Observable<any> {
-    const param = {
-      data: {
-        startTime: filters.updatedTime?.[0]
-          ? timeToTimestampMillisecond(
-              this.date.transform(filters.updatedTime[0], 'yyyy-MM-dd') +
-                ' 00:00:00'
-            )
-          : '',
-        endTime: filters.updatedTime?.[1]
-          ? timeToTimestampMillisecond(
-              this.date.transform(filters.updatedTime[1], 'yyyy-MM-dd') +
-                ' 23:59:59'
-            )
-          : '',
-        rateId: '',
-      },
-      page: {
-        pageNum: pageIndex,
-        pageSize: pageSize
-      }
-    };
 
-    return this.https.post<any>('/v2/liquidity/rate/network/listPage', param).pipe(
-      map(response => {
-        if (response.code === 0) {
-          return response;
-        }
-        throw new Error(response.message);
-      })
-    );
-  }
 
   public getTokenPairList(): Observable<any> {
     return new Observable((observer) => {
