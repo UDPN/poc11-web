@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 16:21:51
+ * @LastEditTime: 2025-02-28 11:36:19
  * @Description:
  */
 import {
@@ -307,26 +307,26 @@ export class TopUpWithdrawComponent implements OnInit, AfterViewInit {
             title: 'Sender Wallet Address',
             tdTemplate: this.fromTpl,
             notNeedEllipsis: true,
-            width: 140
+            width: 180
           },
           {
             title: 'Receiver Wallet Address',
             tdTemplate: this.toTpl,
             notNeedEllipsis: true,
-            width: 150
+            width: 200
           },
           {
             title: 'Type',
             field: 'type',
             pipe: 'walletTransferInfoType',
             notNeedEllipsis: true,
-            width: 140
+            width: 120
           },
           {
             title: 'Amount',
             tdTemplate: this.transferAmountTpl,
             notNeedEllipsis: true,
-            width: 140
+            width: 240
           },
           {
             title: 'FX Rate',

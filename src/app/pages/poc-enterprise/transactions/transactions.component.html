@@ -500,11 +500,11 @@
   let-receivingCurrency="receivingCurrency"
 >
   <div class="display-flex">
-    <div>
+    <div style="width: 90px; text-align: right">
       <p>
         {{ sendingAmount | map: 'toThousandthMark' }}
       </p>
-      <p>{{ sendingCurrency }}</p>
+      <p>{{ ' ' + sendingCurrency }}</p>
     </div>
     <div>
       <span
@@ -514,11 +514,11 @@
         nzTheme="outline"
       ></span>
     </div>
-    <div>
+    <div style="text-align: right">
       <p>
         {{ receivingAmount | map: 'toThousandthMark' }}
       </p>
-      <p>{{ receivingCurrency }}</p>
+      <p>{{ ' ' + receivingCurrency }}</p>
     </div>
   </div>
 </ng-template>

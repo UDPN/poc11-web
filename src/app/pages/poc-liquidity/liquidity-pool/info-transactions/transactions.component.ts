@@ -1,4 +1,10 @@
-import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  Input
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -48,7 +54,7 @@ export class TransactionsComponent implements OnInit {
 
   statusOptions = [
     { label: 'All', value: 0 },
-    { label: 'Processing', value: 30 },
+    { label: 'Processing', value: 20 },
     { label: 'Successful', value: 35 },
     { label: 'Failed', value: 40 }
   ];
@@ -110,7 +116,7 @@ export class TransactionsComponent implements OnInit {
           title: 'Transaction Time',
           field: 'txTime',
           width: 160,
-          pipe: 'timeStamp',
+          pipe: 'timeStamp'
         },
         {
           title: 'Transaction Hash',
@@ -151,9 +157,13 @@ export class TransactionsComponent implements OnInit {
       data: {
         liquidityPoolId: Number(this.id),
         status: this.searchParam.status,
-        txEndTime: this.searchParam.txTime?.[1] ? timeToTimestampMillisecond(this.searchParam.txTime[1]) : 0,
+        txEndTime: this.searchParam.txTime?.[1]
+          ? timeToTimestampMillisecond(this.searchParam.txTime[1])
+          : 0,
         txHash: this.searchParam.txHash,
-        txStartTime: this.searchParam.txTime?.[0] ? timeToTimestampMillisecond(this.searchParam.txTime[0]) : 0,
+        txStartTime: this.searchParam.txTime?.[0]
+          ? timeToTimestampMillisecond(this.searchParam.txTime[0])
+          : 0,
         txType: this.searchParam.txType,
         walletAddress: this.searchParam.walletAddress
       },
@@ -166,7 +176,8 @@ export class TransactionsComponent implements OnInit {
     this.loading = true;
     this.tableConfig.loading = true;
 
-    this.liquidityPoolService.getTransactionList(params)
+    this.liquidityPoolService
+      .getTransactionList(params)
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -179,7 +190,9 @@ export class TransactionsComponent implements OnInit {
             this.tableData = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
           } else {
-            this.message.error(res.message || 'Failed to load transaction list');
+            this.message.error(
+              res.message || 'Failed to load transaction list'
+            );
             this.tableData = [];
             this.tableConfig.total = 0;
           }
@@ -208,7 +221,7 @@ export class TransactionsComponent implements OnInit {
     switch (status) {
       case 35:
         return 'success';
-      case 30:
+      case 20:
         return 'processing';
       case 40:
         return 'red';
@@ -219,7 +232,7 @@ export class TransactionsComponent implements OnInit {
 
   getStatusText(status: number): string {
     switch (status) {
-      case 30:
+      case 20:
         return 'processing';
       case 35:
         return 'successful';

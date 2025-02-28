@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:45
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 17:59:04
+ * @LastEditTime: 2025-02-28 11:22:15
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -144,9 +144,9 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <!-- <nz-option nzValue="5" nzLabel="Pending Approval"></nz-option>
                 <nz-option nzValue="15" nzLabel="Rejected"></nz-option> -->
+                <nz-option nzValue="20" nzLabel="Processing"></nz-option>
                 <nz-option nzValue="35" nzLabel="Success"></nz-option>
                 <nz-option nzValue="40" nzLabel="Failed"></nz-option>
-                <nz-option nzValue="20" nzLabel="Processing"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -239,11 +239,11 @@
       let-toCurrency="toCurrency"
     >
       <div class="display-flex">
-        <div>
+        <div style="width: 90px; text-align: right">
           <p>
             {{ fromCbdcCount | map: 'toThousandthMark' }}
           </p>
-          <p>{{ fromCurrency }}</p>
+          <p>{{ ' ' + fromCurrency }}</p>
         </div>
         <div>
           <span
@@ -253,11 +253,11 @@
             nzTheme="outline"
           ></span>
         </div>
-        <div>
+        <div style="text-align: right">
           <p>
             {{ toCbdcCount | map: 'toThousandthMark' }}
           </p>
-          <p>{{ toCurrency }}</p>
+          <p>{{ ' ' + toCurrency }}</p>
         </div>
       </div>
     </ng-template>
