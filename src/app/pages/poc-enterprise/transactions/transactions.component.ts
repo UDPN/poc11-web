@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:14:24
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-28 14:53:02
+ * @LastEditTime: 2025-03-03 10:30:41
  * @Description:
  */
 import {
@@ -341,13 +341,13 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             field: 'type',
             pipe: 'walletTransferInfoType',
             notNeedEllipsis: true,
-            width: 120
+            width: 160
           },
           {
             title: 'Amount',
             tdTemplate: this.transferAmountTpl,
             notNeedEllipsis: true,
-            width: 240
+            width: 160
           },
           {
             title: 'FX Rate',

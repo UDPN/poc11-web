@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-28 09:50:57
+ * @LastEditTime: 2025-03-03 10:26:40
  * @Description:
  */
 import {
@@ -196,19 +196,19 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
           notNeedEllipsis: true,
-          width: 110
+          width: 120
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
           notNeedEllipsis: true,
-          width: 110
+          width: 120
         },
         {
           title: 'To',
           tdTemplate: this.toTpl,
           notNeedEllipsis: true,
-          width: 110
+          width: 120
         },
         {
           title: 'Type',
@@ -221,7 +221,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           title: 'Amount',
           tdTemplate: this.amountTpl,
           notNeedEllipsis: true,
-          width: 200
+          width: 150
         },
         {
           title: 'FX Rate',
@@ -234,7 +234,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 130
+          width: 180
         },
         {
           title: 'Status',

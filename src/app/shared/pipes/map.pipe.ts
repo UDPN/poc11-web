@@ -551,7 +551,7 @@ export class MapPipe implements PipeTransform {
         value = value.toString();
         value = Number(value) + 200000;
         // return value;
-        let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss a zzzz');
+        let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss zzzz');
         return res?.replace('GMT', 'UTC');
       }
     }
@@ -564,7 +564,7 @@ export class MapPipe implements PipeTransform {
         if (value.length === 10) {
           value = Number(value) * 1000;
         }
-        let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss a zzzz');
+        let res = this.datePipe.transform(value, 'MMMM d, y HH:mm:ss zzzz');
         return res?.replace('GMT', 'UTC');
       }
     }

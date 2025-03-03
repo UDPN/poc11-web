@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-02-17 10:19:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-28 11:17:02
+ * @LastEditTime: 2025-03-03 10:34:49
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -347,24 +347,20 @@
       let-fromCurrency="fromCurrency"
       let-toCurrency="toCurrency"
     >
-      <div class="display-flex">
-        <div>
-          <p>
-            {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
-          </p>
-        </div>
-        <div>
-          <span
-            class="arrow-right m-l-10 m-r-10"
-            nz-icon
-            nzType="arrow-right"
-            nzTheme="outline"
-          ></span>
-        </div>
-        <div>
-          <p>{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</p>
-        </div>
-      </div>
+      <span>
+        {{ fromAmount | map: 'toThousandthMark' }}{{ ' ' + fromCurrency }}
+      </span>
+      <br />
+      <span
+        class="arrow-right m-r-10"
+        style="text-align: center"
+        nz-icon
+        nzType="arrow-right"
+        nzTheme="outline"
+      ></span>
+      <span
+        >{{ toAmount | map: 'toThousandthMark' }}{{ ' ' + toCurrency }}</span
+      >
     </ng-template>
     <ng-template
       #tokenPairTpl

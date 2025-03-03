@@ -498,29 +498,30 @@
   let-sendingAmount="sendingAmount"
   let-receivingAmount="receivingAmount"
   let-receivingCurrency="receivingCurrency"
+  let-type="type"
 >
-  <div class="display-flex">
-    <div style="width: 90px; text-align: right">
-      <p>
-        {{ sendingAmount | map: 'toThousandthMark' }}
-      </p>
-      <p>{{ ' ' + sendingCurrency }}</p>
-    </div>
-    <div>
-      <span
-        class="arrow-right m-l-10 m-r-10"
-        nz-icon
-        nzType="arrow-right"
-        nzTheme="outline"
-      ></span>
-    </div>
-    <div style="text-align: right">
-      <p>
-        {{ receivingAmount | map: 'toThousandthMark' }}
-      </p>
-      <p>{{ ' ' + receivingCurrency }}</p>
-    </div>
-  </div>
+  <ng-container *ngIf="type === 3">
+    <span>
+      {{ sendingAmount | map: 'toThousandthMark' }}{{ ' ' + sendingCurrency }}
+    </span>
+  </ng-container>
+  <ng-container *ngIf="type === 1 || type === 2"
+    ><span>
+      {{ sendingAmount | map: 'toThousandthMark' }}{{ ' ' + sendingCurrency }}
+    </span>
+    <br />
+    <span
+      class="arrow-right m-r-10"
+      style="text-align: center"
+      nz-icon
+      nzType="arrow-right"
+      nzTheme="outline"
+    ></span>
+    <span
+      >{{ receivingAmount | map: 'toThousandthMark'
+      }}{{ ' ' + receivingCurrency }}</span
+    ></ng-container
+  >
 </ng-template>
 <ng-template
   #transferFxRateTpl
