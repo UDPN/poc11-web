@@ -100,7 +100,7 @@ export class WalletComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Enterprise Management', 'Wallet Management'],
+      breadcrumb: ['Enterprise Management', 'Enterprise Wallet Management'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''

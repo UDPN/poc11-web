@@ -42,7 +42,7 @@ export class ApprovalComponent implements OnInit, AfterViewInit {
       breadcrumbs: [
         { name: 'Enterprise Management' },
         {
-          name: 'Wallet Management',
+          name: 'Enterprise Wallet Management',
           url: '/poc/poc-enterprise/wallet'
         },
         { name: 'Approval' }
