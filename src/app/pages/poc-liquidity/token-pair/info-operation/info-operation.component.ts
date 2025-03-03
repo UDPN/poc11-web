@@ -83,12 +83,11 @@ export class InfoOperationComponent implements OnInit {
 
   getStatusColor(state: number): string {
     switch (state) {
-      case 35:
+      case 1:
         return 'success';
-      case 30:
+      case 0:
         return 'processing';
-      case 40:
-      case 15:
+      case 2:
         return 'error';
       default:
         return 'default';
@@ -97,14 +96,12 @@ export class InfoOperationComponent implements OnInit {
 
   getStatusText(state: number): string {
     switch (state) {
-      case 35:
+      case 1:
         return 'Success';
-      case 30:
+      case 0:
         return 'Processing';
-      case 40:
+      case 2:
         return 'Failed';
-      case 15:
-        return 'Rejected';
       default:
         return 'Unknown';
     }
