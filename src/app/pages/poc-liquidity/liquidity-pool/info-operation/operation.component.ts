@@ -59,15 +59,21 @@ export class OperationComponent implements OnInit {
           tdTemplate: this.operationTypeTpl
         },
         {
-          title: 'Operator',
+          title: 'Created by',
           field: 'createdBy',
           width: 120
         },
         {
-          title: 'Operation Time',
+          title: 'Created on',
           field: 'createdTime',
           width: 180,
           pipe: 'timeStamp',
+        },
+        {
+          title: 'Comments',
+          field: 'remarks',
+          width: 200,
+          tdTemplate: this.remarksTpl
         },
         {
           title: 'Transaction Time',
@@ -80,12 +86,6 @@ export class OperationComponent implements OnInit {
           field: 'txHash',
           width: 160,
           tdTemplate: this.hashTpl
-        },
-        {
-          title: 'Remarks',
-          field: 'remarks',
-          width: 200,
-          tdTemplate: this.remarksTpl
         },
         {
           title: 'Status',
