@@ -91,6 +91,7 @@ export interface TokenPairDetailResponse {
     createUser: string;
     exchangeRate: number;
     fromCurrency: string;
+    fxType: number;
     rateId: number;
     state: number;
     toCurrency: string;

@@ -5,7 +5,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 interface DisplayTokenPairInfo {
   tokenPair: string;
-  fxType: string;
+  fxType: number|string;
   status: number;
   fxRate: string;
   fxRateUpdatedOn: number;
@@ -25,7 +25,7 @@ export class InfoBasicComponent implements OnInit, OnChanges {
   historyLoading = false;
   tokenPairInfo: DisplayTokenPairInfo = {
     tokenPair: '',
-    fxType: 'Local FX',
+    fxType: '',
     status: 0,
     fxRate: '',
     fxRateUpdatedOn: 0,
@@ -65,7 +65,7 @@ export class InfoBasicComponent implements OnInit, OnChanges {
           const data = res.data;
           this.tokenPairInfo = {
             tokenPair: `${data.fromCurrency}/${data.toCurrency}`,
-            fxType: 'Local FX',
+            fxType: data.fxType === 1 ? 'Local FX' : 'Network FX',
             status: data.state,
             fxRate: `1 ${data.fromCurrency} = ${data.exchangeRate} ${data.toCurrency}`,
             fxRateUpdatedOn: data.updateTime,
