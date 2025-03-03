@@ -102,7 +102,6 @@ export class AddNetComponent implements OnInit, AfterViewInit {
 
   updateAllChecked(): void {
     this.indeterminate = false;
-    this.allChecked = !this.allChecked;
     this.tokenPairList = this.tokenPairList.map(item => ({
       ...item,
       checked: this.allChecked
