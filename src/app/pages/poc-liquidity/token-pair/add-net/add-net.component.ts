@@ -71,12 +71,12 @@ export class AddNetComponent implements OnInit, AfterViewInit {
             toCurrency: item.toCurrency
           }));
         } else {
-          this.message.error(res.message || 'Failed to load token pair list');
+          console.error(res.message || 'Failed to load token pair list');
         }
         this.loading = false;
       },
       error: (err) => {
-        this.message.error(err.message || 'Failed to load token pair list');
+        console.error(err.message || 'Failed to load token pair list');
         this.loading = false;
       }
     });
@@ -151,13 +151,11 @@ export class AddNetComponent implements OnInit, AfterViewInit {
               if (res.code === 0) {
                 this.message.success('Submitted successfully');
                 this.router.navigate(['/poc/poc-liquidity/token-pair']);
-              } else {
-                this.message.error(res.message || 'Failed to save token pairs');
-              }
+              } 
             },
             error: (err) => {
               this.submitting = false;
-              this.message.error(err.message || 'Failed to save token pairs');
+              console.error(err.message || 'Failed to save token pairs');
             }
           });
         }

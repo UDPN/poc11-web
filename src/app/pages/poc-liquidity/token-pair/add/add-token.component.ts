@@ -135,7 +135,7 @@ export class AddTokenComponent implements OnInit, AfterViewInit {
             }
           },
           error: (error) => {
-            this.message.error('Failed to submit');
+            console.error('Failed to submit');
           },
           complete: () => {
             this.submitting = false;

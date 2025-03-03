@@ -214,7 +214,7 @@ export class TokenPairService {
                 ' 23:59:59'
             )
           : '',
-        rateId: '',
+        rateId: filters.tokenPair || '',
         state: filters.status || ''
       },
       page: {
