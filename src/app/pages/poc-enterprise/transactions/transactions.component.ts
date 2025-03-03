@@ -374,7 +374,7 @@ export class TransactionsComponent implements OnInit, AfterViewInit {
             fixed: true,
             fixedDir: 'right',
             showAction: false,
-            width: 80
+            width: 100
           }
         ],
         total: 0,

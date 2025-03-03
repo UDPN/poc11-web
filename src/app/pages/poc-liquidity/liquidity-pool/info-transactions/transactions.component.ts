@@ -135,7 +135,7 @@ export class TransactionsComponent implements OnInit {
         {
           title: 'Actions',
           tdTemplate: this.actionTpl,
-          width: 80,
+          width: 100,
           fixed: true,
           fixedDir: 'right'
         }

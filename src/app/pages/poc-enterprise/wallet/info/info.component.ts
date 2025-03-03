@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2025-01-15 14:09:17
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-02-26 16:22:10
+ * @LastEditTime: 2025-03-03 11:23:29
  * @Description:
  */
 import {
@@ -279,7 +279,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 80
+          width: 100
         }
       ],
       total: 0,
@@ -341,7 +341,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 80
+          width: 100
         }
       ],
       total: 0,
