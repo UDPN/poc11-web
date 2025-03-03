@@ -59,13 +59,11 @@ export class InfoOperationComponent implements OnInit {
         if (res.code === 0) {
           this.operationRecords = res.data.rows;
           this.total = res.data.page.total;
-        } else {
-          this.message.error(res.message || 'Failed to get operation records');
-        }
+        } 
         this.loading = false;
       },
       error: (err) => {
-        this.message.error(err.message || 'Failed to get operation records');
+        console.error(err.message || 'Failed to get operation records');
         this.loading = false;
       }
     });

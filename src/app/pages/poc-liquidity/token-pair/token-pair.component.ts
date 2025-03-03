@@ -27,7 +27,7 @@ import { OperateModalComponent } from './operate-modal/operate-modal.component';
 interface SearchParam {
   tokenPair: string;
   updatedTime: any[];
-  status: number;
+  status: number|string;
 }
 
 interface TokenPairResponse {
@@ -80,7 +80,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   searchParam: Partial<SearchParam> = {
     tokenPair: '',
     updatedTime: [],
-    status: 0
+    status: ''
   };
   tableQueryParams: NzTableQueryParams = {
     pageIndex: 1,
@@ -150,7 +150,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     this.searchParam = {
       tokenPair: '',
       updatedTime: [],
-      status: 0
+      status: ''
     };
     this.getDataList(this.tableQueryParams);
   }
@@ -175,12 +175,14 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
+
     this.tableConfig.loading = true;
     const params = {
       pageSize: this.tableConfig.pageSize!,
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
+    console.log(params);
 
     this.tokenPairService
       .fetchList(params.pageNum, params.pageSize, params.filters)
@@ -214,14 +216,10 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
             this.tableConfig.pageIndex = params.pageNum;
             this.tableLoading(false);
             // this.cdr.markForCheck();
-          } else {
-            this.message.error(
-              res.message || 'Failed to fetch token pair list'
-            );
-          }
+          } 
         },
         error: () => {
-          this.message.error('Failed to fetch token pair list');
+          console.error('Failed to fetch token pair list');
         }
       });
   }

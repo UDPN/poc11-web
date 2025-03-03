@@ -50,13 +50,10 @@ export class OperateModalComponent implements OnInit {
         if (response.code === 0) {
           this.message.success('Operation successful');
           this.modal.close(true);
-        } else {
-          this.message.error(response.message || 'Operation failed');
-        }
+        } 
       },
       error: (error) => {
         console.error('Operation failed:', error);
-        this.message.error('Operation failed');
       },
       complete: () => {
         this.isLoading = false;
