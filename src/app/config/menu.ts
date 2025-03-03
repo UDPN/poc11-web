@@ -407,7 +407,7 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R0305',
         newLinkFlag: 1,
-        path: '../../../../assets/api-documentation/Commercial Bank Control Panel OpenAPI Documentation.v1.0.0.pdf'
+        path: '../../../../assets/api-documentation/Commercial Bank OpenAPI Documentation for Enterprise Users v1.1.0.pdf'
       },
       {
         id: 5,

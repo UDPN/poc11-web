@@ -743,7 +743,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('focus') onFocusSendAmount() {
-    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+    const value = this.validateForm.get('reni_sendAmount')?.value;
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel && !value) {
       this.validateForm.get('amount')?.setValue('', { emitEvent: false });
       this.inputType = 1;
     }
@@ -759,7 +760,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   @HostListener('focus') onFocusAmount() {
-    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+    const value = this.validateForm.get('amount')?.value;
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel && !value) {
       this.validateForm
         .get('reni_sendAmount')
         ?.setValue('', { emitEvent: false });

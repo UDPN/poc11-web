@@ -319,13 +319,15 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('focus') onFocusSendAmount() {
-    if (this.reveingCurrecy !== this.purchCurrecy) {
+    const value = this.validateForm.get('reni_sendAmount')?.value;
+    if (this.reveingCurrecy !== this.purchCurrecy && !value) {
       this.validateForm.get('amount')?.setValue('', { emitEvent: false });
       this.inputType = 1;
     }
   }
   @HostListener('focus') onFocusAmount() {
-    if (this.reveingCurrecy !== this.purchCurrecy) {
+    const value = this.validateForm.get('amount')?.value;
+    if (this.reveingCurrecy !== this.purchCurrecy && !value) {
       this.validateForm
         .get('reni_sendAmount')
         ?.setValue('', { emitEvent: false });

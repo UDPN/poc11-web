@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-03-03 10:26:40
+ * @LastEditTime: 2025-03-03 11:20:36
  * @Description:
  */
 import {
@@ -249,7 +249,7 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           fixed: true,
           fixedDir: 'right',
           showAction: false,
-          width: 60
+          width: 100
         }
       ],
       total: 0,
