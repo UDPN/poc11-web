@@ -275,11 +275,11 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       case 0:
         return 'Opening';
       case 1:
-        return 'Success';
+        return 'Active';
       case 2:
         return 'Failed';
       case 3:
-        return 'Disabled';
+        return 'Inactive';
       default:
         return 'Unknown';
     }
@@ -308,6 +308,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
     const modal = this.modal.create({
       nzTitle: isActivate ? 'Activate Token Pair' : 'Deactivate Token Pair',
       nzContent: OperateModalComponent,
+      nzClosable: false,
+      nzMaskClosable: false,
       nzData: {
         rateId: rateId,
         tokenPair: tokenPair,

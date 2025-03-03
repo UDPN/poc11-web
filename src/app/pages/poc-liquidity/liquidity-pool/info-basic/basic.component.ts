@@ -57,11 +57,9 @@ export class BasicComponent implements OnInit, OnChanges {
 
   getPoolInfo(): void {
     this.loading = true;
-    console.log('Fetching pool info for ID:', this.id);
 
     this.liquidityPoolService.getPoolInfo(this.id).subscribe({
       next: (res: PoolInfoResponse) => {
-        console.log('API Response:', res);
         if (res.code === 0 && res.data) {
           const { data } = res;
           this.poolInfo = {
@@ -77,15 +75,11 @@ export class BasicComponent implements OnInit, OnChanges {
             txTime: data.txTime,
             tokenPairs: data.tokenPairInformationList.map(pair => `${pair.fromToken}/${pair.toToken}`)
           };
-          console.log('Processed poolInfo:', this.poolInfo);
-        } else {
-          this.message.error(res.message || 'Failed to get pool information');
-        }
+        } 
         this.loading = false;
       },
       error: (err) => {
         console.error('API Error:', err);
-        this.message.error(err.message || 'Failed to get pool information');
         this.loading = false;
       }
     });
