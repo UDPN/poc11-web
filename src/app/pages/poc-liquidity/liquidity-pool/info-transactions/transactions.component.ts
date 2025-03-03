@@ -3,7 +3,8 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  Input
+  Input,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -62,7 +63,8 @@ export class TransactionsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private message: NzMessageService,
-    private liquidityPoolService: LiquidityPoolService
+    private liquidityPoolService: LiquidityPoolService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -189,6 +191,7 @@ export class TransactionsComponent implements OnInit {
           if (res.code === 0) {
             this.tableData = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
+            this.cdr.detectChanges();
           } else {
             this.message.error(
               res.message || 'Failed to load transaction list'

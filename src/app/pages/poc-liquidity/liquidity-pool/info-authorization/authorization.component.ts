@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
@@ -44,7 +44,8 @@ export class AuthorizationComponent implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private liquidityPoolService: LiquidityPoolService
+    private liquidityPoolService: LiquidityPoolService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -117,12 +118,16 @@ export class AuthorizationComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          this.loading = false;
+          this.tableConfig.loading = false;
           if (res.code === 0) {
+
             this.dataList = res.data.rows.map(item => ({
               ...item,
               status: item.status || 0
             })) || [];
             this.tableConfig.total = res.data.page.total || 0;
+            this.cdr.detectChanges();
           } else {
             this.message.error(res.message || 'Failed to load authorization list');
             this.dataList = [];

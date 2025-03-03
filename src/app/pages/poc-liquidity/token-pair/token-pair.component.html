@@ -73,7 +73,7 @@
                 <nz-option [nzValue]="" nzLabel="All"></nz-option>
                 <nz-option [nzValue]="0" nzLabel="Processing"></nz-option>
                 <nz-option [nzValue]="1" nzLabel="Active"></nz-option>
-                <nz-option [nzValue]="2" nzLabel="filed"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Failed"></nz-option>
                 <nz-option [nzValue]="3" nzLabel="Inactive"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -150,7 +150,7 @@
           (click)="openOperateModal(rateId, tokenPair, status)"
           >Deactivate</a
         >
-        <nz-divider nzType="vertical"></nz-divider>
+        <span class="m-r-8"></span>
       </ng-container>
       <a
         routerLink="/poc/poc-liquidity/token-pair/infoToken"
