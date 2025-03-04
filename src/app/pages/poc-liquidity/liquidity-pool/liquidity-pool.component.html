@@ -30,8 +30,8 @@
                 <nz-option nzValue="" nzLabel="All"></nz-option>
                 <nz-option
                   *ngFor="let item of tokenList"
-                  [nzValue]="item.key"
-                  [nzLabel]="item.value"
+                  [nzValue]="item.tokenId"
+                  [nzLabel]="item.tokenName"
                 ></nz-option>
               </nz-select>
             </nz-form-control>

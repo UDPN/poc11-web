@@ -10,6 +10,7 @@ interface ModalData {
   liquidityPoolId: number;
   balance: string;
   minBalanceReq: string;
+  authorizedAmount: string;
 }
 
 @Component({
@@ -40,7 +41,7 @@ export class ReauthorizeModalComponent implements OnInit {
     this.liquidityPoolId = this.data.liquidityPoolId;
     this.walletBalance = this.data.balance;
     this.minBalanceReq = this.data.minBalanceReq;
-    
+    this.authorizedAmount = this.data.authorizedAmount;
     // 检查钱包余额是否小于最小余额要求
     this.isWalletBalanceInsufficient = Number(this.walletBalance) < Number(this.minBalanceReq);
   }

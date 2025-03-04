@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input, ChangeDetectorRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
@@ -41,7 +41,8 @@ export class OperationComponent implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private liquidityPoolService: LiquidityPoolService
+    private liquidityPoolService: LiquidityPoolService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -123,22 +124,27 @@ export class OperationComponent implements OnInit {
         finalize(() => {
           this.loading = false;
           this.tableConfig.loading = false;
+          this.cdr.detectChanges();
         })
       )
       .subscribe({
         next: (res) => {
+
           if (res.code === 0) {
             this.dataList = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;
+      
           } else {
             // this.message.error(res.message || '获取操作记录失败');
             this.dataList = [];
             this.tableConfig.total = 0;
           }
+
         },
         error: (error) => {
           this.dataList = [];
           this.tableConfig.total = 0;
+          this.cdr.detectChanges();
         }
       });
   }
