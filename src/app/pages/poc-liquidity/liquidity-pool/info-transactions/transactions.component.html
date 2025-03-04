@@ -10,7 +10,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+      <!-- <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
         <nz-form-item>
           <nz-form-label>Transaction Type</nz-form-label>
           <nz-form-control>
@@ -19,7 +19,7 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-      </div>
+      </div> -->
       <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
         <nz-form-item>
           <nz-form-label>Transaction Hash</nz-form-label>
@@ -76,8 +76,8 @@
       <nz-tag [nzColor]="getStatusColor(data.status)">{{ getStatusText(data.status) }}</nz-tag>
     </ng-template>
 
-    <ng-template #actionTpl let-data>
-      <a [routerLink]="['/poc/poc-liquidity/liquidity-pool/transaction-detail', data.txHash]">View</a>
+    <ng-template #actionTpl let-txHash="txHash">
+      <a [routerLink]="['/poc/poc-liquidity/liquidity-pool/transaction-detail', txHash]">View</a>
     </ng-template>
   </app-ant-table>
 </app-card-table-wrap>

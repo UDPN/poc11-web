@@ -18,7 +18,7 @@ interface SearchParams {
   walletAddress: string;
   txType: number;
   txHash: string;
-  status: number;
+  status: number|string;
   txTime: Date[];
 }
 
@@ -43,7 +43,7 @@ export class TransactionsComponent implements OnInit {
     walletAddress: '',
     txType: 0,
     txHash: '',
-    status: 0,
+    status: '',
     txTime: []
   };
 
@@ -217,7 +217,7 @@ export class TransactionsComponent implements OnInit {
       walletAddress: '',
       txType: 0,
       txHash: '',
-      status: 0,
+      status: '',
       txTime: []
     };
     this.getDataList(1);

@@ -280,7 +280,7 @@ export class LiquidityPoolService {
     });
   }
 
-  public getTransactionList(params: TransactionSearchParams): Observable<TransactionResponse> {
+  public getTransactionList(params: any): Observable<TransactionResponse> {
     return this.https.post<TransactionResponse>('/v2/liquidity-poll/transactions', params);
   }
 
