@@ -30,7 +30,7 @@ interface SearchParams {
 export class TransactionsComponent implements OnInit {
   @ViewChild('addressTpl', { static: false }) addressTpl!: TemplateRef<any>;
   @ViewChild('amountTpl', { static: false }) amountTpl!: TemplateRef<any>;
-  @ViewChild('statusTpl', { static: false }) statusTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
   @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
   @Input() id: string = '';
@@ -98,22 +98,14 @@ export class TransactionsComponent implements OnInit {
           width: 160,
           tdTemplate: this.addressTpl
         },
-        {
-          title: 'Transaction Type',
-          field: 'txType',
-          width: 120
-        },
+
         {
           title: 'Amount',
           field: 'amount',
           width: 120,
           tdTemplate: this.amountTpl
         },
-        {
-          title: 'FX Rate',
-          field: 'fxRate',
-          width: 100
-        },
+
         {
           title: 'Transaction Time',
           field: 'txTime',
@@ -128,7 +120,6 @@ export class TransactionsComponent implements OnInit {
         },
         {
           title: 'Status',
-          field: 'status',
           width: 100,
           tdTemplate: this.statusTpl
         },
