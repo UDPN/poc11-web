@@ -185,7 +185,6 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-
     this.tokenPairService
       .fetchList(params.pageNum, params.pageSize, params.filters)
       .pipe(
