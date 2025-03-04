@@ -112,11 +112,9 @@
                 [(ngModel)]="searchParam.status"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <!-- <nz-option nzValue="1" nzLabel="Pending Approval"></nz-option> -->
-                <nz-option nzValue="3" nzLabel="Processing"></nz-option>
-                <nz-option nzValue="5" nzLabel="Success"></nz-option>
-                <nz-option nzValue="6" nzLabel="Failed"></nz-option>
-                <!-- <nz-option nzValue="2" nzLabel="Rejected"></nz-option> -->
+                <nz-option nzValue="20" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="35" nzLabel="Success"></nz-option>
+                <nz-option nzValue="40" nzLabel="Failed"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -210,8 +208,8 @@
       >
     </ng-template>
     <ng-template #statusTpl let-status="status">
-      <nz-tag [nzColor]="status | map: 'walletTransactionsStatusColor'">{{
-        status | map: 'walletTransactionsStatus'
+      <nz-tag [nzColor]="status | map: 'transactionsRecordStatusColor'">{{
+        status | map: 'walletTransactionsRecordStatus'
       }}</nz-tag>
     </ng-template>
     <ng-template #operationTpl let-transferId="transferId">
