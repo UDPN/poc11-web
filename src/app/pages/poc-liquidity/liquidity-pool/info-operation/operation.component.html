@@ -5,13 +5,23 @@
       <span class="label">Operation Type</span>
     </div>
     <div nz-col>
-      <nz-select name="operationType" [(ngModel)]="searchParam.operationType" style="width: 200px">
-        <nz-option *ngFor="let type of operationTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+      <nz-select
+        name="operationType"
+        [(ngModel)]="searchParam.operationType"
+        style="width: 200px"
+      >
+        <nz-option
+          *ngFor="let type of operationTypes"
+          [nzValue]="type.value"
+          [nzLabel]="type.label"
+        ></nz-option>
       </nz-select>
     </div>
     <div nz-col>
       <button nz-button (click)="resetForm()">Reset</button>
-      <button nz-button nzType="primary" class="m-l-8" (click)="getDataList()">Query</button>
+      <button nz-button nzType="primary" class="m-l-8" (click)="getDataList()">
+        Query
+      </button>
     </div>
   </div>
 </div>
@@ -28,21 +38,24 @@
     <span>{{ getOperationTypeText(operationType) }}</span>
   </ng-template>
 
-
-  <ng-template #hashTpl let-text="field" let-item="item">
-    <ng-container *ngIf="item[text]">
-      <span nz-typography [nzCopyable]="true" [nzCopyText]="item[text]">{{ item[text] }}</span>
+  <ng-template #hashTpl let-txHash="txHash">
+    <ng-container *ngIf="txHash">
+      <span nz-typography [nzCopyable]="true" [nzCopyText]="txHash">
+        {{ txHash.slice(0, 4) }}...{{ txHash.slice(-4) }}
+      </span>
     </ng-container>
-    <ng-container *ngIf="!item[text]">
+    <ng-container *ngIf="!txHash">
       --
     </ng-container>
   </ng-template>
 
-  <ng-template #remarksTpl let-text="field" let-item="item">
-    <span [title]="item[text]">{{ item[text] || 'N/A' }}</span>
+  <ng-template #remarksTpl let-remarks="remarks">
+    <ng-container>{{ remarks == '' ? '--' : remarks }}</ng-container>
   </ng-template>
 
   <ng-template #statusTpl let-status="status">
-    <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
+    <nz-tag [nzColor]="getStatusColor(status)">{{
+      getStatusText(status)
+    }}</nz-tag>
   </ng-template>
 </app-card-table-wrap>
