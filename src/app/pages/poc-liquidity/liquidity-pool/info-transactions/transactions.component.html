@@ -66,9 +66,9 @@
       <span nz-typography [nzCopyable]="true">{{ item[text] }}</span>
     </ng-template>
 
-    <ng-template #amountTpl let-data>
-      <span [class.text-success]="data.amount >= 0" [class.text-danger]="data.amount < 0">
-        {{ formatAmount(data.amount, data.fromTokenSymbol) }}
+    <ng-template #amountTpl  let-amount="amount" let-currency="currency">
+      <span [class.text-success]="amount >= 0" [class.text-danger]="amount < 0">
+        {{ formatAmount(amount, currency) }}
       </span>
     </ng-template>
 

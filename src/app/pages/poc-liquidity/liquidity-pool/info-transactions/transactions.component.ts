@@ -29,7 +29,7 @@ interface SearchParams {
 })
 export class TransactionsComponent implements OnInit {
   @ViewChild('addressTpl', { static: false }) addressTpl!: TemplateRef<any>;
-  @ViewChild('amountTpl', { static: false }) amountTpl!: TemplateRef<any>;
+  @ViewChild('amountTpl', { static: true }) amountTpl!: TemplateRef<any>;
   @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
   @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
@@ -101,7 +101,6 @@ export class TransactionsComponent implements OnInit {
 
         {
           title: 'Amount',
-          field: 'amount',
           width: 120,
           tdTemplate: this.amountTpl
         },
