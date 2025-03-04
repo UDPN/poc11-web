@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2023-12-13 14:27:01
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-03-04 13:17:02
+ * @LastEditTime: 2025-03-04 13:45:00
  * @Description: 
 -->
 <app-page-header
@@ -108,7 +108,7 @@
             </nz-descriptions>
           </nz-card>
           <ng-container
-            *ngIf="info.status === 1 || info.status === 3 || info.status === 5"
+            *ngIf="info.status === 5 || info.status === 20 || info.status === 35"
           >
             <nz-card
               nzTitle="Transaction Information"
@@ -133,7 +133,7 @@
               </nz-descriptions>
             </nz-card>
           </ng-container>
-          <ng-container *ngIf="info.status === 2 || info.status === 6">
+          <ng-container *ngIf="info.status === 15 || info.status === 40">
             <nz-card
               nzTitle="Refund Information"
               nzBordered="false"

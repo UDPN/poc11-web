@@ -30,7 +30,7 @@
             class="fiat-money-descriptions-order"
           >
             <nz-descriptions-item [nzTitle]="'Custodian Bank'"
-              ><span>{{
+              ><span [title]="info?.centralBankName">{{
                 info?.centralBankName | map: 'showPartEight'
               }}</span></nz-descriptions-item
             >
