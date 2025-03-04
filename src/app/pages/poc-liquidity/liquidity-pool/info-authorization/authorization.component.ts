@@ -36,9 +36,9 @@ export class AuthorizationComponent implements OnInit {
 
   statusOptions = [
     { label: 'All', value: 0 },
-    { label: 'Pending ', value: 1 },
-    { label: 'Under ', value: 2 },
-    { label: 'Successful ', value: 3 },
+    { label: 'Processing ', value: 1 },
+    { label: 'Processing ', value: 2 },
+    { label: 'Success ', value: 3 },
     { label: 'Failed ', value: 4 }
   ];
 
@@ -176,11 +176,11 @@ export class AuthorizationComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 1:
-        return 'Pending ';
+        return 'Processing ';
       case 2:
-        return 'Under ';
+        return 'Processing ';
       case 3:
-        return 'Successful ';
+        return 'Success ';
       case 4:
         return 'Failed ';
       default:

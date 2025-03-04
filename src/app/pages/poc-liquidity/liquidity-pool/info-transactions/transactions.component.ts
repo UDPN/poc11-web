@@ -56,7 +56,7 @@ export class TransactionsComponent implements OnInit {
   statusOptions = [
     { label: 'All', value: 0 },
     { label: 'Processing', value: 20 },
-    { label: 'Successful', value: 35 },
+    { label: 'Success', value: 35 },
     { label: 'Failed', value: 40 }
   ];
 
@@ -236,11 +236,11 @@ export class TransactionsComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 20:
-        return 'processing';
+        return 'Processing';
       case 35:
-        return 'successful';
+        return 'Success';
       case 40:
-        return 'failed';
+        return 'Failed';
       default:
         return 'Unknown';
     }

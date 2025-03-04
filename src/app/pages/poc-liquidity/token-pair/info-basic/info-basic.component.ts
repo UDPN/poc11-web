@@ -145,13 +145,13 @@ export class InfoBasicComponent implements OnInit, OnChanges {
   getStatusText(status: number): string {
     switch (status) {
       case 0:
-        return 'Opening';
+        return 'Processing';
       case 1:
-        return 'Success';
+        return 'Active';
       case 2:
         return 'Failed';
       case 3:
-        return 'Disabled';
+        return 'Inactive';
       default:
         return 'Unknown';
     }
