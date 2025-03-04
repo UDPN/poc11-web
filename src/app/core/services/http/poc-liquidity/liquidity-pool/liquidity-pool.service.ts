@@ -266,6 +266,13 @@ export class LiquidityPoolService {
       message: string;
     }>('/v2/liquidity-poll/token/list', {});
   }
+  public getTokenListAll(): Observable<any> {
+    return this.https.post<{
+      code: number;
+      data: TokenListItem[];
+      message: string;
+    }>('/v2/liquidity-poll/token/list/all', {});
+  }
 
   public getPoolInfo(liquidityPoolId: string): Observable<PoolInfoResponse> {
     return this.https.post<PoolInfoResponse>('/v2/liquidity-poll/basic/information', {

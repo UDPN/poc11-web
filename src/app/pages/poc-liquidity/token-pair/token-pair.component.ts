@@ -273,7 +273,7 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   getStatusText(state: number): string {
     switch (state) {
       case 0:
-        return 'Opening';
+        return 'Processing';
       case 1:
         return 'Active';
       case 2:

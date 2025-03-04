@@ -101,7 +101,7 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   }
 
   getTokenList(): void {
-    this.liquidityPoolService.getTokenList().subscribe({
+    this.liquidityPoolService.getTokenListAll().subscribe({
       next: (res) => {
         if (res.code === 0) {
           this.tokenList = res.data;
@@ -260,11 +260,11 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
       case 0:
         return 'Progress';
       case 1:
-        return 'Successful';
+        return 'Active';
       case 2:
-        return 'Failed';
+        return 'Inactive';
       case 3:
-        return 'Disabled';
+        return 'Rejected';
       default:
         return 'Unknown';
     }
