@@ -301,7 +301,7 @@ export class LiquidityPoolService {
     const requestParams = {
       data: {
         liquidityPoolId: Number(liquidityPoolId),
-        operationType: params.operationType || 0
+        operationType: params.operationType || ""
       },
       page: {
         pageNum: params.pageIndex || 1,

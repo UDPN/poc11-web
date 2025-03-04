@@ -60,7 +60,6 @@ export class RegisterComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.message.error('Failed to check registration status');
         console.error('Error checking registration status:', error);
       }
     });
@@ -131,7 +130,6 @@ export class RegisterComponent implements OnInit {
         }
       },
       error: (error: Error) => {
-        this.message.error('Failed to load wallet addresses');
         console.error('Error loading wallet addresses:', error);
       }
     });
@@ -203,7 +201,6 @@ export class RegisterComponent implements OnInit {
           }
         },
         error: (error: Error) => {
-          this.message.error('Failed to load wallet addresses');
           console.error('Error loading wallet addresses:', error);
         }
       });
@@ -237,7 +234,6 @@ export class RegisterComponent implements OnInit {
             },
             error: (error) => {
               this.isLoading = false;
-              this.message.error('Registration failed');
               console.error('Registration error:', error);
             }
           });
