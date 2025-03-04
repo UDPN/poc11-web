@@ -284,9 +284,35 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
               nzTitle: 'Warning ',
               nzContent: 'The Liquidity Pool Address  cannot be deactivated due to existing associated token pairs.Please deactivate them before proceeding.'
             });
+          }else{
+            const modal = this.modal.create<ActivateModalComponent>({
+              nzTitle:
+                status === 1 ? 'Deactivate Liquidity Pool' : 'Activate Liquidity Pool',
+              nzContent: ActivateModalComponent,
+              nzWidth: 600,
+              nzData: {
+                liquidityPoolAddress,
+                token,
+                liquidityPoolId,
+                status
+              }
+            });
+        
+            modal.afterClose.subscribe((comments: string) => {
+              if (comments) {
+                this.message.success(
+                  `Liquidity Pool ${
+                    status === 1 ? 'deactivated' : 'activated'
+                  } successfully`
+                );
+                this.getDataList(this.tableQueryParams);
+              }
+            });
+
           }
         }
       });
+      return;
     }
     const modal = this.modal.create<ActivateModalComponent>({
       nzTitle:
