@@ -100,12 +100,9 @@ export class RegisterComponent implements OnInit {
           }
           
           this.updateAddButtonVisibility();
-        } else {
-          this.message.error(response.message || 'Failed to load tokens');
         }
       },
       error: (error) => {
-        this.message.error('Failed to load tokens');
         console.error('Error loading tokens:', error);
       }
     });

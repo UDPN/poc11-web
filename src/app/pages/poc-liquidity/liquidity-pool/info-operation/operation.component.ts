@@ -16,9 +16,9 @@ interface SearchParams {
 })
 export class OperationComponent implements OnInit {
   @Input() id: string = '';
-  @ViewChild('hashTpl', { static: false }) hashTpl!: TemplateRef<any>;
+  @ViewChild('hashTpl', { static: true }) hashTpl!: TemplateRef<any>;
   @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
-  @ViewChild('remarksTpl', { static: false }) remarksTpl!: TemplateRef<any>;
+  @ViewChild('remarksTpl', { static: true }) remarksTpl!: TemplateRef<any>;
   @ViewChild('operationTypeTpl', { static: true }) operationTypeTpl!: TemplateRef<any>;
 
   tableConfig!: AntTableConfig;
@@ -72,7 +72,6 @@ export class OperationComponent implements OnInit {
         },
         {
           title: 'Comments',
-          field: 'remarks',
           width: 200,
           tdTemplate: this.remarksTpl
         },
@@ -84,7 +83,6 @@ export class OperationComponent implements OnInit {
         },
         {
           title: 'Transaction Hash',
-          field: 'txHash',
           width: 160,
           tdTemplate: this.hashTpl
         },
