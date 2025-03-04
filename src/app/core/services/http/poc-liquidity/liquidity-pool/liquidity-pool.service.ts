@@ -281,11 +281,33 @@ export class LiquidityPoolService {
     const requestParams = {
       data: {
         liquidityPoolId: Number(liquidityPoolId),
-        operationEndTime: params.operationTime?.[1] ? timeToTimestampMillisecond(params.operationTime[1]) : '',
-        operationStartTime: params.operationTime?.[0] ? timeToTimestampMillisecond(params.operationTime[0]) : '',
-        txEndTime: params.transactionTime?.[1] ? timeToTimestampMillisecond(params.transactionTime[1]) : '',
+        operationEndTime: params.operationTime?.[1]
+        ? timeToTimestampMillisecond(
+            this.date.transform(params.operationTime[1], 'yyyy-MM-dd') +
+              ' 23:59:59'
+          )
+        : '',
+        operationStartTime: params.operationTime?.[0]
+        ? timeToTimestampMillisecond(
+            this.date.transform(params.operationTime[0], 'yyyy-MM-dd') +
+              ' 00:00:00'
+          )
+        : '',
         txHash: params.transactionHash || '',
-        txStartTime: params.transactionTime?.[0] ? timeToTimestampMillisecond(params.transactionTime[0]) : '',
+
+        txEndTime: params.transactionTime?.[1]
+        ? timeToTimestampMillisecond(
+            this.date.transform(params.transactionTime[1], 'yyyy-MM-dd') +
+              ' 23:59:59'
+          )
+        : '',
+
+        txStartTime: params.transactionTime?.[0]
+        ? timeToTimestampMillisecond(
+            this.date.transform(params.transactionTime[0], 'yyyy-MM-dd') +
+              ' 00:00:00'
+          )
+        : '',
         txStatus: params.status ? Number(params.status) : ''
       },
       page: {
