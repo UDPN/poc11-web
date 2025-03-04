@@ -82,7 +82,7 @@ export class AddComponent implements OnInit {
           name: 'Wallet Management'
         },
         {
-          name: 'Wallet Management',
+          name: 'Wallet Creation',
           url: '/poc/poc-wallet/cbdc-wallet'
         },
         { name: 'Create' }

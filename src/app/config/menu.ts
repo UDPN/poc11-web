@@ -67,7 +67,7 @@ const menuNav: Menu[] = [
       {
         id: 1,
         fatherId: 4,
-        menuName: 'Wallet Management',
+        menuName: 'Wallet Creation',
         open: false,
         selected: false,
         menuType: 'C',

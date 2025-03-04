@@ -68,7 +68,7 @@ export class InfoComponent implements OnInit {
           name: 'Wallet Management'
         },
         {
-          name: 'Wallet Management',
+          name: 'Wallet Creation',
           url: '/poc/poc-wallet/cbdc-wallet'
         },
         { name: 'Details' }

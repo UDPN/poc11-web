@@ -158,10 +158,10 @@ export const MapSet = {
   walletTransactionsStatusColor: {
     1: 'volcano',
     2: 'red',
-    3: 'purple',
-    5: 'cyan',
+    3: 'blue',
+    5: 'green',
     6: 'red',
-    7: 'purple'
+    7: 'blue'
   },
   walletTransactionsType: {
     1: 'Top-up',
@@ -174,10 +174,10 @@ export const MapSet = {
   },
   transactionsRecordStatusColor: {
     5: 'volcano',
-    10: 'purple',
+    10: 'blue',
     15: 'red',
-    20: 'purple',
-    30: 'purple',
+    20: 'blue',
+    30: 'blue',
     35: 'green',
     40: 'red'
   },
@@ -198,11 +198,11 @@ export const MapSet = {
   walletStatusColor: {
     1: 'volcano',
     2: 'red',
-    3: 'purple',
-    4: 'purple',
-    5: 'cyan',
+    3: 'blue',
+    4: 'blue',
+    5: 'green',
     6: 'red',
-    7: 'purple',
+    7: 'blue',
     8: 'default'
   },
   walletApprovalResult: {
