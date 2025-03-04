@@ -93,10 +93,10 @@ export class AddComponent implements OnInit, AfterViewInit {
   initForm(): void {
     this.validateForm = this.fb.group({
       enterpriseCode: [null],
-      enterpriseName: [null, [this.enterpriseNameValidator]],
-      contactName: [null, [this.contactNameValidator]],
+      enterpriseName: [null, ],
+      contactName: [null, ],
       email: [null, [Validators.required, Validators.email]],
-      enterpriseBank: [null, [this.enterpriseBankValidator]],
+      enterpriseBank: [null, ],
       enterpriseAccount: [null],
       generateWallet: ['1', [Validators.required]],
       approvalValue: [this.formatNumber(5000), [Validators.required]],
@@ -178,32 +178,32 @@ export class AddComponent implements OnInit, AfterViewInit {
     });
   }
 
-  enterpriseNameValidator = (
-    control: UntypedFormControl
-  ): { [s: string]: boolean } => {
-    if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
-      return { regular: true, error: true };
-    }
-    return {};
-  };
+  // enterpriseNameValidator = (
+  //   control: UntypedFormControl
+  // ): { [s: string]: boolean } => {
+  //   if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
+  //     return { regular: true, error: true };
+  //   }
+  //   return {};
+  // };
 
-  contactNameValidator = (
-    control: UntypedFormControl
-  ): { [s: string]: boolean } => {
-    if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
-      return { regular: true, error: true };
-    }
-    return {};
-  };
+  // contactNameValidator = (
+  //   control: UntypedFormControl
+  // ): { [s: string]: boolean } => {
+  //   if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
+  //     return { regular: true, error: true };
+  //   }
+  //   return {};
+  // };
 
-  enterpriseBankValidator = (
-    control: UntypedFormControl
-  ): { [s: string]: boolean } => {
-    if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
-      return { regular: true, error: true };
-    }
-    return {};
-  };
+  // enterpriseBankValidator = (
+  //   control: UntypedFormControl
+  // ): { [s: string]: boolean } => {
+  //   if (!/^[A-Za-z0-9\s]{0,50}$/.test(control.value)) {
+  //     return { regular: true, error: true };
+  //   }
+  //   return {};
+  // };
 
   onBack() {
     this.location.back();
