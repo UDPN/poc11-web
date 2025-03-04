@@ -177,13 +177,13 @@ export class OperationComponent implements OnInit {
   getStatusText(status: number): string {
     switch (status) {
       case 0:
-        return 'In Progress';
+        return 'Processing';
       case 1:
         return 'Success';
       case 2:
         return 'Failed';
       case 3:
-        return 'rejected';
+        return 'Rejected';
       default:
         return 'Unknown';
     }

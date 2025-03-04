@@ -258,13 +258,13 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   getStatusText(status: number): string {
     switch (status) {
       case 0:
-        return 'Progress';
+        return 'Processing';
       case 1:
         return 'Active';
-      case 2:
-        return 'Inactive';
       case 3:
-        return 'Rejected';
+        return 'Inactive';
+      case 2:
+        return 'Failed';
       default:
         return 'Unknown';
     }

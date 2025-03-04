@@ -105,11 +105,11 @@ export class BasicComponent implements OnInit, OnChanges {
       case 1:
         return 'Active';
       case 0:
-        return 'In Progress';
+        return 'Processing';
       case 2:
         return 'Failed';
       case 3:
-        return 'Disabled';
+        return 'Inactive';
       default:
         return 'Unknown';
     }
