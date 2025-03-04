@@ -216,7 +216,7 @@ export class TokenPairService {
             )
           : '',
         rateId: filters.tokenPair || '',
-        state: filters.status || ''
+        state: filters.status
       },
       page: {
         pageNum: pageIndex,
