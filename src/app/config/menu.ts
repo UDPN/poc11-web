@@ -147,7 +147,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010201',
+        code: 'R010901',
         path: '/poc/poc-enterprise/enterprise-onboarding'
       },
       {
@@ -157,7 +157,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010202',
+        code: 'R010902',
         path: '/poc/poc-enterprise/wallet'
       },
       {
@@ -167,7 +167,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010203',
+        code: 'R010903',
         path: '/poc/poc-enterprise/transaction-approval'
       },
       {
@@ -177,7 +177,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010203',
+        code: 'R010904',
         path: '/poc/poc-enterprise/transactions'
       }
     ]
@@ -190,7 +190,7 @@ const menuNav: Menu[] = [
     open: false,
     selected: false,
     menuType: 'C',
-    code: 'R0103',
+    code: 'R0111',
     path: '/poc/poc-liquidity',
     children: [
       {
@@ -200,7 +200,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010201',
+        code: 'R011101',
         path: '/poc/poc-liquidity/liquidity-pool'
       },
       {
@@ -210,7 +210,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010202',
+        code: 'R011102',
         path: '/poc/poc-liquidity/token-pair'
       },
       {
@@ -220,7 +220,7 @@ const menuNav: Menu[] = [
         open: false,
         selected: false,
         menuType: 'C',
-        code: 'R010203',
+        code: 'R011103',
         path: '/poc/poc-liquidity/fx-transactions'
       }
     ]

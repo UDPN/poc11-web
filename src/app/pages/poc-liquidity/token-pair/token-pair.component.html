@@ -140,22 +140,32 @@
       let-tokenPair="tokenPair"
     >
       <ng-container>
-        <a
-          *ngIf="status === 3"
-          (click)="openOperateModal(rateId, tokenPair, status)"
-          >Activate</a
+        <ng-container
+          *appAuth="selectedTab === 'local' ? 'R01110203' : 'R01110208'"
+          ><a
+            *ngIf="status === 3"
+            (click)="openOperateModal(rateId, tokenPair, status)"
+            >Activate</a
+          ></ng-container
         >
-        <a
-          *ngIf="status === 1"
-          (click)="openOperateModal(rateId, tokenPair, status)"
-          >Deactivate</a
+        <ng-container
+          *appAuth="selectedTab === 'local' ? 'R01110204' : 'R01110209'"
+          ><a
+            *ngIf="status === 1"
+            (click)="openOperateModal(rateId, tokenPair, status)"
+            >Deactivate</a
+          ></ng-container
         >
         <span class="m-r-8"></span>
       </ng-container>
-      <a
-        routerLink="/poc/poc-liquidity/token-pair/infoToken"
-        [queryParams]="{ rateId: rateId }"
-        >Details</a
+      <ng-container
+        *appAuth="selectedTab === 'local' ? 'R01110202' : 'R01110207'"
+      >
+        <a
+          routerLink="/poc/poc-liquidity/token-pair/infoToken"
+          [queryParams]="{ rateId: rateId }"
+          >Details</a
+        ></ng-container
       >
     </ng-template>
   </app-card-table-wrap>
@@ -163,7 +173,7 @@
 
 <ng-template #localFxBtn>
   <button
-    *appAuth="''"
+    *appAuth="'R01110201'"
     nz-button
     nzType="primary"
     class="m-r-8"
@@ -172,12 +182,17 @@
     <i nz-icon nzType="plus"></i>
     New
   </button>
-  <a class="m-r-8" href="/assets/token-pair/Commercial Bank OpenAPI Documentation for Management System Local FX Rate v1.1.0(1).pdf" target="_blank">How to Upload FX Rate</a>
+  <a
+    class="m-r-8"
+    href="/assets/token-pair/Commercial Bank OpenAPI Documentation for Management System Local FX Rate v1.1.0(1).pdf"
+    target="_blank"
+    >How to Upload FX Rate</a
+  >
 </ng-template>
 
 <ng-template #networkFxBtn>
   <button
-    *appAuth="''"
+    *appAuth="'R01110206'"
     nz-button
     nzType="primary"
     class="m-r-8"

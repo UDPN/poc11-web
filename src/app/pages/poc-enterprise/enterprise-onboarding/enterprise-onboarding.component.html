@@ -151,7 +151,7 @@
       let-enterpriseId="enterpriseId"
       let-enterpriseName="enterpriseName"
     >
-      <ng-container *appAuth="''">
+      <ng-container *appAuth="'R01090103'">
         <span
           class="operate-text"
           *ngIf="status === 0"
@@ -161,7 +161,7 @@
           Approval
         </span>
       </ng-container>
-      <ng-container *appAuth="''">
+      <ng-container *appAuth="status === 1 ? 'R01090106' : 'R01090105'">
         <span
           class="operate-text"
           (click)="updateStatus(status, enterpriseId, enterpriseName)"
@@ -170,7 +170,7 @@
           {{ status === 1 ? 'Deactivate' : 'Activate' }}
         </span>
       </ng-container>
-      <ng-container *appAuth="''">
+      <ng-container *appAuth="'R01090104'">
         <span
           class="operate-text"
           routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
@@ -178,7 +178,7 @@
         >
           Details
         </span> </ng-container
-      ><ng-container *appAuth="''">
+      ><ng-container *appAuth="'R01090102'">
         <span
           class="operate-text"
           *ngIf="status === 1 || status === 2 || status === 3"
@@ -194,7 +194,7 @@
 <ng-template #createBtn>
   <button
     routerLink="/poc/poc-enterprise/enterprise-onboarding/add"
-    *appAuth="''"
+    *appAuth="'R01090101'"
     nz-button
     nzType="primary"
     class="m-r-8"

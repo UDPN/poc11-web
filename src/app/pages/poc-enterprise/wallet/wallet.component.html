@@ -215,7 +215,7 @@
       let-balance="balance"
       let-currency="currency"
     >
-      <ng-container *appAuth="''">
+      <ng-container *appAuth="'R01090201'">
         <span
           class="operate-text"
           *ngIf="status === 1"
@@ -225,7 +225,7 @@
           Approval
         </span>
       </ng-container>
-      <ng-container *appAuth="''">
+      <ng-container *appAuth="status === 5 ? 'R01090204' : 'R01090203'">
         <span
           class="operate-text"
           *ngIf="status === 5 || status === 8"
@@ -243,7 +243,7 @@
           {{ status === 5 ? 'Deactivate' : 'Activate' }}
         </span>
       </ng-container>
-      <ng-container *appAuth="''">
+      <ng-container *appAuth="'R01090202'">
         <span
           class="operate-text"
           routerLink="/poc/poc-enterprise/wallet/info"
