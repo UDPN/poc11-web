@@ -184,10 +184,13 @@ export class TransactionsComponent implements OnInit {
         finalize(() => {
           this.loading = false;
           this.tableConfig.loading = false;
+          this.cdr.detectChanges();
         })
       )
       .subscribe({
         next: (res) => {
+          this.loading = false;
+          this.tableConfig.loading = false;
           if (res.code === 0) {
             this.tableData = res.data.rows || [];
             this.tableConfig.total = res.data.page.total || 0;

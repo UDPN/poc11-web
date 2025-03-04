@@ -91,8 +91,8 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   tokenPairList: Array<{ key: string; value: string }> = [];
-  selectedTabIndex = Number(localStorage.getItem('tokenPairTabIndex')) || 0;
-  selectedTab = localStorage.getItem('tokenPairTab') || 'local';
+  selectedTabIndex =  0;
+  selectedTab = 'local';
 
   constructor(
     private tokenPairService: TokenPairService,
@@ -112,8 +112,11 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    localStorage.removeItem('tokenPairTabIndex');
+    localStorage.removeItem('tokenPairTab');
+    localStorage.setItem('tokenPairTabIndex', '0');
+    localStorage.setItem('tokenPairTab', 'local');
     this.initTable();
-    console.log(this.selectedTab);
 
     this.getDataList();
 
@@ -182,7 +185,6 @@ export class TokenPairComponent implements OnInit, AfterViewInit {
       pageNum: e?.pageIndex || this.tableConfig.pageIndex!,
       filters: this.searchParam
     };
-    console.log(params);
 
     this.tokenPairService
       .fetchList(params.pageNum, params.pageSize, params.filters)
