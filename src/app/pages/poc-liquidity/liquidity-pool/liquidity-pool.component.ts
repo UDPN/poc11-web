@@ -73,14 +73,16 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   };
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
-  tokenList: Array<{ key: string; value: string }> = [];
+
+  tokenList: Array<{ tokenId: number; tokenName: string; minBalance: string }> = [];
   comments: string = '';
 
   constructor(
     private liquidityPoolService: LiquidityPoolService,
     private cdr: ChangeDetectorRef,
     private message: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private modalService: NzModalService
   ) {}
 
   ngAfterViewInit(): void {
@@ -134,7 +136,6 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
   }
 
   getDataList(e?: NzTableQueryParams): void {
-    console.log(this.searchParam);
     this.tableConfig.loading = true;
     const params: SearchCommonVO<any> = {
       pageSize: this.tableConfig.pageSize!,
@@ -275,6 +276,19 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
     liquidityPoolId: number,
     status: number
   ): void {
+    if(status === 1){
+      this.liquidityPoolService.rateCheck({liquidityPoolId:liquidityPoolId}).subscribe({
+        next: (res) => {
+          if(!res.data){
+            this.modalService.warning({
+              nzTitle: 'Warning ',
+              nzContent: 'The Liquidity Pool Address  cannot be deactivated due to existing associated token pairs.Please deactivate them before proceeding.'
+            });
+          }
+        }
+      });
+      return;
+    }
     const modal = this.modal.create<ActivateModalComponent>({
       nzTitle:
         status === 1 ? 'Deactivate Liquidity Pool' : 'Activate Liquidity Pool',

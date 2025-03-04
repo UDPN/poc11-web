@@ -301,7 +301,7 @@ export class LiquidityPoolService {
     const requestParams = {
       data: {
         liquidityPoolId: Number(liquidityPoolId),
-        operationType: params.operationType || 0
+        operationType: params.operationType || ""
       },
       page: {
         pageNum: params.pageIndex || 1,
@@ -333,4 +333,7 @@ export class LiquidityPoolService {
     return this.https.post<ReauthorizeResponse>('/v2/liquidity-poll/reauthorize', params);
   }
   
+  public rateCheck(params: {liquidityPoolId:number}): Observable<RegisterResponse> {
+    return this.https.post<any>('/v2/liquidity-poll/rate/check', params);
+  }
 }

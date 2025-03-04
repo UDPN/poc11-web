@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
+import { NzModalRef, NZ_MODAL_DATA, NzModalService } from 'ng-zorro-antd/modal';
 import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liquidity-pool/liquidity-pool.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -27,7 +27,8 @@ export class ActivateModalComponent {
     private modal: NzModalRef,
     @Inject(NZ_MODAL_DATA) private data: ModalData,
     private liquidityPoolService: LiquidityPoolService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private modalService: NzModalService
   ) {
     this.liquidityPoolAddress = this.data.liquidityPoolAddress;
     this.token = this.data.token;
@@ -64,5 +65,6 @@ export class ActivateModalComponent {
         console.log(err.message || 'Failed to modify liquidity pool status');
       }
     });
+
   }
 } 
