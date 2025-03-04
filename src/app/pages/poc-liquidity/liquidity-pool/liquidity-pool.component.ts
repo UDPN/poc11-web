@@ -287,7 +287,6 @@ export class LiquidityPoolComponent implements OnInit, AfterViewInit {
           }
         }
       });
-      return;
     }
     const modal = this.modal.create<ActivateModalComponent>({
       nzTitle:
