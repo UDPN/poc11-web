@@ -153,7 +153,7 @@ const menuNav: Menu[] = [
       {
         id: 2,
         fatherId: 6,
-        menuName: 'Wallet Management',
+        menuName: 'Enterprise Wallet Management',
         open: false,
         selected: false,
         menuType: 'C',
@@ -407,7 +407,7 @@ const menuNav: Menu[] = [
         menuType: 'C',
         code: 'R0305',
         newLinkFlag: 1,
-        path: '../../../../assets/api-documentation/Commercial Bank OpenAPI Documentation for Enterprise Users v1.1.0.pdf'
+        path: '../../../../assets/api-documentation/Commercial Bank OpenAPI Documentation for Enterprise Users v1.1.0.pdf'
       },
       {
         id: 5,

@@ -1,10 +1,4 @@
-/*
- * @Author: chenyuting
- * @Date: 2025-01-15 14:09:17
- * @LastEditors: chenyuting
- * @LastEditTime: 2025-03-03 11:23:29
- * @Description:
- */
+
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -91,7 +85,7 @@ export class InfoComponent implements OnInit, AfterViewInit {
       breadcrumbs: [
         { name: 'Enterprise Management' },
         {
-          name: 'Wallet Management',
+          name: 'Enterprise Wallet Management',
           url: '/poc/poc-enterprise/wallet'
         },
         { name: 'Details' }
