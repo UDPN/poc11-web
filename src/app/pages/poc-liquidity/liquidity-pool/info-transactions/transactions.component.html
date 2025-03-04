@@ -66,18 +66,18 @@
       <span nz-typography [nzCopyable]="true">{{ item[text] }}</span>
     </ng-template>
 
-    <ng-template #amountTpl let-data>
-      <span [class.text-success]="data.amount >= 0" [class.text-danger]="data.amount < 0">
-        {{ formatAmount(data.amount, data.fromTokenSymbol) }}
+    <ng-template #amountTpl  let-amount="amount" let-currency="currency">
+      <span [class.text-success]="amount >= 0" [class.text-danger]="amount < 0">
+        {{ formatAmount(amount, currency) }}
       </span>
     </ng-template>
 
-    <ng-template #statusTpl let-data>
-      <nz-tag [nzColor]="getStatusColor(data.status)">{{ getStatusText(data.status) }}</nz-tag>
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag>
     </ng-template>
 
-    <ng-template #actionTpl let-txHash="txHash">
-      <a [routerLink]="['/poc/poc-liquidity/liquidity-pool/transaction-detail', txHash]">View</a>
+    <ng-template #actionTpl let-transferId="transferId">
+      <a [routerLink]="['/poc/poc-liquidity/fx-transactions/info', transferId]">View</a>
     </ng-template>
   </app-ant-table>
 </app-card-table-wrap>
