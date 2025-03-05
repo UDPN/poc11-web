@@ -366,6 +366,7 @@
     {{ txHash | map: 'nullValue' }}
   </ng-container>
 </ng-template>
+<!-- transaction status-->
 <ng-template #statusTpl let-state="state">
   <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{
     state | map: 'walletTransactionsRecordStatus'
