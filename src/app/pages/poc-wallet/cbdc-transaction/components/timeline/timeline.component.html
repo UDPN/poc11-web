@@ -43,7 +43,7 @@
     </ng-container>
   </ng-container> -->
   <!-- Processing -->
-  <ng-container *ngIf="info.status === 3">
+  <ng-container *ngIf="info.status === 20">
     <!-- Top-up -->
     <ng-container *ngIf="info.type === 1">
       <nz-steps [nzCurrent]="3" nzDirection="vertical" nzSize="small">
@@ -91,7 +91,7 @@
     </ng-container>
   </ng-container>
   <!-- Failed -->
-  <ng-container *ngIf="info.status === 6">
+  <ng-container *ngIf="info.status === 40">
     <nz-steps nzDirection="vertical" nzSize="small">
       <nz-step
         nzTitle="Created"
@@ -180,7 +180,7 @@
     </ng-container>
   </ng-container> -->
   <!-- Success -->
-  <ng-container *ngIf="info.status === 5">
+  <ng-container *ngIf="info.status === 35">
     <ng-container *ngIf="info.type === 1">
       <nz-steps nzDirection="vertical" nzSize="small">
         <nz-step

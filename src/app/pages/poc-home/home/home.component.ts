@@ -541,6 +541,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
@@ -589,7 +590,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       legend: {
-        // data: ['Top-up', 'Transfer In', 'Withdraw', 'Transfer Out'],
+        // data: ['Top-up', 'Transfer In', 'Withdrawal', 'Transfer Out'],
         data: [
           {
             name: 'Top-up',
@@ -600,7 +601,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             icon: 'circle'
           },
           {
-            name: 'Withdraw',
+            name: 'Withdrawal',
             icon: 'circle'
           },
           {
@@ -629,7 +630,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           data: param.transferInAmount
         },
         {
-          name: 'Withdraw',
+          name: 'Withdrawal',
           type: 'line',
           data: param.withdrawAmount
         },

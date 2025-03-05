@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
@@ -10,7 +17,10 @@ import { AntTableConfig } from '@shared/components/ant-table/ant-table.component
 import { PageHeaderType } from '@shared/components/page-header/page-header.component';
 import { TreeNodeInterface } from '@shared/components/tree-table/tree-table.component';
 import { MapKeyType, MapPipe, MapSet } from '@shared/pipes/map.pipe';
-import { fnFlatDataHasParentToTree, fnFlattenTreeDataByDataList } from '@utils/treeTableTools';
+import {
+  fnFlatDataHasParentToTree,
+  fnFlattenTreeDataByDataList
+} from '@utils/treeTableTools';
 import { ModalBtnStatus } from '@widget/base-modal';
 import { MenuModalService } from '@widget/biz-widget/system/menu-modal/menu-modal.service';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -30,18 +40,24 @@ interface SearchParam {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuComponent implements OnInit {
-  @ViewChild('zorroIconTpl', { static: true }) zorroIconTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('aliIconTpl', { static: true }) aliIconTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('visibleTpl', { static: true }) visibleTpl!: TemplateRef<NzSafeAny>;
-  @ViewChild('newLinkFlag', { static: true }) newLinkFlag!: TemplateRef<NzSafeAny>;
+  @ViewChild('zorroIconTpl', { static: true })
+  zorroIconTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('aliIconTpl', { static: true })
+  aliIconTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('operationTpl', { static: true })
+  operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('visibleTpl', { static: true })
+  visibleTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('newLinkFlag', { static: true })
+  newLinkFlag!: TemplateRef<NzSafeAny>;
 
   ActionCode = ActionCode;
   searchParam: Partial<SearchParam> = {};
 
   tableConfig!: AntTableConfig;
   pageHeaderInfo: Partial<PageHeaderType> = {
-    title: 'Menu management database (once every 10 minutes to recover from a backup), remember to finish the new menu corresponding to add just with new menu, otherwise unable to show',
+    title:
+      'Menu management database (once every 10 minutes to recover from a backup), remember to finish the new menu corresponding to add just with new menu, otherwise unable to show',
     breadcrumb: ['Home page', 'System management', 'Menu management']
   };
   dataList: TreeNodeInterface[] = [];
@@ -62,9 +78,7 @@ export class MenuComponent implements OnInit {
     this.getDataList();
   }
 
-  
   tableChangeDectction(): void {
-    
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
@@ -89,7 +103,7 @@ export class MenuComponent implements OnInit {
           this.tableLoading(false);
         })
       )
-      .subscribe(menuList => {
+      .subscribe((menuList) => {
         const target = fnFlatDataHasParentToTree(menuList.list, 'fatherId');
         this.dataList = fnFlattenTreeDataByDataList(target);
         this.tableLoading(false);
@@ -103,7 +117,7 @@ export class MenuComponent implements OnInit {
 
   add(fatherId: number): void {
     this.menuModalService.show({ nzTitle: 'add' }).subscribe(
-      res => {
+      (res) => {
         if (!res || res.status === ModalBtnStatus.Cancel) {
           return;
         }
@@ -112,7 +126,7 @@ export class MenuComponent implements OnInit {
         this.tableLoading(true);
         this.addEditData(param, 'addMenus');
       },
-      error => this.tableLoading(false)
+      (error) => this.tableLoading(false)
     );
   }
 
@@ -141,15 +155,14 @@ export class MenuComponent implements OnInit {
             }
             this.getDataList();
           },
-          error => this.tableLoading(false)
+          (error) => this.tableLoading(false)
         );
       }
     });
   }
 
-  
   edit(id: number, fatherId: number): void {
-    this.dataService.getMenuDetail(id).subscribe(res => {
+    this.dataService.getMenuDetail(id).subscribe((res) => {
       this.menuModalService.show({ nzTitle: 'edit' }, res).subscribe(
         ({ modalValue, status }) => {
           if (status === ModalBtnStatus.Cancel) {
@@ -160,12 +173,11 @@ export class MenuComponent implements OnInit {
           this.tableLoading(true);
           this.addEditData(modalValue, 'editMenus');
         },
-        error => this.tableLoading(false)
+        (error) => this.tableLoading(false)
       );
     });
   }
 
-  
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
   }
@@ -176,51 +188,60 @@ export class MenuComponent implements OnInit {
         {
           title: 'The name of the menu',
           width: 230,
+          notNeedEllipsis: true,
           field: 'menuName'
         },
         {
           title: 'Zorro icon',
           field: 'icon',
+          notNeedEllipsis: true,
           width: 100,
           tdTemplate: this.zorroIconTpl
         },
         {
           title: 'Ali icon',
           field: 'alIcon',
+          notNeedEllipsis: true,
           width: 100,
           tdTemplate: this.aliIconTpl
         },
         {
           title: 'Access code',
           field: 'code',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'The routing address',
           field: 'path',
+          notNeedEllipsis: true,
           width: 300
         },
         {
           title: 'The sorting',
           field: 'orderNum',
+          notNeedEllipsis: true,
           width: 80
         },
         {
           title: 'state',
           field: 'status',
           pipe: 'available',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'show',
           field: 'visible',
           pipe: 'isOrNot',
+          notNeedEllipsis: true,
           tdTemplate: this.visibleTpl,
           width: 100
         },
         {
           title: 'Outside the chain',
           field: 'newLinkFlag',
+          notNeedEllipsis: true,
           pipe: 'isOrNot',
           tdTemplate: this.newLinkFlag,
           width: 100
@@ -228,12 +249,14 @@ export class MenuComponent implements OnInit {
         {
           title: 'Creation time',
           field: 'createTime',
+          notNeedEllipsis: true,
           pipe: 'date:yyyy-MM-dd HH:mm',
           width: 180
         },
         {
           title: 'operation',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,
@@ -250,6 +273,8 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.initTable();
-    this.visibleOptions = [...MapPipe.transformMapToArray(MapSet.visible, MapKeyType.Boolean)];
+    this.visibleOptions = [
+      ...MapPipe.transformMapToArray(MapSet.visible, MapKeyType.Boolean)
+    ];
   }
 }

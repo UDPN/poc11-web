@@ -11,21 +11,23 @@
     }}
   </div> -->
 </app-nav-top>
-<div
-  style="
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 12px;
-  "
->
-  <a
-    href="../../../../assets/quick-guide/UDPN Project Kissen Sandbox Quick Guide.pdf"
-    target="_blank"
-    style="font-weight: 600; text-decoration: underline"
-    >{{ 'Quick Guide' }}</a
+<ng-container *appAuth="'R0110'">
+  <div
+    style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
+    "
   >
-</div>
+    <a
+      href="../../../../assets/quick-guide/UDPN Project Kissen Sandbox Quick Guide.pdf"
+      target="_blank"
+      style="font-weight: 600; text-decoration: underline"
+      >{{ 'Quick Guide' }}</a
+    >
+  </div>
+</ng-container>
 <ul
   *ngIf="!isMixiHead; else mixiHeadTpl"
   nz-menu

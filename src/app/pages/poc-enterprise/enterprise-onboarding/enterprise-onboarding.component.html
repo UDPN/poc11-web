@@ -1,0 +1,205 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<div class="normal-table-wrap">
+  <nz-card
+    nzTitle="Query"
+    [nzBodyStyle]="{ 'padding-bottom': 0 }"
+    class="m-b-10"
+  >
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Enterprise Code</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="enterpriseCode"
+                [(ngModel)]="searchParam.enterpriseCode"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Email</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="email"
+                [(ngModel)]="searchParam.email"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                style="width: 100%"
+                name="creationTime"
+                [(ngModel)]="searchParam.creationTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Status</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="status"
+                [(ngModel)]="searchParam.status"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option nzValue="0" nzLabel="Pending Approval"></nz-option>
+                <nz-option nzValue="1" nzLabel="Active"></nz-option>
+                <nz-option nzValue="2" nzLabel="Inactive"></nz-option>
+                <nz-option nzValue="3" nzLabel="Failed"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="16"
+          [nzXl]="16"
+          [nzLg]="24"
+          [nzMd]="24"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="m-b-8 text-right p-0"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <app-card-table-wrap
+    [isNormalTable]="true"
+    tableTitle="Enterprise List"
+    [btnTpl]="createBtn"
+  >
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #numberTpl let-key="key">
+      <span [title]="key">{{ key }}</span>
+    </ng-template>
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="status | map: 'EnterpriseStatusColor'">{{
+        status | map: 'EnterpriseStatus'
+      }}</nz-tag>
+    </ng-template>
+    <ng-template
+      #operationTpl
+      let-status="status"
+      let-enterpriseId="enterpriseId"
+      let-enterpriseName="enterpriseName"
+    >
+      <ng-container *appAuth="'R01090103'">
+        <span
+          class="operate-text"
+          *ngIf="status === 0"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/op-info"
+          [queryParams]="{ enterpriseId: enterpriseId, status: status }"
+        >
+          Approval
+        </span>
+      </ng-container>
+      <ng-container *appAuth="status === 1 ? 'R01090106' : 'R01090105'">
+        <span
+          class="operate-text"
+          (click)="updateStatus(status, enterpriseId, enterpriseName)"
+          *ngIf="status === 1 || status === 2"
+        >
+          {{ status === 1 ? 'Deactivate' : 'Activate' }}
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R01090104'">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/info"
+          [queryParams]="{ enterpriseId: enterpriseId, status: status }"
+        >
+          Details
+        </span> </ng-container
+      ><ng-container *appAuth="'R01090102'">
+        <span
+          class="operate-text"
+          *ngIf="status === 1 || status === 2 || status === 3"
+          routerLink="/poc/poc-enterprise/enterprise-onboarding/add"
+          [queryParams]="{ enterpriseId: enterpriseId, status: status }"
+        >
+          Edit
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>
+<ng-template #createBtn>
+  <button
+    routerLink="/poc/poc-enterprise/enterprise-onboarding/add"
+    *appAuth="'R01090101'"
+    nz-button
+    nzType="primary"
+    class="m-r-8"
+  >
+    <i nz-icon nzType="plus"></i>
+    Onboard
+  </button>
+</ng-template>

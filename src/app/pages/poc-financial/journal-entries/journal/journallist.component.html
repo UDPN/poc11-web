@@ -159,7 +159,7 @@
               <span *ngIf="transaction.particularsAccount"
                 >{{ getTransactionTypeName(data.txType)
                 }}{{ ' ' + transaction.stablecoinName }}{{ ' ( '
-                }}{{ transaction.particularsAccount | map: 'showPart'
+                }}{{ transaction.particularsAccount | map: 'showPartEight'
                 }}{{ ' )' }}</span
               >
               <span *ngIf="!transaction.particularsAccount"
@@ -170,14 +170,18 @@
             <td>
               {{
                 transaction.loanType === 1
-                  ? (transaction.txAmount | number: '1.2-2') + ' ' + transaction.currencyName
+                  ? (transaction.txAmount | number: '1.2-2') +
+                    ' ' +
+                    transaction.currencyName
                   : ''
               }}
             </td>
             <td>
               {{
                 transaction.loanType === 2
-                  ? (transaction.txAmount | number: '1.2-2') + ' ' + transaction.currencyName
+                  ? (transaction.txAmount | number: '1.2-2') +
+                    ' ' +
+                    transaction.currencyName
                   : ''
               }}
             </td>

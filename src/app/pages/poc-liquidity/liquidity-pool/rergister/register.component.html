@@ -1,0 +1,123 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-liquidity/liquidity-pool'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+
+<div class="normal-detail-table-wrap">
+  <nz-card [nzTitle]="'Liquidity Pool Registration'">
+    <!-- Activation Requirements Info -->
+    <nz-alert
+      nzType="info"
+      [nzMessage]="'Liquidity Pool Activation Requirements:'"
+      [nzDescription]="requirementsDesc"
+      class="m-b-24"
+    ></nz-alert>
+    <ng-template #requirementsDesc>
+      <p>For initial registration, two sub-wallets are required; thereafter, only one is needed. By registering, you authorize smart contracts to execute FX transaction transfers. Please ensure that your wallet balance or authorized amount exceeds the minimum requirement so that users can select you as a liquidity provider during transactions. Otherwise, your wallet will not appear in the liquidity provider list.</p>
+      <p>To create a wallet, click <a (click)="createWallet()">"Create Wallet"</a>.</p>
+    </ng-template>
+
+    <!-- Registration Form -->
+    <form nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div formArrayName="poolEntries">
+        <div *ngFor="let entry of poolEntries.controls; let i = index" [formGroupName]="i" class="pool-entry">
+          <div class="pool-entry-header">
+            <span class="pool-entry-title">Pool Entry #{{i + 1}}</span>
+            <button 
+              nz-button 
+              nzType="text" 
+              nzDanger 
+              (click)="removePoolEntry(i)"
+              [disabled]="poolEntries.length <= 2"
+              *ngIf="i >= 2"
+            >
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+          </div>
+
+          <div nz-row [nzGutter]="24">
+            <!-- Token -->
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>Token</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a token">
+                  <nz-select 
+                    formControlName="tokenId" 
+                    nzPlaceHolder="Select token"
+                    (ngModelChange)="onTokenSelect($event, i)"
+                  >
+                    <nz-option 
+                      *ngFor="let token of tokenList" 
+                      [nzValue]="token.tokenId" 
+                      [nzLabel]="token.tokenName"
+                      [nzDisabled]="isTokenDisabled(token.tokenId, i)"
+                    ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Liquidity Pool Address -->
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Liquidity Pool Address</nz-form-label>
+                <nz-form-control nzErrorTip="Please select a wallet address">
+                  <nz-select formControlName="liquidityPoolAddress" nzPlaceHolder="Select wallet address">
+                    <nz-option 
+                      *ngFor="let wallet of getWalletList(i)" 
+                      [nzValue]="wallet.walletAddress" 
+                      [nzLabel]="wallet.walletAddress"
+                    ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Min Balance Req -->
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired>
+                  Min Balance Req.
+                  <i nz-icon nzType="info-circle" nzTheme="outline" nz-tooltip nzTooltipTitle="Minimum balance requirement for the liquidity pool"></i>
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="minBalanceReq" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <!-- Pre-authorized Debit -->
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label>Pre-authorized Debit</nz-form-label>
+                <nz-form-control>
+                  <label nz-checkbox formControlName="preAuthorizedDebit" [nzDisabled]="true"></label>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Button -->
+      <div class="m-b-24 m-t-15" *ngIf="showAddButton">
+        <button nz-button (click)="addPoolEntry()" [disabled]="poolEntries.length >= 5">
+          <i nz-icon nzType="plus"></i>Add
+        </button>
+        <span class="entry-count" *ngIf="poolEntries.length >= 5">
+          Maximum number of entries reached (5)
+        </span>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <!-- <button nz-button (click)="onBack()">Back</button> -->
+        <button nz-button nzType="primary" type="submit" [nzLoading]="isLoading">Submit</button>
+      </div>
+    </form>
+  </nz-card>
+</div>

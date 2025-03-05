@@ -105,7 +105,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
             <nz-form-control>
               <nz-range-picker
                 style="width: 100%"
@@ -326,21 +326,12 @@
                       [nzShowArrow]="true"
                       formControlName="txTypes"
                     >
-                    <!-- 1: Top-up 2: Withdraw 3: Transfer4Swap 5:Exchange -->
+                      <!-- 1: Top-up 2: Withdrawal 3: Transfer4Swap 5:Exchange -->
                       <nz-option nzValue="1" nzLabel="Top-up"></nz-option>
-                      <nz-option nzValue="2" nzLabel="Withdraw"></nz-option>
-                      <nz-option
-                        nzValue="3"
-                        nzLabel="Transfer"
-                      ></nz-option>
-                      <nz-option
-                        nzValue="4"
-                        nzLabel="Swap"
-                      ></nz-option>
-                      <nz-option
-                        nzValue="5"
-                        nzLabel="Exchange"
-                      ></nz-option>
+                      <nz-option nzValue="2" nzLabel="Withdrawal"></nz-option>
+                      <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
+                      <nz-option nzValue="4" nzLabel="Swap"></nz-option>
+                      <nz-option nzValue="5" nzLabel="Exchange"></nz-option>
                     </nz-select>
                   </div>
                 </div>

@@ -1,0 +1,282 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Liquidity Pool Address</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                placeholder=""
+                name="liquidityPoolAddress"
+                [(ngModel)]="searchParam.liquidityPoolAddress"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Token</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="token"
+                [(ngModel)]="searchParam.token"
+                style="width: 100%"
+              >
+                <nz-option nzValue="" nzLabel="All"></nz-option>
+                <nz-option
+                  *ngFor="let item of tokenList"
+                  [nzValue]="item.tokenId"
+                  [nzLabel]="item.tokenName"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Created Time</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker
+                class="full-width"
+                name="createdTime"
+                [(ngModel)]="searchParam.createdTime"
+              ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div
+          nz-col
+          [nzXXl]="8"
+          [nzXl]="8"
+          [nzLg]="12"
+          [nzMd]="12"
+          [nzSm]="24"
+          [nzXs]="24"
+        >
+          <nz-form-item>
+            <nz-form-label>Status</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                nzPlaceHolder=""
+                name="status"
+                [(ngModel)]="searchParam.status"
+                style="width: 100%"
+              >
+                <nz-option [nzValue]="''" nzLabel="All"></nz-option>
+                <nz-option [nzValue]="0" nzLabel="Processing"></nz-option>
+                <nz-option [nzValue]="1" nzLabel="Active"></nz-option>
+                <nz-option [nzValue]="3" nzLabel="Inactive"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Failed"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div
+          nz-col
+          [nzXXl]="16"
+          [nzXl]="16"
+          [nzLg]="24"
+          [nzMd]="24"
+          [nzSm]="24"
+          [nzXs]="24"
+          class="m-b-8 text-right p-0"
+        >
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <nz-form-control>
+              <div nz-col [nzSpan]="24">
+                <button
+                  nz-button
+                  [nzType]="'primary'"
+                  (click)="getDataList(this.tableQueryParams)"
+                >
+                  Query
+                </button>
+                <a nz-button nzType="link" class="m-l-15" (click)="resetForm()"
+                  >Reset</a
+                >
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+
+  <app-card-table-wrap
+    [isNormalTable]="true"
+    tableTitle="Liquidity Pool List"
+    [btnTpl]="createBtn"
+  >
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+    <ng-template #addressTpl let-liquidityPollAddress="liquidityPollAddress">
+      <span
+        nz-typography
+        [nzCopyable]="true"
+        [nzCopyText]="liquidityPollAddress"
+      >
+        {{ liquidityPollAddress | slice: 0:6 }}...{{
+          liquidityPollAddress | slice: -4
+        }}
+      </span>
+    </ng-template>
+    <ng-template
+      #walletBalanceTpl
+      let-walletBalance="walletBalance"
+      let-symbol="symbol"
+    >
+      <span>
+        {{ walletBalance | map: 'toThousandthMark' }}{{ ' ' + symbol }}
+      </span>
+    </ng-template>
+    <ng-template
+      #authorizedAmountTpl
+      let-authorizedAmount="authorizedAmount"
+      let-symbol="symbol"
+    >
+      <span>
+        {{ authorizedAmount | map: 'toThousandthMark' }}{{ ' ' + symbol }}
+      </span>
+    </ng-template>
+    <ng-template #minBalanceTpl let-minBalance="minBalance" let-symbol="symbol">
+      <span>
+        {{ minBalance | map: 'toThousandthMark' }}{{ ' ' + symbol }}
+      </span>
+    </ng-template>
+    <ng-template #minBalanceHeaderTpl>
+      <span>Min Balance Req.</span>
+      <i
+        nz-icon
+        nzType="info-circle"
+        nzTheme="outline"
+        nz-tooltip
+        nzTooltipTitle="A minimum balance is required for the Kissen Network Liquidity Pool."
+        class="m-l-4"
+      ></i>
+    </ng-template>
+    <ng-template #statusTpl let-status="status">
+      <nz-tag [nzColor]="getStatusColor(status)">{{
+        getStatusText(status)
+      }}</nz-tag>
+    </ng-template>
+    <ng-template
+      #operationTpl
+      let-liquidityPollAddress="liquidityPollAddress"
+      let-status="status"
+      let-token="token"
+      let-liquidityPoolId="liquidityPoolId"
+      let-walletBalance="walletBalance"
+      let-minBalance="minBalance"
+      let-authorizedAmount="authorizedAmount"
+      let-enableButton="enableButton"
+    >
+      <ng-container *appAuth="'R01110104'">
+        <span
+          class="operate-text"
+          (click)="
+            showActivateModal(
+              liquidityPollAddress,
+              token,
+              liquidityPoolId,
+              status
+            )
+          "
+          *ngIf="status === 3 && enableButton"
+        >
+          Activate
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R01110103'">
+        <span
+          class="operate-text"
+          routerLink="/poc/poc-liquidity/liquidity-pool/info"
+          [queryParams]="{liquidityPoolId}"
+        >
+          Details
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R01110105'">
+        <span
+          class="operate-text"
+          *ngIf="status === 1"
+          (click)="
+            showActivateModal(
+              liquidityPollAddress,
+              token,
+              liquidityPoolId,
+              status
+            )
+          "
+        >
+          Deactivate
+        </span>
+      </ng-container>
+      <ng-container *appAuth="'R01110102'">
+        <span
+          class="operate-text"
+          (click)="
+            showReauthorizeModal(
+              liquidityPollAddress,
+              token,
+              liquidityPoolId,
+              walletBalance,
+              minBalance,
+              authorizedAmount
+            )
+          "
+          *ngIf="status === 1"
+        >
+          Authorize
+        </span>
+      </ng-container>
+    </ng-template>
+  </app-card-table-wrap>
+</div>
+
+<ng-template #createBtn>
+  <button
+    routerLink="/poc/poc-liquidity/liquidity-pool/register"
+    *appAuth="'R01110101'"
+    nz-button
+    nzType="primary"
+    class="m-r-8"
+  >
+    <i nz-icon nzType="plus"></i>
+    Register
+  </button>
+</ng-template>

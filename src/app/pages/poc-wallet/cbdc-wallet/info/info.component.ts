@@ -32,6 +32,8 @@ export class InfoComponent implements OnInit {
   toTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('statusTpl', { static: true })
   statusTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('stateTpl', { static: true })
+  stateTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
   pageHeaderInfo: Partial<PageHeaderType> = {
@@ -66,7 +68,7 @@ export class InfoComponent implements OnInit {
           name: 'Wallet Management'
         },
         {
-          name: 'Wallet Management',
+          name: 'Wallet Creation',
           url: '/poc/poc-wallet/cbdc-wallet'
         },
         { name: 'Details' }
@@ -213,24 +215,27 @@ export class InfoComponent implements OnInit {
           title: 'Operation Type',
           field: 'type',
           pipe: 'operationType',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'Transaction Hash',
           field: 'txHash',
           pipe: 'nullValue',
+          notNeedEllipsis: true,
           width: 280
         },
         {
           title: 'Transaction Time',
           field: 'txTime',
           pipe: 'timeStamp',
+          notNeedEllipsis: true,
           width: 150
         },
         {
           title: 'Status',
-          field: 'state',
-          pipe: 'operationStatus',
+          tdTemplate: this.stateTpl,
+          notNeedEllipsis: true,
           width: 150
         }
       ],
@@ -240,7 +245,6 @@ export class InfoComponent implements OnInit {
       pageSize: 10,
       pageIndex: 1
     };
-
     this.transactionTableConfig = {
       headers: [
         {

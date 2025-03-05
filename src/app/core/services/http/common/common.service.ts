@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2023-10-17 15:43:56
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-18 17:17:34
+ * @LastEditTime: 2025-01-22 16:04:12
  * @Description:
  */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -43,7 +43,7 @@ export class CommonService {
       `/v1/export/task/download?busId=${busId}&busType=${busType}`,
       {
         responseType: 'blob',
-        observe: 'response',
+        observe: 'response'
       }
     );
   }
@@ -54,5 +54,9 @@ export class CommonService {
 
   public blockchainList(): Observable<any> {
     return this.http.get(`/v1/common/blockchain/list`);
+  }
+
+  public currencyList(): Observable<any> {
+    return this.http.post(`/v1/common/centralBankList`);
   }
 }

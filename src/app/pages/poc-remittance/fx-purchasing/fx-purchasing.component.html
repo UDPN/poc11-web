@@ -25,7 +25,9 @@
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Source Token
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
@@ -43,7 +45,7 @@
                   </div>
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Currency</ng-container
+                      >Please input your Source Token</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -96,11 +98,16 @@
                       class="unit-postion"
                       style="color: rgba(0, 0, 0, 0.45)"
                     >
-                      <span> {{ this.purchCurrecyModelShow }}</span>
+                      <span>
+                        {{
+                          this.purchCurrecyModelShow +
+                            ' ' +
+                            this.purchCurrecyModelCount
+                        }}</span
+                      >
                       <span class="m-l-5 m-r-5">{{
                         this.purchCurrecyModelShowIcon
                       }}</span>
-                      <span>{{ this.purchCurrecyModelCount }}</span>
                     </div>
                   </div>
                   <ng-template #transactionWalletAddressError let-control>
@@ -137,7 +144,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group
-                        [nzAddOnBefore]="purchCurrecyModelShowIcon"
+                        [nzAddOnAfter]="purchCurrecyModelShowIcon"
                       >
                         <input
                           type="number"
@@ -158,6 +165,9 @@
                       >The selected wallet doesn’t have sufficient
                       funds.</ng-container
                     >
+                    <ng-container *ngIf="control.hasError('regular1')"
+                      >Please fill in the correct amount</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
@@ -176,14 +186,16 @@
         style="background: #fff; border-radius: 16px; padding: 4px"
       >
         <nz-card
-          nzTitle="Receiving Information"
+          nzTitle="Receiver Information"
           nzBordered="false"
           class="none-bottom"
         >
           <form nz-form [formGroup]="validateForm">
             <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
               <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Currency </nz-form-label>
+                <nz-form-label nzRequired nzSpan="24"
+                  >Target Token
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="availableBalanceError">
                   <div nz-row>
                     <div nz-col nzSpan="24">
@@ -201,7 +213,7 @@
                   </div>
                   <ng-template #availableBalanceError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Available Balance</ng-container
+                      >Please input your Target Token</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -233,16 +245,21 @@
                       class="unit-postion"
                       style="color: rgba(0, 0, 0, 0.45)"
                     >
-                      <span> {{ this.reveingCurrecyModelShow }}</span>
+                      <span>
+                        {{
+                          this.reveingCurrecyModelShow +
+                            ' ' +
+                            this.reveingCurrecyModelCount
+                        }}</span
+                      >
                       <span class="m-l-5 m-r-5">{{
                         this.reveingCurrecyModelShowIcon
                       }}</span>
-                      <span>{{ this.reveingCurrecyModelCount }}</span>
                     </div>
                   </div>
                   <ng-template #receivingWalletAddressError let-control>
                     <ng-container *ngIf="control.hasError('required')"
-                      >Please input your Receiving Wallet Address</ng-container
+                      >Please input your Receiver Wallet Address</ng-container
                     >
                   </ng-template>
                 </nz-form-control>
@@ -257,7 +274,7 @@
                   <div nz-row>
                     <div nz-col nzSpan="24">
                       <nz-input-group
-                        [nzAddOnBefore]="reveingCurrecyModelShowIcon"
+                        [nzAddOnAfter]="reveingCurrecyModelShowIcon"
                       >
                         <input
                           type="number"
@@ -275,81 +292,24 @@
                       >Please input your FX Purchase Amount</ng-container
                     >
 
-                    <ng-container
-                      *ngIf="control.hasError('regular')"
-                    ></ng-container>
+                    <ng-container *ngIf="control.hasError('regular')"
+                      >Please fill in the correct amount</ng-container
+                    >
                   </ng-template>
                 </nz-form-control>
               </nz-form-item>
             </div>
-
-            <!-- <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
-              <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="20" nzXXl="12">
-                <nz-form-label nzRequired nzSpan="24">Custodian Bank
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="receivingBankNameError">
-                  <div nz-row>
-                    <div nz-col nzSpan="24">
-                      <input nz-input formControlName="receivingBankName" maxlength="100" readonly
-                        class="onboard-disabled" />
-                    </div>
-                  </div>
-                  <ng-template #receivingBankNameError let-control>
-                    <ng-container *ngIf="control.hasError('required')">Please input your Receiving Custodian Bank
-                      Name</ng-container>
-                  </ng-template>
-                </nz-form-control>
-              </nz-form-item>
-            </div> -->
           </form>
         </nz-card>
       </div>
-      <ng-container *ngIf="showStatus">
+      <ng-container
+        *ngIf="
+          showStatus &&
+          this.validateForm.get('amount')?.value &&
+          this.validateForm.get('reni_sendAmount')?.value
+        "
+      >
         <div
-          nz-col
-          [nzXXl]="23"
-          [nzXl]="23"
-          [nzLg]="23"
-          [nzMd]="23"
-          [nzSm]="24"
-          [nzXs]="24"
-          class="m-t-15 remit"
-          style="background: #fff; border-radius: 16px; padding: 24px"
-        >
-          <div class="remit-title">FX Order Details</div>
-          <nz-descriptions
-            nzLayout="vertical"
-            nzTitle=""
-            [nzColumn]="{ xxl: 4, xl: 4, lg: 2, md: 2, sm: 1, xs: 1 }"
-            class="m-t-20 m-l-20 m-r-20 card-descriptions-order-else"
-            [nzColon]="true"
-            [nzBordered]="false"
-          >
-            <nz-descriptions-item nzTitle="FX Rate">{{
-              remiInfo.rate
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Commission Fee">{{
-              remiInfo.com
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Total Debit Amount">{{
-              remiInfo.total
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Receiving Amount">{{
-              remiInfo.reve
-            }}</nz-descriptions-item
-            ><nz-descriptions-item
-              nzSpan="2"
-              [nzTitle]="this.sendName + ' Liquidity Wallet Address'"
-              >{{ remiInfo.fromCapitalPoolAddress }}</nz-descriptions-item
-            ><nz-descriptions-item
-              nzSpan="2"
-              [nzTitle]="this.beneficiaryName + ' Liquidity Wallet Address'"
-              >{{ remiInfo.toCapitalPoolAddress }}</nz-descriptions-item
-            ></nz-descriptions
-          >
-        </div>
-        <div
-          nz-col
           nz-col
           [nzXXl]="23"
           [nzXl]="23"
@@ -358,22 +318,42 @@
           [nzSm]="24"
           [nzXs]="24"
           class="m-t-60"
-          style="
-            background: #fff;
-            border-radius: 16px;
-            padding: 4px;
-            display: none;
-          "
+          style="background: #fff; border-radius: 16px; padding: 4px"
         >
           <div>
             <nz-card
-              nzTitle="FX  Information"
+              nzTitle="FX Liquidity Providers List"
               nzBordered="false"
               class="none-bottom"
             >
-              <span style="color: rgb(174, 6, 6)">{{
-                'Indicative rate expires as at ' + timeString
-              }}</span>
+              <div class="m-b-10">
+                <span>{{ 'Amount: ' }}</span>
+                <span class="operate-text" style="font-size: 20px"
+                  ><b>{{
+                    this.validateForm.get('reni_sendAmount')?.value
+                      | map: 'toThousandthMark'
+                  }}</b></span
+                >
+                <span
+                  ><b>{{ purchCurrecyModelShowIcon }}</b></span
+                >
+                <span
+                  class="arrow-right m-l-10 m-r-10"
+                  nz-icon
+                  nzType="arrow-right"
+                  nzTheme="outline"
+                ></span>
+                <span class="operate-text" style="font-size: 20px"
+                  ><b>{{
+                    this.validateForm.get('amount')?.value
+                      | map: 'toThousandthMark'
+                  }}</b></span
+                >
+                <span
+                  ><b>{{ reveingCurrecyModelShowIcon }}</b></span
+                >
+              </div>
+
               <nz-table
                 #rowSelectionTable
                 nzShowSizeChanger
@@ -383,11 +363,28 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th>FX Liquidity Provider</th>
+                    <th>
+                      FX Rate
+                      <nz-tag style="opacity: 0.7" [nzColor]="color">{{
+                        rateType | map: 'fxType'
+                      }}</nz-tag>
+                    </th>
+                    <th>Liquidity Provider Name</th>
                     <!-- <th>Currency Pair</th> -->
-                    <th>FX Rate</th>
-                    <th>Commission Fee</th>
-                    <th>Total Debit Amount</th>
+                    <th>
+                      {{
+                        purchCurrecyModelShowIcon +
+                          ' ' +
+                          'Liquidity Pool Address'
+                      }}
+                    </th>
+                    <th>
+                      {{
+                        reveingCurrecyModelShowIcon +
+                          ' ' +
+                          'Liquidity Pool Address'
+                      }}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -410,20 +407,13 @@
                         <label nz-radio [nzValue]="i"></label>
                       </nz-radio-group>
                     </td>
-                    <td>{{ data.sp }}</td>
                     <td>{{ data.currency }}</td>
-                    <!-- <td>{{ data.rate }}</td> -->
+                    <td>{{ data.sp }}</td>
                     <td>
-                      {{ data.com }}
+                      {{ data.fromCapitalPoolAddress }}
                     </td>
                     <td>
-                      <b>{{ data.total }}</b>
-                      <span
-                        style="color: blue; font-weight: 600; margin-left: 30px"
-                        *ngIf="i === 0"
-                        >{{ '
-                        Recommended!' }}</span
-                      >
+                      {{ data.toCapitalPoolAddress }}
                     </td>
                   </tr>
                 </tbody>
@@ -435,7 +425,7 @@
     </div>
   </nz-card>
   <div nz-row nzJustify="center" nzAlign="middle" class="m-t-25 m-b-10 m-r-60">
-    <div nz-col nzSpan="24" style="text-align: end">
+    <div nz-col nzSpan="22" style="text-align: end">
       <button
         *appAuth="'R01020201'"
         nz-button
@@ -476,125 +466,76 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="FX Purchasing Confirmation"
+  nzTitle="Confirm FX Purchase"
   (nzOnCancel)="cancelView()"
   [nzClosable]="false"
   [nzWidth]="1000"
   nzCentered="true"
 >
   <div *nzModalContent>
-    <div
-      nz-row
-      style="display: flex; justify-content: space-around; align-items: center"
-      class="m-t-30"
-    >
-      <div
-        nz-col
-        [nzXXl]="11"
-        [nzXl]="11"
-        [nzLg]="11"
-        [nzMd]="11"
-        [nzSm]="24"
-        [nzXs]="24"
-      >
-        <nz-card nzTitle="Sending Information" class="info-none-bottom">
+    <div nz-row>
+      <div nz-col [nzSpan]="24">
+        <nz-card [nzBordered]="false">
           <nz-descriptions
-            nzLayout="vertical"
             nzTitle=""
             [nzColumn]="1"
             [nzColon]="false"
             [nzBordered]="false"
-            class="card-descriptions-vertical"
+            class="card-descriptions-order"
           >
-            <nz-descriptions-item nzTitle="Sending Amount:">{{
-              validateForm.controls['reni_sendAmount'].value +
-                ' ' +
-                purchCurrecy.replace('-UDPN', '')
+            <nz-descriptions-item nzTitle="Amount"
+              ><span class="operate-text" style="font-size: 16px"
+                ><b>{{
+                  this.validateForm.get('reni_sendAmount')?.value
+                    | map: 'toThousandthMark'
+                }}</b></span
+              >
+              <span>{{ purchCurrecyModelShowIcon }}</span>
+              <span
+                class="arrow-right m-l-10 m-r-10"
+                nz-icon
+                nzType="arrow-right"
+                nzTheme="outline"
+              ></span>
+              <span class="operate-text" style="font-size: 16px"
+                ><b>{{
+                  this.validateForm.get('amount')?.value
+                    | map: 'toThousandthMark'
+                }}</b></span
+              >
+              <span>{{
+                reveingCurrecyModelShowIcon
+              }}</span></nz-descriptions-item
+            >
+            <nz-descriptions-item nzTitle="Sender Wallet Address"
+              ><p
+                nz-typography
+                [nzCopyable]="true"
+                [nzCopyText]="
+                  validateForm.controls['transactionWalletAddress'].value
+                "
+              >
+                {{ validateForm.controls['transactionWalletAddress'].value }}
+              </p></nz-descriptions-item
+            >
+            <nz-descriptions-item nzTitle="Receiver Wallet Address"
+              ><p
+                nz-typography
+                [nzCopyable]="true"
+                [nzCopyText]="receivingWalletAddressShow"
+              >
+                {{ receivingWalletAddressShow }}
+              </p></nz-descriptions-item
+            ><nz-descriptions-item nzTitle="FX Rate"
+              >{{ checkedItemComment[0].currencyShow }}
+              <nz-tag style="opacity: 0.7" [nzColor]="color" class="m-l-15">{{
+                this.rateType | map: 'fxType'
+              }}</nz-tag> </nz-descriptions-item
+            ><nz-descriptions-item nzTitle="Liquidity Provider Name">{{
+              checkedItemComment[0].sp
             }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Sending Wallet Address">{{
-              validateForm.controls['transactionWalletAddress'].value
-            }}</nz-descriptions-item>
-            <!-- <nz-descriptions-item nzTitle="Custodian Bank">{{
-              validateForm.controls['transactionBankName'].value
-              }}</nz-descriptions-item> -->
           </nz-descriptions>
         </nz-card>
-      </div>
-      <div
-        nz-col
-        [nzXXl]="1"
-        [nzXl]="1"
-        [nzLg]="1"
-        [nzMd]="1"
-        [nzSm]="0"
-        [nzXs]="0"
-      >
-        <img src="../../../../assets/imgs//arrow.png" alt="" />
-      </div>
-      <div
-        nz-col
-        [nzXXl]="11"
-        [nzXl]="11"
-        [nzLg]="11"
-        [nzMd]="11"
-        [nzSm]="24"
-        [nzXs]="24"
-      >
-        <nz-card nzTitle="Receiving Information" class="info-none-bottom">
-          <nz-descriptions
-            nzLayout="vertical"
-            nzTitle=""
-            [nzColumn]="1"
-            [nzColon]="false"
-            [nzBordered]="false"
-            class="card-descriptions-vertical"
-          >
-            <nz-descriptions-item nzTitle="Receiving Amount">{{
-              validateForm.controls['amount'].value +
-                ' ' +
-                reveingCurrecy.replace('-UDPN', '')
-            }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Receiving Wallet Address">{{
-              receivingWalletAddressShow
-            }}</nz-descriptions-item>
-            <!-- <nz-descriptions-item nzTitle="Custodian Bank">{{
-              validateForm.controls['receivingBankName'].value
-              }}</nz-descriptions-item> -->
-          </nz-descriptions>
-        </nz-card>
-      </div>
-      <div
-        nz-col
-        [nzXXl]="24"
-        [nzXl]="24"
-        [nzLg]="24"
-        [nzMd]="24"
-        [nzSm]="24"
-        [nzXs]="24"
-      >
-        <nz-descriptions
-          nzLayout="vertical"
-          [nzColumn]="{ xxl: 5, xl: 5, lg: 5, md: 5, sm: 5, xs: 5 }"
-          [nzColon]="false"
-          [nzBordered]="false"
-          class="card-descriptions-vertical m-t-25"
-        >
-          <nz-descriptions-item nzTitle="FX Settlement Bank">{{
-            checkedItemComment[0].sp
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Exchange Rate">{{
-            checkedItemComment[0].currencyShow
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Commission Fee">{{
-            checkedItemComment[0].com
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Total Debit Amount">{{
-            checkedItemComment[0].total
-          }}</nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Receiving Amount">{{
-            checkedItemComment[0].info.reve
-          }}</nz-descriptions-item>
-        </nz-descriptions>
       </div>
     </div>
   </div>

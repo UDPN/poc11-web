@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
+import { ThemeOptionsKey, aesKey, aesVi } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { FxPurchasingService } from '@app/core/services/http/poc-remittance/fx-purchasing/fxPurchasing.service';
@@ -71,6 +72,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   purchCurrecyModelShow = '';
   purchCurrecyModelCount = '';
   purchCurrecyModelShowIcon = '';
+  rateType: any = 0;
   reveingCurrecy!: string;
   reveingCurrecyModelShow = '';
   reveingCurrecyModelCount = '';
@@ -85,6 +87,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   transactionWalletAddressArr: any[] = [];
   inputType = 0;
   sendName = '';
+  color: string = '';
   beneficiaryName = '';
   remiInfo: {
     rate: any;
@@ -112,7 +115,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     private fxPurchasingService: FxPurchasingService,
     private modal: NzModalService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private windowService: WindowService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -130,6 +134,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     let datePipe: DatePipe = new DatePipe('en-US');
     this.timeString = datePipe
       .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
@@ -165,10 +171,12 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (control.value === '') {
+    if (!control.value) {
       return { error: true, required: true };
     } else if (control.value > this.purchCurrecyCount) {
       return { regular: true, error: true };
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -184,7 +192,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   amountValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
       return { regular: true, error: true };
     }
     return {};
@@ -215,7 +223,8 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
             currecy: item.digitalSymbol,
             currecySymbol: item.digitalCurrencyName,
             walletAddress: item.wallets,
-            legalCurrencySymbol: item.legalCurrencySymbol
+            legalCurrencySymbol: item.legalCurrencySymbol,
+            digitalSymbol: item.digitalSymbol
           });
         });
         this.onReceiving(0);
@@ -267,11 +276,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.beneficiaryName = this.fxReceivingData[e]?.currecy;
     this.reveingCurrecy = this.fxReceivingData[e]?.currecySymbol;
     this.reveingCurrecyModelShowIcon =
-      this.fxReceivingData[e].legalCurrencySymbol === null
+      this.fxReceivingData[e].digitalSymbol === null
         ? ''
-        : this.fxReceivingData[e].legalCurrencySymbol;
-    this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+        : this.fxReceivingData[e].digitalSymbol;
+    this.reveingCurrecyModelShow = 'Available Balance: ';
     this.reveingCurrecyModelCount = thousandthMark(
       this.fxReceivingData[e]['walletAddress'][0]['cbdcCount']
     );
@@ -311,13 +319,15 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('focus') onFocusSendAmount() {
-    if (this.reveingCurrecy !== this.purchCurrecy) {
+    const value = this.validateForm.get('reni_sendAmount')?.value;
+    if (this.reveingCurrecy !== this.purchCurrecy && !value) {
       this.validateForm.get('amount')?.setValue('', { emitEvent: false });
       this.inputType = 1;
     }
   }
   @HostListener('focus') onFocusAmount() {
-    if (this.reveingCurrecy !== this.purchCurrecy) {
+    const value = this.validateForm.get('amount')?.value;
+    if (this.reveingCurrecy !== this.purchCurrecy && !value) {
       this.validateForm
         .get('reni_sendAmount')
         ?.setValue('', { emitEvent: false });
@@ -339,8 +349,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     //   (item: any) => item.bankAccountId === e
     // );
     // this.validateForm.get('transactionWalletAddressId')?.setValue(e);
-    this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.purchCurrecyModelShow = 'Available Balance: ';
     this.purchCurrecyModelCount = thousandthMark(
       this.transactionWalletAddressArr[e]['cbdcCount']
     );
@@ -365,8 +374,7 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.fxReceivingDataWallets.filter(
       (item: any) => item.bankAccountId === e
     );
-    this.reveingCurrecyModelShow =
-      this.reveingCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+    this.reveingCurrecyModelShow = 'Available Balance: ';
     this.reveingCurrecyModelCount = thousandthMark(val[0]['cbdcCount']);
     this.availableBalance = val[0]['cbdcCount'];
     if (this.reveingCurrecy === this.purchCurrecy) {
@@ -380,11 +388,10 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendName = this.fxPurchaseData[e].digitalSymbol;
     this.purchCurrecy = this.fxPurchaseData[e].digitalCurrencyName;
     this.purchCurrecyModelShowIcon =
-      this.fxPurchaseData[e].legalCurrencySymbol === null
+      this.fxPurchaseData[e].digitalSymbol === null
         ? ''
-        : this.fxPurchaseData[e].legalCurrencySymbol;
-    this.purchCurrecyModelShow =
-      this.purchCurrecy.replace('-UDPN', '') + ' Available Balance: ';
+        : this.fxPurchaseData[e].digitalSymbol;
+    this.purchCurrecyModelShow = 'Available Balance: ';
     this.purchCurrecyModelCount = thousandthMark(
       this.fxPurchaseData[e]['remitterInformationExtendInfoList'][0][
         'cbdcCount'
@@ -546,28 +553,30 @@ export class FxPurchasingComponent implements OnInit, AfterViewInit, OnDestroy {
           })
           .subscribe((res) => {
             let resultData: any[] = [];
+            this.rateType = res[0].rateType;
             this.transferTitle =
               this.reveingCurrecy.replace('-UDPN', '') +
               '/' +
               this.purchCurrecy.replace('-UDPN', '') +
-              ' Fx Rate';
+              ' FX Rate';
             res.forEach((item: any) => {
               resultData.push({
                 rateId: item.rateId,
                 sp: item.provider,
+                fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+                toCapitalPoolAddress: item.toCapitalPoolAddress,
                 currency:
-                  '1 ' +
                   item.from.replace('-UDPN', '') +
+                  '/' +
+                  item.to.replace('-UDPN', '') +
                   ' = ' +
-                  item.rate +
-                  ' ' +
-                  item.to.replace('-UDPN', ''),
+                  item.rate.toFixed(2),
                 currencyShow:
-                  '1 ' +
                   item.from.replace('-UDPN', '') +
+                  '/' +
+                  item.to.replace('-UDPN', '') +
                   ' = ' +
-                  item.rate +
-                  item.to.replace('-UDPN', ''),
+                  item.rate.toFixed(2),
                 rate: item.rate,
                 com: this.getValCom(item),
                 total: this.getValTotal(item),

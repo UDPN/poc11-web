@@ -181,10 +181,10 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           width: 100
         },
         {
-          title: 'Currency',
+          title: 'Token Currency',
           field: 'currency',
           notNeedEllipsis: true,
-          width: 80
+          width: 150
         },
         {
           title: 'Amount',
@@ -203,11 +203,12 @@ export class CbdcTransactionComponent implements OnInit, AfterViewInit {
           title: 'Status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
-          width: 120
+          width: 100
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

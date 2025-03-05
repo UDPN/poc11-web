@@ -1,3 +1,10 @@
+<!--
+ * @Author: chenyuting
+ * @Date: 2025-01-04 17:30:42
+ * @LastEditors: chenyuting
+ * @LastEditTime: 2025-02-21 13:44:52
+ * @Description: 
+-->
 <app-page-header
   [backTpl]="backTpl"
   [backUrl]="'/poc/poc-system/user'"
@@ -15,7 +22,7 @@
     <form nz-form [formGroup]="validateForm">
       <div nz-row nzJustify="center" nzAlign="middle" class="m-b-10">
         <nz-form-item nz-col nzXs="24" nzSm="18" nzXl="12" nzXXl="12">
-          <nz-form-label nzRequired nzSpan="10">User Name </nz-form-label>
+          <nz-form-label nzRequired nzSpan="10">Username</nz-form-label>
           <nz-form-control [nzErrorTip]="userNameError">
             <div nz-row>
               <div nz-col nzSpan="24">
@@ -30,7 +37,7 @@
             </div>
             <ng-template #userNameError let-control>
               <ng-container *ngIf="control.hasError('required')"
-                >Please input User Name</ng-container
+                >Please input Username</ng-container
               >
               <ng-container *ngIf="control.hasError('regular')"
                 >Numbers, letters or a combination of both,2-30

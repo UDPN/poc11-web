@@ -31,7 +31,7 @@
               <nz-descriptions-item nzTitle="Custodian Bank">
                 {{ info.centralBankName }}
               </nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Currency">
+              <nz-descriptions-item nzTitle="Token Currency">
                 {{ info.currency }}
               </nz-descriptions-item>
               <nz-descriptions-item nzTitle="Created By">{{
@@ -282,30 +282,22 @@
       <a
         [title]="transactionNo"
         nz-typography
-        nzCopyable
+        [nzCopyable]="transactionNo ? true : false"
         [nzCopyText]="transactionNo"
         routerLink="/poc/poc-wallet/cbdc-transaction/info"
         [queryParams]="{transferId}"
       >
-        {{
-          transactionNo.length > 12
-            ? transactionNo.slice(0, 12) + '...'
-            : transactionNo
-        }}
+        {{ transactionNo | map: 'showPartEight' }}
       </a>
     </ng-container>
     <ng-container *ngIf="type === 1 || type === 2 || type === 3">
       <p
         [title]="transactionNo"
         nz-typography
-        nzCopyable
+        [nzCopyable]="transactionNo ? true : false"
         [nzCopyText]="transactionNo"
       >
-        {{
-          transactionNo.length > 12
-            ? transactionNo.slice(0, 12) + '...'
-            : transactionNo
-        }}
+        {{ transactionNo | map: 'showPartEight' }}
       </p>
     </ng-container>
   </ng-container>
@@ -325,17 +317,13 @@
     <p
       [title]="fromAccountAddress"
       nz-typography
-      nzCopyable
+      [nzCopyable]="fromAccountAddress ? true : false"
       *ngIf="
         fromAccountAddress !== '0x0000000000000000000000000000000000000000'
       "
       [nzCopyText]="fromAccountAddress"
     >
-      {{
-        fromAccountAddress.length > 12
-          ? fromAccountAddress.slice(0, 12) + '...'
-          : fromAccountAddress
-      }}
+      {{ fromAccountAddress | map: 'showPartEight' }}
     </p>
   </ng-container>
   <ng-container *ngIf="!fromAccountAddress">
@@ -352,15 +340,11 @@
     <p
       [title]="toAccountAddress"
       nz-typography
-      nzCopyable
+      [nzCopyable]="toAccountAddress ? true : false"
       *ngIf="toAccountAddress !== '0x0000000000000000000000000000000000000000'"
       [nzCopyText]="toAccountAddress"
     >
-      {{
-        toAccountAddress.length > 12
-          ? toAccountAddress.slice(0, 12) + '...'
-          : toAccountAddress
-      }}
+      {{ toAccountAddress | map: 'showPartEight' }}
     </p>
   </ng-container>
   <ng-container *ngIf="!toAccountAddress">
@@ -369,8 +353,13 @@
 </ng-template>
 <ng-template #transactionHashTpl let-txHash="txHash">
   <ng-container *ngIf="txHash">
-    <p [title]="txHash" nz-typography nzCopyable [nzCopyText]="txHash">
-      {{ txHash.length > 12 ? txHash.slice(0, 12) + '...' : txHash }}
+    <p
+      [title]="txHash"
+      nz-typography
+      [nzCopyable]="txHash ? true : false"
+      [nzCopyText]="txHash"
+    >
+      {{ txHash | map: 'showPartEight' }}
     </p>
   </ng-container>
   <ng-container *ngIf="!txHash">
@@ -411,4 +400,9 @@
     nzTooltipTrigger="click"
     nzTooltipOverlayClassName="buils"
   ></i>
+</ng-template>
+<ng-template #stateTpl let-state="state">
+  <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{
+    state | map: 'walletTransactionsRecordStatus'
+  }}</nz-tag>
 </ng-template>

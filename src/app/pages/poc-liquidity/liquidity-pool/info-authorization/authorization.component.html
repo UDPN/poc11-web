@@ -1,0 +1,76 @@
+<!-- Search Form -->
+<nz-card [nzTitle]="'Query'" [nzBodyStyle]="{ 'padding-bottom': 10 }" class="m-b-10">
+    <form nz-form nzLayout="vertical">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Operation Time</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker style="width: 100%" name="operationTime" [(ngModel)]="searchParam.operationTime"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Transaction Hash</nz-form-label>
+            <nz-form-control>
+              <input nz-input placeholder="Enter transaction hash" name="transactionHash" [(ngModel)]="searchParam.transactionHash" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Transaction Time</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker style="width: 100%" name="transactionTime" [(ngModel)]="searchParam.transactionTime"></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="8" [nzXl]="8" [nzLg]="12" [nzMd]="12" [nzSm]="24" [nzXs]="24">
+          <nz-form-item>
+            <nz-form-label>Status</nz-form-label>
+            <nz-form-control>
+              <nz-select name="status" [(ngModel)]="searchParam.status" style="width: 100%">
+                <nz-option *ngFor="let status of statusOptions" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzXXl]="24" [nzXl]="24" [nzLg]="24" [nzMd]="24" [nzSm]="24" [nzXs]="24" class="text-right">
+          <button nz-button nzType="primary" (click)="getDataList()">Query</button>
+          <button nz-button class="m-l-8" (click)="resetForm()">Reset</button>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  
+  <!-- Authorization Records -->
+  <app-card-table-wrap [isNormalTable]="true" [tableTitle]="'Authorization Records'">
+    <app-ant-table
+      (changePageSize)="changePageSize($event)"
+      (changePageNum)="getDataList($event)"
+      [tableConfig]="tableConfig"
+      [tableData]="dataList"
+    ></app-ant-table>
+  
+    <ng-template #hashTpl let-text="field" let-item="item">
+      <ng-container *ngIf="item[text]">
+        <span nz-typography [nzCopyable]="true" [nzCopyText]="item[text]">{{ item[text] }}</span>
+      </ng-container>
+      <ng-container *ngIf="!item[text]">
+        --
+      </ng-container>
+    </ng-template>
+  
+    <ng-template #amountTpl let-data>
+      <span>{{ formatAmount(data.authorizedAmount, data.tokenSymbol) }}</span>
+    </ng-template>
+  
+    <ng-template #statusTpl let-status="status">
+        <nz-tag [nzColor]="getStatusColor(status)">{{ getStatusText(status) }}</nz-tag> 
+
+    </ng-template>
+    
+  </app-card-table-wrap>
+
+

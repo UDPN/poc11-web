@@ -19,8 +19,8 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs';
 
 interface SearchParam {
-  applicationTime: Array<any>;
-  approvalTime: Array<any>;
+  applicationTime: any;
+  approvalTime: any;
   businessApplicationStatus: string;
   businessApplicationCode: string;
   applicationType: string;

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
@@ -29,7 +36,8 @@ export class RoleManageComponent implements OnInit {
   searchParam: Partial<SearchParam> = {};
   tableConfig!: AntTableConfig;
   pageHeaderInfo: Partial<PageHeaderType> = {
-    title: 'Role management database (once every 10 minutes to recover from a backup)',
+    title:
+      'Role management database (once every 10 minutes to recover from a backup)',
     breadcrumb: ['Home page', 'User management', 'Role management']
   };
   dataList: Role[] = [];
@@ -44,7 +52,7 @@ export class RoleManageComponent implements OnInit {
     private modalService: RoleManageModalService,
     private router: Router,
     public message: NzMessageService
-  ) { }
+  ) {}
 
   selectedChecked(e: any): void {
     // @ts-ignore
@@ -70,7 +78,7 @@ export class RoleManageComponent implements OnInit {
           this.tableLoading(false);
         })
       )
-      .subscribe(data => {
+      .subscribe((data) => {
         const { list, total, pageNum } = data;
         this.dataList = [...list];
         this.tableConfig.total = total!;
@@ -80,14 +88,13 @@ export class RoleManageComponent implements OnInit {
       });
   }
 
-
   setRole(id: number): void {
-    this.router.navigate(['/default/system/role-manager/set-role'], { queryParams: { id: id } });
+    this.router.navigate(['/default/system/role-manager/set-role'], {
+      queryParams: { id: id }
+    });
   }
 
-
   tableChangeDectction(): void {
-
     this.dataList = [...this.dataList];
     this.cdr.detectChanges();
   }
@@ -99,7 +106,7 @@ export class RoleManageComponent implements OnInit {
 
   add(): void {
     this.modalService.show({ nzTitle: 'new' }).subscribe(
-      res => {
+      (res) => {
         if (!res || res.status === ModalBtnStatus.Cancel) {
           return;
         }
@@ -107,7 +114,7 @@ export class RoleManageComponent implements OnInit {
         this.tableLoading(true);
         this.addEditData(param, 'addRoles');
       },
-      error => this.tableLoading(false)
+      (error) => this.tableLoading(false)
     );
   }
 
@@ -116,9 +123,8 @@ export class RoleManageComponent implements OnInit {
     this.getDataList();
   }
 
-
   edit(id: number): void {
-    this.dataService.getRolesDetail(id).subscribe(res => {
+    this.dataService.getRolesDetail(id).subscribe((res) => {
       this.modalService.show({ nzTitle: 'The editor' }, res).subscribe(
         ({ modalValue, status }) => {
           if (status === ModalBtnStatus.Cancel) {
@@ -128,7 +134,7 @@ export class RoleManageComponent implements OnInit {
           this.tableLoading(true);
           this.addEditData(modalValue, 'editRoles');
         },
-        error => this.tableLoading(false)
+        (error) => this.tableLoading(false)
       );
     });
   }
@@ -153,12 +159,11 @@ export class RoleManageComponent implements OnInit {
             }
             this.getDataList();
           },
-          error => this.tableLoading(false)
+          (error) => this.tableLoading(false)
         );
       }
     });
   }
-
 
   changePageSize(e: number): void {
     this.tableConfig.pageSize = e;
@@ -175,16 +180,19 @@ export class RoleManageComponent implements OnInit {
         {
           title: 'Character name',
           field: 'roleName',
+          notNeedEllipsis: true,
           width: 100
         },
         {
           title: 'note',
           width: 100,
-          field: 'roleDesc'
+          field: 'roleDesc',
+          notNeedEllipsis: true
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

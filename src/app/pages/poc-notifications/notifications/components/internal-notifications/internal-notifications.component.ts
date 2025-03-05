@@ -35,7 +35,7 @@ export class InternalNotificationsComponent {
     filter: []
   };
   tableConfig!: AntTableConfig;
-  dataList: NzSafeAny[] = [{}];
+  dataList: NzSafeAny[] = [];
   modalInfo: any = {};
   isVisible: boolean = false;
   constructor(
@@ -171,6 +171,7 @@ export class InternalNotificationsComponent {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

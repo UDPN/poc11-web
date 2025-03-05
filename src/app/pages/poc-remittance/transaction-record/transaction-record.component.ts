@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-09 15:40:52
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-06 14:35:27
+ * @LastEditTime: 2025-03-03 11:20:36
  * @Description:
  */
 import {
@@ -67,6 +67,8 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
   statusTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('amountTpl', { static: true })
   amountTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('fxRateTpl', { static: true })
+  fxRateTpl!: TemplateRef<NzSafeAny>;
   searchParam: Partial<SearchParam> = {
     creationTime: [],
     state: '',
@@ -194,55 +196,56 @@ export class TransactionRecordComponent implements OnInit, AfterViewInit {
           title: 'Transaction No.',
           tdTemplate: this.transactionNoTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'From',
           tdTemplate: this.fromTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'To',
           tdTemplate: this.toTpl,
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'Type',
           field: 'type',
           pipe: 'transactionsRecordType',
           notNeedEllipsis: true,
-          width: 100
-        },
-        {
-          title: 'Currency',
-          field: 'currency',
-          notNeedEllipsis: true,
-          width: 100
+          width: 130
         },
         {
           title: 'Amount',
           tdTemplate: this.amountTpl,
           notNeedEllipsis: true,
-          width: 100
+          width: 150
+        },
+        {
+          title: 'FX Rate',
+          tdTemplate: this.fxRateTpl,
+          notNeedEllipsis: true,
+          width: 140
         },
         {
           title: 'Created on',
           field: 'createTime',
           pipe: 'timeStamp',
           notNeedEllipsis: true,
-          width: 150
+          width: 180
         },
         {
           title: 'Status',
           tdTemplate: this.statusTpl,
           notNeedEllipsis: true,
-          width: 120
+          width: 100
         },
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

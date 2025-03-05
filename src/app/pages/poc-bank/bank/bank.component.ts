@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-12-10 17:23:08
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-05 16:47:00
+ * @LastEditTime: 2025-02-24 19:55:57
  * @Description:
  */
 import {
@@ -212,7 +212,7 @@ export class BankComponent implements OnInit, AfterViewInit {
           width: 200
         },
         {
-          title: 'Currency',
+          title: 'Token',
           field: 'currency',
           notNeedEllipsis: true,
           width: 120

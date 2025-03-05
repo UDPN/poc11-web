@@ -59,9 +59,15 @@ export class HttpInterceptorService implements HttpInterceptor {
       this.pocHomeService.isFirstLogin().subscribe((res: any) => {
         return res;
       });
+      let prefixUrl: string = '';
+      if (req.url.indexOf('v2') !== -1) {
+        prefixUrl = '/api/manage';
+      } else {
+        prefixUrl = '/wcbdccommercial';
+      }
       httpConfig = {
         headers: req.headers.set('token', token),
-        url: (environment.production ? '/wcbdccommercial' : '') + req.url
+        url: (environment.production ? prefixUrl : '') + req.url
       };
     } else {
       httpConfig = {
@@ -97,7 +103,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
       this.errorCode = this.modal.error({
         nzTitle:
-          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contract support.',
+          'There is an error in backend system, please wait and try again in a few minutes.  If you encounter this issue all the time, please contact support.',
         nzContent: ''
       });
     }

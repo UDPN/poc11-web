@@ -84,7 +84,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Created on</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
             <nz-form-control>
               <nz-range-picker
                 style="width: 100%"
@@ -112,11 +112,9 @@
                 [(ngModel)]="searchParam.status"
               >
                 <nz-option nzValue="" nzLabel="All"></nz-option>
-                <nz-option nzValue="1" nzLabel="Pending Approval"></nz-option>
-                <nz-option nzValue="3" nzLabel="Processing"></nz-option>
-                <nz-option nzValue="5" nzLabel="Success"></nz-option>
-                <nz-option nzValue="6" nzLabel="Failed"></nz-option>
-                <nz-option nzValue="2" nzLabel="Rejected"></nz-option>
+                <nz-option nzValue="20" nzLabel="Processing"></nz-option>
+                <nz-option nzValue="35" nzLabel="Success"></nz-option>
+                <nz-option nzValue="40" nzLabel="Failed"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -167,14 +165,10 @@
         <p
           [title]="transactionNo"
           nz-typography
-          nzCopyable
+          [nzCopyable]="transactionNo ? true : false"
           [nzCopyText]="transactionNo"
         >
-          {{
-            transactionNo.length > 12
-              ? transactionNo.slice(0, 12) + '...'
-              : transactionNo
-          }}
+          {{ transactionNo | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container *ngIf="!transactionNo">
@@ -186,17 +180,13 @@
         <p
           [title]="type === 1 ? to : from"
           nz-typography
-          nzCopyable
+          [nzCopyable]="(type === 1 ? to : from) ? true : false"
           [nzCopyText]="type === 1 ? to : from"
         >
           {{
             type === 1
-              ? to.length > 12
-                ? to.slice(0, 12) + '...'
-                : to
-              : from.length > 12
-              ? from.slice(0, 12) + '...'
-              : from
+              ? (to | map: 'showPartEight')
+              : (from | map: 'showPartEight')
           }}
         </p>
       </ng-container>
@@ -204,7 +194,7 @@
     <ng-template #toTpl let-to="to">
       <ng-container *ngIf="to">
         <p [title]="to" nz-typography nzCopyable [nzCopyText]="to">
-          {{ to.length > 12 ? to.slice(0, 12) + '...' : to }}
+          {{ to | map: 'showPartEight' }}
         </p>
       </ng-container>
       <ng-container *ngIf="!to">
@@ -218,8 +208,8 @@
       >
     </ng-template>
     <ng-template #statusTpl let-status="status">
-      <nz-tag [nzColor]="status | map: 'walletTransactionsStatusColor'">{{
-        status | map: 'walletTransactionsStatus'
+      <nz-tag [nzColor]="status | map: 'transactionsRecordStatusColor'">{{
+        status | map: 'walletTransactionsRecordStatus'
       }}</nz-tag>
     </ng-template>
     <ng-template #operationTpl let-transferId="transferId">

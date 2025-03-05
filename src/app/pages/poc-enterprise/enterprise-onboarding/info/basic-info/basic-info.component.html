@@ -1,0 +1,139 @@
+<nz-card>
+  <div nz-row>
+    <div nz-col [nzSpan]="24">
+      <!-- Enterprise Information -->
+      <div class="info-section">
+        <h2>Enterprise Information</h2>
+        <div class="info-table">
+          <table>
+            <tr>
+              <td class="label">Enterprise Code</td>
+              <td>
+                {{ enterpriseDetail.enterpriseCode }}
+                <i nz-icon nzType="copy" nzTheme="outline" class="copy-icon" nz-tooltip="Copy" (click)="copy(enterpriseDetail.enterpriseCode)"></i>
+                <nz-tag [nzColor]="'success'" *ngIf="status === 1">Active</nz-tag>
+              </td>
+              <td class="label">Enterprise Name</td>
+              <td>{{ enterpriseDetail.enterpriseName }}</td>
+            </tr>
+            <tr>
+              <td class="label">Contact Name</td>
+              <td>{{ enterpriseDetail.contactName || '--' }}</td>
+              <td class="label">Email</td>
+              <td>{{ enterpriseDetail.contactEmail }}</td>
+            </tr>
+            <tr>
+              <td class="label">Enterprise Bank</td>
+              <td>{{ enterpriseDetail.enterpriseFlatBank }}</td>
+              <td class="label">Enterprise Account</td>
+              <td>
+                {{ enterpriseDetail.enterpriseFlatAccount }}
+                <i nz-icon nzType="copy" nzTheme="outline" class="copy-icon" nz-tooltip="Copy" (click)="copy(enterpriseDetail.enterpriseFlatAccount)"></i>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">Description</td>
+              <td colspan="3">{{ enterpriseDetail.remarks || '--' }}</td>
+            </tr>
+            <tr>
+              <td class="label">Created by</td>
+              <td>{{ enterpriseDetail.createUser }}</td>
+              <td class="label">Created on</td>
+              <td>{{ enterpriseDetail.createTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Approval Rules and Settings -->
+      <div class="info-section">
+        <h2>Approval Rules and Settings</h2>
+        <div class="info-table">
+          <table>
+            <tr>
+              <td class="label">Generate Wallet</td>
+              <td>{{ enterpriseDetail.walletApproval === 1 ? 'Approval Required' : 'No Approval Required' }}</td>
+              <td class="label">Maximum transfer/FX purchasing amount allowed without requiring approval (excluding transactions within a single account)</td>
+              <td>{{ enterpriseDetail.txApprovalThreshold || '0.00' }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Token Permission -->
+      <div class="info-section">
+        <h2>Token Permission</h2>
+        <div class="info-table">
+          <table>
+            <tr>
+              <td class="label">Token Name</td>
+              <td>
+                <nz-tag class="token-tag" *ngFor="let token of enterpriseDetail.tokenList">
+                  {{ token.tokenName }} (Hyperledger Besu)
+                </nz-tag>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Onboarding Approval Information -->
+      <div class="info-section">
+        <h2>Onboarding Approval Information</h2>
+        <div class="info-table">
+          <table>
+            <tr>
+              <td class="label">Approval Result</td>
+              <td>Approved</td>
+              <td class="label">Comments</td>
+              <td>Approved</td>
+            </tr>
+            <tr>
+              <td class="label">Approved by</td>
+              <td>admin</td>
+              <td class="label">Approved on</td>
+              <td>{{ enterpriseDetail.approvalTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Access Information -->
+      <div class="info-section">
+        <h2>Access Information</h2>
+        <div class="info-table">
+          <table>
+            <tr>
+              <td class="label">OpenAPI Access</td>
+              <td>
+                <a (click)="downloadSecretKey()">Download your OpenAPI access key pair for authentication</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">Access Address</td>
+              <td>
+                {{ enterpriseDetail.accessAddress }}
+                <i nz-icon nzType="copy" nzTheme="outline" class="copy-icon" nz-tooltip="Copy" (click)="copy(enterpriseDetail.accessAddress)"></i>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">Access Key</td>
+              <td>
+                {{ enterpriseDetail.accessKey }}
+                <i nz-icon nzType="copy" nzTheme="outline" class="copy-icon" nz-tooltip="Copy" (click)="copy(enterpriseDetail.accessKey)"></i>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-card>
+
+<style>
+  .small-text {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-bottom: 4px;
+  }
+</style>

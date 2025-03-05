@@ -112,7 +112,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
     });
     this.pageHeaderInfo = {
       title: ``,
-      breadcrumb: ['Wallet Management', 'CBDC Wallet Management'],
+      breadcrumb: ['Wallet Management', 'Wallet Creation'],
       extra: this.headerExtra,
       desc: this.headerContent,
       footer: ''
@@ -409,17 +409,17 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
           width: 150
         },
         {
-          title: 'Currency',
+          title: 'Token Currency',
           field: 'currency',
           notNeedEllipsis: true,
-          width: 120
+          width: 150
         },
         {
           title: 'Balance',
           field: 'balance',
           pipe: 'toThousandthMark',
           notNeedEllipsis: true,
-          width: 150
+          width: 120
         },
         {
           title: 'Created on',
@@ -437,6 +437,7 @@ export class CbdcWalletComponent implements OnInit, AfterViewInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

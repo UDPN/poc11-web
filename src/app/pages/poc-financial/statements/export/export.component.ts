@@ -69,8 +69,8 @@ export class ExportComponent implements OnInit, AfterViewInit {
   txnTypesTpl!: TemplateRef<NzSafeAny>;
   @ViewChild('transactionPeriodTpl', { static: true })
   transactionPeriodTpl!: TemplateRef<NzSafeAny>;
-  tokenList: Array<any> = [];
-  blockchainList: Array<any> = [];
+  tokenList: any = [];
+  blockchainList: any = [];
   tableConfig!: AntTableConfig;
   dataList: NzSafeAny[] = [];
   txTypesError: boolean = false;
@@ -429,6 +429,7 @@ export class ExportComponent implements OnInit, AfterViewInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

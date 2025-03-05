@@ -1,0 +1,59 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-liquidity/token-pair'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <!-- FX Type -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24">FX Type</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Please select FX Type">
+          <input nz-input formControlName="fxType" [disabled]="true" readonly />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Token Pair -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Token Pair</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Please select at least one token pair">
+          <div class="token-pairs-container">
+            <label nz-checkbox 
+              [nzChecked]="allChecked"
+              [nzIndeterminate]="indeterminate"
+              (nzCheckedChange)="updateAllChecked($event)">
+              Check All
+            </label>
+            <div class="token-pairs-grid">
+              <label *ngFor="let pair of tokenPairs" 
+                     nz-checkbox 
+                     [nzValue]="pair.value"
+                     [nzChecked]="isChecked(pair.value)"
+                     (nzCheckedChange)="onItemChecked(pair.value, $event)">
+                {{ pair.label }}
+              </label>
+            </div>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button nz-button (click)="onBack()">Back</button>
+        <button 
+          nz-button 
+          nzType="primary" 
+          type="submit" 
+          [nzLoading]="submitting"
+          [disabled]="!validateForm.valid || validateForm.get('selectedTokens')?.value?.length === 0">
+          Submit
+        </button>
+      </div>
+    </form>
+  </nz-card>
+</div>

@@ -25,7 +25,7 @@
         [nzCopyable]="fileId ? true : false"
         [nzCopyText]="fileId"
       >
-        {{ fileId | map: 'showPartTen' }}
+        {{ fileId | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #fileHashTpl let-fileHash="fileHash">
@@ -35,7 +35,7 @@
         [nzCopyable]="fileHash ? true : false"
         [nzCopyText]="fileHash"
       >
-        {{ fileHash | map: 'showPartTen' }}
+        {{ fileHash | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #statusTpl let-exportState="exportState">

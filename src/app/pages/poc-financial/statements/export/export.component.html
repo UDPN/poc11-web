@@ -106,9 +106,9 @@
                 [(ngModel)]="exportParam.txTypes"
                 (ngModelChange)="getTxTypes($event)"
               >
-                          <!-- 1: Top-up 2: Withdraw 3: Transfer4Swap 5:Exchange -->
+                <!-- 1: Top-up 2: Withdrawal 3: Transfer4Swap 5:Exchange -->
                 <nz-option nzValue="1" nzLabel="Top-up"></nz-option>
-                <nz-option nzValue="2" nzLabel="Withdraw"></nz-option>
+                <nz-option nzValue="2" nzLabel="Withdrawal"></nz-option>
                 <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
                 <nz-option nzValue="4" nzLabel="Swap"></nz-option>
                 <nz-option nzValue="5" nzLabel="Exchange"></nz-option>
@@ -363,7 +363,7 @@
         [nzCopyable]="fileId ? true : false"
         [nzCopyText]="fileId"
       >
-        {{ fileId | map: 'showPartTen' }}
+        {{ fileId | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #fileHashTpl let-fileHash="fileHash">
@@ -373,7 +373,7 @@
         [nzCopyable]="fileHash ? true : false"
         [nzCopyText]="fileHash"
       >
-        {{ fileHash | map: 'showPartTen' }}
+        {{ fileHash | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #statusTpl let-exportState="exportState">
@@ -388,7 +388,7 @@
         [nzCopyable]="proofHash ? true : false"
         [nzCopyText]="proofHash"
       >
-        {{ proofHash | map: 'showPartTen' }}
+        {{ proofHash | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #walletAddressTpl let-walletAddress="walletAddress">
@@ -398,7 +398,7 @@
         [nzCopyable]="walletAddress ? true : false"
         [nzCopyText]="walletAddress"
       >
-        {{ walletAddress | map: 'showPartTen' }}
+        {{ walletAddress | map: 'showPartEight' }}
       </p>
     </ng-template>
     <ng-template #proofStatusTpl let-proofState="proofState">

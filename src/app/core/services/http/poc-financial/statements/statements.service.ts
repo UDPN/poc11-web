@@ -17,7 +17,7 @@ export interface Adata {
   taskName: string;
   timeZone: string;
   tokenId: string | number;
-  txTypes: Array<any>;
+  txTypes: any;
 }
 
 export interface Sdata {

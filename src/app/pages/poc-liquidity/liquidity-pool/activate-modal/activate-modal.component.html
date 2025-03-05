@@ -1,0 +1,31 @@
+<p>{{ status === 1 ? 'Deactivate' : 'Activate' }} the Liquidity Pool Address to {{ status === 1 ? 'disable' : 'enable' }} FX purchasing and {{ status === 1 ? 'prevent' : 'facilitate' }} transfers between different currencies.</p>
+
+<div class="form-content">
+  <div class="form-item">
+    <label>Liquidity Pool Address</label>
+    <input nz-input [ngModel]="liquidityPoolAddress" [disabled]="true" />
+  </div>
+
+  <div class="form-item">
+    <label>Token</label>
+    <input nz-input [ngModel]="token" [disabled]="true" />
+  </div>
+
+  <div class="form-item">
+    <label><span class="required">*</span>Comments</label>
+    <textarea 
+      nz-input 
+      [(ngModel)]="comments"
+      [nzAutosize]="{ minRows: 4, maxRows: 6 }"
+      maxlength="200"
+    ></textarea>
+    <div class="char-count">
+      <span>{{ comments.length || 0 }} / 200</span>
+    </div>
+  </div>
+</div>
+
+<div *nzModalFooter>
+  <button nz-button (click)="handleCancel()">Cancel</button>
+  <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isLoading">{{ status === 1 ? 'Deactivate' : 'Activate' }}</button>
+</div> 

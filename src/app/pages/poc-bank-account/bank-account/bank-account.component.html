@@ -30,18 +30,18 @@
             class="fiat-money-descriptions-order"
           >
             <nz-descriptions-item [nzTitle]="'Custodian Bank'"
-              ><span>{{
-                info?.centralBankName | map: 'showPart'
+              ><span [title]="info?.centralBankName">{{
+                info?.centralBankName | map: 'showPartEight'
               }}</span></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Account Number'"
               ><span
                 nz-typography
-                nzCopyable
+                [nzCopyable]="info?.bankAccountNo ? true : false"
                 [nzCopyText]="info?.bankAccountNo"
                 style="color: #fff"
                 [title]="info?.bankAccountNo"
-                >{{ info?.bankAccountNo | map: 'showPart' }}</span
+                >{{ info?.bankAccountNo | map: 'showPartEight' }}</span
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Mock Money Balance'"
@@ -84,11 +84,11 @@
             <nz-descriptions-item [nzTitle]="'Master Wallet Address'"
               ><span
                 nz-typography
-                nzCopyable
+                [nzCopyable]="walletInfo?.walletAddress ? true : false"
                 [nzCopyText]="walletInfo?.walletAddress"
                 style="color: #fff"
                 [title]="walletInfo?.walletAddress"
-                >{{ walletInfo?.walletAddress | map: 'showPart' }}</span
+                >{{ walletInfo?.walletAddress | map: 'showPartEight' }}</span
               ></nz-descriptions-item
             >
             <nz-descriptions-item [nzTitle]="'Current Balance'"
@@ -293,7 +293,7 @@
   >
     <app-ant-table
       (changePageSize)="changePageSize($event)"
-      (changePageNum)="getChange($event, this.centralBankId)"
+      (changePageNum)="this.getDataList($event, this.centralBankId)"
       [tableConfig]="tableConfig"
       [tableData]="dataList"
     ></app-ant-table>
@@ -301,11 +301,11 @@
       <p
         [title]="transactionId"
         nz-typography
-        nzCopyable
+        [nzCopyable]="transactionId ? true : false"
         *ngIf="transactionId"
         [nzCopyText]="transactionId"
       >
-        {{ transactionId | map: 'showPartTen' }}
+        {{ transactionId | map: 'showPartEight' }}
       </p>
       <p *ngIf="!transactionId">{{ '--' }}</p>
     </ng-template>
@@ -357,7 +357,7 @@
 </ng-template>
 <nz-modal
   [(nzVisible)]="isVisibleTopUp"
-  nzTitle="Top up"
+  nzTitle="Top-up"
   (nzOnCancel)="cancelTopUp()"
   [nzClosable]="false"
   [nzWidth]="800"
@@ -440,7 +440,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Payment Currency
+              Payment Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="amountError"
@@ -455,14 +455,14 @@
               </ng-template>
               <ng-template #amountError let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Payment Currency</ng-container
+                  >Please input your Payment Amount</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular1')"
-                  >The Payment Currency cannot be greater than the Available
+                  >The Payment Amount cannot be greater than the Available
                   Balance</ng-container
                 >
               </ng-template>
@@ -522,7 +522,7 @@
 </nz-modal>
 <nz-modal
   [(nzVisible)]="isVisibleWithdraw"
-  nzTitle="Withdraw"
+  nzTitle="Withdrawal"
   (nzOnCancel)="cancelWithdraw()"
   [nzClosable]="false"
   [nzWidth]="800"
@@ -607,7 +607,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label nzRequired nzSpan="8" class="text-left">
-              Amount of Currency
+              Receiving Amount
             </nz-form-label>
             <nz-form-control
               [nzErrorTip]="amount1Error"
@@ -622,14 +622,14 @@
               </ng-template>
               <ng-template #amount1Error let-control>
                 <ng-container *ngIf="control.hasError('required')"
-                  >Please input your Amount of Currency</ng-container
+                  >Please input your Receiving Amount</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular')"
                   >You can enter only positive integer numbers with a maximum of
                   2 decimal places.</ng-container
                 >
                 <ng-container *ngIf="control.hasError('regular1')"
-                  >The Amount of Currency cannot be greater than the Available
+                  >The Receiving Amount cannot be greater than the Available
                   Balance</ng-container
                 >
               </ng-template>

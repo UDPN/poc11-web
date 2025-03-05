@@ -8,15 +8,11 @@
 </ng-template>
 <div class="normal-detail-table-wrap">
   <nz-card [nzBordered]="true" class="m-b-10">
-    <nz-descriptions
-      nzTitle=""
-      [nzColon]="false"
-      [nzBordered]="true"
-    >
-      <nz-descriptions-item nzTitle="User Name" [nzSpan]="3">{{
+    <nz-descriptions nzTitle="" [nzColon]="false" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="Username" [nzSpan]="3">{{
         info.userName
       }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Real Name	" [nzSpan]="3">{{
+      <nz-descriptions-item nzTitle="Real Name" [nzSpan]="3">{{
         info.realName
       }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Telephone Number" [nzSpan]="3">{{

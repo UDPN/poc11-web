@@ -16,7 +16,8 @@ import {
   Validators
 } from '@angular/forms';
 import { Route, Router } from '@angular/router';
-import { aesKey, aesVi } from '@app/config/constant';
+import { ThemeOptionsKey, aesKey, aesVi } from '@app/config/constant';
+import { WindowService } from '@app/core/services/common/window.service';
 import { LoginService } from '@app/core/services/http/login/login.service';
 import { PocCapitalPoolService } from '@app/core/services/http/poc-capital-pool/poc-capital-pool.service';
 import { TransferService } from '@app/core/services/http/poc-remittance/transfer/transfer.service';
@@ -86,6 +87,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   valueValidator: string = '';
   valueValidator1: string = '';
   oldAmount: any = '';
+  rateType: any = 0;
   remiInfo: {
     rate: any;
     com: any;
@@ -103,6 +105,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   };
   inputType = 0;
   bankNames = '';
+  color: string = '';
   amountValue: any;
   reniSendAmountValue: any;
   isError: boolean = true;
@@ -114,7 +117,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     private fb: FormBuilder,
     private transferService: TransferService,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private windowService: WindowService
   ) {}
   ngOnDestroy(): void {
     this.timeSubscription.unsubscribe();
@@ -177,6 +181,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    const themeOptionsKey: any = this.windowService.getStorage(ThemeOptionsKey);
+    this.color = JSON.parse(themeOptionsKey).color;
     let datePipe: DatePipe = new DatePipe('en-US');
     this.timeString = datePipe
       .transform(new Date().getTime() + 180000, 'MMMM d, y HH:mm:ss a zzzz')
@@ -217,10 +223,12 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   sendAmountValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (control.value === '') {
+    if (!control.value) {
       return { error: true, required: true };
     } else if (control.value > this.availableCurrecyModelCount) {
       return { regular: true, error: true };
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
+      return { regular1: true, error: true };
     }
     return {};
   };
@@ -288,7 +296,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       this.availableCurrecyModel === this.beneficiaryCurrency
     ) {
       return { regular: true, error: true };
-    } else if (!/^(([1-9]{1}\d*)|(0{1}))(\.\d{0,2})?$/.test(control.value)) {
+    } else if (!/^([1-9]\d*|0)(\.\d{0,2})?$/.test(control.value)) {
       return { regular1: true, error: true };
     }
     return {};
@@ -390,8 +398,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     const val = this.remitterWalletAddressList.filter(
       (item: any) => item.bankAccountId === e
     );
-    this.availableCurrecyModelShow =
-      this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
+    this.availableCurrecyModelShow = 'Available Balance: ';
     this.availableCount = thousandthMark(val[0].cbdcCount);
     this.validateForm
       .get('availableBalance')
@@ -588,22 +595,24 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .subscribe((res) => {
         let resultData: any[] = [];
+        this.rateType = res[0].rateType;
         this.transferTitle =
           this.availableCurrecyModel.replace('-UDPN', '') +
           '/' +
           this.beneficiaryCurrency.replace('-UDPN', '') +
-          ' Fx Rate';
+          ' FX Rate';
         res.forEach((item: any) => {
           resultData.push({
             rateId: item.rateId,
             sp: item.provider,
+            fromCapitalPoolAddress: item.fromCapitalPoolAddress,
+            toCapitalPoolAddress: item.toCapitalPoolAddress,
             currency:
-              '1 ' +
               item.from.replace('-UDPN', '') +
+              '/' +
+              item.to.replace('-UDPN', '') +
               ' = ' +
-              item.rate +
-              ' ' +
-              item.to.replace('-UDPN', ''),
+              item.rate.toFixed(2),
             rate: item.rate,
             com: this.getValCom(item),
             total: this.getValTotal(item),
@@ -695,7 +704,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.sendName = val[0].digitalSymbol;
     this.availableCurrecyModelShowIcon =
-      val[0].legalCurrencySymbol === null ? '' : val[0].legalCurrencySymbol;
+      val[0].digitalSymbol === null ? '' : val[0].digitalSymbol;
     this.availableCurrecyModelShow =
       this.availableCurrecyModel.replace('-UDPN', '') + ' Available Balance: ';
     this.availableCount = thousandthMark(
@@ -734,7 +743,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('focus') onFocusSendAmount() {
-    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+    const value = this.validateForm.get('reni_sendAmount')?.value;
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel && !value) {
       this.validateForm.get('amount')?.setValue('', { emitEvent: false });
       this.inputType = 1;
     }
@@ -750,7 +760,8 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   @HostListener('focus') onFocusAmount() {
-    if (this.beneficiaryCurrency !== this.availableCurrecyModel) {
+    const value = this.validateForm.get('amount')?.value;
+    if (this.beneficiaryCurrency !== this.availableCurrecyModel && !value) {
       this.validateForm
         .get('reni_sendAmount')
         ?.setValue('', { emitEvent: false });
@@ -771,7 +782,7 @@ export class TransferComponent implements OnInit, AfterViewInit, OnDestroy {
       (item: any) => item.digitalCurrencyName === e
     );
     this.beneficiaryName = val[0]['digitalSymbol'];
-    this.beneficiaryCurrencyIcon = val[0]['legalCurrencySymbol'];
+    this.beneficiaryCurrencyIcon = val[0]['digitalSymbol'];
     // centralBankId
     this.newToCommercialBankId = val[0]['centralBankId'];
     this.BeneficiaryArr = val[0]['beneficiaryWalletExtendedRespVOs'];

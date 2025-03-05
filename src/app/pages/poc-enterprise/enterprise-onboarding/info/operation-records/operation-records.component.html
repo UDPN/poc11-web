@@ -1,0 +1,73 @@
+  <nz-card>
+    <div class="m-b-20">
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label>Operation Type</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                [(ngModel)]="operationType"
+                (ngModelChange)="onOperationTypeChange()"
+                style="width: 100%"
+              >
+                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+                <nz-option [nzValue]="1" nzLabel="Onboard"></nz-option>
+                <nz-option [nzValue]="2" nzLabel="Edit"></nz-option>
+                <nz-option [nzValue]="3" nzLabel="Enable"></nz-option>
+                <nz-option [nzValue]="4" nzLabel="Deactivate"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="18" style="text-align: right;">
+          <button nz-button (click)="resetFilter()">Reset</button>
+          <button nz-button nzType="primary" class="m-l-8" (click)="loadRecordList()">Query</button>
+        </div>
+      </div>
+    </div>
+
+    <nz-table
+      #basicTable
+      [nzData]="recordList"
+      [nzFrontPagination]="false"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      [nzLoading]="loading"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th>Operation Type</th>
+          <th>Created by</th>
+          <th>Created on</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ getOperationTypeText(data.operationType) }}</td>
+          <td>
+            <p nz-typography [nzCopyable]="data.createUser ? true : false" [nzCopyText]="data.createUser">
+              {{ data.createUser || '' }}
+            </p>
+          </td>
+          <td>{{ data.createTime | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
+          <td>
+            <nz-tag [nzColor]="getStatusColor(data.status)">
+              {{ getStatusText(data.status) }}
+            </nz-tag>
+          </td>
+          <td>
+            <ng-container *ngIf="data.status === 35; else detailsButton">
+              N/A
+            </ng-container>
+            <ng-template #detailsButton>
+              <a nz-button nzType="link" routerLink="/poc/poc-enterprise/enterprise-onboarding/op-info" [queryParams]="{ enterpriseId: enterpriseId,status: data.status }">Details</a>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>

@@ -1,0 +1,577 @@
+<app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<div class="normal-table-wrap">
+  <nz-card [nzBodyStyle]="{ 'padding-bottom': 0 }" class="m-b-10"
+    ><nz-tabset (nzSelectedIndexChange)="tabIndexChange($event)">
+      <nz-tab *ngFor="let tab of tabs; index as i" [nzTitle]="tab">
+        <nz-card
+          nzTitle="Query"
+          [nzBodyStyle]="{ 'padding-bottom': 0 }"
+          nzBordered="false"
+          class="m-b-10"
+        >
+          <!-- Top-up / Withdraw -->
+          <form nz-form nzLayout="vertical" *ngIf="i === 0">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Transaction No.</nz-form-label>
+                  <nz-form-control>
+                    <input
+                      nz-input
+                      placeholder=""
+                      name="applicationId"
+                      [(ngModel)]="searchParam.applicationId"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Enterprise Code</nz-form-label>
+                  <nz-form-control>
+                    <input
+                      nz-input
+                      placeholder=""
+                      name="enterpriseCode"
+                      [(ngModel)]="searchParam.enterpriseCode"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Wallet Address</nz-form-label>
+                  <nz-form-control>
+                    <input
+                      nz-input
+                      placeholder=""
+                      name="walletAddress"
+                      [(ngModel)]="searchParam.walletAddress"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Type</nz-form-label>
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder=""
+                      name="transactionType"
+                      [(ngModel)]="searchParam.transactionType"
+                    >
+                      <nz-option nzValue="" nzLabel="All"></nz-option>
+                      <nz-option [nzValue]="3" nzLabel="Top-up"></nz-option>
+                      <nz-option [nzValue]="4" nzLabel="withdrawal"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Token</nz-form-label>
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder=""
+                      name="currency"
+                      [(ngModel)]="searchParam.currency"
+                    >
+                      <nz-option nzValue="" nzLabel="All"></nz-option>
+                      <nz-option
+                        *ngFor="let item of currencyList"
+                        [nzValue]="item.digitalSymbol"
+                        [nzLabel]="item.digitalSymbol"
+                      >
+                      </nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
+                  <nz-form-control>
+                    <nz-range-picker
+                      style="width: 100%"
+                      name="appliedOn"
+                      [(ngModel)]="searchParam.appliedOn"
+                    ></nz-range-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Status</nz-form-label>
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder=""
+                      name="status"
+                      [(ngModel)]="searchParam.status"
+                    >
+                      <nz-option nzValue="" nzLabel="All"></nz-option>
+                      <nz-option nzValue="20" nzLabel="Processing"></nz-option>
+                      <nz-option nzValue="40" nzLabel="Failed"></nz-option>
+                      <nz-option nzValue="35" nzLabel="Success"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="16"
+                [nzXl]="16"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+                class="m-b-8 text-right p-0"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"></nz-form-label>
+                  <nz-form-control>
+                    <div nz-col [nzSpan]="24">
+                      <button
+                        nz-button
+                        [nzType]="'primary'"
+                        (click)="getDataList(this.tableQueryParams)"
+                      >
+                        Query
+                      </button>
+                      <a
+                        nz-button
+                        nzType="link"
+                        class="m-l-15"
+                        (click)="resetForm()"
+                        >Reset</a
+                      >
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </form>
+          <!-- Top-up / Withdraw -->
+          <!-- Transfer / FX Purchasing -->
+          <form nz-form nzLayout="vertical" *ngIf="i === 1">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24 }">
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Transaction No.</nz-form-label>
+                  <nz-form-control>
+                    <input
+                      nz-input
+                      placeholder=""
+                      name="applicationId"
+                      [(ngModel)]="transferSearchParam.applicationId"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Sender Wallet Address</nz-form-label>
+                  <nz-form-control>
+                    <input
+                      nz-input
+                      placeholder=""
+                      name="fromAccountAddress"
+                      [(ngModel)]="transferSearchParam.fromAccountAddress"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label>Receiver Wallet Address</nz-form-label>
+                  <nz-form-control>
+                    <input
+                      nz-input
+                      placeholder=""
+                      name="toAccountAddress"
+                      [(ngModel)]="transferSearchParam.toAccountAddress"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Type</nz-form-label>
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder=""
+                      name="type"
+                      [(ngModel)]="transferSearchParam.type"
+                    >
+                      <nz-option nzValue="" nzLabel="All"></nz-option>
+                      <nz-option
+                        nzValue="1"
+                        nzLabel="Cross-Token Transfer"
+                      ></nz-option>
+                      <nz-option nzValue="2" nzLabel="Exchange"></nz-option>
+                      <nz-option nzValue="3" nzLabel="Transfer"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Created Time</nz-form-label>
+                  <nz-form-control>
+                    <nz-range-picker
+                      style="width: 100%"
+                      name="appliedOn"
+                      [(ngModel)]="transferSearchParam.appliedOn"
+                    ></nz-range-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div
+                nz-col
+                [nzXXl]="8"
+                [nzXl]="8"
+                [nzLg]="12"
+                [nzMd]="12"
+                [nzSm]="24"
+                [nzXs]="24"
+              >
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">Status</nz-form-label>
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder=""
+                      name="state"
+                      [(ngModel)]="transferSearchParam.state"
+                    >
+                      <nz-option nzValue="" nzLabel="All"></nz-option>
+                      <nz-option nzValue="20" nzLabel="Processing"></nz-option>
+                      <nz-option nzValue="40" nzLabel="Failed"></nz-option>
+                      <nz-option nzValue="35" nzLabel="Success"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="24" class="m-b-8 text-right p-0">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true"></nz-form-label>
+                  <nz-form-control>
+                    <div nz-col [nzSpan]="24">
+                      <button
+                        nz-button
+                        [nzType]="'primary'"
+                        (click)="getDataList(this.tableQueryParams)"
+                      >
+                        Query
+                      </button>
+                      <a
+                        nz-button
+                        nzType="link"
+                        class="m-l-15"
+                        (click)="resetForm()"
+                        >Reset</a
+                      >
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </form>
+          <!-- Transfer / FX Purchasing -->
+        </nz-card>
+        <app-card-table-wrap
+          [isNormalTable]="true"
+          [tableTitle]="
+            i === 0
+              ? 'Top-up / Withdraw Transactions'
+              : 'Transfer / FX Purchasing Transactions'
+          "
+        >
+          <app-ant-table
+            (changePageSize)="changePageSize($event)"
+            (changePageNum)="getDataList($event)"
+            [tableConfig]="tableConfig"
+            [tableData]="dataList"
+          ></app-ant-table>
+        </app-card-table-wrap> </nz-tab
+    ></nz-tabset>
+  </nz-card>
+</div>
+<ng-template #txHashTpl let-txHash="txHash">
+  <p
+    [title]="txHash"
+    nz-typography
+    [nzCopyable]="txHash ? true : false"
+    [nzCopyText]="txHash"
+  >
+    {{ txHash | map: 'showPartEight' }}
+  </p>
+</ng-template>
+
+<!-- Top-up / Withdraw -->
+<ng-template #txnTpl let-applicationId="applicationId">
+  <p
+    [title]="applicationId"
+    nz-typography
+    [nzCopyable]="applicationId ? true : false"
+    [nzCopyText]="applicationId"
+  >
+    {{ applicationId | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #enterpriseCodeTpl let-enterpriseCode="enterpriseCode">
+  <p
+    [title]="enterpriseCode"
+    nz-typography
+    [nzCopyable]="enterpriseCode ? true : false"
+    [nzCopyText]="enterpriseCode"
+  >
+    {{ enterpriseCode }}
+  </p>
+</ng-template>
+
+<ng-template #walletAddressTpl let-walletAddress="walletAddress">
+  <p
+    [title]="walletAddress"
+    nz-typography
+    [nzCopyable]="walletAddress ? true : false"
+    [nzCopyText]="walletAddress"
+  >
+    {{ walletAddress | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #amountTpl let-amount="amount">
+  <p [title]="amount | map: 'toThousandthMark'">
+    {{ amount | map: 'toThousandthMark' }}
+  </p>
+</ng-template>
+<ng-template #statusTpl let-status="status">
+  <nz-tag [nzColor]="status | map: 'enterpriseTransactionStatusColor'">{{
+    status | map: 'enterpriseTransactionStatus'
+  }}</nz-tag>
+</ng-template>
+<ng-template
+  #operationTpl
+  let-status="status"
+  let-accountCbdcId="accountCbdcId"
+>
+  <ng-container *appAuth="'R01090401'">
+    <span
+      class="operate-text"
+      routerLink="/poc/poc-enterprise/transactions/info"
+      [queryParams]="{accountCbdcId}"
+    >
+      Details
+    </span>
+  </ng-container>
+</ng-template>
+<!-- Top-up / Withdraw -->
+
+<!-- Transfer / FX Purchasing -->
+<ng-template #transferTxnTpl let-applicationId="applicationId">
+  <p
+    [title]="applicationId"
+    nz-typography
+    [nzCopyable]="applicationId ? true : false"
+    [nzCopyText]="applicationId"
+  >
+    {{ applicationId | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #fromTpl let-fromAccountAddress="fromAccountAddress">
+  <p
+    [title]="fromAccountAddress"
+    nz-typography
+    [nzCopyable]="fromAccountAddress ? true : false"
+    [nzCopyText]="fromAccountAddress"
+  >
+    {{ fromAccountAddress | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template #toTpl let-toAccountAddress="toAccountAddress">
+  <p
+    [title]="toAccountAddress"
+    nz-typography
+    [nzCopyable]="toAccountAddress ? true : false"
+    [nzCopyText]="toAccountAddress"
+  >
+    {{ toAccountAddress | map: 'showPartEight' }}
+  </p>
+</ng-template>
+<ng-template
+  #transferAmountTpl
+  let-sendingCurrency="sendingCurrency"
+  let-sendingAmount="sendingAmount"
+  let-receivingAmount="receivingAmount"
+  let-receivingCurrency="receivingCurrency"
+  let-type="type"
+>
+  <ng-container *ngIf="type === 3">
+    <span>
+      {{ sendingAmount | map: 'toThousandthMark' }}{{ ' ' + sendingCurrency }}
+    </span>
+  </ng-container>
+  <ng-container *ngIf="type === 1 || type === 2"
+    ><span>
+      {{ sendingAmount | map: 'toThousandthMark' }}{{ ' ' + sendingCurrency }}
+    </span>
+    <br />
+    <span
+      class="arrow-right m-r-10"
+      style="text-align: center"
+      nz-icon
+      nzType="arrow-right"
+      nzTheme="outline"
+    ></span>
+    <span
+      >{{ receivingAmount | map: 'toThousandthMark'
+      }}{{ ' ' + receivingCurrency }}</span
+    ></ng-container
+  >
+</ng-template>
+<ng-template
+  #transferFxRateTpl
+  let-receivingCurrency="receivingCurrency"
+  let-sendingCurrency="sendingCurrency"
+  let-fxRate="fxRate"
+  >{{ sendingCurrency + '/' + receivingCurrency + ' = ' + fxRate }}</ng-template
+>
+<ng-template
+  #sendingAmountTpl
+  let-sendingAmount="sendingAmount"
+  let-sendingCurrency="sendingCurrency"
+>
+  <p
+    [title]="(sendingAmount | map: 'toThousandthMark') + ' ' + sendingCurrency"
+  >
+    {{ (sendingAmount | map: 'toThousandthMark') + ' ' + sendingCurrency }}
+  </p>
+</ng-template>
+<ng-template
+  #receivingAmountTpl
+  let-receivingAmount="receivingAmount"
+  let-receivingCurrency="receivingCurrency"
+>
+  <p
+    [title]="
+      (receivingAmount | map: 'toThousandthMark') + ' ' + receivingCurrency
+    "
+  >
+    {{ (receivingAmount | map: 'toThousandthMark') + ' ' + receivingCurrency }}
+  </p>
+</ng-template>
+<ng-template #transferStatusTpl let-state="state">
+  <nz-tag [nzColor]="state | map: 'enterpriseTransactionStatusColor'">{{
+    state | map: 'enterpriseTransactionStatus'
+  }}</nz-tag>
+</ng-template>
+<ng-template
+  #transferOperationTpl
+  let-state="state"
+  let-transferId="transferId"
+>
+  <ng-container *appAuth="'R01090403'">
+    <span
+      class="operate-text"
+      routerLink="/poc/poc-enterprise/transactions/info"
+      [queryParams]="{transferId}"
+    >
+      Details
+    </span>
+  </ng-container>
+</ng-template>
+<!-- Transfer / FX Purchasing -->

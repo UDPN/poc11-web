@@ -2,7 +2,7 @@
  * @Author: zhangxuefeng
  * @Date: 2024-01-11 14:58:13
  * @LastEditors: chenyuting
- * @LastEditTime: 2024-12-17 09:41:44
+ * @LastEditTime: 2025-01-23 16:35:02
  * @Description:
  */
 const ip = '69.230.239.221';
@@ -13,8 +13,8 @@ export const localUrl = ``;
 export const environment = {
   production: false,
   localUrl: localUrl,
-  clientName: 'admintest',
-  password: 'Kissen123'
+  clientName: 'admin',
+  password: 'Abcd1234'
 };
 
 /*

@@ -215,7 +215,7 @@ export class UserComponent implements OnInit {
           show: true
         },
         {
-          title: 'User Name',
+          title: 'Username',
           field: 'userName',
           notNeedEllipsis: true,
           width: 180
@@ -248,6 +248,7 @@ export class UserComponent implements OnInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

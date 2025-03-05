@@ -2,7 +2,7 @@
  * @Author: chenyuting
  * @Date: 2024-04-18 15:13:38
  * @LastEditors: chenyuting
- * @LastEditTime: 2025-01-04 10:14:01
+ * @LastEditTime: 2025-02-20 14:43:48
  * @Description: 
 -->
 <app-page-header [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
@@ -95,7 +95,7 @@
           [nzXs]="24"
         >
           <nz-form-item>
-            <nz-form-label>Currency</nz-form-label>
+            <nz-form-label>Token</nz-form-label>
             <nz-form-control>
               <nz-select
                 nzPlaceHolder=""
@@ -197,7 +197,7 @@
             this.commercialBankName
           }}</span></nz-descriptions-item
         >
-        <nz-descriptions-item nzTitle="Currency"
+        <nz-descriptions-item nzTitle="Token"
           ><span class="font-bold">{{
             this.currency
           }}</span></nz-descriptions-item
@@ -219,7 +219,7 @@
         >
           <p
             nz-typography
-            nzCopyable
+            [nzCopyable]="item ? true : false"
             [nzCopyTooltips]="['Copy', 'Copy successful']"
             [nzContent]="item"
           ></p>

@@ -174,6 +174,7 @@ export class ApplicationComponent implements OnInit {
         {
           title: 'Actions',
           tdTemplate: this.operationTpl,
+          notNeedEllipsis: true,
           fixed: true,
           fixedDir: 'right',
           showAction: false,

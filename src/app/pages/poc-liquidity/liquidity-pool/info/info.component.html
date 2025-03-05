@@ -1,0 +1,27 @@
+<app-page-header
+  [backTpl]="backTpl"
+  [backUrl]="'/poc/poc-liquidity/liquidity-pool'"
+  [pageHeaderInfo]="pageHeaderInfo"
+></app-page-header>
+<ng-template #backTpl>
+  <span class="m-t-15" nz-icon nzType="arrow-left" nzTheme="outline"></span>
+</ng-template>
+
+<div class="normal-detail-table-wrap">
+  <nz-card>
+    <nz-tabset>
+      <nz-tab nzTitle="Basic Information">
+        <app-basic [id]="id"></app-basic>
+      </nz-tab>
+      <nz-tab nzTitle="Transactions">
+        <app-transactions [id]="id"></app-transactions>
+      </nz-tab>
+      <nz-tab nzTitle="Authorization">
+        <app-authorization [id]="id"></app-authorization>
+      </nz-tab>
+      <nz-tab nzTitle="Operation Records">
+        <app-operation [id]="id"></app-operation>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</div>

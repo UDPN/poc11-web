@@ -60,5 +60,5 @@
     }
   },
   "defaultProject": "poc11-web",
-  "nxCloudAccessToken": "NTJmMzczOGEtYzQzZC00M2E2LTk2NjEtMjg1N2QxM2EzOTM1fHJlYWQtd3JpdGU="
+  "neverConnectToCloud": true
 }
