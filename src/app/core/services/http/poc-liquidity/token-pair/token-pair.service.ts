@@ -194,7 +194,7 @@ export class TokenPairService {
     public http: BaseHttpService,
     private https: HttpClient,
     private date: DatePipe
-  ) {}
+  ) { }
 
   public fetchList(
     pageIndex: number,
@@ -205,15 +205,15 @@ export class TokenPairService {
       data: {
         startTime: filters.updatedTime?.[0]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.updatedTime[0], 'yyyy-MM-dd') +
-                ' 00:00:00'
-            )
+            this.date.transform(filters.updatedTime[0], 'yyyy-MM-dd') +
+            ' 00:00:00'
+          )
           : '',
         endTime: filters.updatedTime?.[1]
           ? timeToTimestampMillisecond(
-              this.date.transform(filters.updatedTime[1], 'yyyy-MM-dd') +
-                ' 23:59:59'
-            )
+            this.date.transform(filters.updatedTime[1], 'yyyy-MM-dd') +
+            ' 23:59:59'
+          )
           : '',
         rateId: filters.tokenPair || '',
         state: filters.status
@@ -224,7 +224,7 @@ export class TokenPairService {
       }
     };
     const selectedTab = localStorage.getItem('tokenPairTab');
-    const apiUrl = selectedTab === 'local' 
+    const apiUrl = selectedTab === 'local'
       ? '/v2/liquidity/rate/local/listPage'
       : '/v2/liquidity/rate/network/listPage';
     return this.https.post<TokenPairDetailResponse>(apiUrl, param);
@@ -253,7 +253,7 @@ export class TokenPairService {
   public getTokenPairDetail(rateId: number): Observable<TokenPairDetailResponse> {
     const params: TokenPairDetailRequest = { rateId };
     const selectedTab = localStorage.getItem('tokenPairTab');
-    const apiUrl = selectedTab === 'local' 
+    const apiUrl = selectedTab === 'local'
       ? '/v2/liquidity/rate/local/detail/basic'
       : '/v2/liquidity/rate/network/detail/basic';
     return this.https.post<TokenPairDetailResponse>(apiUrl, params);
@@ -276,7 +276,7 @@ export class TokenPairService {
       }
     };
     const selectedTab = localStorage.getItem('tokenPairTab');
-    const apiUrl = selectedTab === 'local' 
+    const apiUrl = selectedTab === 'local'
       ? '/v2/liquidity/rate/local/detail/history'
       : '/v2/liquidity/rate/network/detail/history';
     return this.https.post<FxRateHistoryResponse>(apiUrl, param);
@@ -303,13 +303,13 @@ export class TokenPairService {
       }
     };
     const selectedTab = localStorage.getItem('tokenPairTab');
-    const apiUrl = selectedTab === 'local' 
+    const apiUrl = selectedTab === 'local'
       ? '/v2/liquidity/rate/local/detail/records'
       : '/v2/liquidity/rate/network/detail/records';
     return this.https.post<OperationRecordsResponse>(apiUrl, requestParams);
   }
 
-  public saveLocalTokenPair(params: SaveTokenPairRequest): Observable<SaveTokenPairResponse> {
+  public saveLocalTokenPair(params: SaveTokenPairRequest[]): Observable<SaveTokenPairResponse> {
     return this.https.post<SaveTokenPairResponse>('/v2/liquidity/rate/local/save', params);
   }
 
@@ -354,7 +354,7 @@ export class TokenPairService {
 
   public operateTokenPair(params: TokenPairOperateRequest): Observable<TokenPairOperateResponse> {
     const selectedTab = localStorage.getItem('tokenPairTab');
-    const apiUrl = selectedTab === 'local' 
+    const apiUrl = selectedTab === 'local'
       ? '/v2/liquidity/rate/local/operate'
       : '/v2/liquidity/rate/network/operate';
     return this.https.post<TokenPairOperateResponse>(apiUrl, params);

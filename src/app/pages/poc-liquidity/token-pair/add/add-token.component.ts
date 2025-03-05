@@ -41,7 +41,7 @@ export class AddTokenComponent implements OnInit, AfterViewInit {
     private tokenPairService: TokenPairService,
     private modal: NzModalService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -116,7 +116,7 @@ export class AddTokenComponent implements OnInit, AfterViewInit {
       nzContent: 'Are you sure you want to submit?',
       nzOnOk: () => {
         this.submitting = true;
-        
+
         const tokenPairRequests = selectedTokens.map((pair: string) => {
           const [fromCurrency, toCurrency] = pair.split('/');
           return {
@@ -125,7 +125,7 @@ export class AddTokenComponent implements OnInit, AfterViewInit {
           };
         });
 
-        this.tokenPairService.saveLocalTokenPair(tokenPairRequests[0]).subscribe({
+        this.tokenPairService.saveLocalTokenPair(tokenPairRequests).subscribe({
           next: (res) => {
             if (res.code === 0) {
               this.message.success('Submitted successfully');
