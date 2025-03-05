@@ -13,12 +13,13 @@ import { LiquidityPoolService } from '@app/core/services/http/poc-liquidity/liqu
 import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 import { finalize } from 'rxjs';
 import { timeToTimestampMillisecond } from '@app/utils/tools';
+import { DatePipe } from '@angular/common';
 
 interface SearchParams {
   walletAddress: string;
   txType: number;
   txHash: string;
-  status: number|string;
+  status: number | string;
   txTime: Date[];
 }
 
@@ -64,8 +65,9 @@ export class TransactionsComponent implements OnInit {
     private route: ActivatedRoute,
     private message: NzMessageService,
     private liquidityPoolService: LiquidityPoolService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private date: DatePipe
+  ) { }
 
   ngOnInit() {
     this.initTableConfig();
@@ -150,11 +152,17 @@ export class TransactionsComponent implements OnInit {
         liquidityPoolId: Number(this.id),
         status: this.searchParam.status,
         txEndTime: this.searchParam.txTime?.[1]
-          ? timeToTimestampMillisecond(this.searchParam.txTime[1])
-          : 0,
+          ? timeToTimestampMillisecond(
+            this.date.transform(this.searchParam.txTime?.[1], 'yyyy-MM-dd') +
+            ' 23:59:59'
+          )
+          : '',
         txHash: this.searchParam.txHash,
         txStartTime: this.searchParam.txTime?.[0]
-          ? timeToTimestampMillisecond(this.searchParam.txTime[0])
+          ? timeToTimestampMillisecond(
+            this.date.transform(this.searchParam.txTime?.[0], 'yyyy-MM-dd') +
+            ' 00:00:00'
+          )
           : 0,
         txType: this.searchParam.txType,
         walletAddress: this.searchParam.walletAddress
