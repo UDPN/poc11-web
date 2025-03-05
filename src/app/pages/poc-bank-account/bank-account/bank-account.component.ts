@@ -194,7 +194,7 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
         this.getWalletInfo(this.info?.currency);
         this.centralBankId = this.info?.centralBankId;
         if (this.info?.centralBankId) {
-          this.getChange(this.tableQueryParams, this.info?.centralBankId);
+          this.getDataList(this.tableQueryParams, this.info?.centralBankId);
         }
         this.cdr.markForCheck();
         return;
@@ -208,10 +208,6 @@ export class BankAccountComponent implements OnInit, AfterViewInit {
       this.cdr.markForCheck();
       return;
     });
-  }
-
-  getChange(value: any, centralBankId: any) {
-    this.getDataList(value, centralBankId);
   }
 
   getDataList(e?: NzTableQueryParams, centralBankId?: any): void {
