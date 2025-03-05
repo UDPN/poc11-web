@@ -102,9 +102,9 @@ export interface TokenPairDetailResponse {
 
 interface FxRateHistoryRequest {
   data: {
-    endTime: number;
+    endTime: string | number;
     rateId: number;
-    startTime: number;
+    startTime: string | number;
   };
   page: {
     pageNum: number;
@@ -265,10 +265,10 @@ export class TokenPairService {
         rateId: params.rateId,
         startTime: params.startDate ? timeToTimestampMillisecond(
           this.date.transform(params.startDate, 'yyyy-MM-dd') + ' 00:00:00'
-        ) : 0,
+        ) : '',
         endTime: params.endDate ? timeToTimestampMillisecond(
           this.date.transform(params.endDate, 'yyyy-MM-dd') + ' 23:59:59'
-        ) : 0
+        ) : ''
       },
       page: {
         pageNum: params.pageIndex || 1,
