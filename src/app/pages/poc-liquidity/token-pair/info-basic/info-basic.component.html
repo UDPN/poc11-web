@@ -47,31 +47,13 @@
       </div>
     </div>
 
-    <!-- History Table -->
-    <nz-table
-      #basicTable
-      [nzData]="historyList"
-      [nzFrontPagination]="false"
-      [nzTotal]="total"
-      [nzPageSize]="pageSize"
-      [nzPageIndex]="pageIndex"
-      [nzLoading]="historyLoading"
-      (nzQueryParams)="onQueryParamsChange($event)"
-    >
-      <thead>
-        <tr>
-          <th>Token Pair</th>
-          <th>FX Rate</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of basicTable.data">
-          <td>{{ data.tokenPair }}</td>
-          <td>{{ data.fxRate }}</td>
-          <td>{{ data.date | date:'MMM d, y, HH:mm:ss' }} UTC+08:00</td>
-        </tr>
-      </tbody>
-    </nz-table>
+    <app-card-table-wrap [isNormalTable]="true">
+      <app-ant-table
+        (changePageSize)="onPageSizeChange($event)"
+        (changePageNum)="getFxRateHistory($event)"
+        [tableConfig]="tableConfig"
+        [tableData]="historyList"
+      ></app-ant-table>
+    </app-card-table-wrap>
   </nz-card>
 </nz-spin>
