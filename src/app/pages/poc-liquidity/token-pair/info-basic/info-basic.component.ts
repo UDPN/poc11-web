@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { TokenPairService, TokenPairDetailResponse } from '@app/core/services/http/poc-liquidity/token-pair/token-pair.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { AntTableConfig } from '@app/shared/components/ant-table/ant-table.component';
 
 interface DisplayTokenPairInfo {
   tokenPair: string;
-  fxType: number|string;
+  fxType: number | string;
   status: number;
   fxRate: string;
   fxRateUpdatedOn: number;
@@ -18,7 +19,7 @@ interface DisplayTokenPairInfo {
   templateUrl: './info-basic.component.html',
   styleUrl: './info-basic.component.less'
 })
-export class InfoBasicComponent implements OnInit, OnChanges {
+export class InfoBasicComponent implements OnInit {
   @Input() rateId: number = 0;
 
   loading = false;
@@ -36,26 +37,59 @@ export class InfoBasicComponent implements OnInit, OnChanges {
   // FX Rate History
   dateRange: Date[] = [];
   historyList: any[] = [];
-  pageSize = 10;
-  pageIndex = 1;
-  total = 0;
+  tableConfig!: AntTableConfig;
 
   constructor(
     private tokenPairService: TokenPairService,
-    private message: NzMessageService
-  ) {}
+    private message: NzMessageService,
+    private cdr: ChangeDetectorRef,
+  ) {
+
+  }
+
+
 
   ngOnInit() {
-    if (this.rateId) {
-      this.getTokenPairDetail();
-    }
+    this.initTableConfig();
+    this.getTokenPairDetail();
+    this.getFxRateHistory();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['rateId'] && !changes['rateId'].firstChange && this.rateId) {
-      this.getTokenPairDetail();
-    }
+
+  initTableConfig() {
+    this.tableConfig = {
+      headers: [
+        {
+          title: 'Token Pair',
+          field: 'tokenPair',
+          width: 160
+        },
+        {
+          title: 'FX Rate',
+          field: 'fxRate',
+          width: 160
+        },
+        {
+          title: 'Date',
+          field: 'date',
+          width: 180,
+          pipe: 'timeStamp'
+        }
+      ],
+      total: 0,
+      pageSize: 10,
+      pageIndex: 1,
+      loading: false,
+      xScroll: 1300
+    };
   }
+
+  onPageSizeChange(pageSize: number): void {
+    this.tableConfig.pageSize = pageSize;
+    this.getFxRateHistory();
+  }
+
+
 
   getTokenPairDetail(): void {
     this.loading = true;
@@ -72,6 +106,7 @@ export class InfoBasicComponent implements OnInit, OnChanges {
             createdBy: data.createUser,
             createdOn: data.createTime
           };
+          this.cdr.detectChanges();
         } else {
           this.message.error(res.message || 'Failed to get token pair details');
         }
@@ -84,46 +119,51 @@ export class InfoBasicComponent implements OnInit, OnChanges {
     });
   }
 
-  getFxRateHistory(): void {
-    this.historyLoading = true;
+  getFxRateHistory(e?: NzTableQueryParams | number): void {
+    if (typeof e === 'number') {
+      this.tableConfig.pageIndex = e;
+    } else if (e) {
+      this.tableConfig.pageIndex = e.pageIndex;
+    }
+
+    this.tableConfig.loading = true;
     const params = {
       startDate: this.dateRange[0],
       endDate: this.dateRange[1],
       rateId: this.rateId,
-      pageSize: this.pageSize,
-      pageIndex: this.pageIndex
+      pageSize: this.tableConfig.pageSize,
+      pageIndex: this.tableConfig.pageIndex
     };
 
     this.tokenPairService.getFxRateHistory(params).subscribe({
       next: (res) => {
+        this.historyLoading = false;
+        this.cdr.detectChanges();
         if (res.code === 0) {
           this.historyList = res.data.rows.map(item => ({
             tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
             fxRate: `1 ${item.fromCurrency} = ${item.exchangeRate} ${item.toCurrency}`,
             date: item.createTime
           }));
-          this.total = res.data.page.total;
-          this.pageIndex = res.data.page.pageNum;
+          this.tableConfig.total = res.data.page.total;
+
         } else {
-          this.message.error(res.message || 'Failed to get FX rate history');
+          this.historyList = [];
+          this.tableConfig.total = 0;
         }
-        this.historyLoading = false;
+        this.tableConfig.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        this.message.error(err.message || 'Failed to get FX rate history');
-        this.historyLoading = false;
+        this.tableConfig.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    this.pageIndex = params.pageIndex;
-    this.pageSize = params.pageSize;
-    this.getFxRateHistory();
-  }
-
   resetSearch(): void {
     this.dateRange = [];
+    this.tableConfig.pageIndex = 1;
     this.getFxRateHistory();
   }
 
