@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { TokenPairService, TokenPairDetailResponse } from '@app/core/services/http/poc-liquidity/token-pair/token-pair.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 interface DisplayTokenPairInfo {
   tokenPair: string;
-  fxType: number|string;
+  fxType: number | string;
   status: number;
   fxRate: string;
   fxRateUpdatedOn: number;
@@ -42,8 +42,9 @@ export class InfoBasicComponent implements OnInit, OnChanges {
 
   constructor(
     private tokenPairService: TokenPairService,
-    private message: NzMessageService
-  ) {}
+    private message: NzMessageService,
+    private cdr: ChangeDetectorRef,
+  ) { }
 
   ngOnInit() {
     if (this.rateId) {
@@ -96,6 +97,8 @@ export class InfoBasicComponent implements OnInit, OnChanges {
 
     this.tokenPairService.getFxRateHistory(params).subscribe({
       next: (res) => {
+        this.historyLoading = false;
+        this.cdr.detectChanges();
         if (res.code === 0) {
           this.historyList = res.data.rows.map(item => ({
             tokenPair: `${item.fromCurrency}/${item.toCurrency}`,
