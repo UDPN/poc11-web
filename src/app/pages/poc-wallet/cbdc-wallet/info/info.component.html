@@ -366,13 +366,11 @@
     {{ txHash | map: 'nullValue' }}
   </ng-container>
 </ng-template>
-<ng-template #statusTpl let-state="state" let-type="type">
-  <ng-container *ngIf="type === 4 || type === 5">
-    <span>{{ state | map: 'walletInfoTopUpStatus' }}</span>
-  </ng-container>
-  <ng-container *ngIf="type === 1 || type === 2 || type === 3">
-    <span>{{ state | map: 'walletInfoTransactionStatus' }}</span>
-  </ng-container>
+<!-- transaction status-->
+<ng-template #statusTpl let-state="state">
+  <nz-tag [nzColor]="state | map: 'transactionsRecordStatusColor'">{{
+    state | map: 'walletTransactionsRecordStatus'
+  }}</nz-tag>
 </ng-template>
 <ng-template
   #amountTpl
