@@ -137,13 +137,15 @@
         </nz-form-item>
         <nz-form-item nz-col nzXs="24" nzSm="24" nzXl="7" nzXXl="7">
           <nz-form-label nzRequired nzSpan="24"
-            ><div>Maximum transfer/FX purchasing amount allowed without requiring
-            approval <span class="smFont">(excluding transactions within a single account)</span></div> </nz-form-label
+            ><div class="smFont">Maximum transfer/FX purchasing amount allowed without requiring
+            approval  <span class="smFont">(excluding transactions between two wallets of the same user.)</span></div> </nz-form-label
           >
           <nz-form-control [nzErrorTip]="approvalError">
             <div nz-row>
               <div nz-col nzSpan="24">
-                <input nz-input formControlName="approvalValue" />
+                <nz-input-group nzAddOnAfter="tokens">
+                  <input nz-input formControlName="approvalValue" />
+                </nz-input-group>
               </div>
             </div>
             <ng-template #approvalError let-control>
