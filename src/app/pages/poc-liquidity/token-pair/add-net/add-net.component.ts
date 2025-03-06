@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { Location } from '@angular/common';
@@ -45,7 +45,8 @@ export class AddNetComponent implements OnInit, AfterViewInit {
     private tokenPairService: TokenPairService,
     private datePipe: DatePipe,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -138,7 +139,9 @@ export class AddNetComponent implements OnInit, AfterViewInit {
         nzTitle: 'Confirm',
         nzContent: 'Are you sure you want to submit?',
         nzOnOk: () => {
+          
           this.submitting = true;
+          this.cdr.detectChanges();
           const params = selectedTokens.map(item => ({
             fromCurrency: item.fromCurrency!,
             toCurrency: item.toCurrency!
@@ -147,6 +150,7 @@ export class AddNetComponent implements OnInit, AfterViewInit {
           this.tokenPairService.saveNetworkTokenPair(params).subscribe({
             next: (res) => {
               this.submitting = false;
+              this.cdr.detectChanges();
               if (res.code === 0) {
                 this.message.success('Submitted successfully');
                 this.router.navigate(['/poc/poc-liquidity/token-pair']);
