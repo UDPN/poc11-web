@@ -18,6 +18,7 @@ export class DefLayoutContentComponent implements OnInit {
   isNightTheme$ = this.themesService.getIsNightTheme();
   themesOptions$ = this.themesService.getThemesMode();
   isMixiMode = false;
+  currentYear = new Date().getFullYear();
   themesOptions: SettingInterface = {
     theme: 'dark',
     color: '',
