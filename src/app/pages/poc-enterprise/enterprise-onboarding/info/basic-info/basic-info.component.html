@@ -53,8 +53,8 @@
             <tr>
               <td class="label">Generate Wallet</td>
               <td>{{ enterpriseDetail.walletApproval === 1 ? 'Approval Required' : 'No Approval Required' }}</td>
-              <td class="label">Maximum transfer/FX purchasing amount allowed without requiring approval (excluding transactions within a single account)</td>
-              <td>{{ enterpriseDetail.txApprovalThreshold || '0.00' }}</td>
+              <td class="label">Maximum transfer/FX purchasing amount allowed without requiring approval (excluding transactions between two wallets of the same user).</td>
+              <td>{{ enterpriseDetail.txApprovalThreshold || '0.00' }} {{' tokens'}}</td>
             </tr>
           </table>
         </div>
