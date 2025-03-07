@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,10 +14,11 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { PageHeaderType } from '@app/shared/components/page-header/page-header.component';
 import { Location } from '@angular/common';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageComponent, NzMessageService } from 'ng-zorro-antd/message';
 import { fnCheckForm } from '@app/utils/tools';
 import { finalize } from 'rxjs';
 import { UserService } from '@app/core/services/http/poc-system/user/user.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-add',
@@ -19,6 +26,7 @@ import { UserService } from '@app/core/services/http/poc-system/user/user.servic
   styleUrls: ['./add.component.less']
 })
 export class AddComponent implements OnInit {
+  @ViewChild('customTemplate', { static: true }) customTemplate!: any;
   pageHeaderInfo: Partial<PageHeaderType> = {
     title: '',
     breadcrumbs: [],
@@ -39,7 +47,8 @@ export class AddComponent implements OnInit {
     private message: NzMessageService,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-    private location: Location
+    private location: Location,
+    private modal: NzModalService
   ) {}
   ngAfterViewInit(): void {
     this.pageHeaderInfo = {
@@ -152,12 +161,17 @@ export class AddComponent implements OnInit {
         .subscribe({
           next: (res) => {
             if (res) {
-              this.message
-                .success('Added', { nzDuration: 1000 })
-                .onClose.subscribe(() => {
+              this.modal.success({
+                nzClosable: false,
+                nzTitle: 'Saved successfully',
+                nzContent:
+                  'The default password has been sent to the registered email address: ' +
+                  this.validateForm.get('email')?.value,
+                nzOnOk: () => {
                   this.validateForm.reset();
                   this.location.back();
-                });
+                }
+              });
             }
             this.isLoading = false;
             this.cdr.markForCheck();
