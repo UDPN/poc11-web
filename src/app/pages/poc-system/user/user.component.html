@@ -101,6 +101,7 @@
       let-userId="userId"
       let-userName="userName"
       let-realName="realName"
+      let-email="email"
     >
       <ng-container *appAuth="'R030102'">
         <span
@@ -142,7 +143,7 @@
       <ng-container *appAuth="'R030107'">
         <span
           class="operate-text"
-          (click)="onResetPassword(userId, userName, realName)"
+          (click)="onResetPassword(userId, email, realName)"
         >
           Reset Password
         </span>

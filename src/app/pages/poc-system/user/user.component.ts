@@ -147,7 +147,7 @@ export class UserComponent implements OnInit {
     });
   }
 
-  onResetPassword(userId: string, userName: string, realName: string) {
+  onResetPassword(userId: string, email: string, realName: string) {
     const clientName = sessionStorage.getItem('clientName');
     this.modal.confirm({
       nzTitle: 'Are you sure you want to reset password ?',
@@ -157,17 +157,19 @@ export class UserComponent implements OnInit {
           this.userService.resetPassword({ userId }).subscribe({
             next: (res) => {
               resolve(true);
-              this.message
-                .success(
-                  `The password of '${userName}' has been reset to '${res.pwd}'`,
-                  { nzDuration: 1000 }
-                )
-                .onClose!.subscribe(() => {
+              this.modal.success({
+                nzClosable: false,
+                nzTitle: 'Saved successfully',
+                nzContent:
+                  'The default password has been sent to the registered email address: ' +
+                  email,
+                nzOnOk: () => {
                   if (realName === clientName) {
                     this.loginOutService.loginOut().then();
                   }
                   this.getDataList();
-                });
+                }
+              });
               this.cdr.markForCheck();
             },
             error: (err) => {
